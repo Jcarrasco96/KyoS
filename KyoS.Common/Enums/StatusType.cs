@@ -19,6 +19,19 @@
                    (index == 2) ? IncidentsStatus.NotValid :
                    (index == 3) ? IncidentsStatus.Reviewed : IncidentsStatus.NotValid;
         }
+        public static SPRStatus GetSPRStatusByIndex(int index)
+        {
+            return (index == 0) ? SPRStatus.Open :
+                   (index == 1) ? SPRStatus.Closed :
+                   (index == 2) ? SPRStatus.Added : SPRStatus.Open;
+        }
+        public static TCMPayStubFiltro GetFiltroTCMPayStubByIndex(int index)
+        {
+            return (index == 0) ? TCMPayStubFiltro.Created :
+                   (index == 1) ? TCMPayStubFiltro.Approved :
+                   (index == 2) ? TCMPayStubFiltro.Billed :
+                   (index == 3) ? TCMPayStubFiltro.Paid : TCMPayStubFiltro.Created;
+        }
     }
     public enum NoteStatus
     {
@@ -78,5 +91,24 @@
         Edition,
         Pending,
         Approved
+    }
+    public enum SPRStatus
+    {
+        Open,
+        Closed,
+        Added
+    }
+    public enum SafetyPlanStatus
+    {
+        Edition,
+        Pending,
+        Approved
+    }
+    public enum TCMPayStubFiltro
+    {
+        Created,
+        Approved,
+        Billed,
+        Paid
     }
 }

@@ -49,7 +49,10 @@ namespace KyoS.Web.Controllers
             {
                 schedules = await _context.Schedule
                                          .Include(n => n.SubSchedules)
-                                         .OrderBy(d => d.Service).ThenBy(n => n.Session).ThenBy(n => n.InitialTime)
+                                         .Where(s => s.Clinic.Id == user_logged.Clinic.Id)
+                                         .OrderBy(d => d.Service)
+                                         .ThenBy(n => n.Session)
+                                         .ThenBy(n => n.InitialTime)
                                          .ToListAsync();
             }
             return View(schedules);
@@ -117,7 +120,10 @@ namespace KyoS.Web.Controllers
 
                         List<ScheduleEntity> listSchedules = await _context.Schedule
                                                                            .Include(n => n.SubSchedules)
-                                                                           .OrderBy(d => d.Service).ThenBy(n => n.Session).ThenBy(n => n.InitialTime)
+                                                                           .Where(s => s.Clinic.Id == user_logged.Clinic.Id)
+                                                                           .OrderBy(d => d.Service)
+                                                                           .ThenBy(n => n.Session)
+                                                                           .ThenBy(n => n.InitialTime)
                                                                            .ToListAsync();
                         
                         return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewSchedules", listSchedules)});

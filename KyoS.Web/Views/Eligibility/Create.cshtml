@@ -15,19 +15,23 @@
                     <span asp-validation-for="DocumentFile" class="text-danger"></span>
                 </div>
             </div>
-            <div class="col-md-12">
+            <div class="col-md-5">
                 <div class="form-group">
                     <label asp-for="EligibilityDate" class="control-label"></label>&nbsp;*
                     <input asp-for="EligibilityDate" class="form-control" />
                     <span asp-validation-for="EligibilityDate" class="text-danger"></span>
                 </div>
             </div>
+            <div class="container-fluid">
+                &nbsp;
+            </div>
             <div class="col-md-12">
                 <div class="form-group">
-                    <label asp-for="Exists" class="control-label">Exist (check to confirm eligibility without attaching document)</label>
-                    <input type="checkbox" asp-for="Exists" class="checkbox" />
-                    <span asp-validation-for="Exists" class="text-danger"></span>
+                    <input type="checkbox" asp-for="Exists" class="form-check-input" />&nbsp;&nbsp;Exist (check to confirm eligibility without attaching document)
                 </div>
+            </div>
+            <div class="col-md-12">
+                &nbsp;
             </div>
             <div>
                 <div class="col-md-offset-9">

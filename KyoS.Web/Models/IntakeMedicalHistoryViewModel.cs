@@ -16,5 +16,7 @@ namespace KyoS.Web.Models
 
         public int IdClient { get; set; }
         public int IdTCMClient { get; set; }
+        public int IdDoctor { get; set; }
+
     }
 }

@@ -39,9 +39,9 @@
                         @ViewBag.errorText
                     </strong>
                 </div>
-            }            
+            }
         </div>
-        <form asp-action="CreateGroup" enctype="multipart/form-data">
+        <form asp-action="CreateGroup" enctype="multipart/form-data" onsubmit="return false;" id="form1">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="col-md-4 form-group">
                 <label asp-for="IdClinic" class="control-label"></label>&nbsp;*
@@ -56,13 +56,13 @@
                        data-multiple-dates="6"
                        data-multiple-dates-separator=","
                        style="width:100%;"
-                       data-position="right top" />
+                       data-position="right top" id="txtWorkdays" />
             </div>
             <div class="col-md-12 form-group">
                 <strong>Note: </strong> Corresponding notes of clients related to this therapy will be generated.
             </div>
             <div class="col-md-12 form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Create" class="btn btn-primary" id="btnSave" />
                 <a asp-action="GroupWorkdays" class="btn btn-success">Back</a>
             </div>
         </form>
@@ -73,6 +73,16 @@
 
         <script src="~/js/datepicker.min.js" type="text/javascript" charset="utf-8"></script>
         <script src="~/js/datepicker.en.js" type="text/javascript" charset="utf-8"></script>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $("#btnSave").click(function () {
+                    if ($("#txtWorkdays").val() != "") {
+                        $("#btnSave").prop('disabled', true);
+                        form1.submit();
+                    }
+                });
+            });
+        </script>
     }
 </body>
 </html>

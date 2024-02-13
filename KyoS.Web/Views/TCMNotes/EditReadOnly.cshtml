@@ -27,6 +27,10 @@
                 {
                     @Html.ActionLink("TCM Notifications", "Notifications", "TCMMessages")
                 }
+                @if (ViewData["origi"].ToString() == "4")
+                {
+                    @Html.ActionLink("Billing", "TCMSupervisor", "TCMBilling")
+                }
             </li>
             <li class="active">TCM Notes</li>
         </ul><!--.breadcrumb-->
@@ -45,14 +49,15 @@
             <partial name="_TCMNotes" />
             <div class="col-md-push-12">
                 <div id="view-NoteActivity">
-                    @await Html.PartialAsync("_ViewTCMNoteActivity", Model.TCMNoteActivity.ToList())
+                    @await Html.PartialAsync("_ViewTCMNoteActivity", Model.TCMNoteActivity.ToList(), new ViewDataDictionary(ViewData) { { "Id", @ViewData["available"] } })
                 </div>
             </div>
-            <partial name="_TCMNotes1" />
+            <partial name="_TCMNotes1ReadOnly" />
             <div class="form-group col-md-12">
                 @if (User.IsInRole("TCMSupervisor"))
                 {
-                    <a asp-action="ApprovedNote" asp-route-id="@Model.Id" asp-route-origin="@ViewData["origi"]" class="btn btn-primary">Approve</a>
+                    <input type="submit" value="Approve" asp-route-id="@Model.Id" asp-route-origi="@ViewData["origi"]" class="btn btn-primary" />
+                    @*<a asp-action="ApprovedNote" asp-route-id="@Model.Id" asp-route-origin="@ViewData["origi"]" asp-route-model="@Model" class="btn btn-primary">Approve</a>*@
                     <a class="btn btn-warning" onclick="showInPopup('@Url.Action("AddMessageEntity","TCMNotes",new {id = Model.Id, origi = @ViewData["origi"]},Context.Request.Scheme)','Add message to casemanager')" title="Not approved note due to problems">Review</a>
                 }
                 @if (ViewData["origi"].ToString() == "1")
@@ -67,12 +72,17 @@
                 {
                     <a asp-action="Notifications" asp-controller="TCMMessages" class="btn btn-success">Back</a>
                 }
+                @if (ViewData["origi"].ToString() == "4")
+                {
+                    <a asp-action="TCMSupervisor" asp-controller="TCMBilling" class="btn btn-success">Back</a>
+                }
             </div>
         </form>
     </div>
 </body>
 </html>
 
+<partial name="_ModalPopupLg" />
 <partial name="_ModalPopup" />
 <partial name="_DeleteDialog" />
 

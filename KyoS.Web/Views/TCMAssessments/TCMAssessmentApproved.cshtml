@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<KyoS.Web.Data.Entities.TCMAssessmentEntity>
 @{
-    ViewData["Title"] = "TCM FARS Forms";
+    ViewData["Title"] = "Assessments";
 }
 <link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
 
@@ -18,7 +18,14 @@
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">Pending Assessments</h3>
+                @if (ViewData["approved"].ToString() == "0")
+                {
+                    <h3 class="panel-title">Assessments in edition</h3>
+                }
+                @if (ViewData["approved"].ToString() == "1")
+                {
+                    <h3 class="panel-title">Pending Assessments</h3>
+                }
             </div>
             <div class="panel-body">
                 <table class="table table-hover table-responsive table-striped" id="MyTable">
@@ -27,13 +34,16 @@
                             <th class="col-md-1">
 
                             </th>
+                            <th class="col-md-2">
+                                TCM Name
+                            </th>
                             <th class="col-md-3">
                                 Client Name
                             </th>
-                            <th class="col-md-2" style="text-align: center;">
+                            <th class="col-md-1" style="text-align: center;">
                                 Open
                             </th>
-                            <th class="col-md-2" style="text-align: center;">
+                            <th class="col-md-1" style="text-align: center;">
                                 Assessment
                             </th>
                             <th class="col-md-1" style="text-align: center;">
@@ -98,6 +108,9 @@
                                             }
                                         </table>
                                     </div>
+                                </td>
+                                <td >
+                                    @Html.DisplayFor(modelItem => item.TcmClient.Casemanager.Name)
                                 </td>
                                 <td>
                                     @if (item.TcmClient.Client.Gender == KyoS.Common.Enums.GenderType.Female)
@@ -165,7 +178,7 @@
                                     }
                                     @if (item.Approved == 2)
                                     {
-                                        <span class="label label-info">
+                                        <span class="label label-success">
                                             Approved
                                         </span>
                                     }
@@ -175,21 +188,22 @@
                                     {
                                         @if (item.Approved == 0)
                                         {
-                                            <a asp-action="Edit" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-warning" title="Edit TCM Discharge"><i class="glyphicon glyphicon-pencil"></i></a>
-                                            <a asp-action="FinishEditing" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-success" title="Finish Editing TCM Discharge"><i class="glyphicon glyphicon-ok"></i></a>
-                                            <i title="Approved" class="btn btn-success disabled glyphicon glyphicon-print"></i>
+                                            <a asp-action="Edit" asp-route-id="@item.Id" asp-route-origi="4" class="btn btn-warning" title="Edit Assessment"><i class="glyphicon glyphicon-pencil"></i></a>
+                                            <a asp-action="FinishEditing" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-success" title="Sign / Finish Edition"><i class="glyphicon glyphicon-ok"></i></a>
+                                            <i title="Print" class="btn btn-success disabled glyphicon glyphicon-print"></i>
                                         }
                                         @if (item.Approved == 1)
                                         {
-                                            <a asp-action="Edit" asp-route-id="@item.Id" asp-route-origin="2" class="btn btn-warning disabled" title="Edit TCM Discharge"><i class="glyphicon glyphicon-pencil"></i></a>
+                                            <a asp-action="Edit" asp-route-id="@item.Id" asp-route-origin="2" class="btn btn-warning" title="Edit Assessment"><i class="glyphicon glyphicon-pencil"></i></a>
                                             <i title="Approved" class="btn btn-success disabled glyphicon glyphicon-ok"></i>
-                                            <i title="Approved" class="btn btn-success disabled glyphicon glyphicon-print"></i>
+                                            <i title="Print" class="btn btn-success disabled glyphicon glyphicon-print"></i>
                                         }
                                         @if (item.Approved == 2)
                                         {
                                             <i title="Approved" class="btn btn-warning disabled glyphicon glyphicon-pencil"></i>
                                             <i title="Approved" class="btn btn-success disabled glyphicon glyphicon-ok"></i>
-                                            <a asp-action="Print" asp-route-id="@item.Id" class="btn btn-success" title="Edit TCM Discharge"><i class="glyphicon glyphicon-print"></i></a>
+                                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info" title="View Assessment"><i class="glyphicon glyphicon-list"></i></a>
+                                            <a asp-action="PrintTCMAssessment" asp-controller="TCMIntakes" asp-route-id="@item.TcmClient.Id" class="btn btn-success" title="Print Assessment" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                         }
                                     }
                                     @if (User.IsInRole("TCMSupervisor"))
@@ -198,20 +212,21 @@
                                         {
                                             <i title="Approved" class="btn btn-warning disabled glyphicon glyphicon-pencil"></i>
                                             <i title="Approved" class="btn btn-success disabled glyphicon glyphicon-ok"></i>
-                                            <i title="Approved" class="btn btn-success disabled glyphicon glyphicon-print"></i>
+                                            <i title="Print" class="btn btn-success disabled glyphicon glyphicon-print"></i>
                                         }
 
                                         @if (item.Approved == 1)
                                         {
                                             <i title="Approved" class="btn btn-warning disabled glyphicon glyphicon-pencil"></i>
                                             <a asp-action="EditReadOnly" asp-route-id="@item.Id" class="btn btn-success" title="Pending Approval"><i class="glyphicon glyphicon-ok"></i></a>
-                                            <i title="Approved" class="btn btn-success disabled glyphicon glyphicon-print"></i>
+                                            <i title="Print" class="btn btn-success disabled glyphicon glyphicon-print"></i>
                                         }
                                         @if (item.Approved == 2)
                                         {
                                             <i title="Approved" class="btn btn-warning disabled glyphicon glyphicon-pencil"></i>
                                             <i title="Approved" class="btn btn-success disabled glyphicon glyphicon-ok"></i>
-                                            <a asp-action="Print" asp-route-id="@item.Id" class="btn btn-success" title="Edit TCM Discharge"><i class="glyphicon glyphicon-print"></i></a>
+                                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info" title="View Assessment"><i class="glyphicon glyphicon-list"></i></a>
+                                            <a asp-action="PrintTCMAssessment" asp-controller="TCMIntakes" asp-route-id="@item.TcmClient.Id" class="btn btn-success" title="Print Assessment" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                         }
                                     }
                                     @if (User.IsInRole("Manager"))
@@ -220,13 +235,14 @@
                                         {
                                             <i title="Approved" class="btn btn-warning disabled glyphicon glyphicon-pencil"></i>
                                             <i title="Approved" class="btn btn-success disabled glyphicon glyphicon-ok"></i>
-                                            <i title="Approved" class="btn btn-success disabled glyphicon glyphicon-print"></i>
+                                            <i title="Print" class="btn btn-success disabled glyphicon glyphicon-print"></i>
                                         }
                                         @if (item.Approved == 2)
                                         {
                                             <i title="Approved" class="btn btn-warning disabled glyphicon glyphicon-pencil"></i>
                                             <i title="Approved" class="btn btn-success disabled glyphicon glyphicon-ok"></i>
-                                            <a asp-action="Print" asp-route-id="@item.Id" class="btn btn-success" title="Edit TCM Discharge"><i class="glyphicon glyphicon-print"></i></a>
+                                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info" title="View Assessment"><i class="glyphicon glyphicon-list"></i></a>
+                                            <a asp-action="PrintTCMAssessment" asp-controller="TCMIntakes" asp-route-id="@item.TcmClient.Id" class="btn btn-success" title="Print Assessment" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                         }
                                     }
                                 </td>

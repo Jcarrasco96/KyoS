@@ -1,0 +1,236 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="10/14/2023 13:28:52" ReportInfo.CreatorVersion="2021.1.0.0">
+  <Dictionary>
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pKiygLNrR2GSkUua6CZa7zWuDzNGOn7cjq7mn0WTOnccDkyyV5BLvtFa1BRlcYFBrDuWS41cLSS3njo+M2rqS1Q==">
+      <TableDataSource Name="Clinics" DataType="System.Int32" Enabled="true" TableName="Clinics">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Name" DataType="System.String"/>
+        <Column Name="LogoPath" DataType="System.String"/>
+        <Column Name="Schema" DataType="System.Int32"/>
+        <Column Name="Address" DataType="System.String"/>
+        <Column Name="CEO" DataType="System.String"/>
+        <Column Name="City" DataType="System.String"/>
+        <Column Name="FaxNo" DataType="System.String"/>
+        <Column Name="Phone" DataType="System.String"/>
+        <Column Name="State" DataType="System.String"/>
+        <Column Name="ZipCode" DataType="System.String"/>
+        <Column Name="ClinicalDirector" DataType="System.String"/>
+        <Column Name="ProviderTaxId" DataType="System.String"/>
+        <Column Name="ProviderMedicaidId" DataType="System.String"/>
+      </TableDataSource>
+      <TableDataSource Name="Clients" DataType="System.Int32" Enabled="true" TableName="Clients">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Name" DataType="System.String"/>
+        <Column Name="Gender" DataType="System.Int32"/>
+        <Column Name="Code" DataType="System.String"/>
+        <Column Name="ClinicId" DataType="System.Int32"/>
+        <Column Name="DateOfBirth" DataType="System.DateTime"/>
+        <Column Name="ZipCode" DataType="System.String"/>
+        <Column Name="Status" DataType="System.Int32"/>
+        <Column Name="GroupId" DataType="System.Int32"/>
+        <Column Name="AlternativeAddress" DataType="System.String"/>
+        <Column Name="City" DataType="System.String"/>
+        <Column Name="Country" DataType="System.String"/>
+        <Column Name="CreatedBy" DataType="System.String"/>
+        <Column Name="CreatedOn" DataType="System.DateTime"/>
+        <Column Name="DoctorId" DataType="System.Int32"/>
+        <Column Name="Email" DataType="System.String"/>
+        <Column Name="EmergencyContactId" DataType="System.Int32"/>
+        <Column Name="Ethnicity" DataType="System.Int32"/>
+        <Column Name="FullAddress" DataType="System.String"/>
+        <Column Name="LastModifiedBy" DataType="System.String"/>
+        <Column Name="LastModifiedOn" DataType="System.DateTime"/>
+        <Column Name="LegalGuardianId" DataType="System.Int32"/>
+        <Column Name="MaritalStatus" DataType="System.Int32"/>
+        <Column Name="MedicaidID" DataType="System.String"/>
+        <Column Name="OtherLanguage" DataType="System.String"/>
+        <Column Name="PhotoPath" DataType="System.String"/>
+        <Column Name="PreferredLanguage" DataType="System.Int32"/>
+        <Column Name="PsychiatristId" DataType="System.Int32"/>
+        <Column Name="Race" DataType="System.Int32"/>
+        <Column Name="SSN" DataType="System.String"/>
+        <Column Name="SignPath" DataType="System.String"/>
+        <Column Name="State" DataType="System.String"/>
+        <Column Name="Telephone" DataType="System.String"/>
+        <Column Name="TelephoneSecondary" DataType="System.String"/>
+        <Column Name="RelationShipOfLegalGuardian" DataType="System.Int32"/>
+        <Column Name="Service" DataType="System.Int32"/>
+        <Column Name="IndividualTherapyFacilitatorId" DataType="System.Int32"/>
+        <Column Name="AdmisionDate" DataType="System.DateTime"/>
+        <Column Name="PlaceOfBirth" DataType="System.String"/>
+        <Column Name="RelationShipOfEmergencyContact" DataType="System.Int32"/>
+        <Column Name="IdFacilitatorPSR" DataType="System.Int32"/>
+        <Column Name="OtherLanguage_Read" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="OtherLanguage_Speak" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="OtherLanguage_Understand" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="MedicareId" DataType="System.String"/>
+        <Column Name="DateOfClose" DataType="System.DateTime"/>
+        <Column Name="OnlyTCM" DataType="System.Boolean" BindableControl="CheckBox"/>
+      </TableDataSource>
+      <TableDataSource Name="CaseManagers" DataType="System.Int32" Enabled="true" TableName="CaseManagers">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Name" DataType="System.String"/>
+        <Column Name="ProviderNumber" DataType="System.String"/>
+        <Column Name="Status" DataType="System.Int32"/>
+        <Column Name="LinkedUser" DataType="System.String"/>
+        <Column Name="SignaturePath" DataType="System.String"/>
+        <Column Name="ClinicId" DataType="System.Int32"/>
+        <Column Name="Email" DataType="System.String"/>
+        <Column Name="Phone" DataType="System.String"/>
+        <Column Name="Credentials" DataType="System.String"/>
+        <Column Name="Money" DataType="System.Decimal"/>
+      </TableDataSource>
+      <TableDataSource Name="TCMClient" DataType="System.Int32" Enabled="true" TableName="TCMClient">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="CasemanagerId" DataType="System.Int32"/>
+        <Column Name="CaseNumber" DataType="System.String"/>
+        <Column Name="ClientId" DataType="System.Int32"/>
+        <Column Name="DataClose" DataType="System.DateTime"/>
+        <Column Name="DataOpen" DataType="System.DateTime"/>
+        <Column Name="Period" DataType="System.Int32"/>
+        <Column Name="Status" DataType="System.Int32"/>
+        <Column Name="CreatedBy" DataType="System.String"/>
+        <Column Name="CreatedOn" DataType="System.DateTime"/>
+        <Column Name="LastModifiedBy" DataType="System.String"/>
+        <Column Name="LastModifiedOn" DataType="System.DateTime"/>
+      </TableDataSource>
+      <TableDataSource Name="Classifications" Alias="Signatures" DataType="System.Int32" Enabled="true" TableName="Classifications">
+        <Column Name="supervisorSignature" DataType="System.Byte[]" PropName="Id"/>
+        <Column Name="facilitatorSignature" DataType="System.Byte[]" PropName="Name"/>
+      </TableDataSource>
+      <TableDataSource Name="TCMIntakePainScreen" DataType="System.Int32" Enabled="true" TableName="TCMIntakePainScreen">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="TcmClient_FK" DataType="System.Int32"/>
+        <Column Name="DoYouSuffer" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="DidYouUse" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="WereYourDrugs" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="DoYouFell" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="DoYouBelieve" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="WhereIs" DataType="System.String"/>
+        <Column Name="WhatCauses" DataType="System.String"/>
+        <Column Name="DoesYourPainEffect" DataType="System.String"/>
+        <Column Name="AlwayasThere" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="ComesAndGoes" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="CurrentPainScore" DataType="System.Int32"/>
+        <Column Name="AdmissionedFor" DataType="System.String"/>
+        <Column Name="DateSignatureEmployee" DataType="System.DateTime"/>
+        <Column Name="CreatedBy" DataType="System.String"/>
+        <Column Name="CreatedOn" DataType="System.DateTime"/>
+        <Column Name="LastModifiedBy" DataType="System.String"/>
+        <Column Name="LastModifiedOn" DataType="System.DateTime"/>
+        <Column Name="DateOfReferral" DataType="System.DateTime"/>
+        <Column Name="ReferredTo" DataType="System.String"/>
+      </TableDataSource>
+    </MsSqlDataConnection>
+    <Parameter Name="session1" DataType="System.String"/>
+  </Dictionary>
+  <ReportPage Name="Page1" PaperWidth="215.9" PaperHeight="279.4" RawPaperSize="1" LeftMargin="5" TopMargin="5" RightMargin="5" BottomMargin="5" Watermark.Enabled="true" Watermark.Font="Arial, 60pt">
+    <ReportTitleBand Name="ReportTitle1" Width="778.3" Height="80.15">
+      <TextObject Name="Textbox12" Left="170.1" Top="9.45" Width="431.15" Height="20" CanGrow="true" Text="[Clinics.Name]" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 12pt, style=Bold"/>
+      <TextObject Name="Textbox64" Left="170.1" Top="31.33" Width="431.15" Height="22" CanGrow="true" Text="Mental Health Targeted Case Management Program" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 11pt, style=Bold"/>
+      <LineObject Name="Line3" Left="160.65" Top="14.45" Height="37.2"/>
+      <LineObject Name="Line4" Left="774.52" Top="74.6" Width="-776"/>
+      <PictureObject Name="Picture1" Left="18.9" Top="5.45" Width="103.95" Height="66.15"/>
+      <LineObject Name="Line6" Left="159.65" Top="13.45" Height="37.8"/>
+      <LineObject Name="Line7" Left="774.9" Top="73.7" Width="-776"/>
+    </ReportTitleBand>
+    <DataBand Name="Data1" Top="84" Width="778.3" Height="932.28" DataSource="CaseManagers">
+      <TextObject Name="Text304" Top="34.8" Width="102.06" Height="17.01" Text="Client's Name:" HorzAlign="Right" VertAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text305" Left="103.95" Top="32.8" Width="313.36" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Clients.Name]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text318" Left="167.1" Width="431.15" Height="22" CanGrow="true" Text="Pain Screen" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 12pt, style=Bold"/>
+      <PictureObject Name="Picture3" Left="156.67" Top="832.7" Width="95" Height="63.45" DataColumn="Signatures.facilitatorSignature"/>
+      <TextObject Name="Text316" Left="76.07" Top="907.65" Width="264.6" Height="22.68" CanGrow="true" Text="Employee / TCM Signature" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
+      <LineObject Name="Line17" Left="344.67" Top="906.2" Width="-268.38"/>
+      <TextObject Name="Text317" Left="75.62" Top="887.3" Width="268.38" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[CaseManagers.Name]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
+      <PictureObject Name="Picture4" Left="159.67" Top="747.75" Width="95" Height="63.45" DataColumn="Signatures.supervisorSignature"/>
+      <TextObject Name="Text324" Left="75.97" Top="821.7" Width="264.6" Height="22.68" CanGrow="true" Text="Client / Parent / Legal Guardian Signature" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
+      <LineObject Name="Line18" Left="345.67" Top="821.25" Width="-268.38"/>
+      <TextObject Name="Text325" Left="75.6" Top="802.35" Width="268.38" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Clients.Name]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text291" Left="532.22" Top="821.87" Width="153.09" Height="22.68" CanGrow="true" Text="Date" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
+      <LineObject Name="Line16" Left="687.42" Top="821.39" Width="-154.98"/>
+      <TextObject Name="Text292" Left="532.22" Top="802.46" Width="158.76" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[TCMIntakePainScreen.DateOfReferral]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text322" Left="532.22" Top="907.71" Width="153.09" Height="22.68" CanGrow="true" Text="Date" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
+      <LineObject Name="Line19" Left="687.42" Top="905.54" Width="-154.98"/>
+      <TextObject Name="Text323" Left="532.22" Top="887.3" Width="158.76" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[TCMIntakePainScreen.DateSignatureEmployee]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
+      <CheckBoxObject Name="CheckBox28" Left="463.15" Top="83.05" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMIntakePainScreen.DoYouSuffer"/>
+      <TextObject Name="Text331" Left="478.05" Top="80.05" Width="37.8" Height="18.9" Text="Yes" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text332" Left="6.43" Top="83.05" Width="451.71" Height="17.01" Text="Do you suffer from chronic pain?" VertAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text333" Left="6.43" Top="113.4" Width="451.71" Height="17.01" Text="Did you use drugs or alcohol to cope with pain?" VertAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text334" Left="6.43" Top="141.75" Width="451.71" Height="35.91" Text="Were your drug abuse problems made worse &#10;by your need for pain medication?" VertAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text335" Left="6.43" Top="185.55" Width="451.71" Height="35.91" Text="Do you feel concerned that your pain management &#10;needs will not be addressed? " VertAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text336" Left="6.43" Top="230.25" Width="451.71" Height="17.01" Text="Do you believe you will always need narcotic pain medications?" VertAlign="Center" Font="Arial, 10pt"/>
+      <CheckBoxObject Name="CheckBox29" Left="464.05" Top="113.4" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMIntakePainScreen.DidYouUse"/>
+      <TextObject Name="Text337" Left="478.95" Top="110.4" Width="37.8" Height="18.9" Text="Yes" VertAlign="Center" Font="Arial, 9pt"/>
+      <CheckBoxObject Name="CheckBox30" Left="464.05" Top="147.75" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMIntakePainScreen.WereYourDrugs"/>
+      <TextObject Name="Text338" Left="478.95" Top="144.75" Width="37.8" Height="18.9" Text="Yes" VertAlign="Center" Font="Arial, 9pt"/>
+      <CheckBoxObject Name="CheckBox31" Left="464.21" Top="193" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMIntakePainScreen.DoYouFell"/>
+      <TextObject Name="Text339" Left="478.95" Top="190" Width="37.8" Height="18.9" Text="Yes" VertAlign="Center" Font="Arial, 9pt"/>
+      <CheckBoxObject Name="CheckBox32" Left="464.21" Top="230.8" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMIntakePainScreen.DoYouBelieve"/>
+      <TextObject Name="Text340" Left="478.95" Top="227.8" Width="37.8" Height="18.9" Text="Yes" VertAlign="Center" Font="Arial, 9pt"/>
+      <CheckBoxObject Name="CheckBox33" Left="522.2" Top="83.6" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePainScreen.DoYouSuffer] == true,false,true)"/>
+      <TextObject Name="Text341" Left="537.1" Top="80.6" Width="37.8" Height="18.9" Text="No" VertAlign="Center" Font="Arial, 9pt"/>
+      <CheckBoxObject Name="CheckBox34" Left="523.1" Top="113.42" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePainScreen.DidYouUse] == true,false,true)"/>
+      <TextObject Name="Text342" Left="538" Top="110.4" Width="37.8" Height="18.9" Text="No" VertAlign="Center" Font="Arial, 9pt"/>
+      <CheckBoxObject Name="CheckBox35" Left="523.1" Top="147.82" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePainScreen.WereYourDrugs] == true,false,true)"/>
+      <TextObject Name="Text343" Left="538" Top="144.8" Width="37.8" Height="18.9" Text="No" VertAlign="Center" Font="Arial, 9pt"/>
+      <CheckBoxObject Name="CheckBox36" Left="523.26" Top="193.18" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePainScreen.DoYouFell] == true,false,true)"/>
+      <TextObject Name="Text344" Left="538" Top="190.16" Width="37.8" Height="18.9" Text="No" VertAlign="Center" Font="Arial, 9pt"/>
+      <CheckBoxObject Name="CheckBox37" Left="523.26" Top="230.98" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePainScreen.DoYouBelieve] == true,false,true)"/>
+      <TextObject Name="Text345" Left="538" Top="227.96" Width="37.8" Height="18.9" Text="No" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text346" Left="6.45" Top="274.05" Width="470.61" Height="17.01" Text="Where is your pain located? " VertAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text118" Left="9.45" Top="293.95" Width="756" Height="56.7" Fill.Color="LightBlue" CanGrow="true" CanBreak="false" Text="[TCMIntakePainScreen.WhereIs]" Font="Arial, 9pt"/>
+      <TextObject Name="Text347" Left="6.45" Top="359.1" Width="470.61" Height="17.01" Text="What causes your pain?" VertAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text348" Left="9.45" Top="379" Width="756" Height="56.7" Fill.Color="LightBlue" CanGrow="true" CanBreak="false" Text="[TCMIntakePainScreen.WhatCauses]" Font="Arial, 9pt"/>
+      <TextObject Name="Text349" Left="6.45" Top="444.15" Width="754.11" Height="35.91" Text="Does your pain effect your daily functioning? If so what? (i.e. sleep, school/work,  mood, relationships, eating/drinking, etc..)" VertAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text350" Left="9.45" Top="482.95" Width="756" Height="56.7" Fill.Color="LightBlue" CanGrow="true" CanBreak="false" Text="[TCMIntakePainScreen.DoesYourPainEffect]" Font="Arial, 9pt"/>
+      <CheckBoxObject Name="CheckBox38" Left="152.75" Top="569" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMIntakePainScreen.AlwayasThere"/>
+      <TextObject Name="Text351" Left="165.65" Top="566" Width="85.05" Height="18.9" Text="Always There" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text352" Left="9.45" Top="566" Width="139.86" Height="17.01" Text="Duration of pain? " VertAlign="Center" Font="Arial, 10pt"/>
+      <CheckBoxObject Name="CheckBox39" Left="249.6" Top="569.02" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMIntakePainScreen.ComesAndGoes"/>
+      <TextObject Name="Text353" Left="261.5" Top="566.55" Width="113.4" Height="18.9" Text="Comes and Goes" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text354" Left="9.45" Top="594.8" Width="508.41" Height="17.01" Text="Current Pain Score: (0 -­ no pain, 5 -­ moderate pain, 10 -­ severe pain)" VertAlign="Center" Font="Arial, 10pt"/>
+      <CheckBoxObject Name="CheckBox48" Left="15.45" Top="613.7" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePainScreen.CurrentPainScore] == 0,true,false)"/>
+      <CheckBoxObject Name="CheckBox49" Left="54.25" Top="613.7" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePainScreen.CurrentPainScore] == 1,true,false)"/>
+      <CheckBoxObject Name="CheckBox50" Left="92.05" Top="613.7" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePainScreen.CurrentPainScore] == 2,true,false)"/>
+      <CheckBoxObject Name="CheckBox40" Left="130.85" Top="613.7" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePainScreen.CurrentPainScore] == 3,true,false)"/>
+      <CheckBoxObject Name="CheckBox41" Left="167.65" Top="613.7" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePainScreen.CurrentPainScore] == 4,true,false)"/>
+      <CheckBoxObject Name="CheckBox42" Left="206.45" Top="613.7" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePainScreen.CurrentPainScore] == 5,true,false)"/>
+      <CheckBoxObject Name="CheckBox43" Left="241.25" Top="613.7" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePainScreen.CurrentPainScore] == 6,true,false)"/>
+      <CheckBoxObject Name="CheckBox44" Left="280.05" Top="613.7" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePainScreen.CurrentPainScore] == 7,true,false)"/>
+      <CheckBoxObject Name="CheckBox45" Left="319.3" Top="613.7" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePainScreen.CurrentPainScore] == 8,true,false)"/>
+      <CheckBoxObject Name="CheckBox46" Left="358.1" Top="613.7" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePainScreen.CurrentPainScore] == 9,true,false)"/>
+      <CheckBoxObject Name="CheckBox47" Left="394.9" Top="613.7" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePainScreen.CurrentPainScore] == 10,true,false)"/>
+      <TextObject Name="Text360" Left="13.45" Top="626.05" Width="18.9" Height="18.9" Text="0" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text361" Left="52.25" Top="626.05" Width="18.9" Height="18.9" Text="1" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text362" Left="90.05" Top="626.05" Width="18.9" Height="18.9" Text="2" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text363" Left="128.85" Top="626.05" Width="18.9" Height="18.9" Text="3" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text364" Left="165.65" Top="626.05" Width="18.9" Height="18.9" Text="4" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text365" Left="204.45" Top="626.05" Width="18.9" Height="18.9" Text="5" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text366" Left="239.25" Top="626.05" Width="18.9" Height="18.9" Text="6" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text367" Left="278.05" Top="626.05" Width="18.9" Height="18.9" Text="7" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text368" Left="317.3" Top="626.05" Width="18.9" Height="18.9" Text="8" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text369" Left="356.1" Top="626.05" Width="18.9" Height="18.9" Text="9" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text370" Left="387.9" Top="626.05" Width="28.35" Height="18.9" Text="10" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+      <TableObject Name="Table2" Left="9.45" Top="656.95" Width="759.02" Height="56.7" Border.Lines="All">
+        <TableColumn Name="Column3" Width="151.2"/>
+        <TableColumn Name="Column4" Width="264.6"/>
+        <TableColumn Name="Column5" Width="343.22"/>
+        <TableRow Name="Row19">
+          <TableCell Name="Cell49" Border.Lines="All" Text="Score Range" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+          <TableCell Name="Cell50" Border.Lines="All" Text="Assessment" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+          <TableCell Name="Cell51" Border.Lines="All" Text="Plan" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+        </TableRow>
+        <TableRow Name="Row20">
+          <TableCell Name="Cell54" Border.Lines="All" Text="0-4" HorzAlign="Center" Font="Arial, 10pt"/>
+          <TableCell Name="Cell55" Border.Lines="All" Text="Low Risk" HorzAlign="Center" Font="Arial, 10pt"/>
+          <TableCell Name="Cell56" Border.Lines="All" Text="Reassess if other issues arise" HorzAlign="Center" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row21">
+          <TableCell Name="Cell59" Border.Lines="All" Text="16-24" HorzAlign="Center" Font="Arial, 10pt"/>
+          <TableCell Name="Cell60" Border.Lines="All" Text="High Risk" HorzAlign="Center" Font="Arial, 10pt"/>
+          <TableCell Name="Cell61" Border.Lines="All" Text="Refer client to a Physician" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt"/>
+        </TableRow>
+      </TableObject>
+    </DataBand>
+  </ReportPage>
+</Report>

@@ -2,7 +2,7 @@
 
 <div class="panel panel-default">
     <div class="panel-heading">
-        <h3 class="panel-title">TCM Service Plan Review's Domain and Objetive</h3>
+        <h3 class="panel-title">Domains - Objetives</h3>
     </div>
     <div class="panel-body">
         <table class="table table-hover table-responsive table-striped" id="MyTable">
@@ -44,7 +44,7 @@
                                         <th class="col-md-1" style="text-align:center">Objective</th>
                                         <th class="col-md-2" style="text-align:left">Create by</th>
                                         <th class="col-md-2" style="text-align:center">Status</th>
-                                        <th class="col-md-5" style="text-align:center">Objectives Changes/Updates</th>
+                                        <th class="col-md-5" style="text-align:center">Objectives Changes / Updates</th>
                                         <th class="col-md-2" style="text-align:center"></th>
                                     </tr>
                                     @foreach (var value in item.TCMServicePlanRevDomainObjectiive)
@@ -70,21 +70,47 @@
                                             <td align="center">
                                                 @if (User.IsInRole("CaseManager"))
                                                 {
-                                                    @if (value.Origin == "Service Plan Review")
+                                                    @if (ViewData["origi"].ToString() != "5")
                                                     {
-                                                        <a onclick="showInPopup('@Url.Action("EditObjetive", "TCMServicePlanReviews", new { id = value.Id }, Context.Request.Scheme)','Edit Objetive of Service Plan Review')" class="btn btn-warning" title="Edit Objetive of this Service Plan Review"><i class="glyphicon glyphicon-pencil"></i> </a>
-                                                        <a asp-action="DeleteObjetive" asp-route-id="@value.Id" asp-route-idObjetive="@value.IdObjective" class="btn btn-danger"><i class="glyphicon glyphicon-trash" title="Delete Objetive"></i></a>
+                                                        @if (value.Origin == "Service Plan Review")
+                                                        {
+                                                            <a onclick="showInPopup('@Url.Action("EditObjetive", "TCMServicePlanReviews", new { id = value.Id }, Context.Request.Scheme)','Edit Objetive of Service Plan Review')" class="btn btn-warning" title="Edit Objetive of this Service Plan Review"><i class="glyphicon glyphicon-pencil"></i> </a>
+                                                            <a onclick="showInPopup('@Url.Action("DeleteObjetive", "TCMServicePlanReviews", new { id = value.Id }, Context.Request.Scheme)','Delete Objective')" class="btn btn-danger" title="Delete objective"><i class="glyphicon glyphicon-trash"></i> </a>
+                                                        }
+                                                        else
+                                                        {
+                                                            <a onclick="showInPopup('@Url.Action("EditObjetiveReadOnly", "TCMServicePlanReviews", new { id = value.Id }, Context.Request.Scheme)','Edit Objetive of Service Plan Review')" class="btn btn-warning" title="Edit Objetive of this Service Plan Review"><i class="glyphicon glyphicon-pencil"></i> </a>
+                                                            <a asp-action="EditDomain" asp-route-id="@item.Id" class="btn btn-danger disabled"><i class="glyphicon glyphicon-trash" title="Edit Service PLan Review Domain"></i></a>
+                                                        }
                                                     }
                                                     else
                                                     {
-                                                        <a onclick="showInPopup('@Url.Action("EditObjetiveReadOnly", "TCMServicePlanReviews", new { id = value.Id }, Context.Request.Scheme)','Edit Objetive of Service Plan Review')" class="btn btn-warning" title="Edit Objetive of this Service Plan Review"><i class="glyphicon glyphicon-pencil"></i> </a>
-                                                        <a asp-action="EditDomain" asp-route-id="@item.Id" class="btn btn-danger disabled"><i class="glyphicon glyphicon-trash" title="Edit Service PLan Review Domain"></i></a>
+                                                        <a onclick="showInPopup('@Url.Action("EditObjetiveReadOnly", "TCMServicePlanReviews", new { id = value.Id, origi = 5 }, Context.Request.Scheme)','View Objetive')" class="btn btn-info" title="View Objetive"><i class="glyphicon glyphicon-search"></i> </a>
                                                     }
                                                 }
-                                                else
+                                                @if (User.IsInRole("TCMSupervisor"))
                                                 {
-                                                    <i class="btn btn-warning disabled glyphicon glyphicon-pencil"></i>
-                                                    <i class="btn btn-danger disabled glyphicon glyphicon-trash"></i>
+                                                    @if (item.TcmServicePlanReview.TcmServicePlan.TCMSupervisor.Clinic.Setting.TCMSupervisorEdit == true && ViewData["origi"].ToString() != "5")
+                                                    {
+                                                        @if (value.Origin == "Service Plan Review")
+                                                        {
+                                                            <a onclick="showInPopup('@Url.Action("EditObjetive", "TCMServicePlanReviews", new { id = value.Id }, Context.Request.Scheme)','Edit Objetive of Service Plan Review')" class="btn btn-warning" title="Edit Objetive of this Service Plan Review"><i class="glyphicon glyphicon-pencil"></i> </a>
+                                                            <a onclick="showInPopup('@Url.Action("DeleteObjetive", "TCMServicePlanReviews", new { id = value.Id }, Context.Request.Scheme)','Delete Objective')" class="btn btn-danger" title="Delete objective"><i class="glyphicon glyphicon-trash"></i> </a>
+                                                        }
+                                                        else
+                                                        {
+                                                            <a onclick="showInPopup('@Url.Action("EditObjetiveReadOnly", "TCMServicePlanReviews", new { id = value.Id }, Context.Request.Scheme)','Edit Objetive of Service Plan Review')" class="btn btn-warning" title="Edit Objetive of this Service Plan Review"><i class="glyphicon glyphicon-pencil"></i> </a>
+                                                            <a onclick="showInPopup('@Url.Action("DeleteObjetive", "TCMServicePlanReviews", new { id = value.Id }, Context.Request.Scheme)','Delete Objective')" class="btn btn-danger disabled" title="Delete objective"><i class="glyphicon glyphicon-trash"></i> </a>
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        <a onclick="showInPopup('@Url.Action("EditObjetiveReadOnly", "TCMServicePlanReviews", new { id = value.Id, origi = 5 }, Context.Request.Scheme)','View Objetive')" class="btn btn-info" title="View Objetive"><i class="glyphicon glyphicon-search"></i> </a>
+                                                    }
+                                                }
+                                                @if (User.IsInRole("Manager"))
+                                                {
+                                                    <a onclick="showInPopup('@Url.Action("EditObjetiveReadOnly", "TCMServicePlanReviews", new { id = value.Id, origi = 5 }, Context.Request.Scheme)','View Objetive')" class="btn btn-info" title="View Objetive"><i class="glyphicon glyphicon-search"></i> </a>
                                                 }
                                             </td>
                                         </tr>
@@ -99,13 +125,13 @@
                             @Html.DisplayFor(modelItem => item.TcmDomain.Name)
                         </td>
                         <td align="center">
-                            @if (item.Status == KyoS.Common.Enums.StatusType.Open)
+                            @if (item.Status == KyoS.Common.Enums.SPRStatus.Open)
                             {
                                 <span class="label label-success">
                                     Open
                                 </span>
                             }
-                            @if (item.Status == KyoS.Common.Enums.StatusType.Close)
+                            @if (item.Status == KyoS.Common.Enums.SPRStatus.Closed)
                             {
                                 <span class="label label-default">
                                     Close
@@ -115,24 +141,54 @@
                         <td align="center">
                             @if (User.IsInRole("CaseManager"))
                             {
-                                @if (item.TcmDomain.Origin == "Service Plan Review")
+                                @if (ViewData["origi"].ToString() != "5")
                                 {
-                                    <a onclick="showInPopup('@Url.Action("EditDomain", "TCMServicePlanReviews", new { id = item.TcmDomain.Id }, Context.Request.Scheme)','Edit Objetive of Service Plan Review')" class="btn btn-warning" title="Edit Objetive of this Service Plan Review"><i class="glyphicon glyphicon-pencil"></i> </a>
-                                    <a onclick="showInPopup('@Url.Action("CreateObjetive", "TCMServicePlanReviews", new { id = item.TcmDomain.Id, origen = 1, idServicePlanReview = item.TcmServicePlanReview.Id }, Context.Request.Scheme)','Create Objetive of Service Plan Review')" class="btn btn-info" title="Create Objetive of this Service Plan Review"><i class="glyphicon glyphicon-plus"></i> </a>
-                                    <a asp-action="DeleteDomain" asp-route-id="@item.Id" class="btn btn-danger"><i class="glyphicon glyphicon-trash" title="Delete Domain"></i></a>
+                                    @if (item.TcmDomain.Origin == "Service Plan Review")
+                                    {
+                                        <a onclick="showInPopup('@Url.Action("EditDomain", "TCMServicePlanReviews", new { id = item.TcmDomain.Id }, Context.Request.Scheme)','Edit Domain of Service Plan Review')" class="btn btn-warning" title="Edit Domain of this Service Plan Review"><i class="glyphicon glyphicon-pencil"></i> </a>
+                                        <a onclick="showInPopup('@Url.Action("CreateObjetive", "TCMServicePlanReviews", new { id = item.TcmDomain.Id, origen = 1, idServicePlanReview = item.TcmServicePlanReview.Id }, Context.Request.Scheme)','Create Objetive of Service Plan Review')" class="btn btn-info" title="Create Objetive of this Service Plan Review"><i class="glyphicon glyphicon-plus"></i> </a>
+                                        <a onclick="showInPopup('@Url.Action("DeleteDomain", "TCMServicePlanReviews", new { id = item.Id }, Context.Request.Scheme)','Delete Domain')" class="btn btn-danger" title="Delete Domain"><i class="glyphicon glyphicon-trash"></i> </a>
+                                    }
+                                    else
+                                    {
+                                        <a onclick="showInPopup('@Url.Action("EditDomainReadOnly", "TCMServicePlanReviews", new { id = item.TcmDomain.Id }, Context.Request.Scheme)','Edit Domain of Service Plan Review')" class="btn btn-warning" title="Edit Doamin of this Service Plan Review"><i class="glyphicon glyphicon-pencil"></i> </a>
+                                        <a onclick="showInPopup('@Url.Action("CreateObjetive", "TCMServicePlanReviews", new { id = item.TcmDomain.Id, idServicePlanReview = item.TcmServicePlanReview.Id }, Context.Request.Scheme)','Create Objetive of Service Plan Review')" class="btn btn-info" title="Create Objetive of this Service Plan Review"><i class="glyphicon glyphicon-plus"></i> </a>
+                                        <a asp-action="DeleteDomain" asp-route-id="@item.Id" class="btn btn-danger" disabled><i class="glyphicon glyphicon-trash " title="Delete Domain"></i></a>
+                                    }
                                 }
                                 else
                                 {
-                                    <a onclick="showInPopup('@Url.Action("EditDomainReadOnly", "TCMServicePlanReviews", new { id = item.TcmDomain.Id }, Context.Request.Scheme)','Edit Objetive of Service Plan Review')" class="btn btn-warning" title="Edit Objetive of this Service Plan Review"><i class="glyphicon glyphicon-pencil"></i> </a>
-                                    <a onclick="showInPopup('@Url.Action("CreateObjetive", "TCMServicePlanReviews", new { id = item.TcmDomain.Id, idServicePlanReview = item.TcmServicePlanReview.Id }, Context.Request.Scheme)','Create Objetive of Service Plan Review')" class="btn btn-info" title="Create Objetive of this Service Plan Review"><i class="glyphicon glyphicon-plus"></i> </a>
-                                    <a asp-action="DeleteDomain" asp-route-id="@item.Id" class="btn btn-danger disabled"><i class="glyphicon glyphicon-trash" title="Delete Service PLan Review Domain"></i></a>
+                                    <a onclick="showInPopup('@Url.Action("EditDomainReadOnly", "TCMServicePlanReviews", new { id = item.TcmDomain.Id, origi = 5}, Context.Request.Scheme)','View Domain')" class="btn btn-info" title="View Domain"><i class="glyphicon glyphicon-search"></i> </a>
+                                    <i class="btn btn-info disabled glyphicon glyphicon-plus"></i>
                                 }
                             }
-                            else
+                            @if (User.IsInRole("TCMSupervisor"))
                             {
-                                <i class="btn btn-warning disabled glyphicon glyphicon-pencil"></i>
+                                @if (item.TcmServicePlanReview.TcmServicePlan.TCMSupervisor.Clinic.Setting.TCMSupervisorEdit == true && ViewData["origi"].ToString() != "5")
+                                {
+                                    @if (item.TcmDomain.Origin == "Service Plan Review")
+                                    {
+                                        <a onclick="showInPopup('@Url.Action("EditDomainReadOnly", "TCMServicePlanReviews", new { id = item.TcmDomain.Id }, Context.Request.Scheme)','Edit Domain of Service Plan Review')" class="btn btn-warning" title="Edit Domain of this Service Plan Review"><i class="glyphicon glyphicon-pencil"></i> </a>
+                                        <a onclick="showInPopup('@Url.Action("CreateObjetive", "TCMServicePlanReviews", new { id = item.TcmDomain.Id, origen = 1, idServicePlanReview = item.TcmServicePlanReview.Id }, Context.Request.Scheme)','Create Objetive of Service Plan Review')" class="btn btn-info disabled" title="Create Objetive of this Service Plan Review"><i class="glyphicon glyphicon-plus"></i> </a>
+                                        <a onclick="showInPopup('@Url.Action("DeleteDomain", "TCMServicePlanReviews", new { id = item.Id }, Context.Request.Scheme)','Delete Domain')" class="btn btn-danger" title="Delete Domain"><i class="glyphicon glyphicon-trash"></i> </a>
+                                    }
+                                    else
+                                    {
+                                        <a onclick="showInPopup('@Url.Action("EditDomainReadOnly", "TCMServicePlanReviews", new { id = item.TcmDomain.Id }, Context.Request.Scheme)','Edit Domain of Service Plan Review')" class="btn btn-warning" title="Edit Domain of this Service Plan Review"><i class="glyphicon glyphicon-pencil"></i> </a>
+                                        <a onclick="showInPopup('@Url.Action("CreateObjetive", "TCMServicePlanReviews", new { id = item.TcmDomain.Id, idServicePlanReview = item.TcmServicePlanReview.Id }, Context.Request.Scheme)','Create Objetive of Service Plan Review')" class="btn btn-info disabled" title="Create Objetive of this Service Plan Review"><i class="glyphicon glyphicon-plus"></i> </a>
+                                        <a asp-action="DeleteDomain" asp-route-id="@item.Id" class="btn btn-danger" disabled><i class="glyphicon glyphicon-trash " title="Delete Domain"></i></a>
+                                    }
+                                }
+                                else
+                                {
+                                    <a onclick="showInPopup('@Url.Action("EditDomainReadOnly", "TCMServicePlanReviews", new { id = item.TcmDomain.Id, origi = 5}, Context.Request.Scheme)','View Domain')" class="btn btn-info" title="View Domain"><i class="glyphicon glyphicon-search"></i> </a>
+                                    <i class="btn btn-info disabled glyphicon glyphicon-plus"></i>
+                                }
+                            }
+                            @if (User.IsInRole("Manager"))
+                            {
+                                <a onclick="showInPopup('@Url.Action("EditDomainReadOnly", "TCMServicePlanReviews", new { id = item.TcmDomain.Id, origi = 5}, Context.Request.Scheme)','View Domain')" class="btn btn-info" title="View Domain"><i class="glyphicon glyphicon-search"></i> </a>
                                 <i class="btn btn-info disabled glyphicon glyphicon-plus"></i>
-                                <i class="btn btn-danger disabled glyphicon glyphicon-trash"></i>
                             }
                         </td>
                     </tr>
@@ -141,3 +197,5 @@
         </table>
     </div>
 </div>
+
+

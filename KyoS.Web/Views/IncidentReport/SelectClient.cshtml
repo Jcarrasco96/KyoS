@@ -1,0 +1,32 @@
+﻿@model KyoS.Web.Models.IncidentReportViewModel
+@{
+    Layout = null;
+}
+
+<div class="row">
+    <form asp-action="SelectClient" asp-route-id="@Model.IdClient">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <div class="col-md-8">
+            <div class="form-group">
+                <label asp-for="IdClient" class="control-label">Client</label>
+                <select asp-for="IdClient" asp-items="Model.Clients" class="form-control"></select>
+                <span asp-validation-for="IdClient" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="container-fluid">
+            &nbsp;
+        </div>
+        <div class="container-fluid">
+            &nbsp;
+        </div>
+        <div class="col-md-12">
+            <div class="col-md-offset-9">
+                <input type="submit" value="Select" class="btn btn-primary" />
+                <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+

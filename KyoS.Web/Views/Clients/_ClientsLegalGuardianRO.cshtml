@@ -1,0 +1,64 @@
+﻿@model KyoS.Web.Models.ClientViewModel
+
+<div class="col-md-12">
+    &nbsp;
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-3">
+        <label asp-for="LegalGuardian.Name" class="control-label">Legal Guardian Name</label>&nbsp;*
+        <input asp-for="LegalGuardian.Name" class="form-control" disabled />
+        <span asp-validation-for="LegalGuardian.Name" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-3">
+        <label asp-for="IdRelationship" class="control-label"></label>
+        <select asp-for="IdRelationship" asp-items="Model.Relationships" class="form-control" disabled></select>
+        <span asp-validation-for="IdRelationship" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="LegalGuardian.Address" class="control-label">Address</label>
+        <input asp-for="LegalGuardian.Address" class="form-control" disabled />
+        <span asp-validation-for="LegalGuardian.Address" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="LegalGuardian.Country" class="control-label">Country</label>
+        <input asp-for="LegalGuardian.Country" class="form-control" disabled />
+        <span asp-validation-for="LegalGuardian.Country" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="LegalGuardian.City" class="control-label">City</label>
+        <input asp-for="LegalGuardian.City" class="form-control" disabled />
+        <span asp-validation-for="LegalGuardian.City" class="text-danger"></span>
+    </div>
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-2">
+        <label asp-for="LegalGuardian.State" class="control-label">State</label>
+        <input asp-for="LegalGuardian.State" class="form-control" disabled />
+        <span asp-validation-for="LegalGuardian.State" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-1">
+        <label asp-for="ZipCodeLegalGuardian" class="control-label">Zip Code</label>
+        <input asp-for="ZipCodeLegalGuardian" class="form-control" disabled />
+        <span asp-validation-for="ZipCodeLegalGuardian" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-3">
+        <label asp-for="LegalGuardian.AdressLine2" class="control-label">Address Line 2</label>
+        <input asp-for="LegalGuardian.AdressLine2" class="form-control" disabled />
+        <span asp-validation-for="LegalGuardian.AdressLine2" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="LegalGuardian.Telephone" class="control-label">Telephone</label>
+        <input asp-for="LegalGuardian.Telephone" class="form-control" disabled />
+        <span asp-validation-for="LegalGuardian.Telephone" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="LegalGuardian.TelephoneSecondary" class="control-label">Telephone Secundary</label>
+        <input asp-for="LegalGuardian.TelephoneSecondary" class="form-control" disabled />
+        <span asp-validation-for="LegalGuardian.TelephoneSecondary" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="LegalGuardian.Email" class="control-label">Email</label>
+        <input asp-for="LegalGuardian.Email" class="form-control" disabled />
+        <span asp-validation-for="LegalGuardian.Email" class="text-danger"></span>
+    </div>
+</div>

@@ -32,6 +32,12 @@ namespace KyoS.Web.Models
         public IEnumerable<SelectListItem> StatusList { get; set; }
 
         public IEnumerable<SelectListItem> Clinics { get; set; }
+
+      
+        [Display(Name = "TCM Supervisor")]
+        public int IdTCMsupervisor { get; set; }
+
+        public IEnumerable<SelectListItem> TCMsupervisors { get; set; }
     }
 }
 

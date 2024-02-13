@@ -73,5 +73,6 @@ namespace KyoS.Web.Data.Entities
         public ICollection<GroupNote_Activity> GroupNotes_Activities { get; set; }
 
         public int? MTPId { get; set; }
+        public string Setting { get; set; }
     }
 }

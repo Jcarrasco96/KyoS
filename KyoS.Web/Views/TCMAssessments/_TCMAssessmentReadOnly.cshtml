@@ -1,7 +1,7 @@
 ﻿@model KyoS.Web.Models.TCMAssessmentViewModel
 
 <div class="col-md-push-12">
-    <div class="form-group col-md-2">
+    <div class="form-group col-md-3">
         <label asp-for="TcmClient.Client.Name" class="control-label">Client Name</label>
         <input asp-for="TcmClient.Client.Name" class="form-control" readonly>
         <span asp-validation-for="TcmClient.Client.Name" class="text-danger"></span>
@@ -11,7 +11,7 @@
         <input asp-for="TcmClient.CaseNumber" class="form-control" readonly>
         <span asp-validation-for="TcmClient.CaseNumber" class="text-danger"></span>
     </div>
-    <div class="form-group col-md-4">
+    <div class="form-group col-md-3">
         <label asp-for="TcmClient.Client.FullAddress" class="control-label">Address, City, State, Zip </label>
         <input asp-for="TcmClient.Client.FullAddress" class="form-control" readonly>
         <span asp-validation-for="TcmClient.Client.FullAddress" class="text-danger"></span>
@@ -95,7 +95,7 @@
     <div class="col-md-12">
     <pre>
        <strong>Legal Decision-Maker or Authorized Representative (if applicable)</strong>
-       <input asp-for="LegalDecisionNone" disabled> None         <input asp-for="LegalDecisionLegal" disabled> Legal Guardian         <input asp-for="LegalDecisionAdLitem" disabled> Guardian-ad-Litem          <input asp-for="LegalDecisionParent" disabled> Parent         <input asp-for="LegalDecisionAttomey" disabled> Attomey-in-fact        <input asp-for="LegalDecisionOther" disabled> Other <input asp-for="LegalDecisionOtherExplain"  style="width:30%" disabled/>
+       <input asp-for="LegalDecisionNone" disabled> None      <input asp-for="LegalDecisionLegal" disabled> Legal Guardian      <input asp-for="LegalDecisionAdLitem" disabled> Guardian-ad-Litem       <input asp-for="LegalDecisionParent" disabled> Parent      <input asp-for="LegalDecisionAttomey" disabled> Attomey-in-fact     <input asp-for="LegalDecisionOther" disabled> Other <input asp-for="LegalDecisionOtherExplain"  style="width:30%" disabled/>
     </pre>
     </div>
 </div>
@@ -132,31 +132,7 @@
     </div>
 </div>
 <div class="col-md-push-12">
-    @*<div class="form-group col-md-2">
-            <label asp-for="TcmClient.Client.Referred.Name" class="control-label">Referred by</label>
-            <input asp-for="TcmClient.Client.Referred.Name" class="form-control" readonly>
-            <span asp-validation-for="TcmClient.Client.Referred.Name" class="text-danger"></span>
-        </div>
-        <div class="form-group col-md-2">
-            <label asp-for="TcmClient.Client.Referred.Telephone" class="control-label">Phone No</label>
-            <input asp-for="TcmClient.Client.Referred.Telephone" class="form-control" readonly>
-            <span asp-validation-for="TcmClient.Client.Referred.Telephone" class="text-danger"></span>
-        </div>
-        <div class="form-group col-md-4">
-            <label asp-for="TcmClient.Client.Referred.Address" class="control-label">Address</label>
-            <input asp-for="TcmClient.Client.Referred.Address" class="form-control" readonly>
-            <span asp-validation-for="TcmClient.Client.Referred.Address" class="text-danger"></span>
-        </div>
-        <div class="form-group col-md-2">
-            <label asp-for="TcmClient.Client.Referred.Title" class="control-label">Title/Position</label>
-            <input asp-for="TcmClient.Client.Referred.Title" class="form-control" readonly>
-            <span asp-validation-for="TcmClient.Client.Referred.Title" class="text-danger"></span>
-        </div>
-        <div class="form-group col-md-2">
-            <label asp-for="TcmClient.Client.Referred.Agency" class="control-label">Agency (if applicable)</label>
-            <input asp-for="TcmClient.Client.Referred.Agency" class="form-control" readonly>
-            <span asp-validation-for="TcmClient.Client.Referred.Agency" class="text-danger"></span>
-        </div>*@
+   
 </div>
 <div class="col-md-push-12">
     <div class="col-md-12">

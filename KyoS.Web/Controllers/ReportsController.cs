@@ -69,15 +69,18 @@ namespace KyoS.Web.Controllers
         public async Task<IActionResult> PrintDailyAssistance(int id)
         {
             List<Workday_Client> workdayClientList = await _context.Workdays_Clients
-                                                               .Include(wc => wc.Facilitator)
-                                                               .ThenInclude(f => f.Clinic)
 
-                                                               .Include(wc => wc.Workday)
+                                                                   .Include(wc => wc.Facilitator)
+                                                                   .ThenInclude(f => f.Clinic)
 
-                                                               .Include(wc => wc.Client)
+                                                                   .Include(wc => wc.Workday)
 
-                                                               .Where(wc => (wc.Workday.Id == id && wc.Facilitator.LinkedUser == User.Identity.Name))
-                                                               .ToListAsync();
+                                                                   .Include(wc => wc.Client)
+
+                                                                   .Include(wc => wc.Schedule)
+
+                                                                   .Where(wc => (wc.Workday.Id == id && wc.Facilitator.LinkedUser == User.Identity.Name))
+                                                                   .ToListAsync();
             if (workdayClientList.Count() == 0)
             {
                 return RedirectToAction("Home/Error404");

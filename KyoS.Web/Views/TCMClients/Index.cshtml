@@ -1,6 +1,7 @@
 ﻿@model IEnumerable<KyoS.Web.Data.Entities.TCMClientEntity>
 @{
     ViewData["Title"] = "TCM Cases";
+    ViewData["origin"] = 0;
 }
 
 <link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
@@ -14,13 +15,21 @@
         <li class="active">TCM Cases</li>
     </ul><!--.breadcrumb-->
 </div>
-@if (User.IsInRole("Manager") || User.IsInRole("TCMSupervisor"))
+@if (User.IsInRole("Manager"))
 {
-<p>
-    <a onclick="showInPopup('@Url.Action("Create", "TCMClients", null, Context.Request.Scheme)','Open TCM Case')" class="btn btn-primary" title="Open TCM Case"><i class="glyphicon glyphicon-plus"></i> Open TCM Case</a>
-</p>
+    <p>
+        <a onclick="showInPopup('@Url.Action("Create", "TCMClients", null, Context.Request.Scheme)','Open TCM Case')" class="btn btn-primary" title="Open TCM Case"><i class="glyphicon glyphicon-plus"></i> Open TCM Case</a>
+    </p>
+    @*<p>
+        <a onclick="showInPopup('@Url.Action("CopyTCMMedicalHistory", "TCMClients", null, Context.Request.Scheme)','Copy los medical History ')" class="btn btn-primary" title="Copy Medical History"><i class="glyphicon glyphicon-plus"></i> Copy Medical history</a>
+    </p>*@
 }
-
+@if (User.IsInRole("TCMSupervisor"))
+{
+    <p>
+        <a onclick="showInPopup('@Url.Action("Create", "TCMClients", null, Context.Request.Scheme)','Open TCM Case')" class="btn btn-primary disabled" title="Open TCM Case"><i class="glyphicon glyphicon-plus"></i> Open TCM Case</a>
+    </p>
+}
 
 <div class="row">
     <div id="view-tcmClient">
@@ -37,11 +46,27 @@
     <script src="~/js/jquery.dataTables.min.js"></script>
 
     <script type="text/javascript">
-                         $(document).ready(function () {
-                             $('#MyTable').DataTable({
-                               "order": [[0, "asc"]],
-                                "pageLength": 100
-                            });                            
-                        });
+        $(document).ready(function () {
+            $('#MyTable').DataTable({
+                "order": [[0, "asc"]],
+                "pageLength": 100
+            });
+        });
+         function ConfirmDelete(e) {
+            Swal.fire({
+                title: 'Do you want to delete?',
+                text: "Note: All data related to this element will be deleted.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var url = "@Url.Action("Delete", "TCMClients")";
+                    window.location.href = url + '/' + e;
+                }
+            });
+        }
     </script>
 }

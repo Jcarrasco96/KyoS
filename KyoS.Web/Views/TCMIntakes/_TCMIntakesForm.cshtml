@@ -12,9 +12,9 @@
         <span asp-validation-for="TcmClient.CaseNumber" class="text-danger"></span>
     </div>
     <div class="form-group col-md-2">
-        <label asp-for="TcmClient.Client.AdmisionDate" class="control-label">Date of Admission</label>
-        <input asp-for="TcmClient.Client.AdmisionDate" class="form-control" readonly>
-        <span asp-validation-for="TcmClient.Client.AdmisionDate" class="text-danger"></span>
+        <label asp-for="TcmClient.DataOpen" class="control-label">Date of Admission</label>
+        <input asp-for="TcmClient.DataOpen" class="form-control" readonly>
+        <span asp-validation-for="TcmClient.DataOpen" class="text-danger"></span>
     </div>
     <div class="form-group col-md-2">
         <label asp-for="TcmClient.Client.MedicaidID" class="control-label"></label>
@@ -25,7 +25,7 @@
         <label asp-for="TcmClient.Client.MedicareId" class="control-label">Medicare ID</label>
         <input asp-for="TcmClient.Client.MedicareId" class="form-control" readonly>
         <span asp-validation-for="TcmClient.Client.MedicareId" class="text-danger"></span>
-    </div>    
+    </div>
 </div>
 <div class="col-md-push-12">
     <div class="form-group col-md-4">
@@ -80,7 +80,7 @@
         <input asp-for="TcmClient.Client.Ethnicity" class="form-control" readonly>
         <span asp-validation-for="TcmClient.Client.Ethnicity" class="text-danger"></span>
     </div>
-    
+
 </div>
 <div class="col-md-push-12">
     <div class="form-group col-md-2">
@@ -118,297 +118,612 @@
     </div>
 
 </div>
-<div class="col-md-push-12">
-    <div class="form-group col-md-2">
-        <label asp-for="IntakeDate" class="control-label">Intake Date</label>
-        <input asp-for="IntakeDate" class="form-control">
-        <span asp-validation-for="IntakeDate" class="text-danger"></span>
+@if (User.IsInRole("CaseManager"))
+{
+    <div class="col-md-push-12">
+        <div class="form-group col-md-3">
+            <label asp-for="LegalGuardianName" class="control-label">Legal Guardian</label>
+            <input asp-for="LegalGuardianName" class="form-control">
+            <span asp-validation-for="LegalGuardianName" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-2">
+            <label asp-for="LegalGuardianTelephone" class="control-label">Legal Guardian Telephone</label>
+            <input asp-for="LegalGuardianTelephone" class="form-control">
+            <span asp-validation-for="LegalGuardianTelephone" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-2">
+            <label asp-for="IdRelationshipLG" class="control-label"></label>
+            <select asp-for="IdRelationshipLG" asp-items="Model.RelationshipsLG" class="form-control"></select>
+            <span asp-validation-for="IdRelationshipLG" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-3">
+            <label asp-for="LegalGuardianAddress" class="control-label">Legal Guardian Address</label>
+            <input asp-for="LegalGuardianAddress" class="form-control">
+            <span asp-validation-for="LegalGuardianAddress" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-2">
+            <label asp-for="LegalGuardianCity" class="control-label">Legal Guardian City</label>
+            <input asp-for="LegalGuardianCity" class="form-control">
+            <span asp-validation-for="LegalGuardianCity" class="text-danger"></span>
+        </div>
+
     </div>
-    <div class="form-group col-md-2">
-        <label asp-for="LegalGuardianName" class="control-label">Legal Guardian</label>
-        <input asp-for="LegalGuardianName" class="form-control">
-        <span asp-validation-for="LegalGuardianName" class="text-danger"></span>
+
+    <div class="col-md-push-12">
+        <div class="form-group col-md-2">
+            <label asp-for="LegalGuardianState" class="control-label">Legal Guardian State</label>
+            <input asp-for="LegalGuardianState" class="form-control">
+            <span asp-validation-for="LegalGuardianState" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-2">
+            <label asp-for="LegalGuardianZipCode" class="control-label">Legal Guardian Zip Code</label>
+            <input asp-for="LegalGuardianZipCode" class="form-control">
+            <span asp-validation-for="LegalGuardianZipCode" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-2">
+            <label asp-for="EducationLevel" class="control-label">Education Level</label>
+            <input asp-for="EducationLevel" class="form-control">
+            <span asp-validation-for="EducationLevel" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-2">
+            <label asp-for="ReligionOrEspiritual" class="control-label">Religion or Spiritual Beliefs</label>
+            <input asp-for="ReligionOrEspiritual" class="form-control">
+            <span asp-validation-for="ReligionOrEspiritual" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-2">
+            <label asp-for="IdEmployedStatus" class="control-label"></label>
+            <select asp-for="IdEmployedStatus" asp-items="Model.EmployedStatus" class="form-control"></select>
+            <span asp-validation-for="IdEmployedStatus" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-2">
+            <label asp-for="IdResidentialStatus" class="control-label"></label>
+            <select asp-for="IdResidentialStatus" asp-items="Model.ResidentialStatusList" class="form-control"></select>
+            <span asp-validation-for="IdResidentialStatus" class="text-danger"></span>
+        </div>
     </div>
-    <div class="form-group col-md-2">
-        <label asp-for="LegalGuardianTelephone" class="control-label">Legal Guardian Telephone</label>
-        <input asp-for="LegalGuardianTelephone" class="form-control">
-        <span asp-validation-for="LegalGuardianTelephone" class="text-danger"></span>
+    <div class="col-md-push-12">
+        <div class="form-group col-md-3">
+            <label asp-for="TitlePosition" class="control-label">Title / Position</label>
+            <input asp-for="TitlePosition" class="form-control">
+            <span asp-validation-for="TitlePosition" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-3">
+            <label asp-for="Agency" class="control-label">Agency (if applicable)</label>
+            <input asp-for="Agency" class="form-control">
+            <span asp-validation-for="Agency" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-6">
+            <br />
+            <b>Do you currently have a cough that has lasted 3 weeks or longer?</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Yes&nbsp;<input type="checkbox" asp-for="IsClientCurrently" class="form-check-input" id="check1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; No&nbsp;<input type="checkbox" class="form-check-input" id="check101">
+        </div>
     </div>
-    <div class="form-group col-md-2">
-        <label asp-for="IdRelationshipLG" class="control-label"></label>
-        <select asp-for="IdRelationshipLG" asp-items="Model.RelationshipsLG" class="form-control"></select>
-        <span asp-validation-for="IdRelationshipLG" class="text-danger"></span>
+    <div class="col-md-push-12">
+        <div class="form-group col-md-12">
+            <label asp-for="Elibigility" class="control-label">Elibigility</label>
+            <textarea asp-for="Elibigility" class="form-control" rows="2"></textarea>
+            <span asp-validation-for="Elibigility" class="text-danger"></span>
+        </div>
     </div>
-    <div class="form-group col-md-2">
-        <label asp-for="LegalGuardianAddress" class="control-label">Legal Guardian Address</label>
-        <input asp-for="LegalGuardianAddress" class="form-control">
-        <span asp-validation-for="LegalGuardianAddress" class="text-danger"></span>
+    <div class="col-md-push-12">
+        <div class="form-group col-md-5">
+            <label asp-for="IdHealthPlan" class="control-label"></label>
+            <select asp-for="IdHealthPlan" asp-items="Model.HealthPlan" class="form-control"></select>
+            <span asp-validation-for="IdHealthPlan" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-3">
+            <label asp-for="HealthMemberId" class="control-label">Member ID</label>
+            <input asp-for="HealthMemberId" class="form-control">
+            <span asp-validation-for="HealthMemberId" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-4">
+            <label asp-for="InsuranceOther" class="control-label">Insurance Other</label>
+            <input asp-for="InsuranceOther" class="form-control">
+            <span asp-validation-for="InsuranceOther" class="text-danger"></span>
+        </div>
     </div>
-    <div class="form-group col-md-2">
-        <label asp-for="LegalGuardianCity" class="control-label">Legal Guardian City</label>
-        <input asp-for="LegalGuardianCity" class="form-control">
-        <span asp-validation-for="LegalGuardianCity" class="text-danger"></span>
+    <div class="col-md-push-12">
+        <div class="form-group col-md-3">
+            <label asp-for="School" class="control-label">School</label>
+            <input asp-for="School" class="form-control">
+            <span asp-validation-for="School" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-2">
+            <label asp-for="Grade" class="control-label">Grade</label>
+            <input asp-for="Grade" class="form-control">
+            <span asp-validation-for="Grade" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-3">
+            <label asp-for="TeacherCounselor_Name" class="control-label">Teacher Counselor Name</label>
+            <input asp-for="TeacherCounselor_Name" class="form-control">
+            <span asp-validation-for="TeacherCounselor_Name" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-2">
+            <label asp-for="TeacherCounselor_Phone" class="control-label">Phone No</label>
+            <input asp-for="TeacherCounselor_Phone" class="form-control">
+            <span asp-validation-for="TeacherCounselor_Phone" class="text-danger"></span>
+        </div>
+        <div class="container-fluid">
+            &nbsp;
+        </div>
     </div>
-   
-</div>
+    <div class="col-md-push-12">
+        <div class="form-group col-md-5">
+            <pre><b>School Program</b>&nbsp;&nbsp;<br /><input type="checkbox" asp-for="School_Regular" class="form-check-input"> Regular &nbsp;&nbsp;<input type="checkbox" asp-for="School_ESE" class="form-check-input"> ESE&nbsp;&nbsp; <input type="checkbox" asp-for="School_EBD" class="form-check-input">  EBD &nbsp;&nbsp;<input type="checkbox" asp-for="School_ESOL" class="form-check-input"> ESOL&nbsp;&nbsp;<input type="checkbox" asp-for="School_HHIP" class="form-check-input">  HHIP (Homebound) &nbsp;&nbsp;<input type="checkbox" asp-for="School_Other" class="form-check-input"> Other</pre>
+        </div>
+        <div class="container-fluid">
+            &nbsp;
+        </div>
+    </div>
+    <div class="col-md-push-12">
+        <div class="form-group col-md-2">
+            <label asp-for="CountryOfBirth" class="control-label">Country of Birth</label>
+            <input asp-for="CountryOfBirth" class="form-control">
+            <span asp-validation-for="CountryOfBirth" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-2">
+            <label asp-for="YearEnterUsa" class="control-label">Year entered USA</label>
+            <input asp-for="YearEnterUsa" class="form-control">
+            <span asp-validation-for="YearEnterUsa" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-8">
+            <pre><b>Status</b>
+            <input type="checkbox" asp-for="StausCitizen" class="form-check-input"> Citizen &nbsp;&nbsp; &nbsp;&nbsp;<input type="checkbox" asp-for="StatusResident" class="form-check-input"> Resident&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" asp-for="StatusOther" class="form-check-input">  Other (If Other, please explain): <input asp-for="StatusOther_Explain" style="width:30%"></pre>
+            <br />
+        </div>
+    </div>
+    <div class="col-md-push-12">
+        <div class="form-group col-md-2">
+            <label asp-for="EmergencyContactName" class="control-label">Primary Contact</label>
+            <input asp-for="EmergencyContactName" class="form-control">
+            <span asp-validation-for="EmergencyContactName" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-2">
+            <label asp-for="EmergencyContacTelephone" class="control-label">Phone No</label>
+            <input asp-for="EmergencyContacTelephone" class="form-control">
+            <span asp-validation-for="EmergencyContacTelephone" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-2">
+            <label asp-for="IdRelationshipEC" class="control-label"></label>
+            <select asp-for="IdRelationshipEC" asp-items="Model.RelationshipsEC" class="form-control"></select>
+            <span asp-validation-for="IdRelationshipEC" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-2">
+            <label asp-for="SecondaryContact" class="control-label">Secondary Contact</label>
+            <input asp-for="SecondaryContact" class="form-control">
+            <span asp-validation-for="SecondaryContact" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-2">
+            <label asp-for="SecondaryContact_Phone" class="control-label">Phone No</label>
+            <input asp-for="SecondaryContact_Phone" class="form-control">
+            <span asp-validation-for="SecondaryContact_Phone" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-2">
+            <label asp-for="SecondaryContact_RelationShip" class="control-label">RelationShip</label>
+            <input asp-for="SecondaryContact_RelationShip" class="form-control">
+            <span asp-validation-for="SecondaryContact_RelationShip" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-md-push-12">
+        <div class="form-group col-md-12">
+            <strong>May we leave/send voice/text messages to the above contacts if necessary?</strong>
+            &nbsp;
+            <input type="checkbox" asp-for="EmergencyContact" class="form-check-input" id="check2">
+        </div>
+    </div>
+    <div class="col-md-push-12">
+        <div class="form-group col-md-3">
+            <label asp-for="Psychiatrist_Name" class="control-label">Psychiarist</label>
+            <input asp-for="Psychiatrist_Name" class="form-control">
+            <span asp-validation-for="Psychiatrist_Name" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-2">
+            <label asp-for="Psychiatrist_Phone" class="control-label">Phone No</label>
+            <input asp-for="Psychiatrist_Phone" class="form-control">
+            <span asp-validation-for="Psychiatrist_Phone" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-5">
+            <label asp-for="Psychiatrist_Address" class="control-label">Address</label>
+            <input asp-for="Psychiatrist_Address" class="form-control">
+            <span asp-validation-for="Psychiatrist_Address" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-2">
+            <label asp-for="Psychiatrist_CityStateZip" class="control-label">City, State, Zip</label>
+            <input asp-for="Psychiatrist_CityStateZip" class="form-control">
+            <span asp-validation-for="Psychiatrist_CityStateZip" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-md-push-12">
+        <div class="form-group col-md-3">
+            <label asp-for="PCP_Name" class="control-label">Primary Care Physician (PCP)</label>
+            <input asp-for="PCP_Name" class="form-control">
+            <span asp-validation-for="PCP_Name" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-2">
+            <label asp-for="PCP_Phone" class="control-label">Phone No</label>
+            <input asp-for="PCP_Phone" class="form-control">
+            <span asp-validation-for="PCP_Phone" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-2">
+            <label asp-for="PCP_Place" class="control-label">Place of Practice</label>
+            <input asp-for="PCP_Place" class="form-control">
+            <span asp-validation-for="PCP_Place" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-3">
+            <label asp-for="PCP_Address" class="control-label">Address</label>
+            <input asp-for="PCP_Address" class="form-control">
+            <span asp-validation-for="PCP_Address" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-2">
+            <label asp-for="PCP_CityStateZip" class="control-label">City, State, Zip</label>
+            <input asp-for="PCP_CityStateZip" class="form-control">
+            <span asp-validation-for="PCP_CityStateZip" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-md-push-12">
+        <div class="form-group col-md-3">
+            <label asp-for="Other" class="control-label">Other</label>
+            <input asp-for="Other" class="form-control">
+            <span asp-validation-for="Other" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-2">
+            <label asp-for="Other_Phone" class="control-label">Phone No</label>
+            <input asp-for="Other_Phone" class="form-control">
+            <span asp-validation-for="Other_Phone" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-4">
+            <label asp-for="Other_Address" class="control-label">Address</label>
+            <input asp-for="Other_Address" class="form-control">
+            <span asp-validation-for="Other_Address" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-3">
+            <label asp-for="Other_City" class="control-label">City, State, Zip</label>
+            <input asp-for="Other_City" class="form-control">
+            <span asp-validation-for="Other_City" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-md-push-12">
+        <div class="form-group col-md-3">
+            <strong>Need of Special Accommodations?</strong>&nbsp;&nbsp;
+            <input type="checkbox" asp-for="NeedSpecial" class="form-check-input">
+        </div>
+        <div class="container-fluid">
+            &nbsp;
+        </div>
+    </div>
+    <div class="col-md-push-12">
+        <div class="form-group col-md-12">
+            <label asp-for="NeedSpecial_Specify" class="control-label">Specify</label>
+            <input asp-for="NeedSpecial_Specify" class="form-control">
+            <span asp-validation-for="NeedSpecial_Specify" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-md-push-12">
+        <div class="form-group col-md-12">
+            <label asp-for="CaseManagerNotes" class="control-label">Case Manager's notes</label>
+            <textarea asp-for="CaseManagerNotes" class="form-control" rows="2"></textarea>
+            <span asp-validation-for="CaseManagerNotes" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <pre>
+        @if (Model.Id == 0)
+        {
+        <input type="checkbox" class="form-check-input" disabled> <i>Signed</i>
+        }
+        else
+        { 
+        <input type="checkbox" class="form-check-input" checked disabled> <i>Signed</i>
+        }
+        <strong>Staff Signature: </strong> <strong>(@Html.DisplayFor(modelItem => Model.TcmClient.Casemanager.Name))</strong>    <input asp-for="IntakeDate">
+    </pre>
+    </div>
+}
+else
+{
+    @if (User.IsInRole("Manager") || User.IsInRole("TCMSupervisor"))
+    {
+        <div class="col-md-push-12">
+            <div class="form-group col-md-3">
+                <label asp-for="LegalGuardianName" class="control-label">Legal Guardian</label>
+                <input asp-for="LegalGuardianName" class="form-control" readonly>
+                <span asp-validation-for="LegalGuardianName" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-2">
+                <label asp-for="LegalGuardianTelephone" class="control-label">Legal Guardian Telephone</label>
+                <input asp-for="LegalGuardianTelephone" class="form-control" readonly>
+                <span asp-validation-for="LegalGuardianTelephone" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-2">
+                <label asp-for="IdRelationshipLG" class="control-label"></label>
+                <select asp-for="IdRelationshipLG" asp-items="Model.RelationshipsLG" class="form-control" disabled></select>
+                <span asp-validation-for="IdRelationshipLG" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-3">
+                <label asp-for="LegalGuardianAddress" class="control-label">Legal Guardian Address</label>
+                <input asp-for="LegalGuardianAddress" class="form-control" readonly>
+                <span asp-validation-for="LegalGuardianAddress" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-2">
+                <label asp-for="LegalGuardianCity" class="control-label">Legal Guardian City</label>
+                <input asp-for="LegalGuardianCity" class="form-control" readonly>
+                <span asp-validation-for="LegalGuardianCity" class="text-danger"></span>
+            </div>
+
+        </div>
+
+        <div class="col-md-push-12">
+            <div class="form-group col-md-2">
+                <label asp-for="LegalGuardianState" class="control-label">Legal Guardian State</label>
+                <input asp-for="LegalGuardianState" class="form-control" readonly>
+                <span asp-validation-for="LegalGuardianState" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-2">
+                <label asp-for="LegalGuardianZipCode" class="control-label">Legal Guardian Zip Code</label>
+                <input asp-for="LegalGuardianZipCode" class="form-control" readonly>
+                <span asp-validation-for="LegalGuardianZipCode" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-2">
+                <label asp-for="EducationLevel" class="control-label">Education Level</label>
+                <input asp-for="EducationLevel" class="form-control" readonly>
+                <span asp-validation-for="EducationLevel" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-2">
+                <label asp-for="ReligionOrEspiritual" class="control-label">Religion or Spiritual Beliefs</label>
+                <input asp-for="ReligionOrEspiritual" class="form-control" readonly>
+                <span asp-validation-for="ReligionOrEspiritual" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-2">
+                <label asp-for="IdEmployedStatus" class="control-label"></label>
+                <select asp-for="IdEmployedStatus" asp-items="Model.EmployedStatus" class="form-control" disabled></select>
+                <span asp-validation-for="IdEmployedStatus" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-2">
+                <label asp-for="IdResidentialStatus" class="control-label"></label>
+                <select asp-for="IdResidentialStatus" asp-items="Model.ResidentialStatusList" class="form-control" disabled></select>
+                <span asp-validation-for="IdResidentialStatus" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-push-12">
+            <div class="form-group col-md-3">
+                <label asp-for="TitlePosition" class="control-label">Title / Position</label>
+                <input asp-for="TitlePosition" class="form-control" readonly>
+                <span asp-validation-for="TitlePosition" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-3">
+                <label asp-for="Agency" class="control-label">Agency (if applicable)</label>
+                <input asp-for="Agency" class="form-control" readonly>
+                <span asp-validation-for="Agency" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-6">
+                <br />
+                <b>Do you currently have a cough that has lasted 3 weeks or longer?</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Yes&nbsp;<input type="checkbox" asp-for="IsClientCurrently" class="form-check-input" id="check1" disabled>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; No&nbsp;<input type="checkbox" class="form-check-input" id="check101" disabled>
+            </div>
+        </div>
+        <div class="col-md-push-12">
+            <div class="form-group col-md-12">
+                <label asp-for="Elibigility" class="control-label">Elibigility</label>
+                <textarea asp-for="Elibigility" class="form-control" rows="2" readonly></textarea>
+                <span asp-validation-for="Elibigility" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-push-12">
+            <div class="form-group col-md-5">
+                <label asp-for="IdHealthPlan" class="control-label"></label>
+                <select asp-for="IdHealthPlan" asp-items="Model.HealthPlan" class="form-control" readonly></select>
+                <span asp-validation-for="IdHealthPlan" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-3">
+                <label asp-for="HealthMemberId" class="control-label">Member ID</label>
+                <input asp-for="HealthMemberId" class="form-control" readonly>
+                <span asp-validation-for="HealthMemberId" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-4">
+                <label asp-for="InsuranceOther" class="control-label">Insurance Other</label>
+                <input asp-for="InsuranceOther" class="form-control" readonly>
+                <span asp-validation-for="InsuranceOther" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-push-12">
+            <div class="form-group col-md-3">
+                <label asp-for="School" class="control-label">School</label>
+                <input asp-for="School" class="form-control" readonly>
+                <span asp-validation-for="School" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-2">
+                <label asp-for="Grade" class="control-label">Grade</label>
+                <input asp-for="Grade" class="form-control" readonly>
+                <span asp-validation-for="Grade" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-3">
+                <label asp-for="TeacherCounselor_Name" class="control-label">Teacher Counselor Name</label>
+                <input asp-for="TeacherCounselor_Name" class="form-control" readonly>
+                <span asp-validation-for="TeacherCounselor_Name" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-2">
+                <label asp-for="TeacherCounselor_Phone" class="control-label">Phone No</label>
+                <input asp-for="TeacherCounselor_Phone" class="form-control" readonly>
+                <span asp-validation-for="TeacherCounselor_Phone" class="text-danger"></span>
+            </div>
+            <div class="container-fluid">
+                &nbsp;
+            </div>
+        </div>
+        <div class="col-md-push-12">
+            <div class="form-group col-md-5">
+                <pre><b>School Program</b>&nbsp;&nbsp;<br /><input type="checkbox" asp-for="School_Regular" class="form-check-input" disabled> Regular &nbsp;&nbsp;<input type="checkbox" asp-for="School_ESE" class="form-check-input" disabled> ESE&nbsp;&nbsp; <input type="checkbox" asp-for="School_EBD" class="form-check-input" disabled>  EBD &nbsp;&nbsp;<input type="checkbox" asp-for="School_ESOL" class="form-check-input" disabled> ESOL&nbsp;&nbsp;<input type="checkbox" asp-for="School_HHIP" class="form-check-input" disabled>  HHIP (Homebound) &nbsp;&nbsp;<input type="checkbox" asp-for="School_Other" class="form-check-input" disabled> Other</pre>
+            </div>
+            <div class="container-fluid">
+                &nbsp;
+            </div>
+        </div>
+        <div class="col-md-push-12">
+            <div class="form-group col-md-2">
+                <label asp-for="CountryOfBirth" class="control-label">Country of Birth</label>
+                <input asp-for="CountryOfBirth" class="form-control" readonly>
+                <span asp-validation-for="CountryOfBirth" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-2">
+                <label asp-for="YearEnterUsa" class="control-label">Year entered USA</label>
+                <input asp-for="YearEnterUsa" class="form-control" readonly>
+                <span asp-validation-for="YearEnterUsa" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-8">
+                <pre><b>Status</b>
+                <input type="checkbox" asp-for="StausCitizen" class="form-check-input" disabled> Citizen &nbsp;&nbsp; &nbsp;&nbsp;<input type="checkbox" asp-for="StatusResident" class="form-check-input" disabled> Resident&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" asp-for="StatusOther" class="form-check-input" disabled>  Other (If Other, please explain): <input asp-for="StatusOther_Explain" style="width:30%" disabled></pre>
+                <br />
+            </div>
+        </div>
+        <div class="col-md-push-12">
+            <div class="form-group col-md-2">
+                <label asp-for="EmergencyContactName" class="control-label">Primary Contact</label>
+                <input asp-for="EmergencyContactName" class="form-control" readonly>
+                <span asp-validation-for="EmergencyContactName" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-2">
+                <label asp-for="EmergencyContacTelephone" class="control-label">Phone No</label>
+                <input asp-for="EmergencyContacTelephone" class="form-control" readonly>
+                <span asp-validation-for="EmergencyContacTelephone" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-2">
+                <label asp-for="IdRelationshipEC" class="control-label"></label>
+                <select asp-for="IdRelationshipEC" asp-items="Model.RelationshipsEC" class="form-control" disabled></select>
+                <span asp-validation-for="IdRelationshipEC" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-2">
+                <label asp-for="SecondaryContact" class="control-label">Secondary Contact</label>
+                <input asp-for="SecondaryContact" class="form-control" readonly>
+                <span asp-validation-for="SecondaryContact" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-2">
+                <label asp-for="SecondaryContact_Phone" class="control-label">Phone No</label>
+                <input asp-for="SecondaryContact_Phone" class="form-control" readonly>
+                <span asp-validation-for="SecondaryContact_Phone" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-2">
+                <label asp-for="SecondaryContact_RelationShip" class="control-label">RelationShip</label>
+                <input asp-for="SecondaryContact_RelationShip" class="form-control" readonly>
+                <span asp-validation-for="SecondaryContact_RelationShip" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-push-12">
+            <div class="form-group col-md-12">
+                <strong>May we leave/send voice/text messages to the above contacts if necessary?</strong>
+                &nbsp;
+                <input type="checkbox" asp-for="EmergencyContact" class="form-check-input" id="check2" disabled>
+            </div>
+        </div>
+        <div class="col-md-push-12">
+            <div class="form-group col-md-3">
+                <label asp-for="Psychiatrist_Name" class="control-label">Psychiarist</label>
+                <input asp-for="Psychiatrist_Name" class="form-control" readonly>
+                <span asp-validation-for="Psychiatrist_Name" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-2">
+                <label asp-for="Psychiatrist_Phone" class="control-label">Phone No</label>
+                <input asp-for="Psychiatrist_Phone" class="form-control" readonly>
+                <span asp-validation-for="Psychiatrist_Phone" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-5">
+                <label asp-for="Psychiatrist_Address" class="control-label">Address</label>
+                <input asp-for="Psychiatrist_Address" class="form-control" readonly>
+                <span asp-validation-for="Psychiatrist_Address" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-2">
+                <label asp-for="Psychiatrist_CityStateZip" class="control-label">City, State, Zip</label>
+                <input asp-for="Psychiatrist_CityStateZip" class="form-control" readonly>
+                <span asp-validation-for="Psychiatrist_CityStateZip" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-push-12">
+            <div class="form-group col-md-3">
+                <label asp-for="PCP_Name" class="control-label">Primary Care Physician (PCP)</label>
+                <input asp-for="PCP_Name" class="form-control" readonly>
+                <span asp-validation-for="PCP_Name" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-2">
+                <label asp-for="PCP_Phone" class="control-label">Phone No</label>
+                <input asp-for="PCP_Phone" class="form-control" readonly>
+                <span asp-validation-for="PCP_Phone" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-2">
+                <label asp-for="PCP_Place" class="control-label">Place of Practice</label>
+                <input asp-for="PCP_Place" class="form-control" readonly>
+                <span asp-validation-for="PCP_Place" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-3">
+                <label asp-for="PCP_Address" class="control-label">Address</label>
+                <input asp-for="PCP_Address" class="form-control" readonly>
+                <span asp-validation-for="PCP_Address" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-2">
+                <label asp-for="PCP_CityStateZip" class="control-label">City, State, Zip</label>
+                <input asp-for="PCP_CityStateZip" class="form-control" readonly>
+                <span asp-validation-for="PCP_CityStateZip" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-push-12">
+            <div class="form-group col-md-3">
+                <label asp-for="Other" class="control-label">Other</label>
+                <input asp-for="Other" class="form-control" readonly>
+                <span asp-validation-for="Other" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-2">
+                <label asp-for="Other_Phone" class="control-label readonly">Phone No</label>
+                <input asp-for="Other_Phone" class="form-control" readonly>
+                <span asp-validation-for="Other_Phone" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-4">
+                <label asp-for="Other_Address" class="control-label">Address</label>
+                <input asp-for="Other_Address" class="form-control" readonly>
+                <span asp-validation-for="Other_Address" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-3">
+                <label asp-for="Other_City" class="control-label">City, State, Zip</label>
+                <input asp-for="Other_City" class="form-control" readonly>
+                <span asp-validation-for="Other_City" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-push-12">
+            <div class="form-group col-md-3">
+                <strong>Need of Special Accommodations?</strong>&nbsp;&nbsp;
+                <input type="checkbox" asp-for="NeedSpecial" class="form-check-input" disabled>
+            </div>
+            <div class="container-fluid">
+                &nbsp;
+            </div>
+        </div>
+        <div class="col-md-push-12">
+            <div class="form-group col-md-12">
+                <label asp-for="NeedSpecial_Specify" class="control-label">Specify</label>
+                <input asp-for="NeedSpecial_Specify" class="form-control" readonly>
+                <span asp-validation-for="NeedSpecial_Specify" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-push-12">
+            <div class="form-group col-md-12">
+                <label asp-for="CaseManagerNotes" class="control-label">Case Manager's notes</label>
+                <textarea asp-for="CaseManagerNotes" class="form-control" rows="2" readonly></textarea>
+                <span asp-validation-for="CaseManagerNotes" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <pre>
+        @if (Model.Id == 0)
+        {
+        <input type="checkbox" class="form-check-input" disabled> <i>Signed</i>
+        }
+        else
+        { 
+        <input type="checkbox" class="form-check-input" checked disabled> <i>Signed</i>
+        }
+        <strong>Staff Signature: </strong> <strong>(@Html.DisplayFor(modelItem => Model.TcmClient.Casemanager.Name))</strong>    <input asp-for="IntakeDate" disabled>
+    </pre>
+        </div>
+    }
+}
 
 <div class="col-md-push-12">
-    <div class="form-group col-md-2">
-        <label asp-for="LegalGuardianState" class="control-label">Legal Guardian State</label>
-        <input asp-for="LegalGuardianState" class="form-control">
-        <span asp-validation-for="LegalGuardianState" class="text-danger"></span>
-    </div>
-    <div class="form-group col-md-2">
-        <label asp-for="LegalGuardianZipCode" class="control-label">Legal Guardian Zip Code</label>
-        <input asp-for="LegalGuardianZipCode" class="form-control">
-        <span asp-validation-for="LegalGuardianZipCode" class="text-danger"></span>
-    </div>
-    <div class="form-group col-md-2">
-        <label asp-for="EducationLevel" class="control-label">Education Level</label>
-        <input asp-for="EducationLevel" class="form-control">
-        <span asp-validation-for="EducationLevel" class="text-danger"></span>
-    </div>
-    <div class="form-group col-md-2">
-        <label asp-for="ReligionOrEspiritual" class="control-label">Religion or Spiritual Beliefs</label>
-        <input asp-for="ReligionOrEspiritual" class="form-control">
-        <span asp-validation-for="ReligionOrEspiritual" class="text-danger"></span>
-    </div>
-    <div class="form-group col-md-2">
-        <label asp-for="IdEmployedStatus" class="control-label"></label>
-        <select asp-for="IdEmployedStatus" asp-items="Model.EmployedStatus" class="form-control"></select>
-        <span asp-validation-for="IdEmployedStatus" class="text-danger"></span>
-    </div>
-    <div class="form-group col-md-2">
-        <label asp-for="IdResidentialStatus" class="control-label"></label>
-        <select asp-for="IdResidentialStatus" asp-items="Model.ResidentialStatusList" class="form-control"></select>
-        <span asp-validation-for="IdResidentialStatus" class="text-danger"></span>
-    </div>
-</div>
-<div class="col-md-push-12">
-    <div class="form-group col-md-3">
-        <label asp-for="TitlePosition" class="control-label">Title / Position</label>
-        <input asp-for="TitlePosition" class="form-control">
-        <span asp-validation-for="TitlePosition" class="text-danger"></span>
-    </div>
-    <div class="form-group col-md-3">
-        <label asp-for="Agency" class="control-label">Agency (if applicable)</label>
-        <input asp-for="Agency" class="form-control">
-        <span asp-validation-for="Agency" class="text-danger"></span>
-    </div>
-    <div class="form-group col-md-6">
-        <br />
-        <b>Do you currently have a cough that has lasted 3 weeks or longer?</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Yes&nbsp;<input type="checkbox" asp-for="IsClientCurrently" class="form-check-input" id="check1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; No&nbsp;<input type="checkbox" class="form-check-input" id="check101">
-    </div>
-</div>
-<div class="col-md-push-12">
-    <div class="form-group col-md-12">
-        <label asp-for="Elibigility" class="control-label">Elibigility</label>
-        <textarea asp-for="Elibigility" class="form-control" rows="2"></textarea>
-        <span asp-validation-for="Elibigility" class="text-danger"></span>
-    </div>
-</div>
-<div class="col-md-push-12">
-    <div class="form-group col-md-5">
-        <label asp-for="IdHealthPlan" class="control-label"></label>
-        <select asp-for="IdHealthPlan" asp-items="Model.HealthPlan" class="form-control"></select>
-        <span asp-validation-for="IdHealthPlan" class="text-danger"></span>
-    </div>
-    <div class="form-group col-md-3">
-        <label asp-for="HealthMemberId" class="control-label">Member ID</label>
-        <input asp-for="HealthMemberId" class="form-control">
-        <span asp-validation-for="HealthMemberId" class="text-danger"></span>
-    </div>
-    <div class="form-group col-md-4">
-        <label asp-for="InsuranceOther" class="control-label">Insurance Other</label>
-        <input asp-for="InsuranceOther" class="form-control">
-        <span asp-validation-for="InsuranceOther" class="text-danger"></span>
-    </div>
-</div>
-<div class="col-md-push-12">
-    <div class="form-group col-md-3">
-        <label asp-for="School" class="control-label">School</label>
-        <input asp-for="School" class="form-control">
-        <span asp-validation-for="School" class="text-danger"></span>
-    </div>
-    <div class="form-group col-md-2">
-        <label asp-for="Grade" class="control-label">Grade</label>
-        <input asp-for="Grade" class="form-control">
-        <span asp-validation-for="Grade" class="text-danger"></span>
-    </div>
-    <div class="form-group col-md-3">
-        <label asp-for="TeacherCounselor_Name" class="control-label">Teacher Counselor Name</label>
-        <input asp-for="TeacherCounselor_Name" class="form-control">
-        <span asp-validation-for="TeacherCounselor_Name" class="text-danger"></span>
-    </div>
-    <div class="form-group col-md-2">
-        <label asp-for="TeacherCounselor_Phone" class="control-label">Phone No</label>
-        <input asp-for="TeacherCounselor_Phone" class="form-control">
-        <span asp-validation-for="TeacherCounselor_Phone" class="text-danger"></span>
-    </div>
-    <div class="container-fluid">
-        &nbsp;
-    </div>
-</div>
-<div class="col-md-push-12">
-    <div class="form-group col-md-5">
-        <pre><b>School Program</b>&nbsp;&nbsp;<br /><input type="checkbox" asp-for="School_Regular" class="form-check-input"> Regular &nbsp;&nbsp;<input type="checkbox" asp-for="School_ESE" class="form-check-input"> ESE&nbsp;&nbsp; <input type="checkbox" asp-for="School_EBD" class="form-check-input">  EBD &nbsp;&nbsp;<input type="checkbox" asp-for="School_ESOL" class="form-check-input"> ESOL&nbsp;&nbsp;<input type="checkbox" asp-for="School_HHIP" class="form-check-input">  HHIP (Homebound) &nbsp;&nbsp;<input type="checkbox" asp-for="School_Other" class="form-check-input"> Other</pre>
-    </div>
-    <div class="container-fluid">
-        &nbsp;
-    </div>
-</div>
-<div class="col-md-push-12">
-    <div class="form-group col-md-2">
-        <label asp-for="CountryOfBirth" class="control-label">Country of Birth</label>
-        <input asp-for="CountryOfBirth" class="form-control">
-        <span asp-validation-for="CountryOfBirth" class="text-danger"></span>
-    </div>
-    <div class="form-group col-md-2">
-        <label asp-for="YearEnterUsa" class="control-label">Year entered USA</label>
-        <input asp-for="YearEnterUsa" class="form-control">
-        <span asp-validation-for="YearEnterUsa" class="text-danger"></span>
-    </div>
-    <div class="form-group col-md-8">
-        <pre><b>Status</b>
-        <input type="checkbox" asp-for="StausCitizen" class="form-check-input"> Citizen &nbsp;&nbsp; &nbsp;&nbsp;<input type="checkbox" asp-for="StatusResident" class="form-check-input"> Resident&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" asp-for="StatusOther" class="form-check-input">  Other (If Other, please explain): <input asp-for="StatusOther_Explain" style="width:30%"></pre>
-        <br />
-    </div> 
-</div>
-<div class="col-md-push-12">
-    <div class="form-group col-md-2">
-        <label asp-for="EmergencyContactName" class="control-label">Primary Contact</label>
-        <input asp-for="EmergencyContactName" class="form-control">
-        <span asp-validation-for="EmergencyContactName" class="text-danger"></span>
-    </div>
-    <div class="form-group col-md-2">
-        <label asp-for="EmergencyContacTelephone" class="control-label">Phone No</label>
-        <input asp-for="EmergencyContacTelephone" class="form-control">
-        <span asp-validation-for="EmergencyContacTelephone" class="text-danger"></span>
-    </div>
-    <div class="form-group col-md-2">
-        <label asp-for="IdRelationshipEC" class="control-label"></label>
-        <select asp-for="IdRelationshipEC" asp-items="Model.RelationshipsEC" class="form-control"></select>
-        <span asp-validation-for="IdRelationshipEC" class="text-danger"></span>
-    </div>
-    <div class="form-group col-md-2">
-        <label asp-for="SecondaryContact" class="control-label">Secondary Contact</label>
-        <input asp-for="SecondaryContact" class="form-control">
-        <span asp-validation-for="SecondaryContact" class="text-danger"></span>
-    </div>
-    <div class="form-group col-md-2">
-        <label asp-for="SecondaryContact_Phone" class="control-label">Phone No</label>
-        <input asp-for="SecondaryContact_Phone" class="form-control">
-        <span asp-validation-for="SecondaryContact_Phone" class="text-danger"></span>
-    </div>
-    <div class="form-group col-md-2">
-        <label asp-for="SecondaryContact_RelationShip" class="control-label">RelationShip</label>
-        <input asp-for="SecondaryContact_RelationShip" class="form-control">
-        <span asp-validation-for="SecondaryContact_RelationShip" class="text-danger"></span>
-    </div>
-</div>
-<div class="col-md-push-12">
-    <div class="form-group col-md-12">
-        <strong>May we leave/send voice/text messages to the above contacts if necessary?</strong>
-        &nbsp;
-        <input type="checkbox" asp-for="EmergencyContact" class="form-check-input" id="check2">
-    </div>
-</div>
-<div class="col-md-push-12">
-    <div class="form-group col-md-3">
-        <label asp-for="Psychiatrist_Name" class="control-label">Psychiarist</label>
-        <input asp-for="Psychiatrist_Name" class="form-control">
-        <span asp-validation-for="Psychiatrist_Name" class="text-danger"></span>
-    </div>
-    <div class="form-group col-md-2">
-        <label asp-for="Psychiatrist_Phone" class="control-label">Phone No</label>
-        <input asp-for="Psychiatrist_Phone" class="form-control">
-        <span asp-validation-for="Psychiatrist_Phone" class="text-danger"></span>
-    </div>
-    <div class="form-group col-md-5">
-        <label asp-for="Psychiatrist_Address" class="control-label">Address</label>
-        <input asp-for="Psychiatrist_Address" class="form-control">
-        <span asp-validation-for="Psychiatrist_Address" class="text-danger"></span>
-    </div>
-    <div class="form-group col-md-2">
-        <label asp-for="Psychiatrist_CityStateZip" class="control-label">City, State, Zip</label>
-        <input asp-for="Psychiatrist_CityStateZip" class="form-control">
-        <span asp-validation-for="Psychiatrist_CityStateZip" class="text-danger"></span>
-    </div>
-</div>
-<div class="col-md-push-12">
-    <div class="form-group col-md-3">
-        <label asp-for="PCP_Name" class="control-label">Primary Care Physician (PCP)</label>
-        <input asp-for="PCP_Name" class="form-control">
-        <span asp-validation-for="PCP_Name" class="text-danger"></span>
-    </div>
-    <div class="form-group col-md-2">
-        <label asp-for="PCP_Phone" class="control-label">Phone No</label>
-        <input asp-for="PCP_Phone" class="form-control">
-        <span asp-validation-for="PCP_Phone" class="text-danger"></span>
-    </div>
-    <div class="form-group col-md-2">
-        <label asp-for="PCP_Place" class="control-label">Place of Practice</label>
-        <input asp-for="PCP_Place" class="form-control" >
-        <span asp-validation-for="PCP_Place" class="text-danger"></span>
-    </div>
-    <div class="form-group col-md-3">
-        <label asp-for="PCP_Address" class="control-label">Address</label>
-        <input asp-for="PCP_Address" class="form-control">
-        <span asp-validation-for="PCP_Address" class="text-danger"></span>
-    </div>
-    <div class="form-group col-md-2">
-        <label asp-for="PCP_CityStateZip" class="control-label">City, State, Zip</label>
-        <input asp-for="PCP_CityStateZip" class="form-control">
-        <span asp-validation-for="PCP_CityStateZip" class="text-danger"></span>
-    </div>
-</div>
-<div class="col-md-push-12">
-    <div class="form-group col-md-3">
-        <label asp-for="Other" class="control-label">Other</label>
-        <input asp-for="Other" class="form-control" >
-        <span asp-validation-for="Other" class="text-danger"></span>
-    </div>
-    <div class="form-group col-md-2">
-        <label asp-for="Other_Phone" class="control-label">Phone No</label>
-        <input asp-for="Other_Phone" class="form-control" >
-        <span asp-validation-for="Other_Phone" class="text-danger"></span>
-    </div>
-    <div class="form-group col-md-4">
-        <label asp-for="Other_Address" class="control-label">Address</label>
-        <input asp-for="Other_Address" class="form-control" >
-        <span asp-validation-for="Other_Address" class="text-danger"></span>
-    </div>
-    <div class="form-group col-md-3">
-        <label asp-for="Other_City" class="control-label">City, State, Zip</label>
-        <input asp-for="Other_City" class="form-control" >
-        <span asp-validation-for="Other_City" class="text-danger"></span>
-    </div>
-</div>
-<div class="col-md-push-12">
-    <div class="form-group col-md-3">
-        <strong>Need of Special Accommodations?</strong>&nbsp;&nbsp;
-        <input type="checkbox" asp-for="NeedSpecial" class="form-check-input">
-    </div>
-    <div class="container-fluid">
-        &nbsp;
-    </div>
-</div>
-<div class="col-md-push-12">
-    <div class="form-group col-md-12">
-        <label asp-for="NeedSpecial_Specify" class="control-label">Specify</label>
-        <input asp-for="NeedSpecial_Specify" class="form-control">
-        <span asp-validation-for="NeedSpecial_Specify" class="text-danger"></span>
-    </div>
-</div>
-<div class="col-md-push-12">
-    <div class="form-group col-md-12">
-        <label asp-for="CaseManagerNotes" class="control-label">Case Manager's notes</label>
-        <textarea asp-for="CaseManagerNotes" class="form-control" rows="2"></textarea>
-        <span asp-validation-for="CaseManagerNotes" class="text-danger"></span>
-    </div>
-</div>
-<div class="col-md-push-12">
-    
+
 </div>
 <script>
     check1.addEventListener('change', (e) => {
@@ -432,7 +747,7 @@
     } else {
         check101.checked = true;
     }
-    
+
 </script>
 
 

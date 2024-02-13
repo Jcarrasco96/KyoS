@@ -41,24 +41,26 @@
                     <tbody>
                         @foreach (var item in Model)
                         {
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.FacilitatorName)
-                            </td>
-                            <td align="center">
-                                @Html.DisplayFor(modelItem => item.PSREditing)
-                            </td>
-                            <td align="center">
-                                @Html.DisplayFor(modelItem => item.IndEditing)
-                            </td>
-                            <td align="center">
-                                @Html.DisplayFor(modelItem => item.GroupEditing)
-                            </td>
-                            <td align="center">
-                                @(item.PSREditing + item.IndEditing + item.GroupEditing)
-                            </td>
-                        </tr>
-
+                            @if (item.PSREditing > 0 || item.IndEditing > 0 || item.GroupEditing > 0)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.FacilitatorName)
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.PSREditing)
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.IndEditing)
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.GroupEditing)
+                                    </td>
+                                    <td align="center">
+                                        @(item.PSREditing + item.IndEditing + item.GroupEditing)
+                                    </td>
+                                </tr>
+                            }
                         }
                     </tbody>
                 </table>

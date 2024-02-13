@@ -63,10 +63,11 @@
                                                             <table class="table table-striped">
                                                                 <tr>
                                                                     <th class="col-md-2" style="text-align:center;">Session</th>
-                                                                    <th class="col-md-4">Name</th>
+                                                                    <th class="col-md-3">Name</th>
                                                                     <th class="col-md-2" style="text-align:center;">Present</th>
                                                                     <th class="col-md-2" style="text-align:center;">Note Status</th>
                                                                     <th class="col-md-2" style="text-align:center;">Change Session</th>
+                                                                    <th class="col-md-1" style="text-align:center;">Delete</th>
                                                                     <th></th>
                                                                 </tr>
                                                                 @foreach (var day_client in day.Workdays_Clients.Where(dc => dc.Facilitator.Id.ToString() == @ViewData["facilitatorId"].ToString()).OrderBy(n => n.Session))
@@ -145,6 +146,16 @@
                                                                                     }
                                                                                 }
                                                                             </td>
+                                                                            <td align="center">
+                                                                                @if (User.IsInRole("Manager") == true && day_client.IndividualNote == null)
+                                                                                {
+                                                                                    <a onclick="showInPopup('@Url.Action("DeleteIndNoteModal","Notes",new { id = day_client.Id, weekId = item.Id, facilitatorId = day_client.Facilitator.Id},Context.Request.Scheme)','Delete Individual Note')" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i></a>
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <a onclick="showInPopup('@Url.Action("DeleteIndNoteModal","Notes",new { id = day_client.Id, weekId = item.Id, facilitatorId = day_client.Facilitator.Id},Context.Request.Scheme)','Delete Individual Note')" class="btn btn-danger disabled"><i class="glyphicon glyphicon-trash"></i></a>
+                                                                                }
+                                                                            </td>
                                                                         </tr>
                                                                     }
                                                                     else
@@ -214,7 +225,16 @@
                                                                                     }
                                                                                 }
                                                                             </td>
-                                                                           
+                                                                            <td align="center">
+                                                                                @if (User.IsInRole("Manager") == true && day_client.IndividualNote == null)
+                                                                                {
+                                                                                    <a onclick="showInPopup('@Url.Action("DeleteIndNoteModal","Notes",new { id = day_client.Id, weekId = item.Id, facilitatorId = day_client.Facilitator.Id},Context.Request.Scheme)','Delete Individual Note')" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i></a>
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <a onclick="showInPopup('@Url.Action("DeleteIndNoteModal","Notes",new { id = day_client.Id, weekId = item.Id, facilitatorId = day_client.Facilitator.Id},Context.Request.Scheme)','Delete Individual Note')" class="btn btn-danger disabled"><i class="glyphicon glyphicon-trash"></i></a>
+                                                                                }
+                                                                            </td>
                                                                         </tr>
                                                                     }
                                                                 }

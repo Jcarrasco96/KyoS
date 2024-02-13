@@ -1,0 +1,77 @@
+﻿@model KyoS.Web.Models.MeetingNotesViewModel
+<div class="col-md-push-12">
+    <div class="form-group col-md-3">
+        <label asp-for="Title" class="control-label"></label>
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-3">
+        <label asp-for="Date" class="control-label"></label>
+        <input asp-for="Date" class="form-control" />
+        <span asp-validation-for="Date" class="text-danger"></span>
+    </div>
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-12">
+        <label asp-for="PlanNote" class="control-label"></label>
+        <textarea asp-for="PlanNote" class="form-control" rows="2"></textarea>
+        <span asp-validation-for="PlanNote" class="text-danger"></span>
+    </div>
+</div>
+<div>
+    <div class="col-md-12">
+        <div class="form-group">
+            <label class="control-label">Facilitators</label>
+            @Html.ListBox("facilitators", ViewData["facilitators"] as MultiSelectList, new { @class = "chosen-select", @style = "width:100%;" })
+        </div>
+    </div>
+</div>
+<div class="col-md-12">
+    <hr />
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-12">
+        <label asp-for="Description" class="control-label"></label>
+        <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+</div>
+
+<div class="col-md-12">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Intervention Notes</h3>
+        </div>
+        <div class="panel-body">
+            <table class="table table-hover table-responsive table-striped" id="MyTable">
+                <thead>
+                    <tr>
+                        <th class="col-md-2">
+                            Facilitator Name
+                        </th>
+                        <th class="col-md-8">
+                            Intervention
+                        </th>
+                        <th class="col-md-1" style="text-align:center;">
+                            Sign
+                        </th>
+                        <th class="col-md-1" style="text-align:center;">
+                            Date
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.FacilitatorList.OrderBy(n => n.Facilitator.Name))
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(modelItem => item.Facilitator.Name)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Intervention)</td>
+                            <td align="center">@Html.DisplayFor(modelItem => item.Sign)</td>
+                            <td align="center">@Html.DisplayFor(modelItem => item.DateSign)</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -5,28 +5,34 @@
     <div class="col-md-12">
          <div class="panel panel-default">
              <div class="panel-heading">
-                <h3 class="panel-title">TCM Cases</h3>
+                 <h3 class="panel-title">TCM Cases (max code: @Model.Max(n => n.CaseNumber))</h3>
              </div>
              <div class="panel-body">
                  <table class="table table-hover table-responsive table-striped" id="MyTable">
                      <thead>
                          <tr>
-                             <th class="col-md-3">
+                             <th class="col-md-2">
                                  Case Manager
                              </th>
                              <th class="col-md-3">
                                  Client Name
                              </th>
-                             <th class="col-md-2" style="text-align: center;">
-                                 Client Status
+                             <th class="col-md-1" style="text-align: center;">
+                                 Case
                              </th>
                              <th class="col-md-1" style="text-align: center;">
-                                 Open Date
+                                 Referral
+                             </th>
+                             <th class="col-md-1" style="text-align: center;">
+                                 Status
+                             </th>
+                             <th class="col-md-1" style="text-align: center;">
+                                 Open
+                             </th>
+                             <th class="col-md-1" style="text-align: center;">
+                                 Closed
                              </th>
                              <th class="col-md-2" style="text-align: center;">
-                                 Close Date
-                             </th>                             
-                             <th class="col-md-1" style="text-align: center;">
                              </th>
                          </tr>
                      </thead>
@@ -48,8 +54,48 @@
                                  }
                                  &nbsp;
                                  @Html.DisplayFor(modelItem => item.Client.Name)
-                                 |
+                             </td>
+                             <td align="center">
                                  @Html.DisplayFor(modelItem => item.CaseNumber)
+                             </td>
+                             <td align="center">
+                                 @if (User.IsInRole("Manager") || User.IsInRole("TCMSupervisor"))
+                                 {
+                                     @if (item.TCMReferralForm != null)
+                                     {
+                                         @if (item.TCMReferralForm.TCMSign == true)
+                                         {
+                                             <a asp-action="TCMReferralAccept" asp-route-idTCMClient="@item.Id" asp-controller="TCMClients" class="btn btn-success" title="View Referral Form"><i class="glyphicon glyphicon-th-list"></i></a>
+                                         }
+                                         else
+                                         {
+                                             <a asp-action="TCMReferralAccept" asp-route-idTCMClient="@item.Id" asp-controller="TCMClients" class="btn btn-warning" title="View Referral Form"><i class="glyphicon glyphicon-th-list"></i></a>
+                                         }
+                                     }
+                                     else
+                                     {
+                                         <a asp-action="CreateReferralForm" asp-route-idTCMClient="@item.Id" asp-controller="TCMClients" class="btn btn-danger" title="Create Referral Form"><i class="glyphicon glyphicon-th-list"></i></a>
+                                     }
+                                 }
+                                 @if (User.IsInRole("CaseManager"))
+                                 {
+                                     @if (item.TCMReferralForm != null)
+                                     {
+                                         @if (item.TCMReferralForm.TCMSign == true)
+                                         {
+                                             <a asp-action="TCMReferralAccept" asp-route-idTCMClient="@item.Id" asp-controller="TCMClients" class="btn btn-success" title="View Referral Form"><i class="glyphicon glyphicon-th-list"></i></a>
+                                         }
+                                         else
+                                         {
+                                             <a asp-action="TCMReferralAccept" asp-route-idTCMClient="@item.Id" asp-controller="TCMClients" class="btn btn-warning" title="View Referral Form"><i class="glyphicon glyphicon-th-list"></i></a>
+                                         }
+                                     }
+                                     else
+                                     {
+                                         <a asp-action="TCMReferralAccept" asp-route-id="@item.Id" asp-controller="TCMClients" class="btn btn-danger disabled" title="View Referral Form"><i class="glyphicon glyphicon-th-list"></i></a>
+                                     }
+                                 }
+
                              </td>
                              <td align="center">
                                  @if (item.Status == KyoS.Common.Enums.StatusType.Open)
@@ -74,13 +120,15 @@
                              <td align="right">
                                  @if ((User.IsInRole("Manager") || User.IsInRole("TCMSupervisor")))
                                  {
-                                     @if (item.Status == KyoS.Common.Enums.StatusType.Open)
+                                     <a onclick="showInPopup('@Url.Action("Edit", "TCMClients", new { id = item.Id, origin = ViewData["origin"] }, Context.Request.Scheme)','Edit TCM Case')" class="btn btn-warning" title="Edit TCM Case"><i class="glyphicon glyphicon-pencil"></i></a>
+                                     <a asp-action="TCMCaseHistory" asp-route-id="@item.Id" asp-controller="TCMClients" class="btn btn-info" title="View Case History"><i class="glyphicon glyphicon-list"></i></a>
+                                     @if (User.IsInRole("Manager"))
                                      {
-                                         <a onclick="showInPopup('@Url.Action("Edit", "TCMClients", new { id = item.Id }, Context.Request.Scheme)','Edit TCM Case')" class="btn btn-warning" title="Edit TCM Case"><i class="glyphicon glyphicon-pencil"></i></a>
+                                        <button onclick="ConfirmDelete(@item.Id)" class="btn btn-danger deleteItem" title="Delete case"><i class="glyphicon glyphicon-trash"></i></button>
                                      }
                                      else
-                                     {
-                                         <a class="btn btn-warning disabled" title="Edit Case"><i class="glyphicon glyphicon-pencil"></i></a>
+                                     { 
+                                        <button onclick="ConfirmDelete(@item.Id)" class="btn btn-danger deleteItem" title="Delete case"><i class="glyphicon glyphicon-trash"></i></button>
                                      }
                                  }
                                  @if (User.IsInRole("CaseManager"))
@@ -93,6 +141,7 @@
                                      {
                                          <a class="btn btn-warning disabled" title="Edit Open Binder"><i class="glyphicon glyphicon-pencil"></i></a>
                                      }
+                                     <a asp-action="TCMCaseHistory" asp-route-id="@item.Id" asp-controller="TCMClients" class="btn btn-info" title="View Case History"><i class="glyphicon glyphicon-list"></i></a>
                                  }
                              </td>
                          </tr>

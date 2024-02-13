@@ -32,12 +32,14 @@
 
 <div class="row">
     <div>
-        <form asp-action="ApproveIndNote" enctype="multipart/form-data">            
+        <form asp-action="ApproveIndNote" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <input type="hidden" asp-for="Origin" />
+            <input type="hidden" asp-for="CodeBill" />
+            <input type="hidden" asp-for="Setting" />
             <partial name="_IndividualMCSReadOnly" />
-            <partial name="_IndividualNotesReadOnly" />            
+            <partial name="_IndividualNotesReadOnly" />
             <div class="form-group col-md-12">
                 @if (User.IsInRole("Supervisor"))
                 {

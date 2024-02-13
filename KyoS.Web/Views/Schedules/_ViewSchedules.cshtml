@@ -58,7 +58,7 @@
                                                     <th class="col-md-5" style="text-align:center;">End Time</th>
                                                     <th class="col-md-2" style="text-align:center;"></th>
                                                 </tr>
-                                                @foreach (var product1 in item.SubSchedules)
+                                                @foreach (var product1 in item.SubSchedules.OrderBy(n => n.InitialTime.TimeOfDay))
                                                 {
                                                     <tr>
                                                         <td align="center">@Html.DisplayFor(modelItem => product1.InitialTime)</td>

@@ -32,6 +32,10 @@
                 {
                     @Html.ActionLink("Inbox", "MessagesOfDischarges", "TCMMessages")
                 }
+                @if (@ViewData["origi"].ToString() == "5")
+                {
+                    @Html.ActionLink("Updates of Discharges", "UpdateTCMDischarge", "TCMDischarges")
+                }
             </li>
             <li class="active">Edit</li>
         </ul><!--.breadcrumb-->
@@ -70,6 +74,8 @@
                     </div>
                 </div>
                 <br />
+                <partial name="_TCMDischargeSign" />
+                <br />
                 <div class="form-group col-md-12">
                     <input type="submit" value="Save" class="btn btn-primary" />
                     @if (Model.Approved == 0)
@@ -97,6 +103,10 @@
                     @if (@ViewData["origi"].ToString() == "4")
                     {
                         <a asp-action="MessagesOfDischarges" asp-controller="TCMMessages" class="btn btn-success">Back</a>
+                    }
+                    @if (@ViewData["origi"].ToString() == "5")
+                    {
+                        <a asp-action="UpdateTCMDischarge" asp-controller="TCMDischarges" class="btn btn-success">Back</a>
                     }
                 </div>
             </form>

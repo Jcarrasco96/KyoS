@@ -15,11 +15,9 @@
     </ul><!--.breadcrumb-->
 </div>
 
-
-
 @*<p>
         <a asp-action="Create" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Create Activity</a>
-    </p>*@
+  </p>*@
 
 <div class="row">
     <div class="col-md-12">
@@ -36,92 +34,15 @@
             </div>
         }
     </div>
-    <div class="col-md-12">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                @if (ViewBag.Pending == "1")
-                {
-                    <h3 class="panel-title">Pending facilitator's intervention</h3>
-                }
-                else
-                {
-                    <h3 class="panel-title">Facilitator's Intervention</h3>
-                }
-            </div>
-            <div class="panel-body">
-                <table class="table table-hover table-responsive table-striped" id="MyTable">
-                    <thead>
-                        <tr>
-                            <th class="col-md-1" style="text-align:center;">
-                                @Html.DisplayNameFor(model => model.Id)
-                            </th>
-                            <th class="col-md-2">
-                                @Html.DisplayNameFor(model => model.Theme)
-                            </th>
-                            <th class="col-md-6" style="text-align:center;">
-                                Facilitator's Intervention
-                            </th>
-                            
-                            <th class="col-md-1" style="text-align:center;">
-                                Status
-                            </th>
-                            <th class="col-md-2">
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Model)
-                        {
-                            <tr>
-                                <td align="center">
-                                    @Html.DisplayFor(modelItem => item.Id)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Theme.Name)
-                                </td>
-                                <td align="left">
-                                    @item.Name.ToLower()
-                                </td>
-                               
-                                <td align="center">
-                                    @if (item.Status == KyoS.Common.Enums.ActivityStatus.Pending)
-                                    {
-                                        <span class="label label-danger">Pending</span>
-                                    }
-                                    else
-                                    {
-                                        <span class="label label-primary">Approved</span>
-                                    }
-                                </td>
-                                <td align="right">
-                                    @if (item.Status == KyoS.Common.Enums.ActivityStatus.Pending)
-                                    {
-                                        @if (ViewBag.Pending == "1")
-                                        {
-                                            <a asp-action="ApproveFacilitatorIntervention" asp-route-id="@item.Id" asp-route-origin="2" class="btn btn-primary" title="Approve Activity"><i class="glyphicon glyphicon-ok"></i></a>
-                                            <a asp-action="Edit3" asp-route-id="@item.Id" asp-route-origin="2" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i></a>
-                                        }
-                                        else
-                                        {
-                                            <a asp-action="ApproveFacilitatorIntervention" asp-route-id="@item.Id" class="btn btn-primary" title="Approve Activity"><i class="glyphicon glyphicon-ok"></i></a>
-                                            <a asp-action="Edit3" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i></a>
-                                        }
-                                    }
-                                    @if (item.Status == KyoS.Common.Enums.ActivityStatus.Approved)
-                                    {
-                                        <a class="btn btn-primary disabled"><i class="glyphicon glyphicon-ok"></i></a>
-                                        <a class="btn btn-warning disabled"><i class="glyphicon glyphicon-pencil"></i></a>
-                                    }
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-        </div>
+</div>
+
+<div class="row">
+    <div id="view-activities">
+        @await Html.PartialAsync("_ViewActivities", Model)
     </div>
 </div>
 
+<partial name="_ModalPopup" />
 <partial name="_DeleteDialog" />
 
 @section Scripts {

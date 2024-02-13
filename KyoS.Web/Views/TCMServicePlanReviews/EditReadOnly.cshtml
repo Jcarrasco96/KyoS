@@ -1,14 +1,14 @@
 ﻿@model KyoS.Web.Models.TCMServicePlanReviewViewModel
 @{
-    ViewData["Title"] = "Approve Service Plan Review";
+    ViewData["Title"] = "Approve SPR";
 }
 
 <!DOCTYPE html>
 
 <html>
-<link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
 <head>
     <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
 </head>
 <body>
     <div class="breadcrumbs" id="breadcrumbs">
@@ -23,18 +23,22 @@
                 {
                     @Html.ActionLink("TCM Service Plan Review Notifications", "Notifications", "TCMMessages")
                 }
+                @if (ViewData["origi"].ToString() == "5")
+                {
+                    @Html.ActionLink("TCM Client History", "TCMCaseHistory", "TCMClients", new { id = @Model.TcmServicePlan.TcmClient_FK })
+                }
             </li>
-            <li class="active">Approve</li>
+            <li class="active">Approve Service Plan Review</li>
         </ul><!--.breadcrumb-->
     </div>
 
-    <h4>Approve new service plan review</h4>
+    <h4>Approve Service Plan Review</h4>
     <hr />
 
     <div class="row">
 
         <form asp-action="ApproveTCMServicePlanReview" asp-route-id="@Model.Id" asp-route-origi="@ViewData["origi"]" enctype="multipart/form-data">
-            <div class="row col-md-12">
+            <div class="col-md-push-12">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <input type="hidden" asp-for="Id" />
                 <input type="hidden" asp-for="IdServicePlan" />
@@ -46,17 +50,117 @@
                             @await Html.PartialAsync("_ViewDomainServicePlanReview", Model.TCMServicePlanRevDomain.ToList())
                         </div>
                     </div>
+                    <div class="col-md-12">
+                        @if (User.IsInRole("CaseManager"))
+                        {
+                            <div class="col-md-push-12">
+                                <pre>
+                            @if (Model.Approved < 1)
+                            {
+        <input type="checkbox" class="form-check-input" disabled> <i>Signed</i>
+                            }
+                            else
+                            {            
+        <input type="checkbox" class="form-check-input" checked disabled> <i>Signed</i>
+                            }
+        <strong>Employee signature date</strong>        <input asp-for="DateTCMCaseManagerSignature">   
+        <strong>(@Html.DisplayFor(modelItem => Model.TcmServicePlan.TcmClient.Casemanager.Name))</strong>  <br />  
+        <input type="checkbox" class="form-check-input" disabled> <i>Signed</i>
+        <strong>(@Html.DisplayFor(modelItem => Model.TcmServicePlan.TcmClient.Casemanager.TCMSupervisor.Name))</strong>
+                        </pre>
+                            </div>
+                            <div class="col-md-push-12">
+                                <hr />
+                            </div>
+                        }
+                        @if (User.IsInRole("TCMSupervisor"))
+                        {
+                            <div class="col-md-push-12">
+                                <pre>
+                            @if (Model.Approved < 1)
+                            {
+        <input type="checkbox" class="form-check-input" disabled> <i>Signed</i>
+                            }
+                            else
+                            { 
+        <input type="checkbox" class="form-check-input" checked disabled> <i>Signed</i>
+                            }
+                            @if (Model.TcmServicePlan.TcmClient.Client.Clinic.Setting.TCMSupervisorEdit == true && ViewData["origi"].ToString() != "5")
+                            {
+        <strong>Employee signature date</strong>      <input asp-for="DateTCMCaseManagerSignature">   
+        <strong>(@Html.DisplayFor(modelItem => Model.TcmServicePlan.TcmClient.Casemanager.Name))</strong>  <br /> 
+                            }
+                            else
+                            { 
+        <strong>Employee signature date</strong>      <input asp-for="DateTCMCaseManagerSignature" disabled>   
+        <strong>(@Html.DisplayFor(modelItem => Model.TcmServicePlan.TcmClient.Casemanager.Name))</strong>  <br /> 
+        
+                            }
+                            @if (Model.Approved < 2)
+                            {
+        <input type="checkbox" class="form-check-input" disabled> <i>Signed</i>
+                            }
+                            else
+                            { 
+        <input type="checkbox" class="form-check-input" checked disabled> <i>Signed</i>
+                            } 
+                            @if (ViewData["origi"].ToString() != "5")
+                            {
+        <strong>Supervisor signature date</strong>    <input asp-for="DateTCMSupervisorSignature">
+        <strong>(@Html.DisplayFor(modelItem => Model.TcmServicePlan.TcmClient.Casemanager.TCMSupervisor.Name))</strong>                    
+                            }
+                            else
+                            { 
+        <strong>Supervisor signature date</strong>    <input asp-for="DateTCMSupervisorSignature" disabled>
+        <strong>(@Html.DisplayFor(modelItem => Model.TcmServicePlan.TcmClient.Casemanager.TCMSupervisor.Name))</strong>
+                            }
+
+                            </pre>
+                            </div>
+                            <div class="col-md-push-12">
+                                <hr />
+                            </div>
+                        }
+                         @if (User.IsInRole("Manager"))
+                        {
+                            <div class="col-md-push-12">
+                                <pre>
+                            @if (Model.Approved < 1)
+                            {
+        <input type="checkbox" class="form-check-input" disabled> <i>Signed</i>
+                            }
+                            else
+                            { 
+        <input type="checkbox" class="form-check-input" checked disabled> <i>Signed</i>
+                            }
+                            
+        <strong>Employee signature date</strong>      <input asp-for="DateTCMCaseManagerSignature" disabled>   
+        <strong>(@Html.DisplayFor(modelItem => Model.TcmServicePlan.TcmClient.Casemanager.Name))</strong>  <br /> 
+                            @if (Model.Approved < 2)
+                            {
+        <input type="checkbox" class="form-check-input" disabled> <i>Signed</i>
+                            }
+                            else
+                            { 
+        <input type="checkbox" class="form-check-input" checked disabled> <i>Signed</i>
+                            } 
+        <strong>Supervisor signature date</strong>    <input asp-for="DateTCMSupervisorSignature" disabled>
+        <strong>(@Html.DisplayFor(modelItem => Model.TcmServicePlan.TcmClient.Casemanager.TCMSupervisor.Name))</strong>
+                            </pre>
+                            </div>
+                            <div class="col-md-push-12">
+                                <hr />
+                            </div>
+                        }
+                    </div>
                 </div>
                 <br />
                 <div class="form-group col-md-12">
-                    <input type="submit" value="Approve" class="btn btn-primary" />
-                    @if (User.IsInRole("TCMSupervisor"))
+
+                    @if (User.IsInRole("TCMSupervisor") && ViewData["origi"].ToString() != "5")
                     {
+                        <input type="submit" value="Approve" class="btn btn-primary" />
                         <a class="btn btn-warning" onclick="showInPopup('@Url.Action("AddMessageEntity", "TCMServicePlanReviews", new { id = Model.Id, origi = 1 }, Context.Request.Scheme)','Add message to casemanager')" title="Not approved tcm Fars due to problems">Review</a>
-                    }
-                    else
-                    {
-                        <a asp-action="AddMessageEntity" class="btn btn-warning disabled">Review</a>
                     }
                     @if (ViewData["origi"].ToString() == "0")
                     {
@@ -66,7 +170,10 @@
                     {
                         <a asp-action="Notifications" asp-controller="TCMMessages" class="btn btn-success">Back</a>
                     }
-
+                    @if (ViewData["origi"].ToString() == "5")
+                    {
+                        <a asp-action="TCMCaseHistory" asp-controller="TCMClients" asp-route-id="@Model.TcmServicePlan.TcmClient_FK" class="btn btn-success">Back</a>
+                    }
                 </div>
             </div>
         </form>

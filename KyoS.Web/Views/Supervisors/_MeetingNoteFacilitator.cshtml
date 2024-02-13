@@ -1,0 +1,47 @@
+﻿@model KyoS.Web.Models.MeetingNotesFacilitatorModel
+<div class="col-md-push-12">
+    <div class="form-group col-md-3">
+        <label asp-for="MeetingNoteEntity.Title" class="control-label"></label>
+        <input asp-for="MeetingNoteEntity.Title" class="form-control" readonly />
+        <span asp-validation-for="MeetingNoteEntity.Title" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-3">
+        <label asp-for="MeetingNoteEntity.Date" class="control-label"></label>
+        <input asp-for="MeetingNoteEntity.Date" class="form-control" readonly />
+        <span asp-validation-for="MeetingNoteEntity.Date" class="text-danger"></span>
+    </div>
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-12">
+        <label asp-for="MeetingNoteEntity.PlanNote" class="control-label"></label>
+        <textarea asp-for="MeetingNoteEntity.PlanNote" class="form-control" rows="2" readonly></textarea>
+        <span asp-validation-for="MeetingNoteEntity.PlanNote" class="text-danger"></span>
+    </div>
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-12">
+        <label asp-for="MeetingNoteEntity.Description" class="control-label"></label>
+        <textarea asp-for="MeetingNoteEntity.Description" class="form-control" rows="4" readonly></textarea>
+        <span asp-validation-for="MeetingNoteEntity.Description" class="text-danger"></span>
+    </div>
+</div>
+<div class="col-md-12">
+    <hr />
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-12">
+        <label asp-for="Intervention" class="control-label"></label>
+        <textarea asp-for="Intervention" class="form-control" rows="4"></textarea>
+        <span asp-validation-for="Intervention" class="text-danger"></span>
+    </div>
+</div>
+<div class="col-md-12">
+    &nbsp;
+</div>
+<div class="col-md-12" id="check110">
+    <pre>
+    @Html.DisplayFor(modelItem => Model.Facilitator.Name)                 <input asp-for="Sign" type="checkbox" class="form-check-input" id="check1" > Sign Here (Facilitator)                @Html.DisplayFor(modelItem => Model.Facilitator.Codigo)                   <input asp-for="DateSign">
+    <strong>_______________________</strong>         <strong>_____________________________</strong>         <strong>___________________</strong>         <strong>___________________</strong>
+    <strong>Case Manager Print Name</strong>            <strong>Case Manager Signature</strong>                 <strong>Credentials</strong>                    <strong>Date</strong>
+                </pre>
+</div>

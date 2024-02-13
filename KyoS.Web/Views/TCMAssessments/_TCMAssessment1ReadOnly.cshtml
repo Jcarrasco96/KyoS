@@ -2,23 +2,23 @@
 
 <div class="col-md-push-12">
     <div class="col-md-12">
-        <pre>
-        <strong>SECTION III: PRESENTING PROBLEMS </strong>
-        <textarea asp-for="PresentingProblems" rows="4" style="width:90%" disabled> </textarea>
+    <pre>
+    <strong>SECTION III: PRESENTING PROBLEMS </strong>
+    <textarea asp-for="PresentingProblems" rows="8" style="width:95%" disabled> </textarea>
 
-        Date of onset of present problem(s): <input asp-for="DateOfOnSetPresentingProblem" disabled>        Previous psychiatric problem(s):   <input type="checkbox" class="form-check-input" id="check103" disabled> No        <input asp-for="PresentingProblemPrevious" class="form-check-input" id="check3" disabled> Yes
+    Date of onset of present problem(s): <input asp-for="DateOfOnSetPresentingProblem" disabled>        Previous psychiatric problem(s):   <input type="checkbox" class="form-check-input" id="check103" disabled> No        <input asp-for="PresentingProblemPrevious" class="form-check-input" id="check3" disabled> Yes
     </pre>
     </div>
 </div>
 <div class="col-md-push-12">
     <div class="col-md-12">
-        <pre>
-        <strong>SECTION IV: FAMILY INFORMATION </strong>
-        A. <strong>Parents Information </strong>(children only)
-        What are the child’s parent’s names?    <input asp-for="ChildMother" style="width:20%" disabled/> Child’s Mother                 <input asp-for="ChildFather" style="width:20%" disabled/> Child’s Father 
-        Parent’s marital status: <input asp-for="Married" class="form-check-input" disabled> Married         <input asp-for="Divorced" class="form-check-input" disabled> Divorced        <input asp-for="Separated" class="form-check-input" disabled> Separated       <input asp-for="NeverMarried" class="form-check-input"disabled > Never married
-        Are child’s parents living together?        <input asp-for="AreChild" class="form-check-input" id="check4" disabled> Yes       <input type="checkbox" class="form-check-input" id="check104" disabled> No       If No, provide the following information for the non-custodial parent:
-        </pre>
+    <pre>
+    <strong>SECTION IV: FAMILY INFORMATION </strong>
+    A. <strong>Parents Information </strong>(children only)
+    What are the child’s parent’s names?    <input asp-for="ChildMother" style="width:20%" disabled/> Child’s Mother                 <input asp-for="ChildFather" style="width:20%" disabled/> Child’s Father 
+    Parent’s marital status: <input asp-for="Married" class="form-check-input" disabled> Married         <input asp-for="Divorced" class="form-check-input" disabled> Divorced        <input asp-for="Separated" class="form-check-input" disabled> Separated       <input asp-for="NeverMarried" class="form-check-input"disabled > Never married
+    Are child’s parents living together?        <input asp-for="AreChild" class="form-check-input" id="check4" disabled> Yes       <input type="checkbox" class="form-check-input" id="check104" disabled> No       If No, provide the following information for the non-custodial parent:
+    </pre>
     </div>
 </div>
 <div class="col-md-push-12">
@@ -44,10 +44,10 @@
     </div>
 </div>
 <div class="col-md-push-12">
-    <div class="col-md-12">
-        <pre>
-        *May we contact the non-custodial parent if necessary?  <input asp-for="MayWe" class="form-check-input" id="check5" disabled> Yes       <input type="checkbox" class="form-check-input" id="check105" disabled> No        <input asp-for="MayWeNA" class="form-check-input" disabled> N/A
-        </pre>
+    <div class="form-group col-md-12">
+    <pre>
+    *May we contact the non-custodial parent if necessary?  <select asp-for="IdYesNoNAWe" asp-items="Model.YesNoNAs" disabled></select>
+    </pre>
     </div>
 </div>
 

@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using AspNetCore.ReportingServices.ReportProcessing.ReportObjectModel;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc.Rendering;
+
 
 namespace KyoS.Web.Helpers
 {
@@ -49,7 +51,8 @@ namespace KyoS.Web.Helpers
                 CodeMTP = model.CodeMTP,
                 CodeBIO = model.CodeBIO,
                 CodeMTPR = model.CodeMTPR,
-                CodeFARS = model.CodeFARS
+                CodeFARS = model.CodeFARS,
+                CPTCode_TCM = model.CPTCode_TCM
 
             };
         }
@@ -78,7 +81,8 @@ namespace KyoS.Web.Helpers
                 CodeMTP = clinicEntity.CodeMTP,
                 CodeBIO = clinicEntity.CodeBIO,
                 CodeMTPR = clinicEntity.CodeMTPR,
-                CodeFARS = clinicEntity.CodeFARS
+                CodeFARS = clinicEntity.CodeFARS,
+                CPTCode_TCM = clinicEntity.CPTCode_TCM
 
             };
         }
@@ -136,15 +140,20 @@ namespace KyoS.Web.Helpers
             };
         }
 
-        public async Task<ActivityEntity> ToActivityEntity(ActivityViewModel model, bool isNew)
+        public async Task<ActivityEntity> ToActivityEntity(ActivityViewModel model, bool isNew, string userId)
         {
             return new ActivityEntity
             {
                 Id = isNew ? 0 : model.Id,
                 Name = model.Name,
                 Status = ActivityStatus.Pending,
-                Theme = await _context.Themes.FindAsync(model.IdTheme)
+                Theme = await _context.Themes.FindAsync(model.IdTheme),
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
             };
+
         }
 
         public ActivityViewModel ToActivityViewModel(ActivityEntity activityEntity)
@@ -154,7 +163,10 @@ namespace KyoS.Web.Helpers
                 Id = activityEntity.Id,
                 Name = activityEntity.Name,
                 Themes = _combosHelper.GetComboThemes(),
-                IdTheme = activityEntity.Theme.Id
+                IdTheme = activityEntity.Theme.Id,
+                Theme = activityEntity.Theme,
+                CreatedBy = activityEntity.CreatedBy,
+                CreatedOn = activityEntity.CreatedOn
             };
         }
 
@@ -233,7 +245,10 @@ namespace KyoS.Web.Helpers
                 SignaturePath = signaturePath,
                 Email = model.Email,
                 Phone = model.Phone,
-                Money = model.Money
+                Money = model.Money,
+                TCMSupervisor = await _context.TCMSupervisors.FindAsync(model.IdTCMsupervisor),
+                RaterEducation = model.RaterEducation,
+                RaterFMHCertification = model.RaterFMHCertification
             };
         }
 
@@ -254,7 +269,11 @@ namespace KyoS.Web.Helpers
                 SignaturePath = caseMannagerEntity.SignaturePath,
                 Email = caseMannagerEntity.Email,
                 Phone = caseMannagerEntity.Phone,
-                Money = caseMannagerEntity.Money
+                Money = caseMannagerEntity.Money,
+                IdTCMsupervisor = caseMannagerEntity.TCMSupervisor == null? 0 : caseMannagerEntity.TCMSupervisor.Id,
+                TCMsupervisors = _combosHelper.GetComboTCMSupervisorByClinic(idClinic),
+                RaterEducation = caseMannagerEntity.RaterEducation,
+                RaterFMHCertification = caseMannagerEntity.RaterFMHCertification
             };
         }
 
@@ -392,7 +411,13 @@ namespace KyoS.Web.Helpers
                 OnlyTCM = clientEntity.OnlyTCM,
                 HealthInsuranceTemp = _context.HealthInsuranceTemp.Where(n => n.UserName == user_logged.UserName && n.IdClient == clientEntity.Id),
                 Clients_HealthInsurances = clientEntity.Clients_HealthInsurances,
-                Annotations = clientEntity.Annotations
+                Annotations = clientEntity.Annotations,
+                Doctor = clientEntity.Doctor,
+                Psychiatrist = clientEntity.Psychiatrist,
+                LegalGuardian = clientEntity.LegalGuardian,
+                EmergencyContact = clientEntity.EmergencyContact
+
+                
             };
         }
 
@@ -443,6 +468,8 @@ namespace KyoS.Web.Helpers
                 Name = model.Name,
                 SignaturePath = signaturePath,
                 Status = StatusUtils.GetStatusByIndex(model.IdStatus),
+                RaterEducation = model.RaterEducation,
+                RaterFMHCertification = model.RaterFMHCertification
             };
         }
 
@@ -460,7 +487,9 @@ namespace KyoS.Web.Helpers
                 UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.TCMSupervisor, idClinic),
                 SignaturePath = TCMSupervisorEntity.SignaturePath,
                 IdStatus = (TCMSupervisorEntity.Status == StatusType.Open) ? 1 : 2,
-                StatusList = _combosHelper.GetComboClientStatus()
+                StatusList = _combosHelper.GetComboClientStatus(),
+                RaterEducation = TCMSupervisorEntity.RaterEducation,
+                RaterFMHCertification = TCMSupervisorEntity.RaterFMHCertification
             };
         }
 
@@ -656,7 +685,7 @@ namespace KyoS.Web.Helpers
                 IdService = Convert.ToInt32(goalEntity.Service),
                 Services = _combosHelper.GetComboServices(),
                 Compliment = goalEntity.Compliment,
-                Compliment_Date = goalEntity.Compliment_Date != null ? goalEntity.Compliment_Date : DateTime.Now,
+                Compliment_Date = goalEntity.Compliment_Date.Day > 1 ? goalEntity.Compliment_Date : DateTime.Now,
                 Compliment_Explain = goalEntity.Compliment_Explain,
                 Compliment_IdMTPReview = goalEntity.Compliment_IdMTPReview,
                 IdMTPReview = goalEntity.IdMTPReview                
@@ -864,7 +893,8 @@ namespace KyoS.Web.Helpers
                 UsesSessions = model.UsesSessions,
                 Variable = model.Variable,
 
-                Schema = model.Schema
+                Schema = model.Schema,
+                Setting = model.Setting
             };
         }
 
@@ -920,7 +950,8 @@ namespace KyoS.Web.Helpers
                 Psychodynamic = model.Psychodynamic,
                 BehaviorModification = model.BehaviorModification,
                 Other_Intervention = model.Other_Intervention,
-                SubSchedule = await _context.SubSchedule.FindAsync(model.IdSubSchedule)
+                SubSchedule = await _context.SubSchedule.FindAsync(model.IdSubSchedule),
+                Setting = model.Setting
             };
         }
 
@@ -966,7 +997,8 @@ namespace KyoS.Web.Helpers
                 CBT = model.CBT,
                 Psychodynamic = model.Psychodynamic,
                 BehaviorModification = model.BehaviorModification,
-                Other_Intervention = model.Other_Intervention
+                Other_Intervention = model.Other_Intervention,
+                Setting = model.Setting
             };
         }        
 
@@ -1033,6 +1065,8 @@ namespace KyoS.Web.Helpers
                                                          .FirstOrDefaultAsync(d => d.Id == model.IdMtp) : null,
                 Brief = (model.IdBrief != 0) ? await _context.Brief
                                                          .FirstOrDefaultAsync(d => d.Id == model.IdBrief) : null,
+                Bio = (model.IdBio != 0) ? await _context.Bio
+                                                         .FirstOrDefaultAsync(d => d.Id == model.IdBio) : null,
                 Title = model.Title,
                 Text = model.Text,
                 DateCreated = DateTime.Now,
@@ -1054,7 +1088,10 @@ namespace KyoS.Web.Helpers
                 CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
                 LastModifiedBy = !isNew ? userId : string.Empty,
                 LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
-                FaxNumber = model.FaxNumber
+                FaxNumber = model.FaxNumber,
+                City = model.City,
+                State = model.State,
+                ZipCode = model.ZipCode
             };
         }
 
@@ -1070,7 +1107,11 @@ namespace KyoS.Web.Helpers
                 CreatedBy = isNew ? userId : model.CreatedBy,
                 CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
                 LastModifiedBy = !isNew ? userId : string.Empty,
-                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null)
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                FaxNumber = model.FaxNumber,
+                City = model.City,
+                State = model.State,
+                ZipCode = model.ZipCode
             };
         }
 
@@ -1092,7 +1133,8 @@ namespace KyoS.Web.Helpers
                 State = model.State,
                 ZipCode = model.ZipCode,
                 TelephoneSecondary = model.TelephoneSecondary,
-                AdressLine2 = model.AdressLine2
+                AdressLine2 = model.AdressLine2,
+                SignPath = model.SignPath
             };
         }
 
@@ -1133,7 +1175,10 @@ namespace KyoS.Web.Helpers
                 LastModifiedBy = !isNew ? userId : string.Empty,
                 LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
                 Agency = model.Agency,
-                Title = model.Title
+                Title = model.Title,
+                City = model.City,
+                State = model.State,
+                ZidCode = model.ZidCode
             };
         }
 
@@ -1162,7 +1207,10 @@ namespace KyoS.Web.Helpers
                 Email = model.Email,
                 CreatedBy = model.CreatedBy,
                 CreatedOn = model.CreatedOn,
-                FaxNumber = model.FaxNumber
+                FaxNumber = model.FaxNumber,
+                City = model.City,
+                State = model.State,
+                ZipCode = model.ZipCode
             };
         }
 
@@ -1175,8 +1223,13 @@ namespace KyoS.Web.Helpers
                 Address = model.Address,
                 Telephone = model.Telephone,
                 Email = model.Email,
+                FaxNumber = model.FaxNumber,
+                City = model.City,
+                State = model.State,
+                ZipCode = model.ZipCode,
                 CreatedBy = model.CreatedBy,
                 CreatedOn = model.CreatedOn
+
             };
         }
 
@@ -1193,7 +1246,10 @@ namespace KyoS.Web.Helpers
                 CreatedBy = model.CreatedBy,
                 CreatedOn = model.CreatedOn,
                 Agency = model.Agency,
-                Title = model.Title
+                Title = model.Title,
+                City = model.City,
+                State = model.State,
+                ZidCode = model.ZidCode
             };
         }
 
@@ -1215,7 +1271,8 @@ namespace KyoS.Web.Helpers
                 State = model.State,
                 ZipCode = model.ZipCode,
                 TelephoneSecondary = model.TelephoneSecondary,
-                AdressLine2 = model.AdressLine2
+                AdressLine2 = model.AdressLine2,
+                SignPath = model.SignPath
             };
         }
 
@@ -1367,8 +1424,7 @@ namespace KyoS.Web.Helpers
                 DurationTime = model.DurationTime,
                 Units = model.Units,                
                 Active = model.Active,
-                IdClient = model.Client.Id,
-                Clients = _combosHelper.GetComboActiveClientsByClinic(idClinic),
+                Client = model.Client,
                 IdHealthInsurance = model.HealthInsurance.Id,
                 HealthInsurances = _combosHelper.GetComboActiveInsurancesByClinic(idClinic),
                 CreatedBy = model.CreatedBy,
@@ -1376,7 +1432,10 @@ namespace KyoS.Web.Helpers
                 LastModifiedBy = model.LastModifiedBy,
                 LastModifiedOn = model.LastModifiedOn,
                 MemberId = model.MemberId,
-                AuthorizationNumber = model.AuthorizationNumber
+                AuthorizationNumber = model.AuthorizationNumber,
+                IdAgencyService = (model.Agency == ServiceAgency.CMH) ? 0 : 1,
+                AgencyServices = _combosHelper.GetComboServiceAgency(),
+                Agency = model.Agency
             };
         }
 
@@ -1394,7 +1453,22 @@ namespace KyoS.Web.Helpers
                 CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
                 LastModifiedBy = !isNew ? userId : string.Empty,
                 LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
-                MHProblems = model.MHProblems
+                MHProblems = model.MHProblems,
+                TCMSupervisorEdit = model.TCMSupervisorEdit,
+                BillSemanalMH = model.BillSemanalMH,
+                IndNoteForAppointment = model.IndNoteForAppointment,
+                TCMInitialTime = model.TCMInitialTime,
+                TCMEndTime = model.TCMEndTime,
+                LockTCMNoteForUnits = model.LockTCMNoteForUnits,
+                UnitsForDayForClient = model.UnitsForDayForClient,
+                DischargeJoinCommission = model.DischargeJoinCommission,
+                CreateNotesTCMWithServiceplanInEdition = model.CreateNotesTCMWithServiceplanInEdition,
+                SupervisorEdit = model.SupervisorEdit,
+                TCMSupervisionTimeWithCaseManager = model.TCMSupervisionTimeWithCaseManager,
+                DocumentAssisstant_Intake = model.DocumentAssisstant_Intake,
+                CreateTCMNotesWithoutDomain = model.CreateTCMNotesWithoutDomain,
+                TCMPayStub_Filtro = StatusUtils.GetFiltroTCMPayStubByIndex(model.IdFiltroPayStub),
+                MTPmultipleSignatures = model.MTPmultipleSignatures
             };
         }
 
@@ -1413,7 +1487,23 @@ namespace KyoS.Web.Helpers
                 CreatedOn = model.CreatedOn,
                 LastModifiedBy = model.LastModifiedBy,
                 LastModifiedOn = model.LastModifiedOn,
-                MHProblems = model.MHProblems
+                MHProblems = model.MHProblems,
+                TCMSupervisorEdit = model.TCMSupervisorEdit,
+                BillSemanalMH = model.BillSemanalMH,
+                IndNoteForAppointment = model.IndNoteForAppointment,
+                TCMInitialTime = model.TCMInitialTime,
+                TCMEndTime = model.TCMEndTime,
+                LockTCMNoteForUnits = model.LockTCMNoteForUnits,
+                UnitsForDayForClient = model.UnitsForDayForClient,
+                DischargeJoinCommission = model.DischargeJoinCommission,
+                CreateNotesTCMWithServiceplanInEdition = model.CreateNotesTCMWithServiceplanInEdition,
+                SupervisorEdit = model.SupervisorEdit,
+                TCMSupervisionTimeWithCaseManager = model.TCMSupervisionTimeWithCaseManager,
+                DocumentAssisstant_Intake = model.DocumentAssisstant_Intake,
+                CreateTCMNotesWithoutDomain = model.CreateTCMNotesWithoutDomain,
+                IdFiltroPayStub = (model.TCMPayStub_Filtro == TCMPayStubFiltro.Created) ? 0 : (model.TCMPayStub_Filtro == TCMPayStubFiltro.Approved) ? 1 : (model.TCMPayStub_Filtro == TCMPayStubFiltro.Billed) ? 2 : 3,
+                FiltroPayStubs = _combosHelper.GetComboFiltroTCMPayStubByClinic(),
+                MTPmultipleSignatures = model.MTPmultipleSignatures
             };
         }
 
@@ -1497,7 +1587,8 @@ namespace KyoS.Web.Helpers
                 DataOpen = model.DataOpen,
                 DataClose = model.DataClose,
                 Period = model.Period,
-                Client = model.Client
+                Client = model.Client,
+                Younger = model.Younger
             };
         }
 
@@ -1516,7 +1607,10 @@ namespace KyoS.Web.Helpers
                 CaseNumber = tcmClientEntity.CaseNumber,
                 DataOpen = tcmClientEntity.DataOpen,
                 DataClose = tcmClientEntity.DataClose,
-                Period = tcmClientEntity.Period
+                Period = tcmClientEntity.Period,
+                CreatedOn = tcmClientEntity.CreatedOn,
+                CreatedBy = tcmClientEntity.CreatedBy,
+                Younger = tcmClientEntity.Younger
             };
         }
 
@@ -1534,7 +1628,9 @@ namespace KyoS.Web.Helpers
                 Strengths = TcmServicePlanEntity.Strengths,
                 Weakness = TcmServicePlanEntity.Weakness,
                 CaseNumber = TcmServicePlanEntity.TcmClient.CaseNumber,
-                ID_Status = (TcmServicePlanEntity.Status == StatusType.Open) ? 1 : 2                
+                ID_Status = (TcmServicePlanEntity.Status == StatusType.Open) ? 1 : 2 ,
+                DateSupervisorSignature = TcmServicePlanEntity.DateSupervisorSignature,
+                DateTcmSignature = TcmServicePlanEntity.DateTcmSignature
             };
         }
 
@@ -1561,7 +1657,10 @@ namespace KyoS.Web.Helpers
                 Approved = model.Approved,
                 TCMMessages = _context.TCMMessages
                                       .Where(n => n.TCMServicePlan.Id == model.Id)
-                                      .ToList()
+                                      .ToList(),
+                DateSupervisorSignature = model.DateSupervisorSignature,
+                DateTcmSignature = model.DateTcmSignature
+                
             };
         }
 
@@ -1582,8 +1681,10 @@ namespace KyoS.Web.Helpers
                 CreatedBy = TcmDomainEntity.CreatedBy,
                 CreatedOn = TcmDomainEntity.CreatedOn,
                 LastModifiedBy = TcmDomainEntity.LastModifiedBy,
-                LastModifiedOn = TcmDomainEntity.LastModifiedOn
-
+                LastModifiedOn = TcmDomainEntity.LastModifiedOn,
+                Id_SubService = TcmDomainEntity.IdSubService,
+                NameSubService = TcmDomainEntity.NameSubService,
+                DateAccomplished = TcmDomainEntity.DateAccomplished
             };
         }
 
@@ -1604,7 +1705,11 @@ namespace KyoS.Web.Helpers
                 Code = model.Code,
                 Name = model.Name,
                 TcmServicePlan = model.TcmServicePlan,
-                Origin = origin
+                Origin = origin,
+                NameSubService =(model.Id_SubService == 0)? string.Empty: _context.TCMSubServices.FirstOrDefault(n => n.Id == model.Id_SubService).Name,
+                IdSubService = model.Id_SubService,
+                Status = model.Status,
+                DateAccomplished = model.DateAccomplished
             };
         }
 
@@ -1627,8 +1732,8 @@ namespace KyoS.Web.Helpers
                 BehaviorIsStatus = IntakeScreeninigType.GetBehaviorIsByIndex(model.IdBehaviorIs),
                 SpeechIsStatus = IntakeScreeninigType.GetSpeechIsByIndex(model.IdSpeechIs),
                 EmergencyContact = model.EmergencyContact,
-                DateSignatureEmployee = model.DateSignatureEmployee,
-
+                DateSignatureEmployee = model.DateSignatureEmployee
+                
             };
         }
 
@@ -2120,7 +2225,9 @@ namespace KyoS.Web.Helpers
                 TCMMessages = _context.TCMMessages
                                       .Where(n => n.TCMAddendum.Id == model.Id)
                                       .ToList(),
-                Approved = model.Approved
+                Approved = model.Approved,
+                DateTCMSign = model.DateTCMSign,
+                DateTCMSupervisorSign = model.DateTCMSupervisorSign
 
             };
         }
@@ -2138,7 +2245,9 @@ namespace KyoS.Web.Helpers
                 LongTerm = TcmAdendumEntity.LongTerm,
                 NeedsIdentified = TcmAdendumEntity.NeedsIdentified,
                 CreatedOn = TcmAdendumEntity.CreatedOn,
-                CreatedBy = TcmAdendumEntity.CreatedBy
+                CreatedBy = TcmAdendumEntity.CreatedBy,
+                DateTCMSign = TcmAdendumEntity.DateTCMSign,
+                DateTCMSupervisorSign = TcmAdendumEntity.DateTCMSupervisorSign
             };
         }
 
@@ -2159,7 +2268,19 @@ namespace KyoS.Web.Helpers
                 _TCMServicePlanRevDomain = TcmServicePlanReviewEntity.TCMServicePlanRevDomain,
                 Approved = TcmServicePlanReviewEntity.Approved,
                 CreatedBy = TcmServicePlanReviewEntity.CreatedBy,
-                CreatedOn = TcmServicePlanReviewEntity.CreatedOn
+                CreatedOn = TcmServicePlanReviewEntity.CreatedOn,
+
+                ClientContinue = TcmServicePlanReviewEntity.ClientContinue,
+                ClientHasBeen1 = TcmServicePlanReviewEntity.ClientHasBeen1,
+                ClientHasBeen2 = TcmServicePlanReviewEntity.ClientHasBeen2,
+                ClientNoLonger1 = TcmServicePlanReviewEntity.ClientNoLonger1,
+                ClientNoLonger2 = TcmServicePlanReviewEntity.ClientNoLonger2,
+                ClientWillContinue = TcmServicePlanReviewEntity.ClientWillContinue,
+                ClientWillHave = TcmServicePlanReviewEntity.ClientWillHave,
+                DateTCMCaseManagerSignature = TcmServicePlanReviewEntity.DateTCMCaseManagerSignature,
+                DateTCMSupervisorSignature = TcmServicePlanReviewEntity.DateTCMSupervisorSignature,
+                HasBeenExplained = TcmServicePlanReviewEntity.HasBeenExplained,
+                TheExpertedReviewDate = TcmServicePlanReviewEntity.TheExpertedReviewDate
                 //ID_Status = (TcmServicePlanEntity.Status == StatusType.Open) ? 1 : 2,
 
             };
@@ -2186,7 +2307,19 @@ namespace KyoS.Web.Helpers
                 TCMServicePlanRevDomain = model.TCMServicePlanRevDomain,
                 TCMMessages = _context.TCMMessages
                                       .Where(n => n.TCMServicePlan.TCMServicePlanReview.Id == model.Id)
-                                      .ToList()
+                                      .ToList(),
+                Approved = model.Approved,
+                ClientContinue = model.ClientContinue,
+                ClientHasBeen1 = model.ClientHasBeen1,
+                ClientHasBeen2 = model.ClientHasBeen2,
+                ClientNoLonger1 = model.ClientNoLonger1,
+                ClientNoLonger2 = model.ClientNoLonger2,
+                ClientWillContinue = model.ClientWillContinue,
+                ClientWillHave = model.ClientWillHave,
+                DateTCMCaseManagerSignature = model.DateTCMCaseManagerSignature,
+                DateTCMSupervisorSignature = model.DateTCMSupervisorSignature,
+                HasBeenExplained = model.HasBeenExplained,
+                TheExpertedReviewDate = model.TheExpertedReviewDate
 
             };
         }
@@ -2239,15 +2372,16 @@ namespace KyoS.Web.Helpers
                 PresentProblems = TcmDischargeEntity.PresentProblems,
                 ProgressToward = TcmDischargeEntity.ProgressToward,
                 Referred = TcmDischargeEntity.Referred,
-                StaffingDate = DateTime.Now,
-                StaffSignatureDate = DateTime.Now,
-                SupervisorSignatureDate = DateTime.Now,
+                StaffingDate = TcmDischargeEntity.StaffingDate,
+                StaffSignatureDate = TcmDischargeEntity.StaffSignatureDate,
+                SupervisorSignatureDate = TcmDischargeEntity.SupervisorSignatureDate,
                 TcmDischargeFollowUp = TcmDischargeEntity.TcmDischargeFollowUp,
                 TcmDischargeServiceStatus = TcmDischargeEntity.TcmDischargeServiceStatus,
                 TcmServices = TcmDischargeEntity.TcmServicePlan.TCMService,
                 Approved = TcmDischargeEntity.Approved,
                 CreatedBy = TcmDischargeEntity.CreatedBy,
-                CreatedOn = TcmDischargeEntity.CreatedOn
+                CreatedOn = TcmDischargeEntity.CreatedOn,
+                TCMSupervisor = TcmDischargeEntity.TCMSupervisor
 
             };
         }
@@ -2348,8 +2482,7 @@ namespace KyoS.Web.Helpers
                 DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
                 DateSignaturePerson = model.DateSignaturePerson,
                 Documents = model.Documents,
-                AdmissionedFor = model.AdmissionedFor
-                
+                AdmissionedFor = model.AdmissionedFor                
 
             };
 
@@ -2443,7 +2576,7 @@ namespace KyoS.Web.Helpers
 
         }
 
-        public IntakeMedicalHistoryEntity ToIntakeMedicalHistoryEntity(IntakeMedicalHistoryViewModel model, bool isNew)
+        public IntakeMedicalHistoryEntity ToIntakeMedicalHistoryEntity(IntakeMedicalHistoryViewModel model, bool isNew, string userId)
         {
             return new IntakeMedicalHistoryEntity
             {
@@ -2602,7 +2735,13 @@ namespace KyoS.Web.Helpers
                 UsualIntervalBetweenPeriods = model.UsualIntervalBetweenPeriods,
 
                 AdmissionedFor = model.AdmissionedFor,
-                InformationProvided = model.InformationProvided
+                InformationProvided = model.InformationProvided,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                StartTime = model.StartTime,
+                EndTime = model.EndTime
             };
         }
 
@@ -2619,7 +2758,7 @@ namespace KyoS.Web.Helpers
                 DateSignaturePerson = model.DateSignaturePerson,
                 Documents = model.Documents,
 
-                AddressPhysician = model.AddressPhysician,
+                AddressPhysician = (model.Client.Doctor == null) ? string.Empty : model.Client.Doctor.Address,
                 AgeFirstTalked = model.AgeFirstTalked,
                 AgeFirstWalked = model.AgeFirstWalked,
                 AgeToiletTrained = model.AgeToiletTrained,
@@ -2647,7 +2786,7 @@ namespace KyoS.Web.Helpers
                 ChestPain = model.ChestPain,
                 ChronicCough = model.ChronicCough,
                 ChronicIndigestion = model.ChronicIndigestion,
-                City = model.City,
+                City = (model.Client.Doctor == null) ? string.Empty : model.Client.Doctor.City,
                 Complications = model.Complications,
                 Complications_Explain = model.Complications_Explain,
                 Comprehending = model.Comprehending,
@@ -2731,7 +2870,7 @@ namespace KyoS.Web.Helpers
                 PerformingCertainMotions = model.PerformingCertainMotions,
                 Planned = model.Planned,
                 Poliomyelitis = model.Poliomyelitis,
-                PrimaryCarePhysician = model.PrimaryCarePhysician,
+                PrimaryCarePhysician = (model.Client.Doctor == null) ? string.Empty: model.Client.Doctor.Name,
                 ProblemWithBedWetting = model.ProblemWithBedWetting,
                 Reading = model.Reading,
                 RheumaticFever = model.RheumaticFever,
@@ -2742,7 +2881,7 @@ namespace KyoS.Web.Helpers
                 ShortnessOfBreath = model.ShortnessOfBreath,
                 SkinTrouble = model.SkinTrouble,
                 Speaking = model.Speaking,
-                State = model.State,
+                State = (model.Client.Doctor == null) ? string.Empty : model.Client.Doctor.State,
                 StomachPain = model.StomachPain,
                 Surgery = model.Surgery,
                 SwellingOfFeet = model.SwellingOfFeet,
@@ -2756,7 +2895,7 @@ namespace KyoS.Web.Helpers
                 WeightLoss = model.WeightLoss,
                 WhoopingCough = model.WhoopingCough,
                 WritingSentence = model.WritingSentence,
-                ZipCode = model.ZipCode,
+                ZipCode = (model.Client.Doctor == null)? string.Empty : model.Client.Doctor.ZipCode,
 
                 AgeOfFirstMenstruation = model.AgeOfFirstMenstruation,
                 DateOfLastBreastExam = model.DateOfLastBreastExam,
@@ -2766,7 +2905,15 @@ namespace KyoS.Web.Helpers
                 UsualIntervalBetweenPeriods = model.UsualIntervalBetweenPeriods,
 
                 AdmissionedFor = model.AdmissionedFor,
-                InformationProvided = model.InformationProvided
+                InformationProvided = model.InformationProvided,
+                IdDoctor = (model.Client.Doctor == null) ? 0 : model.Client.Doctor.Id,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn,
+                StartTime = model.StartTime,
+                EndTime = model.EndTime
+                
             };
 
         }
@@ -2817,7 +2964,20 @@ namespace KyoS.Web.Helpers
                 LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
                 TypeService = model.TypeService,
                 DateAdmissionService = model.DateAdmissionService,
-                Messages = !isNew ? await _context.Messages.Where(m => m.Discharge.Id == model.Id).ToListAsync() : null
+                Messages = !isNew ? await _context.Messages.Where(m => m.Discharge.Id == model.Id).ToListAsync() : null,
+                ClientMoveOutArea = model.ClientMoveOutArea,
+                ExtendedHospitalization = model.ExtendedHospitalization,
+                Follow_up = model.Follow_up,
+                MinimalProgress = model.MinimalProgress,
+                ModerateProgress = model.ModerateProgress,
+                NoProgress = model.NoProgress,
+                PlanCompletePartially = model.PlanCompletePartially,
+                Regression = model.Regression,
+                SignificantProgress = model.SignificantProgress,
+                SummaryOfPresentingProblems = model.SummaryOfPresentingProblems,
+                TreatmentSummary = model.TreatmentSummary,
+                UnableToDetermine = model.UnableToDetermine,
+                JoinCommission = model.JoinCommission
             };
         }
 
@@ -2868,7 +3028,20 @@ namespace KyoS.Web.Helpers
                 LastModifiedBy = model.LastModifiedBy,
                 LastModifiedOn = model.LastModifiedOn,
                 TypeService = model.TypeService,
-                DateAdmissionService = model.DateAdmissionService
+                DateAdmissionService = model.DateAdmissionService,
+                ClientMoveOutArea = model.ClientMoveOutArea,
+                ExtendedHospitalization = model.ExtendedHospitalization,
+                Follow_up = model.Follow_up,
+                MinimalProgress = model.MinimalProgress,
+                ModerateProgress = model.ModerateProgress,
+                NoProgress = model.NoProgress,
+                PlanCompletePartially = model.PlanCompletePartially,
+                Regression = model.Regression,
+                SignificantProgress = model.SignificantProgress,
+                SummaryOfPresentingProblems = model.SummaryOfPresentingProblems,
+                TreatmentSummary = model.TreatmentSummary,
+                UnableToDetermine = model.UnableToDetermine,
+                JoinCommission = model.JoinCommission
 
             };
 
@@ -2888,8 +3061,13 @@ namespace KyoS.Web.Helpers
                 Dosage = model.Dosage,
                 Name = model.Name,
                 Frequency = model.Frequency,
-                Prescriber = model.Prescriber
-                
+                Prescriber = model.Prescriber,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                ReasonPurpose = model.ReasonPurpose,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn,
+
             };
         }
 
@@ -2903,7 +3081,10 @@ namespace KyoS.Web.Helpers
                 Dosage = model.Dosage,
                 Name = model.Name,
                 Frequency = model.Frequency,
-                Prescriber = model.Prescriber
+                Prescriber = model.Prescriber,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                ReasonPurpose = model.ReasonPurpose
             };
 
         }
@@ -3057,7 +3238,7 @@ namespace KyoS.Web.Helpers
                 Appearance_Disheveled = model.Appearance_Disheveled,
                 Appearance_FairHygiene = model.Appearance_FairHygiene,
                 Appearance_WellGroomed = model.Appearance_WellGroomed,
-                Appetite = BioType.GetBioAppetiteByIndex(model.IdIfSexuallyActive),
+                Appetite = BioType.GetBioAppetiteByIndex(model.IdAppetite),
                 ApproximateDateReport = model.ApproximateDateReport,
                 ApproximateDateReport_Where = model.ApproximateDateReport_Where,
                 AReferral = model.AReferral,
@@ -3235,7 +3416,13 @@ namespace KyoS.Web.Helpers
                                    .ToList(),
                 Status = model.Status,
                 CodeBill = model.CodeBill,
-                Units = model.Units
+                Units = model.Units,
+                AnyEating = model.AnyEating,
+                AnyFood = model.AnyFood,
+                MilitaryServiceHistory = model.MilitaryServiceHistory,
+                MilitaryServiceHistory_Explain = model.MilitaryServiceHistory_Explain,
+                VocationalAssesment = model.VocationalAssesment,
+                Code90791 = model.Code90791
 
             };
         }
@@ -3447,7 +3634,13 @@ namespace KyoS.Web.Helpers
                 AdmissionedFor = model.AdmissionedFor,
                 Status = model.Status,
                 CodeBill = model.CodeBill,
-                Units = model.Units
+                Units = model.Units,
+                AnyEating = model.AnyEating,
+                AnyFood = model.AnyFood,
+                MilitaryServiceHistory = model.MilitaryServiceHistory,
+                MilitaryServiceHistory_Explain = model.MilitaryServiceHistory_Explain,
+                VocationalAssesment = model.VocationalAssesment,
+                Code90791 = model.Code90791
 
             };
 
@@ -3501,7 +3694,9 @@ namespace KyoS.Web.Helpers
                 CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
                 LastModifiedBy = !isNew ? userId : string.Empty,
                 LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
-                Messages = !isNew ? await _context.Messages.Where(m => m.Addendum.Id == model.Id).ToListAsync() : null
+                Messages = !isNew ? await _context.Messages.Where(m => m.Addendum.Id == model.Id).ToListAsync() : null,
+                DateOfApprove = model.DateOfApprove,
+                DocumentAssisstant = await _context.DocumentsAssistant.FirstOrDefaultAsync(n => n.Id == model.IdDocumentAssisstant)
             };
         }
 
@@ -3518,13 +3713,14 @@ namespace KyoS.Web.Helpers
                 Status = model.Status,
                 Unit = model.Unit,
                 IdMTP = model.Mtp.Id,
-                Facilitator = model.Facilitator,
+                Facilitator = model.Facilitator,  
                 Goals = model.Goals,
                 Mtp = model.Mtp,
                 CreatedBy = model.CreatedBy,
                 CreatedOn = model.CreatedOn,
                 LastModifiedBy = model.LastModifiedBy,
-                LastModifiedOn = model.LastModifiedOn
+                LastModifiedOn = model.LastModifiedOn,
+                DateOfApprove = model.DateOfApprove
 
             };
             if (model.Facilitator != null)
@@ -3535,6 +3731,10 @@ namespace KyoS.Web.Helpers
                 salida.IdSupervisor = model.Supervisor.Id;
             else
                 salida.IdSupervisor = 0;
+            if (model.DocumentAssisstant != null)
+                salida.IdDocumentAssisstant = model.DocumentAssisstant.Id;
+            else
+                salida.IdDocumentAssisstant = 0;
             return salida;
         }
 
@@ -3584,7 +3784,12 @@ namespace KyoS.Web.Helpers
                 DataOfService = model.DataOfService,
                 Messages = !isNew ? await _context.Messages.Where(m => m.MTPReview.Id == model.Id).ToListAsync() : null,
                 CodeBill = model.CodeBill,
-                Units = model.Units
+                Units = model.Units,
+                DateIndFacilitator = model.DateIndFacilitator,
+                IndFacilitator = await _context.Facilitators
+                                               .FirstOrDefaultAsync(c => c.Id == model.IdIndFacilitator),
+                SignIndTherapy = model.SignIndTherapy,
+                SignTherapy = model.SignTherapy
 
             };
             
@@ -3632,7 +3837,12 @@ namespace KyoS.Web.Helpers
                 StartTime = model.StartTime,
                 DataOfService = model.DataOfService,
                 CodeBill = model.CodeBill,
-                Units = model.Units
+                Units = model.Units,
+                IdIndFacilitator = (model.IndFacilitator != null) ? model.IndFacilitator.Id : 0,
+                DateIndFacilitator = model.DateIndFacilitator,
+                IndFacilitator = model.IndFacilitator,
+                SignIndTherapy = model.SignIndTherapy,
+                SignTherapy = model.SignTherapy
 
             };           
         }
@@ -3679,7 +3889,7 @@ namespace KyoS.Web.Helpers
                 Other_City = model.Other_City,
                 Other_Phone = model.Other_Phone,
                 PrimarySourceIncome = model.PrimarySourceIncome,
-                ResidentialStatus = ResidentialUtils.GetResidentialByIndex(model.IdResidentialStatus),
+                ResidentialStatus = ResidentialUtils.GetResidentialByIndex1(model.IdResidentialStatus),
                 School = model.School,
                 School_EBD = model.School_EBD,
                 School_ESE = model.School_ESE,
@@ -3883,7 +4093,10 @@ namespace KyoS.Web.Helpers
                 Address = model.Address,
                 CityStateZip = model.CityStateZip,
                 PhoneNo = model.PhoneNo,
-                FaxNo = model.FaxNo
+                FaxNo = model.FaxNo,
+                ConsentType = ConsentUtils.GetTypeByIndex(model.Idtype),
+                OtherAutorizedInformation = model.OtherAutorizedInformation,
+                OtherPurposeRequest = model.OtherPurposeRequest
             };
         }
 
@@ -3926,7 +4139,14 @@ namespace KyoS.Web.Helpers
                 CreatedBy = model.CreatedBy,
                 CreatedOn = model.CreatedOn,
                 LastModifiedBy = model.LastModifiedBy,
-                LastModifiedOn = model.LastModifiedOn
+                LastModifiedOn = model.LastModifiedOn,
+                ConsentType = model.ConsentType,
+                OtherAutorizedInformation = model.OtherAutorizedInformation,
+                OtherPurposeRequest = model.OtherPurposeRequest,
+                ConsentList = _combosHelper.GetComboConsentType(),
+                Idtype = (model.ConsentType == ConsentType.HURRICANE) ? 1 : (model.ConsentType == ConsentType.PCP) ? 2 : (model.ConsentType == ConsentType.PSYCHIATRIST) ? 3 : (model.ConsentType == ConsentType.EMERGENCY_CONTACT) ? 4 : (model.ConsentType == ConsentType.DCF) ? 5 : (model.ConsentType == ConsentType.SSA) ? 6 : (model.ConsentType == ConsentType.BANK) ? 7 : (model.ConsentType == ConsentType.HOUSING_OFFICES) ? 8 : (model.ConsentType == ConsentType.POLICE_STATION) ? 9 : (model.ConsentType == ConsentType.PHARMACY) ? 10
+                : (model.ConsentType == ConsentType.MEDICAL_INSURANCE) ? 11 : (model.ConsentType == ConsentType.CAC) ? 12 : (model.ConsentType == ConsentType.LIFELINESS_PROVIDERS) ? 13 : (model.ConsentType == ConsentType.TAG_AGENCY) ? 14 : (model.ConsentType == ConsentType.STS) ? 15 : (model.ConsentType == ConsentType.DONATION_CENTERS) ? 16 : (model.ConsentType == ConsentType.LTC) ? 17 : (model.ConsentType == ConsentType.INTERNET_SERVICES) ? 18 : (model.ConsentType == ConsentType.USCIS) ? 19 : 0,
+                 
             };
         }
 
@@ -4434,7 +4654,7 @@ namespace KyoS.Web.Helpers
                 CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
                 LastModifiedBy = !isNew ? userId : string.Empty,
                 LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
-                TcmClient = await _context.TCMClient.FirstAsync(n => n.Id == model.IdTCMClient),
+                TcmClient = await _context.TCMClient.Include(n => n.Casemanager).ThenInclude(n => n.TCMSupervisor).FirstAsync(n => n.Id == model.IdTCMClient),
                 AdmissionedFor = model.AdmissionedFor,
                 Approved = model.Approved,
                 Date = model.Date,
@@ -4445,7 +4665,16 @@ namespace KyoS.Web.Helpers
                 IsExperiencing = model.IsExperiencing,
                 SupervisorSignatureDate = model.SupervisorSignatureDate,
                 TcmClient_FK = model.TcmClient_FK,
-                TcmSupervisor = model.TcmSupervisor
+                TcmSupervisor = model.TcmSupervisor,
+                HasAMental2 = model.HasAMental2,
+                HasAMental6 = model.HasAMental6,
+                HasRecolated = model.HasRecolated,
+                IsEnrolled = model.IsEnrolled,
+                IsNotReceiving = model.IsNotReceiving,
+                Lacks = model.Lacks,
+                Meets = model.Meets,
+                RequiresOngoing = model.RequiresOngoing,
+                RequiresServices = model.RequiresServices
             };
 
             return salida;
@@ -4472,7 +4701,16 @@ namespace KyoS.Web.Helpers
                 CreatedBy = model.CreatedBy,
                 CreatedOn = model.CreatedOn,
                 LastModifiedBy = model.LastModifiedBy,
-                LastModifiedOn = model.LastModifiedOn
+                LastModifiedOn = model.LastModifiedOn,
+                HasAMental2 = model.HasAMental2,
+                HasAMental6 = model.HasAMental6,
+                HasRecolated = model.HasRecolated,
+                IsEnrolled = model.IsEnrolled,
+                IsNotReceiving = model.IsNotReceiving,
+                Lacks = model.Lacks,
+                Meets = model.Meets,
+                RequiresOngoing = model.RequiresOngoing,
+                RequiresServices = model.RequiresServices
             };
 
         }
@@ -4678,7 +4916,7 @@ namespace KyoS.Web.Helpers
                 LastModifiedBy = !isNew ? userId : string.Empty,
                 LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
                 Approved = model.Approved,
-                AreChild = model.AreChild,
+                AreChild = YesNoNAUtils.GetYesNoNaByIndex(model.IdYesNoNAAreChild),
                 AreChildAddress = model.AreChildAddress,
                 TcmClient_FK = model.TcmClient_FK,
                 AreChildCity = model.AreChildCity,
@@ -4692,8 +4930,7 @@ namespace KyoS.Web.Helpers
                 Divorced = model.Divorced,
                 Family = model.Family,
                 Married = model.Married,
-                MayWe = model.MayWe,
-                MayWeNA = model.MayWeNA,
+                MayWe = YesNoNAUtils.GetYesNoNaByIndex(model.IdYesNoNAWe),
                 NeverMarried = model.NeverMarried,
                 Other = model.Other,
                 OtherExplain = model.OtherExplain,
@@ -4779,11 +5016,10 @@ namespace KyoS.Web.Helpers
                 HearingNotDetermined = model.HearingNotDetermined,
                 Hears = model.Hears,
                 Homicidal = model.Homicidal,
-                HowActive = model.HowActive,
+                HowActive = FrecuencyActiveUtils.GetFrecuencyActiveByIndex(model.IdFrecuencyActive),
                 HowManyTimes = model.HowManyTimes,
                 IsClientCurrently = model.IsClientCurrently,
-                IsClientPregnancy = model.IsClientPregnancy,
-                IsClientPregnancyNA = model.IsClientPregnancyNA,
+                IsClientPregnancy = YesNoNAUtils.GetYesNoNaByIndex(model.IdYesNoNAPregnancy),
                 IsSheReceiving = model.IsSheReceiving,
                 Issues = model.Issues,
                 LegalDecisionAddress = model.LegalDecisionAddress,
@@ -4890,7 +5126,7 @@ namespace KyoS.Web.Helpers
                 EmployerCityState = model.EmployerCityState,
                 EmployerContactPerson = model.EmployerContactPerson,
                 EmployerPhone = model.EmployerPhone,
-                EmploymentStatus = model.EmploymentStatus,
+                EmploymentStatus = EmployedUtils.GetEmployedByIndex(model.IdEmploymentStatus),
                 ExcessiveCluter = model.ExcessiveCluter,
                 FailToEelementary = model.FailToEelementary,
                 FailToHigh = model.FailToHigh,
@@ -4997,7 +5233,7 @@ namespace KyoS.Web.Helpers
                 RelationshipMiddle = model.RelationshipMiddle,
                 RelationshipPreSchool = model.RelationshipPreSchool,
                 Resident = model.Resident,
-                ResidentStatus = model.ResidentStatus,
+                ResidentStatus = ResidentialUtils.GetResidentialByIndex1(model.IdResidentStatus),
                 SchoolAddress = model.SchoolAddress,
                 SchoolCityState = model.SchoolCityState,
                 SchoolDistrict = model.SchoolDistrict,
@@ -5065,7 +5301,7 @@ namespace KyoS.Web.Helpers
                 TcmMessages = _context.TCMMessages
                                       .Where(n => n.TCMAssessment.Id == model.Id)
                                       .ToList()
-
+            
             };
         }
 
@@ -5081,6 +5317,7 @@ namespace KyoS.Web.Helpers
                 LastModifiedBy = model.LastModifiedBy,
                 LastModifiedOn = model.LastModifiedOn,
                 Approved = model.Approved,
+                IdYesNoNAAreChild = (model.AreChild == YesNoNAType.Yes) ? 0 : (model.AreChild == YesNoNAType.No) ? 1 : 2,
                 AreChild = model.AreChild,
                 AreChildAddress = model.AreChildAddress,
                 TcmClient_FK = model.TcmClient_FK,
@@ -5095,8 +5332,9 @@ namespace KyoS.Web.Helpers
                 Divorced = model.Divorced,
                 Family = model.Family,
                 Married = model.Married,
+                IdYesNoNAWe = (model.MayWe == YesNoNAType.Yes) ? 0 : (model.MayWe == YesNoNAType.No) ? 1 : 2,
+                YesNoNAs = _combosHelper.GetComboYesNoNA(),
                 MayWe = model.MayWe,
-                MayWeNA = model.MayWeNA,
                 NeverMarried = model.NeverMarried,
                 Other = model.Other,
                 OtherExplain = model.OtherExplain,
@@ -5184,8 +5422,7 @@ namespace KyoS.Web.Helpers
                 HowActive = model.HowActive,
                 HowManyTimes = model.HowManyTimes,
                 IsClientCurrently = model.IsClientCurrently,
-                IsClientPregnancy = model.IsClientPregnancy,
-                IsClientPregnancyNA = model.IsClientPregnancyNA,
+                IdYesNoNAPregnancy = (model.IsClientPregnancy == YesNoNAType.Yes) ? 0 : (model.IsClientPregnancy == YesNoNAType.No) ? 1 : 2,
                 IsSheReceiving = model.IsSheReceiving,
                 Issues = model.Issues,
                 LegalDecisionAddress = model.LegalDecisionAddress, 
@@ -5293,6 +5530,8 @@ namespace KyoS.Web.Helpers
                 EmployerContactPerson = model.EmployerContactPerson,
                 EmployerPhone = model.EmployerPhone,
                 EmploymentStatus = model.EmploymentStatus,
+                IdEmploymentStatus = (model.EmploymentStatus == EmploymentStatus.EmployetFT) ? 0 : (model.EmploymentStatus == EmploymentStatus.EmployetPT) ? 1 : (model.EmploymentStatus == EmploymentStatus.Retired) ? 2 : (model.EmploymentStatus == EmploymentStatus.Disabled) ? 3 : (model.EmploymentStatus == EmploymentStatus.Homemaker) ? 4 : (model.EmploymentStatus == EmploymentStatus.Student) ? 5 : (model.EmploymentStatus == EmploymentStatus.Unemployed) ? 6 : 7,
+                EmploymentStatuss = _combosHelper.GetComboEmployed(),
                 ExcessiveCluter = model.ExcessiveCluter,
                 FailToEelementary = model.FailToEelementary,
                 FailToHigh = model.FailToHigh,
@@ -5399,6 +5638,8 @@ namespace KyoS.Web.Helpers
                 RelationshipMiddle = model.RelationshipMiddle,
                 RelationshipPreSchool = model.RelationshipPreSchool,
                 Resident = model.Resident,
+                IdResidentStatus = (model.ResidentStatus == ResidentialStatus.LivingAlone)? 0 : (model.ResidentStatus == ResidentialStatus.livingWithRelatives) ? 1 : (model.ResidentStatus == ResidentialStatus.livingWithNoRelatives) ? 2 : (model.ResidentStatus == ResidentialStatus.AsistedLivingFacility) ? 3 : (model.ResidentStatus == ResidentialStatus.FosterCare_GroupHome) ? 4 : (model.ResidentStatus == ResidentialStatus.Hospital_NursingHome) ? 5 : (model.ResidentStatus == ResidentialStatus.ResidentialProgram) ? 6 : (model.ResidentStatus == ResidentialStatus.Correctional_Facility) ? 7 : 8,
+                ResidentStatuss = _combosHelper.GetComboResidential(),
                 ResidentStatus = model.ResidentStatus,
                 SchoolAddress = model.SchoolAddress,
                 SchoolCityState = model.SchoolCityState,
@@ -5464,10 +5705,21 @@ namespace KyoS.Web.Helpers
                 OtherReceiveExplain = model.OtherReceiveExplain,
                 Status = TCMDocumentStatus.Edition,
                 TCMSupervisor = model.TCMSupervisor,
-                Client_Referred_List = model.TcmClient.Client.Client_Referred.ToList()
+                Client_Referred_List = model.TcmClient.Client.Client_Referred.ToList(),
+                IdFrecuencyActive = (model.HowActive == FrecuencyActive.Daily) ? 0: (model.HowActive == FrecuencyActive.Three_Time_per_week_or_more) ? 1 : (model.HowActive == FrecuencyActive.Three_Time_per_week_or_less) ? 2 : (model.HowActive == FrecuencyActive.Once_per_week) ? 3 : (model.HowActive == FrecuencyActive.Rarely) ? 4 : 5,
+                FrecuencyActiveList = _combosHelper.GetComboFrecuencyActive(),
+                Psychiatrist_Name = (model.TcmClient.TCMIntakeForm == null)? "": model.TcmClient.TCMIntakeForm.Psychiatrist_Name,
+                Psychiatrist_Address = (model.TcmClient.TCMIntakeForm == null) ? "" : model.TcmClient.TCMIntakeForm.Psychiatrist_Address,
+                Psychiatrist_Phone = (model.TcmClient.TCMIntakeForm == null) ? "" : model.TcmClient.TCMIntakeForm.Psychiatrist_Phone,
+                Psychiatrist_CityStateZip = (model.TcmClient.TCMIntakeForm == null) ? "" : model.TcmClient.TCMIntakeForm.Psychiatrist_CityStateZip,
+
+                PCP_Name = (model.TcmClient.TCMIntakeForm == null) ? "" : model.TcmClient.TCMIntakeForm.PCP_Name,
+                PCP_Address = (model.TcmClient.TCMIntakeForm == null) ? "": model.TcmClient.TCMIntakeForm.PCP_Address,
+                PCP_Phone = (model.TcmClient.TCMIntakeForm == null) ? "" : model.TcmClient.TCMIntakeForm.PCP_Phone,
+                PCP_CityStateZip = (model.TcmClient.TCMIntakeForm == null) ? "" : model.TcmClient.TCMIntakeForm.PCP_CityStateZip
                 
             };
-
+           
             return salida;
 
         }
@@ -5602,7 +5854,7 @@ namespace KyoS.Web.Helpers
                 LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
                 TcmAssessment = await _context.TCMAssessment.FirstOrDefaultAsync(c => c.Id == model.IdTCMAssessment),
                 DateReceived = model.DateReceived,
-                Efectiveness = model.Efectiveness,
+                Efectiveness = EffectivenessUtils.GetEffectivenessByIndex(model.IdEffectivess),
                 ProviderAgency = model.ProviderAgency,
                 TypeService = model.TypeService
             };
@@ -5623,7 +5875,9 @@ namespace KyoS.Web.Helpers
                 ProviderAgency = model.ProviderAgency,
                 Efectiveness = model.Efectiveness,
                 DateReceived = model.DateReceived,
-                IdTCMAssessment = model.TcmAssessment.Id
+                IdTCMAssessment = model.TcmAssessment.Id,
+                IdEffectivess = (model.Efectiveness == EffectivenessType.Effective) ? 0 : (model.Efectiveness == EffectivenessType.Highly_effective) ? 1 : (model.Efectiveness == EffectivenessType.Somewhat_effective) ? 2 : (model.Efectiveness == EffectivenessType.slightly_effective) ? 3 : (model.Efectiveness == EffectivenessType.Not_at_all_effective) ? 4 : (model.Efectiveness == EffectivenessType.unable_to_evaluate) ? 5 : (model.Efectiveness == EffectivenessType.In_progress) ? 6 : 7,
+                EffectivessList = _combosHelper.GetComboEffectiveness()
             };
 
             return salida;
@@ -5679,7 +5933,8 @@ namespace KyoS.Web.Helpers
                 DateBegin = model.DateBegin,
                 Frequency = model.Frequency,
                 LastTimeUsed = model.LastTimeUsed,
-                SustanceName = model.SustanceName
+                SustanceName = DrugsUtils.GetEffectivenessByIndex(model.IdDrugs)
+                
             };
         }
 
@@ -5699,7 +5954,11 @@ namespace KyoS.Web.Helpers
                 Frequency = model.Frequency,
                 LastTimeUsed = model.LastTimeUsed,
                 SustanceName = model.SustanceName,
-                IdTCMAssessment = model.TcmAssessment.Id
+                IdTCMAssessment = model.TcmAssessment.Id,
+                DrugsList = _combosHelper.GetComboDrugs(),
+                IdDrugs = (model.SustanceName == DrugsType.Alcohol) ? 0 : (model.SustanceName == DrugsType.Amphetamine_Meth) ? 1 : (model.SustanceName == DrugsType.Barbiturates) ? 2 : (model.SustanceName == DrugsType.Benzodiazepines) ? 3 : (model.SustanceName == DrugsType.Caffeine) ? 4 : (model.SustanceName == DrugsType.Cocaina_Crack) ? 5 : (model.SustanceName == DrugsType.Hallucinogens) ? 6 :
+                (model.SustanceName == DrugsType.Heroin) ? 7 : (model.SustanceName == DrugsType.Inhalants_Solvents) ? 8 : (model.SustanceName == DrugsType.LSD) ? 9 : (model.SustanceName == DrugsType.Marijuana_Hashish) ? 10 : (model.SustanceName == DrugsType.MDMA_Ecstasy) ? 11 : (model.SustanceName == DrugsType.Nicotne) ? 12 : (model.SustanceName == DrugsType.Opium) ? 13 : 14
+
             };
 
             return salida;
@@ -5803,8 +6062,12 @@ namespace KyoS.Web.Helpers
                                     .FirstOrDefault(n => n.Id == model.IdTCMClient),
                 TCMMessages = _context.TCMMessages
                                       .Where(n => n.TCMNote.Id == model.Id)
-                                      .ToList()
-
+                                      .ToList(),
+                Sign = model.Sign,
+                BillDms = model.BillDms,
+                BilledDate = model.BilledDate,
+                PaymentDate = model.PaymentDate,
+                CodeBill = model.CodeBill
             };
         }
 
@@ -5828,8 +6091,13 @@ namespace KyoS.Web.Helpers
                 TCMClient = model.TCMClient,
                 IdCaseManager = model.TCMClient.Casemanager.Id,
                 IdTCMClient = model.TCMClient.Id,
-                IdTCMNote = model.Id
-                
+                IdTCMNote = model.Id,
+                Sign = model.Sign,
+                BillDms = model.BillDms,
+                BilledDate = model.BilledDate,
+                PaymentDate = model.PaymentDate,
+                CodeBill = model.CodeBill
+
             };
 
             return salida;
@@ -5845,14 +6113,15 @@ namespace KyoS.Web.Helpers
                 LastModifiedBy = !isNew ? userId : string.Empty,
                 LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
                 DescriptionOfService = model.DescriptionOfService,
-                EndTime = model.EndTime,
+                EndTime = model.StartTime.AddMinutes(model.Minutes),
                 Minutes = model.Minutes,
                 Setting = ServiceTCMNotesUtils.GetCodeByIndex(model.IdSetting),
                 StartTime = model.StartTime,
                 TCMDomain = model.TCMDomain,
                 TCMNote = _context.TCMNote.FirstOrDefault(n => n.Id == model.IdTCMNote),
                 ServiceName = model.ServiceName,
-                TCMServiceActivity = await _context.TCMServiceActivity.FirstOrDefaultAsync(n => n.Id == model.IdTCMActivity)
+                TCMServiceActivity = await _context.TCMServiceActivity.FirstOrDefaultAsync(n => n.Id == model.IdTCMActivity),
+                Billable = model.Billable
             };
         }
 
@@ -5871,19 +6140,22 @@ namespace KyoS.Web.Helpers
                 Minutes = model.Minutes,
                 Setting = model.Setting,
                 StartTime = model.StartTime,
-                TCMDomain = model.TCMDomain,
+                TCMDomain = (model.TCMDomain != null)? model.TCMDomain : new TCMDomainEntity(),
                 TCMNote = model.TCMNote,
                 IdTCMNote = model.TCMNote.Id,
-                IdTCMDomain = model.TCMDomain.Id,
+                IdTCMDomain = (model.TCMDomain != null)? model.TCMDomain.Id : 0,
                 IdSetting = ServiceTCMNotesUtils.GetIndexByCode(model.Setting),
                 SettingList = _combosHelper.GetComboTCMNoteSetting(),
-                DomainList = _combosHelper.GetComboServicesUsed(_context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == model.TCMNote.TCMClient.Id).Id),
+                DomainList = _combosHelper.GetComboServicesUsed(_context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == model.TCMNote.TCMClient.Id).Id, model.TCMNote.DateOfService),
                 IdTCMClient = model.TCMNote.TCMClient.Id,
-                ActivityList = _combosHelper.GetComboTCMNoteActivity(model.TCMDomain.Code),
+                ActivityList = (model.TCMDomain != null)? _combosHelper.GetComboTCMNoteActivity(model.TCMDomain.Code) : _combosHelper.GetComboTCMNoteActivity(string.Empty),
                 DateOfServiceNote = model.TCMNote.DateOfService,
                 ServiceName = model.ServiceName,
-                IdTCMActivity = model.TCMServiceActivity.Id,
-                DescriptionTemp = _context.TCMServiceActivity.FirstOrDefault(n => n.Id == model.TCMServiceActivity.Id).Description
+                IdTCMActivity = (model.TCMServiceActivity != null)? model.TCMServiceActivity.Id : 0,
+                DescriptionTemp = (model.TCMServiceActivity != null)? (model.TCMServiceActivity.Id != 0)? _context.TCMServiceActivity.FirstOrDefault(n => n.Id == model.TCMServiceActivity.Id).Description : string.Empty : string.Empty,
+                TimeEnd = model.EndTime.ToShortTimeString(),
+                NeedIdentified = model.TCMDomain.NeedsIdentified,
+                Billable = model.Billable
         };
 
             return salida;
@@ -5960,6 +6232,7 @@ namespace KyoS.Web.Helpers
                 Status = TcmStageEntity.Status,
                 Approved = TcmStageEntity.Approved,
                 Frecuency = TcmStageEntity.Frecuency
+                
             };
         }
 
@@ -5974,13 +6247,14 @@ namespace KyoS.Web.Helpers
                 IdSetting = model.IdSetting,
                 Setting = ServiceTCMNotesUtils.GetCodeByIndex(model.IdSetting),
                 IdTCMDomain = model.IdTCMDomain,
-                TCMDomainCode = model.TCMDomain.Code,
+                TCMDomainCode = (model.TCMDomain != null)? model.TCMDomain.Code : string.Empty,
                 StartTime = model.StartTime,
                 UserName = userId,
                 IdTCMClient = model.IdTCMClient,
                 DateOfServiceOfNote = model.StartTime,
                 ServiceName = model.ServiceName,
-                IdTCMServiceActivity = model.IdTCMActivity
+                IdTCMServiceActivity = model.IdTCMActivity,
+                Billable = model.Billable
             };
         }
 
@@ -6213,7 +6487,8 @@ namespace KyoS.Web.Helpers
                                    .Where(n => n.Brief.Id == model.Id)
                                    .ToList(),
                 Status = model.Status,
-                SumanrOfFindings = model.SumanrOfFindings
+                SumanrOfFindings = model.SumanrOfFindings,
+                Code90791 = model.Code90791
 
             };
         }
@@ -6345,7 +6620,8 @@ namespace KyoS.Web.Helpers
                 LastModifiedOn = model.LastModifiedOn,
                 AdmissionedFor = model.AdmissionedFor,
                 Status = model.Status,
-                SumanrOfFindings = model.SumanrOfFindings
+                SumanrOfFindings = model.SumanrOfFindings,
+                Code90791 = model.Code90791
 
             };
 
@@ -6368,6 +6644,7 @@ namespace KyoS.Web.Helpers
                 Guarded = model.Guarded,
                 Withdrawn = model.Withdrawn,
                 Hostile = model.Hostile,
+                Setting = model.Setting,
 
                 Adequated = model.Adequated,
                 Assigned = model.Assigned,
@@ -6439,6 +6716,7 @@ namespace KyoS.Web.Helpers
                 Guarded = model.Guarded,
                 Withdrawn = model.Withdrawn,
                 Hostile = model.Hostile,
+                Setting = model.Setting,
 
                 Adequated = model.Adequated,
                 Assigned = model.Assigned,
@@ -6609,7 +6887,7 @@ namespace KyoS.Web.Helpers
             };
         }
 
-        public async Task<ClientAuxiliarViewModel> ToClientAUXViewModel(ClientEntity clientEntity, List<MTPReviewEntity> mtpr)
+        public ClientAuxiliarViewModel ToClientAUXViewModel(ClientEntity clientEntity, List<MTPReviewEntity> mtpr)
         {
             return new ClientAuxiliarViewModel
             {
@@ -6658,6 +6936,1739 @@ namespace KyoS.Web.Helpers
                 FarsFormList = clientEntity.FarsFormList
                 
             };
+        }
+
+        public TCMIntakeClientSignatureVerificationEntity ToTCMIntakeClientSignatureVerificationEntity(TCMIntakeClientSignatureVerificationViewModel model, bool isNew, string userId)
+        {
+            return new TCMIntakeClientSignatureVerificationEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                TcmClient = model.TcmClient,
+                TcmClient_FK = model.TcmClient_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureLegalGuardianOrClient = model.DateSignatureLegalGuardianOrClient,
+                AdmissionedFor = model.AdmissionedFor                
+               
+            };
+        }
+
+        public TCMIntakeClientSignatureVerificationViewModel ToTCMIntakeClientSignatureVerificationViewModel(TCMIntakeClientSignatureVerificationEntity model)
+        {
+            return new TCMIntakeClientSignatureVerificationViewModel
+            {
+                Id = model.Id,
+                TcmClient = model.TcmClient,
+                IdTCMClient = model.TcmClient.Id,
+                TcmClient_FK = model.TcmClient_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureLegalGuardianOrClient = model.DateSignatureLegalGuardianOrClient,
+                AdmissionedFor = model.AdmissionedFor,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn
+
+            };
+
+        }
+
+        public TCMIntakeClientIdDocumentVerificationEntity ToTCMIntakeClientIdDocumentVerificationEntity(TCMIntakeClientIdDocumentVerificationViewModel model, bool isNew, string userId)
+        {
+            return new TCMIntakeClientIdDocumentVerificationEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                TcmClient = model.TcmClient,
+                TcmClient_FK = model.TcmClient_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureLegalGuardianOrClient = model.DateSignatureLegalGuardianOrClient,
+                AdmissionedFor = model.AdmissionedFor,
+                HealthPlan = model.HealthPlan,
+                Id_DriverLicense = model.Id_DriverLicense,
+                MedicaidId = model.MedicaidId,
+                MedicareCard = model.MedicareCard,
+                Other_Identification = model.Other_Identification,
+                Other_Name = model.Other_Name,
+                Passport_Resident = model.Passport_Resident,
+                Social = model.Social
+
+            };
+        }
+
+        public TCMIntakeClientIdDocumentVerificationViewModel ToTCMIntakeClientIdDocumentVerificationViewModel(TCMIntakeClientIdDocumentVerificationEntity model)
+        {
+            return new TCMIntakeClientIdDocumentVerificationViewModel
+            {
+                Id = model.Id,
+                TcmClient = model.TcmClient,
+                IdTCMClient = model.TcmClient.Id,
+                TcmClient_FK = model.TcmClient_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureLegalGuardianOrClient = model.DateSignatureLegalGuardianOrClient,
+                AdmissionedFor = model.AdmissionedFor,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn,
+                HealthPlan = model.HealthPlan,
+                Id_DriverLicense = model.Id_DriverLicense,
+                MedicaidId = model.MedicaidId,
+                MedicareCard = model.MedicareCard,
+                Other_Identification = model.Other_Identification,
+                Other_Name = model.Other_Name,
+                Passport_Resident = model.Passport_Resident,
+                Social = model.Social
+
+            };
+        }
+
+        public TCMIntakePainScreenEntity ToTCMIntakePainScreenEntity(TCMIntakePainScreenViewModel model, bool isNew, string userId)
+        {
+            return new TCMIntakePainScreenEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                TcmClient = model.TcmClient,
+                TcmClient_FK = model.TcmClient_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                AdmissionedFor = model.AdmissionedFor,
+                AlwayasThere = model.AlwayasThere,
+                ComesAndGoes = model.ComesAndGoes,
+                CurrentPainScore = model.CurrentPainScore,
+                DidYouUse = model.DidYouUse,
+                DoesYourPainEffect = model.DoesYourPainEffect,
+                DoYouBelieve = model.DoYouBelieve,
+                DoYouFell = model.DoYouFell,
+                DoYouSuffer = model.DoYouSuffer,
+                WereYourDrugs = model.WereYourDrugs,
+                WhatCauses = model.WhatCauses,
+                WhereIs = model.WhereIs,
+                DateOfReferral = model.DateOfReferral,
+                ReferredTo = model.ReferredTo
+                
+            };
+        }
+
+        public TCMIntakePainScreenViewModel ToTCMIntakePainScreenViewModel(TCMIntakePainScreenEntity model)
+        {
+            return new TCMIntakePainScreenViewModel
+            {
+                Id = model.Id,
+                TcmClient = model.TcmClient,
+                IdTCMClient = model.TcmClient.Id,
+                TcmClient_FK = model.TcmClient_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                AdmissionedFor = model.AdmissionedFor,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn,
+                AlwayasThere = model.AlwayasThere,
+                ComesAndGoes = model.ComesAndGoes,
+                CurrentPainScore = model.CurrentPainScore,
+                DidYouUse = model.DidYouUse,
+                DoesYourPainEffect = model.DoesYourPainEffect,
+                DoYouBelieve = model.DoYouBelieve,
+                DoYouFell = model.DoYouFell,
+                DoYouSuffer = model.DoYouSuffer,
+                WereYourDrugs = model.WereYourDrugs,
+                WhatCauses = model.WhatCauses,
+                WhereIs = model.WhereIs,
+                DateOfReferral = model.DateOfReferral,
+                ReferredTo = model.ReferredTo
+            };
+
+        }
+
+        public TCMIntakeColumbiaSuicideEntity ToTCMIntakeColumbiaSuicideEntity(TCMIntakeColumbiaSuicideViewModel model, bool isNew, string userId)
+        {
+            return new TCMIntakeColumbiaSuicideEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                TcmClient = model.TcmClient,
+                TcmClient_FK = model.TcmClient_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                AdmissionedFor = model.AdmissionedFor,
+                HaveYouActuallyLifeTime = model.HaveYouActuallyLifeTime,
+                HaveYouActuallyLifeTime_Value = RiskUtils.GetRiskByIndex(model.IdHaveYouActuallyLifeTime_Value),
+                HaveYouActuallyPastMonth = model.HaveYouActuallyPastMonth,
+                HaveYouActuallyPastMonth_Value = RiskUtils.GetRiskByIndex(model.IdHaveYouActuallyPastMonth_Value),
+                HaveYouBeenLifeTime = model.HaveYouBeenLifeTime,
+                HaveYouBeenLifeTime_Value = RiskUtils.GetRiskByIndex(model.IdHaveYouBeenLifeTime_Value),
+                HaveYouBeenPastMonth = model.HaveYouBeenPastMonth,
+                HaveYouBeenPastMonth_Value = RiskUtils.GetRiskByIndex(model.IdHaveYouBeenPastMonth_Value),
+                HaveYouEver = model.HaveYouEver,
+                HaveYouEverIfYes = model.HaveYouEverIfYes,
+                HaveYouEverIfYes_Value = RiskUtils.GetRiskByIndex(model.IdHaveYouEverIfYes_Value),
+                HaveYouEver_Value = RiskUtils.GetRiskByIndex(model.IdHaveYouEver_Value),
+                HaveYouHadLifeTime = model.HaveYouHadLifeTime,
+                HaveYouHadLifeTime_Value = RiskUtils.GetRiskByIndex(model.IdHaveYouHadLifeTime_Value),
+                HaveYouHadPastMonth = model.HaveYouHadPastMonth,
+                HaveYouHadPastMonth_Value = RiskUtils.GetRiskByIndex(model.IdHaveYouHadPastMonth_Value),
+                HaveYouStartedLifeTime = model.HaveYouStartedLifeTime,
+                HaveYouStartedLifeTime_Value = RiskUtils.GetRiskByIndex(model.IdHaveYouStartedLifeTime_Value),
+                HaveYouStartedPastMonth = model.HaveYouStartedPastMonth,
+                HaveYouStartedPastMonth_Value = RiskUtils.GetRiskByIndex(model.IdHaveYouStartedPastMonth_Value),
+                HaveYouWishedLifeTime = model.HaveYouWishedLifeTime,
+                HaveYouWishedLifeTime_Value = RiskUtils.GetRiskByIndex(model.IdHaveYouWishedLifeTime_Value),
+                HaveYouWishedPastMonth = model.HaveYouWishedPastMonth,
+                HaveYouWishedPastMonth_Value = RiskUtils.GetRiskByIndex(model.IdHaveYouWishedPastMonth_Value)
+
+            };
+        }
+
+        public TCMIntakeColumbiaSuicideViewModel ToTCMIntakeColumbiaSuicideViewModel(TCMIntakeColumbiaSuicideEntity model)
+        {
+            return new TCMIntakeColumbiaSuicideViewModel
+            {
+                Id = model.Id,
+                TcmClient = model.TcmClient,
+                IdTCMClient = model.TcmClient.Id,
+                TcmClient_FK = model.TcmClient_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                AdmissionedFor = model.AdmissionedFor,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn,
+                HaveYouActuallyLifeTime = model.HaveYouActuallyLifeTime,
+                HaveYouActuallyLifeTime_Value = model.HaveYouActuallyLifeTime_Value,
+                HaveYouActuallyPastMonth = model.HaveYouActuallyPastMonth,
+                HaveYouActuallyPastMonth_Value = model.HaveYouActuallyPastMonth_Value,
+                HaveYouBeenLifeTime = model.HaveYouBeenLifeTime,
+                HaveYouBeenLifeTime_Value = model.HaveYouBeenLifeTime_Value,
+                HaveYouBeenPastMonth = model.HaveYouBeenPastMonth,
+                HaveYouBeenPastMonth_Value = model.HaveYouBeenPastMonth_Value,
+                HaveYouEver = model.HaveYouEver,
+                HaveYouEverIfYes = model.HaveYouEverIfYes,
+                HaveYouEverIfYes_Value = model.HaveYouEverIfYes_Value,
+                HaveYouEver_Value = model.HaveYouEver_Value,
+                HaveYouHadLifeTime = model.HaveYouHadLifeTime,
+                HaveYouHadLifeTime_Value = model.HaveYouHadLifeTime_Value,
+                HaveYouHadPastMonth = model.HaveYouHadPastMonth,
+                HaveYouHadPastMonth_Value = model.HaveYouHadPastMonth_Value,
+                HaveYouStartedLifeTime = model.HaveYouStartedLifeTime,
+                HaveYouStartedLifeTime_Value = model.HaveYouStartedLifeTime_Value,
+                HaveYouStartedPastMonth = model.HaveYouStartedPastMonth,
+                HaveYouStartedPastMonth_Value = model.HaveYouStartedPastMonth_Value,
+                HaveYouWishedLifeTime = model.HaveYouWishedLifeTime,
+                HaveYouWishedLifeTime_Value = model.HaveYouWishedLifeTime_Value,
+                HaveYouWishedPastMonth = model.HaveYouWishedPastMonth,
+                HaveYouWishedPastMonth_Value = model.HaveYouWishedPastMonth_Value,
+
+                IdHaveYouWishedPastMonth_Value = (model.HaveYouWishedPastMonth_Value == RiskType.Low) ? 0 : (model.HaveYouWishedPastMonth_Value == RiskType.Moderate) ? 1 : (model.HaveYouWishedPastMonth_Value == RiskType.High) ? 2 : 0,
+                IdHaveYouWishedLifeTime_Value = (model.HaveYouWishedLifeTime_Value == RiskType.Low) ? 0 : (model.HaveYouWishedLifeTime_Value == RiskType.Moderate) ? 1 : (model.HaveYouWishedLifeTime_Value == RiskType.High) ? 2 : 0,
+
+                IdHaveYouActuallyPastMonth_Value = (model.HaveYouActuallyPastMonth_Value == RiskType.Low) ? 0 : (model.HaveYouActuallyPastMonth_Value == RiskType.Moderate) ? 1 : (model.HaveYouActuallyPastMonth_Value == RiskType.High) ? 2 : 0,
+                IdHaveYouActuallyLifeTime_Value = (model.HaveYouActuallyLifeTime_Value == RiskType.Low) ? 0 : (model.HaveYouActuallyLifeTime_Value == RiskType.Moderate) ? 1 : (model.HaveYouActuallyLifeTime_Value == RiskType.High) ? 2 : 0,
+
+                IdHaveYouBeenPastMonth_Value = (model.HaveYouBeenPastMonth_Value == RiskType.Low) ? 0 : (model.HaveYouBeenPastMonth_Value == RiskType.Moderate) ? 1 : (model.HaveYouBeenPastMonth_Value == RiskType.High) ? 2 : 0,
+                IdHaveYouBeenLifeTime_Value = (model.HaveYouBeenLifeTime_Value == RiskType.Low) ? 0 : (model.HaveYouBeenLifeTime_Value == RiskType.Moderate) ? 1 : (model.HaveYouBeenLifeTime_Value == RiskType.High) ? 2 : 0,
+
+                IdHaveYouHadPastMonth_Value = (model.HaveYouHadPastMonth_Value == RiskType.Low) ? 0 : (model.HaveYouHadPastMonth_Value == RiskType.Moderate) ? 1 : (model.HaveYouHadPastMonth_Value == RiskType.High) ? 2 : 0,
+                IdHaveYouHadLifeTime_Value = (model.HaveYouHadLifeTime_Value == RiskType.Low) ? 0 : (model.HaveYouHadLifeTime_Value == RiskType.Moderate) ? 1 : (model.HaveYouHadLifeTime_Value == RiskType.High) ? 2 : 0,
+
+                IdHaveYouStartedPastMonth_Value = (model.HaveYouStartedPastMonth_Value == RiskType.Low) ? 0 : (model.HaveYouStartedPastMonth_Value == RiskType.Moderate) ? 1 : (model.HaveYouStartedPastMonth_Value == RiskType.High) ? 2 : 0,
+                IdHaveYouStartedLifeTime_Value = (model.HaveYouStartedLifeTime_Value == RiskType.Low) ? 0 : (model.HaveYouStartedLifeTime_Value == RiskType.Moderate) ? 1 : (model.HaveYouStartedLifeTime_Value == RiskType.High) ? 2 : 0,
+
+                IdHaveYouEver_Value = (model.HaveYouEver_Value == RiskType.Low) ? 0 : (model.HaveYouEver_Value == RiskType.Moderate) ? 1 : (model.HaveYouEver_Value == RiskType.High) ? 2 : 0,
+                IdHaveYouEverIfYes_Value = (model.HaveYouEverIfYes_Value == RiskType.Low) ? 0 : (model.HaveYouEverIfYes_Value == RiskType.Moderate) ? 1 : (model.HaveYouEverIfYes_Value == RiskType.High) ? 2 : 0,
+
+                RiskList = _combosHelper.GetComboRisk(),
+
+            };
+
+        }
+
+        public TCMIntakePersonalWellbeingEntity ToTCMIntakePersonalWellbeingEntity(TCMIntakePersonalWellbeingViewModel model, bool isNew, string userId)
+        {
+            return new TCMIntakePersonalWellbeingEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                TcmClient = model.TcmClient,
+                TcmClient_FK = model.TcmClient_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                AdmissionedFor = model.AdmissionedFor,
+                Living = model.Living,
+                Community = model.Community,
+                Feel = model.Feel,
+                Health = model.Health,
+                Life = model.Life,
+                Relationships = model.Relationships,
+                Religion = model.Religion,
+                Security = model.Security
+                
+            };
+        }
+
+        public TCMIntakePersonalWellbeingViewModel ToTCMIntakePersonalWellbeingViewModel(TCMIntakePersonalWellbeingEntity model)
+        {
+            return new TCMIntakePersonalWellbeingViewModel
+            {
+                Id = model.Id,
+                TcmClient = model.TcmClient,
+                IdTCMClient = model.TcmClient.Id,
+                TcmClient_FK = model.TcmClient_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                AdmissionedFor = model.AdmissionedFor,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn,
+                Living = model.Living,
+                Community = model.Community,
+                Feel = model.Feel,
+                Health = model.Health,
+                Life = model.Life,
+                Relationships = model.Relationships,
+                Religion = model.Religion,
+                Security = model.Security
+
+            };
+
+        }
+
+        public TCMIntakeNutritionalScreenEntity ToTCMIntakeNutritionalScreenEntity(TCMIntakeNutritionalScreenViewModel model, bool isNew, string userId)
+        {
+            return new TCMIntakeNutritionalScreenEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                TcmClient = model.TcmClient,
+                TcmClient_FK = model.TcmClient_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                AdmissionedFor = model.AdmissionedFor,
+                ClientAlwaysHungry = model.ClientAlwaysHungry,
+                ClientAlwaysHungry_Value = model.ClientAlwaysHungry_Value,
+                ClientAlwaysThirsty = model.ClientAlwaysThirsty,
+                ClientAlwaysThirsty_Value = model.ClientAlwaysThirsty_Value,
+                ClientAppetiteFair = model.ClientAppetiteFair,
+                ClientAppetiteFair_Value = model.ClientAppetiteFair_Value,
+                ClientAppetiteGood = model.ClientAppetiteGood,
+                ClientAppetiteGood_Value = model.ClientAppetiteGood_Value,
+                ClientAppetitepoor = model.ClientAppetitepoor,
+                ClientAppetitepoor_Value = model.ClientAppetitepoor_Value,
+                ClientBinges = model.ClientBinges,
+                ClientBinges_Value = model.ClientBinges_Value,
+                ClientDiarrhea = model.ClientDiarrhea,
+                ClientDiarrhea_Value = model.ClientDiarrhea_Value,
+                ClientEatsAlone = model.ClientEatsAlone,
+                ClientEatsAlone_Value = model.ClientEatsAlone_Value,
+                ClientEatsFew = model.ClientEatsFew,
+                ClientEatsFewer = model.ClientEatsFewer,
+                ClientEatsFewer_Value = model.ClientEatsFewer_Value,
+                ClientEatsFew_Value = model.ClientEatsFew_Value,
+                ClientFoodAllergies = model.ClientFoodAllergies,
+                ClientFoodAllergies_Value = model.ClientFoodAllergies_Value,
+                ClientHasHistory = model.ClientHasHistory,
+                ClientHasHistory_Value = model.ClientHasHistory_Value,
+                ClientHasIllnes = model.ClientHasIllnes,
+                ClientHasIllnes_Value = model.ClientHasIllnes_Value,
+                ClientHasTooth = model.ClientHasTooth,
+                ClientHasTooth_Value = model.ClientHasTooth_Value,
+                ClientTakes = model.ClientTakes,
+                ClientTakes_Value = model.ClientTakes_Value,
+                ClientVomits = model.ClientVomits,
+                ClientVomits_Value = model.ClientVomits_Value,
+                DateOfReferral = model.DateOfReferral,
+                ReferredTo = model.ReferredTo,
+                WithoutWanting = model.WithoutWanting,
+                WithoutWanting_Value = model.WithoutWanting_Value
+
+            };
+        }
+
+        public TCMIntakeNutritionalScreenViewModel ToTCMIntakeNutritionalScreenViewModel(TCMIntakeNutritionalScreenEntity model)
+        {
+            return new TCMIntakeNutritionalScreenViewModel
+            {
+                Id = model.Id,
+                TcmClient = model.TcmClient,
+                IdTCMClient = model.TcmClient.Id,
+                TcmClient_FK = model.TcmClient_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                AdmissionedFor = model.AdmissionedFor,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn,
+                ClientAlwaysHungry = model.ClientAlwaysHungry,
+                ClientAlwaysHungry_Value = model.ClientAlwaysHungry_Value,
+                ClientAlwaysThirsty = model.ClientAlwaysThirsty,
+                ClientAlwaysThirsty_Value = model.ClientAlwaysThirsty_Value,
+                ClientAppetiteFair = model.ClientAppetiteFair,
+                ClientAppetiteFair_Value = model.ClientAppetiteFair_Value,
+                ClientAppetiteGood = model.ClientAppetiteGood,
+                ClientAppetiteGood_Value = model.ClientAppetiteGood_Value,
+                ClientAppetitepoor = model.ClientAppetitepoor,
+                ClientAppetitepoor_Value = model.ClientAppetitepoor_Value,
+                ClientBinges = model.ClientBinges,
+                ClientBinges_Value = model.ClientBinges_Value,
+                ClientDiarrhea = model.ClientDiarrhea,
+                ClientDiarrhea_Value = model.ClientDiarrhea_Value,
+                ClientEatsAlone = model.ClientEatsAlone,
+                ClientEatsAlone_Value = model.ClientEatsAlone_Value,
+                ClientEatsFew = model.ClientEatsFew,
+                ClientEatsFewer = model.ClientEatsFewer,
+                ClientEatsFewer_Value = model.ClientEatsFewer_Value,
+                ClientEatsFew_Value = model.ClientEatsFew_Value,
+                ClientFoodAllergies = model.ClientFoodAllergies,
+                ClientFoodAllergies_Value = model.ClientFoodAllergies_Value,
+                ClientHasHistory = model.ClientHasHistory,
+                ClientHasHistory_Value = model.ClientHasHistory_Value,
+                ClientHasIllnes = model.ClientHasIllnes,
+                ClientHasIllnes_Value = model.ClientHasIllnes_Value,
+                ClientHasTooth = model.ClientHasTooth,
+                ClientHasTooth_Value = model.ClientHasTooth_Value,
+                ClientTakes = model.ClientTakes,
+                ClientTakes_Value = model.ClientTakes_Value,
+                ClientVomits = model.ClientVomits,
+                ClientVomits_Value = model.ClientVomits_Value,
+                DateOfReferral = model.DateOfReferral,
+                ReferredTo = model.ReferredTo,
+                WithoutWanting = model.WithoutWanting,
+                WithoutWanting_Value = model.WithoutWanting_Value
+
+            };
+
+        }
+
+        public async Task<TCMDateBlockedEntity> ToTCMDateBlockedEntity(TCMDateBlockedViewModel model, bool isNew, string userId)
+        {
+            return new TCMDateBlockedEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Clinic = await _context.Clinics.FirstOrDefaultAsync(c => c.Id == model.IdClinic),
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                DateBlocked = model.DateBlocked,
+                Description = model.Description
+            };
+        }
+
+        public TCMDateBlockedViewModel ToTCMDateBlockedViewModel(TCMDateBlockedEntity model)
+        {
+            return new TCMDateBlockedViewModel
+            {
+                Id = model.Id,
+                IdClinic = model.Clinic.Id,
+                Clinics = _combosHelper.GetComboClinics(),
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn,
+                DateBlocked = model.DateBlocked,
+                Description = model.Description
+            };
+        }
+
+        public async Task<CiteEntity> ToCiteEntity(CiteViewModel model,bool isNew, string userId)
+        {
+            return new CiteEntity
+            {
+                Id = isNew ? 0 : model.Id,               
+                Status = CiteUtils.GetCiteByIndex(model.IdStatus),
+                Client = await _context.Clients.FindAsync(model.IdClient),
+                DateCite = model.DateCite,
+                Copay = model.Copay,
+                EventNote = model.EventNote,
+                PatientNote = model.PatientNote,
+                Facilitator = await _context.Facilitators.FindAsync(model.IdFacilitator),
+                SubSchedule = await _context.SubSchedule.FindAsync(model.IdSubSchedule),
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null)
+            };
+        }
+
+        public CiteViewModel ToCiteViewModel(CiteEntity model, int idClinic)
+        {
+            return new CiteViewModel
+            {
+                Id = model.Id,                
+                Worday_CLient = model.Worday_CLient,
+                PatientNote = model.PatientNote,
+                Copay = model.Copay,
+                DateCite = model.DateCite,                
+                Client = model.Client,
+                EventNote = model.EventNote,
+                Facilitator = model.Facilitator,
+                IdClient = model.Client.Id,
+                IdFacilitator = model.Facilitator.Id,
+                Service = "Therapy Private",
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                IdSubSchedule = model.SubSchedule.Id,
+                SubSchedulesList = _combosHelper.GetComboSchedulesByClinicForCites(idClinic, ServiceType.Individual, model.Facilitator.Id, model.DateCite),
+                SubSchedule = model.SubSchedule,
+                IdStatus = (model.Status == CiteStatus.S) ? 1 : (model.Status == CiteStatus.C) ? 2 : (model.Status == CiteStatus.R) ? 3 : (model.Status == CiteStatus.NS) ? 4 : (model.Status == CiteStatus.AR) ? 5 : (model.Status == CiteStatus.CO) ? 6 : (model.Status == CiteStatus.A) ? 7 : (model.Status == CiteStatus.X) ? 8 : 0,
+                Status = model.Status,
+                StatusList = _combosHelper.GetComboSiteStatus()               
+            };
+        }
+
+        public async Task<BillDmsEntity> ToBillDMSEntity(BillDmsViewModel model, bool isNew)
+        {
+            return new BillDmsEntity
+            {
+               Id = isNew ? 0 : model.Id,
+               Amount = model.Amount,
+               BillDmsDetails = model.BillDmsDetails,
+               DateBill = model.DateBill,
+               DateBillClose = model.DateBillClose,
+               DateBillPayment = model.DateBillPayment,
+               Different = model.Different,
+               StatusBill = StatusBillUtils.GetStatusBillByIndex(model.IdStatus),
+               TCMNotes = model.TCMNotes,
+               Units = model.Units,
+               Workday_Clients = model.Workday_Clients,
+               FinishEdition = model.FinishEdition
+            };
+        }
+
+        public BillDmsViewModel ToBillDMSViewModel(BillDmsEntity model)
+        {
+            return new BillDmsViewModel
+            {
+                Id = model.Id,
+                Amount = model.Amount,
+                BillDmsDetails = model.BillDmsDetails,
+                DateBill = model.DateBill,
+                DateBillClose = model.DateBillClose,
+                DateBillPayment = model.DateBillPayment,
+                Different = model.Different,
+                StatusBill = model.StatusBill,
+                TCMNotes = model.TCMNotes,
+                Units = model.Units,
+                Workday_Clients = model.Workday_Clients,
+                IdStatus = (model.StatusBill == StatusBill.Unbilled) ? 1 : (model.StatusBill == StatusBill.Billed) ? 2 : (model.StatusBill == StatusBill.Pending) ? 3 : (model.StatusBill == StatusBill.Paid) ? 4 : 0,
+                StatusList = _combosHelper.GetComboBillStatus(),
+                AmountCMHNotes = model.BillDmsDetails.Where(n => n.ServiceAgency == ServiceAgency.CMH).Count(),
+                AmountTCMNotes = model.BillDmsDetails.Where(n => n.ServiceAgency == ServiceAgency.TCM).Count(),
+                FinishEdition = model.FinishEdition
+            };
+        }
+
+        public async Task<BillDmsPaidEntity> ToBillDMSPaidEntity(BillDmsPaidViewModel model, bool isNew)
+        {
+            return new BillDmsPaidEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Amount = model.Amount,
+                OrigePaid = PaidOrigiUtils.GetPaidOrigiByIndex(model.IdOrigi),
+                DatePaid = model.DatePaid,
+                Bill = _context.BillDms.FirstOrDefault(n => n.Id == model.IdBillDms)
+            };
+        }
+
+        public BillDmsPaidViewModel ToBillDMSPaidModel(BillDmsPaidEntity model)
+        {
+            return new BillDmsPaidViewModel
+            {
+                Id = model.Id,
+                Amount = model.Amount,
+                IdOrigi = (model.OrigePaid == PaidOrigi.Income) ? 1 : (model.OrigePaid == PaidOrigi.Difference) ? 2 : 0,
+                OrigiList = _combosHelper.GetComboBillPaid(),
+                DatePaid = model.DatePaid,
+                Bill = _context.BillDms.FirstOrDefault(n => n.Id == model.Bill.Id),
+                IdBillDms = model.Bill.Id
+            };
+        }
+
+        public async Task<TCMReferralFormEntity> ToTCMReferralFormEntity(TCMReferralFormViewModel model, bool isNew, string userId)
+        {
+            TCMReferralFormEntity salida;
+            salida = new TCMReferralFormEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+
+                TcmClient = await _context.TCMClient
+                                          .FirstOrDefaultAsync(n => n.Id == model.IdTCMClient),
+               Address = model.Address,
+               AssignedTo = model.AssignedTo,
+               AuthorizedDate = model.AuthorizedDate,
+               DateOfBirth = model.DateOfBirth,
+               CaseAccepted = model.CaseAccepted,
+               CaseNumber = model.CaseNumber,
+               Comments = model.Comments,
+               DateAssigned = model.DateAssigned,
+               Dx = model.Dx,
+               Dx_Description = model.Dx_Description,
+               ExperatedDate = model.ExperatedDate,
+               Gender = model.Gender,
+               HMO = model.HMO,
+               LegalGuardianName = model.LegalGuardianName,
+               LegalGuardianPhone = model.LegalGuardianPhone,
+               MedicaidId = model.MedicaidId,
+               NameClient = model.NameClient,
+               NameSupervisor = model.NameSupervisor,
+               PrimaryPhone = model.PrimaryPhone,
+               Program = model.Program,
+               ReferredBy_Name = model.ReferredBy_Name,
+               ReferredBy_Phone = model.ReferredBy_Phone,
+               ReferredBy_Title = model.ReferredBy_Title,
+               SecondaryPhone = model.SecondaryPhone,
+               SSN = model.SSN,
+               TCMSign = model.TCMSign,
+               TCMSupervisorSign = model.TCMSupervisorSign,
+               UnitsApproved = model.UnitsApproved
+
+            };
+
+            return salida;
+        }
+
+        public TCMReferralFormViewModel ToTCMReferralFormViewModel(TCMReferralFormEntity model)
+        {
+            return new TCMReferralFormViewModel
+            {
+                Id = model.Id,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn,
+                IdTCMClient = model.TcmClient.Id,
+                TcmClient = model.TcmClient,
+
+                Address = model.Address,
+                AssignedTo = model.AssignedTo,
+                AuthorizedDate = model.AuthorizedDate,
+                DateOfBirth = model.DateOfBirth,
+                CaseAccepted = model.CaseAccepted,
+                CaseNumber = model.CaseNumber,
+                Comments = model.Comments,
+                DateAssigned = model.DateAssigned,
+                Dx = model.Dx,
+                Dx_Description = model.Dx_Description,
+                ExperatedDate = model.ExperatedDate,
+                Gender = model.Gender,
+                HMO = model.HMO,
+                LegalGuardianName = model.LegalGuardianName,
+                LegalGuardianPhone = model.LegalGuardianPhone,
+                MedicaidId = model.MedicaidId,
+                NameClient = model.NameClient,
+                NameSupervisor = model.NameSupervisor,
+                PrimaryPhone = model.PrimaryPhone,
+                Program = model.Program,
+                ReferredBy_Name = model.ReferredBy_Name,
+                ReferredBy_Phone = model.ReferredBy_Phone,
+                ReferredBy_Title = model.ReferredBy_Title,
+                SecondaryPhone = model.SecondaryPhone,
+                SSN = model.SSN,
+                TCMSign = model.TCMSign,
+                TCMSupervisorSign = model.TCMSupervisorSign,
+                UnitsApproved = model.UnitsApproved
+                
+            };
+        }
+
+        public async Task<TCMSupervisionTimeEntity> ToTCMSupervisionTimeEntity(TCMSupervisionTimeViewModel model, bool isNew, string userId)
+        {
+            return new TCMSupervisionTimeEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                CaseManager = await _context.CaseManagers.FindAsync(model.IdCaseManager),
+                Description = model.Description,
+                DateSupervision = model.DateSupervision,
+                EndTime = model.EndTime,
+                StartTime = model.StartTime,
+                TCMSupervisor = await _context.TCMSupervisors.FindAsync(model.IdTCMSupervisor),
+                Present = model.Present
+            };
+        }
+
+        public TCMSupervisionTimeViewModel ToTCMSupervisionTimeViewModel(TCMSupervisionTimeEntity model, int idClinic)
+        {
+            return new TCMSupervisionTimeViewModel
+            {
+                Id = model.Id,
+                Description = model.Description,
+                CreatedOn = model.CreatedOn,
+                CreatedBy = model.CreatedBy,
+                IdCaseManager = model.CaseManager.Id,
+                CaseManager = model.CaseManager,
+                DateSupervision = model.DateSupervision,
+                StartTime = model.StartTime,
+                EndTime= model.EndTime,
+                IdTCMSupervisor = model.TCMSupervisor.Id,
+                TCMSupervisor = model.TCMSupervisor,
+                Present = model.Present
+
+            };
+        }
+
+        public async Task<TCMSubServiceEntity> ToTCMSubServiceEntity(TCMSubServiceViewModel model, bool isNew, string userId)
+        {
+            return new TCMSubServiceEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                TcmService = await _context.TCMServices.FindAsync(model.Id_TCMService),
+                Name = model.Name,
+                Description = model.Description,
+                Active = model.Active
+                
+            };
+        }
+
+        public TCMSubServiceViewModel ToTCMSubServiceViewModel(TCMSubServiceEntity TcmStageEntity)
+        {
+            return new TCMSubServiceViewModel
+            {
+                Id = TcmStageEntity.Id,
+                Name = TcmStageEntity.Name,
+                Id_TCMService = TcmStageEntity.TcmService.Id,
+                Description = TcmStageEntity.Description,
+                TcmService = TcmStageEntity.TcmService,
+                CreatedBy = TcmStageEntity.CreatedBy,
+                CreatedOn = TcmStageEntity.CreatedOn,
+                Active = TcmStageEntity.Active
+
+            };
+        }
+
+        public async Task<TCMTransferEntity> ToTCMTransferEntity(TCMTransferViewModel model, bool isNew, string userId)
+        {
+            return new TCMTransferEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                Address = model.Address,
+                ChangeInformation = model.ChangeInformation,
+                CityStateZip = model.CityStateZip,
+                DateAudit = model.DateAudit,
+                DateAuditSign = model.DateAuditSign,
+                DateLastService = model.DateLastService,
+                DateServicePlanORLastSPR = model.DateServicePlanORLastSPR,
+                EndTransferDate = model.EndTransferDate,
+                HasClientChart = model.HasClientChart,
+                LegalGuardianName = model.LegalGuardianName,
+                LegalGuardianPhone = model.LegalGuardianPhone,
+                OpeningDate = model.OpeningDate,
+                OpeningDateAssignedTo = model.OpeningDateAssignedTo,
+                OtherPhone = model.OtherPhone,
+                PrimaryPhone = model.PrimaryPhone,
+                Return = model.Return,
+                TCMAssignedFrom = _context.CaseManagers.FirstOrDefault(n => n.Id == model.IdCaseManagerFrom),
+                TCMAssignedFromAccept = model.TCMAssignedFromAccept,
+                TCMAssignedTo = _context.CaseManagers.FirstOrDefault(n => n.Id == model.IdCaseManagerTo),
+                TCMAssignedToAccept = model.TCMAssignedToAccept,
+                TCMClient = _context.TCMClient.FirstOrDefault(n => n.Id == model.IdTCMClient),
+                TCMSupervisor = _context.TCMSupervisors.FirstOrDefault(n => n.Id == model.IdTCMSupervisor),
+                TCMSupervisorAccept = model.TCMSupervisorAccept,
+                TransferFollow = model.TransferFollow              
+
+            };
+        }
+
+        public TCMTransferViewModel ToTCMTransferViewModel(TCMTransferEntity model)
+        {
+            return new TCMTransferViewModel
+            {
+                Id = model.Id,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                Address = model.Address,
+                ChangeInformation = model.ChangeInformation,
+                CityStateZip = model.CityStateZip,
+                DateAudit = model.DateAudit,
+                DateAuditSign = model.DateAuditSign,
+                DateLastService = model.DateLastService,
+                DateServicePlanORLastSPR = model.DateServicePlanORLastSPR,
+                EndTransferDate = model.EndTransferDate,
+                HasClientChart = model.HasClientChart,
+                LegalGuardianName = model.LegalGuardianName,
+                LegalGuardianPhone = model.LegalGuardianPhone,
+                OpeningDate = model.OpeningDate,
+                OpeningDateAssignedTo = model.OpeningDateAssignedTo,
+                OtherPhone = model.OtherPhone,
+                PrimaryPhone = model.PrimaryPhone,
+                Return = model.Return,
+                TCMAssignedFrom = model.TCMAssignedFrom,
+                TCMAssignedFromAccept = model.TCMAssignedFromAccept,
+                TCMAssignedTo = model.TCMAssignedTo,
+                TCMAssignedToAccept = model.TCMAssignedToAccept,
+                TCMClient = model.TCMClient,
+                TCMSupervisor = model.TCMSupervisor,
+                TCMSupervisorAccept = model.TCMSupervisorAccept,
+                TransferFollow = model.TransferFollow,
+                IdCaseManagerFrom = model.TCMAssignedFrom.Id,
+                IdCaseManagerTo = model.TCMAssignedTo.Id,
+                IdTCMClient = model.TCMClient.Id,
+                IdTCMSupervisor = model.TCMSupervisor.Id,
+                TCMsTo = _combosHelper.GetComboCaseManagersByTCMSupervisor(model.TCMSupervisor.LinkedUser, 1)
+
+
+            };
+        }
+
+        public IntakeConsentForTelehealthEntity ToIntakeConsentForTelehealthEntity(IntakeConsentForTelehealthViewModel model, bool isNew)
+        {
+            return new IntakeConsentForTelehealthEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Client = model.Client,
+                Client_FK = model.Client_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
+                DateSignaturePerson = model.DateSignaturePerson,
+                AdmissionedFor = model.AdmissionedFor,
+                IConsentToReceive = model.IConsentToReceive,
+                Documents = model.Documents
+            };
+        }
+
+        public IntakeConsentForTelehealthViewModel ToIntakeConsentForTelehealthViewModel(IntakeConsentForTelehealthEntity model)
+        {
+            return new IntakeConsentForTelehealthViewModel
+            {
+                Id = model.Id,
+                Client = model.Client,
+                IdClient = model.Client.Id,
+                Client_FK = model.Client_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
+                DateSignaturePerson = model.DateSignaturePerson,
+                AdmissionedFor = model.AdmissionedFor,
+                IConsentToReceive = model.IConsentToReceive,
+                Documents = model.Documents
+
+            };
+
+        }
+
+        public IntakeNoDuplicateServiceEntity ToIntakeNoDuplicateServiceEntity(IntakeNoDuplicateServiceViewModel model, bool isNew)
+        {
+            return new IntakeNoDuplicateServiceEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Client = model.Client,
+                Client_FK = model.Client_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
+                DateSignaturePerson = model.DateSignaturePerson,
+                AdmissionedFor = model.AdmissionedFor,
+                Documents = model.Documents
+            };
+        }
+
+        public IntakeNoDuplicateServiceViewModel ToIntakeNoDuplicateServiceViewModel(IntakeNoDuplicateServiceEntity model)
+        {
+            return new IntakeNoDuplicateServiceViewModel
+            {
+                Id = model.Id,
+                Client = model.Client,
+                IdClient = model.Client.Id,
+                Client_FK = model.Client_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
+                DateSignaturePerson = model.DateSignaturePerson,
+                AdmissionedFor = model.AdmissionedFor,
+                Documents = model.Documents
+
+            };
+
+        }
+        public IntakeAdvancedDirectiveEntity ToIntakeAdvancedDirectiveEntity(IntakeAdvancedDirectiveViewModel model, bool isNew, string userId)
+        {
+            return new IntakeAdvancedDirectiveEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                Client = model.Client,
+                Client_FK = model.Client_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
+                DateSignaturePerson = model.DateSignaturePerson,
+                Documents = model.Documents,
+                AdmissionedFor = model.AdmissionedFor,
+                IHave = model.IHave,
+                IHaveNot = model.IHaveNot
+
+            };
+        }
+
+        public IntakeAdvancedDirectiveViewModel ToIntakeAdvancedDirectiveViewModel(IntakeAdvancedDirectiveEntity model)
+        {
+            return new IntakeAdvancedDirectiveViewModel
+            {
+                Id = model.Id,
+                Client = model.Client,
+                IdClient = model.Client.Id,
+                Client_FK = model.Client_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
+                DateSignaturePerson = model.DateSignaturePerson,
+                Documents = model.Documents,
+                AdmissionedFor = model.AdmissionedFor,
+                IHave = model.IHave,
+                IHaveNot = model.IHaveNot,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn
+            };
+
+        }
+
+        public ReferralFormEntity ToReferralEntity(ReferralFormViewModel model, bool isNew, string userId)
+        {
+            FacilitatorEntity facilitator = _context.Facilitators.FirstOrDefault(n => n.Id == model.IdFacilitator);
+            SupervisorEntity Supervisor = _context.Supervisors.FirstOrDefault(n => n.Id == model.IdSupervisor);
+            return new ReferralFormEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+
+                Client = _context.Clients
+                                 .FirstOrDefault(n => n.Id == model.IdClient),
+                Address = model.Address,
+                AssignedTo = facilitator.Name,
+                AuthorizedDate = model.AuthorizedDate,
+                DateOfBirth = model.DateOfBirth,
+                CaseAcceptedFacilitator = model.CaseAcceptedFacilitator,
+                CaseAcceptedSupervisor = model.CaseAcceptedSupervisor,
+                CaseNumber = model.CaseNumber,
+                Comments = model.Comments,
+                DateAssigned = model.DateAssigned,
+                Dx = model.Dx,
+                Dx_Description = model.Dx_Description,
+                ExperatedDate = model.ExperatedDate,
+                Gender = model.Gender,
+                HMO = model.HMO,
+                LegalGuardianName = model.LegalGuardianName,
+                LegalGuardianPhone = model.LegalGuardianPhone,
+                MedicaidId = model.MedicaidId,
+                NameClient = model.NameClient,
+                NameSupervisor = Supervisor.Name,
+                PrimaryPhone = model.PrimaryPhone,
+                Program = model.Program,
+                ReferredBy_Name = model.ReferredBy_Name,
+                ReferredBy_Phone = model.ReferredBy_Phone,
+                ReferredBy_Title = model.ReferredBy_Title,
+                SecondaryPhone = model.SecondaryPhone,
+                SSN = model.SSN,
+                FacilitatorSign = model.FacilitatorSign,
+                SupervisorSign = model.SupervisorSign,
+                UnitsApproved = model.UnitsApproved,
+                Facilitator = facilitator,
+                Supervisor = Supervisor,
+                AssignedBy = model.AssignedBy
+
+            };
+        }
+
+        public ReferralFormViewModel ToReferralViewModel(ReferralFormEntity model)
+        {
+            return new ReferralFormViewModel
+            {
+                Id = model.Id,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn,
+                IdClient = model.Client.Id,
+                Client = model.Client,
+
+                Address = model.Address,
+                AssignedTo = model.AssignedTo,
+                AuthorizedDate = model.AuthorizedDate,
+                DateOfBirth = model.DateOfBirth,
+                CaseAcceptedFacilitator = model.CaseAcceptedFacilitator,
+                CaseAcceptedSupervisor = model.CaseAcceptedSupervisor,
+                CaseNumber = model.CaseNumber,
+                Comments = model.Comments,
+                DateAssigned = model.DateAssigned,
+                Dx = model.Dx,
+                Dx_Description = model.Dx_Description,
+                ExperatedDate = model.ExperatedDate,
+                Gender = model.Gender,
+                HMO = model.HMO,
+                LegalGuardianName = model.LegalGuardianName,
+                LegalGuardianPhone = model.LegalGuardianPhone,
+                MedicaidId = model.MedicaidId,
+                NameClient = model.NameClient,
+                NameSupervisor = model.NameSupervisor,
+                PrimaryPhone = model.PrimaryPhone,
+                Program = model.Program,
+                ReferredBy_Name = model.ReferredBy_Name,
+                ReferredBy_Phone = model.ReferredBy_Phone,
+                ReferredBy_Title = model.ReferredBy_Title,
+                SecondaryPhone = model.SecondaryPhone,
+                SSN = model.SSN,
+                FacilitatorSign = model.FacilitatorSign,
+                SupervisorSign = model.SupervisorSign,
+                UnitsApproved = model.UnitsApproved,
+                AssignedBy = model.AssignedBy
+            };
+        }
+
+        public async Task<TCMIntakeAppendixIEntity> ToTCMIntakeAppendixIEntity(TCMIntakeAppendixIViewModel model, bool isNew, string userId)
+        {
+            TCMIntakeAppendixIEntity salida;
+            salida = new TCMIntakeAppendixIEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                TcmClient = await _context.TCMClient.Include(n => n.Casemanager).ThenInclude(n => n.TCMSupervisor).FirstAsync(n => n.Id == model.IdTCMClient),
+                AdmissionedFor = model.AdmissionedFor,
+                Approved = model.Approved,
+                Date = model.Date,
+                SupervisorSignatureDate = model.SupervisorSignatureDate,
+                TcmClient_FK = model.TcmClient_FK,
+                TcmSupervisor = model.TcmSupervisor,
+                HasAmental2 = model.HasAmental2,
+                HasAmental6 = model.HasAmental6,
+                HasRecolated = model.HasRecolated,
+                IsEnrolled = model.IsEnrolled,
+                IsInOut = model.IsInOut,
+                IsNot = model.IsNot,
+                Lacks = model.Lacks,
+                RequiresOngoing = model.RequiresOngoing,
+                RequiresServices = model.RequiresServices
+            };
+
+            return salida;
+        }
+
+        public TCMIntakeAppendixIViewModel ToTCMIntakeAppendixIViewModel(TCMIntakeAppendixIEntity model)
+        {
+            return new TCMIntakeAppendixIViewModel
+            {
+                Id = model.Id,
+                TcmClient = model.TcmClient,
+                IdTCMClient = model.TcmClient_FK,
+                AdmissionedFor = model.AdmissionedFor,
+                Approved = model.Approved,
+                Date = model.Date,
+                SupervisorSignatureDate = model.SupervisorSignatureDate,
+                TcmClient_FK = model.TcmClient_FK,
+                TcmSupervisor = model.TcmSupervisor,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn,
+                HasAmental2 = model.HasAmental2,
+                HasAmental6 = model.HasAmental6,
+                HasRecolated = model.HasRecolated,
+                IsEnrolled = model.IsEnrolled,
+                IsInOut = model.IsInOut,
+                IsNot = model.IsNot,
+                Lacks = model.Lacks,
+                RequiresOngoing = model.RequiresOngoing,
+                RequiresServices = model.RequiresServices
+            };
+
+        }
+
+        public IntakeClientIdDocumentVerificationEntity ToIntakeClientIdDocumentVerificationEntity(IntakeClientIdDocumentVerificationViewModel model, bool isNew, string userId)
+        {
+            return new IntakeClientIdDocumentVerificationEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                Client = model.Client,
+                Client_FK = model.Client_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureLegalGuardianOrClient = model.DateSignatureLegalGuardianOrClient,
+                AdmissionedFor = model.AdmissionedFor,
+                HealthPlan = model.HealthPlan,
+                Id_DriverLicense = model.Id_DriverLicense,
+                MedicaidId = model.MedicaidId,
+                MedicareCard = model.MedicareCard,
+                Other_Identification = model.Other_Identification,
+                Other_Name = model.Other_Name,
+                Passport_Resident = model.Passport_Resident,
+                Social = model.Social
+
+            };
+        }
+
+        public IntakeClientIdDocumentVerificationViewModel ToIntakeClientIdDocumentVerificationViewModel(IntakeClientIdDocumentVerificationEntity model)
+        {
+            return new IntakeClientIdDocumentVerificationViewModel
+            {
+                Id = model.Id,
+                Client = model.Client,
+                IdClient = model.Client.Id,
+                Client_FK = model.Client_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureLegalGuardianOrClient = model.DateSignatureLegalGuardianOrClient,
+                AdmissionedFor = model.AdmissionedFor,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn,
+                HealthPlan = model.HealthPlan,
+                Id_DriverLicense = model.Id_DriverLicense,
+                MedicaidId = model.MedicaidId,
+                MedicareCard = model.MedicareCard,
+                Other_Identification = model.Other_Identification,
+                Other_Name = model.Other_Name,
+                Passport_Resident = model.Passport_Resident,
+                Social = model.Social
+
+            };
+        }
+
+        public IntakeForeignLanguageEntity ToIntakeForeignLanguageEntity(IntakeForeignLanguageViewModel model, bool isNew, string userId)
+        {
+            return new IntakeForeignLanguageEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                Client = model.Client,
+                Client_FK = model.Client_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
+                DateSignaturePerson = model.DateSignaturePerson,
+                Documents = model.Documents,
+                AdmissionedFor = model.AdmissionedFor
+
+            };
+        }
+
+        public IntakeForeignLanguageViewModel ToIntakeForeignLanguageViewModel(IntakeForeignLanguageEntity model)
+        {
+            return new IntakeForeignLanguageViewModel
+            {
+                Id = model.Id,
+                Client = model.Client,
+                IdClient = model.Client.Id,
+                Client_FK = model.Client_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
+                DateSignaturePerson = model.DateSignaturePerson,
+                Documents = model.Documents,
+                AdmissionedFor = model.AdmissionedFor,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn
+            };
+        }
+
+        public async Task<SafetyPlanEntity> ToSafetyPlanEntity(SafetyPlanViewModel model, bool isNew, string userId)
+        {
+            return new SafetyPlanEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Client = model.Client,
+                Client_FK = model.IdClient,
+                AdviceIwould = model.AdviceIwould,
+                DateSignatureClient = model.DateSignatureClient,
+                DateSignatureFacilitator = model.DateSignatureFacilitator,
+                Documents = model.Documents,
+                Facilitator = await _context.Facilitators.FirstOrDefaultAsync(n => n.Id == model.IdFacilitator),
+                PeopleIcanCall = model.PeopleIcanCall,
+                ThingsThat = model.ThingsThat,
+                WarningSignsOfCrisis = model.WarningSignsOfCrisis,
+                WaysToDistract = model.WaysToDistract,
+                WaysToKeepmyselfSafe = model.WaysToKeepmyselfSafe,
+                Status = model.Status,
+                Supervisor = await _context.Supervisors.FirstOrDefaultAsync(n => n.Id == model.IdSupervisor),
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                DateDocument = model.DateDocument,
+                DocumentAssisstant = await _context.DocumentsAssistant.FirstOrDefaultAsync(n => n.Id == model.IdDocumentAssisstant)
+            };
+        }
+
+        public SafetyPlanViewModel ToSafetyPlanViewModel(SafetyPlanEntity model)
+        {
+            SafetyPlanViewModel salida;
+            salida = new SafetyPlanViewModel
+            {
+                Id = model.Id,
+                Client = model.Client,
+                IdClient = model.Client.Id,
+                Client_FK = model.Client_FK,
+                AdviceIwould = model.AdviceIwould,
+                DateSignatureClient = model.DateSignatureClient,
+                DateSignatureFacilitator = model.DateSignatureFacilitator,
+                Documents = model.Documents,
+                Facilitator = (model.Facilitator == null) ? new FacilitatorEntity() : model.Facilitator,
+                PeopleIcanCall = model.PeopleIcanCall,
+                ThingsThat = model.ThingsThat,
+                WarningSignsOfCrisis = model.WarningSignsOfCrisis,
+                WaysToDistract = model.WaysToDistract,
+                WaysToKeepmyselfSafe = model.WaysToKeepmyselfSafe,
+                IdFacilitator = (model.Facilitator == null) ? 0 : model.Facilitator.Id,
+                IdSupervisor = (model.Supervisor == null) ? 0 : model.Supervisor.Id,
+                Supervisor = (model.Supervisor == null)? new SupervisorEntity() : model.Supervisor,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn,
+                DateDocument = model.DateDocument,
+                DocumentAssisstant = (model.DocumentAssisstant == null) ? new DocumentsAssistantEntity() : model.DocumentAssisstant,
+                IdDocumentAssisstant = (model.DocumentAssisstant == null) ? 0 : model.DocumentAssisstant.Id,
+
+            };
+                        
+            return salida;
+        }
+
+        public async Task<IncidentReportEntity> ToIncidentReportEntity(IncidentReportViewModel model, bool isNew, string userId)
+        {
+            return new IncidentReportEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Client =await _context.Clients.FirstOrDefaultAsync(n => n.Id == model.IdClient),
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                Facilitator = await _context.Facilitators.FirstOrDefaultAsync(n => n.Id == model.IdFacilitator),
+                Supervisor = await _context.Supervisors.FirstOrDefaultAsync(n => n.Id == model.IdSupervisor),
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                DocumentAssisstant = await _context.DocumentsAssistant.FirstOrDefaultAsync(n => n.Id == model.IdDocumentAssisstant),
+                //AdmissionFor
+                DateIncident = model.DateIncident,
+                DateReport = model.DateReport,
+                DescriptionIncident = model.DescriptionIncident,
+                Injured = model.Injured,
+                Injured_Description = model.Injured_Description,
+                Location = model.Location,
+                TimeIncident = model.TimeIncident,
+                Witnesses = model.Witnesses,
+                Witnesses_Contact = model.Witnesses_Contact,
+                AdmissionFor = model.AdmissionFor
+
+            };
+        }
+
+        public IncidentReportViewModel ToIncidentReportViewModel(IncidentReportEntity model)
+        {
+            IncidentReportViewModel salida;
+            salida = new IncidentReportViewModel
+            {
+                Id = model.Id,
+                Client = model.Client,
+                IdClient = model.Client.Id,
+                Facilitator = (model.Facilitator == null) ? new FacilitatorEntity() : model.Facilitator,
+                IdFacilitator = (model.Facilitator == null) ? 0 : model.Facilitator.Id,
+                IdSupervisor = (model.Supervisor == null) ? 0 : model.Supervisor.Id,
+                Supervisor = (model.Supervisor == null) ? new SupervisorEntity() : model.Supervisor,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn,
+                DocumentAssisstant = (model.DocumentAssisstant == null) ? new DocumentsAssistantEntity() : model.DocumentAssisstant,
+                IdDocumentAssisstant = (model.DocumentAssisstant == null) ? 0 : model.DocumentAssisstant.Id,
+                DateIncident = model.DateIncident,
+                DateReport = model.DateReport,
+                DescriptionIncident = model.DescriptionIncident,
+                Injured = model.Injured,
+                Injured_Description = model.Injured_Description,
+                Location = model.Location,
+                TimeIncident = model.TimeIncident,
+                Witnesses = model.Witnesses,
+                Witnesses_Contact = model.Witnesses_Contact,
+                AdmissionFor = model.AdmissionFor,
+                DateSignatureEmployee = model.DateSignatureEmployee
+            };
+
+            return salida;
+        }
+
+        public async Task<MeetingNoteEntity> ToMeetingNoteEntity(MeetingNotesViewModel model, bool isNew)
+        {
+            return new MeetingNoteEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Date = model.Date,
+                Description = model.Description,
+                PlanNote = model.PlanNote,
+                Status = model.Status,
+                Title = model.Title,
+                Supervisor = model.Supervisor,
+                FacilitatorList = model.FacilitatorList
+            };
+        }
+
+        public MeetingNotesViewModel ToMeetingNoteViewModel(MeetingNoteEntity entity)
+        {
+
+            MeetingNotesViewModel model = new MeetingNotesViewModel();
+            model = new MeetingNotesViewModel
+            {
+                Id = entity.Id,
+                Date = entity.Date,
+                Description = entity.Description,
+                PlanNote = entity.PlanNote,
+                Status = entity.Status,
+                Title = entity.Title,
+                Supervisor = entity.Supervisor,
+                FacilitatorList = entity.FacilitatorList
+            };
+         
+            return model;
+        }
+
+        public async Task<MeetingNotes_Facilitator> ToMeetingNoteFacilitatorEntity(MeetingNotesFacilitatorModel model, bool isNew)
+        {
+            return new MeetingNotes_Facilitator
+            {
+                Id = isNew ? 0 : model.Id,
+                DateSign = model.DateSign,
+                Intervention = model.Intervention,
+                Sign = model.Sign
+                
+            };
+        }
+
+        public MeetingNotesFacilitatorModel ToMeetingNoteFacilitatorViewModel(MeetingNotes_Facilitator entity)
+        {
+
+            MeetingNotesFacilitatorModel model = new MeetingNotesFacilitatorModel();
+            model = new MeetingNotesFacilitatorModel
+            {
+               Id = entity.Id,
+               DateSign = entity.DateSign,
+               Intervention = entity.Intervention,
+               Sign = entity.Sign,
+               Facilitator = entity.Facilitator,
+               MeetingNoteEntity = entity.MeetingNoteEntity,
+               IdSupervisorNote = entity.MeetingNoteEntity.Id
+            };
+
+            return model;
+        }
+
+        public async Task<TCMPayStubEntity> ToPayStubEntity(TCMNotePendingByPayStubViewModel model, bool isNew)
+        {
+            return new TCMPayStubEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Amount = model.Amount,
+                DatePayStub = model.DatePayStub,
+                DatePayStubClose = model.DatePayStubClose,
+                DatePayStubPayment = model.DatePayStubPayment,
+                StatusPayStub = StatusTCMPaystubUtils.GetStatusBillByIndex(model.IdStatus),
+                TCMNotes = model.TCMNoteList,
+                Units = model.Units,
+                CaseMannager = _context.CaseManagers.Find(model.IdCaseManager),
+                TCMPayStubDetails = model.TCMPaystubDetails
+
+            };
+        }
+
+        public TCMNotePendingByPayStubViewModel ToPayStubViewModel(TCMPayStubEntity model)
+        {
+            return new TCMNotePendingByPayStubViewModel
+            {
+                Id = model.Id,
+                Amount = model.Amount,
+                TCMPaystubDetails = model.TCMPayStubDetails,
+                DatePayStub = model.DatePayStub,
+                DatePayStubClose = model.DatePayStubClose,
+                DatePayStubPayment = model.DatePayStubPayment,
+                Units = model.Units,
+                IdStatus = (model.StatusPayStub == StatusTCMPaystub.Pending) ? 0 : 1,
+                StatusList = _combosHelper.GetComboBillStatus()
+                
+               // AmountCMHNotes = model.TCMPayStubDetails.Where(n => n.ServiceAgency == ServiceAgency.CMH).Count(),
+               // AmountTCMNotes = model.BillDmsDetails.Where(n => n.ServiceAgency == ServiceAgency.TCM).Count(),
+                
+            };
+        }
+
+        public TCMIntakeMedicalHistoryEntity ToTCMIntakeMedicalHistoryEntity(TCMIntakeMedicalHistoryViewModel model, bool isNew, string userId)
+        {
+            return new TCMIntakeMedicalHistoryEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                TCMClient = _context.TCMClient.Find(model.IdTCMClient),
+                TCMClient_FK = model.TCMClient_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
+                DateSignaturePerson = model.DateSignaturePerson,
+                Documents = model.Documents,
+
+                AddressPhysician = model.AddressPhysician,
+                AgeFirstTalked = model.AgeFirstTalked,
+                AgeFirstWalked = model.AgeFirstWalked,
+                AgeToiletTrained = model.AgeToiletTrained,
+                AgeWeaned = model.AgeWeaned,
+                Allergies = model.Allergies,
+                Allergies_Describe = model.Allergies_Describe,
+                AndOrSoiling = model.AndOrSoiling,
+                Anemia = model.Anemia,
+                AreYouCurrently = model.AreYouCurrently,
+                AreYouPhysician = model.AreYouPhysician,
+                Arthritis = model.Arthritis,
+                AssumingCertainPositions = model.AssumingCertainPositions,
+                BackPain = model.BackPain,
+                BeingConfused = model.BeingConfused,
+                BeingDisorientated = model.BeingDisorientated,
+                BirthWeight = model.BirthWeight,
+                BlackStools = model.BlackStools,
+                BloodInUrine = model.BloodInUrine,
+                BloodyStools = model.BloodyStools,
+                BottleFedUntilAge = model.BottleFedUntilAge,
+                BreastFed = model.BreastFed,
+                BurningUrine = model.BurningUrine,
+                Calculating = model.Calculating,
+                Cancer = model.Cancer,
+                ChestPain = model.ChestPain,
+                ChronicCough = model.ChronicCough,
+                ChronicIndigestion = model.ChronicIndigestion,
+                City = model.City,
+                Complications = model.Complications,
+                Complications_Explain = model.Complications_Explain,
+                Comprehending = model.Comprehending,
+                Concentrating = model.Concentrating,
+                Constipation = model.Constipation,
+                ConvulsionsOrFits = model.ConvulsionsOrFits,
+                CoughingOfBlood = model.CoughingOfBlood,
+                DescriptionOfChild = model.DescriptionOfChild,
+                Diabetes = model.Diabetes,
+                Diphtheria = model.Diphtheria,
+                DoYouSmoke = model.DoYouSmoke,
+                DoYouSmoke_PackPerDay = model.DoYouSmoke_PackPerDay,
+                DoYouSmoke_Year = model.DoYouSmoke_Year,
+                EarInfections = model.EarInfections,
+                Epilepsy = model.Epilepsy,
+                EyeTrouble = model.EyeTrouble,
+                Fainting = model.Fainting,
+                FamilyAsthma = model.FamilyAsthma,
+                FamilyAsthma_ = model.FamilyAsthma_,
+                FamilyCancer = model.FamilyCancer,
+                FamilyCancer_ = model.FamilyCancer_,
+                FamilyDiabetes = model.FamilyDiabetes,
+                FamilyDiabetes_ = model.FamilyDiabetes_,
+                FamilyEpilepsy = model.FamilyEpilepsy,
+                FamilyEpilepsy_ = model.FamilyEpilepsy_,
+                FamilyGlaucoma = model.FamilyGlaucoma,
+                FamilyGlaucoma_ = model.FamilyGlaucoma_,
+                FamilyHayFever = model.FamilyHayFever,
+                FamilyHayFever_ = model.FamilyHayFever_,
+                FamilyHeartDisease = model.FamilyHeartDisease,
+                FamilyHeartDisease_ = model.FamilyHeartDisease_,
+                FamilyHighBloodPressure = model.FamilyHighBloodPressure,
+                FamilyHighBloodPressure_ = model.FamilyHighBloodPressure_,
+                FamilyKidneyDisease = model.FamilyKidneyDisease,
+                FamilyKidneyDisease_ = model.FamilyKidneyDisease_,
+                FamilyNervousDisorders = model.FamilyNervousDisorders,
+                FamilyNervousDisorders_ = model.FamilyNervousDisorders_,
+                FamilyOther = model.FamilyOther,
+                FamilyOther_ = model.FamilyOther_,
+                FamilySyphilis = model.FamilySyphilis,
+                FamilySyphilis_ = model.FamilySyphilis_,
+                FamilyTuberculosis = model.FamilyTuberculosis,
+                FamilyTuberculosis_ = model.FamilyTuberculosis_,
+                FirstYearMedical = model.FirstYearMedical,
+                Fractures = model.Fractures,
+                FrequentColds = model.FrequentColds,
+                FrequentHeadaches = model.FrequentHeadaches,
+                FrequentNoseBleeds = model.FrequentNoseBleeds,
+                FrequentSoreThroat = model.FrequentSoreThroat,
+                FrequentVomiting = model.FrequentVomiting,
+                HaveYouEverBeenPregnant = model.HaveYouEverBeenPregnant,
+                HaveYouEverHadComplications = model.Complications,
+                HaveYouEverHadExcessive = model.HaveYouEverHadExcessive,
+                HaveYouEverHadPainful = model.HaveYouEverHadPainful,
+                HaveYouEverHadSpotting = model.HaveYouEverHadSpotting,
+                HayFever = model.HayFever,
+                HeadInjury = model.HeadInjury,
+                Hearing = model.Hearing,
+                HearingTrouble = model.HearingTrouble,
+                HeartPalpitation = model.HeartPalpitation,
+                Hemorrhoids = model.Hemorrhoids,
+                Hepatitis = model.Hepatitis,
+                Hernia = model.Hernia,
+                HighBloodPressure = model.HighBloodPressure,
+                Hoarseness = model.Hoarseness,
+                Immunizations = model.Immunizations,
+                InfectiousDisease = model.InfectiousDisease,
+                Jaundice = model.Jaundice,
+                KidneyStones = model.KidneyStones,
+                KidneyTrouble = model.KidneyTrouble,
+                Length = model.Length,
+                ListAllCurrentMedications = model.ListAllCurrentMedications,
+                LossOfMemory = model.LossOfMemory,
+                Mumps = model.Mumps,
+                Nervousness = model.Nervousness,
+                NightSweats = model.NightSweats,
+                Normal = model.Normal,
+                PainfulJoints = model.PainfulJoints,
+                PainfulMuscles = model.PainfulMuscles,
+                PainfulUrination = model.PainfulUrination,
+                PerformingCertainMotions = model.PerformingCertainMotions,
+                Planned = model.Planned,
+                Poliomyelitis = model.Poliomyelitis,
+                PrimaryCarePhysician = model.PrimaryCarePhysician,
+                ProblemWithBedWetting = model.ProblemWithBedWetting,
+                Reading = model.Reading,
+                RheumaticFever = model.RheumaticFever,
+                Rheumatism = model.Rheumatism,
+                ScarletFever = model.ScarletFever,
+                Seeing = model.Seeing,
+                SeriousInjury = model.SeriousInjury,
+                ShortnessOfBreath = model.ShortnessOfBreath,
+                SkinTrouble = model.SkinTrouble,
+                Speaking = model.Speaking,
+                State = model.State,
+                StomachPain = model.StomachPain,
+                Surgery = model.Surgery,
+                SwellingOfFeet = model.SwellingOfFeet,
+                SwollenAnkles = model.SwollenAnkles,
+                Tuberculosis = model.Tuberculosis,
+                Unplanned = model.Unplanned,
+                VaricoseVeins = model.VaricoseVeins,
+                VenerealDisease = model.VenerealDisease,
+                VomitingOfBlood = model.VomitingOfBlood,
+                Walking = model.Walking,
+                WeightLoss = model.WeightLoss,
+                WhoopingCough = model.WhoopingCough,
+                WritingSentence = model.WritingSentence,
+                ZipCode = model.ZipCode,
+
+                AgeOfFirstMenstruation = model.AgeOfFirstMenstruation,
+                DateOfLastBreastExam = model.DateOfLastBreastExam,
+                DateOfLastPelvic = model.DateOfLastPelvic,
+                DateOfLastPeriod = model.DateOfLastPeriod,
+                UsualDurationOfPeriods = model.UsualDurationOfPeriods,
+                UsualIntervalBetweenPeriods = model.UsualIntervalBetweenPeriods,
+
+                AdmissionedFor = model.AdmissionedFor,
+                InformationProvided = model.InformationProvided,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                StartTime = model.StartTime,
+                EndTime = model.EndTime,
+                
+            };
+        }
+
+        public TCMIntakeMedicalHistoryViewModel ToTCMIntakeMedicalHistoryViewModel(TCMIntakeMedicalHistoryEntity model)
+        {
+            return new TCMIntakeMedicalHistoryViewModel
+            {
+                Id = model.Id,
+                TCMClient = model.TCMClient,
+                IdTCMClient = model.TCMClient.Id,
+                TCMClient_FK = model.TCMClient_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignatureLegalGuardian = model.DateSignatureLegalGuardian,
+                DateSignaturePerson = model.DateSignaturePerson,
+                Documents = model.Documents,
+
+                AddressPhysician = model.AddressPhysician,
+                AgeFirstTalked = model.AgeFirstTalked,
+                AgeFirstWalked = model.AgeFirstWalked,
+                AgeToiletTrained = model.AgeToiletTrained,
+                AgeWeaned = model.AgeWeaned,
+                Allergies = model.Allergies,
+                Allergies_Describe = model.Allergies_Describe,
+                AndOrSoiling = model.AndOrSoiling,
+                Anemia = model.Anemia,
+                AreYouCurrently = model.AreYouCurrently,
+                AreYouPhysician = model.AreYouPhysician,
+                Arthritis = model.Arthritis,
+                AssumingCertainPositions = model.AssumingCertainPositions,
+                BackPain = model.BackPain,
+                BeingConfused = model.BeingConfused,
+                BeingDisorientated = model.BeingDisorientated,
+                BirthWeight = model.BirthWeight,
+                BlackStools = model.BlackStools,
+                BloodInUrine = model.BloodInUrine,
+                BloodyStools = model.BloodyStools,
+                BottleFedUntilAge = model.BottleFedUntilAge,
+                BreastFed = model.BreastFed,
+                BurningUrine = model.BurningUrine,
+                Calculating = model.Calculating,
+                Cancer = model.Cancer,
+                ChestPain = model.ChestPain,
+                ChronicCough = model.ChronicCough,
+                ChronicIndigestion = model.ChronicIndigestion,
+                City = model.City,
+                Complications = model.Complications,
+                Complications_Explain = model.Complications_Explain,
+                Comprehending = model.Comprehending,
+                Concentrating = model.Concentrating,
+                Constipation = model.Constipation,
+                ConvulsionsOrFits = model.ConvulsionsOrFits,
+                CoughingOfBlood = model.CoughingOfBlood,
+                DescriptionOfChild = model.DescriptionOfChild,
+                Diabetes = model.Diabetes,
+                Diphtheria = model.Diphtheria,
+                DoYouSmoke = model.DoYouSmoke,
+                DoYouSmoke_PackPerDay = model.DoYouSmoke_PackPerDay,
+                DoYouSmoke_Year = model.DoYouSmoke_Year,
+                EarInfections = model.EarInfections,
+                Epilepsy = model.Epilepsy,
+                EyeTrouble = model.EyeTrouble,
+                Fainting = model.Fainting,
+                FamilyAsthma = model.FamilyAsthma,
+                FamilyAsthma_ = model.FamilyAsthma_,
+                FamilyCancer = model.FamilyCancer,
+                FamilyCancer_ = model.FamilyCancer_,
+                FamilyDiabetes = model.FamilyDiabetes,
+                FamilyDiabetes_ = model.FamilyDiabetes_,
+                FamilyEpilepsy = model.FamilyEpilepsy,
+                FamilyEpilepsy_ = model.FamilyEpilepsy_,
+                FamilyGlaucoma = model.FamilyGlaucoma,
+                FamilyGlaucoma_ = model.FamilyGlaucoma_,
+                FamilyHayFever = model.FamilyHayFever,
+                FamilyHayFever_ = model.FamilyHayFever_,
+                FamilyHeartDisease = model.FamilyHeartDisease,
+                FamilyHeartDisease_ = model.FamilyHeartDisease_,
+                FamilyHighBloodPressure = model.FamilyHighBloodPressure,
+                FamilyHighBloodPressure_ = model.FamilyHighBloodPressure_,
+                FamilyKidneyDisease = model.FamilyKidneyDisease,
+                FamilyKidneyDisease_ = model.FamilyKidneyDisease_,
+                FamilyNervousDisorders = model.FamilyNervousDisorders,
+                FamilyNervousDisorders_ = model.FamilyNervousDisorders_,
+                FamilyOther = model.FamilyOther,
+                FamilyOther_ = model.FamilyOther_,
+                FamilySyphilis = model.FamilySyphilis,
+                FamilySyphilis_ = model.FamilySyphilis_,
+                FamilyTuberculosis = model.FamilyTuberculosis,
+                FamilyTuberculosis_ = model.FamilyTuberculosis_,
+                FirstYearMedical = model.FirstYearMedical,
+                Fractures = model.Fractures,
+                FrequentColds = model.FrequentColds,
+                FrequentHeadaches = model.FrequentHeadaches,
+                FrequentNoseBleeds = model.FrequentNoseBleeds,
+                FrequentSoreThroat = model.FrequentSoreThroat,
+                FrequentVomiting = model.FrequentVomiting,
+                HaveYouEverBeenPregnant = model.HaveYouEverBeenPregnant,
+                HaveYouEverHadComplications = model.Complications,
+                HaveYouEverHadExcessive = model.HaveYouEverHadExcessive,
+                HaveYouEverHadPainful = model.HaveYouEverHadPainful,
+                HaveYouEverHadSpotting = model.HaveYouEverHadSpotting,
+                HayFever = model.HayFever,
+                HeadInjury = model.HeadInjury,
+                Hearing = model.Hearing,
+                HearingTrouble = model.HearingTrouble,
+                HeartPalpitation = model.HeartPalpitation,
+                Hemorrhoids = model.Hemorrhoids,
+                Hepatitis = model.Hepatitis,
+                Hernia = model.Hernia,
+                HighBloodPressure = model.HighBloodPressure,
+                Hoarseness = model.Hoarseness,
+                Immunizations = model.Immunizations,
+                InfectiousDisease = model.InfectiousDisease,
+                Jaundice = model.Jaundice,
+                KidneyStones = model.KidneyStones,
+                KidneyTrouble = model.KidneyTrouble,
+                Length = model.Length,
+                ListAllCurrentMedications = model.ListAllCurrentMedications,
+                LossOfMemory = model.LossOfMemory,
+                Mumps = model.Mumps,
+                Nervousness = model.Nervousness,
+                NightSweats = model.NightSweats,
+                Normal = model.Normal,
+                PainfulJoints = model.PainfulJoints,
+                PainfulMuscles = model.PainfulMuscles,
+                PainfulUrination = model.PainfulUrination,
+                PerformingCertainMotions = model.PerformingCertainMotions,
+                Planned = model.Planned,
+                Poliomyelitis = model.Poliomyelitis,
+                PrimaryCarePhysician = model.PrimaryCarePhysician,
+                ProblemWithBedWetting = model.ProblemWithBedWetting,
+                Reading = model.Reading,
+                RheumaticFever = model.RheumaticFever,
+                Rheumatism = model.Rheumatism,
+                ScarletFever = model.ScarletFever,
+                Seeing = model.Seeing,
+                SeriousInjury = model.SeriousInjury,
+                ShortnessOfBreath = model.ShortnessOfBreath,
+                SkinTrouble = model.SkinTrouble,
+                Speaking = model.Speaking,
+                State = model.State,
+                StomachPain = model.StomachPain,
+                Surgery = model.Surgery,
+                SwellingOfFeet = model.SwellingOfFeet,
+                SwollenAnkles = model.SwollenAnkles,
+                Tuberculosis = model.Tuberculosis,
+                Unplanned = model.Unplanned,
+                VaricoseVeins = model.VaricoseVeins,
+                VenerealDisease = model.VenerealDisease,
+                VomitingOfBlood = model.VomitingOfBlood,
+                Walking = model.Walking,
+                WeightLoss = model.WeightLoss,
+                WhoopingCough = model.WhoopingCough,
+                WritingSentence = model.WritingSentence,
+                ZipCode = model.ZipCode,
+
+                AgeOfFirstMenstruation = model.AgeOfFirstMenstruation,
+                DateOfLastBreastExam = model.DateOfLastBreastExam,
+                DateOfLastPelvic = model.DateOfLastPelvic,
+                DateOfLastPeriod = model.DateOfLastPeriod,
+                UsualDurationOfPeriods = model.UsualDurationOfPeriods,
+                UsualIntervalBetweenPeriods = model.UsualIntervalBetweenPeriods,
+
+                AdmissionedFor = model.AdmissionedFor,
+                InformationProvided = model.InformationProvided,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn,
+                StartTime = model.StartTime,
+                EndTime = model.EndTime
+
+            };
+
         }
 
     }

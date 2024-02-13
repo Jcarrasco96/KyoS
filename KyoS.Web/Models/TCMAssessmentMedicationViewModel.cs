@@ -11,5 +11,6 @@ namespace KyoS.Web.Models
     public class TCMAssessmentMedicationViewModel : TCMAssessmentMedicationEntity
     {
         public int IdTCMAssessment { get; set; }
+        public string OldName { get; set; }
     }
 }

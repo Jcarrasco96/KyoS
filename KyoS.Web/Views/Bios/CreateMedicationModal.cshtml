@@ -10,7 +10,7 @@
             <input type="hidden" asp-for="IdClient" />
             <input type="hidden" asp-for="Client.Name" />
             <div class="container-fluid">
-                <h4 style="font-weight:bold;"> <span class="label label-info"> Client - @Model.Client.Name </span></h4>
+                <h4 style="font-weight:bold;"> <span class="label label-info"> @Model.Client.Name </span></h4>
             </div>
             <div>
                 <div class=" col-md-6 form-group">
@@ -52,6 +52,11 @@
                     <label asp-for="Frequency" class="control-label"></label>
                     <input asp-for="Frequency" class="form-control" />
                     <span asp-validation-for="Frequency" class="text-danger"></span>
+                </div>
+            </div>
+            <div>
+                <div class="container-fluid">
+                    &nbsp;
                 </div>
             </div>
             <div>

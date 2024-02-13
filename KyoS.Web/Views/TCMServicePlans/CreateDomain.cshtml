@@ -13,8 +13,8 @@
             <input type="hidden" asp-for="CreatedBy" />
             <div class="form-group">
                 <div class="col-md-12 form-group">
-                    <label asp-for="Id_Service" class="control-label">Service</label>&nbsp;*
-                    <select asp-for="Id_Service" asp-items="Model.Services" class="form-control"></select>
+                    <label asp-for="Id_Service" class="control-label">Domain</label>&nbsp;*
+                    <select asp-for="Id_Service" asp-items="Model.Services" class="form-control" id="Code_Service"></select>
                     <span asp-validation-for="Id_Service" class="text-danger"></span>
                 </div>
             </div>
@@ -24,10 +24,13 @@
                     <input asp-for="DateIdentified" class="form-control" />
                     <span asp-validation-for="DateIdentified" class="text-danger"></span>
                 </div>
-                <div class="container-fluid">
-                    &nbsp;
+                <div class="col-md-8 form-group">
+                    <label asp-for="Id_SubService" class="control-label">Sub-Service Name</label>
+                    <select asp-for="Id_SubService" asp-items="Model.SubServices" class="form-control" id="SubServices"></select>
+                    <span asp-validation-for="Id_SubService" class="text-danger"></span>
                 </div>
             </div>
+
             <div class="col-md-12">
                 <div class="form-group">
                     <label asp-for="Needs_Identified" class="control-label">Identified Needs</label>
@@ -55,3 +58,14 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+<script type="text/javascript">
+    $("#Code_Service").change(function () {
+            var url = "@Url.Action("GetListSubServices", "TCMServices")";
+             $.get(url, { idService: $("#Code_Service").val()}, function (data) {
+                 $("#SubServices").empty();
+                   $.each(data, function (index, row) {
+                    $("#SubServices").append("<option value='" + row.value + "'>" + row.text + "</option>")
+                   });
+            })
+        });
+</script>

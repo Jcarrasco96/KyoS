@@ -1,6 +1,6 @@
 ﻿@model KyoS.Web.Models.TCMIntakeAdvancedDirectiveViewModel
 @{
-    ViewData["Title"] = "TCM Advanced Directive";
+    ViewData["Title"] = "Advanced Directive";
 }
 
 <!DOCTYPE html>
@@ -15,7 +15,14 @@
         <ul class="breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                @Html.ActionLink("TCM Intake Section 1", "TCMIntakeSectionDashboard", "TCMIntakes", new { id = @Model.IdTCMClient, section = 1, origin = ViewData["origi"] })
+                @if (User.IsInRole("CaseManager"))
+                {
+                    @Html.ActionLink("TCM Intake Section 1", "TCMIntakeSectionDashboard", "TCMIntakes", new { id = @Model.IdTCMClient, section = 1, origin = ViewData["origi"] })
+                }
+                else
+                {
+                    @Html.ActionLink("TCM Intake Section 1", "TCMIntakeSectionDashboardReadOnly", "TCMIntakes", new { id = @Model.IdTCMClient, section = 1, origin = ViewData["origi"] })
+                }
             </li>
             <li class="active">Mental Health Advance Directive Acknowledgement</li>
         </ul><!--.breadcrumb-->
@@ -33,8 +40,23 @@
             <input type="hidden" asp-for="AdmissionedFor" />
             <partial name="_TCMIntakesAdvancedDirective" />
             <div class="form-group col-md-12">
-                <input type="submit" value="Sign" class="btn btn-primary" />
-                <a asp-action="TCMIntakeSectionDashboard" asp-route-id="@Model.IdTCMClient" asp-route-section="1" asp-route-origin="@ViewData["origi"]" class="btn btn-success">Back</a>
+                @if (User.IsInRole("CaseManager"))
+                {
+                    @if (Model.Id == 0)
+                    {
+                        <input type="submit" value="Sign and Save" class="btn btn-primary" />
+                    }
+                    else
+                    {
+                        <input type="submit" value="Save" class="btn btn-primary" />
+                    }
+                    <a asp-action="TCMIntakeSectionDashboard" asp-route-id="@Model.IdTCMClient" asp-route-section="1" asp-route-origin="@ViewData["origi"]" class="btn btn-success">Back</a>
+                }
+                else
+                {
+                    <input type="submit" value="Save" class="btn btn-primary" disabled />
+                    <a asp-action="TCMIntakeSectionDashboardReadOnly" asp-route-id="@Model.IdTCMClient" asp-route-section="1" asp-route-origin="@ViewData["origi"]" class="btn btn-success">Back</a>
+                }
             </div>
         </form>
     </div>
@@ -43,10 +65,37 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    <script src="~/js/jquery.dataTables.min.js"></script>
-
+    
     <script type="text/javascript">
-
+        check1.addEventListener('change', (e) => {
+            if (check1.checked == true) {
+                check101.checked = false;
+                document.getElementById("IdHaveYouWishedPastMonth_Value").removeAttribute("disabled");
+            }
+            else {
+                check101.checked = true;
+                document.getElementById("IdHaveYouWishedPastMonth_Value").setAttribute("disabled", "disabled");
+                $("#IdHaveYouWishedPastMonth_Value").prop('selectedIndex', 0);
+            }
+        })
+        check101.addEventListener('change', (e) => {
+            if (check101.checked == true) {
+                check1.checked = false;
+                document.getElementById("IdHaveYouWishedPastMonth_Value").setAttribute("disabled", "disabled");
+                $("#IdHaveYouWishedPastMonth_Value").prop('selectedIndex', 0);
+            } else {
+                check1.checked = true;
+                document.getElementById("IdHaveYouWishedPastMonth_Value").removeAttribute("disabled");
+            }
+        })
+        if (check1.checked == true) {
+            check101.checked = false;
+            document.getElementById("IdHaveYouWishedPastMonth_Value").removeAttribute("disabled");
+        }
+        else {
+            check101.checked = true;
+            document.getElementById("IdHaveYouWishedPastMonth_Value").setAttribute("disabled", "disabled");
+        }
     </script>
 }
 

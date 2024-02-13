@@ -50,7 +50,7 @@ namespace KyoS.Web.Controllers
             Configuration = configuration;
         }
         
-        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant, CaseManager")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant, CaseManager, Frontdesk")]
         public async Task<IActionResult> Index(int idError = 0)
         {
             UserEntity user_logged = await _context.Users
@@ -67,13 +67,14 @@ namespace KyoS.Web.Controllers
             {
                 ViewBag.Delete = "N";
             }
-            if (User.IsInRole("Manager") || User.IsInRole("Supervisor"))
+            if (User.IsInRole("Manager") || User.IsInRole("Supervisor") || User.IsInRole("Frontdesk"))
             {
                 return View(await _context.Clients
                                           .Include(c => c.Clinic)
                                           .Include(c => c.IndividualTherapyFacilitator)
                                           .Include(c => c.Clients_HealthInsurances)
                                           .ThenInclude(c => c.HealthInsurance)
+                                          .Include(c => c.ReferralForm)
                                           .Where(c => c.Clinic.Id == user_logged.Clinic.Id)
                                           .OrderBy(c => c.Name).ToListAsync());
             }
@@ -84,6 +85,7 @@ namespace KyoS.Web.Controllers
                                           .Include(c => c.IndividualTherapyFacilitator)
                                           .Include(c => c.Clients_HealthInsurances)
                                           .ThenInclude(c => c.HealthInsurance)
+                                          .Include(c => c.ReferralForm)
                                           .Where(c => (c.Clinic.Id == user_logged.Clinic.Id
                                                 && (c.Bio.CreatedBy == user_logged.UserName
                                                      || c.MTPs.Where(m => m.CreatedBy == user_logged.UserName).Count() > 0)))
@@ -98,6 +100,7 @@ namespace KyoS.Web.Controllers
                                           .Include(c => c.IndividualTherapyFacilitator)
                                           .Include(c => c.Clients_HealthInsurances)
                                           .ThenInclude(c => c.HealthInsurance)
+                                          .Include(c => c.ReferralForm)
                                           .Where(c => (c.Clinic.Id == user_logged.Clinic.Id
                                                 && (c.Workdays_Clients.Where(m => m.Facilitator.Id == facilitator.Id).Count() > 0
                                                     || c.IndividualTherapyFacilitator.Id == facilitator.Id
@@ -119,6 +122,8 @@ namespace KyoS.Web.Controllers
                                                           .Include(c => c.Client)
                                                           .ThenInclude(c => c.Clients_HealthInsurances)
                                                           .ThenInclude(c => c.HealthInsurance)
+                                                          .Include(c => c.Client)
+                                                          .ThenInclude(c => c.ReferralForm)
                                                           .FirstOrDefaultAsync(f => f.Casemanager.Id == casemanager.Id);
 
                 return View(tcmClient.Client);
@@ -127,7 +132,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("NotAuthorized", "Account");
         }
 
-        [Authorize(Roles = "Manager, Supervisor")]
+        [Authorize(Roles = "Manager, Frontdesk")]
         public IActionResult Create(int id = 0)
         {
             if (id == 1)
@@ -185,7 +190,7 @@ namespace KyoS.Web.Controllers
                         StatusList = _combosHelper.GetComboClientStatus(),
                         Country = "United States",
                         State = "Florida",
-                        City = "Miami",
+                        City = user_logged.Clinic == null || user_logged.Clinic.City == null || user_logged.Clinic.City == string.Empty ? "Miami" : user_logged.Clinic.City,
                         IdRace = 0,
                         Races = _combosHelper.GetComboRaces(),
                         IdMaritalStatus = 0,
@@ -242,7 +247,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Manager, Supervisor")]
+        [Authorize(Roles = "Manager, Frontdesk")]
         public async Task<IActionResult> Create(ClientViewModel clientViewModel)
         {
             if (ModelState.IsValid)
@@ -267,6 +272,106 @@ namespace KyoS.Web.Controllers
                                                        .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
                 ClientEntity clientEntity = await _converterHelper.ToClientEntity(clientViewModel, true, photoPath, signPath, user_logged.Id);
+
+                //-------Primary Doctor--------------------------//
+                if (clientViewModel.IdDoctor == 0)
+                {
+                    if (clientViewModel.NamePrimaryDoctor != null && clientViewModel.NamePrimaryDoctor != string.Empty)
+                    {
+                        DoctorEntity PrimaryDoctor = new DoctorEntity
+                        {
+                            Name = clientViewModel.NamePrimaryDoctor,
+                            Address = clientViewModel.AddressPrimaryDoctor,
+                            City = clientViewModel.CityPrimaryDoctor,
+                            Email = clientViewModel.EmailPrimaryDoctor,
+                            State = clientViewModel.StatePrimaryDoctor,
+                            Telephone = clientViewModel.PhonePrimaryDoctor,
+                            ZipCode = clientViewModel.ZipCodePrimaryDoctor,
+                            FaxNumber = clientViewModel.FaxNumberPsychiatrists,
+                            CreatedBy = user_logged.Id,
+                            CreatedOn = DateTime.Today,
+                            LastModifiedBy = string.Empty,
+                            LastModifiedOn = new DateTime(),
+
+                        };
+                        clientEntity.Doctor = PrimaryDoctor;
+
+                    }
+                    else
+                    {
+                        clientEntity.Doctor = null;
+                    }
+                }
+
+                // _context.Add(clientEntity);
+
+                //-------Psychiatrists--------------------------//
+                if (clientViewModel.IdPsychiatrist == 0)
+                {
+                    if (clientViewModel.NamePsychiatrists != null && clientViewModel.NamePsychiatrists != string.Empty)
+                    {
+                        PsychiatristEntity Psychistrists = new PsychiatristEntity
+                        {
+                            Name = clientViewModel.NamePsychiatrists,
+                            Address = clientViewModel.AddressPsychiatrists,
+                            City = clientViewModel.CityPsychiatrists,
+                            Email = clientViewModel.EmailPsychiatrists,
+                            State = clientViewModel.StatePsychiatrists,
+                            Telephone = clientViewModel.PhonePsychiatrists,
+                            ZipCode = clientViewModel.ZipCodePsychiatrists,
+                            FaxNumber = clientViewModel.FaxNumberPsychiatrists,
+                            CreatedBy = user_logged.Id,
+                            CreatedOn = DateTime.Today,
+                            LastModifiedBy = string.Empty,
+                            LastModifiedOn = new DateTime(),
+
+                        };
+                        clientEntity.Psychiatrist = Psychistrists;
+
+                    }
+                    else
+                    {
+                        clientEntity.Psychiatrist = null;
+                    }
+                }
+
+                // _context.Add(clientEntity);
+
+
+                //-------Legal Guardian Contact--------------------------//
+                if (clientViewModel.IdLegalGuardian == 0)
+                {
+                    if (clientViewModel.NameLegalGuardian != null && clientViewModel.NameLegalGuardian != string.Empty)
+                    {
+                        LegalGuardianEntity legalGuardian = new LegalGuardianEntity
+                        {
+                            Name = clientViewModel.NameLegalGuardian,
+                            Address = clientViewModel.AddressLegalGuardian,
+                            AdressLine2 = clientViewModel.AddressLine2LegalGuardian,
+                            City = clientViewModel.CityLegalGuardian,
+                            Country = clientViewModel.CountryLegalGuardian,
+                            Email = clientViewModel.EmailLegalGuardian,
+                            State = clientViewModel.StateLegalGuardian,
+                            Telephone = clientViewModel.PhoneLegalGuardian,
+                            TelephoneSecondary = clientViewModel.PhoneSecundaryLegalGuardian,
+                            ZipCode = clientViewModel.ZipCodeLegalGuardian,
+                            CreatedBy = user_logged.Id,
+                            CreatedOn = DateTime.Today,
+                            LastModifiedBy = string.Empty,
+                            LastModifiedOn = new DateTime(),
+
+                        };
+                        clientEntity.LegalGuardian = legalGuardian;
+
+                    }
+                    else
+                    {
+                        clientEntity.LegalGuardian = null;
+                    }
+                }
+
+               // _context.Add(clientEntity);
+
 
                 //-------Emergency Contact--------------------------//
                 if (clientViewModel.IdEmergencyContact == 0)
@@ -351,7 +456,8 @@ namespace KyoS.Web.Controllers
                         Client = clientEntity,
                         Referred = await _context.Referreds.FirstOrDefaultAsync(d => d.Id == item.IdReferred),
                         Service = item.Service,
-                        ReferredNote = item.ReferredNote
+                        ReferredNote = item.ReferredNote,
+                        type = item.type
                     };
                     _context.Add(clientReferred);
                     _context.ReferredsTemp.Remove(item);
@@ -373,7 +479,8 @@ namespace KyoS.Web.Controllers
                         DurationTime = item.DurationTime,
                         MemberId = item.MemberId,
                         Units = item.Units,
-                        AuthorizationNumber = item.AuthorizationNumber
+                        AuthorizationNumber = item.AuthorizationNumber,
+                        Agency = item.Agency
                     };
                     _context.Add(clientHealthInsurance);
                     _context.HealthInsuranceTemp.Remove(item);
@@ -426,7 +533,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        [Authorize(Roles = "Manager, Supervisor, CaseManager")]
+        [Authorize(Roles = "Manager, CaseManager, Frontdesk")]
         public async Task<IActionResult> Edit(int? id, int origin = 0)
         {
             if (id == null)
@@ -482,7 +589,12 @@ namespace KyoS.Web.Controllers
             {
                 if (worday_clients.Where(n => n.Workday.Service == ServiceType.PSR).Count() > 0)
                 {
-                    clientViewModel.FacilitatorPSR = worday_clients.Where(n => n.Workday.Service == ServiceType.PSR).OrderByDescending(m => m.Workday.Date).FirstOrDefault().Facilitator.Name;
+                    FacilitatorEntity FacilitatorPSR = worday_clients.Where(n => n.Workday.Service == ServiceType.PSR).OrderByDescending(m => m.Workday.Date).FirstOrDefault().Facilitator;
+                    if (FacilitatorPSR != null)
+                    {
+                        clientViewModel.FacilitatorPSR = FacilitatorPSR.Name;
+                        clientViewModel.IdFacilitatorPSR = FacilitatorPSR.Id;
+                    }
                 }
             }
             else
@@ -494,7 +606,13 @@ namespace KyoS.Web.Controllers
             {
                 if (worday_clients.Where(n => n.Workday.Service == ServiceType.Group).Count() > 0)
                 {
-                    clientViewModel.FacilitatorGroup = worday_clients.Where(n => n.Workday.Service == ServiceType.Group).OrderByDescending(m => m.Workday.Date).FirstOrDefault().Facilitator.Name;
+
+                    FacilitatorEntity FacilitatorGroup = worday_clients.Where(n => n.Workday.Service == ServiceType.Group).OrderByDescending(m => m.Workday.Date).FirstOrDefault().Facilitator;
+                    if (FacilitatorGroup != null)
+                    {
+                        clientViewModel.FacilitatorGroup = FacilitatorGroup.Name;
+                        clientViewModel.IdFacilitatorGroup = FacilitatorGroup.Id;
+                    }
                 }
             }
             else
@@ -522,13 +640,17 @@ namespace KyoS.Web.Controllers
             //{
             //    clientEntity.EmergencyContact = new EmergencyContactEntity();
             //}
-
+            if (clientViewModel.IdTCMClient != 0)
+            {
+                clientViewModel.AdmisionDateTCM = _context.TCMClient.FirstOrDefault(n => n.Id == clientViewModel.IdTCMClient).DataOpen;
+            }
+           
             return View(clientViewModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Manager, Supervisor, CaseManager")]
+        [Authorize(Roles = "Manager, CaseManager, Frontdesk")]
         public async Task<IActionResult> Edit(int id, ClientViewModel clientViewModel)
         {
             if (id != clientViewModel.Id)
@@ -558,6 +680,115 @@ namespace KyoS.Web.Controllers
                 {
                     _context.Entry(clientEntity).Reference("Group").CurrentValue = null;
                     _context.Entry(clientEntity).Reference("Group").IsModified = true;
+                }
+
+                //-------Primary Doctor--------------------------//
+                if (clientViewModel.IdDoctor == 0)
+                {
+                    if (clientViewModel.NamePrimaryDoctor != null && clientViewModel.NamePrimaryDoctor != string.Empty)
+                    {
+                        DoctorEntity PrimaryDoctor = new DoctorEntity
+                        {
+                            Name = clientViewModel.NamePrimaryDoctor,
+                            Address = clientViewModel.AddressPrimaryDoctor,
+                            City = clientViewModel.CityPrimaryDoctor,
+                            Email = clientViewModel.EmailPrimaryDoctor,
+                            State = clientViewModel.StatePrimaryDoctor,
+                            Telephone = clientViewModel.PhonePrimaryDoctor,
+                            ZipCode = clientViewModel.ZipCodePrimaryDoctor,
+                            CreatedBy = user_logged.Id,
+                            CreatedOn = DateTime.Today,
+                            LastModifiedBy = string.Empty,
+                            LastModifiedOn = new DateTime(),
+
+                        };
+                        _context.Add(PrimaryDoctor);
+                        clientEntity.Doctor = PrimaryDoctor;
+
+                    }
+                    else
+                    {
+                        clientEntity.Doctor = null;
+                    }
+
+                }
+                else
+                {
+                    clientEntity.Doctor = _context.Doctors.FirstOrDefault(n => n.Id == clientViewModel.IdDoctor);
+                }
+
+                //-------Psychiatrists--------------------------//
+                if (clientViewModel.IdPsychiatrist == 0)
+                {
+                    if (clientViewModel.NamePsychiatrists != null && clientViewModel.NamePsychiatrists != string.Empty)
+                    {
+                        PsychiatristEntity Psychiatrists = new PsychiatristEntity
+                        {
+                            Name = clientViewModel.NamePsychiatrists,
+                            Address = clientViewModel.AddressPsychiatrists,
+                            City = clientViewModel.CityPsychiatrists,
+                            Email = clientViewModel.EmailPsychiatrists,
+                            State = clientViewModel.StatePsychiatrists,
+                            Telephone = clientViewModel.PhonePsychiatrists,
+                            ZipCode = clientViewModel.ZipCodePsychiatrists,
+                            FaxNumber = clientViewModel.FaxNumberPsychiatrists,
+                            CreatedBy = user_logged.Id,
+                            CreatedOn = DateTime.Today,
+                            LastModifiedBy = string.Empty,
+                            LastModifiedOn = new DateTime(),
+
+                        };
+                        _context.Add(Psychiatrists);
+                        clientEntity.Psychiatrist = Psychiatrists;
+
+                    }
+                    else
+                    {
+                        clientEntity.Psychiatrist = null;
+                    }
+
+                }
+                else
+                {
+                    clientEntity.Psychiatrist = _context.Psychiatrists.FirstOrDefault(n => n.Id == clientViewModel.IdPsychiatrist);
+                }
+
+                //-------Legal Guardian--------------------------//
+                if (clientViewModel.IdLegalGuardian == 0)
+                {
+                    if (clientViewModel.NameLegalGuardian != null && clientViewModel.NameLegalGuardian != string.Empty)
+                    {
+                        LegalGuardianEntity legalGuardianContact = new LegalGuardianEntity
+                        {
+                            Name = clientViewModel.NameLegalGuardian,
+                            Address = clientViewModel.AddressLegalGuardian,
+                            AdressLine2 = clientViewModel.AddressLine2LegalGuardian,
+                            City = clientViewModel.CityLegalGuardian,
+                            Country = clientViewModel.CountryLegalGuardian,
+                            Email = clientViewModel.EmailLegalGuardian,
+                            State = clientViewModel.StateLegalGuardian,
+                            Telephone = clientViewModel.PhoneLegalGuardian,
+                            TelephoneSecondary = clientViewModel.PhoneLegalGuardian,
+                            ZipCode = clientViewModel.ZipCodeLegalGuardian,
+                            CreatedBy = user_logged.Id,
+                            CreatedOn = DateTime.Today,
+                            LastModifiedBy = string.Empty,
+                            LastModifiedOn = new DateTime(),
+
+                        };
+                        _context.Add(legalGuardianContact);
+                        clientEntity.LegalGuardian = legalGuardianContact;
+
+                    }
+                    else
+                    {
+                        clientEntity.LegalGuardian = null;
+                    }
+
+                }
+                else
+                {
+                    clientEntity.LegalGuardian = _context.LegalGuardians.FirstOrDefault(n => n.Id == clientViewModel.IdLegalGuardian);
                 }
 
                 //-------Emergency Contact--------------------------//
@@ -595,30 +826,6 @@ namespace KyoS.Web.Controllers
                 }
                 else
                 {
-                    /*if (clientViewModel.NameEmergencyContact != string.Empty)
-                    {
-                        EmergencyContactEntity emergencyContact = new EmergencyContactEntity
-                        {
-                            Name = clientViewModel.NameEmergencyContact,
-                            Address = clientViewModel.AddressEmergencyContact,
-                            AdressLine2 = clientViewModel.AddressLine2EmergencyContact,
-                            City = clientViewModel.CityEmergencyContact,
-                            Country = clientViewModel.CountryEmergencyContact,
-                            Email = clientViewModel.EmailEmergencyContact,
-                            State = clientViewModel.StateEmergencyContact,
-                            Telephone = clientViewModel.PhoneEmergencyContact,
-                            TelephoneSecondary = clientViewModel.PhoneSecundaryEmergencyContact,
-                            ZipCode = clientViewModel.ZipCodeEmergencyContact,
-                            CreatedBy = user_logged.Id,
-                            CreatedOn = DateTime.Today,
-                            LastModifiedBy = string.Empty,
-                            LastModifiedOn = new DateTime(),
-
-                        };
-                        //_context.Update(emergencyContact);
-                        
-
-                    }*/
                     clientEntity.EmergencyContact = _context.EmergencyContacts.FirstOrDefault(n => n.Id == clientViewModel.IdEmergencyContact);
                 }
 
@@ -644,7 +851,7 @@ namespace KyoS.Web.Controllers
                         Principal = item.Principal
                     };
                     _context.Add(clientDiagnostic);
-                    _context.DiagnosticsTemp.Remove(item);
+                    //_context.DiagnosticsTemp.Remove(item);
                 }
 
                 //delete all client referred of this client
@@ -665,10 +872,11 @@ namespace KyoS.Web.Controllers
                         Client = clientEntity,
                         Referred = await _context.Referreds.FirstOrDefaultAsync(d => d.Id == item1.IdReferred),
                         Service = item1.Service,
-                        ReferredNote = item1.ReferredNote
+                        ReferredNote = item1.ReferredNote,
+                        type = item1.type
                     };
                     _context.Add(clientReferred);
-                    _context.ReferredsTemp.Remove(item1);
+                    //_context.ReferredsTemp.Remove(item1);
                 }
 
                 //delete all client Documents of this client
@@ -699,7 +907,7 @@ namespace KyoS.Web.Controllers
                         };
                         _context.Add(document);
                    // }                    
-                    _context.DocumentsTemp.Remove(item);
+                    //_context.DocumentsTemp.Remove(item);
                 }
 
                 //delete all client Health Insurance of this client
@@ -724,10 +932,11 @@ namespace KyoS.Web.Controllers
                         DurationTime = item.DurationTime,
                         MemberId = item.MemberId,
                         Units = item.Units,
-                        AuthorizationNumber = item.AuthorizationNumber
+                        AuthorizationNumber = item.AuthorizationNumber,
+                        Agency = item.Agency
                     };
                     _context.Add(clientHealthInsurance);
-                    _context.HealthInsuranceTemp.Remove(item);
+                    //_context.HealthInsuranceTemp.Remove(item);
                 }
 
                 try
@@ -761,7 +970,7 @@ namespace KyoS.Web.Controllers
             return View(clientViewModel);
         }
 
-        [Authorize(Roles = "Supervisor, Facilitator, Documents_Assistant, CaseManager")]
+        [Authorize(Roles = "Supervisor, Facilitator, Documents_Assistant, CaseManager, TCMSupervisor")]
         public async Task<IActionResult> Details(int? id, int origin = 0)
         {
             if (id == null)
@@ -847,11 +1056,18 @@ namespace KyoS.Web.Controllers
             {
                 clientEntity.EmergencyContact = new EmergencyContactEntity();
             }
-
+            if (clientViewModel.IdTCMClient != 0)
+            {
+                clientViewModel.AdmisionDateTCM = _context.TCMClient.FirstOrDefault(n => n.Id == clientViewModel.IdTCMClient).DataOpen;
+            }
+            else
+            {
+                clientViewModel.AdmisionDateTCM = _context.TCMClient.FirstOrDefault(n => n.Client.Id == clientViewModel.Id).DataOpen;
+            }
             return View(clientViewModel);
         }
 
-        [Authorize(Roles = "Supervisor, Manager, Facilitator, Documents_Assistant")]
+        [Authorize(Roles = "Supervisor, Manager, Facilitator, Documents_Assistant, Frontdesk")]
         public async Task<IActionResult> ClientsWithoutMTP()
         {
             UserEntity user_logged = await _context.Users
@@ -870,19 +1086,36 @@ namespace KyoS.Web.Controllers
                 ClinicEntity clinic = await _context.Clinics.FirstOrDefaultAsync(c => c.Id == user_logged.Clinic.Id);
                 if (clinic != null)
                 {
-                    return View(await _context.Clients
+                    if (User.IsInRole("Facilitator"))
+                    {
+                        FacilitatorEntity facilitator = await _context.Facilitators.FirstOrDefaultAsync(n => n.LinkedUser == user_logged.UserName);
+                        return View(await _context.Clients
                                               .Include(c => c.MTPs)
                                               .Where(c => (c.Clinic.Id == user_logged.Clinic.Id
                                                         && c.MTPs.Count == 0
-                                                        && c.OnlyTCM == false))
+                                                        && c.OnlyTCM == false
+                                                        && (c.IdFacilitatorPSR == facilitator.Id
+                                                         || c.IdFacilitatorGroup == facilitator.Id
+                                                         || c.IndividualTherapyFacilitator.Id == facilitator.Id)))
                                               .ToListAsync());
 
+                    }
+                    else
+                    {
+                        return View(await _context.Clients
+                                                  .Include(c => c.MTPs)
+                                                  .Where(c => (c.Clinic.Id == user_logged.Clinic.Id
+                                                            && c.MTPs.Count == 0
+                                                            && c.OnlyTCM == false))
+                                                  .ToListAsync());
+
+                    }
                 }
             }
             return RedirectToAction("NotAuthorized", "Account");
         }
 
-        [Authorize(Roles = "Manager, Supervisor")]
+        [Authorize(Roles = "Manager, Supervisor, Frontdesk")]
         public async Task<IActionResult> ClientsWithoutDOC()
         {
             if (User.IsInRole("Admin"))
@@ -918,7 +1151,7 @@ namespace KyoS.Web.Controllers
             }
         }
 
-        [Authorize(Roles = "Manager, Supervisor, CaseManager")]
+        [Authorize(Roles = "Manager, Supervisor, CaseManager, Frontdesk")]
         public IActionResult AddDiagnostic(int id = 0, int idClient = 0)
         {
             if (id == 0)
@@ -944,7 +1177,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Manager, Supervisor, CaseManager")]
+        [Authorize(Roles = "Manager, Supervisor, CaseManager, Frontdesk")]
         public async Task<IActionResult> AddDiagnostic(int id, DiagnosticTempViewModel diagnosticTempViewModel)
         {
             UserEntity user_logged = _context.Users
@@ -980,7 +1213,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "AddDiagnostic", model) });
         }
 
-        [Authorize(Roles = "Manager, Supervisor, CaseManager")]
+        [Authorize(Roles = "Manager, Supervisor, CaseManager, Frontdesk")]
         public IActionResult AddDocument(int id = 0, int idClient = 0)
         {
             if (id == 0)
@@ -1004,7 +1237,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Manager, Supervisor, CaseManager")]
+        [Authorize(Roles = "Manager, Supervisor, CaseManager, Frontdesk")]
         public async Task<IActionResult> AddDocument(int id, DocumentTempViewModel documentTempViewModel)
         {
             UserEntity user_logged = _context.Users
@@ -1046,7 +1279,7 @@ namespace KyoS.Web.Controllers
 
         }
 
-        [Authorize(Roles = "Manager, Supervisor, CaseManager")]
+        [Authorize(Roles = "Manager, Supervisor, CaseManager, Frontdesk")]
         public async Task<IActionResult> DeleteDiagnosticTemp(int? id)
         {
             UserEntity user_logged = _context.Users
@@ -1070,7 +1303,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDiagnostic", _context.DiagnosticsTemp.Where(d => d.UserName == user_logged.UserName && d.IdClient == diagnostic.IdClient).ToList()) });
         }
 
-        [Authorize(Roles = "Manager, Supervisor, CaseManager")]
+        [Authorize(Roles = "Manager, Supervisor, CaseManager, Frontdesk")]
         public async Task<IActionResult> DeleteDocumentTemp(int? id)
         {
             UserEntity user_logged = _context.Users
@@ -1099,7 +1332,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDocument", _context.DocumentsTemp.Where(d => d.UserName == user_logged.UserName && d.IdClient == documentTemp.IdClient).OrderByDescending(d => d.CreatedOn).ToList()) });
         }
 
-        [Authorize(Roles = "Manager, Supervisor, CaseManager")]
+        [Authorize(Roles = "Manager, Supervisor, CaseManager, Frontdesk")]
         public async Task<IActionResult> DeleteReferredTemp(int? id)
         {
             UserEntity user_logged = _context.Users
@@ -1123,7 +1356,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewReferred", _context.ReferredsTemp.Where(d => d.CreatedBy == user_logged.UserName && d.IdClient == referred.IdClient).ToList()) });
         }
 
-        [Authorize(Roles = "Manager, Supervisor, Facilitator")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Frontdesk, TCMSupervisor")]
         public async Task<IActionResult> OpenDocument(int id)
         {
             DocumentTempEntity document = await _context.DocumentsTemp
@@ -1136,7 +1369,7 @@ namespace KyoS.Web.Controllers
             return File(document.DocumentPath, mimeType);
         }
 
-        [Authorize(Roles = "Manager, Supervisor, CaseManager")]
+        [Authorize(Roles = "Manager, Supervisor, CaseManager, Frontdesk")]
         public void DeleteDiagnosticsTemp(ClientEntity client = null)
         {
             UserEntity user_logged = _context.Users.Include(u => u.Clinic)
@@ -1163,7 +1396,7 @@ namespace KyoS.Web.Controllers
             _context.SaveChanges();
         }
 
-        [Authorize(Roles = "Manager, Supervisor, CaseManager")]
+        [Authorize(Roles = "Manager, Supervisor, CaseManager, Frontdesk")]
         public void DeleteDocumentsTemp(ClientEntity client = null)
         {
             UserEntity user_logged = _context.Users.Include(u => u.Clinic)
@@ -1192,7 +1425,7 @@ namespace KyoS.Web.Controllers
             _context.SaveChanges();
         }
 
-        [Authorize(Roles = "Manager, Supervisor, CaseManager")]
+        [Authorize(Roles = "Manager, Supervisor, CaseManager, Frontdesk")]
         public void DeleteReferredsTemp(ClientEntity client = null)
         {
             UserEntity user_logged = _context.Users.Include(u => u.Clinic)
@@ -1218,7 +1451,7 @@ namespace KyoS.Web.Controllers
             _context.SaveChanges();
         }
 
-        [Authorize(Roles = "Manager, Supervisor, CaseManager")]
+        [Authorize(Roles = "Manager, Supervisor, CaseManager, Frontdesk")]
         public void SetDiagnosticsTemp(ClientEntity client)
         {
             IEnumerable<Client_Diagnostic> clientsDiagnostics = _context.Clients_Diagnostics
@@ -1246,7 +1479,7 @@ namespace KyoS.Web.Controllers
             }            
         }
 
-        [Authorize(Roles = "Manager, Supervisor, CaseManager")]
+        [Authorize(Roles = "Manager, Supervisor, CaseManager, Frontdesk")]
         public void SetDocumentsTemp(ClientEntity client)
         {
             IEnumerable<DocumentEntity> documents = _context.Documents                                                            
@@ -1275,7 +1508,7 @@ namespace KyoS.Web.Controllers
             }
         }
 
-        [Authorize(Roles = "Manager, Supervisor, CaseManager")]
+        [Authorize(Roles = "Manager, Supervisor, CaseManager, Frontdesk")]
         public void SetReferredsTemp(ClientEntity client)
         {
             List<Client_Referred> clientsReferreds = _context.Clients_Referreds
@@ -1300,7 +1533,8 @@ namespace KyoS.Web.Controllers
                         Telephone = item.Referred.Telephone,
                         IdReferred = item.Referred.Id,
                         CreatedBy = user_logged.UserName,
-                        IdClient = client.Id
+                        IdClient = client.Id,
+                        type = item.type
                     };
                     _context.Add(referred);
                 }
@@ -1308,7 +1542,7 @@ namespace KyoS.Web.Controllers
             }
         }
 
-        [Authorize(Roles = "Manager, Supervisor")]
+        [Authorize(Roles = "Manager, Supervisor, Frontdesk")]
         public async Task<IActionResult> DocumentForClient()
         {
             if (User.IsInRole("Admin"))
@@ -1362,7 +1596,7 @@ namespace KyoS.Web.Controllers
             }
         }
 
-        [Authorize(Roles = "Manager, Facilitator, Supervisor, Documents_Assistant")]
+        [Authorize(Roles = "Manager, Facilitator, Supervisor, Documents_Assistant, Frontdesk")]
         public async Task<IActionResult> AllDocuments()
         {
             UserEntity user_logged = _context.Users
@@ -1483,7 +1717,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("NotAuthorized", "Account");
         }
 
-        [Authorize(Roles = "Manager, Supervisor, CaseManager")]
+        [Authorize(Roles = "Manager, Supervisor, CaseManager, Frontdesk")]
         public IActionResult AddReferred(int id = 0, int idClient = 0)
         {
             if (id == 0)
@@ -1499,7 +1733,9 @@ namespace KyoS.Web.Controllers
                     ServiceAgency = _combosHelper.GetComboServiceAgency(),
                     CreatedBy = user_logged.UserName,
                     CreatedOn = DateTime.Now,
-                    IdClient = idClient
+                    IdClient = idClient,
+                    IdType = 0,
+                    Types = _combosHelper.GetComboTypeReferred(),
 
                 };
                 return View(model);
@@ -1513,7 +1749,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Manager, Supervisor, CaseManager")]
+        [Authorize(Roles = "Manager, Supervisor, CaseManager, Frontdesk")]
         public async Task<IActionResult> AddReferred(int id, ReferredTempViewModel referredTempViewModel)
         {
             UserEntity user_logged = _context.Users
@@ -1537,7 +1773,8 @@ namespace KyoS.Web.Controllers
                         IdReferred = referred.Id,
                         CreatedBy = referredTempViewModel.CreatedBy,
                         CreatedOn = referredTempViewModel.CreatedOn,
-                        IdClient = referredTempViewModel.IdClient
+                        IdClient = referredTempViewModel.IdClient,
+                        type = ReferredUtils.GetTypeReferredByIndex(referredTempViewModel.IdType)
 
                     };
                     _context.Add(referredTemp);
@@ -1555,7 +1792,8 @@ namespace KyoS.Web.Controllers
                 ServiceAgency = _combosHelper.GetComboServiceAgency(),
                 CreatedOn = referredTempViewModel.CreatedOn,
                 CreatedBy = referredTempViewModel.CreatedBy,
-                IdClient = referredTempViewModel.IdClient
+                IdClient = referredTempViewModel.IdClient,
+                type = referredTempViewModel.type
             };
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "AddReferred", model) });
         }        
@@ -1615,7 +1853,7 @@ namespace KyoS.Web.Controllers
             return Json(text);
         }
 
-        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant, Frontdesk")]
         public async Task<IActionResult> ClientHistory(int idClient = 0)
         {
             UserEntity user_logged = _context.Users
@@ -1636,7 +1874,8 @@ namespace KyoS.Web.Controllers
 
                                                 .Include(w => w.MTPs)
                                                 .ThenInclude(w => w.AdendumList)
-
+                                                .ThenInclude(w => w.Goals)
+                                               
                                                 .Include(w => w.Bio)
                                                 .Include(w => w.Brief)
                                                 .Include(w => w.FarsFormList)
@@ -1663,6 +1902,11 @@ namespace KyoS.Web.Controllers
                                                 .Include(w => w.Workdays_Clients)
                                                 .ThenInclude(w => w.GroupNote2)
 
+                                                .Include(w => w.Workdays_Clients)
+                                                .ThenInclude(w => w.Schedule)
+
+                                                .Include(w => w.IntakeMedicalHistory)
+
                                                 .FirstOrDefaultAsync(w => (w.Clinic.Id == user_logged.Clinic.Id
                                                    && w.Id == idClient));
 
@@ -1671,7 +1915,7 @@ namespace KyoS.Web.Controllers
             return View(client);
         }
 
-        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant, Frontdesk")]
         public async Task<IActionResult> ClientProblemList(int idClient = 0)
         {
             UserEntity user_logged = _context.Users
@@ -1720,6 +1964,10 @@ namespace KyoS.Web.Controllers
 
                                                 .Include(w => w.MTPs)
                                                 .ThenInclude(w => w.AdendumList)
+
+                                                .Include(w => w.IntakeMedicalHistory)
+                                                .Include(w => w.Doctor)
+                                                .Include(w => w.MedicationList)
 
                                                 .FirstOrDefaultAsync(w => (w.Clinic.Id == user_logged.Clinic.Id
                                                    && w.Id == idClient));
@@ -1845,6 +2093,38 @@ namespace KyoS.Web.Controllers
             problem.Add(tempProblem);
             tempProblem = new Problem();
 
+            //Medical History
+            if (client.IntakeMedicalHistory == null)
+            {
+                tempProblem.Name = "Medical History";
+                tempProblem.Description = "The client has no Medical History";
+                tempProblem.Active = 0;
+
+                problem.Add(tempProblem);
+                tempProblem = new Problem();
+            }
+            else
+            {
+                if (client.Doctor == null)
+                {
+                    tempProblem.Name = "Medical History";
+                    tempProblem.Description = "The client has no Doctor";
+                    tempProblem.Active = 1;
+
+                    problem.Add(tempProblem);
+                    tempProblem = new Problem();
+                }
+                if (client.MedicationList.Count() == 0)
+                {
+                    tempProblem.Name = "Medical History"; ;
+                    tempProblem.Description = "The client has no Medication list";
+                    tempProblem.Active = 1;
+
+                    problem.Add(tempProblem);
+                    tempProblem = new Problem();
+                }
+            }
+
             //FARS initial
             if (client.FarsFormList.Count() > 0 && client.Bio != null )
             {
@@ -1907,15 +2187,15 @@ namespace KyoS.Web.Controllers
                     
                     if (client.MTPs.ElementAtOrDefault(0).MtpReviewList.Count() > 0)
                     {
-                        if (client.MTPs.ElementAtOrDefault(0).AdmissionDateMTP.AddMonths(client.MTPs.ElementAtOrDefault(0).NumberOfMonths.Value + client.MTPs.ElementAtOrDefault(0).MtpReviewList.ElementAtOrDefault(0).MonthOfTreatment) > client.DateOfClose)
+                        if (client.MTPs.ElementAtOrDefault(0).DateOfUpdate > client.DateOfClose || client.MTPs.ElementAtOrDefault(0).MtpReviewList.ElementAtOrDefault(0).ReviewedOn > client.DateOfClose)
                         {
                             tempProblem.Name = "Date of Close";
-                            tempProblem.Description = "Date of close is out of term";
+                            tempProblem.Description = "Client ends therapy before expiration (MTPR)";
                             tempProblem.Active = 1;
                         }
                         else
                         {
-                            if (client.DateOfClose == null || client.DateOfClose == date)
+                            if (client.DateOfClose == date)
                             {
                                 tempProblem.Name = "Date of Close";
                                 tempProblem.Description = "Date of close is out of term";
@@ -1932,15 +2212,15 @@ namespace KyoS.Web.Controllers
                     }
                     else
                     {
-                        if (client.MTPs.ElementAtOrDefault(0).AdmissionDateMTP.AddMonths(client.MTPs.ElementAtOrDefault(0).NumberOfMonths.Value) > client.DateOfClose)
+                        if (client.MTPs.ElementAtOrDefault(0).DateOfUpdate > client.DateOfClose)
                         {
                             tempProblem.Name = "Date of Close";
-                            tempProblem.Description = "Date of close is out of term";
+                            tempProblem.Description = "Client ends therapy before expiration (MTP)";
                             tempProblem.Active = 1;
                         }
                         else
                         {
-                            if (client.DateOfClose == null || client.DateOfClose == date)
+                            if (client.DateOfClose == date)
                             {
                                 tempProblem.Name = "Date of Close";
                                 tempProblem.Description = "Date of close is out of term";
@@ -1959,6 +2239,78 @@ namespace KyoS.Web.Controllers
                 }
             }
             tempProblem = new Problem();
+
+            if (client.Bio != null)
+            {
+                if (client.Bio.Setting == string.Empty)
+                {
+                    tempProblem.Name = "BIO";
+                    tempProblem.Description = "Not exists setting in the BIO";
+                    tempProblem.Active = 1;
+                    problem.Add(tempProblem);
+                    tempProblem = new Problem();
+                }
+
+                if (client.MTPs.Count() > 0)
+                {
+                    foreach (var item in client.MTPs)
+                    {
+                        if (item.Setting == string.Empty)
+                        {
+                            tempProblem.Name = "MTP";
+                            tempProblem.Description = "Not exists setting in the MTP";
+                            tempProblem.Active = 1;
+                            problem.Add(tempProblem);
+                            tempProblem = new Problem();
+                        }
+                        if (item.Setting != client.Bio.Setting)
+                        {
+                            tempProblem.Name = "Setting";
+                            tempProblem.Description = "Review setting in the documents(BIO, MTP)";
+                            tempProblem.Active = 1;
+                            problem.Add(tempProblem);
+                            tempProblem = new Problem();
+                        }
+                    }
+                }
+            }
+            
+           
+
+            if (client.Brief != null)
+            {
+                if (client.Brief.Setting == string.Empty)
+                {
+                    tempProblem.Name = "Brief";
+                    tempProblem.Description = "Not exists setting in the Brief";
+                    tempProblem.Active = 1;
+                    problem.Add(tempProblem);
+                    tempProblem = new Problem();
+                }
+
+                if (client.MTPs.Count() > 0)
+                {
+                    foreach (var item in client.MTPs)
+                    {
+                        if (item.Setting == string.Empty)
+                        {
+                            tempProblem.Name = "MTP";
+                            tempProblem.Description = "Not exists setting in the MTP";
+                            tempProblem.Active = 1;
+                            problem.Add(tempProblem);
+                            tempProblem = new Problem();
+                        }
+                        if (item.Setting != client.Bio.Setting)
+                        {
+                            tempProblem.Name = "Setting";
+                            tempProblem.Description = "Review setting in the documents(Brief, MTP)";
+                            tempProblem.Active = 1;
+                            problem.Add(tempProblem);
+                            tempProblem = new Problem();
+                        }
+                    }
+                }
+            }
 
             //Discharge
             bool dischage_ind = false;
@@ -2171,17 +2523,20 @@ namespace KyoS.Web.Controllers
 
             }
 
-           
+
 
             if (client.MTPs.Sum(n => n.AdendumList.Count()) > client.FarsFormList.Where(n => n.Type == FARSType.Addendums).Count())
             {
                 int cant_Addendums = client.MTPs.Sum(n => n.AdendumList.Count()) - client.FarsFormList.Where(n => n.Type == FARSType.Addendums).Count();
                 tempProblem.Name = "FARS";
-                tempProblem.Description = "The amount of FARS does not match with Addendums (" + cant_Addendums +")";
-                tempProblem.Active = 1;
+                tempProblem.Description = "The amount of FARS does not match with Addendums (" + cant_Addendums + ")";
+                tempProblem.Active = 0;
                 problem.Add(tempProblem);
                 tempProblem = new Problem();
 
+            }
+            else
+            {
                 foreach (var item in client.MTPs)
                 {
                     foreach (var element in item.AdendumList)
@@ -2210,29 +2565,73 @@ namespace KyoS.Web.Controllers
                 }
             }
 
-            if (dischage_psr == true && fars_d_psr == false)
+            if (dischage_psr == true)
             {
-                tempProblem.Name = "FARS";
-                tempProblem.Description = "FARS with incompatible date (Discharge PSR)";
-                tempProblem.Active = 1;
-                problem.Add(tempProblem);
-                tempProblem = new Problem();
+                if (client.FarsFormList.Where(n => n.Type == FARSType.Discharge_PSR).Count() == 0)
+                {
+                    tempProblem.Name = "FARS";
+                    tempProblem.Description = "Client without FARS (Discharge PSR)";
+                    tempProblem.Active = 0;
+                    problem.Add(tempProblem);
+                    tempProblem = new Problem();
+                }
+                else
+                {
+                    if (dischage_psr == true && fars_d_psr == false)
+                    {
+                        tempProblem.Name = "FARS";
+                        tempProblem.Description = "FARS with incompatible date (Discharge PSR)";
+                        tempProblem.Active = 1;
+                        problem.Add(tempProblem);
+                        tempProblem = new Problem();
+                    }
+                }
             }
-            if (dischage_group == true && fars_d_group == false)
+
+            if (dischage_group == true)
             {
-                tempProblem.Name = "FARS";
-                tempProblem.Description = "FARS with incompatible date (Discharge Group)";
-                tempProblem.Active = 1;
-                problem.Add(tempProblem);
-                tempProblem = new Problem();
+                if (client.FarsFormList.Where(n => n.Type == FARSType.Discharge_Group).Count() == 0)
+                {
+                    tempProblem.Name = "FARS";
+                    tempProblem.Description = "Client without FARS (Discharge Group)";
+                    tempProblem.Active = 0;
+                    problem.Add(tempProblem);
+                    tempProblem = new Problem();
+                }
+                else
+                {
+                    if (dischage_group == true && fars_d_group == false)
+                    {
+                        tempProblem.Name = "FARS";
+                        tempProblem.Description = "FARS with incompatible date (Discharge Group)";
+                        tempProblem.Active = 1;
+                        problem.Add(tempProblem);
+                        tempProblem = new Problem();
+                    }
+                }
             }
-            if (dischage_ind == true && fars_d_ind == false)
+
+            if (dischage_ind == true)
             {
-                tempProblem.Name = "FARS";
-                tempProblem.Description = "FARS with incompatible date (Discharge Ind.)";
-                tempProblem.Active = 1;
-                problem.Add(tempProblem);
-                tempProblem = new Problem();
+                if (client.FarsFormList.Where(n => n.Type == FARSType.Discharge_Ind).Count() == 0)
+                {
+                    tempProblem.Name = "FARS";
+                    tempProblem.Description = "Client without FARS (Discharge Ind.)";
+                    tempProblem.Active = 0;
+                    problem.Add(tempProblem);
+                    tempProblem = new Problem();
+                }
+                else
+                {
+                    if (dischage_ind == true && fars_d_ind == false)
+                    {
+                        tempProblem.Name = "FARS";
+                        tempProblem.Description = "FARS with incompatible date (Discharge Ind.)";
+                        tempProblem.Active = 1;
+                        problem.Add(tempProblem);
+                        tempProblem = new Problem();
+                    }
+                }
             }
 
             if (farsEdition == true)
@@ -2480,7 +2879,7 @@ namespace KyoS.Web.Controllers
             return View(problem);
         }
 
-        [Authorize(Roles = "Manager, Supervisor")]
+        [Authorize(Roles = "Manager, Supervisor, Frontdesk")]
         public void DeleteHealthInsuranceTemp(ClientEntity client = null)
         {
             UserEntity user_logged = _context.Users.Include(u => u.Clinic)
@@ -2508,7 +2907,7 @@ namespace KyoS.Web.Controllers
             _context.SaveChanges();
         }
 
-        [Authorize(Roles = "Manager, Supervisor")]
+        [Authorize(Roles = "Manager, Supervisor, Frontdesk")]
         public void SetHealthInsuranceTemp(ClientEntity client)
         {
             IEnumerable<Client_HealthInsurance> clientsHealthinsurance = _context.Clients_HealthInsurances
@@ -2532,7 +2931,8 @@ namespace KyoS.Web.Controllers
                         Name = item.HealthInsurance.Name,
                         UserName = user_logged.UserName,
                         IdClient = client.Id,
-                        AuthorizationNumber = item.AuthorizationNumber
+                        AuthorizationNumber = item.AuthorizationNumber,
+                        Agency = item.Agency
 
                     };
                     _context.Add(healthInsuranceTemp);
@@ -2541,7 +2941,7 @@ namespace KyoS.Web.Controllers
             }
         }
 
-        [Authorize(Roles = "Manager, Supervisor, CaseManager")]
+        [Authorize(Roles = "Manager, Supervisor, CaseManager, Frontdesk")]
         public async Task<IActionResult> DeleteHealthInsurance_Temp(int? id)
         {
             UserEntity user_logged = _context.Users
@@ -2586,8 +2986,10 @@ namespace KyoS.Web.Controllers
                     MemberId = string.Empty,
                     Units = 0,
                     IdClient = idClient,
-                    AuthorizationNumber = string.Empty
-                };
+                    AuthorizationNumber = "Not Need",
+                    IdAgencyService = 0,
+                    AgencyServices = _combosHelper.GetComboServiceAgency()
+                 };
                 return View(entity);
             }
             else
@@ -2602,7 +3004,9 @@ namespace KyoS.Web.Controllers
                     MemberId = string.Empty,
                     Units = 0,
                     IdClient = idClient,
-                    AuthorizationNumber = string.Empty
+                    AuthorizationNumber = string.Empty,
+                    IdAgencyService = 0,
+                    AgencyServices = _combosHelper.GetComboServiceAgency()
                 };
                 return View(entity);
             }
@@ -2628,8 +3032,15 @@ namespace KyoS.Web.Controllers
 
                     foreach (var item in healthInsuranceTempList)
                     {
-                        item.Active = false;
-                        _context.Update(item);
+                        if (item.Agency == ServiceAgencyUtils.GetServiceAgencyByIndex(HealthInsuranceModel.IdAgencyService))
+                        {
+                            item.Active = false;
+                            _context.Update(item);
+                        }
+                        else
+                        {
+                            _context.Update(item);
+                        }
                     }
 
                     HealthInsuranceEntity healthInsurance = await _context.HealthInsurances.FirstOrDefaultAsync(n => n.Id == HealthInsuranceModel.IdhealthInsurance);
@@ -2644,12 +3055,13 @@ namespace KyoS.Web.Controllers
                         Units = HealthInsuranceModel.Units,
                         Name = healthInsurance.Name,
                         IdClient = HealthInsuranceModel.IdClient,
-                        AuthorizationNumber = HealthInsuranceModel.AuthorizationNumber
+                        AuthorizationNumber = HealthInsuranceModel.AuthorizationNumber,
+                        Agency = ServiceAgencyUtils.GetServiceAgencyByIndex(HealthInsuranceModel.IdAgencyService)
                     };
                     _context.Add(healthInsuranceTemp);
                     await _context.SaveChangesAsync();
 
-                    List<HealthInsuranceTempEntity> list = await _context.HealthInsuranceTemp.Where(n => n.IdClient == HealthInsuranceModel.IdClient)
+                    List<HealthInsuranceTempEntity> list = await _context.HealthInsuranceTemp.Where(n => n.IdClient == HealthInsuranceModel.IdClient && n.UserName == user_logged.UserName)
                                                                          .ToListAsync();
 
                     return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewHealthInsurance", list )});
@@ -2673,7 +3085,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "AddHealthInsuranceClient", model) });
         }
 
-        [Authorize(Roles = "Manager, Supervisor, Facilitator")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Frontdesk")]
         public IActionResult AuditClientNotUsed()
         {
             UserEntity user_logged = _context.Users
@@ -2784,7 +3196,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("ClientHistory","Clients", new { idClient = farsViewModel .IdClient});
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Frontdesk")]
         public IActionResult EXCELallClient()
         {
             UserEntity user_logged = _context.Users
@@ -2813,7 +3225,7 @@ namespace KyoS.Web.Controllers
             return File(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "ALL_CLIENTS.xlsx");
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Frontdesk")]
         public async Task<IActionResult> Signatures()
         {
             UserEntity user_logged = await _context.Users
@@ -2830,15 +3242,14 @@ namespace KyoS.Web.Controllers
             return View(await _context.Clients
 
                                       .Include(c => c.Clinic)
-                                      .Include(c => c.IndividualTherapyFacilitator)
                                       .Include(c => c.Clients_HealthInsurances)
                                         .ThenInclude(c => c.HealthInsurance)
-
+                                      .Include(c => c.LegalGuardian)
                                       .Where(c => c.Clinic.Id == user_logged.Clinic.Id)
                                       .OrderBy(c => c.Name).ToListAsync());       
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Frontdesk")]
         public async Task<IActionResult> EditSignature(int? id)
         {
             if (id == null)
@@ -2863,7 +3274,7 @@ namespace KyoS.Web.Controllers
             return View(clientViewModel);
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Frontdesk")]
         public async Task<JsonResult> SaveClientSignature(string id, string dataUrl)
         {
             string signPath = await _imageHelper.UploadSignatureAsync(dataUrl, "Clients"); 
@@ -2880,7 +3291,7 @@ namespace KyoS.Web.Controllers
             return Json(new { redirectToUrl = Url.Action("Signatures", "Clients") });
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Frontdesk")]
         public async Task<IActionResult> Documentation()
         {
             UserEntity user_logged = await _context.Users
@@ -2904,7 +3315,7 @@ namespace KyoS.Web.Controllers
                                       .OrderBy(c => c.Name).ToListAsync());                     
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Frontdesk")]
         public async Task<IActionResult> DownloadDocumentation(int id)
         {
             ClientEntity client = await _context.Clients
@@ -3419,7 +3830,7 @@ namespace KyoS.Web.Controllers
         //    return File(_fileHelper.Zip(fileContentList), "application/zip", $"{client.Name}_Notes.zip");
         //}
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Frontdesk")]
         public async Task<IActionResult> DownloadApprovedNotesSimultaneous(int id)
         {
             ClientEntity client = await _context.Clients
@@ -3522,35 +3933,35 @@ namespace KyoS.Web.Controllers
             {
                 workdayClientList = await db.Workdays_Clients
 
-                                                                   .Include(wc => wc.Facilitator)
+                                            .Include(wc => wc.Facilitator)
 
-                                                                   .Include(wc => wc.Client)
-                                                                        .ThenInclude(c => c.MTPs)
-                                                                            .ThenInclude(m => m.Goals)
-                                                                                .ThenInclude(g => g.Objetives)
+                                            .Include(wc => wc.Client)
+                                                .ThenInclude(c => c.MTPs)
+                                                    .ThenInclude(m => m.Goals)
+                                                        .ThenInclude(g => g.Objetives)
 
-                                                                   .Include(wc => wc.Client)
-                                                                        .ThenInclude(c => c.Clients_Diagnostics)
-                                                                            .ThenInclude(cd => cd.Diagnostic)
+                                            .Include(wc => wc.Client)
+                                                .ThenInclude(c => c.Clients_Diagnostics)
+                                                    .ThenInclude(cd => cd.Diagnostic)
 
-                                                                   .Include(wc => wc.Note)
-                                                                        .ThenInclude(n => n.Supervisor)
-                                                                            .ThenInclude(s => s.Clinic)
+                                            .Include(wc => wc.Note)
+                                                .ThenInclude(n => n.Supervisor)
+                                                    .ThenInclude(s => s.Clinic)
 
-                                                                   .Include(wc => wc.Note)
-                                                                        .ThenInclude(n => n.Notes_Activities)
-                                                                            .ThenInclude(na => na.Activity)
-                                                                                .ThenInclude(a => a.Theme)
+                                            .Include(wc => wc.Note)
+                                                .ThenInclude(n => n.Notes_Activities)
+                                                    .ThenInclude(na => na.Activity)
+                                                        .ThenInclude(a => a.Theme)
 
-                                                                   .Include(wc => wc.Note)
-                                                                        .ThenInclude(n => n.Notes_Activities)
-                                                                            .ThenInclude(na => na.Objetive)
-                                                                                .ThenInclude(o => o.Goal)
+                                            .Include(wc => wc.Note)
+                                                .ThenInclude(n => n.Notes_Activities)
+                                                    .ThenInclude(na => na.Objetive)
+                                                        .ThenInclude(o => o.Goal)
 
-                                                                   .Include(wc => wc.Workday)
+                                            .Include(wc => wc.Workday)
 
-                                                                   .Where(wc => (wc.Client.Id == idClient && (wc.Note != null && wc.Note.Status == NoteStatus.Approved)))
-                                                                   .ToListAsync();
+                                            .Where(wc => (wc.Client.Id == idClient && (wc.Note != null && wc.Note.Status == NoteStatus.Approved)))
+                                            .ToListAsync();
             }            
 
             List<FileContentResult> fileContentList = new List<FileContentResult>();
@@ -3586,30 +3997,32 @@ namespace KyoS.Web.Controllers
             {
                 workdayClientList = await db.Workdays_Clients
 
-                                                                   .Include(wc => wc.Facilitator)
+                                            .Include(wc => wc.Facilitator)
 
-                                                                   .Include(wc => wc.Client)
+                                            .Include(wc => wc.Client)
+                                                .ThenInclude(c => c.Clients_Diagnostics)
+                                                    .ThenInclude(cd => cd.Diagnostic)
 
-                                                                   .Include(wc => wc.NoteP)
-                                                                    .ThenInclude(n => n.Supervisor)
-                                                                        .ThenInclude(s => s.Clinic)
+                                            .Include(wc => wc.NoteP)
+                                            .ThenInclude(n => n.Supervisor)
+                                                .ThenInclude(s => s.Clinic)
 
-                                                                   .Include(wc => wc.NoteP)
-                                                                    .ThenInclude(n => n.NotesP_Activities)
-                                                                        .ThenInclude(na => na.Activity)
-                                                                            .ThenInclude(a => a.Theme)
+                                            .Include(wc => wc.NoteP)
+                                            .ThenInclude(n => n.NotesP_Activities)
+                                                .ThenInclude(na => na.Activity)
+                                                    .ThenInclude(a => a.Theme)
 
-                                                                   .Include(wc => wc.NoteP)
-                                                                    .ThenInclude(n => n.NotesP_Activities)
-                                                                        .ThenInclude(na => na.Objetive)
-                                                                            .ThenInclude(o => o.Goal)
+                                            .Include(wc => wc.NoteP)
+                                            .ThenInclude(n => n.NotesP_Activities)
+                                                .ThenInclude(na => na.Objetive)
+                                                    .ThenInclude(o => o.Goal)
 
-                                                                   .Include(wc => wc.Workday)
-                                                                    .ThenInclude(w => w.Workdays_Activities_Facilitators)
-                                                                        .ThenInclude(waf => waf.Facilitator)
+                                            .Include(wc => wc.Workday)
+                                            .ThenInclude(w => w.Workdays_Activities_Facilitators)
+                                                .ThenInclude(waf => waf.Facilitator)                                                                    
 
-                                                                   .Where(wc => (wc.Client.Id == idClient && (wc.NoteP != null && wc.NoteP.Status == NoteStatus.Approved)))
-                                                                   .ToListAsync();
+                                            .Where(wc => (wc.Client.Id == idClient && (wc.NoteP != null && wc.NoteP.Status == NoteStatus.Approved)))
+                                            .ToListAsync();
             }
             
             List<FileContentResult> fileContentList = new List<FileContentResult>();
@@ -3661,31 +4074,31 @@ namespace KyoS.Web.Controllers
             {
                 workdayClientList = await db.Workdays_Clients
 
-                                                                   .Include(wc => wc.Facilitator)
+                                            .Include(wc => wc.Facilitator)
 
-                                                                   .Include(wc => wc.Client)
-                                                                      .ThenInclude(c => c.MTPs)
-                                                                          .ThenInclude(m => m.Goals)
-                                                                              .ThenInclude(g => g.Objetives)
+                                            .Include(wc => wc.Client)
+                                                .ThenInclude(c => c.MTPs)
+                                                    .ThenInclude(m => m.Goals)
+                                                        .ThenInclude(g => g.Objetives)
 
-                                                                   .Include(wc => wc.GroupNote)
-                                                                      .ThenInclude(n => n.Supervisor)
-                                                                          .ThenInclude(s => s.Clinic)
+                                            .Include(wc => wc.GroupNote)
+                                                .ThenInclude(n => n.Supervisor)
+                                                    .ThenInclude(s => s.Clinic)
 
-                                                                   .Include(wc => wc.GroupNote)
-                                                                      .ThenInclude(n => n.GroupNotes_Activities)
-                                                                          .ThenInclude(na => na.Activity)
-                                                                              .ThenInclude(a => a.Theme)
+                                            .Include(wc => wc.GroupNote)
+                                                .ThenInclude(n => n.GroupNotes_Activities)
+                                                    .ThenInclude(na => na.Activity)
+                                                        .ThenInclude(a => a.Theme)
 
-                                                                   .Include(wc => wc.GroupNote)
-                                                                      .ThenInclude(n => n.GroupNotes_Activities)
-                                                                          .ThenInclude(na => na.Objetive)
-                                                                              .ThenInclude(o => o.Goal)
+                                            .Include(wc => wc.GroupNote)
+                                                .ThenInclude(n => n.GroupNotes_Activities)
+                                                    .ThenInclude(na => na.Objetive)
+                                                        .ThenInclude(o => o.Goal)
 
-                                                                   .Include(wc => wc.Workday)
+                                            .Include(wc => wc.Workday)
 
-                                                                   .Where(wc => (wc.Client.Id == idClient && (wc.GroupNote != null && wc.GroupNote.Status == NoteStatus.Approved)))
-                                                                   .ToListAsync();
+                                            .Where(wc => (wc.Client.Id == idClient && (wc.GroupNote != null && wc.GroupNote.Status == NoteStatus.Approved)))
+                                            .ToListAsync();
             }
             
             List<FileContentResult> fileContentList = new List<FileContentResult>();
@@ -3714,33 +4127,37 @@ namespace KyoS.Web.Controllers
             {
                 workdayClientList = await db.Workdays_Clients
 
-                                                                   .Include(wc => wc.Facilitator)
+                                            .Include(wc => wc.Facilitator)
 
-                                                                   .Include(wc => wc.Client)
-                                                                    .ThenInclude(c => c.MTPs)
-                                                                        .ThenInclude(m => m.Goals)
-                                                                            .ThenInclude(g => g.Objetives)
+                                            .Include(wc => wc.Client)
+                                            .ThenInclude(c => c.MTPs)
+                                                .ThenInclude(m => m.Goals)
+                                                    .ThenInclude(g => g.Objetives)
 
-                                                                   .Include(wc => wc.GroupNote2)
-                                                                    .ThenInclude(n => n.Supervisor)
-                                                                        .ThenInclude(s => s.Clinic)
+                                            .Include(wc => wc.GroupNote2)
+                                            .ThenInclude(n => n.Supervisor)
+                                                .ThenInclude(s => s.Clinic)
 
-                                                                   .Include(wc => wc.GroupNote2)
-                                                                    .ThenInclude(n => n.GroupNotes2_Activities)
-                                                                        .ThenInclude(na => na.Activity)
-                                                                            .ThenInclude(a => a.Theme)
+                                            .Include(wc => wc.GroupNote2)
+                                            .ThenInclude(n => n.GroupNotes2_Activities)
+                                                .ThenInclude(na => na.Activity)
+                                                    .ThenInclude(a => a.Theme)
 
-                                                                   .Include(wc => wc.GroupNote2)
-                                                                    .ThenInclude(n => n.GroupNotes2_Activities)
-                                                                        .ThenInclude(na => na.Objetive)
-                                                                            .ThenInclude(o => o.Goal)
+                                            .Include(wc => wc.GroupNote2)
+                                            .ThenInclude(n => n.GroupNotes2_Activities)
+                                                .ThenInclude(na => na.Objetive)
+                                                    .ThenInclude(o => o.Goal)
 
-                                                                   .Include(wc => wc.Workday)
+                                            .Include(wc => wc.Workday)
 
-                                                                   .Include(wc => wc.Schedule)
+                                            .Include(wc => wc.Schedule)
 
-                                                                   .Where(wc => (wc.Client.Id == idClient && (wc.GroupNote2 != null && wc.GroupNote2.Status == NoteStatus.Approved)))
-                                                                   .ToListAsync();
+                                            .Include(wc => wc.Client)
+                                            .ThenInclude(c => c.Clients_Diagnostics)
+                                                .ThenInclude(cd => cd.Diagnostic)
+
+                                            .Where(wc => (wc.Client.Id == idClient && (wc.GroupNote2 != null && wc.GroupNote2.Status == NoteStatus.Approved)))
+                                            .ToListAsync();
             }
             
             List<FileContentResult> fileContentList = new List<FileContentResult>();
@@ -3769,37 +4186,34 @@ namespace KyoS.Web.Controllers
             {
                 workdayClientList = await db.Workdays_Clients
 
-                                                                   .Include(wc => wc.Facilitator)
+                                            .Include(wc => wc.Facilitator)
 
-                                                                   .Include(wc => wc.Client)
-                                                                    .ThenInclude(c => c.MTPs)
-                                                                        .ThenInclude(m => m.Goals)
-                                                                            .ThenInclude(g => g.Objetives)
+                                            .Include(wc => wc.Client)
+                                            .ThenInclude(c => c.MTPs)
+                                                .ThenInclude(m => m.Goals)
+                                                    .ThenInclude(g => g.Objetives)
 
-                                                                   .Include(wc => wc.Client)
-                                                                    .ThenInclude(c => c.Clients_Diagnostics)
-                                                                        .ThenInclude(cd => cd.Diagnostic)
+                                            .Include(wc => wc.Client)
+                                            .ThenInclude(c => c.Clients_Diagnostics)
+                                                .ThenInclude(cd => cd.Diagnostic)
 
-                                                                   .Include(wc => wc.IndividualNote)
-                                                                    .ThenInclude(n => n.Supervisor)
-                                                                        .ThenInclude(s => s.Clinic)
+                                            .Include(wc => wc.IndividualNote)
+                                            .ThenInclude(n => n.Supervisor)
+                                                .ThenInclude(s => s.Clinic)
 
-                                                                   .Include(wc => wc.IndividualNote)
-                                                                    .ThenInclude(n => n.Objective)
+                                            .Include(wc => wc.IndividualNote)
+                                            .ThenInclude(n => n.Objective)
 
-                                                                   .Include(wc => wc.Workday)
+                                            .Include(wc => wc.Workday)
 
-                                                                   .Where(wc => (wc.Client.Id == idClient && (wc.IndividualNote != null && wc.IndividualNote.Status == NoteStatus.Approved)))
-                                                                   .ToListAsync();
+                                            .Where(wc => (wc.Client.Id == idClient && (wc.IndividualNote != null && wc.IndividualNote.Status == NoteStatus.Approved)))
+                                            .ToListAsync();
             }
             
             List<FileContentResult> fileContentList = new List<FileContentResult>();
             Stream stream = null;
             foreach (var workdayClient in workdayClientList)
             {
-                if (workdayClient.IndividualNote.Supervisor.Clinic.Name == "DAVILA")
-                    stream = _reportHelper.DavilaIndNoteReportSchema1(workdayClient);
-
                 if (workdayClient.IndividualNote.Supervisor.Clinic.Name == "FLORIDA SOCIAL HEALTH SOLUTIONS")
                     stream = _reportHelper.FloridaSocialHSIndNoteReportSchema1(workdayClient);
 
@@ -4650,7 +5064,9 @@ namespace KyoS.Web.Controllers
                     Id = id,
                     Name = healthInsuranceTempEntity.Name,
                     Active = healthInsuranceTempEntity.Active,
-                    UserName = user_logged.UserName
+                    UserName = user_logged.UserName,
+                    IdAgencyService = (healthInsuranceTempEntity.Agency == ServiceAgency.CMH)? 0 : 1,
+                    AgencyServices = _combosHelper.GetComboServiceAgency()
                 };
                 return View(entity);
             }
@@ -4682,7 +5098,8 @@ namespace KyoS.Web.Controllers
                         Units = HealthInsuranceModel.Units,
                         Name = HealthInsuranceModel.Name,
                         IdClient = HealthInsuranceModel.IdClient,
-                        AuthorizationNumber = HealthInsuranceModel.AuthorizationNumber
+                        AuthorizationNumber = HealthInsuranceModel.AuthorizationNumber,
+                        Agency = ServiceAgencyUtils.GetServiceAgencyByIndex(HealthInsuranceModel.IdAgencyService)
                     };
                     _context.Update(healthInsuranceTemp);
                     await _context.SaveChangesAsync();
@@ -4702,7 +5119,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditHealthInsuranceClient", HealthInsuranceModel) });
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Frontdesk")]
         public IActionResult DeleteHealthInsuranceTempModal(int id = 0)
         {
             if (id > 0)
@@ -4728,7 +5145,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Frontdesk")]
         public async Task<IActionResult> DeleteHealthInsuranceTempModal(DeleteViewModel HealthInsuranceModel)
         {
             if (ModelState.IsValid)
@@ -4763,7 +5180,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditHealthInsuranceClient", HealthInsuranceModel) });
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Frontdesk")]
         public async Task<IActionResult> AuthorizationClients(int idError = 0)
         {
             UserEntity user_logged = await _context.Users
@@ -4849,7 +5266,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("NotAuthorized", "Account");
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Frontdesk")]
         public async Task<IActionResult> BirthDayClients(int month = 0)
         {
             UserEntity user_logged = await _context.Users
@@ -4892,8 +5309,8 @@ namespace KyoS.Web.Controllers
                                           .ToListAsync());
         }
 
-        [Authorize(Roles = "Manager, Supervisor, Facilitator")]
-        public async Task<IActionResult> ActiveClients()
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Frontdesk, Documents_Assistant")]
+        public async Task<IActionResult> ActiveClients(int warning = 0)
         {
             UserEntity user_logged = await _context.Users
 
@@ -4935,6 +5352,18 @@ namespace KyoS.Web.Controllers
                                                     || c.IndividualTherapyFacilitator.Id == facilitator.Id
                                                     || c.IdFacilitatorPSR == facilitator.Id
                                                     || c.IdFacilitatorGroup == facilitator.Id))
+                                        .ToListAsync();
+
+            }
+
+            if (User.IsInRole("Documents_Assistant"))
+            {
+                clients = await _context.Clients
+                                        .Include(n => n.Clients_HealthInsurances)
+                                        .ThenInclude(n => n.HealthInsurance)
+                                        .Include(n => n.IndividualTherapyFacilitator)
+                                        .Where(c => c.Status == StatusType.Open
+                                                 && c.Clinic.Id == user_logged.Clinic.Id)
                                         .ToListAsync();
 
             }
@@ -5034,9 +5463,29 @@ namespace KyoS.Web.Controllers
                         temp.DocumentTypeInd = "N_Doc";
                     }
 
-                   
 
-                    salida.Add(temp);
+                    if (warning == 1)
+                    {
+                        if ((temp.Days < 15 && temp.Days > 0) || (temp.DaysInd < 15 && temp.DaysInd > 0))
+                        {
+                            salida.Add(temp);
+                        }
+                       
+                    }
+                    else
+                    {
+                        if (warning == 2)
+                        {
+                            if ((temp.Days <= 0 && temp.Days != -1000) || (temp.DaysInd <= 0 && temp.DaysInd != -1000))
+                            {
+                                salida.Add(temp);
+                            }
+                        }
+                        else
+                        {
+                            salida.Add(temp);
+                        }
+                    }
                     temp = new ClientActivedViewModel();
                     objectives = new List<ObjetiveEntity>();
                     objective = new ObjetiveEntity();
@@ -5047,31 +5496,381 @@ namespace KyoS.Web.Controllers
                 }
                else
                 {
-                    temp.Days = -1000;
-                    temp.Name = item.Name;
-                    temp.Clients_HealthInsurances = item.Clients_HealthInsurances;
-                    temp.Service = item.Service;
-                    temp.IndividualTherapyFacilitator = item.IndividualTherapyFacilitator;
-                    temp.AdmisionDate = item.AdmisionDate;
-                    temp.Code = item.Code;
-                    temp.Gender = item.Gender;
-                    temp.DocumentType = "N_Doc";
-                    temp.MtpId = 0;
-                    temp.DaysInd = -1000;
-                    temp.DocumentTypeInd = "N_Doc";
+                    if (warning == 0)
+                    {
+                        temp.Days = -1000;
+                        temp.Name = item.Name;
+                        temp.Clients_HealthInsurances = item.Clients_HealthInsurances;
+                        temp.Service = item.Service;
+                        temp.IndividualTherapyFacilitator = item.IndividualTherapyFacilitator;
+                        temp.AdmisionDate = item.AdmisionDate;
+                        temp.Code = item.Code;
+                        temp.Gender = item.Gender;
+                        temp.DocumentType = "N_Doc";
+                        temp.MtpId = 0;
+                        temp.DaysInd = -1000;
+                        temp.DocumentTypeInd = "N_Doc";
 
-                    salida.Add(temp);
-                    temp = new ClientActivedViewModel();
-                    objectives = new List<ObjetiveEntity>();
-                    objective = new ObjetiveEntity();
-                    date = new DateTime();
-                    objectivesInd = new List<ObjetiveEntity>();
-                    objectiveInd = new ObjetiveEntity();
-                    dateInd = new DateTime();
+                        salida.Add(temp);
+                        temp = new ClientActivedViewModel();
+                        objectives = new List<ObjetiveEntity>();
+                        objective = new ObjetiveEntity();
+                        date = new DateTime();
+                        objectivesInd = new List<ObjetiveEntity>();
+                        objectiveInd = new ObjetiveEntity();
+                        dateInd = new DateTime();
+                    }
+                    
                 }
             }
 
             return View(salida);
         }
+
+        [Authorize(Roles = "Manager, Frontdesk")]
+        public async Task<IActionResult> EditSignatureLegalGuardian(int? id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            LegalGuardianEntity legalGuardian = await _context.LegalGuardians
+                                                              .FirstOrDefaultAsync(c => c.Id == id);
+
+            if (legalGuardian == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            LegalGuardianViewModel LegalViewModel = _converterHelper.ToLegalGuardianViewModel(legalGuardian);
+
+            return View(LegalViewModel);
+        }
+
+        [Authorize(Roles = "Manager, Frontdesk")]
+        public async Task<JsonResult> SaveSignatureLegalGuardian(string id, string dataUrl)
+        {
+            string signPath = await _imageHelper.UploadSignatureAsync(dataUrl, "LegalGuardian");
+
+            LegalGuardianEntity legalGuardian = await _context.LegalGuardians
+                                                              .FirstOrDefaultAsync(c => c.Id == Convert.ToInt32(id));
+            if (legalGuardian != null)
+            {
+                legalGuardian.SignPath = signPath;
+                _context.Update(legalGuardian);
+                await _context.SaveChangesAsync();
+            }
+
+            return Json(new { redirectToUrl = Url.Action("Signatures", "Clients") });
+        }
+
+        [Authorize(Roles = "Supervisor, Facilitator")]
+        public async Task<IActionResult> ReferralAccept(int? id)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            if (User.IsInRole("Supervisor"))
+            {
+                ReferralFormEntity Referral = await _context.ReferralForms
+                                                            .Include(g => g.Client)
+                                                            .Include(g => g.Facilitator)
+                                                            .Include(g => g.Supervisor)
+                                                            .FirstOrDefaultAsync(g => g.Id == id
+                                                                                   && g.Supervisor.LinkedUser == user_logged.UserName);
+                if (Referral == null)
+                {
+                    return RedirectToAction("Home/Error404");
+                }
+
+                ReferralFormViewModel ReferralViewModel = _converterHelper.ToReferralViewModel(Referral);
+                return View(ReferralViewModel);
+            }
+            if (User.IsInRole("Facilitator"))
+            {
+                ReferralFormEntity Referral = await _context.ReferralForms
+                                                            .Include(g => g.Client)
+                                                            .FirstOrDefaultAsync(g => g.Id == id
+                                                                                   && g.Facilitator.LinkedUser == user_logged.UserName);
+                if (Referral == null)
+                {
+                    return RedirectToAction("Home/Error404");
+                }
+
+                ReferralFormViewModel ReferralViewModel = _converterHelper.ToReferralViewModel(Referral);
+                return View(ReferralViewModel);
+            }
+            if (User.IsInRole("Manager"))
+            {
+                ReferralFormEntity Referral = await _context.ReferralForms
+                                                            .Include(g => g.Client)
+                                                            .FirstOrDefaultAsync(g => g.Id == id);
+                if (Referral == null)
+                {
+                    return RedirectToAction("Home/Error404");
+                }
+
+                ReferralFormViewModel ReferralViewModel = _converterHelper.ToReferralViewModel(Referral);
+                return View(ReferralViewModel);
+            }
+            return RedirectToAction("NotAuthorized", "Account");
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Supervisor, Facilitator")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ReferralAccept(ReferralFormViewModel model)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(u => u.Setting)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            ReferralFormEntity Referral = _context.ReferralForms.FirstOrDefault(n => n.Id == model.Id);
+            if (User.IsInRole("Facilitator"))
+            {
+                Referral.FacilitatorSign = true;
+                Referral.CaseAcceptedFacilitator = model.CaseAcceptedFacilitator;
+                _context.ReferralForms.Update(Referral);
+            }
+            if (User.IsInRole("Supervisor"))
+            {
+                Referral.SupervisorSign = true;
+                Referral.CaseAcceptedSupervisor = model.CaseAcceptedSupervisor;
+                _context.ReferralForms.Update(Referral);
+            }
+            try
+            {
+                await _context.SaveChangesAsync();
+                return RedirectToAction("ReferralPending", "Clients");
+
+            }
+            catch (System.Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+            }
+
+            return View(model);
+        }
+
+        [Authorize(Roles = "Manager, Frontdesk")]
+        public IActionResult CreateReferralForm(int idClient = 0)
+        {
+            ClientEntity client = _context.Clients
+                                          .Include(d => d.Clients_Diagnostics)
+                                          .ThenInclude(d => d.Diagnostic)
+                                          .Include(d => d.LegalGuardian)
+                                          .Include(d => d.Client_Referred)
+                                          .ThenInclude(d => d.Referred)
+                                          .Include(d => d.Clients_HealthInsurances)
+                                          .ThenInclude(d => d.HealthInsurance)
+
+                                          .FirstOrDefault(n => n.Id == idClient);
+
+            ReferralFormViewModel salida;
+
+            Client_Diagnostic client_Diagnostic = new Client_Diagnostic();
+            if (client.Clients_Diagnostics != null)
+            {
+                client_Diagnostic = client.Clients_Diagnostics
+                                          .FirstOrDefault(n => n.Principal == true);
+            }
+
+            ReferredEntity Referred = new ReferredEntity();
+            if (client.Client_Referred.Count() > 0)
+            {
+                Referred = client.Client_Referred
+                                 .FirstOrDefault(n => n.Service == ServiceAgency.TCM)
+                                 .Referred;
+            }
+
+            Client_HealthInsurance Client_HealtInsurance = new Client_HealthInsurance();
+            if (client.Clients_HealthInsurances.Count() > 0)
+            {
+                Client_HealtInsurance = client.Clients_HealthInsurances
+                                              .FirstOrDefault(n => n.Active == true
+                                                                && n.Agency == ServiceAgency.TCM);
+            }
+
+            LegalGuardianEntity legalGuardian = new LegalGuardianEntity();
+            if (client.LegalGuardian != null)
+            {
+                legalGuardian = client.LegalGuardian;
+            }
+
+            if (User.IsInRole("Manager") || User.IsInRole("Frontdesk"))
+            {
+                UserEntity user_logged = _context.Users
+                                                 .Include(u => u.Clinic)
+                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+                if (user_logged.Clinic != null)
+                {
+                    salida = new ReferralFormViewModel
+                    {
+                        //Client
+                        Address = client.FullAddress,
+                        SecondaryPhone = client.TelephoneSecondary,
+                        SSN = client.SSN,
+                        DateOfBirth = client.DateOfBirth,
+                        MedicaidId = client.MedicaidID,
+                        Gender = (client.Gender == GenderType.Female) ? "Female" : "Male",
+                        HMO = string.Empty,
+                        PrimaryPhone = client.Telephone,
+                        //audit
+                        CreatedBy = user_logged.UserName,
+                        CreatedOn = DateTime.Now,
+                        //tcmClient
+                        CaseNumber = client.Code,
+                        NameClient = client.Name,
+                        //Referred
+                        //AssignedTo = .Name,
+                        CaseAcceptedFacilitator = false,
+                        CaseAcceptedSupervisor = false,
+                        Comments = string.Empty,
+                        DateAssigned = client.AdmisionDate,
+                        FacilitatorSign = false,
+                        SupervisorSign = false,
+                        //NameSupervisor = client.Casemanager.TCMSupervisor.Name,
+                        Program = "Mental Health Targeted Case Management",
+                        //Health Insurance
+                        AuthorizedDate = Client_HealtInsurance != null ? Client_HealtInsurance.ApprovedDate : new DateTime(),
+                        ExperatedDate = Client_HealtInsurance != null ? Client_HealtInsurance.ApprovedDate.AddMonths(Client_HealtInsurance.DurationTime) : new DateTime(),
+                        UnitsApproved = Client_HealtInsurance != null ? Client_HealtInsurance.Units : 0,
+                        //Legal Guardian
+                        LegalGuardianName = legalGuardian.Name,
+                        LegalGuardianPhone = legalGuardian.Telephone,
+                        //Diagnostic
+                        Dx = client_Diagnostic.Diagnostic.Code,
+                        Dx_Description = client_Diagnostic.Diagnostic.Description,
+                        //Referred
+                        ReferredBy_Name = Referred.Name,
+                        ReferredBy_Phone = Referred.Telephone,
+                        ReferredBy_Title = Referred.Title,
+                        Client = client,
+                        IdClient = client.Id,
+                        FacilitatorList = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id, false,false),
+                        SupervisorList = _combosHelper.GetComboSupervisorByClinic(user_logged.Clinic.Id, true),
+                        AssignedBy = user_logged.FullName
+                    };
+
+                    return View(salida);
+                }
+            }
+
+            return RedirectToAction("NotAuthorized", "Account");
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Manager, Frontdesk")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateReferralForm(ReferralFormViewModel model)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(u => u.Setting)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+            if (User.IsInRole("Manager") || User.IsInRole("Frontdesk"))
+            {
+                if (ModelState.IsValid)
+                {
+                    ReferralFormEntity Referral = _converterHelper.ToReferralEntity(model, true, user_logged.UserName);
+                    _context.Add(Referral);
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+                        return RedirectToAction("Index", "Clients");
+                    }
+                    catch (System.Exception ex)
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+
+
+                }
+                else
+                {
+                    return View(model);
+                }
+            }
+            else
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+            return View(model);
+        }
+
+        [Authorize(Roles = "Manager, Frontdesk")]
+        public IActionResult ReferralFormReadOnly(int idReferral = 0)
+        {
+            ReferralFormEntity referral = _context.ReferralForms
+                                                  .Include(d => d.Facilitator)
+                                                  .Include(d => d.Supervisor)
+                                                  .Include(d => d.Client)
+                                                  .FirstOrDefault(n => n.Id == idReferral);
+            if (referral != null)
+            {
+                ReferralFormViewModel salida = _converterHelper.ToReferralViewModel(referral);
+                return View(salida);
+
+            }
+
+
+            return RedirectToAction("NotAuthorized", "Account");
+        }
+
+        [Authorize(Roles = "Supervisor, Facilitator")]
+        public async Task<IActionResult> ReferralPending(int idError = 0)
+        {
+            UserEntity user_logged = await _context.Users
+                                                   .Include(u => u.Clinic)
+                                                   .ThenInclude(c => c.Setting)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || (!user_logged.Clinic.Setting.MentalHealthClinic && !user_logged.Clinic.Setting.TCMClinic))
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+            if (idError == 1) //Imposible to delete
+            {
+                ViewBag.Delete = "N";
+            }
+            if (User.IsInRole("Supervisor"))
+            {
+                return View(await _context.ReferralForms
+                                          .Include(c => c.Facilitator)
+                                          .Include(c => c.Supervisor)
+                                          .Include(c => c.Client)
+                                          .Where(c => c.Supervisor.LinkedUser == user_logged.UserName
+                                                   && c.SupervisorSign == false)
+                                          .OrderBy(c => c.Client.Name).ToListAsync());
+            }
+            if (User.IsInRole("Facilitator"))
+            {
+                return View(await _context.ReferralForms
+                                          .Include(c => c.Facilitator)
+                                          .Include(c => c.Supervisor)
+                                          .Include(c => c.Client)
+                                          .Where(c => c.Facilitator.LinkedUser == user_logged.UserName
+                                                   && c.FacilitatorSign == false)
+                                          .OrderBy(c => c.Client.Name).ToListAsync());
+            }
+           
+
+            return RedirectToAction("NotAuthorized", "Account");
+        }
+
     }
 }

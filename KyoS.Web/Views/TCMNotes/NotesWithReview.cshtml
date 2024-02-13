@@ -27,10 +27,10 @@
                         <tr>
                             <th class="col-md-1"></th>
                             <th class="col-md-1" style="text-align:center;">Date</th>
-                            <th class="col-md-3">Name</th>
+                            <th class="col-md-3">Client Name</th>
                             <th class="col-md-2" style="text-align:center;">Note Status</th>
                             <th class="col-md-1" style="text-align:center;">Review</th>
-                            <th class="col-md-2">CaseManager</th>
+                            <th class="col-md-3" style="text-align: center;">Case Manager</th>
                             <th class="col-md-1"></th>
                         </tr>
                     </thead>
@@ -48,9 +48,7 @@
                                             <tr>
                                                 <th class="col-md-2"></th>
                                                 <th class="col-md-3">Title</th>
-                                                <th class="col-md-7" style="text-align:center;">Text</th>
-                                                @*<th class="col-md-1"></th>*@
-                                                <th></th>
+                                                <th class="col-md-7" style="text-align:center;">Text</th>                                                
                                             </tr>
                                             @foreach (var message in client.TCMMessages.OrderBy(m => m.DateCreated))
                                             {
@@ -131,7 +129,7 @@
                                         }
                                     }
                                 </td>
-                                <td>
+                                <td align="center">
                                     @Html.DisplayFor(modelItem => client.TCMClient.Casemanager.Name)
                                 </td>
                                 <td align="right">

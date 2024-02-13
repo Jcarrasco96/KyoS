@@ -30,10 +30,10 @@
                                 Client Name
                             </th>
                             <th class="col-md-2" style="text-align:center;">
-                                Code
+                                Admission Date
                             </th>
                             <th class="col-md-2" style="text-align:center;">
-                                Admission Date
+                                Admitted by
                             </th>
                             <th class="col-md-2" style="text-align:center;">
                                 Client Status
@@ -49,53 +49,182 @@
                     <tbody>
                         @foreach (var item in Model)
                         {
-                            <tr>
-                                <td>
-                                    @if (item.Gender == KyoS.Common.Enums.GenderType.Female)
+                            @if (User.IsInRole("Manager") || User.IsInRole("FrontDesk"))
+                            {
+                                <tr>
+                                    <td>
+                                        @if (item.Gender == KyoS.Common.Enums.GenderType.Female)
+                                        {
+                                            <i class="glyphicon glyphicon-user btn-danger"></i>
+                                        }
+                                        @if (item.Gender == KyoS.Common.Enums.GenderType.Male)
+                                        {
+                                            <i class="glyphicon glyphicon-user btn-primary"></i>
+                                        }
+                                        &nbsp;
+                                        @Html.DisplayFor(modelItem => item.Name)
+                                        |
+                                        @Html.DisplayFor(modelItem => item.Code)
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.AdmisionDate)
+                                    </td>
+                                    <td align="center">
+                                        @if (item.Bio != null)
+                                        {
+                                            @Html.DisplayFor(modelItem => item.Bio.AdmissionedFor)
+                                        }
+                                        else
+                                        {
+                                            <a>-</a>
+                                        }
+                                    </td>
+                                    <td align="center">
+                                        @if (item.Status == KyoS.Common.Enums.StatusType.Open)
+                                        {
+                                            <span class="label label-success">
+                                                Open
+                                            </span>
+                                        }
+                                        @if (item.Status == KyoS.Common.Enums.StatusType.Close)
+                                        {
+                                            <span class="label label-default">
+                                                Close
+                                            </span>
+                                        }
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.Service)
+                                    </td>
+                                    <td align="right">
+                                        @if (User.IsInRole("Supervisor") || User.IsInRole("Documents_Assistant"))
+                                        {
+                                            <a asp-action="CreateMedicalhistory" asp-controller="Intakes" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-primary" title="Create BIO"><i class="glyphicon glyphicon-plus"></i></a>
+                                        }
+                                        else
+                                        {
+                                            <a class="btn btn-primary disabled" title="Create Medical History"><i class="glyphicon glyphicon-plus"></i></a>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                            else
+                            {
+                                @if (item.Bio != null)
+                                {
+                                    @if (item.Bio.CreatedBy == User.Identity.Name)
                                     {
-                                        <i class="glyphicon glyphicon-user btn-danger"></i>
+                                        <tr>
+                                            <td>
+                                                @if (item.Gender == KyoS.Common.Enums.GenderType.Female)
+                                                {
+                                                    <i class="glyphicon glyphicon-user btn-danger"></i>
+                                                }
+                                                @if (item.Gender == KyoS.Common.Enums.GenderType.Male)
+                                                {
+                                                    <i class="glyphicon glyphicon-user btn-primary"></i>
+                                                }
+                                                &nbsp;
+                                                @Html.DisplayFor(modelItem => item.Name)
+                                                |
+                                                @Html.DisplayFor(modelItem => item.Code)
+                                            </td>
+                                            <td align="center">
+                                                @Html.DisplayFor(modelItem => item.AdmisionDate)
+                                            </td>
+                                            <td align="center">
+                                                @if (item.Bio != null)
+                                                {
+                                                    @Html.DisplayFor(modelItem => item.Bio.AdmissionedFor)
+                                                }
+                                                else
+                                                {
+                                                    <a>-</a>
+                                                }
+                                            </td>
+                                            <td align="center">
+                                                @if (item.Status == KyoS.Common.Enums.StatusType.Open)
+                                                {
+                                                    <span class="label label-success">
+                                                        Open
+                                                    </span>
+                                                }
+                                                @if (item.Status == KyoS.Common.Enums.StatusType.Close)
+                                                {
+                                                    <span class="label label-default">
+                                                        Close
+                                                    </span>
+                                                }
+                                            </td>
+                                            <td align="center">
+                                                @Html.DisplayFor(modelItem => item.Service)
+                                            </td>
+                                            <td align="right">
+                                                @if (User.IsInRole("Supervisor") || User.IsInRole("Documents_Assistant"))
+                                                {
+                                                    <a asp-action="CreateMedicalhistory" asp-controller="Intakes" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-primary" title="Create BIO"><i class="glyphicon glyphicon-plus"></i></a>
+                                                }
+                                                else
+                                                {
+                                                    <a class="btn btn-primary disabled" title="Create Medical History"><i class="glyphicon glyphicon-plus"></i></a>
+                                                }
+                                            </td>
+                                        </tr>
                                     }
-                                    @if (item.Gender == KyoS.Common.Enums.GenderType.Male)
-                                    {
-                                        <i class="glyphicon glyphicon-user btn-primary"></i>
-                                    }
-                                    &nbsp;
-                                    @Html.DisplayFor(modelItem => item.Name)
-                                </td>
-                                <td align="center">
-                                    @Html.DisplayFor(modelItem => item.Code)
-                                </td>
-                                <td align="center">
-                                    @Html.DisplayFor(modelItem => item.AdmisionDate)
-                                </td>
-                                <td align="center">
-                                    @if (item.Status == KyoS.Common.Enums.StatusType.Open)
-                                    {
-                                        <span class="label label-success">
-                                            Open
-                                        </span>
-                                    }
-                                    @if (item.Status == KyoS.Common.Enums.StatusType.Close)
-                                    {
-                                        <span class="label label-default">
-                                            Close
-                                        </span>
-                                    }
-                                </td>
-                                <td align="center">
-                                    @Html.DisplayFor(modelItem => item.Service)
-                                </td>
-                                <td align="right">
-                                    @if (User.IsInRole("Supervisor") || User.IsInRole("Documents_Assistant"))
-                                    {
-                                        <a asp-action="CreateMedicalhistory" asp-controller="Intakes" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-primary" title="Create BIO"><i class="glyphicon glyphicon-plus"></i></a>
-                                    }
-                                    else
-                                    {
-                                        <a class="btn btn-primary disabled" title="Create Medical History"><i class="glyphicon glyphicon-plus"></i></a>
-                                    }
-                                </td>
-                            </tr>
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td>
+                                            @if (item.Gender == KyoS.Common.Enums.GenderType.Female)
+                                            {
+                                                <i class="glyphicon glyphicon-user btn-danger"></i>
+                                            }
+                                            @if (item.Gender == KyoS.Common.Enums.GenderType.Male)
+                                            {
+                                                <i class="glyphicon glyphicon-user btn-primary"></i>
+                                            }
+                                            &nbsp;
+                                            @Html.DisplayFor(modelItem => item.Name)
+                                            |
+                                            @Html.DisplayFor(modelItem => item.Code)
+                                        </td>
+                                        <td align="center">
+                                            @Html.DisplayFor(modelItem => item.AdmisionDate)
+                                        </td>
+                                        <td align="center">
+                                            <a>-</a>
+                                        </td>
+                                        <td align="center">
+                                            @if (item.Status == KyoS.Common.Enums.StatusType.Open)
+                                            {
+                                                <span class="label label-success">
+                                                    Open
+                                                </span>
+                                            }
+                                            @if (item.Status == KyoS.Common.Enums.StatusType.Close)
+                                            {
+                                                <span class="label label-default">
+                                                    Close
+                                                </span>
+                                            }
+                                        </td>
+                                        <td align="center">
+                                            @Html.DisplayFor(modelItem => item.Service)
+                                        </td>
+                                        <td align="right">
+                                            @if (User.IsInRole("Supervisor") || User.IsInRole("Documents_Assistant"))
+                                            {
+                                                <a asp-action="CreateMedicalhistory" asp-controller="Intakes" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-primary" title="Create BIO"><i class="glyphicon glyphicon-plus"></i></a>
+                                            }
+                                            else
+                                            {
+                                                <a class="btn btn-primary disabled" title="Create Medical History"><i class="glyphicon glyphicon-plus"></i></a>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            }
                         }
                     </tbody>
                 </table>

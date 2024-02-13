@@ -22,12 +22,14 @@ namespace KyoS.Web.Controllers
         private readonly IConverterHelper _converterHelper;
         private readonly ICombosHelper _combosHelper;
         private readonly ITranslateHelper _translateHelper;
-        public ActivitiesController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper, ITranslateHelper translateHelper)
+        private readonly IRenderHelper _renderHelper;
+        public ActivitiesController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper, ITranslateHelper translateHelper, IRenderHelper renderHelper)
         {
             _context = context;
             _combosHelper = combosHelper;
             _converterHelper = converterHelper;
             _translateHelper = translateHelper;
+            _renderHelper = renderHelper;
         }
 
         [Authorize(Roles = "Facilitator")]
@@ -121,7 +123,7 @@ namespace KyoS.Web.Controllers
                 {
                     model = new ActivityViewModel
                     {
-                        Themes = _combosHelper.GetComboThemesByClinic(user_logged.Clinic.Id)
+                        Themes = _combosHelper.GetComboThemesByClinic(user_logged.Clinic.Id, ThemeType.PSR)
                     };
                     return View(model);
                 }
@@ -139,6 +141,8 @@ namespace KyoS.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ActivityViewModel activityViewModel)
         {
+            UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                            .FirstOrDefault(u => u.UserName == User.Identity.Name);
             if (ModelState.IsValid)
             {
                 ThemeEntity themeEntity = await _context.Themes.FirstOrDefaultAsync(t => t.Id == activityViewModel.IdTheme);
@@ -147,7 +151,7 @@ namespace KyoS.Web.Controllers
                 {
                     FacilitatorEntity facilitator_logged = await _context.Facilitators.Include(u => u.Clinic)
                                                                                       .FirstOrDefaultAsync(u => u.LinkedUser == User.Identity.Name);
-                    ActivityEntity activityEntity = await _converterHelper.ToActivityEntity(activityViewModel, true);
+                    ActivityEntity activityEntity = await _converterHelper.ToActivityEntity(activityViewModel, true, user_logged.UserName);
                     activityEntity.Facilitator = facilitator_logged;
                     activityEntity.DateCreated = DateTime.Now;
                     _context.Add(activityEntity);
@@ -207,7 +211,7 @@ namespace KyoS.Web.Controllers
                 {
                     model = new ActivityViewModel
                     {
-                        Themes = _combosHelper.GetComboThemesByClinic3(user_logged.Clinic.Id)
+                        Themes = _combosHelper.GetComboThemesByClinic3(user_logged.Clinic.Id, ThemeType.PSR)
                     };
                     return View(model);
                 }
@@ -225,6 +229,8 @@ namespace KyoS.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create3(ActivityViewModel activityViewModel)
         {
+            UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                            .FirstOrDefault(u => u.UserName == User.Identity.Name);
             if (ModelState.IsValid)
             {
                 ThemeEntity themeEntity = await _context.Themes.FirstOrDefaultAsync(t => t.Id == activityViewModel.IdTheme);
@@ -234,7 +240,7 @@ namespace KyoS.Web.Controllers
                     FacilitatorEntity facilitator_logged = await _context.Facilitators
                                                                          .Include(u => u.Clinic)
                                                                          .FirstOrDefaultAsync(u => u.LinkedUser == User.Identity.Name);
-                    ActivityEntity activityEntity = await _converterHelper.ToActivityEntity(activityViewModel, true);
+                    ActivityEntity activityEntity = await _converterHelper.ToActivityEntity(activityViewModel, true, user_logged.UserName);
                     activityEntity.Facilitator = facilitator_logged;
                     activityEntity.DateCreated = DateTime.Now;
                     _context.Add(activityEntity);
@@ -305,7 +311,7 @@ namespace KyoS.Web.Controllers
                                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
                 if (user_logged.Clinic != null)
                 {
-                    activityViewModel.Themes = _combosHelper.GetComboThemesByClinic(user_logged.Clinic.Id);
+                    activityViewModel.Themes = _combosHelper.GetComboThemesByClinic(user_logged.Clinic.Id, ThemeType.PSR);
                 }
             }
             activityViewModel.Origin = origin;
@@ -317,6 +323,8 @@ namespace KyoS.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, ActivityViewModel activityViewModel)
         {
+            UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                            .FirstOrDefault(u => u.UserName == User.Identity.Name);
             if (id != activityViewModel.Id)
             {
                 return RedirectToAction("Home/Error404");
@@ -324,7 +332,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                ActivityEntity activityEntity = await _converterHelper.ToActivityEntity(activityViewModel, false);
+                ActivityEntity activityEntity = await _converterHelper.ToActivityEntity(activityViewModel, false, user_logged.UserName);
                 _context.Update(activityEntity);
                 try
                 {
@@ -359,7 +367,9 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("Home/Error404");
             }
 
-            ActivityEntity activityEntity = await _context.Activities.Include(a => a.Theme).FirstOrDefaultAsync(a => a.Id == id);
+            ActivityEntity activityEntity = await _context.Activities
+                                                          .Include(a => a.Theme)
+                                                          .FirstOrDefaultAsync(a => a.Id == id);
             if (activityEntity == null)
             {
                 return RedirectToAction("Home/Error404");
@@ -374,7 +384,14 @@ namespace KyoS.Web.Controllers
                                                  .FirstOrDefault(u => u.UserName == User.Identity.Name);
                 if (user_logged.Clinic != null)
                 {
-                    activityViewModel.Themes = _combosHelper.GetComboThemesByClinic3(user_logged.Clinic.Id);
+                    if (activityEntity.Theme.Service == ThemeType.PSR)
+                    {
+                        activityViewModel.Themes = _combosHelper.GetComboThemesByClinic3(user_logged.Clinic.Id, ThemeType.PSR);
+                    }
+                    if (activityEntity.Theme.Service == ThemeType.Group)
+                    {
+                        activityViewModel.Themes = _combosHelper.GetComboThemesByClinic3(user_logged.Clinic.Id, ThemeType.Group);
+                    }
                 }
             }
             activityViewModel.Origin = origin;
@@ -386,6 +403,8 @@ namespace KyoS.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit3(int id, ActivityViewModel activityViewModel)
         {
+            UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                   .FirstOrDefault(u => u.UserName == User.Identity.Name);
             if (id != activityViewModel.Id)
             {
                 return RedirectToAction("Home/Error404");
@@ -393,7 +412,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                ActivityEntity activityEntity = await _converterHelper.ToActivityEntity(activityViewModel, false);
+                ActivityEntity activityEntity = await _converterHelper.ToActivityEntity(activityViewModel, false, user_logged.UserName);
                 _context.Update(activityEntity);
                 try
                 {
@@ -620,19 +639,19 @@ namespace KyoS.Web.Controllers
                     Day = workday.Date.DayOfWeek.ToString(),
 
                     IdTopic1 = (list1.Count != 0) ? topics[0].Id : 0,
-                    Topics1 = (list1.Count != 0) ? list1 : _combosHelper.GetComboThemesByClinic(workday.Week.Clinic.Id),
+                    Topics1 = (list1.Count != 0) ? list1 : _combosHelper.GetComboThemesByClinic(workday.Week.Clinic.Id, ThemeType.PSR),
                     Activities1 = (list1.Count != 0) ? _combosHelper.GetComboActivitiesByTheme(topics[0].Id, facilitator_logged.Id, workday.Date) : null,
 
                     IdTopic2 = (list2.Count != 0) ? topics[1].Id : 0,
-                    Topics2 = (list2.Count != 0) ? list2 : _combosHelper.GetComboThemesByClinic(workday.Week.Clinic.Id),
+                    Topics2 = (list2.Count != 0) ? list2 : _combosHelper.GetComboThemesByClinic(workday.Week.Clinic.Id, ThemeType.PSR),
                     Activities2 = (list2.Count != 0) ? _combosHelper.GetComboActivitiesByTheme(topics[1].Id, facilitator_logged.Id, workday.Date) : null,
 
                     IdTopic3 = (list3.Count != 0) ? topics[2].Id : 0,
-                    Topics3 = (list3.Count != 0) ? list3 : _combosHelper.GetComboThemesByClinic(workday.Week.Clinic.Id),
+                    Topics3 = (list3.Count != 0) ? list3 : _combosHelper.GetComboThemesByClinic(workday.Week.Clinic.Id, ThemeType.PSR),
                     Activities3 = (list3.Count != 0) ? _combosHelper.GetComboActivitiesByTheme(topics[2].Id, facilitator_logged.Id, workday.Date) : null,
 
                     IdTopic4 = (list4.Count != 0) ? topics[3].Id : 0,
-                    Topics4 = (list4.Count != 0) ? list4 : _combosHelper.GetComboThemesByClinic(workday.Week.Clinic.Id),
+                    Topics4 = (list4.Count != 0) ? list4 : _combosHelper.GetComboThemesByClinic(workday.Week.Clinic.Id, ThemeType.PSR),
                     Activities4 = (list4.Count != 0) ? _combosHelper.GetComboActivitiesByTheme(topics[3].Id, facilitator_logged.Id, workday.Date) : null,
                 };
             }
@@ -704,22 +723,22 @@ namespace KyoS.Web.Controllers
                     Day = workday.Date.DayOfWeek.ToString(),
 
                     IdTopic1 = (activities_list.Count > 0) ? activities_list[0].Activity.Theme.Id : 0,
-                    Topics1 = (list1.Count != 0) ? list1 : _combosHelper.GetComboThemesByClinic(workday.Week.Clinic.Id),
+                    Topics1 = (list1.Count != 0) ? list1 : _combosHelper.GetComboThemesByClinic(workday.Week.Clinic.Id, ThemeType.PSR),
                     IdActivity1 = (activities_list.Count > 0) ? activities_list[0].Activity.Id : 0,
                     Activities1 = _combosHelper.GetComboActivitiesByTheme((activities_list.Count > 0) ? activities_list[0].Activity.Theme.Id : 0, facilitator_logged.Id, workday.Date),
 
                     IdTopic2 = (activities_list.Count > 1) ? activities_list[1].Activity.Theme.Id : 0,
-                    Topics2 = (list2.Count != 0) ? list2 : _combosHelper.GetComboThemesByClinic(workday.Week.Clinic.Id),
+                    Topics2 = (list2.Count != 0) ? list2 : _combosHelper.GetComboThemesByClinic(workday.Week.Clinic.Id, ThemeType.PSR),
                     IdActivity2 = (activities_list.Count > 1) ? activities_list[1].Activity.Id : 0,
                     Activities2 = _combosHelper.GetComboActivitiesByTheme((activities_list.Count > 1) ? activities_list[1].Activity.Theme.Id : 0, facilitator_logged.Id, workday.Date),
 
                     IdTopic3 = (activities_list.Count > 2) ? activities_list[2].Activity.Theme.Id : 0,
-                    Topics3 = (list3.Count != 0) ? list3 : _combosHelper.GetComboThemesByClinic(workday.Week.Clinic.Id),
+                    Topics3 = (list3.Count != 0) ? list3 : _combosHelper.GetComboThemesByClinic(workday.Week.Clinic.Id, ThemeType.PSR),
                     IdActivity3 = (activities_list.Count > 2) ? activities_list[2].Activity.Id : 0,
                     Activities3 = _combosHelper.GetComboActivitiesByTheme((activities_list.Count > 2) ? activities_list[2].Activity.Theme.Id : 0, facilitator_logged.Id, workday.Date),
 
                     IdTopic4 = (activities_list.Count > 3) ? activities_list[3].Activity.Theme.Id : 0,
-                    Topics4 = (list4.Count != 0) ? list4 : _combosHelper.GetComboThemesByClinic(workday.Week.Clinic.Id),
+                    Topics4 = (list4.Count != 0) ? list4 : _combosHelper.GetComboThemesByClinic(workday.Week.Clinic.Id, ThemeType.PSR),
                     IdActivity4 = (activities_list.Count > 3) ? activities_list[3].Activity.Id : 0,
                     Activities4 = _combosHelper.GetComboActivitiesByTheme((activities_list.Count > 3) ? activities_list[3].Activity.Theme.Id : 0, facilitator_logged.Id, workday.Date),
                 };
@@ -813,10 +832,6 @@ namespace KyoS.Web.Controllers
         [Authorize(Roles = "Facilitator")]
         public async Task<IActionResult> CreateActivitiesWeek3(int id = 0, int error = 0, bool am = false, bool pm = false, string session = "AM")
         {
-            //The user must select at least one skill adressed per theme 
-            if (error == 1)
-                ViewBag.Error = "1";
-
             IEnumerable<SelectListItem> list1;
             IEnumerable<SelectListItem> list2;
             IEnumerable<SelectListItem> list3;
@@ -868,15 +883,34 @@ namespace KyoS.Web.Controllers
                                                                                            && waf.Facilitator.Id == facilitator_logged.Id))
                                                                                .ToListAsync();
 
-            list1 = _combosHelper.GetComboThemesByClinic3(user_logged.Clinic.Id);
-            list2 = _combosHelper.GetComboThemesByClinic3(user_logged.Clinic.Id);
-            list3 = _combosHelper.GetComboThemesByClinic3(user_logged.Clinic.Id);
-            list4 = _combosHelper.GetComboThemesByClinic3(user_logged.Clinic.Id);
+            list1 = _combosHelper.GetComboThemesByClinic3(user_logged.Clinic.Id, ThemeType.PSR);
+            list2 = _combosHelper.GetComboThemesByClinic3(user_logged.Clinic.Id, ThemeType.PSR);
+            list3 = _combosHelper.GetComboThemesByClinic3(user_logged.Clinic.Id, ThemeType.PSR);
+            list4 = _combosHelper.GetComboThemesByClinic3(user_logged.Clinic.Id, ThemeType.PSR);
 
             ViewData["edit"] = 1;
             //No hay creadas actividades del facilitador logueado en la fecha seleccionada
             if (activities_list.Count() == 0)
             {
+                ThemeEntity noTheme = await _context.Themes
+                                                    .FirstOrDefaultAsync(t => t.Name == "No theme");
+
+                List<SelectListItem> activitiesSLI = new List<SelectListItem>();
+                if (noTheme != null)
+                {
+                    List<ActivityEntity> activities = await _context.Activities
+                                                                .Where(a => (a.Theme.Id == noTheme.Id && a.Status == ActivityStatus.Approved))
+                                                                .ToListAsync();
+                    if (activities.Count() > 0)
+                    {
+                        activitiesSLI.Insert(0, new SelectListItem
+                        {
+                            Text = activities.First().Name.ToString(),
+                            Value = $"{activities.First().Id}"
+                        });
+                    }                    
+                }
+                
                 model = new Workday_Activity_Facilitator3ViewModel
                 {
                     IdWorkday = id,
@@ -895,12 +929,14 @@ namespace KyoS.Web.Controllers
                     Topics3 = list3,
                     Activities3 = null,
 
-                    IdTopic4 = 0,
+                    IdTopic4 = (noTheme == null) ? 0 : noTheme.Id,
                     Topics4 = list4,
-                    Activities4 = null,
+                    Activities4 = (noTheme == null) ? null : activitiesSLI,
+                    IdActivity4 = 0,
 
                     AM = true,
                     PM = true
+
                 };
             }
             else
@@ -930,7 +966,8 @@ namespace KyoS.Web.Controllers
                         Activities4 = null,
 
                         AM = activities_list.ElementAtOrDefault(0).PM,
-                        PM = activities_list.ElementAtOrDefault(0).AM
+                        PM = activities_list.ElementAtOrDefault(0).AM,
+                        TitleNote = activities_list.ElementAtOrDefault(0).TitleNote
                     };
                     ViewData["edit"] = 0;
                 }
@@ -1017,10 +1054,10 @@ namespace KyoS.Web.Controllers
                         stressManagement4 = activities_list[3].stressManagement == null ? false : Convert.ToBoolean(activities_list[3].stressManagement),
 
                         AM = activities_list.ElementAtOrDefault(0).AM,
-                        PM = activities_list.ElementAtOrDefault(0).PM
+                        PM = activities_list.ElementAtOrDefault(0).PM,
+                        TitleNote = activities_list.ElementAtOrDefault(0).TitleNote
                     };
-                }
-                
+                }                
             }
 
             return View(model);
@@ -1038,15 +1075,7 @@ namespace KyoS.Web.Controllers
                     
                     return RedirectToAction("CreateActivitiesWeek","Activities", new { id = model.IdWorkday});
                 }
-                //The user must select at least one skill adressed per theme 
-                if ((!model.activityDailyLiving1 && !model.communityResources1 && !model.copingSkills1 && !model.diseaseManagement1 && !model.healthyLiving1 && !model.lifeSkills1 && !model.relaxationTraining1 && !model.socialSkills1 && !model.stressManagement1)
-                    || (!model.activityDailyLiving2 && !model.communityResources2 && !model.copingSkills2 && !model.diseaseManagement2 && !model.healthyLiving2 && !model.lifeSkills2 && !model.relaxationTraining2 && !model.socialSkills2 && !model.stressManagement2)
-                    || (!model.activityDailyLiving3 && !model.communityResources3 && !model.copingSkills3 && !model.diseaseManagement3 && !model.healthyLiving3 && !model.lifeSkills3 && !model.relaxationTraining3 && !model.socialSkills3 && !model.stressManagement3)
-                    || (!model.activityDailyLiving4 && !model.communityResources4 && !model.copingSkills4 && !model.diseaseManagement4 && !model.healthyLiving4 && !model.lifeSkills4 && !model.relaxationTraining4 && !model.socialSkills4 && !model.stressManagement4))
-                {
-                    return RedirectToAction(nameof(CreateActivitiesWeek3), new { id = model.IdWorkday, error = 1 });
-                }
-
+                
                 FacilitatorEntity facilitator_logged = await _context.Facilitators
 
                                                                      .Include(f => f.Clinic)
@@ -1087,8 +1116,8 @@ namespace KyoS.Web.Controllers
                     socialSkills = model.socialSkills1,
                     stressManagement = model.stressManagement1,
                     AM = model.AM,
-                    PM = model.PM
-
+                    PM = model.PM,
+                    TitleNote = model.TitleNote
                 };
                 _context.Add(activity);
                 activity = new Workday_Activity_Facilitator
@@ -1107,7 +1136,8 @@ namespace KyoS.Web.Controllers
                     socialSkills = model.socialSkills2,
                     stressManagement = model.stressManagement2,
                     AM = model.AM,
-                    PM = model.PM
+                    PM = model.PM,
+                    TitleNote = model.TitleNote
                 };
                 _context.Add(activity);
                 activity = new Workday_Activity_Facilitator
@@ -1126,7 +1156,8 @@ namespace KyoS.Web.Controllers
                     socialSkills = model.socialSkills3,
                     stressManagement = model.stressManagement3,
                     AM = model.AM,
-                    PM = model.PM
+                    PM = model.PM,
+                    TitleNote = model.TitleNote
                 };
                 _context.Add(activity);
                 activity = new Workday_Activity_Facilitator
@@ -1145,7 +1176,8 @@ namespace KyoS.Web.Controllers
                     socialSkills = model.socialSkills4,
                     stressManagement = model.stressManagement4,
                     AM = model.AM,
-                    PM = model.PM
+                    PM = model.PM,
+                    TitleNote = model.TitleNote
                 };
                 _context.Add(activity);
 
@@ -1291,15 +1323,15 @@ namespace KyoS.Web.Controllers
                     Day = workday.Date.DayOfWeek.ToString(),
 
                     IdTopic1 = (list1.Count != 0) ? topics[0].Id : 0,
-                    Topics1 = (list1.Count != 0) ? list1 : _combosHelper.GetComboThemesByClinic(workday.Week.Clinic.Id),
+                    Topics1 = (list1.Count != 0) ? list1 : _combosHelper.GetComboThemesByClinic(workday.Week.Clinic.Id, ThemeType.PSR),
                     Activities1 = (list1.Count != 0) ? _combosHelper.GetComboActivitiesByTheme(topics[0].Id, facilitator_logged.Id, workday.Date) : null,
 
                     IdTopic2 = (list2.Count != 0) ? topics[1].Id : 0,
-                    Topics2 = (list2.Count != 0) ? list2 : _combosHelper.GetComboThemesByClinic(workday.Week.Clinic.Id),
+                    Topics2 = (list2.Count != 0) ? list2 : _combosHelper.GetComboThemesByClinic(workday.Week.Clinic.Id, ThemeType.PSR),
                     Activities2 = (list2.Count != 0) ? _combosHelper.GetComboActivitiesByTheme(topics[1].Id, facilitator_logged.Id, workday.Date) : null,
 
                     IdTopic3 = (list3.Count != 0) ? topics[2].Id : 0,
-                    Topics3 = (list3.Count != 0) ? list3 : _combosHelper.GetComboThemesByClinic(workday.Week.Clinic.Id),
+                    Topics3 = (list3.Count != 0) ? list3 : _combosHelper.GetComboThemesByClinic(workday.Week.Clinic.Id, ThemeType.PSR),
                     Activities3 = (list3.Count != 0) ? _combosHelper.GetComboActivitiesByTheme(topics[2].Id, facilitator_logged.Id, workday.Date) : null,                    
                 };
             }
@@ -1372,17 +1404,17 @@ namespace KyoS.Web.Controllers
                     Day = workday.Date.DayOfWeek.ToString(),
 
                     IdTopic1 = (activities_list.Count > 0) ? activities_list[0].Activity.Theme.Id : 0,
-                    Topics1 = (list1.Count != 0) ? list1 : _combosHelper.GetComboThemesByClinic(workday.Week.Clinic.Id),
+                    Topics1 = (list1.Count != 0) ? list1 : _combosHelper.GetComboThemesByClinic(workday.Week.Clinic.Id, ThemeType.PSR),
                     IdActivity1 = (activities_list.Count > 0) ? activities_list[0].Activity.Id : 0,
                     Activities1 = _combosHelper.GetComboActivitiesByTheme((activities_list.Count > 0) ? activities_list[0].Activity.Theme.Id : 0, facilitator_logged.Id, workday.Date),
 
                     IdTopic2 = (activities_list.Count > 1) ? activities_list[1].Activity.Theme.Id : 0,
-                    Topics2 = (list2.Count != 0) ? list2 : _combosHelper.GetComboThemesByClinic(workday.Week.Clinic.Id),
+                    Topics2 = (list2.Count != 0) ? list2 : _combosHelper.GetComboThemesByClinic(workday.Week.Clinic.Id, ThemeType.PSR),
                     IdActivity2 = (activities_list.Count > 1) ? activities_list[1].Activity.Id : 0,
                     Activities2 = _combosHelper.GetComboActivitiesByTheme((activities_list.Count > 1) ? activities_list[1].Activity.Theme.Id : 0, facilitator_logged.Id, workday.Date),
 
                     IdTopic3 = (activities_list.Count > 2) ? activities_list[2].Activity.Theme.Id : 0,
-                    Topics3 = (list3.Count != 0) ? list3 : _combosHelper.GetComboThemesByClinic(workday.Week.Clinic.Id),
+                    Topics3 = (list3.Count != 0) ? list3 : _combosHelper.GetComboThemesByClinic(workday.Week.Clinic.Id, ThemeType.PSR),
                     IdActivity3 = (activities_list.Count > 2) ? activities_list[2].Activity.Id : 0,
                     Activities3 = _combosHelper.GetComboActivitiesByTheme((activities_list.Count > 2) ? activities_list[2].Activity.Theme.Id : 0, facilitator_logged.Id, workday.Date),
 
@@ -1536,11 +1568,11 @@ namespace KyoS.Web.Controllers
                     Day = workday.Date.DayOfWeek.ToString(),
 
                     IdTopic1 = 0,
-                    Topics1 = _combosHelper.GetComboThemesByClinic3(workday.Week.Clinic.Id),
+                    Topics1 = _combosHelper.GetComboThemesByClinic3(workday.Week.Clinic.Id, ThemeType.Group),
                     Activities1 = null,
 
                     IdTopic2 = 0,
-                    Topics2 = _combosHelper.GetComboThemesByClinic3(workday.Week.Clinic.Id),
+                    Topics2 = _combosHelper.GetComboThemesByClinic3(workday.Week.Clinic.Id, ThemeType.Group),
                     Activities2 = null,                    
                 };
             }
@@ -1558,12 +1590,12 @@ namespace KyoS.Web.Controllers
                     Day = workday.Date.DayOfWeek.ToString(),
 
                     IdTopic1 = (activities_list.Count > 0) ? activities_list[0].Activity.Theme.Id : 0,
-                    Topics1 = _combosHelper.GetComboThemesByClinic3(workday.Week.Clinic.Id),
+                    Topics1 = _combosHelper.GetComboThemesByClinic3(workday.Week.Clinic.Id, ThemeType.Group),
                     IdActivity1 = (activities_list.Count > 0) ? activities_list[0].Activity.Id : 0,
                     Activities1 = _combosHelper.GetComboActivitiesByTheme((activities_list.Count > 0) ? activities_list[0].Activity.Theme.Id : 0, facilitator_logged.Id, workday.Date),
 
                     IdTopic2 = (activities_list.Count > 1) ? activities_list[1].Activity.Theme.Id : 0,
-                    Topics2 = _combosHelper.GetComboThemesByClinic3(workday.Week.Clinic.Id),
+                    Topics2 = _combosHelper.GetComboThemesByClinic3(workday.Week.Clinic.Id, ThemeType.Group),
                     IdActivity2 = (activities_list.Count > 1) ? activities_list[1].Activity.Id : 0,
                     Activities2 = _combosHelper.GetComboActivitiesByTheme((activities_list.Count > 1) ? activities_list[1].Activity.Theme.Id : 0, facilitator_logged.Id, workday.Date),
                 };
@@ -1932,7 +1964,7 @@ namespace KyoS.Web.Controllers
                                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
                 if (user_logged.Clinic != null)
                 {
-                    activityViewModel.Themes = _combosHelper.GetComboThemesByClinic(user_logged.Clinic.Id);
+                    activityViewModel.Themes = _combosHelper.GetComboThemesByClinic(user_logged.Clinic.Id, ThemeType.All);
                 }
             }
             activityViewModel.Origin = origin;
@@ -1944,6 +1976,8 @@ namespace KyoS.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddLink(int id, ActivityViewModel activityViewModel)
         {
+            UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                            .FirstOrDefault(u => u.UserName == User.Identity.Name);
             if (id != activityViewModel.Id)
             {
                 return RedirectToAction("Home/Error404");
@@ -1951,7 +1985,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                ActivityEntity activityEntity = await _converterHelper.ToActivityEntity(activityViewModel, false);
+                ActivityEntity activityEntity = await _converterHelper.ToActivityEntity(activityViewModel, false, user_logged.UserName);
                 activityEntity.Name = activityEntity.Name + activityViewModel.Link;
                 _context.Update(activityEntity);
                 try
@@ -1980,6 +2014,87 @@ namespace KyoS.Web.Controllers
             }
             return View(activityViewModel);
         }
+
+        public async Task<IActionResult> EditActivity3Modal(int? id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            ActivityEntity activityEntity = await _context.Activities.Include(a => a.Theme).FirstOrDefaultAsync(a => a.Id == id);
+            if (activityEntity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            ActivityViewModel activityViewModel = _converterHelper.ToActivityViewModel(activityEntity);
+
+            if (!User.IsInRole("Admin"))
+            {
+                UserEntity user_logged = _context.Users
+                                                 .Include(u => u.Clinic)
+                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+                if (user_logged.Clinic != null)
+                {
+                   /* if (activityEntity.Theme.Service == ThemeType.PSR)
+                    {
+                        activityViewModel.Themes = _combosHelper.GetComboThemesByClinic3(user_logged.Clinic.Id, ThemeType.PSR);
+                    }
+                    if (activityEntity.Theme.Service == ThemeType.Group)
+                    {
+                        activityViewModel.Themes = _combosHelper.GetComboThemesByClinic3(user_logged.Clinic.Id, ThemeType.Group);
+                    }*/
+                }
+            }
+
+            return View(activityViewModel);
+        }
+
+        [Authorize(Roles = "Supervisor, Facilitator")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditActivity3Modal(ActivityViewModel activityViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                            .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                ActivityEntity activityEntity = await _converterHelper.ToActivityEntity(activityViewModel, false, user_logged.UserName);
+                _context.Update(activityEntity);
+                try
+                {
+                    await _context.SaveChangesAsync();
+
+                    List<ActivityEntity> list = await _context.Activities
+                                                              .Include(a => a.Theme)
+                                                              .Include(a => a.Facilitator)
+                                                              .ThenInclude(t => t.Clinic)
+                                                              .Where(a => (a.Theme.Clinic.Id == user_logged.Clinic.Id 
+                                                                        && a.Status == ActivityStatus.Pending
+                                                                        && a.Theme.Day == null))
+                                                              .OrderBy(a => a.Theme.Name)
+                                                              .ToListAsync();
+
+
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewActivities", list) });
+                }
+                catch (System.Exception ex)
+                {
+                    if (ex.InnerException.Message.Contains("duplicate"))
+                    {
+                        ModelState.AddModelError(string.Empty, $"Already exists the facilitator's intervention: {activityEntity.Theme.Name} - {activityEntity.Name}");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+            }
+            return View(activityViewModel);
+        }
+
 
     }
 }

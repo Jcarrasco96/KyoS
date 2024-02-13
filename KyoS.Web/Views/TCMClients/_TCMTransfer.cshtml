@@ -1,0 +1,55 @@
+﻿@model KyoS.Web.Models.TCMTransferViewModel
+
+<div class="col-md-12">
+    <pre>
+<strong>CLIENT INFORMATION</strong>    
+
+     Client’s Name:                     <input asp-for="TCMClient.Client.Name" style="width:20%" disabled>                 Client’s Number:    <input asp-for="TCMClient.CaseNumber" disabled>
+     Legal Guardian (if applicable):    <input asp-for="LegalGuardianName" style="width:20%" disabled>                 Phone No:           <input asp-for="LegalGuardianPhone" disabled>
+            
+    <strong>Has Client’s contact information change since case was opened?</strong>  <input type="checkbox" asp-for="ChangeInformation" class="form-check-input" id="check1"> Yes <input type="checkbox" class="form-check-input" id="check101"> No
+     Address:                <input asp-for="Address" style="width:20%" id="Address" disabled>                 City, State, Zip:    <input asp-for="CityStateZip" style="width:20%" id="CityStateZip" disabled>
+     Primary Phone No:       <input asp-for="PrimaryPhone" style="width:15%" id="PrimaryPhone" disabled>                          Other Phone No:      <input asp-for="OtherPhone" id="OtherPhone" disabled>
+    </pre>
+</div>
+
+<div class="col-md-12">
+    <pre>
+
+    <strong>CASE MANAGEMENT TRANSFER FOLLOW-UP RECOMENDATIONS</strong>    
+    <textarea asp-for="TransferFollow" rows="5" style="width:95%"></textarea>
+    </pre>
+</div>
+
+<div class="col-md-12">
+    <pre>
+
+    Case Manager’s Name:                 <input asp-for="TCMAssignedFrom.Name" style="width:20%" disabled>           Opening Date:           <input asp-for="OpeningDate" disabled>
+    Date of Service Plan or Last SPR:    <input asp-for="DateServicePlanORLastSPR" style="width:15%" disabled>                    Date of last service:   <input asp-for="DateLastService" disabled>
+    <strong>Has Client’s chart been fully audited prior transfer?</strong>  <input type="checkbox" asp-for="HasClientChart" class="form-check-input" id="check2"> Yes  <input type="checkbox" class="form-check-input" id="check102"> No                 Date of Audit:          <input asp-for="DateAudit" id="DateAudit" disabled>
+
+    
+    <strong>*I certify that all documentation on client’s file prior transfer is up-to-update and in compliance with agency regulations.</strong>
+
+    <input type="checkbox" asp-for="TCMSupervisorAccept" class="form-check-input" id="check5" disabled>                                                 <input asp-for="TCMSupervisor.Name" style="width:20%" disabled>            <input asp-for="DateAuditSign" style="width:10%">
+    <strong>Signature of person completing audit</strong>                           <strong>Print name</strong>                                <strong>Date</strong>
+    </pre>
+</div>
+
+<div class="col-md-12">
+    <pre>
+<strong>TRANSFER COMPLETION</strong>   
+
+    <strong>Case Assigned to:</strong>       <select asp-for="IdCaseManagerTo" asp-items="Model.TCMsTo" id="IdCaseManagerTo"></select>           <strong>Opening Date:</strong>    <input asp-for="OpeningDateAssignedTo" style="width:10%">        <strong>End Transfer:</strong>    <input asp-for="EndTransferDate" style="width:10%">
+    <span asp-validation-for="IdCaseManagerTo" class="text-danger"></span>
+    
+    
+    <input type="checkbox" asp-for="TCMAssignedToAccept" class="form-check-input" id="check6" disabled>                                                 <input asp-for="TCMAssignedTo.Name" style="width:20%" id="NameAssignedTo" disabled>            <input asp-for="DateAuditSign" style="width:10%" disabled>
+    Signature of new Case Manager                            New Case Manager Name                          Date
+
+    <input type="checkbox" asp-for="TCMAssignedFromAccept" class="form-check-input" id="check4" disabled>                                                 <input asp-for="TCMAssignedFrom.Name" style="width:20%" disabled>            <input asp-for="DateAuditSign" style="width:10%" disabled>
+    Signature of previous Case Manager                     Previous Case Manager Name                       Date
+
+    </pre>
+</div>
+

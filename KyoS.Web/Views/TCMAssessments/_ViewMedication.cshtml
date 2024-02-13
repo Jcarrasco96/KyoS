@@ -16,13 +16,13 @@
                                 MEDICATION
                             </th>
                             <th class="col-md-3" style="text-align:center;">
-                                DOSES/FREQUENCY
+                                DOSES / FREQUENCY
                             </th>
                             <th class="col-md-2" style="text-align:center;">
                                 PRESCRIBING PHYSICIAN
                             </th>
                             <th class="col-md-3" style="text-align:center;">
-                                REASON/PURPOSE
+                                REASON / PURPOSE
                             </th>
                             <th class="col-md-2">
 
@@ -48,7 +48,7 @@
                                 <td align="right">
                                     @if (User.IsInRole("CaseManager"))
                                     {
-                                        <a onclick="showInPopup('@Url.Action("EditMedicationModal", "TCMAssessments", new { id = @item.Id }, Context.Request.Scheme)','Edit Behavioral Health')" class="btn btn-warning" title="Edit Behavioral Health"><i class="glyphicon glyphicon-pencil"></i></a>
+                                        <a onclick="showInPopup('@Url.Action("EditMedicationModal", "TCMAssessments", new { id = @item.Id }, Context.Request.Scheme)','Edit Medication')" class="btn btn-warning" title="Edit Behavioral Health"><i class="glyphicon glyphicon-pencil"></i></a>
                                     }
                                 </td>
                             </tr>

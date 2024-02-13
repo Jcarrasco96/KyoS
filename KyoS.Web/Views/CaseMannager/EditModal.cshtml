@@ -1,0 +1,117 @@
+﻿@model KyoS.Web.Models.CaseMannagerViewModel
+@{
+    Layout = null;
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="EditModal" asp-route-id="@Model.Id" onsubmit="return jQueryAjaxPostCaseManagers(this);">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="SignaturePath" />
+            <input type="hidden" asp-for="IdClinic" />
+            <div>
+                <div class="form-group col-md-5">
+                    <label asp-for="Name" class="control-label"></label>&nbsp;*
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="col-md-3 form-group">
+                    <label asp-for="IdStatus" class="control-label"></label>
+                    <select asp-for="IdStatus" asp-items="Model.StatusList" class="form-control"></select>
+                    <span asp-validation-for="IdStatus" class="text-danger"></span>
+                </div>
+                <div class="col-md-2 form-group">
+                    <label asp-for="Credentials" class="control-label"></label>
+                    <input asp-for="Credentials" class="form-control" />
+                    <span asp-validation-for="Credentials" class="text-danger"></span>
+                </div>
+                <div class="col-md-2 form-group">
+                    <label asp-for="ProviderNumber" class="control-label">Number</label>
+                    <input asp-for="ProviderNumber" class="form-control" />
+                    <span asp-validation-for="ProviderNumber" class="text-danger"></span>
+                </div>
+            </div>
+            <div>
+                <div class="col-md-3 form-group">
+                    <label asp-for="RaterEducation" class="control-label">Rater Education</label>
+                    <input asp-for="RaterEducation" class="form-control" />
+                    <span asp-validation-for="RaterEducation" class="text-danger"></span>
+                </div>
+                <div class="col-md-3 form-group">
+                    <label asp-for="RaterFMHCertification" class="control-label">Rater FMH Certification</label>
+                    <input asp-for="RaterFMHCertification" class="form-control" />
+                    <span asp-validation-for="RaterFMHCertification" class="text-danger"></span>
+                </div>
+                <div class="col-md-3 form-group">
+                    <label asp-for="ProviderNumber" class="control-label">Provider</label>
+                    <input asp-for="ProviderNumber" class="form-control" />
+                    <span asp-validation-for="ProviderNumber" class="text-danger"></span>
+                </div>
+                <div class="col-md-3 form-group">
+                    <label asp-for="Phone" class="control-label"></label>
+                    <input asp-for="Phone" class="form-control" />
+                    <span asp-validation-for="Phone" class="text-danger"></span>
+                </div>
+            </div>            
+            <div>
+                <div class="col-md-3 form-group">
+                    <label asp-for="Email" class="control-label"></label>
+                    <input asp-for="Email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="col-md-2 form-group">
+                    <label asp-for="Money" class="control-label">Salary / Hour</label>
+                    <input asp-for="Money" class="form-control" />
+                    <span asp-validation-for="Money" class="text-danger"></span>
+                </div>
+                <div class="col-md-4 form-group">
+                    <label asp-for="IdTCMsupervisor" class="control-label"></label>
+                    <select asp-for="IdTCMsupervisor" asp-items="Model.TCMsupervisors" class="form-control"></select>
+                    <span asp-validation-for="IdTCMsupervisor" class="text-danger"></span>
+                </div>
+                <div class="col-md-3 form-group">
+                    <label asp-for="IdUser" class="control-label"></label>
+                    <select asp-for="IdUser" asp-items="Model.UserList" class="form-control"></select>
+                    <span asp-validation-for="IdUser" class="text-danger"></span>
+                </div>
+            </div>
+            <div>
+                <div class="col-md-3 form-group">
+                    <label asp-for="SignatureFile" class="control-label"></label>
+                    <input asp-for="SignatureFile" type="file" class="form-control" />
+                    <span asp-validation-for="SignatureFile" class="text-danger"></span>
+                </div>
+                <div class="container-fluid">
+                    &nbsp;
+                </div>
+            </div>            
+            <div>
+                <div class="col-md-12 form-group">
+                    @if (!string.IsNullOrEmpty(Model.SignaturePath))
+                    {
+                        <img src="@Url.Content(Model.SignaturePath)" alt="Image" style="width:200px;height:100px;max-width: 100%; height: auto;" />
+                    }
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div form-group">
+                    <hr />
+                </div>
+            </div>
+            <div>
+                <div class="col-md-offset-10 form-group">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                    <a asp-action="Index" class="btn btn-success">Back</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/jquery.dataTables.min.js"></script>
+}
+
+

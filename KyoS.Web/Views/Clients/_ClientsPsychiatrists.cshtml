@@ -1,0 +1,110 @@
+﻿@model KyoS.Web.Models.ClientViewModel
+
+<div class="col-md-12">
+    &nbsp;
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-3">
+        <label asp-for="IdPsychiatrist" class="control-label"></label>
+        <select asp-for="IdPsychiatrist" asp-items="Model.Psychiatrists" class="form-control" id="cbP"></select>
+        <span asp-validation-for="IdPsychiatrist" class="text-danger"></span>
+    </div>
+</div>
+<div class="col-md-12">
+    <hr />
+</div>
+<div class="col-md-12">
+    <input type="checkbox" class="form-check-input" id="chkNewP">
+    <label class="control-label">New</label>
+</div>
+<div class="col-md-12">
+    <hr />
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-3">
+        <label asp-for="NamePsychiatrists" class="control-label">Name Psychiatrists</label>&nbsp;*
+        <input asp-for="NamePsychiatrists" class="form-control" disabled id="nameP"/>
+        <span asp-validation-for="NamePsychiatrists" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-3">
+        <label asp-for="AddressPsychiatrists" class="control-label">Address</label>
+        <input asp-for="AddressPsychiatrists" class="form-control" disabled id="addressP"/>
+        <span asp-validation-for="AddressPsychiatrists" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="CityPsychiatrists" class="control-label">City</label>
+        <input asp-for="CityPsychiatrists" class="form-control" disabled id="cityP"/>
+        <span asp-validation-for="CityPsychiatrists" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="StatePsychiatrists" class="control-label">State</label>
+        <input asp-for="StatePsychiatrists" class="form-control" disabled id="stateP"/>
+        <span asp-validation-for="StatePsychiatrists" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="ZipCodePsychiatrists" class="control-label">Zip Code</label>
+        <input asp-for="ZipCodePsychiatrists" class="form-control" disabled id="zipP"/>
+        <span asp-validation-for="ZipCodePsychiatrists" class="text-danger"></span>
+    </div>
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-2">
+        <label asp-for="PhonePsychiatrists" class="control-label">Telephone</label>
+        <input asp-for="PhonePsychiatrists" class="form-control" disabled id="phoneP" />
+        <span asp-validation-for="PhonePsychiatrists" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="FaxNumberPsychiatrists" class="control-label">Fax Number</label>
+        <input asp-for="FaxNumberPsychiatrists" class="form-control" disabled id="faxP" />
+        <span asp-validation-for="FaxNumberPsychiatrists" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-3">
+        <label asp-for="EmailPsychiatrists" class="control-label">Email</label>
+        <input asp-for="EmailPsychiatrists" class="form-control" disabled id="emailP" />
+        <span asp-validation-for="EmailPsychiatrists" class="text-danger"></span>
+    </div>
+</div>
+
+<script type="text/javascript">
+    chkNewP.addEventListener('change', (e) => {
+        if (chkNewP.checked == true)
+        {
+            $("#cbP").prop('selectedIndex', 0);
+            $("#cbP").prop('disabled', true);
+            //$("#cbREC").prop('selectedIndex', 0);
+            //$("#cbREC").prop('disabled', true);
+
+            $("#nameP").prop('disabled', false);
+            $("#addressP").prop('disabled', false);
+            $("#cityP").prop('disabled', false);
+            $("#stateP").prop('disabled', false);
+            $("#zipP").prop('disabled', false);
+            $("#phoneP").prop('disabled', false);
+            $("#faxP").prop('disabled', false);
+            $("#emailP").prop('disabled', false);
+            $("#nameP").focus();
+        }
+        else
+        {
+            $("#cbP").prop('disabled', false);
+            /*$("#cbREC").prop('disabled', false);*/
+
+            $("#nameP").val("");
+            $("#nameP").prop('disabled', true);
+            $("#addressP").val("");
+            $("#addressP").prop('disabled', true);
+            $("#cityP").val("");
+            $("#cityP").prop('disabled', true);
+            $("#stateP").val("");
+            $("#stateP").prop('disabled', true);
+            $("#zipP").val("");
+            $("#zipP").prop('disabled', true);
+            $("#phoneP").val("");
+            $("#phoneP").prop('disabled', true);
+            $("#faxP").val("");
+            $("#faxP").prop('disabled', true);
+            $("#emailP").val("");
+            $("#emailP").prop('disabled', true);
+        }
+    })
+</script>

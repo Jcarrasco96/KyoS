@@ -15,10 +15,10 @@
         </div>
     </div>
     <div class="form-group col-md-6">
-        <label class="control-label">Diagnosis</label>
+        <label class="control-label">Diagnosis (only Dx. principal)</label>
         @if(Model.Client != null)
         {
-            @if (Model.Client.Clients_Diagnostics.Count() > 0)
+            @if (Model.Client.Clients_Diagnostics.Where(n => n.Principal == true && n.Diagnostic != null).Count() > 0)
             {
                 <input class="form-control" value="@Model.Client.Clients_Diagnostics.ElementAtOrDefault(0).Diagnostic.Code @Model.Client.Clients_Diagnostics.ElementAtOrDefault(0).Diagnostic.Description" readonly id="txtDiagnosis">
             }
@@ -62,37 +62,19 @@
             <span asp-validation-for="EndTime" class="text-danger"></span>
         </div>
     </div>
-    <div class="col-md-1">
+    <div class="col-md-2">
         <div class="form-group">
             <label asp-for="CodeBill" class="control-label">Code Bill</label>
             <input asp-for="CodeBill" class="form-control" />
             <span asp-validation-for="CodeBill" class="text-danger"></span>
         </div>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-2">
         <div class="form-group">
-            <label asp-for="Setting" class="control-label"></label>
-            <br />
-            @if (Model.Setting == "53")
-            {
-                <input type="radio" name="Setting" value="53" checked="checked" />
-            }
-            else
-            {
-                <input type="radio" name="Setting" value="53" />
-            }
-            <strong>53</strong>&nbsp;Client in the clinic
-            &nbsp;
-            @if (Model.Setting == "02")
-            {
-                <input type="radio" name="Setting" value="02" checked="checked" />
-            }
-            else
-            {
-                <input type="radio" name="Setting" value="02" />
-            }
-            <strong>02</strong>&nbsp;Remote
-        </div>
+            <label asp-for="Setting" class="control-label">Setting</label>
+            <input asp-for="Setting" class="form-control" />
+            <span asp-validation-for="Setting" class="text-danger"></span>
+        </div>        
     </div>
 </div>
 <div class="col-md-push-12">
@@ -155,15 +137,15 @@
     <strong><u>Recommended Program of Coordinated Services:</u></strong>
 
     <strong>        <u>TYPE</u></strong>                                 <label style="width:10%; text-decoration:underline; text-align:center">CODE</label>      <label style="width:10%; text-decoration:underline; text-align:center">UNITS</label>      <label style="width:15%; text-decoration:underline; text-align:center">FRECUENCY</label>      <label style="width:10%; text-decoration:underline; text-align:center">DURATION (months)</label>
-    <input type="checkbox" asp-for="Medication" class="form-check-input"> Medication Management                      <input asp-for="MedicationCode" type="text" style="width:10%" />      <input asp-for="MedicationUnits" type="number" style="width:10%" />     <input asp-for="MedicationFrecuency" type="text" style="width:15%" />      <input asp-for="MedicationDuration" type="number" style="width:10%" />
+    <input type="checkbox" asp-for="Medication" class="form-check-input" id="chbMedication"> Medication Management                      <input asp-for="MedicationCode" type="text" style="width:10%" readonly/>      <input asp-for="MedicationUnits" type="number" style="width:10%" id="txtMedicationUnits" readonly/>     <input asp-for="MedicationFrecuency" type="text" style="width:15%" id="txtMedicationFrecuency" readonly/>      <input asp-for="MedicationDuration" type="number" style="width:10%" id="txtMedicationDuration" readonly/>
 
-    <input type="checkbox" asp-for="Individual" class="form-check-input"> Individual Therapy                         <input asp-for="IndividualCode" type="text" style="width:10%" />      <input asp-for="IndividualUnits" type="number" style="width:10%" />     <input asp-for="IndividualFrecuency" type="text" style="width:15%" />      <input asp-for="IndividualDuration" type="number" style="width:10%" />
+    <input type="checkbox" asp-for="Individual" class="form-check-input" id="chbIndividual"> Individual Therapy                         <input asp-for="IndividualCode" type="text" style="width:10%" readonly/>      <input asp-for="IndividualUnits" type="number" style="width:10%" id="txtIndividualUnits"/>     <input asp-for="IndividualFrecuency" type="text" style="width:15%" id="txtIndividualFrecuency"/>      <input asp-for="IndividualDuration" type="number" style="width:10%" id="txtIndividualDuration"/>
 
-    <input type="checkbox" asp-for="Family" class="form-check-input"> Family Therapy                             <input asp-for="FamilyCode" type="text" style="width:10%" />      <input asp-for="FamilyUnits" type="number" style="width:10%" />     <input asp-for="FamilyFrecuency" type="text" style="width:15%" />      <input asp-for="FamilyDuration" type="number" style="width:10%" />
+    <input type="checkbox" asp-for="Family" class="form-check-input" id="chbFamily"> Family Therapy                             <input asp-for="FamilyCode" type="text" style="width:10%" readonly/>      <input asp-for="FamilyUnits" type="number" style="width:10%" id="txtFamilyUnits" readonly/>     <input asp-for="FamilyFrecuency" type="text" style="width:15%" id="txtFamilyFrecuency" readonly/>      <input asp-for="FamilyDuration" type="number" style="width:10%" id="txtFamilyDuration" readonly/>
     
-    <input type="checkbox" asp-for="Psychosocial" class="form-check-input"> Psychosocial Rehabilitation Services       <input asp-for="PsychosocialCode" type="text" style="width:10%" />      <input asp-for="PsychosocialUnits" type="number" style="width:10%" />     <input asp-for="PsychosocialFrecuency" type="text" style="width:15%" />      <input asp-for="PsychosocialDuration" type="number" style="width:10%" />
+    <input type="checkbox" asp-for="Psychosocial" class="form-check-input" id="chbPsychosocial"> Psychosocial Rehabilitation Services       <input asp-for="PsychosocialCode" type="text" style="width:10%" readonly/>      <input asp-for="PsychosocialUnits" type="number" style="width:10%" id="txtPsychosocialUnits"/>     <input asp-for="PsychosocialFrecuency" type="text" style="width:15%" id="txtPsychosocialFrecuency"/>      <input asp-for="PsychosocialDuration" type="number" style="width:10%" id="txtPsychosocialDuration"/>
     
-    <input type="checkbox" asp-for="Group" class="form-check-input"> Group Therapy                              <input asp-for="GroupCode" type="text" style="width:10%" />      <input asp-for="GroupUnits" type="number" style="width:10%" />     <input asp-for="GroupFrecuency" type="text" style="width:15%" />      <input asp-for="GroupDuration" type="number" style="width:10%" />
+    <input type="checkbox" asp-for="Group" class="form-check-input" id="chbGroup"> Group Therapy                              <input asp-for="GroupCode" type="text" style="width:10%" readonly/>      <input asp-for="GroupUnits" type="number" style="width:10%" id="txtGroupUnits" readonly/>     <input asp-for="GroupFrecuency" type="text" style="width:15%" id="txtGroupFrecuency" readonly/>      <input asp-for="GroupDuration" type="number" style="width:10%" id="txtGroupDuration" readonly/>
             </pre>
         </div>
     </div>
@@ -190,15 +172,15 @@
         <div class="form-group">
             <pre>
     <strong></strong>
-    Substance Abuse:    <input type="checkbox" class="form-check-input" id="check101"> No   <input type="checkbox" asp-for="Substance" class="form-check-input" readonly id="check1"> Yes       <input asp-for="SubstanceWhere" type="text" style="width:70%" /> 
+    Substance Abuse:    <input type="checkbox" class="form-check-input" id="check101" checked> No   <input type="checkbox" asp-for="Substance" class="form-check-input" readonly id="check1"> Yes       <input asp-for="SubstanceWhere" type="text" style="width:70%" /> 
     
-    Legal:              <input type="checkbox" class="form-check-input" id="check102"> No   <input type="checkbox" asp-for="Legal" class="form-check-input" readonly id="check2"> Yes       <input asp-for="LegalWhere" type="text" style="width:70%" /> 
+    Legal:              <input type="checkbox" class="form-check-input" id="check102" checked> No   <input type="checkbox" asp-for="Legal" class="form-check-input" readonly id="check2"> Yes       <input asp-for="LegalWhere" type="text" style="width:70%" /> 
     
-    Health:             <input type="checkbox" class="form-check-input" id="check103"> No   <input type="checkbox" asp-for="Health" class="form-check-input" readonly id="check3"> Yes       <input asp-for="HealthWhere" type="text" style="width:70%" /> 
+    Health:             <input type="checkbox" class="form-check-input" id="check103" checked> No   <input type="checkbox" asp-for="Health" class="form-check-input" readonly id="check3"> Yes       <input asp-for="HealthWhere" type="text" style="width:70%" /> 
     
-    Pain:               <input type="checkbox" class="form-check-input" id="check104"> No   <input type="checkbox" asp-for="Paint" class="form-check-input" readonly id="check4"> Yes       <input asp-for="PaintWhere" type="text" style="width:70%" /> 
+    Pain:               <input type="checkbox" class="form-check-input" id="check104" checked> No   <input type="checkbox" asp-for="Paint" class="form-check-input" readonly id="check4"> Yes       <input asp-for="PaintWhere" type="text" style="width:70%" /> 
     
-    Other:              <input type="checkbox" class="form-check-input" id="check105"> No   <input type="checkbox" asp-for="Other" class="form-check-input" readonly id="check5"> Yes       <input asp-for="OtherWhere" type="text" style="width:70%" /> 
+    Other:              <input type="checkbox" class="form-check-input" id="check105" checked> No   <input type="checkbox" asp-for="Other" class="form-check-input" readonly id="check5"> Yes       <input asp-for="OtherWhere" type="text" style="width:70%" /> 
             </pre>
         </div>
     </div>
@@ -230,7 +212,6 @@
         } else {
             check101.checked = true;
         }
-
     })
     check101.addEventListener('change', (e) => {
         if (check101.checked == true) {
@@ -238,13 +219,7 @@
         } else {
             check1.checked = true;
         }
-
-    })
-    if (check1.checked == true) {
-        check101.checked = false;
-    } else {
-        check101.checked = true;
-    }
+    })    
     //-------------------------------
     check2.addEventListener('change', (e) => {
         if (check2.checked == true) {
@@ -252,7 +227,6 @@
         } else {
             check102.checked = true;
         }
-
     })
     check102.addEventListener('change', (e) => {
         if (check102.checked == true) {
@@ -260,13 +234,7 @@
         } else {
             check2.checked = true;
         }
-
-    })
-    if (check2.checked == true) {
-        check102.checked = false;
-    } else {
-        check102.checked = true;
-    }
+    })    
     //--------------------------------
     check3.addEventListener('change', (e) => {
         if (check3.checked == true) {
@@ -274,7 +242,6 @@
         } else {
             check103.checked = true;
         }
-
     })
     check103.addEventListener('change', (e) => {
         if (check103.checked == true) {
@@ -282,13 +249,7 @@
         } else {
             check3.checked = true;
         }
-
-    })
-    if (check3.checked == true) {
-        check103.checked = false;
-    } else {
-        check103.checked = true;
-    }
+    })    
     //----------------------------
     check4.addEventListener('change', (e) => {
         if (check4.checked == true) {
@@ -296,7 +257,6 @@
         } else {
             check104.checked = true;
         }
-
     })
     check104.addEventListener('change', (e) => {
         if (check104.checked == true) {
@@ -304,13 +264,7 @@
         } else {
             check4.checked = true;
         }
-
-    })
-    if (check4.checked == true) {
-        check104.checked = false;
-    } else {
-        check104.checked = true;
-    }
+    })    
     //--------------------------------
     check5.addEventListener('change', (e) => {
         if (check5.checked == true) {
@@ -318,7 +272,6 @@
         } else {
             check105.checked = true;
         }
-
     })
     check105.addEventListener('change', (e) => {
         if (check105.checked == true) {
@@ -326,13 +279,107 @@
         } else {
             check5.checked = true;
         }
-
     })
-    if (check5.checked == true) {
-        check105.checked = false;
-    } else {
-        check105.checked = true;
-    }
+    //--------------------------------
+    chbMedication.addEventListener('change', (e) => {
+        if (chbMedication.checked == true) {
+            $("#txtMedicationUnits").val("4");
+            $("#txtMedicationFrecuency").val("once a week");
+            $("#txtMedicationDuration").val("6");
+
+            $("#txtMedicationUnits").attr('readonly', false);
+            $("#txtMedicationFrecuency").attr('readonly', false);
+            $("#txtMedicationDuration").attr('readonly', false);
+        } else {
+            $("#txtMedicationUnits").val("0");
+            $("#txtMedicationFrecuency").val("");
+            $("#txtMedicationDuration").val("0");
+
+            $("#txtMedicationUnits").attr('readonly', true);
+            $("#txtMedicationFrecuency").attr('readonly', true);
+            $("#txtMedicationDuration").attr('readonly', true);
+        }
+    })
+    //--------------------------------
+    chbIndividual.addEventListener('change', (e) => {
+        if (chbIndividual.checked == true) {
+            $("#txtIndividualUnits").val("4");
+            $("#txtIndividualFrecuency").val("Once a week");
+            $("#txtIndividualDuration").val("6");
+
+            $("#txtIndividualUnits").attr('readonly', false);
+            $("#txtIndividualFrecuency").attr('readonly', false);
+            $("#txtIndividualDuration").attr('readonly', false);
+        } else {
+            $("#txtIndividualUnits").val("0");
+            $("#txtIndividualFrecuency").val("");
+            $("#txtIndividualDuration").val("0");
+
+            $("#txtIndividualUnits").attr('readonly', true);
+            $("#txtIndividualFrecuency").attr('readonly', true);
+            $("#txtIndividualDuration").attr('readonly', true);
+        }
+    })
+    //--------------------------------
+    chbFamily.addEventListener('change', (e) => {
+        if (chbFamily.checked == true) {
+            $("#txtFamilyUnits").val("4");
+            $("#txtFamilyFrecuency").val("once a week");
+            $("#txtFamilyDuration").val("6");
+
+            $("#txtFamilyUnits").attr('readonly', false);
+            $("#txtFamilyFrecuency").attr('readonly', false);
+            $("#txtFamilyDuration").attr('readonly', false);
+        } else {
+            $("#txtFamilyUnits").val("0");
+            $("#txtFamilyFrecuency").val("");
+            $("#txtFamilyDuration").val("0");
+
+            $("#txtFamilyUnits").attr('readonly', true);
+            $("#txtFamilyFrecuency").attr('readonly', true);
+            $("#txtFamilyDuration").attr('readonly', true);
+        }
+    })
+    //--------------------------------
+    chbPsychosocial.addEventListener('change', (e) => {
+        if (chbPsychosocial.checked == true) {
+            $("#txtPsychosocialUnits").val("16");
+            $("#txtPsychosocialFrecuency").val("4 times for week");
+            $("#txtPsychosocialDuration").val("6");
+
+            $("#txtPsychosocialUnits").attr('readonly', false);
+            $("#txtPsychosocialFrecuency").attr('readonly', false);
+            $("#txtPsychosocialDuration").attr('readonly', false);
+        } else {
+            $("#txtPsychosocialUnits").val("0");
+            $("#txtPsychosocialFrecuency").val("");
+            $("#txtPsychosocialDuration").val("0");
+
+            $("#txtPsychosocialUnits").attr('readonly', true);
+            $("#txtPsychosocialFrecuency").attr('readonly', true);
+            $("#txtPsychosocialDuration").attr('readonly', true);
+        }
+    })
+    //--------------------------------
+    chbGroup.addEventListener('change', (e) => {
+        if (chbGroup.checked == true) {
+            $("#txtGroupUnits").val("4");
+            $("#txtGroupFrecuency").val("4 times for week");
+            $("#txtGroupDuration").val("6");
+
+            $("#txtGroupUnits").attr('readonly', false);
+            $("#txtGroupFrecuency").attr('readonly', false);
+            $("#txtGroupDuration").attr('readonly', false);
+        } else {
+            $("#txtGroupUnits").val("0");
+            $("#txtGroupFrecuency").val("");
+            $("#txtGroupDuration").val("0");
+
+            $("#txtGroupUnits").attr('readonly', true);
+            $("#txtGroupFrecuency").attr('readonly', true);
+            $("#txtGroupDuration").attr('readonly', true);
+        }
+    })
 </script>
 
 

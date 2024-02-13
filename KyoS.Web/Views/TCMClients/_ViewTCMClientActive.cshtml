@@ -1,0 +1,126 @@
+﻿@model IEnumerable<KyoS.Web.Data.Entities.TCMClientEntity>
+
+@if (Model != null)
+{
+<div class="col-md-12">
+    <p>
+        <a asp-action="TCMCaseActive" asp-controller="TCMClients" asp-route-warning="0" class="btn btn-info"><i class="glyphicon glyphicon-list"></i> All cases</a>
+
+        <a asp-action="TCMCaseActive" asp-controller="TCMClients" asp-route-warning="1" class="btn btn-warning"><i class="glyphicon glyphicon-alert"></i> Expires soon</a>
+
+        <a asp-action="TCMCaseActive" asp-controller="TCMClients" asp-route-warning="2" class="btn btn-danger"><i class="glyphicon glyphicon-alert"></i> Expired</a>
+    </p>
+</div>
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">TCM Cases</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-hover table-responsive table-striped" id="MyTable">
+                    <thead>
+                        <tr>
+                            <th class="col-md-2">
+                                Case Manager
+                            </th>
+                            <th class="col-md-3">
+                                Client Name
+                            </th>
+                            <th class="col-md-2" style="text-align: center;">
+                                Health Insurance
+                            </th>
+                            <th class="col-md-1" style="text-align: center;">
+                                Open
+                            </th>
+                            <th class="col-md-1" style="text-align: center;">
+                                Close
+                            </th>
+                            <th class="col-md-1" style="text-align: center;">
+                                Days
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Casemanager.Name)
+                                </td>
+                                <td>
+                                    @if (item.Client.Gender == KyoS.Common.Enums.GenderType.Female)
+                                    {
+                                        <i class="glyphicon glyphicon-user btn-danger"></i>
+                                    }
+                                    @if (item.Client.Gender == KyoS.Common.Enums.GenderType.Male)
+                                    {
+                                        <i class="glyphicon glyphicon-user btn-primary"></i>
+                                    }
+                                    &nbsp;
+                                    @Html.DisplayFor(modelItem => item.Client.Name)
+                                    |
+                                    @Html.DisplayFor(modelItem => item.CaseNumber)
+                                </td>
+                                <td align="center">
+                                    @if (item.Client.Clients_HealthInsurances != null && item.Client.Clients_HealthInsurances.Count() > 0)
+                                    {
+                                        @item.Client.Clients_HealthInsurances.FirstOrDefault(n => n.Active == true).HealthInsurance.Name
+                                    }
+                                    else
+                                    { 
+                                        <a>-</a>
+                                    }
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.DataOpen)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.DataClose)
+                                </td>
+                                <td align="center">
+                                    @if (ViewData["warning"].ToString() == "0")
+                                    {
+                                        @if (item.DataClose.Date < DateTime.Today.Date)
+                                        {
+                                            <span class="label label-danger">
+                                                @(DateTime.Today.Date.Subtract(item.DataClose.Date).Days)
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            @if (item.DataClose.Date > DateTime.Today.Date.AddDays(15))
+                                            {
+                                                <span class="label label-success">
+                                                    @(item.DataClose.Date.Subtract(DateTime.Today.Date).Days)
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span class="label label-warning">
+                                                   @(item.DataClose.Date.Subtract(DateTime.Today.Date).Days)
+                                                </span>
+                                            }
+                                        }
+                                    }
+                                    @if (ViewData["warning"].ToString() == "1")
+                                    {
+                                        <span class="label label-warning">
+                                            @(item.DataClose.Subtract(DateTime.Today).Days)
+                                        </span>
+                                    }
+                                    @if (ViewData["warning"].ToString() == "2")
+                                    {
+                                        <span class="label label-danger">
+                                            @(DateTime.Today.Date.Subtract(item.DataClose.Date).Days)
+                                        </span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}
+

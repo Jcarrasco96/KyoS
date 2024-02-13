@@ -12,7 +12,8 @@
             <input type="hidden" asp-for="Id_Domain" />
             <input type="hidden" asp-for="CreatedBy" />
             <input type="hidden" asp-for="CreatedOn" />
-            <div class="form-group">
+            <input type="hidden" asp-for="Id_Stage" />
+            <div class="">
                 <div class=" col-md-12">
                     <h4 style="font-weight:bold;"> <span class="label label-info">Service: @Model.TcmDomain.Code - @Model.TcmDomain.Name</span></h4>
                 </div>
@@ -42,10 +43,10 @@
             <div class="col-md-12">
                 <div class="form-group">
                     <label asp-for="Id_Stage" class="control-label">Stages</label>
-                    <select asp-for="Id_Stage" asp-items="Model.Stages" class="form-control" id="Code_Name" onchange="getCode();"></select>
+                    <select asp-for="Id_Stage" asp-items="Model.Stages" class="form-control" id="Code_Name" onchange="getCode();" disabled></select>
                     <span asp-validation-for="Id_Stage" class="text-danger"></span>
                 </div>
-            </div>            
+            </div>
             <div class="col-md-12">
                 <div class="form-group">
                     <label asp-for="descriptionStages" class="control-label">Description of stage</label>
@@ -64,9 +65,9 @@
                     <textarea asp-for="Responsible" class="form-control" rows="5"></textarea>
                     <span asp-validation-for="Responsible" class="text-danger"></span>
                 </div>
-            </div>            
+            </div>
             <div>
-                <div class="col-md-offset-9">
+                <div class="col-md-offset-10">
                     @if (Model.Origi == 0) //viene de la pagina Index de las notas
                     {
                         <input type="submit" value="Submit" class="btn btn-primary" asp-all-route-id="model.tCMservice.Id" asp-route-origi="0" />
@@ -83,8 +84,6 @@
         </form>
     </div>
 </div>
-
-
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

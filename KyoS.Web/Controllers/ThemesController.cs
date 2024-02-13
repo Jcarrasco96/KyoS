@@ -151,7 +151,9 @@ namespace KyoS.Web.Controllers
                 DayOfWeekType day = (themeViewModel.DayId == 1) ? DayOfWeekType.Monday : (themeViewModel.DayId == 2) ? DayOfWeekType.Tuesday :
                                     (themeViewModel.DayId == 3) ? DayOfWeekType.Wednesday : (themeViewModel.DayId == 4) ? DayOfWeekType.Thursday :
                                     (themeViewModel.DayId == 5) ? DayOfWeekType.Friday : DayOfWeekType.Monday;
-                ThemeEntity theme = await _context.Themes.FirstOrDefaultAsync((t => (t.Name == themeViewModel.Name && t.Day == day && t.Clinic.Id == themeViewModel.IdClinic)));
+                ThemeEntity theme = await _context.Themes.FirstOrDefaultAsync((t => (t.Name == themeViewModel.Name 
+                                                                                  && t.Day == day 
+                                                                                  && t.Clinic.Id == themeViewModel.IdClinic)));
                 if (theme == null)
                 {
                     ThemeEntity themeEntity = await _converterHelper.ToThemeEntity(themeViewModel, true);
@@ -260,7 +262,10 @@ namespace KyoS.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                ThemeEntity theme = await _context.Themes.FirstOrDefaultAsync((t => (t.Name == themeViewModel.Name && t.Day == null && t.Clinic.Id == themeViewModel.IdClinic)));
+                ThemeEntity theme = await _context.Themes.FirstOrDefaultAsync((t => (t.Name == themeViewModel.Name 
+                                                                                  && t.Day == null 
+                                                                                  && t.Clinic.Id == themeViewModel.IdClinic
+                                                                                  && t.Service == ThemeUtils.GetThemeByIndex(themeViewModel.IdService))));
                 if (theme == null)
                 {
                     ThemeEntity themeEntity = await _converterHelper.ToTheme3Entity(themeViewModel, true);
@@ -594,7 +599,7 @@ namespace KyoS.Web.Controllers
                     FacilitatorEntity facilitator_logged = await _context.Facilitators
                                                                          .Include(u => u.Clinic)
                                                                          .FirstOrDefaultAsync(u => u.LinkedUser == User.Identity.Name);
-                    ActivityEntity activityEntity = await _converterHelper.ToActivityEntity(activityViewModel, true);
+                    ActivityEntity activityEntity = await _converterHelper.ToActivityEntity(activityViewModel, true, user_logged.UserName);
                     activityEntity.Facilitator = facilitator_logged;
                     activityEntity.DateCreated = DateTime.Now;
                     _context.Add(activityEntity);
@@ -715,7 +720,14 @@ namespace KyoS.Web.Controllers
                                                  .FirstOrDefault(u => u.UserName == User.Identity.Name);
                 if (user_logged.Clinic != null)
                 {
-                    activityViewModel.Themes = _combosHelper.GetComboThemesByClinic3(user_logged.Clinic.Id);
+                    if (activityEntity.Theme.Service == ThemeType.PSR)
+                    {
+                        activityViewModel.Themes = _combosHelper.GetComboThemesByClinic3(user_logged.Clinic.Id, ThemeType.PSR);
+                    }
+                    if (activityEntity.Theme.Service == ThemeType.Group)
+                    {
+                        activityViewModel.Themes = _combosHelper.GetComboThemesByClinic3(user_logged.Clinic.Id, ThemeType.Group);
+                    }
                 }
             }
            
@@ -733,16 +745,20 @@ namespace KyoS.Web.Controllers
                 UserEntity user_logged = _context.Users.Include(u => u.Clinic)
                                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
-                ActivityEntity activityEntity = await _converterHelper.ToActivityEntity(activityViewModel, false);
+                ActivityEntity activityEntity = await _converterHelper.ToActivityEntity(activityViewModel, false, user_logged.UserName);
+                if (User.IsInRole("Supervisor"))
+                {
+                    activityEntity.Status = ActivityStatus.Approved;
+                }
                 _context.Update(activityEntity);
                 try
                 {
                     await _context.SaveChangesAsync();
 
                     List<ThemeEntity> list = await _context.Themes
-                                                         .Include(n => n.Activities)
-                                                         .Where(n => n.Clinic.Id == user_logged.Clinic.Id)
-                                                         .ToListAsync();
+                                                           .Include(n => n.Activities)
+                                                           .Where(n => n.Clinic.Id == user_logged.Clinic.Id)
+                                                           .ToListAsync();
 
                     return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewTheme3", list) });
                 }
@@ -761,6 +777,36 @@ namespace KyoS.Web.Controllers
             return View(activityViewModel);
         }
 
+        [Authorize(Roles = "Manager, Supervisor")]
+        public async Task<IActionResult> ReturnTo(int? id)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            ActivityEntity activity = await _context.Activities.FirstOrDefaultAsync(s => s.Id == id);
+            if (activity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            try
+            {
+                activity.Status = ActivityStatus.Pending;
+                _context.Activities.Update(activity);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Create3", "Themes");
+            }
+
+            return RedirectToAction("Create3", "Themes");
+        }
     }
 }

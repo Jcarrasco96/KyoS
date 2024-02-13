@@ -14,7 +14,16 @@
         <li class="active">Active clients</li>
     </ul><!--.breadcrumb-->
 </div>
-
+@if (User.IsInRole("Manager") || User.IsInRole("Supervisor") || User.IsInRole("Documents_Assistant"))
+{
+    <p>
+        <a asp-action="ActiveClients" asp-controller="Clients" asp-route-warning="0" class="btn btn-info"><i class="glyphicon glyphicon-list"></i> All client</a>
+   
+        <a asp-action="ActiveClients" asp-controller="Clients" asp-route-warning="1" class="btn btn-warning"><i class="glyphicon glyphicon-alert"></i> Expires soon</a>
+   
+        <a asp-action="ActiveClients" asp-controller="Clients" asp-route-warning="2" class="btn btn-danger"><i class="glyphicon glyphicon-alert"></i> Expired</a>
+    </p>
+}
 <div class="row">
     <div class="col-md-12">
         <div class="panel panel-default">
@@ -102,7 +111,7 @@
                                         }
                                     </td>
                                     <td align="center">
-                                        @if (item.Days <= 10 && item.Days > 0)
+                                        @if (item.Days <= 15 && item.Days > 0)
                                         {
                                             <span class="label label-warning">
                                                 @Html.DisplayFor(modelItem => item.Days)
@@ -110,7 +119,7 @@
                                         }
                                         else
                                         {
-                                            @if (item.Days > 10)
+                                            @if (item.Days > 15)
                                             {
                                                 <span class="label label-success">
                                                     @Html.DisplayFor(modelItem => item.Days)
@@ -150,7 +159,7 @@
                                         }
                                     </td>
                                     <td align="center">
-                                       @if (item.DaysInd <= 10 && item.DaysInd > 0)
+                                        @if (item.DaysInd <= 15 && item.DaysInd > 0)
                                         {
                                             <span class="label label-warning">
                                                 @Html.DisplayFor(modelItem => item.DaysInd)
@@ -158,7 +167,7 @@
                                         }
                                         else
                                         {
-                                            @if (item.DaysInd > 10)
+                                            @if (item.DaysInd > 15)
                                             {
                                                 <span class="label label-success">
                                                     @Html.DisplayFor(modelItem => item.DaysInd)
@@ -188,7 +197,7 @@
                                     <td align="center">
                                         <a asp-action="ViewAllGoals" asp-controller="Notes" asp-route-idMtp="@item.MtpId" target="_blank" class="btn btn-default" title="View all goals"><i class="glyphicon glyphicon-list-alt"></i></a>
                                     </td>
-                                    
+
                                 </tr>
                             }
                         }
@@ -211,7 +220,7 @@
             $('#MyTable').DataTable({
                 "order": [[0, "asc"]],
                 "pageLength": 100
-            });            
+            });
         });
 
         function ConfirmDelete(e) {

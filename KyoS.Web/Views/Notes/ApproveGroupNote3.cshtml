@@ -36,8 +36,10 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <input type="hidden" asp-for="Origin" />
+            <input type="hidden" asp-for="CodeBill" />
+            <input type="hidden" asp-for="Setting" />
             <partial name="_GroupMCS3ReadOnly" />
-            <partial name="_GroupNotes3ReadOnly" />            
+            <partial name="_GroupNotes3ReadOnly" />
             <div class="form-group col-md-12">
                 @if (User.IsInRole("Supervisor"))
                 {
@@ -70,6 +72,7 @@
 </div>
 
 <partial name="_ModalPopup" />
+<partial name="_ModalPopupLg" />
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

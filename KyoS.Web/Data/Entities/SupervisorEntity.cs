@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using KyoS.Common.Enums;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace KyoS.Web.Data.Entities
@@ -35,5 +36,8 @@ namespace KyoS.Web.Data.Entities
         public string RaterEducation { get; set; }
 
         public string RaterFMHCertification { get; set; }
+        public List<ReferralFormEntity> ReferralList { get; set; }
+
+        public StatusType Status { get; set; }
     }
 }

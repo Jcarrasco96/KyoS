@@ -9,12 +9,10 @@ using KyoS.Web.Data.Entities;
 using KyoS.Web.Helpers;
 using KyoS.Web.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.IO;
 using KyoS.Common.Helpers;
-
+using Newtonsoft.Json;
 
 namespace KyoS.Web.Controllers
 {
@@ -26,8 +24,9 @@ namespace KyoS.Web.Controllers
         private readonly IRenderHelper _renderHelper;
         private readonly IReportHelper _reportHelper;
         private readonly DataContext _context;
+        private readonly IOverlapindHelper _overlapingHelper;
 
-        public BiosController(IUserHelper userHelper, IConverterHelper converterHelper, ICombosHelper combosHelper, IRenderHelper renderHelper, DataContext context, IReportHelper reportHelper)
+        public BiosController(IUserHelper userHelper, IConverterHelper converterHelper, ICombosHelper combosHelper, IRenderHelper renderHelper, DataContext context, IReportHelper reportHelper, IOverlapindHelper overlapingHelper)
         {
             _userHelper = userHelper;
             _combosHelper = combosHelper;
@@ -35,9 +34,10 @@ namespace KyoS.Web.Controllers
             _renderHelper = renderHelper;
             _converterHelper = converterHelper;
             _reportHelper = reportHelper;
+            _overlapingHelper = overlapingHelper;
         }
 
-        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant, Frontdesk")]
         public async Task<IActionResult> Index(int idError = 0)
         {
             if (idError == 1) //Imposible to delete
@@ -58,7 +58,7 @@ namespace KyoS.Web.Controllers
             }
             else
             {
-                if (User.IsInRole("Manager")|| User.IsInRole("Supervisor"))
+                if (User.IsInRole("Manager") || User.IsInRole("Supervisor") || User.IsInRole("Frontdesk"))
                     return View(await _context.Clients
 
                                               .Include(g => g.Bio)
@@ -101,259 +101,509 @@ namespace KyoS.Web.Controllers
         [Authorize(Roles = "Supervisor, Documents_Assistant")]
         public IActionResult Create(int id = 0)
         {
-
             UserEntity user_logged = _context.Users
                                              .Include(u => u.Clinic)
+                                             .ThenInclude(c => c.Setting)
                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
-            BioViewModel model = new BioViewModel();
-
-            if (User.IsInRole("Supervisor") || User.IsInRole("Documents_Assistant"))
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
             {
-                if (user_logged.Clinic != null)
-                {
-
-                    model = new BioViewModel
-                    {
-                        IdClient = id,
-                        Client_FK = id,
-                        Client = _context.Clients.Include(n => n.LegalGuardian)
-                                                 .Include(n => n.EmergencyContact)
-                                                 .Include(n => n.MedicationList)
-                                                 .Include(n => n.Client_Referred)
-                                                 .ThenInclude(n => n.Referred)
-                                                 .Include(n => n.List_BehavioralHistory)
-                                                 .Include(f => f. Clients_Diagnostics)
-                                                 .ThenInclude(f => f.Diagnostic)
-                                                 .FirstOrDefault(n => n.Id == id),
-                        AdultCurrentExperience = "",
-                        Affect_Angry = false,
-                        Affect_Anxious = false,
-                        Affect_Appropriate = false,
-                        Affect_Blunted = false,
-                        Affect_Constricted = false,
-                        Affect_Expansive = false,
-                        Affect_Flat = false,
-                        Affect_labile = false,
-                        Affect_Other = false,
-                        Affect_Tearful_Sad = false,
-                        AlternativeDiagnosis = "",
-                        Appearance_Bizarre = false,
-                        Appearance_Cleaned = false,
-                        Appearance_Disheveled = false,
-                        Appearance_FairHygiene = false,
-                        Appearance_WellGroomed = false,
-                        Appetite = Bio_Appetite.Diminished,
-                        ApproximateDateReport = new DateTime(),
-                        ApproximateDateReport_Where = "",
-                        AReferral = false,
-                        AReferral_Services = "",
-                        AReferral_When = "",
-                        AReferral_Where = "",
-                        BioH0031HN = false,
-                        IDAH0031HO = false,
-                        CanClientFollow = false,
-                        Children = "",
-                        ClientAssessmentSituation = "",
-                        ClientFamilyAbusoTrauma = false,
-                        CMH = false,
-                        Comments = "",
-                        DateAbuse = new DateTime(),
-                        DateBio = DateTime.Now,
-                        DateSignatureLicensedPractitioner = DateTime.Now,
-                        DateSignaturePerson = DateTime.Now,
-                        DateSignatureSupervisor = DateTime.Now,
-                        DateSignatureUnlicensedTherapist = DateTime.Now,
-                        Details = "",
-                        DoesClient = false,
-                        DoesClientRequired = false,
-                        DoesClientRequired_Where = "",
-                        DoesNotAlways = false,
-                        DoesTheClientExperience = false,
-                        DoesTheClientExperience_Where = "",
-                        DoYouHaveAnyPhysical = false,
-                        DoYouHaveAnyReligious = false,
-                        DoYouHaveAnyVisual = false,
-                        DoYouOwn = false,
-                        DoYouOwn_Explain = "",
-                        EastAlone = false,
-                        EastFew = false,
-                        EastFewer = false,
-                        FamilyAssessmentSituation = "",
-                        FamilyEmotional = "",
-                        GeneralDescription = "",
-                        Has3OrMore = false,
-                        HasAnIllnes = false,
-                        HasClientBeenTreatedPain = false,
-                        HasClientBeenTreatedPain_Ifnot = "",
-                        HasClientBeenTreatedPain_PleaseIncludeService = "",
-                        HasClientBeenTreatedPain_Where = "",
-                        HasTheClient = false,
-                        HasTheClientVisitedPhysician = false,
-                        HasTheClientVisitedPhysician_Date = "",
-                        HasTheClientVisitedPhysician_Reason = "",
-                        HasTheClient_Explain = "",
-                        HasTooth = false,
-                        HaveYouEverBeen = false,
-                        HaveYouEverBeen_Explain = "",
-                        HaveYouEverThought = false,
-                        HaveYouEverThought_Explain = "",
-                        HigHestEducation = "",
-                        Hydration = Bio_Hydration.Diminished,
-                        IConcurWhitDiagnistic = false,
-                        Id = 0,
-                        If6_Date = new DateTime(),
-                        If6_ReferredTo = "",
-                        IfForeing_AgeArrival = 0,
-                        IfForeing_Born = false,
-                        IfForeing_YearArrival = 0,
-                        IfMarried = "",
-                        IfSeparated = "",
-                        IfSexuallyActive = Bio_IfSexuallyActive.N_A,
-                        Insight_Fair = false,
-                        Insight_Good = false,
-                        Insight_Other = false,
-                        Insight_Poor = false,
-                        Judgment_Fair = false,
-                        Judgment_Good = false,
-                        Judgment_Other = false,
-                        Judgment_Poor = false,
-                        Lacking_Location = false,
-                        Lacking_Person = false,
-                        Lacking_Place = false,
-                        Lacking_Time = false,
-                        LegalAssessment = "",
-                        LegalHistory = "",
-                        //LicensedPractitioner = user_logged.FullName,
-                        MaritalStatus = "",
-                        Mood_Angry = false,
-                        Mood_Anxious = false,
-                        Mood_Depressed = false,
-                        Mood_Euphoric = false,
-                        Mood_Euthymic = false,
-                        Mood_Maniac = false,
-                        Mood_Other = false,
-                        Motor_Agitated = false,
-                        Motor_Akathisia = false,
-                        Motor_Normal = false,
-                        Motor_Other = false,
-                        Motor_RestLess = false,
-                        Motor_Retardation = false,
-                        Motor_Tremor = false,
-                        NotAlwaysPhysically = false,
-                        ObtainRelease = false,
-                        ObtainReleaseInformation = false,
-                        ObtainReleaseInformation7 = false,
-                        Oriented_FullOriented = false,
-                        Outcome = "",
-                        PersonalFamilyPsychiatric = "",
-                        PersonInvolved = "",
-                        PleaseProvideGoal = "",
-                        PleaseRatePain = 0,
-                        PresentingProblem = "",
-                        PrimaryLocation = "",
-                        Priv = false,
-                        ProvideIntegratedSummary = "",
-                        RecentWeight = Bio_RecentWeightChange.Gained,
-                        RelationShips = "",
-                        RelationshipWithFamily = "",
-                        RiskToOther_Chronic = false,
-                        RiskToOther_High = false,
-                        RiskToOther_Low = false,
-                        RiskToOther_Medium = false,
-                        RiskToSelf_Chronic = false,
-                        RiskToSelf_High = false,
-                        RiskToSelf_Low = false,
-                        RiskToSelf_Medium = false,
-                        SafetyPlan = false,
-                        Setting = "02",
-                        Speech_Impoverished = false,
-                        Speech_Loud = false,
-                        Speech_Mumbled = false,
-                        Speech_Normal = false,
-                        Speech_Other = false,
-                        Speech_Pressured = false,
-                        Speech_Rapid = false,
-                        Speech_Slow = false,
-                        Speech_Slurred = false,
-                        Speech_Stutters = false,
-                        SubstanceAbuse = "",
-                        Takes3OrMore = false,
-                        ThoughtContent_Delusions = false,
-                        ThoughtContent_Delusions_Type = "",
-                        ThoughtContent_Hallucinations = false,
-                        ThoughtContent_Hallucinations_Type = "",
-                        ThoughtContent_RealityBased = false,
-                        ThoughtContent_Relevant = false,
-                        ThoughtProcess_Blocking = false,
-                        ThoughtProcess_Circumstantial = false,
-                        ThoughtProcess_Disorganized = false,
-                        ThoughtProcess_FightIdeas = false,
-                        ThoughtProcess_GoalDirected = false,
-                        ThoughtProcess_Irrational = false,
-                        ThoughtProcess_LooseAssociations = false,
-                        ThoughtProcess_Obsessive = false,
-                        ThoughtProcess_Organized = false,
-                        ThoughtProcess_Other = false,
-                        ThoughtProcess_Preoccupied = false,
-                        ThoughtProcess_Rigid = false,
-                        ThoughtProcess_Tangential = false,
-                        TreatmentNeeds = "",
-                        Treatmentrecomendations = "",
-                        WhatIsTheClient = "",
-                        WhatIsYourLanguage = "",
-                        WhereRecord = false,
-                        WhereRecord_When = "",
-                        WhereRecord_Where = "",
-                        WithoutWanting = false,
-                        IdAppetite = 0,
-                        Appetite_Status = _combosHelper.GetComboBio_Appetite(),
-                        IdHydratation = 0,
-                        Hydratation_Status = _combosHelper.GetComboBio_Hydration(),
-                        IdRecentWeight = 0,
-                        RecentWeight_Status = _combosHelper.GetComboBio_RecentWeight(),
-                        IdIfSexuallyActive = 0,
-                        IfSexuallyActive_Status = _combosHelper.GetComboBio_IfSexuallyActive(),
-                        ClientDenied = false,
-                        /*StartTime = DateTime.Now,
-                        EndTime = DateTime.Now,*/
-                        ForHowLong = "",
-                        CreatedOn = DateTime.Now,
-                        CreatedBy = user_logged.UserName,
-                        AdmissionedFor = user_logged.FullName,
-                        CodeBill = user_logged.Clinic.CodeBIO
-                    };
-                    if (model.Client.LegalGuardian == null)
-                        model.Client.LegalGuardian = new LegalGuardianEntity();
-                    if (model.Client.EmergencyContact == null)
-                        model.Client.EmergencyContact = new EmergencyContactEntity();
-                    if (model.Client.MedicationList == null)
-                        model.Client.MedicationList = new List<MedicationEntity>();
-                    if (model.Client.Doctor == null)
-                        model.Client.Doctor = new DoctorEntity();
-                    if (model.Client.Client_Referred == null || model.Client.Client_Referred.Count() == 0)
-                    {
-                        Client_Referred client_referred = new Client_Referred();
-                        model.Client.Client_Referred = new List<Client_Referred>();
-                        model.Client.Client_Referred.Add(client_referred);
-                        model.ReferralName = "Not have referred";
-                    }
-                    else
-                    {
-                        model.ReferralName = model.Client.Client_Referred.Where(n => n.Service == ServiceAgency.CMH).ElementAt(0).Referred.Name;
-                    }
-                   
-                    model.LegalGuardianName = model.Client.LegalGuardian.Name;
-                    model.LegalGuardianTelephone = model.Client.LegalGuardian.Telephone;
-                    model.EmergencyContactName = model.Client.EmergencyContact.Name;
-                    model.EmergencyContactTelephone = model.Client.EmergencyContact.Telephone;
-                    model.RelationShipOfEmergencyContact = model.Client.RelationShipOfEmergencyContact.ToString();
-
-                    return View(model);
-                }
+                return RedirectToAction("NotAuthorized", "Account");
             }
 
-            return View(model);
+            BioTempEntity bioExist = _context.BioTemp
+                                             .FirstOrDefault(b => (b.UserName == user_logged.UserName && b.Url == $"Bios/Create/{id}"));
+            BioViewModel model;
+            if (bioExist != null)
+            {
+                model = new BioViewModel
+                {
+                    IdClient = id,
+                    Client_FK = id,
+                    Client = _context.Clients.Include(n => n.LegalGuardian)
+                                                .Include(n => n.EmergencyContact)
+                                                .Include(n => n.MedicationList)
+                                                .Include(n => n.Client_Referred)
+                                                .ThenInclude(n => n.Referred)
+                                                .Include(n => n.List_BehavioralHistory)
+                                                .Include(f => f.Clients_Diagnostics)
+                                                .ThenInclude(f => f.Diagnostic)
+                                                .FirstOrDefault(n => n.Id == id),
+                    AdultCurrentExperience = bioExist.AdultCurrentExperience,
+                    Affect_Angry = bioExist.Affect_Angry,
+                    Affect_Anxious = bioExist.Affect_Anxious,
+                    Affect_Appropriate = bioExist.Affect_Appropriate,
+                    Affect_Blunted = bioExist.Affect_Blunted,
+                    Affect_Constricted = bioExist.Affect_Constricted,
+                    Affect_Expansive = bioExist.Affect_Expansive,
+                    Affect_Flat = bioExist.Affect_Flat,
+                    Affect_labile = bioExist.Affect_labile,
+                    Affect_Other = bioExist.Affect_Other,
+                    Affect_Tearful_Sad = bioExist.Affect_Tearful_Sad,
+                    AlternativeDiagnosis = bioExist.AlternativeDiagnosis,
+                    Appearance_Bizarre = bioExist.Appearance_Bizarre,
+                    Appearance_Cleaned = bioExist.Appearance_Cleaned,
+                    Appearance_Disheveled = bioExist.Appearance_Disheveled,
+                    Appearance_FairHygiene = bioExist.Appearance_FairHygiene,
+                    Appearance_WellGroomed = bioExist.Appearance_WellGroomed,                    
+                    Appetite = bioExist.Appetite,
+                    ApproximateDateReport = bioExist.ApproximateDateReport,
+                    ApproximateDateReport_Where = bioExist.ApproximateDateReport_Where,
+                    AReferral = bioExist.AReferral,
+                    AReferral_Services = bioExist.AReferral_Services,
+                    AReferral_When = bioExist.AReferral_When,
+                    AReferral_Where = bioExist.AReferral_Where,
+                    BioH0031HN = bioExist.BioH0031HN,
+                    IDAH0031HO = bioExist.IDAH0031HO,
+                    CanClientFollow = bioExist.CanClientFollow,
+                    Children = bioExist.Children,
+                    ClientAssessmentSituation = bioExist.ClientAssessmentSituation,
+                    ClientFamilyAbusoTrauma = bioExist.ClientFamilyAbusoTrauma,
+                    CMH = bioExist.CMH,
+                    Comments = bioExist.Comments,
+                    DateAbuse = bioExist.DateAbuse,
+                    DateBio = Convert.ToDateTime(bioExist.DateBio),
+                    DateSignatureLicensedPractitioner = Convert.ToDateTime(bioExist.DateSignatureLicensedPractitioner),
+                    DateSignaturePerson = Convert.ToDateTime(bioExist.DateSignaturePerson),
+                    DateSignatureSupervisor = Convert.ToDateTime(bioExist.DateSignatureSupervisor),
+                    DateSignatureUnlicensedTherapist = Convert.ToDateTime(bioExist.DateSignatureUnlicensedTherapist),
+                    Details = bioExist.Details,
+                    DoesClient = bioExist.DoesClient,
+                    DoesClientRequired = bioExist.DoesClientRequired,
+                    DoesClientRequired_Where = bioExist.DoesClientRequired_Where,
+                    DoesNotAlways = bioExist.DoesNotAlways,
+                    DoesTheClientExperience = bioExist.DoesTheClientExperience,
+                    DoesTheClientExperience_Where = bioExist.DoesTheClientExperience_Where,
+                    DoYouHaveAnyPhysical = bioExist.DoYouHaveAnyPhysical,
+                    DoYouHaveAnyReligious = bioExist.DoYouHaveAnyReligious,
+                    DoYouHaveAnyVisual = bioExist.DoYouHaveAnyVisual,
+                    DoYouOwn = bioExist.DoYouOwn,
+                    DoYouOwn_Explain = bioExist.DoYouOwn_Explain,
+                    EastAlone = bioExist.EastAlone,
+                    EastFew = bioExist.EastFew,
+                    EastFewer = bioExist.EastFewer,
+                    FamilyAssessmentSituation = bioExist.FamilyAssessmentSituation,
+                    FamilyEmotional = bioExist.FamilyEmotional,
+                    GeneralDescription = bioExist.GeneralDescription,
+                    Has3OrMore = bioExist.Has3OrMore,
+                    HasAnIllnes = bioExist.HasAnIllnes,
+                    HasClientBeenTreatedPain = bioExist.HasClientBeenTreatedPain,
+                    HasClientBeenTreatedPain_Ifnot = bioExist.HasClientBeenTreatedPain_Ifnot,
+                    HasClientBeenTreatedPain_PleaseIncludeService = bioExist.HasClientBeenTreatedPain_PleaseIncludeService,
+                    HasClientBeenTreatedPain_Where = bioExist.HasClientBeenTreatedPain_Where,
+                    HasTheClient = bioExist.HasTheClient,
+                    HasTheClientVisitedPhysician = bioExist.HasTheClientVisitedPhysician,
+                    HasTheClientVisitedPhysician_Date = bioExist.HasTheClientVisitedPhysician_Date,
+                    HasTheClientVisitedPhysician_Reason = bioExist.HasTheClientVisitedPhysician_Reason,
+                    HasTheClient_Explain = bioExist.HasTheClient_Explain,
+                    HasTooth = bioExist.HasTooth,
+                    HaveYouEverBeen = bioExist.HaveYouEverBeen,
+                    HaveYouEverBeen_Explain = bioExist.HaveYouEverBeen_Explain,
+                    HaveYouEverThought = bioExist.HaveYouEverThought,
+                    HaveYouEverThought_Explain = bioExist.HaveYouEverThought_Explain,
+                    HigHestEducation = bioExist.HigHestEducation,
+                    Hydration = Bio_Hydration.Diminished,
+                    IConcurWhitDiagnistic = bioExist.IConcurWhitDiagnistic,
+                    Id = 0,
+                    If6_Date = Convert.ToDateTime(bioExist.If6_Date),
+                    If6_ReferredTo = bioExist.If6_ReferredTo,
+                    IfForeing_AgeArrival = bioExist.IfForeing_AgeArrival,
+                    IfForeing_Born = bioExist.IfForeing_Born,
+                    IfForeing_YearArrival = bioExist.IfForeing_YearArrival,
+                    IfMarried = bioExist.IfMarried,
+                    IfSeparated = bioExist.IfSeparated,
+                    IfSexuallyActive = bioExist.IfSexuallyActive,
+                    Insight_Fair = bioExist.Insight_Fair,
+                    Insight_Good = bioExist.Insight_Good,
+                    Insight_Other = bioExist.Insight_Other,
+                    Insight_Poor = bioExist.Insight_Poor,
+                    Judgment_Fair = bioExist.Judgment_Fair,
+                    Judgment_Good = bioExist.Judgment_Good,
+                    Judgment_Other = bioExist.Judgment_Other,
+                    Judgment_Poor = bioExist.Judgment_Poor,
+                    Lacking_Location = bioExist.Lacking_Location,
+                    Lacking_Person = bioExist.Lacking_Person,
+                    Lacking_Place = bioExist.Lacking_Place,
+                    Lacking_Time = bioExist.Lacking_Time,
+                    LegalAssessment = bioExist.LegalAssessment,
+                    LegalHistory = bioExist.LegalHistory,
+                    MaritalStatus = bioExist.MaritalStatus,
+                    Mood_Angry = bioExist.Mood_Angry,
+                    Mood_Anxious = bioExist.Mood_Anxious,
+                    Mood_Depressed = bioExist.Mood_Depressed,
+                    Mood_Euphoric = bioExist.Mood_Euphoric,
+                    Mood_Euthymic = bioExist.Mood_Euthymic,
+                    Mood_Maniac = bioExist.Mood_Maniac,
+                    Mood_Other = bioExist.Mood_Other,
+                    Motor_Agitated = bioExist.Motor_Agitated,
+                    Motor_Akathisia = bioExist.Motor_Akathisia,
+                    Motor_Normal = bioExist.Motor_Normal,
+                    Motor_Other = bioExist.Motor_Other,
+                    Motor_RestLess = bioExist.Motor_RestLess,
+                    Motor_Retardation = bioExist.Motor_Retardation,
+                    Motor_Tremor = bioExist.Motor_Tremor,
+                    NotAlwaysPhysically = bioExist.NotAlwaysPhysically,
+                    ObtainRelease = bioExist.ObtainRelease,
+                    ObtainReleaseInformation = bioExist.ObtainReleaseInformation,
+                    ObtainReleaseInformation7 = bioExist.ObtainReleaseInformation7,
+                    Oriented_FullOriented = bioExist.Oriented_FullOriented,
+                    Outcome = bioExist.Outcome,
+                    PersonalFamilyPsychiatric = bioExist.PersonalFamilyPsychiatric,
+                    PersonInvolved = bioExist.PersonInvolved,
+                    PleaseProvideGoal = bioExist.PleaseProvideGoal,
+                    PleaseRatePain = bioExist.PleaseRatePain,
+                    PresentingProblem = bioExist.PresentingProblem,
+                    PrimaryLocation = bioExist.PrimaryLocation,
+                    Priv = bioExist.Priv,
+                    ProvideIntegratedSummary = bioExist.ProvideIntegratedSummary,
+                    RecentWeight = bioExist.RecentWeight,
+                    RelationShips = bioExist.RelationShips,
+                    RelationshipWithFamily = bioExist.RelationshipWithFamily,
+                    RiskToOther_Chronic = bioExist.RiskToOther_Chronic,
+                    RiskToOther_High = bioExist.RiskToOther_High,
+                    RiskToOther_Low = bioExist.RiskToOther_Low,
+                    RiskToOther_Medium = bioExist.RiskToOther_Medium,
+                    RiskToSelf_Chronic = bioExist.RiskToSelf_Chronic,
+                    RiskToSelf_High = bioExist.RiskToSelf_High,
+                    RiskToSelf_Low = bioExist.RiskToSelf_Low,
+                    RiskToSelf_Medium = bioExist.RiskToSelf_Medium,
+                    SafetyPlan = bioExist.SafetyPlan,
+                    Setting = bioExist.Setting,
+                    Speech_Impoverished = bioExist.Speech_Impoverished,
+                    Speech_Loud = bioExist.Speech_Loud,
+                    Speech_Mumbled = bioExist.Speech_Mumbled,
+                    Speech_Normal = bioExist.Speech_Normal,
+                    Speech_Other = bioExist.Speech_Other,
+                    Speech_Pressured = bioExist.Speech_Pressured,
+                    Speech_Rapid = bioExist.Speech_Rapid,
+                    Speech_Slow = bioExist.Speech_Slow,
+                    Speech_Slurred = bioExist.Speech_Slurred,
+                    Speech_Stutters = bioExist.Speech_Stutters,
+                    SubstanceAbuse = bioExist.SubstanceAbuse,
+                    Takes3OrMore = bioExist.Takes3OrMore,
+                    ThoughtContent_Delusions = bioExist.ThoughtContent_Delusions,
+                    ThoughtContent_Delusions_Type = bioExist.ThoughtContent_Delusions_Type,
+                    ThoughtContent_Hallucinations = bioExist.ThoughtContent_Hallucinations,
+                    ThoughtContent_Hallucinations_Type = bioExist.ThoughtContent_Hallucinations_Type,
+                    ThoughtContent_RealityBased = bioExist.ThoughtContent_RealityBased,
+                    ThoughtContent_Relevant = bioExist.ThoughtContent_Relevant,
+                    ThoughtProcess_Blocking = bioExist.ThoughtProcess_Blocking,
+                    ThoughtProcess_Circumstantial = bioExist.ThoughtProcess_Circumstantial,
+                    ThoughtProcess_Disorganized = bioExist.ThoughtProcess_Disorganized,
+                    ThoughtProcess_FightIdeas = bioExist.ThoughtProcess_FightIdeas,
+                    ThoughtProcess_GoalDirected = bioExist.ThoughtProcess_GoalDirected,
+                    ThoughtProcess_Irrational = bioExist.ThoughtProcess_Irrational,
+                    ThoughtProcess_LooseAssociations = bioExist.ThoughtProcess_LooseAssociations,
+                    ThoughtProcess_Obsessive = bioExist.ThoughtProcess_Obsessive,
+                    ThoughtProcess_Organized = bioExist.ThoughtProcess_Organized,
+                    ThoughtProcess_Other = bioExist.ThoughtProcess_Other,
+                    ThoughtProcess_Preoccupied = bioExist.ThoughtProcess_Preoccupied,
+                    ThoughtProcess_Rigid = bioExist.ThoughtProcess_Rigid,
+                    ThoughtProcess_Tangential = bioExist.ThoughtProcess_Tangential,
+                    TreatmentNeeds = bioExist.TreatmentNeeds,
+                    Treatmentrecomendations = bioExist.Treatmentrecomendations,
+                    WhatIsTheClient = bioExist.WhatIsTheClient,
+                    WhatIsYourLanguage = bioExist.WhatIsYourLanguage,
+                    WhereRecord = bioExist.WhereRecord,
+                    WhereRecord_When = bioExist.WhereRecord_When,
+                    WhereRecord_Where = bioExist.WhereRecord_Where,
+                    WithoutWanting = bioExist.WithoutWanting,
+                    IdAppetite = ((int)bioExist.Appetite) + 1,
+                    Appetite_Status = _combosHelper.GetComboBio_Appetite(),
+                    IdHydratation = ((int)bioExist.Hydration) + 1,
+                    Hydratation_Status = _combosHelper.GetComboBio_Hydration(),
+                    IdRecentWeight = ((int)bioExist.RecentWeight) + 1,
+                    RecentWeight_Status = _combosHelper.GetComboBio_RecentWeight(),
+                    IdIfSexuallyActive = ((int)bioExist.IfSexuallyActive) + 1,
+                    IfSexuallyActive_Status = _combosHelper.GetComboBio_IfSexuallyActive(),
+                    ClientDenied = bioExist.ClientDenied,
+                    ForHowLong = bioExist.ForHowLong,
+                    CreatedOn = DateTime.Now,
+                    CreatedBy = user_logged.UserName,
+                    AdmissionedFor = user_logged.FullName,
+                    CodeBill = user_logged.Clinic.CodeBIO,
+                    AnyEating = bioExist.AnyEating,
+                    AnyFood = bioExist.AnyFood,
+                    MilitaryServiceHistory = bioExist.MilitaryServiceHistory,
+                    MilitaryServiceHistory_Explain = bioExist.MilitaryServiceHistory_Explain,
+                    VocationalAssesment = bioExist.VocationalAssesment,
+                    Code90791 = bioExist.Code90791,
+                    StartTime = Convert.ToDateTime(bioExist.StartTime),
+                    EndTime = Convert.ToDateTime(bioExist.EndTime)
+                };
+
+                if (model.Client.LegalGuardian == null)
+                    model.Client.LegalGuardian = new LegalGuardianEntity();
+                if (model.Client.EmergencyContact == null)
+                    model.Client.EmergencyContact = new EmergencyContactEntity();
+                if (model.Client.MedicationList == null)
+                    model.Client.MedicationList = new List<MedicationEntity>();
+                if (model.Client.Doctor == null)
+                    model.Client.Doctor = new DoctorEntity();
+                if (model.Client.Client_Referred == null || model.Client.Client_Referred.Where(n => n.Service == ServiceAgency.CMH).Count() == 0)
+                {
+                    Client_Referred client_referred = new Client_Referred();
+                    model.Client.Client_Referred = new List<Client_Referred>();
+                    model.Client.Client_Referred.Add(client_referred);
+                    model.ReferralName = "Not have referred";
+                }
+                else
+                {
+                    model.ReferralName = model.Client.Client_Referred.Where(n => n.Service == ServiceAgency.CMH).ElementAt(0).Referred.Name;
+                }
+
+                model.LegalGuardianName = model.Client.LegalGuardian.Name;
+                model.LegalGuardianTelephone = model.Client.LegalGuardian.Telephone;
+                model.EmergencyContactName = model.Client.EmergencyContact.Name;
+                model.EmergencyContactTelephone = model.Client.EmergencyContact.Telephone;
+                model.RelationShipOfEmergencyContact = model.Client.RelationShipOfEmergencyContact.ToString();
+            }
+            else
+            { 
+                model = new BioViewModel
+                {
+                    IdClient = id,
+                    Client_FK = id,
+                    Client = _context.Clients.Include(n => n.LegalGuardian)
+                                                .Include(n => n.EmergencyContact)
+                                                .Include(n => n.MedicationList)
+                                                .Include(n => n.Client_Referred)
+                                                .ThenInclude(n => n.Referred)
+                                                .Include(n => n.List_BehavioralHistory)
+                                                .Include(f => f.Clients_Diagnostics)
+                                                .ThenInclude(f => f.Diagnostic)
+                                                .FirstOrDefault(n => n.Id == id),
+                    AdultCurrentExperience = "",
+                    Affect_Angry = false,
+                    Affect_Anxious = false,
+                    Affect_Appropriate = false,
+                    Affect_Blunted = false,
+                    Affect_Constricted = false,
+                    Affect_Expansive = false,
+                    Affect_Flat = false,
+                    Affect_labile = false,
+                    Affect_Other = false,
+                    Affect_Tearful_Sad = false,
+                    AlternativeDiagnosis = "",
+                    Appearance_Bizarre = false,
+                    Appearance_Cleaned = false,
+                    Appearance_Disheveled = false,
+                    Appearance_FairHygiene = false,
+                    Appearance_WellGroomed = false,
+                    Appetite = Bio_Appetite.Diminished,
+                    ApproximateDateReport = string.Empty,
+                    ApproximateDateReport_Where = "",
+                    AReferral = false,
+                    AReferral_Services = "",
+                    AReferral_When = "",
+                    AReferral_Where = "",
+                    BioH0031HN = false,
+                    IDAH0031HO = false,
+                    CanClientFollow = false,
+                    Children = "",
+                    ClientAssessmentSituation = "",
+                    ClientFamilyAbusoTrauma = false,
+                    CMH = false,
+                    Comments = "",
+                    DateAbuse = string.Empty,
+                    DateBio = DateTime.Now,
+                    DateSignatureLicensedPractitioner = DateTime.Now,
+                    DateSignaturePerson = DateTime.Now,
+                    DateSignatureSupervisor = DateTime.Now,
+                    DateSignatureUnlicensedTherapist = DateTime.Now,
+                    Details = "",
+                    DoesClient = false,
+                    DoesClientRequired = false,
+                    DoesClientRequired_Where = "",
+                    DoesNotAlways = false,
+                    DoesTheClientExperience = false,
+                    DoesTheClientExperience_Where = "",
+                    DoYouHaveAnyPhysical = false,
+                    DoYouHaveAnyReligious = false,
+                    DoYouHaveAnyVisual = false,
+                    DoYouOwn = false,
+                    DoYouOwn_Explain = "",
+                    EastAlone = false,
+                    EastFew = false,
+                    EastFewer = false,
+                    FamilyAssessmentSituation = "",
+                    FamilyEmotional = "",
+                    GeneralDescription = "",
+                    Has3OrMore = false,
+                    HasAnIllnes = false,
+                    HasClientBeenTreatedPain = false,
+                    HasClientBeenTreatedPain_Ifnot = "",
+                    HasClientBeenTreatedPain_PleaseIncludeService = "",
+                    HasClientBeenTreatedPain_Where = "",
+                    HasTheClient = false,
+                    HasTheClientVisitedPhysician = false,
+                    HasTheClientVisitedPhysician_Date = "",
+                    HasTheClientVisitedPhysician_Reason = "",
+                    HasTheClient_Explain = "",
+                    HasTooth = false,
+                    HaveYouEverBeen = false,
+                    HaveYouEverBeen_Explain = "",
+                    HaveYouEverThought = false,
+                    HaveYouEverThought_Explain = "",
+                    HigHestEducation = "",
+                    Hydration = Bio_Hydration.Diminished,
+                    IConcurWhitDiagnistic = true,
+                    Id = 0,
+                    If6_Date = new DateTime(),
+                    If6_ReferredTo = "",
+                    IfForeing_AgeArrival = 0,
+                    IfForeing_Born = false,
+                    IfForeing_YearArrival = 0,
+                    IfMarried = "",
+                    IfSeparated = "",
+                    IfSexuallyActive = Bio_IfSexuallyActive.N_A,
+                    Insight_Fair = false,
+                    Insight_Good = false,
+                    Insight_Other = false,
+                    Insight_Poor = false,
+                    Judgment_Fair = false,
+                    Judgment_Good = false,
+                    Judgment_Other = false,
+                    Judgment_Poor = false,
+                    Lacking_Location = false,
+                    Lacking_Person = false,
+                    Lacking_Place = false,
+                    Lacking_Time = false,
+                    LegalAssessment = "",
+                    LegalHistory = "",                    
+                    MaritalStatus = "",
+                    Mood_Angry = false,
+                    Mood_Anxious = false,
+                    Mood_Depressed = false,
+                    Mood_Euphoric = false,
+                    Mood_Euthymic = false,
+                    Mood_Maniac = false,
+                    Mood_Other = false,
+                    Motor_Agitated = false,
+                    Motor_Akathisia = false,
+                    Motor_Normal = false,
+                    Motor_Other = false,
+                    Motor_RestLess = false,
+                    Motor_Retardation = false,
+                    Motor_Tremor = false,
+                    NotAlwaysPhysically = false,
+                    ObtainRelease = false,
+                    ObtainReleaseInformation = false,
+                    ObtainReleaseInformation7 = false,
+                    Oriented_FullOriented = false,
+                    Outcome = "",
+                    PersonalFamilyPsychiatric = "",
+                    PersonInvolved = "",
+                    PleaseProvideGoal = "",
+                    PleaseRatePain = 0,
+                    PresentingProblem = "",
+                    PrimaryLocation = "",
+                    Priv = false,
+                    ProvideIntegratedSummary = "",
+                    RecentWeight = Bio_RecentWeightChange.Gained,
+                    RelationShips = "",
+                    RelationshipWithFamily = "",
+                    RiskToOther_Chronic = false,
+                    RiskToOther_High = false,
+                    RiskToOther_Low = false,
+                    RiskToOther_Medium = false,
+                    RiskToSelf_Chronic = false,
+                    RiskToSelf_High = false,
+                    RiskToSelf_Low = false,
+                    RiskToSelf_Medium = false,
+                    SafetyPlan = false,
+                    Setting = "53",
+                    Speech_Impoverished = false,
+                    Speech_Loud = false,
+                    Speech_Mumbled = false,
+                    Speech_Normal = false,
+                    Speech_Other = false,
+                    Speech_Pressured = false,
+                    Speech_Rapid = false,
+                    Speech_Slow = false,
+                    Speech_Slurred = false,
+                    Speech_Stutters = false,
+                    SubstanceAbuse = "",
+                    Takes3OrMore = false,
+                    ThoughtContent_Delusions = false,
+                    ThoughtContent_Delusions_Type = "",
+                    ThoughtContent_Hallucinations = false,
+                    ThoughtContent_Hallucinations_Type = "",
+                    ThoughtContent_RealityBased = false,
+                    ThoughtContent_Relevant = false,
+                    ThoughtProcess_Blocking = false,
+                    ThoughtProcess_Circumstantial = false,
+                    ThoughtProcess_Disorganized = false,
+                    ThoughtProcess_FightIdeas = false,
+                    ThoughtProcess_GoalDirected = false,
+                    ThoughtProcess_Irrational = false,
+                    ThoughtProcess_LooseAssociations = false,
+                    ThoughtProcess_Obsessive = false,
+                    ThoughtProcess_Organized = false,
+                    ThoughtProcess_Other = false,
+                    ThoughtProcess_Preoccupied = false,
+                    ThoughtProcess_Rigid = false,
+                    ThoughtProcess_Tangential = false,
+                    TreatmentNeeds = "",
+                    Treatmentrecomendations = "",
+                    WhatIsTheClient = "",
+                    WhatIsYourLanguage = "",
+                    WhereRecord = false,
+                    WhereRecord_When = "",
+                    WhereRecord_Where = "",
+                    WithoutWanting = false,
+                    IdAppetite = 0,
+                    Appetite_Status = _combosHelper.GetComboBio_Appetite(),
+                    IdHydratation = 0,
+                    Hydratation_Status = _combosHelper.GetComboBio_Hydration(),
+                    IdRecentWeight = 0,
+                    RecentWeight_Status = _combosHelper.GetComboBio_RecentWeight(),
+                    IdIfSexuallyActive = 0,
+                    IfSexuallyActive_Status = _combosHelper.GetComboBio_IfSexuallyActive(),
+                    ClientDenied = false,                    
+                    ForHowLong = "",
+                    CreatedOn = DateTime.Now,
+                    CreatedBy = user_logged.UserName,
+                    AdmissionedFor = user_logged.FullName,
+                    CodeBill = user_logged.Clinic.CodeBIO,
+                    AnyEating = false,
+                    AnyFood = false,
+                    MilitaryServiceHistory = false,
+                    MilitaryServiceHistory_Explain = string.Empty,
+                    VocationalAssesment = string.Empty,
+                    Code90791 = false,
+                    StartTime = DateTime.Now,
+                    EndTime = DateTime.Now.AddMinutes(45)
+                };
+
+                if (model.Client.LegalGuardian == null)
+                    model.Client.LegalGuardian = new LegalGuardianEntity();
+                if (model.Client.EmergencyContact == null)
+                    model.Client.EmergencyContact = new EmergencyContactEntity();
+                if (model.Client.MedicationList == null)
+                    model.Client.MedicationList = new List<MedicationEntity>();
+                if (model.Client.Doctor == null)
+                    model.Client.Doctor = new DoctorEntity();
+                if (model.Client.Client_Referred == null || model.Client.Client_Referred.Where(n => n.Service == ServiceAgency.CMH).Count() == 0)
+                {
+                    Client_Referred client_referred = new Client_Referred();
+                    model.Client.Client_Referred = new List<Client_Referred>();
+                    model.Client.Client_Referred.Add(client_referred);
+                    model.ReferralName = "Not have referred";
+                }
+                else
+                {
+                    model.ReferralName = model.Client.Client_Referred.Where(n => n.Service == ServiceAgency.CMH).ElementAt(0).Referred.Name;
+                }
+
+                model.LegalGuardianName = model.Client.LegalGuardian.Name;
+                model.LegalGuardianTelephone = model.Client.LegalGuardian.Telephone;
+                model.EmergencyContactName = model.Client.EmergencyContact.Name;
+                model.EmergencyContactTelephone = model.Client.EmergencyContact.Telephone;
+                model.RelationShipOfEmergencyContact = model.Client.RelationShipOfEmergencyContact.ToString();
+            }
+
+            return View(model);            
         }
 
         [HttpPost]
@@ -383,7 +633,39 @@ namespace KyoS.Web.Controllers
                     }
 
                     DocumentsAssistantEntity documentAssistant = await _context.DocumentsAssistant.FirstOrDefaultAsync(m => m.LinkedUser == user_logged.UserName);
+                    DateTime start = new DateTime(bioViewModel.DateBio.Year, bioViewModel.DateBio.Month, bioViewModel.DateBio.Day, bioViewModel.StartTime.Hour, bioViewModel.StartTime.Minute, bioViewModel.StartTime.Second);
+                    bioViewModel.StartTime = start;
+                    DateTime end = new DateTime(bioViewModel.DateBio.Year, bioViewModel.DateBio.Month, bioViewModel.DateBio.Day, bioViewModel.EndTime.Hour, bioViewModel.EndTime.Minute, bioViewModel.EndTime.Second);
+                    bioViewModel.EndTime = end;
                     bioEntity = await _converterHelper.ToBioEntity(bioViewModel, true, user_logged.UserName);
+
+                    if (User.IsInRole("Documents_Assistant"))
+                    {
+                        string overlapping = _overlapingHelper.OverlapingDocumentsAssistant(documentAssistant.Id, bioViewModel.StartTime, bioViewModel.EndTime, bioViewModel.Id, DocumentDescription.Bio);
+                        if ( overlapping != string.Empty)
+                        {
+                            ModelState.AddModelError(string.Empty, $"Error. There are documents created in that time interval " + overlapping);
+                            bioViewModel.Client = _context.Clients
+                                                          .Include(n => n.LegalGuardian)
+                                                          .Include(n => n.EmergencyContact)
+                                                          .Include(n => n.MedicationList)
+                                                          .Include(n => n.Client_Referred)
+                                                          .ThenInclude(n => n.Referred)
+                                                          .Include(n => n.List_BehavioralHistory)
+                                                          .Include(f => f.Clients_Diagnostics)
+                                                          .ThenInclude(f => f.Diagnostic) 
+                                                          .FirstOrDefault(n => n.Id == bioViewModel.Client_FK);
+                            bioViewModel.Appetite_Status = _combosHelper.GetComboBio_Appetite();
+                            bioViewModel.IdHydratation = 0;
+                            bioViewModel.Hydratation_Status = _combosHelper.GetComboBio_Hydration();
+                            bioViewModel.IdRecentWeight = 0;
+                            bioViewModel.RecentWeight_Status = _combosHelper.GetComboBio_RecentWeight();
+                            bioViewModel.IdIfSexuallyActive = 0;
+                            bioViewModel.IfSexuallyActive_Status = _combosHelper.GetComboBio_IfSexuallyActive();
+
+                            return View(bioViewModel);
+                        }
+                    }
 
                     if (documentAssistant != null)
                     {
@@ -440,7 +722,7 @@ namespace KyoS.Web.Controllers
                 Appearance_FairHygiene = false,
                 Appearance_WellGroomed = false,
                 Appetite = Bio_Appetite.Diminished,
-                ApproximateDateReport = DateTime.Now,
+                ApproximateDateReport = string.Empty,
                 ApproximateDateReport_Where = "",
                 AReferral = false,
                 AReferral_Services = "",
@@ -454,7 +736,7 @@ namespace KyoS.Web.Controllers
                 ClientFamilyAbusoTrauma = false,
                 CMH = false,
                 Comments = "",
-                DateAbuse = DateTime.Now,
+                DateAbuse = string.Empty,
                 DateBio = DateTime.Now,
                 DateSignatureLicensedPractitioner = DateTime.Now,
                 DateSignaturePerson = DateTime.Now,
@@ -613,10 +895,12 @@ namespace KyoS.Web.Controllers
                 StartTime = DateTime.Now,
                 EndTime = DateTime.Now,
                 ForHowLong = "",
-                CodeBill = bioViewModel.CodeBill
+                CodeBill = bioViewModel.CodeBill,
+                Code90791 = false
             };
-            
-            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Create", model) });
+
+            return View(bioViewModel);
+            //return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Create", model) });
         }
 
         [Authorize(Roles = "Supervisor, Documents_Assistant")]
@@ -625,6 +909,7 @@ namespace KyoS.Web.Controllers
             BioEntity entity = _context.Bio
 
                                        .Include(m => m.Client)
+                                       .Include(n => n.Client.Doctor)
                                        .Include(n => n.Client.LegalGuardian)
                                        .Include(n => n.Client.EmergencyContact)
                                        .Include(n => n.Client.MedicationList)
@@ -634,6 +919,7 @@ namespace KyoS.Web.Controllers
                                        .Include(f => f.Client)
                                        .ThenInclude(f => f.Clients_Diagnostics)
                                        .ThenInclude(f => f.Diagnostic)
+                                       
                                        .FirstOrDefault(i => i.Client.Id == id);
 
             if (entity == null)
@@ -645,6 +931,11 @@ namespace KyoS.Web.Controllers
 
             if (User.IsInRole("Supervisor") || User.IsInRole("Documents_Assistant"))
             {
+                //redirect to bio print report
+                if (entity.Status == BioStatus.Approved)
+                {
+                    return RedirectToAction("PrintBio", new { id = entity.Id });
+                }
                 UserEntity user_logged = _context.Users
 
                                                  .Include(u => u.Clinic)
@@ -719,7 +1010,41 @@ namespace KyoS.Web.Controllers
                     bioViewModel.Units = units;
                 }
 
+                DateTime start = new DateTime(bioViewModel.DateBio.Year, bioViewModel.DateBio.Month, bioViewModel.DateBio.Day, bioViewModel.StartTime.Hour, bioViewModel.StartTime.Minute, bioViewModel.StartTime.Second);
+                bioViewModel.StartTime = start;
+                DateTime end = new DateTime(bioViewModel.DateBio.Year, bioViewModel.DateBio.Month, bioViewModel.DateBio.Day, bioViewModel.EndTime.Hour, bioViewModel.EndTime.Minute, bioViewModel.EndTime.Second);
+                bioViewModel.EndTime = end;
                 BioEntity bioEntity = await _converterHelper.ToBioEntity(bioViewModel, false, user_logged.UserName);
+
+                if (User.IsInRole("Documents_Assistant"))
+                {
+                    DocumentsAssistantEntity documentAssistant = _context.DocumentsAssistant.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
+                    string overlapping = _overlapingHelper.OverlapingDocumentsAssistant(documentAssistant.Id, bioViewModel.StartTime, bioViewModel.EndTime, bioViewModel.Id, DocumentDescription.Bio);
+                    if (overlapping != string.Empty)
+                    {
+                        ModelState.AddModelError(string.Empty, $"Error. There are documents created in that time interval " + overlapping);
+                        bioViewModel.Client = _context.Clients
+                                                      .Include(n => n.LegalGuardian)
+                                                      .Include(n => n.EmergencyContact)
+                                                      .Include(n => n.MedicationList)
+                                                      .Include(n => n.Client_Referred)
+                                                      .ThenInclude(n => n.Referred)
+                                                      .Include(n => n.List_BehavioralHistory)
+                                                      .Include(f => f.Clients_Diagnostics)
+                                                      .ThenInclude(f => f.Diagnostic)
+                                                      .FirstOrDefault(n => n.Id == bioViewModel.Client_FK);
+                        bioViewModel.Appetite_Status = _combosHelper.GetComboBio_Appetite();
+                        bioViewModel.IdHydratation = 0;
+                        bioViewModel.Hydratation_Status = _combosHelper.GetComboBio_Hydration();
+                        bioViewModel.IdRecentWeight = 0;
+                        bioViewModel.RecentWeight_Status = _combosHelper.GetComboBio_RecentWeight();
+                        bioViewModel.IdIfSexuallyActive = 0;
+                        bioViewModel.IfSexuallyActive_Status = _combosHelper.GetComboBio_IfSexuallyActive();
+                        ViewData["origi"] = origi;
+                        return View(bioViewModel);
+                    }
+                }
+
                 _context.Bio.Update(bioEntity);
                 try
                 {
@@ -765,6 +1090,10 @@ namespace KyoS.Web.Controllers
                     {
                         return RedirectToAction("BioWithReview","Bios");
                     }
+                    if (origi == 3)
+                    {
+                        return RedirectToAction("IndexDocumentsAssistant", "Calendar");
+                    }
                 }
                 catch (System.Exception ex)
                 {
@@ -773,7 +1102,8 @@ namespace KyoS.Web.Controllers
 
             }
 
-            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Edit", bioViewModel) });
+            return View(bioViewModel);
+            // return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Edit", bioViewModel) });
         }
 
         [Authorize(Roles = "Supervisor, Documents_Assistant")]
@@ -939,7 +1269,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Create", model) });
         }
 
-        [Authorize(Roles = "Manager, Supervisor, Facilitator")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant")]
         public async Task<IActionResult> IndexBehavioralHealthHistory(int idError = 0)
         {
             if (idError == 1) //Imposible to delete
@@ -979,6 +1309,19 @@ namespace KyoS.Web.Controllers
                                               .Include(g => g.List_BehavioralHistory)
 
                                               .Where(n => n.Clinic.Id == user_logged.Clinic.Id)
+                                              .OrderBy(f => f.Name)
+                                              .ToListAsync());
+                }
+                if (User.IsInRole("Documents_Assistant"))
+                {
+                    DocumentsAssistantEntity document_Assisstant = _context.DocumentsAssistant.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
+                    return View(await _context.Clients
+                                              .Include(f => f.Clients_Diagnostics)
+                                              .Include(g => g.Bio)
+                                              .Include(g => g.List_BehavioralHistory)
+
+                                              .Where(n => n.Clinic.Id == user_logged.Clinic.Id
+                                                       && n.Bio.DocumentsAssistant.Id == document_Assisstant.Id)
                                               .OrderBy(f => f.Name)
                                               .ToListAsync());
                 }
@@ -1152,7 +1495,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction(nameof(IndexBehavioralHealthHistory));            
         }
 
-        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant, Frontdesk")]
         public IActionResult PrintBio(int id)
         {
             BioEntity entity = _context.Bio
@@ -1208,11 +1551,40 @@ namespace KyoS.Web.Controllers
                 Stream stream = _reportHelper.CommunityHTCBioReport(entity);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
-
+            if (entity.Client.Clinic.Name == "PRINCIPLE CARE CENTER INC")
+            {
+                Stream stream = _reportHelper.PrincipleCCIBioReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (entity.Client.Clinic.Name == "SAPPHIRE MENTAL HEALTH CENTER LLC")
+            {
+                Stream stream = _reportHelper.SapphireMHCBioReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }            
+            if (entity.Client.Clinic.Name == "MEDICAL & REHAB OF HILLSBOROUGH INC")
+            {
+                Stream stream = _reportHelper.MedicalRehabBioReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (entity.Client.Clinic.Name == "MY FLORIDA CASE MANAGEMENT SERVICES LLC")
+            {
+                Stream stream = _reportHelper.MyFloridaBioReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (entity.Client.Clinic.Name == "ORION MENTAL HEALTH CENTER LLC")
+            {
+                Stream stream = _reportHelper.OrionBioReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (entity.Client.Clinic.Name == "ALLIED HEALTH GROUP LLC")
+            {
+                Stream stream = _reportHelper.AlliedBioReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
             return null;
         }
 
-        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant, Frontdesk")]
         public async Task<IActionResult> ClientswithoutBIO(int idError = 0)
         {
             UserEntity user_logged = await _context.Users
@@ -1226,16 +1598,35 @@ namespace KyoS.Web.Controllers
             {
                 return RedirectToAction("NotAuthorized", "Account");
             }
+            if (User.IsInRole("Facilitator"))
+            {
+                FacilitatorEntity facilitator = await _context.Facilitators.FirstOrDefaultAsync(n => n.LinkedUser == user_logged.UserName);
+                List<ClientEntity> ClientList = await _context.Clients
+                                                         .Include(n => n.Bio)
+                                                         .Where(n => n.Bio == null
+                                                           && n.Brief == null
+                                                           && n.Clinic.Id == user_logged.Clinic.Id
+                                                           && n.OnlyTCM == false
+                                                           && (n.IdFacilitatorPSR == facilitator.Id
+                                                            || n.IdFacilitatorGroup == facilitator.Id
+                                                            || n.IndividualTherapyFacilitator.Id == facilitator.Id))
+                                                         .ToListAsync();
 
-            List<ClientEntity> ClientList = await _context.Clients
-                                                          .Include(n => n.Bio)
-                                                          .Where(n => n.Bio == null
-                                                            && n.Brief == null
-                                                            && n.Clinic.Id == user_logged.Clinic.Id
-                                                            && n.OnlyTCM == false)
-                                                          .ToListAsync();
+                return View(ClientList);
+            }
+            else
+            {
+                List<ClientEntity> ClientList = await _context.Clients
+                                                             .Include(n => n.Bio)
+                                                             .Where(n => n.Bio == null
+                                                               && n.Brief == null
+                                                               && n.Clinic.Id == user_logged.Clinic.Id
+                                                               && n.OnlyTCM == false)
+                                                             .ToListAsync();
 
-            return View(ClientList);
+                return View(ClientList);
+            }
+               
 
         }
 
@@ -1442,7 +1833,7 @@ namespace KyoS.Web.Controllers
             }
         }
 
-        [Authorize(Roles = "Supervisor, Documents_Assistant, Manager, Facilitator")]
+        [Authorize(Roles = "Supervisor, Documents_Assistant, Manager, Facilitator, Frontdesk")]
         public IActionResult EditReadOnly(int id = 0, int origi = 0)
         {
             BioEntity entity = _context.Bio
@@ -1457,7 +1848,9 @@ namespace KyoS.Web.Controllers
                                        .Include(m => m.Client)
                                        .ThenInclude(n => n.Clients_Diagnostics)
                                        .ThenInclude(n => n.Diagnostic)
-
+                                       .Include(n => n.Client)
+                                       .ThenInclude(n => n.Clinic)
+                                       .ThenInclude(n => n.Setting)
                                        .FirstOrDefault(i => i.Id == id);
 
             if (entity == null)
@@ -1543,15 +1936,43 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Supervisor")]
-        public async Task<IActionResult> Approve(int id, int origi = 0)
+        public async Task<IActionResult> Approve(BioViewModel model, int id, int origi = 0)
         {
 
-            BioEntity bio = await _context.Bio.FirstOrDefaultAsync(n => n.Id == id);
+            BioEntity bio = await _context.Bio
+                                          .Include(n => n.Client)
+                                          .ThenInclude(n => n.Clinic)
+                                          .ThenInclude(n => n.Setting)
+                                          .FirstOrDefaultAsync(n => n.Id == id);
 
 
             bio.Status = BioStatus.Approved;
-            bio.DateSignatureSupervisor = DateTime.Now;
+            bio.DateSignatureSupervisor = model.DateSignatureSupervisor;
             bio.Supervisor = await _context.Supervisors.FirstOrDefaultAsync(s => s.LinkedUser == User.Identity.Name);
+
+            if (bio.Client.Clinic.Setting.SupervisorEdit == true)
+            {
+                //section2
+                bio.PresentingProblem = model.PresentingProblem;
+                bio.ClientAssessmentSituation = model.ClientAssessmentSituation;
+                bio.FamilyAssessmentSituation = model.FamilyAssessmentSituation;
+                bio.FamilyEmotional = model.FamilyEmotional;
+                bio.LegalAssessment = model.LegalAssessment;
+
+                //section 7
+                bio.SubstanceAbuse = model.SubstanceAbuse;
+                bio.MilitaryServiceHistory = model.MilitaryServiceHistory;
+                bio.VocationalAssesment = model.VocationalAssesment;
+                bio.LegalHistory = model.LegalHistory;
+                bio.PersonalFamilyPsychiatric = model.PersonalFamilyPsychiatric;
+                bio.DoesClientRequired = model.DoesClientRequired;
+                bio.DoesClientRequired_Where = model.DoesClientRequired_Where;
+                bio.ObtainRelease = model.ObtainRelease;
+
+                //section 12
+                bio.TreatmentNeeds = model.TreatmentNeeds;
+
+            }
             _context.Update(bio);
 
             await _context.SaveChangesAsync();
@@ -1567,7 +1988,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        [Authorize(Roles = "Supervisor, Manager, Documents_Assistant")]
+        [Authorize(Roles = "Supervisor, Manager, Documents_Assistant, Frontdesk")]
         public async Task<IActionResult> Pending(int idError = 0)
         {
             UserEntity user_logged = await _context.Users
@@ -2163,5 +2584,233 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("NotAuthorized", "Account");
         }
         #endregion
+
+        [Authorize(Roles = "Supervisor, Documents_Assistant")]
+        public async Task<IActionResult> AutoSave(string jsonModel)
+        {
+            UserEntity user_logged = await _context.Users
+                                                   .Include(u => u.Clinic)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            BioTempEntity model = JsonConvert.DeserializeObject<BioTempEntity>(jsonModel);
+
+            BioTempEntity bio = await _context.BioTemp
+                                              .FirstOrDefaultAsync(b => (b.UserName == user_logged.UserName && b.Url == model.Url));
+
+            if (bio == null)
+            {
+                model.UserName = user_logged.UserName;
+
+                _context.Add(model);
+                try
+                {
+                    await _context.SaveChangesAsync();
+                    return Json(true);
+                }
+                catch (Exception)
+                {
+                    return Json(false);
+                }
+            }
+            else
+            {
+                bio.CMH = model.CMH;
+                bio.Priv = model.Priv;
+                bio.Setting = model.Setting;
+                bio.BioH0031HN = model.BioH0031HN;
+                bio.IDAH0031HO = model.IDAH0031HO;
+                bio.Code90791 = model.Code90791;
+                bio.DateBio = model.DateBio;
+                bio.StartTime = model.StartTime;
+                bio.EndTime = model.EndTime;
+                bio.PresentingProblem = model.PresentingProblem;
+                bio.ClientAssessmentSituation = model.ClientAssessmentSituation;
+                bio.FamilyAssessmentSituation = model.FamilyAssessmentSituation;
+                bio.FamilyEmotional = model.FamilyEmotional;
+                bio.LegalAssessment = model.LegalAssessment;
+                bio.Appearance_Disheveled = model.Appearance_Disheveled;
+                bio.Appearance_FairHygiene = model.Appearance_FairHygiene;
+                bio.Appearance_Cleaned = model.Appearance_Cleaned;
+                bio.Appearance_WellGroomed = model.Appearance_WellGroomed;
+                bio.Appearance_Bizarre = model.Appearance_Bizarre;
+                bio.Motor_Normal = model.Motor_Normal;
+                bio.Motor_Agitated = model.Motor_Agitated;
+                bio.Motor_Retardation = model.Motor_Retardation;
+                bio.Motor_RestLess = model.Motor_RestLess;
+                bio.Motor_Akathisia = model.Motor_Akathisia;
+                bio.Motor_Tremor = model.Motor_Tremor;
+                bio.Motor_Other = model.Motor_Other;
+                bio.Speech_Normal = model.Speech_Normal;
+                bio.Speech_Loud = model.Speech_Loud;
+                bio.Speech_Pressured = model.Speech_Pressured;
+                bio.Speech_Impoverished = model.Speech_Impoverished;
+                bio.Speech_Slurred = model.Speech_Slurred;
+                bio.Speech_Mumbled = model.Speech_Mumbled;
+                bio.Speech_Stutters = model.Speech_Stutters;
+                bio.Speech_Rapid = model.Speech_Rapid;
+                bio.Speech_Slow = model.Speech_Slow;
+                bio.Speech_Other = model.Speech_Other;
+                bio.Affect_Appropriate = model.Affect_Appropriate;
+                bio.Affect_labile = model.Affect_labile;
+                bio.Affect_Expansive = model.Affect_Expansive;
+                bio.Affect_Blunted = model.Affect_Blunted;
+                bio.Affect_Constricted = model.Affect_Constricted;
+                bio.Affect_Flat = model.Affect_Flat;
+                bio.Affect_Tearful_Sad = model.Affect_Tearful_Sad;
+                bio.Affect_Anxious = model.Affect_Anxious;
+                bio.Affect_Angry = model.Affect_Angry;
+                bio.Affect_Other = model.Affect_Other;
+                bio.ThoughtProcess_Organized = model.ThoughtProcess_Organized;
+                bio.ThoughtProcess_Disorganized = model.ThoughtProcess_Disorganized;
+                bio.ThoughtProcess_GoalDirected = model.ThoughtProcess_GoalDirected;
+                bio.ThoughtProcess_Irrational = model.ThoughtProcess_Irrational;
+                bio.ThoughtProcess_Rigid = model.ThoughtProcess_Rigid;
+                bio.ThoughtProcess_Obsessive = model.ThoughtProcess_Obsessive;
+                bio.ThoughtProcess_Tangential = model.ThoughtProcess_Tangential;
+                bio.ThoughtProcess_Circumstantial = model.ThoughtProcess_Circumstantial;
+                bio.ThoughtProcess_Preoccupied = model.ThoughtProcess_Preoccupied;
+                bio.ThoughtProcess_Blocking = model.ThoughtProcess_Blocking;
+                bio.ThoughtProcess_FightIdeas = model.ThoughtProcess_FightIdeas;
+                bio.ThoughtProcess_LooseAssociations = model.ThoughtProcess_LooseAssociations;
+                bio.ThoughtProcess_Other = model.ThoughtProcess_Other;
+                bio.Mood_Euthymic = model.Mood_Euthymic;
+                bio.Mood_Depressed = model.Mood_Depressed;
+                bio.Mood_Anxious = model.Mood_Anxious;
+                bio.Mood_Euphoric = model.Mood_Euphoric;
+                bio.Mood_Angry = model.Mood_Angry;
+                bio.Mood_Maniac = model.Mood_Maniac;
+                bio.Mood_Other = model.Mood_Other;
+                bio.Judgment_Good = model.Judgment_Good;
+                bio.Judgment_Fair = model.Judgment_Fair;
+                bio.Judgment_Poor = model.Judgment_Poor;
+                bio.Judgment_Other = model.Judgment_Other;
+                bio.Insight_Good = model.Insight_Good;
+                bio.Insight_Fair = model.Insight_Fair;
+                bio.Insight_Poor = model.Insight_Poor;
+                bio.Insight_Other = model.Insight_Other;
+                bio.ThoughtContent_Relevant = model.ThoughtContent_Relevant;
+                bio.ThoughtContent_Hallucinations = model.ThoughtContent_Hallucinations;
+                bio.ThoughtContent_Hallucinations_Type = model.ThoughtContent_Hallucinations_Type;
+                bio.ThoughtContent_RealityBased = model.ThoughtContent_RealityBased;
+                bio.ThoughtContent_Delusions = model.ThoughtContent_Delusions;
+                bio.ThoughtContent_Delusions_Type = model.ThoughtContent_Delusions_Type;
+                bio.Oriented_FullOriented = model.Oriented_FullOriented;
+                bio.Lacking_Time = model.Lacking_Time;
+                bio.Lacking_Place = model.Lacking_Place;
+                bio.Lacking_Person = model.Lacking_Person;
+                bio.Lacking_Location = model.Lacking_Location;
+                bio.RiskToSelf_Low = model.RiskToSelf_Low;
+                bio.RiskToSelf_Medium = model.RiskToSelf_Medium;
+                bio.RiskToSelf_High = model.RiskToSelf_High;
+                bio.RiskToSelf_Chronic = model.RiskToSelf_Chronic;
+                bio.RiskToOther_Low = model.RiskToOther_Low;
+                bio.RiskToOther_Medium = model.RiskToOther_Medium;
+                bio.RiskToOther_High = model.RiskToOther_High;
+                bio.RiskToOther_Chronic = model.RiskToOther_Chronic;
+                bio.SafetyPlan = model.SafetyPlan;
+                bio.Comments = model.Comments;
+                bio.ClientDenied = model.ClientDenied;
+                bio.HaveYouEverThought = model.HaveYouEverThought;
+                bio.DoYouOwn = model.DoYouOwn;
+                bio.DoesClient = model.DoesClient;
+                bio.HaveYouEverBeen = model.HaveYouEverBeen;
+                bio.HasTheClient = model.HasTheClient;
+                bio.HaveYouEverThought_Explain = model.HaveYouEverThought_Explain;
+                bio.DoYouOwn_Explain = model.DoYouOwn_Explain;
+                bio.HaveYouEverBeen_Explain = model.HaveYouEverBeen_Explain;
+                bio.HasTheClient_Explain = model.HasTheClient_Explain;
+                bio.ClientFamilyAbusoTrauma = model.ClientFamilyAbusoTrauma;
+                bio.DateAbuse = model.DateAbuse;
+                bio.PersonInvolved = model.PersonInvolved;
+                bio.ApproximateDateReport = model.ApproximateDateReport;
+                bio.ApproximateDateReport_Where = model.ApproximateDateReport_Where;
+                bio.RelationShips = model.RelationShips;
+                bio.Details = model.Details;
+                bio.Outcome = model.Outcome;
+                bio.AReferral = model.AReferral;
+                bio.AReferral_Services = model.AReferral_Services;
+                bio.AReferral_When = model.AReferral_When;
+                bio.AReferral_Where = model.AReferral_Where;
+                bio.ObtainRelease = model.ObtainRelease;
+                bio.WhereRecord = model.WhereRecord;
+                bio.WhereRecord_When = model.WhereRecord_When;
+                bio.WhereRecord_Where = model.WhereRecord_Where;
+                bio.HasTheClientVisitedPhysician = model.HasTheClientVisitedPhysician;
+                bio.HasTheClientVisitedPhysician_Reason = model.HasTheClientVisitedPhysician_Reason;
+                bio.HasTheClientVisitedPhysician_Date = model.HasTheClientVisitedPhysician_Date;
+                bio.DoesTheClientExperience = model.DoesTheClientExperience;
+                bio.DoesTheClientExperience_Where = model.DoesTheClientExperience_Where;
+                bio.ForHowLong = model.ForHowLong;
+                bio.PleaseRatePain = model.PleaseRatePain;
+                bio.HasClientBeenTreatedPain = model.HasClientBeenTreatedPain;
+                bio.HasClientBeenTreatedPain_PleaseIncludeService = model.HasClientBeenTreatedPain_PleaseIncludeService;
+                bio.HasClientBeenTreatedPain_Ifnot = model.HasClientBeenTreatedPain_Ifnot;
+                bio.HasClientBeenTreatedPain_Where = model.HasClientBeenTreatedPain_Where;
+                bio.ObtainReleaseInformation = model.ObtainReleaseInformation;
+                bio.EastFewer = model.EastFewer;
+                bio.EastFew = model.EastFew;
+                bio.Has3OrMore = model.Has3OrMore;
+                bio.HasTooth = model.HasTooth;
+                bio.DoesNotAlways = model.DoesNotAlways;
+                bio.EastAlone = model.EastAlone;
+                bio.Takes3OrMore = model.Takes3OrMore;
+                bio.WithoutWanting = model.WithoutWanting;
+                bio.NotAlwaysPhysically = model.NotAlwaysPhysically;
+                bio.AnyFood = model.AnyFood;
+                bio.AnyEating = model.AnyEating;
+                bio.If6_ReferredTo = model.If6_ReferredTo;
+                bio.If6_Date = model.If6_Date;
+                bio.Appetite = model.Appetite;
+                bio.Hydration = model.Hydration;
+                bio.RecentWeight = model.RecentWeight;
+                bio.SubstanceAbuse =  model.SubstanceAbuse;
+                bio.MilitaryServiceHistory = model.MilitaryServiceHistory;
+                bio.MilitaryServiceHistory_Explain = model.MilitaryServiceHistory_Explain;
+                bio.VocationalAssesment = model.VocationalAssesment;
+                bio.LegalHistory = model.LegalHistory;
+                bio.PersonalFamilyPsychiatric = model.PersonalFamilyPsychiatric;
+                bio.DoesClientRequired = model.DoesClientRequired;
+                bio.DoesClientRequired_Where = model.DoesClientRequired_Where;
+                bio.ObtainReleaseInformation7 = model.ObtainReleaseInformation7;
+                bio.IfForeing_Born = model.IfForeing_Born;
+                bio.IfForeing_AgeArrival = model.IfForeing_AgeArrival;
+                bio.IfForeing_YearArrival = model.IfForeing_YearArrival;
+                bio.PrimaryLocation = model.PrimaryLocation;
+                bio.GeneralDescription = model.GeneralDescription;
+                bio.AdultCurrentExperience = model.AdultCurrentExperience;
+                bio.WhatIsTheClient = model.WhatIsTheClient;
+                bio.RelationshipWithFamily = model.RelationshipWithFamily;
+                bio.Children = model.Children;
+                bio.IfMarried = model.IfMarried;
+                bio.IfSeparated = model.IfSeparated;
+                bio.IfSexuallyActive = model.IfSexuallyActive;
+                bio.PleaseProvideGoal = model.PleaseProvideGoal;
+                bio.DoYouHaveAnyReligious = model.DoYouHaveAnyReligious;
+                bio.DoYouHaveAnyVisual = model.DoYouHaveAnyVisual;
+                bio.HigHestEducation = model.HigHestEducation;
+                bio.DoYouHaveAnyPhysical = model.DoYouHaveAnyPhysical;
+                bio.CanClientFollow = model.CanClientFollow;
+                bio.ProvideIntegratedSummary = model.ProvideIntegratedSummary;
+                bio.TreatmentNeeds = model.TreatmentNeeds;
+                bio.Treatmentrecomendations = model.Treatmentrecomendations;
+                bio.IConcurWhitDiagnistic = model.IConcurWhitDiagnistic;
+                bio.AlternativeDiagnosis = model.AlternativeDiagnosis;
+                if(User.IsInRole("Supervisor"))                
+                    bio.DateSignatureLicensedPractitioner = model.DateSignatureLicensedPractitioner;                
+                else                
+                    bio.DateSignatureUnlicensedTherapist = model.DateSignatureUnlicensedTherapist;                
+
+                _context.Update(bio);
+                try
+                {
+                    await _context.SaveChangesAsync();
+                    return Json(false);
+                }
+                catch (Exception)
+                {
+                    return Json(false);
+                }
+            }
+        }        
     }
 }

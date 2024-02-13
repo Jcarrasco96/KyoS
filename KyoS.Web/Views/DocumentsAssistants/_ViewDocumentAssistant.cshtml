@@ -1,0 +1,77 @@
+﻿@model IEnumerable<KyoS.Web.Data.Entities.DocumentsAssistantEntity>
+
+@if (Model != null)
+{
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Documents Assistants</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-hover table-responsive table-striped" id="MyTable">
+                    <thead>
+                        <tr>
+                            <th class="col-md-3">
+                                @Html.DisplayNameFor(model => model.Name)
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Credentials
+                            </th>
+                            <th class="col-md-3">
+                                Clinic
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                User
+                            </th>
+                            <th class="col-md-2" style="text-align:center;">
+                                Signature
+                            </th>
+                            <th class="col-md-2">
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Name)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.Code)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Clinic.Name)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.LinkedUser)
+                                </td>
+                                <td align="center">
+                                    @if (item.SignaturePath == string.Empty || item.SignaturePath == null)
+                                    {
+                                        <span class="label label-danger">
+                                          No
+                                        </span>
+                                    }
+                                    else
+                                    { 
+                                        <span class="label label-success">
+                                          Yes
+                                        </span>
+                                    }
+                                </td>
+                                <td align="right">
+                                    <a onclick="showInPopup('@Url.Action("EditModal","DocumentsAssistants",new {id = @item.Id},Context.Request.Scheme)','Edit Documents Assistant')" class="btn btn-warning" title="Edit Documents Assistant"><i class="glyphicon glyphicon-pencil"></i></a>
+                                    <button onclick="ConfirmDelete(@item.Id)" class="btn btn-danger deleteItem" title="Delete documents assistant"><i class="glyphicon glyphicon-trash"></i></button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}
+
+
+

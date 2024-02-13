@@ -36,5 +36,6 @@ namespace KyoS.Web.Data.Entities
         public int IdTCMServiceActivity { get; set; }
 
         public string ServiceName { get; set; }
+        public bool Billable { get; set; }
     }
 }

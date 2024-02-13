@@ -1,16 +1,16 @@
-﻿@model KyoS.Web.Models.IntakeMedicalHistoryViewModel
+﻿@model KyoS.Web.Models.TCMIntakeMedicalHistoryViewModel
 
 <div class="col-md-12">
     <pre>
     <strong>MEDICAL HISTORY</strong>
 
-    Recipient: <strong>@Html.DisplayFor(modelItem => Model.Client.Clinic.Name)</strong>                                    Case No: @ViewData["CaseNumber"].ToString()
+    Recipient: <strong>@Html.DisplayFor(modelItem => Model.TCMClient.Client.Clinic.Name)</strong>                                    Case No: @ViewData["CaseNumber"].ToString()
             
-    Primary Care Physician: <input asp-for="PrimaryCarePhysician" style="width:20%">
+    Primary Care Physician: <input asp-for="PrimaryCarePhysician" style="width:20%" >
             
-    Address Physician:      <input asp-for="AddressPhysician" style="width:20%">
+    Address Physician:      <input asp-for="AddressPhysician" style="width:20%" >
             
-    City:                   <input asp-for="City" style="width:20%">                    State: <input asp-for="State">                Zip:  <input asp-for="ZipCode">
+    City:                   <input asp-for="City" style="width:20%" >                    State: <input asp-for="State" >                Zip:  <input asp-for="ZipCode" >
     </pre>
 </div>
 <div class="col-md-12">
@@ -145,12 +145,39 @@
 </div>
 <div class="col-md-12">
     <pre>
-    
-    <strong>Person served signature date</strong>    <input asp-for="DateSignaturePerson">      <strong>Legal Guardian signature date</strong>    <input asp-for="DateSignatureLegalGuardian">
-    <strong>(@Html.DisplayFor(modelItem => Model.Client.Name))</strong>     
-    
+@if (Model.AdmissionedFor == User.Identity.Name)
+{
+    @if (Model.TCMClient.Client.LegalGuardian.Name == null)
+    {
+    <strong>Person served signature date</strong>    <input asp-for="DateSignaturePerson">
+    <strong>(@Html.DisplayFor(modelItem => Model.TCMClient.Client.Name))</strong>     
+    }
+    else
+    {
+    <strong>Legal Guardian signature date</strong>    <input asp-for="DateSignatureLegalGuardian">
+    <strong>(@Html.DisplayFor(modelItem => Model.TCMClient.Client.LegalGuardian.Name))</strong>     
+
+    }
     <strong>Employee signature date</strong>         <input asp-for="DateSignatureEmployee">
     <strong>(@Html.DisplayFor(modelItem => Model.AdmissionedFor))</strong>                                                                    
+}
+else
+{ 
+    @if (Model.TCMClient.Client.LegalGuardian.Name == null)
+    {
+    <strong>Person served signature date</strong>    <input asp-for="DateSignaturePerson" >
+    <strong>(@Html.DisplayFor(modelItem => Model.TCMClient.Client.Name))</strong>     
+    }
+    else
+    {
+    <strong>Legal Guardian signature date</strong>    <input asp-for="DateSignatureLegalGuardian" >
+    <strong>(@Html.DisplayFor(modelItem => Model.TCMClient.Client.LegalGuardian.Name))</strong>     
+
+    }
+    <strong>Employee signature date</strong>         <input asp-for="DateSignatureEmployee" >
+    <strong>(@Html.DisplayFor(modelItem => Model.AdmissionedFor))</strong>                                                                    
+
+}
     </pre>
 </div>
 <div class="col-md-12">
@@ -160,7 +187,7 @@
     <div class="form-group col-md-12">
         <input type="checkbox" asp-for="Documents" class="form-check-input" id="Documents"> Documents were verbally translated to me in my native language.<br />
         <label asp-for="Documents" class="forgot">
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>@Html.DisplayFor(modelItem => Model.Client.Clinic.Name)</strong>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>@Html.DisplayFor(modelItem => Model.TCMClient.Client.Clinic.Name)</strong>
         </label>
     </div>
 </div>

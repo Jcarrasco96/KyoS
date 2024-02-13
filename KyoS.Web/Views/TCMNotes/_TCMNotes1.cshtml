@@ -16,23 +16,102 @@
 }
 else
 {
-    <div class="col-md-push-12">
-        <div class="form-group col-md-6">
-            <label asp-for="Outcome" class="control-label">Outcome of Service(s):</label>&nbsp;
-            <textarea asp-for="Outcome" class="form-control" rows="5" readonly></textarea>
-            <span asp-validation-for="Outcome" class="text-danger"></span>
+    @if ( Model.TCMClient.Client.Clinic.Setting.TCMSupervisorEdit == true)
+    {
+        <div class="col-md-push-12">
+            <div class="form-group col-md-6">
+                <label asp-for="Outcome" class="control-label">Outcome of Service(s):</label>&nbsp;
+                <textarea asp-for="Outcome" class="form-control" rows="5"></textarea>
+                <span asp-validation-for="Outcome" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-6">
+                <label asp-for="NextStep" class="control-label">Next Step(s):</label>&nbsp;
+                <textarea asp-for="NextStep" class="form-control" rows="5"></textarea>
+                <span asp-validation-for="NextStep" class="text-danger"></span>
+            </div>
         </div>
-        <div class="form-group col-md-6">
-            <label asp-for="NextStep" class="control-label">Next Step(s):</label>&nbsp;
-            <textarea asp-for="NextStep" class="form-control" rows="5" readonly></textarea>
-            <span asp-validation-for="NextStep" class="text-danger"></span>
+    }
+    else
+    { 
+        <div class="col-md-push-12">
+            <div class="form-group col-md-6">
+                <label asp-for="Outcome" class="control-label">Outcome of Service(s):</label>&nbsp;
+                <textarea asp-for="Outcome" class="form-control" rows="5" readonly></textarea>
+                <span asp-validation-for="Outcome" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-6">
+                <label asp-for="NextStep" class="control-label">Next Step(s):</label>&nbsp;
+                <textarea asp-for="NextStep" class="form-control" rows="5" readonly></textarea>
+                <span asp-validation-for="NextStep" class="text-danger"></span>
+            </div>
         </div>
-    </div>
+    }
+    
 }
-@*<div class="col-md-12">
+
+@if (User.IsInRole("TCMSupervisor"))
+{
+    @if (Model.Status == KyoS.Common.Enums.NoteStatus.Approved)
+    {
+        <div class="col-md-12" id="check110">
                 <pre>
-                    @Html.DisplayFor(modelItem => Model.CaseManager.Name)                                                        @Html.DisplayFor(modelItem => Model.CaseManager.Credentials)                      @Html.DisplayFor(modelItem => Model.CaseManagerDate)
-                    <strong>_______________________</strong>         <strong>______________________</strong>         <strong>___________________</strong>         <strong>___________________</strong>
-                    <strong>Case Manager Print Name</strong>         <strong>Case Manager Signature</strong>             <strong>Credentials</strong>                    <strong>Date</strong>
+                    @Html.DisplayFor(modelItem => Model.TCMClient.Casemanager.Name)                 <input asp-for="Sign" type="checkbox" class="form-check-input" id="check1" disabled> Sign Here (Case Manager)              @Html.DisplayFor(modelItem => Model.TCMClient.Casemanager.Credentials)                      @Html.DisplayFor(modelItem => Model.DateOfService)
+                    <strong>_______________________</strong>         <strong>_____________________________</strong>         <strong>___________________</strong>         <strong>___________________</strong>
+                    <strong>Case Manager Print Name</strong>            <strong>Case Manager Signature</strong>                 <strong>Credentials</strong>                    <strong>Date</strong>
+
+                    @Html.DisplayFor(modelItem => Model.TCMClient.Casemanager.TCMSupervisor.Name)                      <input asp-for="SignSupervisor" type="checkbox" checked class="form-check-input" id="check2" disabled> Sign Here (Supervisor)                  @Html.DisplayFor(modelItem => Model.TCMClient.Casemanager.TCMSupervisor.Code)                    <input asp-for="ApprovedDate" class="form-check-input">
+                    <strong>_______________________</strong>         <strong>_____________________________</strong>         <strong>___________________</strong>         <strong>___________________</strong>
+                    <strong>Supervisor Print Name</strong>               <strong>Supervisor Signature</strong>                  <strong>Credentials</strong>                    <strong>Date</strong>
                 </pre>
-    </div>*@
+        </div>
+    }
+    else
+    { 
+        <div class="col-md-12" id="check110">
+                <pre>
+                    @Html.DisplayFor(modelItem => Model.TCMClient.Casemanager.Name)                          <input asp-for="Sign" type="checkbox" class="form-check-input" id="check1" disabled> Sign Here (Case Manager)                @Html.DisplayFor(modelItem => Model.TCMClient.Casemanager.Credentials)                      @Html.DisplayFor(modelItem => Model.DateOfService)
+                    <strong>_______________________</strong>         <strong>_____________________________</strong>         <strong>___________________</strong>         <strong>___________________</strong>
+                    <strong>Case Manager Print Name</strong>            <strong>Case Manager Signature</strong>                 <strong>Credentials</strong>                    <strong>Date</strong>
+
+                    @Html.DisplayFor(modelItem => Model.TCMClient.Casemanager.TCMSupervisor.Name)                  <input asp-for="SignSupervisor" type="checkbox" class="form-check-input" id="check2" > Sign Here (Supervisor)                  @Html.DisplayFor(modelItem => Model.TCMClient.Casemanager.TCMSupervisor.Code)                    @Html.DisplayFor(modelItem => Model.ApprovedDate)
+                    <strong>_______________________</strong>         <strong>_____________________________</strong>         <strong>___________________</strong>         <strong>___________________</strong>
+                    <strong>Supervisor Print Name</strong>               <strong>Supervisor Signature</strong>                  <strong>Credentials</strong>                    <strong>Date</strong>
+                </pre>
+        </div>
+    }
+}
+@if (User.IsInRole("CaseManager"))
+{
+    @if (Model.Status == KyoS.Common.Enums.NoteStatus.Edition)
+    {
+    <div class="col-md-12" id="check110">
+                <pre>
+                    @Html.DisplayFor(modelItem => Model.TCMClient.Casemanager.Name)                      <input asp-for="Sign" type="checkbox" class="form-check-input" id="check1"> Sign Here (Case Manager)                 @Html.DisplayFor(modelItem => Model.TCMClient.Casemanager.Credentials)                    @Html.DisplayFor(modelItem => Model.DateOfService)
+                    <strong>_______________________</strong>         <strong>_____________________________</strong>         <strong>___________________</strong>         <strong>___________________</strong>
+                    <strong>Case Manager Print Name</strong>            <strong>Case Manager Signature</strong>                 <strong>Credentials</strong>                    <strong>Date</strong>
+                </pre>
+    </div>
+    }
+    else
+    { 
+    <div class="col-md-12" id="check110">
+                <pre>
+                    @Html.DisplayFor(modelItem => Model.TCMClient.Casemanager.Name)                      <input asp-for="Sign" type="checkbox" class="form-check-input" id="check1" disabled> Sign Here (Case Manager)                @Html.DisplayFor(modelItem => Model.TCMClient.Casemanager.Credentials)                      @Html.DisplayFor(modelItem => Model.DateOfService)
+                    <strong>_______________________</strong>         <strong>_____________________________</strong>         <strong>___________________</strong>         <strong>___________________</strong>
+                    <strong>Case Manager Print Name</strong>            <strong>Case Manager Signature</strong>                 <strong>Credentials</strong>                    <strong>Date</strong>
+                </pre>
+    </div>
+    }
+}
+
+<script>
+    check1.addEventListener('change', (e) => {
+        if (check1.checked == true) {
+            document.getElementById('check110'). = true;
+          
+        } else {
+            document.getElementById('check110').disabled = false;
+           
+        }
+    })
+</script>

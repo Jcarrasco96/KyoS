@@ -91,8 +91,8 @@
                             <td align="center">
                                 @if (item.ExpiredDays == 0)
                                 {
-                                    <span class="label label-default">
-                                        N_Obj
+                                    <span class="label label-danger">
+                                        -
                                     </span>
                                 }
                                 else
@@ -123,33 +123,48 @@
                                         Addendum
                                     </span>
                                 }
+                                @if (item.TypeDocument == 3)
+                                {
+                                    <span class="label label-danger">
+                                        -
+                                    </span>
+                                }
                             </td>
                             <td align="right">
                                 @*@if (User.IsInRole("Facilitator"))
+        {
+            <a class="btn btn-warning disabled" title="Edit MTP"><i class="glyphicon glyphicon-pencil"></i></a>
+            <a asp-action="CreateMTPReview" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-success" title="Create Review"><i class="glyphicon glyphicon-plus"></i></a>
+            <a asp-action="PrintMTP" asp-route-id="@item.Id" class="btn btn-success" title="Print MTP" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+        }
+        else
+        {
+            @if (User.IsInRole("Supervisor"))
+            {
+                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i></a>
+                <a class="btn btn-success disabled" title="Create MTP Review"><i class="glyphicon glyphicon-plus"></i></a>
+                <a asp-action="PrintMTP" asp-route-id="@item.Id" class="btn btn-success" title="Print MTP" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+            }
+            else
+            {
+                <a class="btn btn-warning disabled" title="Edit MTP"><i class="glyphicon glyphicon-pencil"></i></a>
+                <a class="btn btn-success disabled" title="Create MTP Review"><i class="glyphicon glyphicon-plus"></i></a>
+                <a asp-action="PrintMTP" asp-route-id="@item.Id" class="btn btn-success" title="Print MTP" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+            }
+
+        }*@
+                                @if (User.IsInRole("Facilitator") || User.IsInRole("Documents_Assistant"))
                                 {
-                                    <a class="btn btn-warning disabled" title="Edit MTP"><i class="glyphicon glyphicon-pencil"></i></a>
                                     <a asp-action="CreateMTPReview" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-success" title="Create Review"><i class="glyphicon glyphicon-plus"></i></a>
-                                    <a asp-action="PrintMTP" asp-route-id="@item.Id" class="btn btn-success" title="Print MTP" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                    <a asp-action="CreateAdendum" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-success" title="Create Addemdun"><i class="glyphicon glyphicon-plus"></i></a>
                                 }
                                 else
                                 {
-                                    @if (User.IsInRole("Supervisor"))
-                                    {
-                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i></a>
-                                        <a class="btn btn-success disabled" title="Create MTP Review"><i class="glyphicon glyphicon-plus"></i></a>
-                                        <a asp-action="PrintMTP" asp-route-id="@item.Id" class="btn btn-success" title="Print MTP" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
-                                    }
-                                    else
-                                    {
-                                        <a class="btn btn-warning disabled" title="Edit MTP"><i class="glyphicon glyphicon-pencil"></i></a>
-                                        <a class="btn btn-success disabled" title="Create MTP Review"><i class="glyphicon glyphicon-plus"></i></a>
-                                        <a asp-action="PrintMTP" asp-route-id="@item.Id" class="btn btn-success" title="Print MTP" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
-                                    }
+                                    <a class="btn btn-success disabled" title="Create MTP Review"><i class="glyphicon glyphicon-plus"></i></a>
+                                    <a class="btn btn-success disabled" title="Create Addendum"><i class="glyphicon glyphicon-plus"></i></a>
+                                }
 
-                                }*@
-                                <a class="btn btn-warning disabled" title="Edit MTP"><i class="glyphicon glyphicon-pencil"></i></a>
-                                <a class="btn btn-success disabled" title="Create MTP Review"><i class="glyphicon glyphicon-plus"></i></a>
-                                <a asp-action="PrintMTP" asp-route-id="@item.Id" class="btn btn-success disabled" title="Print MTP" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                <a asp-action="PrintMTP" asp-route-id="@item.Id" class="btn btn-success" title="Print MTP" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                 <a asp-action="ViewAllGoals" asp-controller="Notes" asp-route-idMtp="@item.Id" class="btn btn-info" title="View Goals" target="_blank"><i class="glyphicon glyphicon-list-alt"></i></a>
                             </td>
                         </tr>

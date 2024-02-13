@@ -13,10 +13,10 @@ namespace KyoS.Web.Helpers
         IEnumerable<SelectListItem> GetComboUserNamesByRolesClinic(UserType userType, int idClinic);
         IEnumerable<SelectListItem> GetComboDays();
         IEnumerable<SelectListItem> GetComboThemes();
-        IEnumerable<SelectListItem> GetComboThemesByClinic(int idClinic);
-        IEnumerable<SelectListItem> GetComboThemesByClinic3(int idClinic);
+        IEnumerable<SelectListItem> GetComboThemesByClinic(int idClinic, ThemeType service);
+        IEnumerable<SelectListItem> GetComboThemesByClinic3(int idClinic, ThemeType service);
         IEnumerable<SelectListItem> GetComboFacilitators();
-        IEnumerable<SelectListItem> GetComboFacilitatorsByClinic(int idClinic, bool blank = false);
+        IEnumerable<SelectListItem> GetComboFacilitatorsByClinic(int idClinic, bool blank = false, bool all = false);
         IEnumerable<SelectListItem> GetComboClients();
         IEnumerable<SelectListItem> GetComboClientsByClinic(int idClinic, bool blank = false);
         IEnumerable<SelectListItem> GetComboActiveClientsByClinic(int idClinic);
@@ -67,9 +67,9 @@ namespace KyoS.Web.Helpers
         IEnumerable<SelectListItem> GetComboBio_RecentWeight();
         IEnumerable<SelectListItem> GetComboBio_IfSexuallyActive();
         IEnumerable<SelectListItem> GetComboTCMNoteSetting();
-        IEnumerable<SelectListItem> GetComboServicesUsed(int idServicePlan);
+        IEnumerable<SelectListItem> GetComboServicesUsed(int idServicePlan, DateTime serviceDate);
         IEnumerable<SelectListItem> GetComboTCMNoteActivity(string codeDomain);
-        IEnumerable<SelectListItem> GetComboTCMClientsByCaseManager(string user);
+        IEnumerable<SelectListItem> GetComboTCMClientsByCaseManagerActives(string user, DateTime dateTCMNote);
         IEnumerable<SelectListItem> GetComboServiceAgency();
         IEnumerable<SelectListItem> GetComboResidential();
         IEnumerable<SelectListItem> GetComboEmployed();
@@ -84,5 +84,28 @@ namespace KyoS.Web.Helpers
         IEnumerable<SelectListItem> GetComboSchedulesForFacilitatorForDay(int idFacilitator, int idWorkday, int idClient, int idWorkdayClient);
         IEnumerable<SelectListItem> GetComboSubSchedulesForFacilitatorForDay(int idFacilitator, int idWorkday, int idSchedule, int idClient, int idWorkdayClient);
         IEnumerable<SelectListItem> GetComboThemeType();
+        IEnumerable<SelectListItem> GetComboTypeReferred();
+        IEnumerable<SelectListItem> GetComboTCMSupervisorByClinic(int idClinic);
+        IEnumerable<SelectListItem> GetComboCaseManagersByTCMSupervisor(string user, int allClient);
+        IEnumerable<SelectListItem> GetComboRisk();
+        IEnumerable<SelectListItem> GetComboTCMClientsByCaseManagerByTCMSupervisor(string user, int allClient);
+        IEnumerable<SelectListItem> GetComboTCMClientsByClinic(int idClinic);
+        IEnumerable<SelectListItem> GetComboSiteStatus();
+        IEnumerable<SelectListItem> GetComboClientByIndfacilitator(int idFacilitator);
+        IEnumerable<SelectListItem> GetComboSchedulesByClinicForCites(int idClinic, ServiceType service, int idFacilitator, DateTime date);
+        IEnumerable<SelectListItem> GetComboConsentType();
+        IEnumerable<SelectListItem> GetComboBillStatus();
+        IEnumerable<SelectListItem> GetComboBillPaid();
+        IEnumerable<SelectListItem> GetComboServicesAssessment(int idServicePlan);
+        IEnumerable<SelectListItem> GetComboYesNoNA();
+        IEnumerable<SelectListItem> GetComboEffectiveness();
+        IEnumerable<SelectListItem> GetComboDrugs();
+        IEnumerable<SelectListItem> GetComboFrecuencyActive();
+        IEnumerable<SelectListItem> GetComboTCMClientsByCaseManager(string user);
+        IEnumerable<SelectListItem> GetComboCaseManagersActive();
+        IEnumerable<SelectListItem> GetComboSupervisorByClinic(int idClinic, bool select);
+        IEnumerable<SelectListItem> GetComboFiltroTCMPayStubByClinic();
+        IEnumerable<SelectListItem> GetComboPaystubStatus();
+        IEnumerable<SelectListItem> GetComboDocumentsAssistantByClinic(int idClinic, bool blank = false, bool all = false);
     }
 }

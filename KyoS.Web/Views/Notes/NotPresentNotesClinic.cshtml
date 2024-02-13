@@ -100,7 +100,7 @@
                                     }
                                     @if (day_client.Workday.Service == KyoS.Common.Enums.ServiceType.Group)
                                     {
-                                        <a asp-action="PrintAbsenceIndNote" asp-route-id="@day_client.Id" class="btn btn-success" title="Print absence group note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                        <a asp-action="PrintAbsenceGroupNote" asp-route-id="@day_client.Id" class="btn btn-success" title="Print absence group note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                     }
                                 </td>
                             </tr>
@@ -122,18 +122,7 @@
             $('#MyTable').DataTable({
                "pageLength": 100
             });
-
-            // Delete item
-            //var item_to_delete;
-
-            @*$('.deleteItem').click((e) => {
-                item_to_delete = e.currentTarget.dataset.id;
-            });
-
-            $("#btnYesDelete").click(function () {
-                var url = "@Url.Action("Delete", "WorkDays")";
-                window.location.href = url + '/' + item_to_delete;
-            });*@
+            
         });
     </script>
 }

@@ -14,7 +14,6 @@
     </ul><!--.breadcrumb-->
 </div>
 <div>
-
     <div class="row">
         <div class="container-fluid">
             <h4 style="font-weight:bold; text-align: center;"> <span class="label label-default"> Intake - @Model.Name </span></h4>
@@ -24,7 +23,7 @@
         </div>
         <div class="col-sm-3 col-md-2">
             @if (Model.IntakeScreening == null)
-            {               
+            {
                 <a style="text-decoration: none;" asp-action="Edit" asp-route-id="@Model.Id" role="button">
                     <div class="thumbnail list-group-item list-group-item-text">
                         <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Intake <br>&nbsp;&nbsp;&nbsp;&nbsp;Screening</h4>
@@ -229,21 +228,119 @@
         <div class="col-sm-3 col-md-1">
             &nbsp;
         </div>
-        @* <div class="col-sm-3 col-md-2">
-            @if (Model.IntakeMedicalHistory == null)
+        <div class="col-md-12">
+            &nbsp;
+        </div>
+        <div class="col-sm-3 col-md-1">
+            &nbsp;
+        </div>
+        <div class="col-sm-3 col-md-2">
+            @if (Model.IntakeClientIdDocumentVerification == null)
             {
-                <div class="thumbnail list-group-item list-group-item-text">
-                    <h4 style="align-content:end;">Medical<br>History</h4>
-                    <p style="text-align:right"><a asp-action="CreateMedicalhistory" asp-route-id="@Model.Id" class="btn btn-default" role="button">Go</a></p>
+                <a style="text-decoration: none;" asp-action="CreateIntakeClientIdDocumentVerification" asp-route-id="@Model.Id" role="button">
+                    <div class="thumbnail list-group-item list-group-item-text">
+                        <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>ID Documents <br>&nbsp;&nbsp;&nbsp;&nbsp;Verification Form</h4>
+                    </div>
+                </a>
+            }
+            else
+            {                
+                <div class="thumbnail list-group-item list-group-item-success">
+                    <a style="text-decoration: none;" asp-action="CreateIntakeClientIdDocumentVerification" asp-route-id="@Model.Id" role="button">
+                        <h4 style="align-content: end; color: #3c763d"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>ID Documents <br>&nbsp;&nbsp;&nbsp;&nbsp;Verification Form</h4>
+                    </a>  
+                    <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-action="PrintIDDocumentsVerificationForm" role="button" title="Print ID Documents Verification Form" target="_blank">
+                        <i class="glyphicon glyphicon-print" style="position: absolute; right: 12px; top: 12px; color: #3c763d;"></i>
+                    </a>
+                </div>             
+            }
+        </div>
+        <div class="col-sm-3 col-md-2">
+            @if (Model.IntakeForeignLanguage == null)
+            {
+                <a style="text-decoration: none;" asp-action="CreateForeignLanguage" asp-route-id="@Model.Id" role="button">
+                    <div class="thumbnail list-group-item list-group-item-text">
+                        <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Foreign Lang. <br>&nbsp;&nbsp;&nbsp;&nbsp;Acknowledgement</h4>
+                    </div>
+                </a>
+            }
+            else
+            {                
+                <div class="thumbnail list-group-item list-group-item-success">
+                    <a style="text-decoration: none;" asp-action="CreateForeignLanguage" asp-route-id="@Model.Id" role="button">
+                        <h4 style="align-content: end; color: #3c763d"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Foreign Lang.  <br>&nbsp;&nbsp;&nbsp;&nbsp;Acknowledgement</h4>
+                    </a>
+                    <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-action="PrintForeignLangAcknowledgement" role="button" title="Print Foreign Lang. Acknowledgement" target="_blank">
+                        <i class="glyphicon glyphicon-print" style="position: absolute; right: 12px; top: 12px; color: #3c763d;"></i>
+                    </a>
                 </div>
+            }
+        </div>
+        <div class="col-sm-3 col-md-2">
+            @if (Model.IntakeConsentForTelehealth == null)
+            {
+                <a style="text-decoration: none;" asp-action="CreateConsentForTelehealth" asp-route-id="@Model.Id" role="button">
+                    <div class="thumbnail list-group-item list-group-item-text">
+                        <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Telehealth <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Consent</h4>
+                    </div>
+                </a>
             }
             else
             {
                 <div class="thumbnail list-group-item list-group-item-success">
-                    <h4 style="align-content:end;">Medical<br>History</h4>
-                    <p style="text-align:right"><a asp-action="CreateMedicalhistory" asp-route-id="@Model.Id" class="btn btn-success" role="button">Go</a></p>
+                    <a style="text-decoration: none;" asp-action="CreateConsentForTelehealth" asp-route-id="@Model.Id" role="button">
+                        <h4 style="align-content: end; color: #3c763d"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Telehealth <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Consent</h4>
+                    </a>
+                    <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-action="PrintTelehealthConsent" role="button" title="Print Telehealth Consent" target="_blank">
+                        <i class="glyphicon glyphicon-print" style="position: absolute; right: 12px; top: 12px; color: #3c763d;"></i>
+                    </a>
                 </div>
             }
-        </div>*@
+        </div>
+        <div class="col-sm-3 col-md-2">
+            @if (Model.IntakeNoDuplicateService == null)
+            {
+                <a style="text-decoration: none;" asp-action="CreateNoDuplicateService" asp-route-id="@Model.Id" role="button">
+                    <div class="thumbnail list-group-item list-group-item-text">
+                        <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>No Duplicate <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Service</h4>
+                    </div>
+                </a>
+            }
+            else
+            {
+                <div class="thumbnail list-group-item list-group-item-success">
+                    <a style="text-decoration: none;" asp-action="CreateNoDuplicateService" asp-route-id="@Model.Id" role="button">
+                        <h4 style="align-content: end; color: #3c763d"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>No Duplicate <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Service</h4>
+                    </a>
+                    <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-action="PrintNoDuplicateService" role="button" title="Print No Duplicate Service" target="_blank">
+                        <i class="glyphicon glyphicon-print" style="position: absolute; right: 12px; top: 12px; color: #3c763d;"></i>
+                    </a>
+                </div>
+            }
+        </div>
+        <div class="col-sm-3 col-md-2">
+            @if (Model.IntakeAdvancedDirective == null)
+            {
+                <a style="text-decoration: none;" asp-action="CreateIntakeAdvenceDirective" asp-route-id="@Model.Id" role="button">
+                    <div class="thumbnail list-group-item list-group-item-text">
+                        <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Advanced <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Directive</h4>
+                    </div>
+                </a>
+            }
+            else
+            {
+                <div class="thumbnail list-group-item list-group-item-success">
+                    <a style="text-decoration: none;" asp-action="CreateIntakeAdvenceDirective" asp-route-id="@Model.Id" role="button">
+                        <h4 style="align-content: end; color: #3c763d"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Advanced <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Directive</h4>
+                    </a>
+                    <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-action="PrintAdvancedDirective" role="button" title="Print Advanced Directive" target="_blank">
+                        <i class="glyphicon glyphicon-print" style="position: absolute; right: 12px; top: 12px; color: #3c763d;"></i>
+                    </a>
+                </div>
+            }
+        </div>
+        <div class="col-sm-3 col-md-1">
+            &nbsp;
+        </div>
     </div>
 </div>

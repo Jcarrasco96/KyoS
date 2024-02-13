@@ -37,55 +37,67 @@
     <div class="col-md-2">
         <div class="form-group">
             <label asp-for="AdmissionDateMTP" class="control-label">MTP Creation Date</label>
-            <input asp-for="AdmissionDateMTP" class="form-control" disabled/>
+            <input asp-for="AdmissionDateMTP" class="form-control" disabled />
             <span asp-validation-for="AdmissionDateMTP" class="text-danger"></span>
         </div>
     </div>
     <div class="col-md-2">
         <div class="form-group">
             <label asp-for="MTPDevelopedDate" class="control-label">Initial Date of Therapy</label>
-            <input asp-for="MTPDevelopedDate" class="form-control" disabled/>
+            <input asp-for="MTPDevelopedDate" class="form-control" disabled />
             <span asp-validation-for="MTPDevelopedDate" class="text-danger"></span>
         </div>
     </div>
     <div class="col-md-2">
         <div class="form-group">
             <label asp-for="StartTime" class="control-label"></label>
-            <input asp-for="StartTime" class="form-control" disabled/>
+            <input asp-for="StartTime" class="form-control" disabled />
             <span asp-validation-for="StartTime" class="text-danger"></span>
         </div>
     </div>
     <div class="col-md-2">
         <div class="form-group">
             <label asp-for="EndTime" class="control-label"></label>
-            <input asp-for="EndTime" class="form-control" disabled/>
+            <input asp-for="EndTime" class="form-control" disabled />
             <span asp-validation-for="EndTime" class="text-danger"></span>
         </div>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-2">
         <div class="form-group">
-            <label asp-for="Setting" class="control-label"></label>
-            <br />
-            @if (Model.Setting == "53")
-            {
-                <input type="radio" name="Setting" value="53" checked="checked" disabled/>
-            }
-            else
-            {
-                <input type="radio" name="Setting" value="53" disabled/>
-            }
-            <strong>53</strong>&nbsp;Client in the clinic
-            &nbsp;
-            @if (Model.Setting == "02")
-            {
-                <input type="radio" name="Setting" value="02" checked="checked" disabled/>
-            }
-            else
-            {
-                <input type="radio" name="Setting" value="02" disabled/>
-            }
-            <strong>02</strong>&nbsp;Remote
+            <label asp-for="CodeBill" class="control-label">Code Bill</label>
+            <input asp-for="CodeBill" class="form-control" disabled/>
+            <span asp-validation-for="CodeBill" class="text-danger"></span>
         </div>
+    </div>
+    <div class="col-md-2">
+        <div class="form-group">
+            <label asp-for="Setting" class="control-label">Setting</label>
+            <input asp-for="Setting" class="form-control" disabled/>
+            <span asp-validation-for="Setting" class="text-danger"></span>
+        </div>
+        @*<div class="form-group">
+                <label asp-for="Setting" class="control-label"></label>
+                <br />
+                @if (Model.Setting == "53")
+                {
+                    <input type="radio" name="Setting" value="53" checked="checked" disabled />
+                }
+                else
+                {
+                    <input type="radio" name="Setting" value="53" disabled />
+                }
+                <strong>53</strong>&nbsp;Client in the clinic
+                &nbsp;
+                @if (Model.Setting == "02")
+                {
+                    <input type="radio" name="Setting" value="02" checked="checked" disabled />
+                }
+                else
+                {
+                    <input type="radio" name="Setting" value="02" disabled />
+                }
+                <strong>02</strong>&nbsp;Remote
+            </div>*@
     </div>
 </div>
 <div class="col-md-push-12">

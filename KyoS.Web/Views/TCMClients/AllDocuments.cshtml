@@ -37,6 +37,12 @@
                                     Consents
                                 </th>
                                 <th class="col-md-1" style="text-align: center;">
+                                    Assessment
+                                </th>
+                                <th class="col-md-1" style="text-align: center;">
+                                    Appendix
+                                </th>
+                                <th class="col-md-1" style="text-align: center;">
                                     Service Plan
                                 </th>
                                 <th class="col-md-1" style="text-align: center;">
@@ -44,12 +50,6 @@
                                 </th>
                                 <th class="col-md-1" style="text-align: center;">
                                     Service Plan R.
-                                </th>
-                                <th class="col-md-1" style="text-align: center;">
-                                    Assessment
-                                </th>
-                                <th class="col-md-1" style="text-align: center;">
-                                    AppendixJ
                                 </th>
                                 <th class="col-md-1" style="text-align: center;">
                                     FARS
@@ -60,7 +60,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var item in Model)
+                            @foreach (var item in Model.OrderBy(n => n.Id))
                             {
                                 <tr>
                                     <td>
@@ -110,6 +110,73 @@
                                             }
                                         }
                                     </td>
+                                     <td align="center">
+                                        @if (item.TCMAssessment == null || item.TCMAssessment.Id == 0)
+                                        {
+                                            <a asp-action="PrintTCMAssessment" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-default disabled" title="Print"><i class="glyphicon glyphicon-print"></i></a>
+                                        }
+                                        else
+                                        {
+                                            @if (item.TCMAssessment.Approved == 0)
+                                            {
+                                                <a asp-action="PrintTCMAssessment" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-warning disabled" title="Print"><i class="glyphicon glyphicon-print"></i></a>
+                                            }
+                                            @if (item.TCMAssessment.Approved == 1)
+                                            {
+                                                <a asp-action="PrintTCMAssessment" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-info disabled" title="Print"><i class="glyphicon glyphicon-print"></i></a>
+                                            }
+                                            @if (item.TCMAssessment.Approved == 2)
+                                            {
+                                                <a asp-action="PrintTCMAssessment" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-success" title="Print Assessment"><i class="glyphicon glyphicon-print"></i></a>
+                                            }
+                                        }
+                                    </td>
+                                     <td align="center">
+                                         @if (item.Younger == true)
+                                         {
+                                             @if (item.TcmIntakeAppendixI == null || item.TcmIntakeAppendixI.Id == 0)
+                                             {
+                                                 <a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-default disabled" title="Print"><i class="glyphicon glyphicon-print"></i></a>
+                                             }
+                                             else
+                                             {
+                                                 @if (item.TcmIntakeAppendixI.Approved == 0)
+                                                 {
+                                                     <a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-warning disabled" title="Print"><i class="glyphicon glyphicon-print"></i></a>
+                                                 }
+                                                 @if (item.TcmIntakeAppendixI.Approved == 1)
+                                                 {
+                                                     <a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-info disabled" title="Print"><i class="glyphicon glyphicon-print"></i></a>
+                                                 }
+                                                 @if (item.TcmIntakeAppendixI.Approved == 2)
+                                                 {
+                                                     <a asp-action="PrintTCMAppendixI" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-success" title="Print Appendix E" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                                 }
+                                             }
+                                         }
+                                         else
+                                         {
+                                             @if (item.TcmIntakeAppendixJ == null || item.TcmIntakeAppendixJ.Id == 0)
+                                             {
+                                                 <a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-default disabled" title="Print"><i class="glyphicon glyphicon-print"></i></a>
+                                             }
+                                             else
+                                             {
+                                                 @if (item.TcmIntakeAppendixJ.Approved == 0)
+                                                 {
+                                                     <a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-warning disabled" title="Print"><i class="glyphicon glyphicon-print"></i></a>
+                                                 }
+                                                 @if (item.TcmIntakeAppendixJ.Approved == 1)
+                                                 {
+                                                     <a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-info disabled" title="Print"><i class="glyphicon glyphicon-print"></i></a>
+                                                 }
+                                                 @if (item.TcmIntakeAppendixJ.Approved == 2)
+                                                 {
+                                                     <a asp-action="PrintTCMAppendixJ" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-success" title="Print Appendix J" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                                 }
+                                             }
+                                         }
+                                     </td>
                                     <td align="center">
                                         @if (item.TcmServicePlan == null || item.TcmServicePlan.Id == 0)
                                         {
@@ -166,48 +233,6 @@
                                             @if (item.TcmServicePlan.TCMServicePlanReview.Approved == 2)
                                             {
                                                 <a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-success" title="Print Service Plan Review"><i class="glyphicon glyphicon-print"></i></a>
-                                            }
-                                        }
-                                    </td>
-                                    <td align="center">
-                                        @if (item.TCMAssessment == null || item.TCMAssessment.Id == 0)
-                                        {
-                                            <a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-default disabled" title="Print"><i class="glyphicon glyphicon-print"></i></a>
-                                        }
-                                        else
-                                        {
-                                            @if (item.TCMAssessment.Approved == 0)
-                                            {
-                                                <a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-warning disabled" title="Print"><i class="glyphicon glyphicon-print"></i></a>
-                                            }
-                                            @if (item.TCMAssessment.Approved == 1)
-                                            {
-                                                <a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-info disabled" title="Print"><i class="glyphicon glyphicon-print"></i></a>
-                                            }
-                                            @if (item.TCMAssessment.Approved == 2)
-                                            {
-                                                <a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-success" title="Print Assessment"><i class="glyphicon glyphicon-print"></i></a>
-                                            }
-                                        }
-                                    </td>
-                                    <td align="center">
-                                        @if (item.TcmIntakeAppendixJ == null || item.TcmIntakeAppendixJ.Id == 0)
-                                        {
-                                             <a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-default disabled" title="Print"><i class="glyphicon glyphicon-print"></i></a>
-                                        }
-                                        else
-                                        {
-                                            @if (item.TcmIntakeAppendixJ.Approved == 0)
-                                            {
-                                                <a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-warning disabled" title="Print"><i class="glyphicon glyphicon-print"></i></a>
-                                            }
-                                            @if (item.TcmIntakeAppendixJ.Approved == 1)
-                                            {
-                                                <a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-info disabled" title="Print"><i class="glyphicon glyphicon-print"></i></a>
-                                            }
-                                            @if (item.TcmIntakeAppendixJ.Approved == 2)
-                                            {
-                                                <a asp-action="PrintTCMAppendixJ" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-success" title="Print Appendix J" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                             }
                                         }
                                     </td>

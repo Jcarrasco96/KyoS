@@ -53,7 +53,7 @@
             Has the client received behavioral health service in the last 2 years due to suicide?   <input type="checkbox" asp-for="HasTheClient" class="form-check-input" id="check8" disabled> Yes   <input type="checkbox" class="form-check-input" id="check108" disabled> No     If yes, specify:  <input asp-for="HasTheClient_Explain" style="width:15%" disabled>
 
 
-    <strong>C. Physical/Sexual/Emotional Abuse:</strong> (current and history – if indicated, record the name of perpetrator, times, dates, and whether reported)
+    <strong>C. Physical/Sexual/Emotional Abuse or exploitation:</strong> (current and history – if indicated, record the name of perpetrator, times, dates, and whether reported)
       If any abuse is indicated in the process, you must do the following: 1. Call the abuse hotline 1-800-962-2873 or 1-800-96- Abuse in all cases, 
       if not previously reported ( you don’t have to file a duplicable report of the abuse if the client/family can provide written proof that it was 
       reported, DCF documentation, DCF Case Worker information, Termination of parental rights). 2. Discuss the client with your supervisor 
@@ -111,6 +111,8 @@
     Takes 3 or more different prescribed or over-the-counter drugs a day.           <input type="checkbox" asp-for="Takes3OrMore" class="form-check-input" id="check18" disabled> YES  <input type="checkbox" class="form-check-input" id="check118" disabled> NO
     Without wanting to. Has lost or gained 10 pounds in the last 6 months.          <input type="checkbox" asp-for="WithoutWanting" class="form-check-input" id="check19" disabled> YES  <input type="checkbox" class="form-check-input" id="check119" disabled> NO
     Not always physically able to shop, cook and/or feed self.                      <input type="checkbox" asp-for="NotAlwaysPhysically" class="form-check-input" id="check20" disabled> YES  <input type="checkbox" class="form-check-input" id="check120" disabled> NO
+    Any Food, Medications, or environmental allergies.                              <input type="checkbox" asp-for="AnyFood" class="form-check-input" id="check26" disabled> YES  <input type="checkbox" class="form-check-input" id="check126" disabled> NO
+    Any eating desorder.                                                            <input type="checkbox" asp-for="AnyEating" class="form-check-input" id="check27" disabled> YES  <input type="checkbox" class="form-check-input" id="check127" disabled> NO
     <strong>Total: </strong>   
     <strong>0-2 GOOD. </strong>As appropriate reassess and/or provide information based on situation.
     <strong>3-5 Moderate risk. </strong>Educate, refer, monitor and reevaluate based on patient situation and organization policy.
@@ -123,20 +125,48 @@
 </pre>
 </div>
 <div class="col-md-12">
+    @if (Model.Client.Clinic.Setting.SupervisorEdit == true && Model.Status == KyoS.Common.Enums.BioStatus.Pending && User.IsInRole("Supervisor"))
+    {
     <pre>
 <strong>7. PSYCHOSOCIAL HISTORY</strong>
 
     Substance Abuse (for client and family members, list types of substances, duration of use and any treatment receive):
-    <textarea asp-for="SubstanceAbuse" style="width:90%" rows="2" disabled></textarea>   
+    <textarea asp-for="SubstanceAbuse" style="width:95%" rows="2"></textarea>   
+    <strong>MILITARY SERVICE HISTORY:</strong>     <input type="checkbox" asp-for="MilitaryServiceHistory" class="form-check-input" id="check28"> YES  <input type="checkbox" class="form-check-input" id="check128"> NO
+    <textarea asp-for="MilitaryServiceHistory_Explain" style="width:95%" rows="4"></textarea>   
+    <strong>VOCATIONAL ASSESMENT:</strong>
+    <textarea asp-for="VocationalAssesment" style="width:95%" rows="2"></textarea>
     Legal History (specifying changes, date, convictions and incarcerations):
-    <textarea asp-for="LegalHistory" style="width:90%" rows="2" disabled></textarea>  
+    <textarea asp-for="LegalHistory" style="width:95%" rows="2"></textarea>  
     Personal and family Psychiatric History (for client and family members, list types of diagnoses, type of services,  duration of use and any treatment received):
-    <textarea asp-for="PersonalFamilyPsychiatric" style="width:90%" rows="2" disabled></textarea>  
+    <textarea asp-for="PersonalFamilyPsychiatric" style="width:95%" rows="2"></textarea>  
         
-    <input type="checkbox" asp-for="DoesClientRequired" class="form-check-input" disabled> Does client require a referral? If referred, where?   <input asp-for="DoesClientRequired_Where" style="width:55%" disabled>
+    <input type="checkbox" asp-for="DoesClientRequired" class="form-check-input"> Does client require a referral? If referred, where?   <input asp-for="DoesClientRequired_Where" style="width:55%">
 
-    <input type="checkbox" asp-for="ObtainRelease" class="form-check-input" disabled> Obtain release of information so care can be coordinated.
+    <input type="checkbox" asp-for="ObtainRelease" class="form-check-input"> Obtain release of information so care can be coordinated.
     </pre>
+    }
+    else
+    { 
+<pre>
+<strong>7. PSYCHOSOCIAL HISTORY</strong>
+
+    Substance Abuse (for client and family members, list types of substances, duration of use and any treatment receive):
+<textarea asp-for="SubstanceAbuse" style="width:95%" rows="2" disabled></textarea>   
+<strong>MILITARY SERVICE HISTORY:</strong>     <input type="checkbox" asp-for="MilitaryServiceHistory" class="form-check-input" id="check28" disabled> YES  <input type="checkbox" class="form-check-input" id="check128" disabled> NO
+<textarea asp-for="MilitaryServiceHistory_Explain" style="width:95%" rows="4" disabled></textarea>   
+<strong>VOCATIONAL ASSESMENT:</strong>
+<textarea asp-for="VocationalAssesment" style="width:95%" rows="2" disabled></textarea>
+    Legal History (specifying changes, date, convictions and incarcerations):
+<textarea asp-for="LegalHistory" style="width:95%" rows="2" disabled></textarea>  
+    Personal and family Psychiatric History (for client and family members, list types of diagnoses, type of services,  duration of use and any treatment received):
+<textarea asp-for="PersonalFamilyPsychiatric" style="width:95%" rows="2" disabled></textarea>  
+        
+<input type="checkbox" asp-for="DoesClientRequired" class="form-check-input" disabled> Does client require a referral? If referred, where?   <input asp-for="DoesClientRequired_Where" style="width:55%" disabled>
+
+<input type="checkbox" asp-for="ObtainRelease" class="form-check-input" disabled> Obtain release of information so care can be coordinated.
+    </pre>
+    }
 </div>
 <div class="col-md-12">
     <pre>
@@ -147,11 +177,11 @@
     Primary location where client was raised: <input asp-for="PrimaryLocation" style="width:10%" disabled>
 
     General description of childhood/adolescence:
-    <textarea asp-for="GeneralDescription" style="width:90%" rows="2" disabled></textarea>   
+    <textarea asp-for="GeneralDescription" style="width:95%" rows="2" disabled></textarea>   
     Adult and current experience: (include work history/ leisure activities and interest)  
-    <textarea asp-for="AdultCurrentExperience" style="width:90%" rows="2" disabled></textarea>   
+    <textarea asp-for="AdultCurrentExperience" style="width:95%" rows="2" disabled></textarea>   
     What is the client`s/family beliefs and important spiritual practices? (Include how these beliefs assist client in dealing with stressor)
-    <textarea asp-for="WhatIsTheClient" style="width:90%" rows="2" disabled></textarea> 
+    <textarea asp-for="WhatIsTheClient" style="width:95%" rows="2" disabled></textarea> 
     </pre>
 </div>
 <div class="col-md-12">
@@ -159,9 +189,9 @@
 <strong>9. FAMILY EXPERIENCE: </strong> (if child is under 16, skip to 10)
 
     Relationship with family, friends, romantic interests:
-    <textarea asp-for="RelationshipWithFamily" style="width:90%" rows="2" disabled></textarea>   
+    <textarea asp-for="RelationshipWithFamily" style="width:95%" rows="2" disabled></textarea>   
     Number of children (specify name or gender and current age)
-    <textarea asp-for="Children" style="width:90%" rows="2" disabled></textarea> 
+    <textarea asp-for="Children" style="width:95%" rows="2" disabled></textarea> 
         Marital Status:  <strong><u>@Html.DisplayFor(modelItem => Model.Client.MaritalStatus)</u></strong> 
         •	If Married or Cohabitating, how long:               <input asp-for="IfMarried" style="width:10%" disabled>
 
@@ -176,7 +206,7 @@
 <strong>10. EDUCATIONAL ASSESSMENT: </strong> is geared towards indicating whether a client needs educational services in addition to therapeutic interventions.
     (Please provide goal for educational services if applicable and/or if unviable at the clinic, refer client to a community provider): 
 
-    <textarea asp-for="PleaseProvideGoal" style="width:90%" rows="2" disabled></textarea>   
+    <textarea asp-for="PleaseProvideGoal" style="width:95%" rows="2" disabled></textarea>   
         1.  Do you have any religious/cultural practice that may hinder your educational goals?                  <input type="checkbox" asp-for="DoYouHaveAnyReligious" class="form-check-input" id="check21" disabled> YES  <input type="checkbox" class="form-check-input" id="check121" disabled> NO
         2.  What is your language of preference: <strong><u>@Html.DisplayFor(modelItem => Model.Client.PreferredLanguage)</u></strong> 
         3.  Do you have any visual, hearing or other sensory impairment that may affect your ability to learn?   <input type="checkbox" asp-for="DoYouHaveAnyVisual" class="form-check-input" id="check22" disabled> YES  <input type="checkbox" class="form-check-input" id="check122" disabled> NO 
@@ -189,16 +219,28 @@
     <pre>
 <strong>11. PROVIDE INTEGRATED SUMMARY BELOW: </strong> 
 
-    <textarea asp-for="ProvideIntegratedSummary" style="width:90%" rows="8" disabled></textarea>   
+    <textarea asp-for="ProvideIntegratedSummary" style="width:95%" rows="8" disabled></textarea>   
     </pre>
 </div>
 <div class="col-md-12">
+    @if (Model.Client.Clinic.Setting.SupervisorEdit == true && Model.Status == KyoS.Common.Enums.BioStatus.Pending && User.IsInRole("Supervisor"))
+    {
     <pre>
 <strong>12. TREATMENT NEEDS:</strong> (use client’s own words)
 
     The client stated: 
-    <textarea asp-for="TreatmentNeeds" style="width:90%" rows="8" disabled></textarea>   
+    <textarea asp-for="TreatmentNeeds" style="width:95%" rows="8" ></textarea>   
     </pre>
+    }
+    else
+    {
+    <pre>
+<strong>12. TREATMENT NEEDS:</strong> (use client’s own words)
+
+    The client stated: 
+    <textarea asp-for="TreatmentNeeds" style="width:95%" rows="8" disabled></textarea>   
+    </pre>
+    }
 </div>
 
 <br />
@@ -713,6 +755,66 @@
         check125.checked = false;
     } else {
         check125.checked = true;
+    }
+    //---------------------------------
+    check26.addEventListener('change', (e) => {
+        if (check26.checked == true) {
+            check126.checked = false;
+        } else {
+            check126.checked = true;
+        }
+    })
+    check126.addEventListener('change', (e) => {
+        if (check126.checked == true) {
+            check26.checked = false;
+        } else {
+            check26.checked = true;
+        }
+    })
+    if (check26.checked == true) {
+        check126.checked = false;
+    } else {
+        check126.checked = true;
+    }
+    //---------------------------------
+    check27.addEventListener('change', (e) => {
+        if (check27.checked == true) {
+            check127.checked = false;
+        } else {
+            check127.checked = true;
+        }
+    })
+    check127.addEventListener('change', (e) => {
+        if (check127.checked == true) {
+            check27.checked = false;
+        } else {
+            check27.checked = true;
+        }
+    })
+    if (check27.checked == true) {
+        check127.checked = false;
+    } else {
+        check127.checked = true;
+    }
+    //---------------------------------
+    check28.addEventListener('change', (e) => {
+        if (check28.checked == true) {
+            check128.checked = false;
+        } else {
+            check128.checked = true;
+        }
+    })
+    check128.addEventListener('change', (e) => {
+        if (check128.checked == true) {
+            check28.checked = false;
+        } else {
+            check28.checked = true;
+        }
+    })
+    if (check28.checked == true) {
+        check128.checked = false;
+    } else {
+        check128.checked = true;
     }
 </script>
 

@@ -16,40 +16,44 @@
                                     Name
                                 </th>
                                 <th class="col-md-2">
-                                    Telephone
+                                    Agency
                                 </th>
                                 <th class="col-md-3">
                                     Address
                                 </th>
                                 <th class="col-md-2">
-                                    Title
+                                    Telephone
                                 </th>
                                 <th class="col-md-2">
-                                    Agency
+                                    Email
                                 </th>
+
                                 <th class="col-md-1" style="text-align:center;">
-                                    
+
                                 </th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var item in Model)
+                            @foreach (var item in Model.Where(n => n.Service == KyoS.Common.Enums.ServiceAgency.TCM))
                             {
                                 <tr>
                                     <td>
                                         @Html.DisplayFor(modelItem => item.Referred.Name)
                                     </td>
                                     <td>
+                                        @Html.DisplayFor(modelItem => item.Referred.Agency)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Referred.Address),
+                                        @Html.DisplayFor(modelItem => item.Referred.City),
+                                        @Html.DisplayFor(modelItem => item.Referred.State),
+                                        @Html.DisplayFor(modelItem => item.Referred.ZidCode)
+                                    </td>
+                                    <td>
                                         @Html.DisplayFor(modelItem => item.Referred.Telephone)
                                     </td>
                                     <td>
-                                        @Html.DisplayFor(modelItem => item.Referred.Address)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Referred.Title)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Referred.Agency)
+                                        @Html.DisplayFor(modelItem => item.Referred.Email)
                                     </td>
                                     <td align="right">
                                          <button type="button" onclick="DeleteReferredTemp(@item.Id)" class="btn btn-danger deleteItem" title="Delete referred"><i class="glyphicon glyphicon-trash"></i></button>

@@ -10,7 +10,6 @@
     <meta name="viewport" content="width=device-width" />
 </head>
 <body>
-
     <div class="breadcrumbs" id="breadcrumbs">
         <ul class="breadcrumb">
             <li>
@@ -37,15 +36,45 @@
                     {
                         @Html.ActionLink("Inbox", "MessagesOfNotes", "TCMMessages")
                     }
+                    @if (ViewData["origin"].ToString() == "6")
+                    {
+                        @Html.ActionLink("Notes in Edition", "NotesStatus", "TCMNotes", new { status = KyoS.Common.Enums.NoteStatus.Edition })
+                    }
+                    @if (ViewData["origin"].ToString() == "7")
+                    {
+                        @Html.ActionLink("Update Notes", "UpdateNote", "TCMNotes", new { dateInterval = @ViewData["interval"], idCaseManager = Model.IdCaseManager, idTCMClient = Model.IdTCMClient })
+                    }
                 }
-
             </li>
             <li class="active">TCM Notes</li>
         </ul><!--.breadcrumb-->
     </div>
-
     <div class="row">
-        <form asp-action="Edit" asp-route-id="@Model.Id" asp-route-origin="@ViewData["origin"]" enctype="multipart/form-data">
+        <div class="col-md-12">
+            @if (ViewBag.Delete == "N")
+            {
+                <div class="alert alert-block alert-danger">
+                    <button type="button" class="close" data-dismiss="alert">
+                        <i class="icon-remove"></i>
+                    </button>
+                    <strong class="red">
+                        Error. It is not posible delete this TCM Note
+                    </strong>
+                </div>
+            }
+            @if (ViewBag.Delete == "Exists")
+            {
+                <div class="alert alert-block alert-danger">
+                    <button type="button" class="close" data-dismiss="alert">
+                        <i class="icon-remove"></i>
+                    </button>
+                    <strong class="red">
+                        Error. It is not posible change date of this TCM Note
+                    </strong>
+                </div>
+            }
+        </div>
+        <form asp-action="Edit" asp-route-id="@Model.Id" asp-route-origin="@ViewData["origin"]"  enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="IdTCMClient" />
             <input type="hidden" asp-for="IdTCMNote" />
@@ -54,43 +83,83 @@
             <input type="hidden" asp-for="CreatedBy" />
             <input type="hidden" asp-for="Status" />
             <input type="hidden" asp-for="IdCaseManager" />
+            
+            <input type="hidden" asp-for="BilledDate" />
+            <input type="hidden" asp-for="PaymentDate" />
+            <input type="hidden" asp-for="BillDms" />
+            <input type="hidden" asp-for="CodeBill" />
+            @if (User.IsInRole("TCMSupervisor") && Model.Status == KyoS.Common.Enums.NoteStatus.Approved)
+            {
+                <input type="hidden" asp-for="Sign" />
+                <input type="hidden" asp-for="SignSupervisor" />
+            }
             <partial name="_TCMNotes" />
             <div class="col-md-push-12">
                 <div class="col-md-12 form-group">
-                    <a onclick="showInPopupLg('@Url.Action("CreateNoteActivity", "TCMNotes", new { idNote = Model.Id, idTCMClient = Model.IdTCMClient}, Context.Request.Scheme)','Add Service')" class="btn btn-success" title="Add service"><i class="glyphicon glyphicon-plus"></i> Add Service</a>
+                    <a onclick="showInPopupLg('@Url.Action("CreateNoteActivity", "TCMNotes", new { idNote = Model.Id, idTCMClient = Model.IdTCMClient, unitsAvaliable = @ViewData["available"], billable = Model.Billable}, Context.Request.Scheme)','Add Service')" class="btn btn-success" title="Add service"><i class="glyphicon glyphicon-plus"></i> Add Service</a>
                 </div>
                 <div id="view-NoteActivity">
-                    @await Html.PartialAsync("_ViewTCMNoteActivity", Model.TCMNoteActivity.ToList())
+                    @await Html.PartialAsync("_ViewTCMNoteActivity", Model.TCMNoteActivity.ToList(), new ViewDataDictionary(ViewData) { { "Id", @ViewData["available"] } })
                 </div>
             </div>
             <partial name="_TCMNotes1" />
             <div class="col-md-12">
-                <input type="submit" value="Save All" asp-route-origin="@ViewData["origin"]" class="btn btn-primary" />
-                @if (@ViewData["origin"].ToString() == "0")
+                <input type="submit" value="Save All" asp-route-origin="@ViewData["origin"]" asp-route-interval="@ViewData["interval"]" class="btn btn-primary" />
+                @if (User.IsInRole("CaseManager"))
                 {
-                    <a asp-action="TCMNotesForCase" asp-route-idTCMClient="@Model.IdTCMClient" class="btn btn-success">Back</a>
+                    @if (@ViewData["origin"].ToString() == "0")
+                    {
+                        <a asp-action="TCMNotesForCase" asp-route-idTCMClient="@Model.IdTCMClient" class="btn btn-success">Back</a>
+                    }
+                    else
+                    {
+                        @if (@ViewData["origin"].ToString() == "1")
+                        {
+                            <a asp-action="NotesStatus" asp-route-status="@KyoS.Common.Enums.NoteStatus.Edition" class="btn btn-success">Back</a>
+                        }
+                        @if (@ViewData["origin"].ToString() == "2")
+                        {
+                            <a asp-action="Index" asp-controller="TCMBilling" asp-route-initDate="@Model.DateOfService.ToString()" class="btn btn-success">Back</a>
+                        }
+                        @if (ViewData["origin"].ToString() == "3")
+                        {
+                            <a asp-action="NotesWithReview" class="btn btn-success">Back</a>
+                        }
+                        @if (ViewData["origin"].ToString() == "4")
+                        {
+                            <a asp-action="MessagesOfNotes" asp-controller="TCMMessages" class="btn btn-success">Back</a>
+                        }
+                        @if (ViewData["origin"].ToString() == "6")
+                        {
+                            <a asp-action="NotesStatus" asp-route-status="@KyoS.Common.Enums.NoteStatus.Edition" class="btn btn-success">Back</a>
+                        }
+                    }
+                    @if (Model.Status == KyoS.Common.Enums.NoteStatus.Edition)
+                    {
+                        <a asp-action="FinishEditingNote" asp-route-id="@Model.Id" asp-route-origin="1" class="btn btn-warning" title="Finish Editing TCM Notes">Finish Editing</a>
+                    }
+                    else
+                    {
+                        <input type="submit" value="Finish Editing" asp-route-origin="5" class="btn btn-warning" disabled />
+                    }
+                    <a onclick="ConfirmDelete(@Model.Id)" class="btn btn-danger deleteItem"> Delete</a>
                 }
                 else
                 {
-                    @if (@ViewData["origin"].ToString() == "1")
+                    @if (User.IsInRole("TCMSupervisor"))
                     {
-                        <a asp-action="NotesStatus" asp-route-status="@KyoS.Common.Enums.NoteStatus.Edition" class="btn btn-success">Back</a>
-                    }
-                    @if (@ViewData["origin"].ToString() == "2")
-                    {
-                        <a asp-action="Index" asp-controller="TCMBilling" class="btn btn-success">Back</a>
-                    }
-                    @if (ViewData["origin"].ToString() == "3")
-                    {
-                        <a asp-action="NotesWithReview" class="btn btn-success">Back</a>
-                    }
-                    @if (ViewData["origin"].ToString() == "4")
-                    {
-                        <a asp-action="MessagesOfNotes" asp-controller="TCMMessages" class="btn btn-success">Back</a>
+                        @if (ViewData["origin"].ToString() == "7")
+                        {
+                            <a asp-action="UpdateNote" asp-route-dateInterval="@ViewData["interval"]" asp-route-idCaseManager="@Model.IdCaseManager" asp-route-idTCMClient="@Model.IdTCMClient" class="btn btn-success">Back</a>
+                        }
+                        else
+                        {
+                            <a asp-action="NotesStatus" asp-route-status="@KyoS.Common.Enums.NoteStatus.Pending" class="btn btn-success">Back</a>
+                            <input type="submit" value="Finish Editing" asp-route-origin="5" class="btn btn-warning" disabled />
+                        }
+                        <a onclick="ConfirmDelete(@Model.Id)" class="btn btn-danger deleteItem"> Delete</a>
                     }
                 }
-                <input type="submit" value="Finish Editing" asp-route-origin="5" class="btn btn-warning" />
-                @*<a asp-action="FinishEditingNote" asp-route-id="@Model.Id" asp-route-origin="2" class="btn btn-warning">Finish Editing</a>*@
             </div>
         </form>
     </div>
@@ -105,7 +174,22 @@
     <script src="~/js/jquery.dataTables.min.js"></script>
 
     <script type="text/javascript">
-
+        function ConfirmDelete(e) {            
+            Swal.fire({
+                title: 'Do you want to delete?',
+                text: "Note: All data related to this element will be deleted.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var url = "@Url.Action("Delete", "TCMNotes")";
+                    window.location.href = url + '?id=' + e + '&origin=' + @ViewData["origin"];
+                }
+            });
+        }
     </script>
 }
 

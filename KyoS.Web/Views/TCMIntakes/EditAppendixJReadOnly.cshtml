@@ -1,0 +1,56 @@
+﻿@model KyoS.Web.Models.TCMIntakeAppendixJViewModel
+@{
+    ViewData["Title"] = "TCM AppendixJ";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+</head>
+<body>
+
+    <div class="breadcrumbs" id="breadcrumbs">
+        <ul class="breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                @Html.ActionLink("TCM Client History", "TCMCaseHistory", "TCMClients", new { id = @Model.TcmClient_FK })
+            </li>
+            <li class="active">TCM AppendixJ</li>
+        </ul><!--.breadcrumb-->
+    </div>
+
+    <h4>TCM AppendixJ</h4>
+    <hr />
+    <div class="row">
+        <form asp-action="EditAppendixJ" asp-route-id="@Model.Id" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="IdTCMClient" />
+            <input type="hidden" asp-for="TcmClient_FK" />
+            <input type="hidden" asp-for="AdmissionedFor" />
+            <input type="hidden" asp-for="CreatedOn" />
+            <input type="hidden" asp-for="CreatedBy" />
+            <partial name="_TCMIntakeAppendixJReadOnly" />
+            <div class="form-group col-md-12">
+                @if (ViewData["origi"].ToString() == "0")
+                {
+                    <input type="submit" value="Update" class="btn btn-primary" />
+                }
+               
+                <a asp-action="TCMCaseHistory" asp-controller="TCMClients" asp-route-id="@Model.TcmClient_FK" class="btn btn-success">Back</a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/jquery.dataTables.min.js"></script>
+
+    <script type="text/javascript">
+
+    </script>
+}
+

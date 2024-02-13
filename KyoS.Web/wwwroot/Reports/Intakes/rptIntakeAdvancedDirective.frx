@@ -1,0 +1,161 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="01/04/2024 10:53:35" ReportInfo.CreatorVersion="2021.1.0.0">
+  <Dictionary>
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pKiygLNrR2GSkUua6CZa7zWuDzNGOn7cjq7mn0WTOnccDkyyV5BLvtFa1BRlcYFBrGKcZm8U1hwbzPmuUWcPMzQ==">
+      <TableDataSource Name="Clinics" DataType="System.Int32" Enabled="true" TableName="Clinics">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Name" DataType="System.String"/>
+        <Column Name="LogoPath" DataType="System.String"/>
+        <Column Name="Schema" DataType="System.Int32"/>
+        <Column Name="Address" DataType="System.String"/>
+        <Column Name="CEO" DataType="System.String"/>
+        <Column Name="City" DataType="System.String"/>
+        <Column Name="FaxNo" DataType="System.String"/>
+        <Column Name="Phone" DataType="System.String"/>
+        <Column Name="State" DataType="System.String"/>
+        <Column Name="ZipCode" DataType="System.String"/>
+        <Column Name="ClinicalDirector" DataType="System.String"/>
+        <Column Name="ProviderTaxId" DataType="System.String"/>
+        <Column Name="ProviderMedicaidId" DataType="System.String"/>
+      </TableDataSource>
+      <TableDataSource Name="Clients" DataType="System.Int32" Enabled="true" TableName="Clients">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Name" DataType="System.String"/>
+        <Column Name="Gender" DataType="System.Int32"/>
+        <Column Name="Code" DataType="System.String"/>
+        <Column Name="ClinicId" DataType="System.Int32"/>
+        <Column Name="DateOfBirth" DataType="System.DateTime"/>
+        <Column Name="ZipCode" DataType="System.String"/>
+        <Column Name="Status" DataType="System.Int32"/>
+        <Column Name="GroupId" DataType="System.Int32"/>
+        <Column Name="AlternativeAddress" DataType="System.String"/>
+        <Column Name="City" DataType="System.String"/>
+        <Column Name="Country" DataType="System.String"/>
+        <Column Name="CreatedBy" DataType="System.String"/>
+        <Column Name="CreatedOn" DataType="System.DateTime"/>
+        <Column Name="DoctorId" DataType="System.Int32"/>
+        <Column Name="Email" DataType="System.String"/>
+        <Column Name="EmergencyContactId" DataType="System.Int32"/>
+        <Column Name="Ethnicity" DataType="System.Int32"/>
+        <Column Name="FullAddress" DataType="System.String"/>
+        <Column Name="LastModifiedBy" DataType="System.String"/>
+        <Column Name="LastModifiedOn" DataType="System.DateTime"/>
+        <Column Name="LegalGuardianId" DataType="System.Int32"/>
+        <Column Name="MaritalStatus" DataType="System.Int32"/>
+        <Column Name="MedicaidID" DataType="System.String"/>
+        <Column Name="OtherLanguage" DataType="System.String"/>
+        <Column Name="PhotoPath" DataType="System.String"/>
+        <Column Name="PreferredLanguage" DataType="System.Int32"/>
+        <Column Name="PsychiatristId" DataType="System.Int32"/>
+        <Column Name="Race" DataType="System.Int32"/>
+        <Column Name="SSN" DataType="System.String"/>
+        <Column Name="SignPath" DataType="System.String"/>
+        <Column Name="State" DataType="System.String"/>
+        <Column Name="Telephone" DataType="System.String"/>
+        <Column Name="TelephoneSecondary" DataType="System.String"/>
+        <Column Name="RelationShipOfLegalGuardian" DataType="System.Int32"/>
+        <Column Name="Service" DataType="System.Int32"/>
+        <Column Name="IndividualTherapyFacilitatorId" DataType="System.Int32"/>
+        <Column Name="AdmisionDate" DataType="System.DateTime"/>
+        <Column Name="PlaceOfBirth" DataType="System.String"/>
+        <Column Name="RelationShipOfEmergencyContact" DataType="System.Int32"/>
+        <Column Name="IdFacilitatorPSR" DataType="System.Int32"/>
+        <Column Name="OtherLanguage_Read" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="OtherLanguage_Speak" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="OtherLanguage_Understand" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="MedicareId" DataType="System.String"/>
+        <Column Name="DateOfClose" DataType="System.DateTime"/>
+        <Column Name="OnlyTCM" DataType="System.Boolean" BindableControl="CheckBox"/>
+      </TableDataSource>
+      <TableDataSource Name="EmergencyContacts" DataType="System.Int32" Enabled="true" TableName="EmergencyContacts">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="CreatedBy" DataType="System.String"/>
+        <Column Name="CreatedOn" DataType="System.DateTime"/>
+        <Column Name="LastModifiedBy" DataType="System.String"/>
+        <Column Name="LastModifiedOn" DataType="System.DateTime"/>
+        <Column Name="Name" DataType="System.String"/>
+        <Column Name="Address" DataType="System.String"/>
+        <Column Name="Telephone" DataType="System.String"/>
+        <Column Name="Email" DataType="System.String"/>
+        <Column Name="Country" DataType="System.String"/>
+        <Column Name="City" DataType="System.String"/>
+        <Column Name="State" DataType="System.String"/>
+        <Column Name="ZipCode" DataType="System.String"/>
+        <Column Name="TelephoneSecondary" DataType="System.String"/>
+        <Column Name="AdressLine2" DataType="System.String"/>
+      </TableDataSource>
+      <TableDataSource Name="Classifications" Alias="Signatures" DataType="System.Int32" Enabled="true" TableName="Classifications">
+        <Column Name="supervisorSignature" DataType="System.Byte[]" PropName="Id"/>
+        <Column Name="facilitatorSignature" DataType="System.Byte[]" PropName="Name"/>
+      </TableDataSource>
+      <TableDataSource Name="IntakeAdvancedDirective" DataType="System.Int32" Enabled="true" TableName="IntakeAdvancedDirective">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Client_FK" DataType="System.Int32"/>
+        <Column Name="DateSignatureLegalGuardian" DataType="System.DateTime"/>
+        <Column Name="DateSignaturePerson" DataType="System.DateTime"/>
+        <Column Name="DateSignatureEmployee" DataType="System.DateTime"/>
+        <Column Name="AdmissionedFor" DataType="System.String"/>
+        <Column Name="Documents" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="IHave" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="IHaveNot" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="CreatedBy" DataType="System.String"/>
+        <Column Name="CreatedOn" DataType="System.DateTime"/>
+        <Column Name="LastModifiedBy" DataType="System.String"/>
+        <Column Name="LastModifiedOn" DataType="System.DateTime"/>
+      </TableDataSource>
+    </MsSqlDataConnection>
+    <Parameter Name="nameEmployee" DataType="System.String"/>
+  </Dictionary>
+  <ReportPage Name="Page1" PaperWidth="215.9" PaperHeight="279.4" RawPaperSize="1" LeftMargin="5" TopMargin="5" RightMargin="5" BottomMargin="5" Watermark.Enabled="true" Watermark.Font="Arial, 60pt">
+    <ReportTitleBand Name="ReportTitle1" Width="778.3" Height="87.6">
+      <TextObject Name="Textbox12" Left="132.75" Top="9.45" Width="535.1" Height="20" CanGrow="true" Text="[Clinics.Name]" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 12pt, style=Bold"/>
+      <TextObject Name="Textbox64" Left="131.75" Top="31.33" Width="535.1" Height="22" CanGrow="true" Text="MENTAL HEALTH ADVANCE DIRECTIVE ACKNOWLEDGEMENT " Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 12pt, style=Bold"/>
+      <LineObject Name="Line3" Left="132.3" Top="14.45" Height="37.2"/>
+      <LineObject Name="Line4" Left="774.52" Top="79.6" Width="-776"/>
+      <PictureObject Name="Picture1" Left="18.9" Top="5.45" Width="103.95" Height="66.15"/>
+      <LineObject Name="Line6" Left="131.3" Top="13.45" Height="37.8"/>
+      <LineObject Name="Line7" Left="774.9" Top="78.7" Width="-776"/>
+      <TextObject Name="Text303" Left="132.3" Top="49.25" Width="535.1" Height="22" CanGrow="true" Text="(ADULT CLIENTS ONLY)" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+    </ReportTitleBand>
+    <DataBand Name="Data1" Top="91.45" Width="778.3" Height="809.92">
+      <TextObject Name="Text40" Top="18.9" Width="90.72" Height="18.9" Text="Client Name:" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text41" Left="455.6" Top="18.9" Width="94.5" Height="18.9" Text="Case Number:" HorzAlign="Right" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text44" Left="81.6" Top="18.9" Width="340.2" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Clients.Name]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text45" Left="551.1" Top="18.9" Width="217.35" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Clients.Code]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text304" Top="85.05" Width="774.9" Height="113.4" Text="A &lt;i&gt;Mental Health Advance Directive&lt;/i&gt; is a legal document that lets you name another individual as agent to make health care decisions for you if you become incapable of making your own decisions, or if you want someone else to make those decisions for you even though you are still capable.&#13;&#10;&lt;b&gt;[Clinics.Name]&lt;/b&gt; (hereinafter &quot;the agency&quot;) does not require you to have a &lt;i&gt; Mental Health Advance Directive&lt;/i&gt;, however the agency will follow the terms of any &lt;i&gt;Advance Directive&lt;/i&gt; that you may have executed, to the extent permitted by the law.&#13;&#10;If you already have a &lt;i&gt;Mental Health Advance Directive&lt;/i&gt;, please provide the agency with a copy.&#13;&#10;&#13;&#10;&#13;&#10;" HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <CheckBoxObject Name="CheckBox27" Left="4" Top="223.8" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="IntakeAdvancedDirective.IHave"/>
+      <TextObject Name="Text310" Left="17.9" Top="222.35" Width="756" Height="30.24" Text="&lt;b&gt;I HAVE&lt;/b&gt; executed a &lt;i&gt;Mental Health Advance Directive&lt;/i&gt; and will provide &lt;b&gt;[Clinics.Name]&lt;/b&gt;, LLC. with a copy. The name and contact information for my agent or surrogate is:" HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text311" Left="22.45" Top="282.5" Width="90.72" Height="18.9" Text="Name" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text312" Left="22.45" Top="262.15" Width="283.5" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[IIf([IntakeAdvancedDirective.IHave]==true,[EmergencyContacts.Name],&quot;&quot;)]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text313" Left="329.75" Top="281.95" Width="100.17" Height="18.9" Text="Phone Number" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text314" Left="329.75" Top="262.33" Width="179.55" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[IIf([IntakeAdvancedDirective.IHave]==true,[EmergencyContacts.Telephone],&quot;&quot;)]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text315" Left="534.75" Top="281.95" Width="100.17" Height="18.9" Text="Relationship" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text316" Left="534.75" Top="262.33" Width="179.55" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[IIf([IntakeAdvancedDirective.IHave]==true,Switch([Clients.RelationShipOfEmergencyContact] == 0, &quot;Unknown&quot;,[Clients.RelationShipOfEmergencyContact] == 1, &quot;Brother&quot;,[Clients.RelationShipOfEmergencyContact] == 2, &quot;Child&quot;,[Clients.RelationShipOfEmergencyContact] == 3, &quot;Daugther&quot;,[Clients.RelationShipOfEmergencyContact] == 4, &quot;Father&quot;,[Clients.RelationShipOfEmergencyContact] == 5, &quot;Friend&quot;,[Clients.RelationShipOfEmergencyContact] == 6, &quot;Guardian&quot;,[Clients.RelationShipOfEmergencyContact] == 7, &quot;Mother&quot;, [Clients.RelationShipOfEmergencyContact] == 8, &quot;Psychiatrist&quot;,[Clients.RelationShipOfEmergencyContact] == 9, &quot;Self&quot;,[Clients.RelationShipOfEmergencyContact] == 10, &quot;Sibling&quot;, [Clients.RelationShipOfEmergencyContact] == 11, &quot;Sister&quot;,[Clients.RelationShipOfEmergencyContact] == 12, &quot;Spouse&quot;, [Clients.RelationShipOfEmergencyContact] == 13, &quot;Son&quot;, [Clients.RelationShipOfEmergencyContact] == 14, &quot;Other&quot;),&quot;&quot;)]" VertAlign="Center" Font="Arial, 9pt"/>
+      <CheckBoxObject Name="CheckBox28" Left="4" Top="322.75" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="IntakeAdvancedDirective.IHaveNot"/>
+      <TextObject Name="Text317" Left="17.9" Top="321.3" Width="756" Height="30.24" Text="&lt;b&gt;I HAVE NOT&lt;/b&gt; executed a &lt;i&gt;Mental Health Advance Directive&lt;/i&gt;, however I have read or been explained, and understand my rights to have a &lt;i&gt;Mental Health Advance Directive&lt;/i&gt;." HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text284" Left="28.35" Top="782.9" Width="153.09" Height="24.57" CanGrow="true" Text="Employee Signature" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
+      <LineObject Name="Line11" Left="221.35" Top="781.45" Width="-192.78"/>
+      <TextObject Name="Text285" Left="532.2" Top="782.9" Width="162.54" Height="24.57" CanGrow="true" Text="Date" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
+      <LineObject Name="Line12" Left="725.2" Top="781.45" Width="-192.78"/>
+      <TextObject Name="Text286" Left="532.2" Top="763.1" Width="196.56" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[IntakeAdvancedDirective.DateSignatureEmployee]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text287" Left="28.35" Top="671.5" Width="190.89" Height="24.57" CanGrow="true" Text="Authorized Representative Signature " Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
+      <LineObject Name="Line13" Left="221.35" Top="670.05" Width="-192.78"/>
+      <TextObject Name="Text288" Left="532.2" Top="671.5" Width="162.54" Height="24.57" CanGrow="true" Text="Date" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
+      <LineObject Name="Line14" Left="725.2" Top="670.57" Width="-191.27"/>
+      <TextObject Name="Text289" Left="532.2" Top="651.67" Width="196.56" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[IIf(Year([IntakeAdvancedDirective.DateSignatureLegalGuardian]) == 1,&quot;&quot;,[IntakeAdvancedDirective.DateSignatureLegalGuardian])]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
+      <PictureObject Name="Picture3" Left="75.6" Top="721.3" Width="95" Height="63.45" DataColumn="Signatures.facilitatorSignature"/>
+      <TextObject Name="Text290" Left="28.35" Top="574.9" Width="190.89" Height="24.57" CanGrow="true" Text="Client’s Signature " Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
+      <LineObject Name="Line15" Left="221.35" Top="573.45" Width="-192.78"/>
+      <TextObject Name="Text291" Left="532.2" Top="574.9" Width="162.54" Height="24.57" CanGrow="true" Text="Date" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
+      <LineObject Name="Line16" Left="725.2" Top="573.45" Width="-192.78"/>
+      <TextObject Name="Text292" Left="532.2" Top="554.1" Width="196.56" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[IntakeAdvancedDirective.DateSignaturePerson]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text318" Left="256.05" Top="670.95" Width="238.14" Height="24.57" CanGrow="true" Text="Authorized Representative Name" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
+      <LineObject Name="Line17" Left="502.75" Top="670.5" Width="-249.48"/>
+      <TextObject Name="Text319" Left="256.15" Top="782.35" Width="238.14" Height="24.57" CanGrow="true" Text="Employee Name" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
+      <LineObject Name="Line18" Left="502.85" Top="781.9" Width="-249.48"/>
+      <TextObject Name="Text320" Left="254.15" Top="762.45" Width="255.15" Height="18.9" Text="[nameEmployee]" Font="Arial, 10pt"/>
+      <TextObject Name="Text321" Left="253.15" Top="651.6" Width="255.15" Height="18.9" Text="[IIf([IntakeAdvancedDirective.IHave]==true,[EmergencyContacts.Name],&quot;&quot;)]" Font="Arial, 10pt"/>
+      <PictureObject Name="Picture4" Left="75.6" Top="512.3" Width="95" Height="63.45" DataColumn="Signatures.supervisorSignature"/>
+    </DataBand>
+  </ReportPage>
+</Report>

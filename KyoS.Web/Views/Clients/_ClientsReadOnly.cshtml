@@ -5,27 +5,39 @@
 <div class="col-md-push-12">
     <div class="form-group col-md-3">
         <label asp-for="Name" class="control-label"></label>
-        <input asp-for="Name" class="form-control" disabled/>        
+        <input asp-for="Name" class="form-control" disabled />
     </div>
     <div class="form-group col-md-2">
         <label asp-for="IdGender" class="control-label"></label>
-        <select asp-for="IdGender" asp-items="Model.GenderList" class="form-control" disabled></select>        
+        <select asp-for="IdGender" asp-items="Model.GenderList" class="form-control" disabled></select>
     </div>
-    <div class="form-group col-md-2">
-        <label asp-for="AdmisionDate" class="control-label"></label>
-        <input asp-for="AdmisionDate" class="form-control" disabled/>        
-    </div>
+    @if (User.IsInRole("CaseManager") == true || User.IsInRole("TCMSupervisor") == true || Model.OnlyTCM == true)
+    {
+        <div class="form-group col-md-2">
+            <label asp-for="AdmisionDateTCM" class="control-label"></label>&nbsp;*
+            <input asp-for="AdmisionDateTCM" class="form-control" disabled/>
+            <span asp-validation-for="AdmisionDateTCM" class="text-danger"></span>
+        </div>
+    }
+    else
+    {
+        <div class="form-group col-md-2">
+            <label asp-for="AdmisionDate" class="control-label"></label>&nbsp;*
+            <input asp-for="AdmisionDate" class="form-control" disabled/>
+            <span asp-validation-for="AdmisionDate" class="text-danger"></span>
+        </div>
+    }
     <div class="form-group col-md-2">
         <label asp-for="DateOfBirth" class="control-label"></label>
-        <input asp-for="DateOfBirth" class="form-control" disabled/>        
+        <input asp-for="DateOfBirth" class="form-control" disabled />
     </div>
     <div class="form-group col-md-1">
         <label asp-for="IdStatus" class="control-label"></label>
-        <select asp-for="IdStatus" asp-items="Model.StatusList" class="form-control" disabled></select>        
+        <select asp-for="IdStatus" asp-items="Model.StatusList" class="form-control" disabled></select>
     </div>
     <div class="form-group col-md-2">
         <label asp-for="DateOfClose" class="control-label"></label>
-        <input asp-for="DateOfClose" class="form-control" disabled/>        
+        <input asp-for="DateOfClose" class="form-control" disabled />
     </div>
 </div>
 <div class="col-md-push-12">

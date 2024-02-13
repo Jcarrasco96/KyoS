@@ -1,14 +1,15 @@
 ﻿@model KyoS.Web.Models.TCMServicePlanReviewViewModel
 @{
-    ViewData["Title"] = "Edit Service Plan Review";
+    ViewData["Title"] = "Edit SPR";
+    ViewData["origi"] = ViewData["origin"];
 }
 
 <!DOCTYPE html>
 
 <html>
-<link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
 <head>
     <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
 </head>
 <body>
     <div class="breadcrumbs" id="breadcrumbs">
@@ -31,12 +32,16 @@
                 {
                     @Html.ActionLink("TCM Service Plan Review", "MessagesOfServicePlanReview", "TCMMessages")
                 }
+                @if (@ViewData["origin"].ToString() == "4")
+                {
+                    @Html.ActionLink("TCM Service Plan Review for update", "UpdateServicePlanReview", "TCMServicePlanReviews")
+                }
             </li>
-            <li class="active">Edit</li>
+            <li class="active">Edit Service Plan Review</li>
         </ul><!--.breadcrumb-->
     </div>
 
-    <h4>Edit service plan review</h4>
+    <h4>Edit Service Plan Review</h4>
     <hr />
 
     <div class="row">
@@ -57,18 +62,67 @@
                             @await Html.PartialAsync("_ViewDomainServicePlanReview", Model.TCMServicePlanRevDomain.ToList())
                         </div>
                     </div>
-                </div>
+                    <div class="col-md-12">
+                        @if (User.IsInRole("CaseManager"))
+                        {
+                            <div class="col-md-push-12">
+                                <pre>
+                            @if (Model.Approved < 1)
+                            {
+        <input type="checkbox" class="form-check-input" disabled> <i>Signed</i>
+                            }
+                            else
+                            {            
+        <input type="checkbox" class="form-check-input" checked disabled> <i>Signed</i>
+                            }
+        <strong>Employee signature date</strong>        <input asp-for="DateTCMCaseManagerSignature">   
+        <strong>(@Html.DisplayFor(modelItem => Model.TcmServicePlan.TcmClient.Casemanager.Name))</strong>  <br />  
+        <input type="checkbox" class="form-check-input" disabled> <i>Signed</i>
+        <strong>Supervisor signature date</strong>      <input asp-for="DateTCMSupervisorSignature" disabled>
+        <strong>(@Html.DisplayFor(modelItem => Model.TcmServicePlan.TcmClient.Casemanager.TCMSupervisor.Name))</strong>
+                        </pre>
+                            </div>
+                            <div class="col-md-push-12">
+                                <hr />
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="col-md-push-12">
+                                <pre>
+                            @if (Model.Approved < 1)
+                            {
+        <input type="checkbox" class="form-check-input" disabled> <i>Signed</i>
+                            }
+                            else
+                            { 
+        <input type="checkbox" class="form-check-input" checked disabled> <i>Signed</i>
+                            }
+        <strong>Employee signature date</strong>      <input asp-for="DateTCMCaseManagerSignature">   
+        <strong>(@Html.DisplayFor(modelItem => Model.TcmServicePlan.TcmClient.Casemanager.Name))</strong>  <br /> 
+                            @if (Model.Approved < 2)
+                            {
+        <input type="checkbox" class="form-check-input" disabled> <i>Signed</i>
+                            }
+                            else
+                            { 
+        <input type="checkbox" class="form-check-input" checked disabled> <i>Signed</i>
+                            } 
+        <strong>Supervisor signature date</strong>    <input asp-for="DateTCMSupervisorSignature">
+        <strong>(@Html.DisplayFor(modelItem => Model.TcmServicePlan.TcmClient.Casemanager.TCMSupervisor.Name))</strong>
+                            </pre>
+                            </div>
+                            <div class="col-md-push-12">
+                                <hr />
+                            </div>
+                        }
+                    </div>
+                   
+                </div>                
                 <br />
                 <div class="form-group col-md-12">
                     <input type="submit" value="Save" class="btn btn-primary" />
-                    @if (Model.Approved == 0)
-                    {
-                        <a asp-action="FinishEditing" asp-route-id="@Model.Id" asp-controller="TCMServicePlanReviews" class="btn btn-warning ">Finish Edition</a>
-                    }
-                    else
-                    {
-                        <a asp-action="FinishEditing" asp-route-id="@Model.Id" asp-controller="TCMServicePlanReviews" class="btn btn-warning disabled">Finish Edition</a>
-                    }
+
                     @if (@ViewData["origin"].ToString() == "0")
                     {
                         <a asp-action="TCMIntakeSectionDashboard" asp-route-id="@Model.TcmServicePlan.TcmClient.Id" asp-route-section="4" asp-controller="TCMIntakes" class="btn btn-success">Back</a>
@@ -84,6 +138,10 @@
                     @if (@ViewData["origin"].ToString() == "3")
                     {
                         <a asp-action="MessagesOfServicePlanReview" asp-controller="TCMMessages" class="btn btn-success">Back</a>
+                    } 
+                    @if (@ViewData["origin"].ToString() == "4")
+                    {
+                        <a asp-action="UpdateServicePlanReview" asp-controller="TCMServicePlanReviews" class="btn btn-success">Back</a>
                     }
                 </div>           
         </form>
@@ -100,22 +158,13 @@
 
     <script type="text/javascript">
         $(document).ready(function () {
-            $('#MyTable').DataTable({
-                                "order": [[1, "asc"]],
-                                "pageLength": 100
-                            });
+             $('#MyTable').DataTable({
+                 "order": [[1, "asc"]],
+                 "pageLength": 100
+             });
 
-            var item_to_delete;
-
-            $('.deleteItem').click((e) => {
-                item_to_delete = e.currentTarget.dataset.id;
-            });
-
-            $("#btnYesDelete").click(function () {
-                var url = "@Url.Action("DeleteDomain", "TCMServicePlanReviews")";
-                window.location.href = url + '/' + item_to_delete;
-            });
         });
+
         $(function () {
             //Assign Click event to Plus Image.
             $("body").on("click", "a[class*='icon-plus-sign-alt']", function () {
@@ -128,5 +177,6 @@
                 $(this).closest("tr").next().remove();
             });
         });
+       
     </script>
 }

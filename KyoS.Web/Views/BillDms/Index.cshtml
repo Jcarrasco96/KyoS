@@ -1,0 +1,71 @@
+﻿@model IEnumerable<KyoS.Web.Data.Entities.BillDmsEntity>
+@{
+    ViewData["Title"] = "Invoice history";
+}
+
+<link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
+
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home"></i>
+            @Html.ActionLink("Dashboard", "Index", "Desktop")
+        </li>
+        <li class="active">Invoice history</li>
+    </ul><!--.breadcrumb-->
+</div>
+
+<p>
+    @if (User.IsInRole("Manager") || User.IsInRole("Admin"))
+    {
+        <a asp-action="Create" asp-route-dateBillclose="@DateTime.Today" class="btn btn-info"><i class="glyphicon glyphicon-search"></i> View Next Invoice</a>
+    }
+</p>
+
+<div class="row">
+    <div id="view-billdms">
+        @await Html.PartialAsync("_ViewBillDms", Model)
+    </div>
+</div>
+
+<partial name="_ModalPopup" />
+<partial name="_DeleteDialog" />
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/jquery.dataTables.min.js"></script>
+
+    <script type="text/javascript">
+        function ConfirmDelete(e) {
+            Swal.fire({
+                title: 'Do you want to delete?',
+                text: "Note: All data related to this element will be deleted.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var url = "@Url.Action("DeletePaid", "BillDms")";
+                    window.location.href = url + '/' + e;
+                }
+            });
+        }
+        $(function () {
+
+            //Assign Click event to Plus Image.
+            $("body").on("click", "a[class*='icon-plus-sign-alt']", function () {
+                $(this).closest("tr").after("<tr><td></td><td colspan = '999'>" + $(this).next().html() + "</td></tr>");
+                $(this).attr("class", "icon-minus-sign-alt");
+            });
+            //Assign Click event to Minus Image.
+            $("body").on("click", "a[class*='icon-minus-sign-alt']", function () {
+                $(this).attr("class", "icon-plus-sign-alt");
+                $(this).closest("tr").next().remove();
+            });
+        });
+    </script>
+}
+
+

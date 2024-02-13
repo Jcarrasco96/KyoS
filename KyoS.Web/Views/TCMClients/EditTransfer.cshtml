@@ -1,0 +1,121 @@
+﻿@model KyoS.Web.Models.TCMTransferViewModel
+@{
+    ViewData["Title"] = "Edit TCM Transfer";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+</head>
+<body>
+
+    <div class="breadcrumbs" id="breadcrumbs">
+        <ul class="breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                @Html.ActionLink("Transfers", "Transfers", "TCMClients")
+            </li>
+            <li class="active">Create TCM Transfer</li>
+        </ul><!--.breadcrumb-->
+    </div>
+
+    <h4>Edit TCM Transfer</h4>
+    <hr />
+    <div class="row">
+        <form asp-action="EditTransfer" asp-route-id="@Model.Id" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="IdTCMClient" />
+            <input type="hidden" asp-for="CreatedOn" />
+            <input type="hidden" asp-for="CreatedBy" />
+            <input type="hidden" asp-for="IdTCMSupervisor" />
+            <input type="hidden" asp-for="IdCaseManagerFrom" />
+            <input type="hidden" asp-for="LegalGuardianName" />
+            <input type="hidden" asp-for="LegalGuardianPhone" />
+            <input type="hidden" asp-for="OpeningDate" />
+            <input type="hidden" asp-for="DateLastService" />
+            <input type="hidden" asp-for="DateServicePlanORLastSPR" />
+            <input type="hidden" asp-for="TCMSupervisorAccept" />
+            <partial name="_TCMTransfer" />
+            <div class="form-group col-md-12">
+                <input type="submit" value="Sign and Save" class="btn btn-primary" />
+                <a asp-action="Transfers" class="btn btn-success">Back</a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#IdCaseManagerTo").change(function () {
+                if ($("#IdCaseManagerTo").val() != 0) {
+                    $("#NameAssignedTo").val($("#IdCaseManagerTo option:selected").text());
+                }
+                else {
+                    $("#NameAssignedTo").val("");
+                }
+            })
+        });
+
+        check1.addEventListener('change', (e) => {
+            if (check1.checked == true) {
+                check101.checked = false;
+                $("#Address").prop('disabled', false);
+                $("#CityStateZip").prop('disabled', false);
+                $("#PrimaryPhone").prop('disabled', false);
+                $("#OtherPhone").prop('disabled', false);
+
+            } else {
+                check101.checked = true;
+            }
+
+        })
+        check101.addEventListener('change', (e) => {
+            if (check101.checked == true) {
+                check1.checked = false;
+                $("#Address").prop('disabled', true);
+                $("#CityStateZip").prop('disabled', true);
+                $("#PrimaryPhone").prop('disabled', true);
+                $("#OtherPhone").prop('disabled', true);
+            } else {
+                check1.checked = true;
+            }
+
+        })
+        if (check1.checked == true) {
+            check101.checked = false;
+        } else {
+            check101.checked = true;
+        }
+        //
+        check2.addEventListener('change', (e) => {
+            if (check2.checked == true) {
+                check102.checked = false;
+                $("#DateAudit").prop('disabled', false);
+            } else {
+                check102.checked = true;
+            }
+
+        })
+        check102.addEventListener('change', (e) => {
+            if (check102.checked == true) {
+                check2.checked = false;
+                $("#DateAudit").prop('disabled', true);
+            } else {
+                check2.checked = true;
+            }
+
+        })
+        if (check2.checked == true) {
+            check102.checked = false;
+        } else {
+            check102.checked = true;
+        }
+    </script>
+}
+
+

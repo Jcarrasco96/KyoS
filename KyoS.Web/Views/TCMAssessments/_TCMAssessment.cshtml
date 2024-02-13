@@ -1,7 +1,7 @@
 ﻿@model KyoS.Web.Models.TCMAssessmentViewModel
 
 <div class="col-md-push-12">
-    <div class="form-group col-md-2">
+    <div class="form-group col-md-3">
         <label asp-for="TcmClient.Client.Name" class="control-label">Client Name</label>
         <input asp-for="TcmClient.Client.Name" class="form-control" readonly>
         <span asp-validation-for="TcmClient.Client.Name" class="text-danger"></span>
@@ -11,7 +11,7 @@
         <input asp-for="TcmClient.CaseNumber" class="form-control" readonly>
         <span asp-validation-for="TcmClient.CaseNumber" class="text-danger"></span>
     </div>
-    <div class="form-group col-md-4">
+    <div class="form-group col-md-3">
         <label asp-for="TcmClient.Client.FullAddress" class="control-label">Address, City, State, Zip </label>
         <input asp-for="TcmClient.Client.FullAddress" class="form-control" readonly>
         <span asp-validation-for="TcmClient.Client.FullAddress" class="text-danger"></span>
@@ -77,21 +77,34 @@
     </div>
     <div class="form-group col-md-1">
         <br />
-        <label asp-for="TcmClient.Client.OtherLanguage_Read" class="control-label">Read</label>
         <input asp-for="TcmClient.Client.OtherLanguage_Read" disabled />
+        <label asp-for="TcmClient.Client.OtherLanguage_Read" class="control-label">Read</label>
         <span asp-validation-for="TcmClient.Client.OtherLanguage_Read" class="text-danger"></span>
     </div>
     <div class="form-group col-md-1">
         <br />
-        <label asp-for="TcmClient.Client.OtherLanguage_Speak" class="control-label">Speak</label>
         <input asp-for="TcmClient.Client.OtherLanguage_Speak" disabled />
+        <label asp-for="TcmClient.Client.OtherLanguage_Speak" class="control-label">Speak</label>
         <span asp-validation-for="TcmClient.Client.OtherLanguage_Speak" class="text-danger"></span>
     </div>
     <div class="col-md-2">
         <br />
-        <label asp-for="TcmClient.Client.OtherLanguage_Understand" class="control-label">Understand</label>
         <input asp-for="TcmClient.Client.OtherLanguage_Understand" disabled />
+        <label asp-for="TcmClient.Client.OtherLanguage_Understand" class="control-label">Understand</label>
         <span asp-validation-for="TcmClient.Client.OtherLanguage_Understand" class="text-danger"></span>
+    </div>
+    <div class="container-fluid">
+        &nbsp;
+    </div>
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-2">
+        <label asp-for="DateAssessment" class="control-label">Assessment Date</label>
+        <input asp-for="DateAssessment" class="form-control">
+        <span asp-validation-for="DateAssessment" class="text-danger"></span>
+    </div>
+    <div class="container-fluid">
+        &nbsp;
     </div>
 </div>
 <div class="col-md-push-12">

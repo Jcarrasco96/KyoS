@@ -9,7 +9,9 @@
         <form asp-action="EditActivity3Modal" onsubmit="return jQueryAjaxPostTheme(this);">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="IdTheme" />
-            <h4>Theme: @ViewData["theme"]</h4>
+            <input type="hidden" asp-for="CreatedBy" />
+            <input type="hidden" asp-for="CreatedOn" />
+            <h4>Theme: @Model.Theme.Name</h4>
             <div class="form-group">
                 <label class="control-label">Facilitator’s Intervention</label>
                 <textarea asp-for="Name" class="form-control" rows="6" id="Name"></textarea>

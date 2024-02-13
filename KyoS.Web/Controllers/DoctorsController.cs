@@ -17,12 +17,14 @@ namespace KyoS.Web.Controllers
         private readonly DataContext _context;
         private readonly IConverterHelper _converterHelper;
         private readonly ICombosHelper _combosHelper;
-        
-        public DoctorsController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper)
+        private readonly IRenderHelper _renderHelper;
+
+        public DoctorsController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper, IRenderHelper renderHelper)
         {
             _context = context;
             _combosHelper = combosHelper;
             _converterHelper = converterHelper;
+            _renderHelper = renderHelper;
         }
         
         public async Task<IActionResult> Index(int idError = 0)
@@ -87,10 +89,10 @@ namespace KyoS.Web.Controllers
 
             UserEntity user_logged = _context.Users
 
-                                              .Include(u => u.Clinic)
-                                              .ThenInclude(c => c.Setting)
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(c => c.Setting)
 
-                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
             if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || (!user_logged.Clinic.Setting.MentalHealthClinic && !user_logged.Clinic.Setting.TCMClinic))
             {
@@ -232,5 +234,154 @@ namespace KyoS.Web.Controllers
             
             return RedirectToAction(nameof(Index));
         }
+
+        public IActionResult CreateModal(int id = 0)
+        {
+            if (id == 1)
+            {
+                ViewBag.Creado = "Y";
+            }
+            else
+            {
+                if (id == 2)
+                {
+                    ViewBag.Creado = "E";
+                }
+                else
+                {
+                    ViewBag.Creado = "N";
+                }
+            }
+
+            UserEntity user_logged = _context.Users
+
+                                              .Include(u => u.Clinic)
+                                              .ThenInclude(c => c.Setting)
+
+                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || (!user_logged.Clinic.Setting.MentalHealthClinic && !user_logged.Clinic.Setting.TCMClinic))
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+            DoctorViewModel model = new DoctorViewModel();
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateModal(DoctorViewModel doctorViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                DoctorEntity doctor = await _context.Doctors.FirstOrDefaultAsync(c => c.Name == doctorViewModel.Name);
+                if (doctor == null)
+                {
+                    UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                           .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                    DoctorEntity doctorEntity = _converterHelper.ToDoctorEntity(doctorViewModel, true, user_logged.Id);
+
+                    _context.Add(doctorEntity);
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+
+                        List<DoctorEntity> doctors_List = await _context.Doctors
+                                                                        .ToListAsync();
+
+                        return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDoctors", doctors_List) });
+                    }
+                    catch (System.Exception ex)
+                    {
+                        if (ex.InnerException.Message.Contains("duplicate"))
+                        {
+                            ModelState.AddModelError(string.Empty, $"Already exists the client: {doctorEntity.Name}");
+                        }
+                        else
+                        {
+                            ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                        }
+                    }
+                }
+                else
+                {
+                    return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateModal", doctorViewModel) });
+                }
+            }
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateModal", doctorViewModel) });
+        }
+
+        public async Task<IActionResult> EditModal(int? id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            UserEntity user_logged = _context.Users
+
+                                              .Include(u => u.Clinic)
+                                              .ThenInclude(c => c.Setting)
+
+                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || (!user_logged.Clinic.Setting.MentalHealthClinic && !user_logged.Clinic.Setting.TCMClinic))
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+            DoctorEntity doctorEntity = await _context.Doctors.FirstOrDefaultAsync(c => c.Id == id);
+            if (doctorEntity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            DoctorViewModel doctorViewModel = _converterHelper.ToDoctorViewModel(doctorEntity);
+
+            return View(doctorViewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditModal(int id, DoctorViewModel doctorViewModel)
+        {
+            if (id != doctorViewModel.Id)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            if (ModelState.IsValid)
+            {
+                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                           .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                DoctorEntity doctorEntity = _converterHelper.ToDoctorEntity(doctorViewModel, false, user_logged.Id);
+                _context.Update(doctorEntity);
+                try
+                {
+                    await _context.SaveChangesAsync();
+
+                    List<DoctorEntity> doctors_List = await _context.Doctors
+                                                                        .ToListAsync();
+
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDoctors", doctors_List) });
+                }
+                catch (System.Exception ex)
+                {
+                    if (ex.InnerException.Message.Contains("duplicate"))
+                    {
+                        ModelState.AddModelError(string.Empty, $"Already exists the doctor: {doctorEntity.Name}");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+            }
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateModal", doctorViewModel) });
+        }
+
     }
 }

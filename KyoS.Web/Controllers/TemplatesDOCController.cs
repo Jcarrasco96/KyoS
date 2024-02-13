@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace KyoS.Web.Controllers
 {
-    [Authorize(Roles = "Manager")]
+    [Authorize(Roles = "Manager, Frontdesk")]
     public class TemplatesDOCController : Controller
     {
         private readonly DataContext _context;

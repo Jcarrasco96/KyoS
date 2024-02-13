@@ -13,11 +13,23 @@
         <select asp-for="IdGender" asp-items="Model.GenderList" class="form-control"></select>
         <span asp-validation-for="IdGender" class="text-danger"></span>
     </div>
-    <div class="form-group col-md-2">
-        <label asp-for="AdmisionDate" class="control-label"></label>&nbsp;*
-        <input asp-for="AdmisionDate" class="form-control" />
-        <span asp-validation-for="AdmisionDate" class="text-danger"></span>
-    </div>
+    @if (User.IsInRole("CaseManager") == true || User.IsInRole("TCMSupervisor") == true || Model.OnlyTCM == true)
+    {
+        <div class="form-group col-md-2">
+            <label asp-for="AdmisionDateTCM" class="control-label"></label>&nbsp;*
+            <input asp-for="AdmisionDateTCM" class="form-control" />
+            <span asp-validation-for="AdmisionDateTCM" class="text-danger"></span>
+        </div>
+    }
+    else
+    {
+        <div class="form-group col-md-2">
+            <label asp-for="AdmisionDate" class="control-label"></label>&nbsp;*
+            <input asp-for="AdmisionDate" class="form-control" />
+            <span asp-validation-for="AdmisionDate" class="text-danger"></span>
+        </div>
+    }
+
     <div class="form-group col-md-2">
         <label asp-for="DateOfBirth" class="control-label"></label>&nbsp;*
         <input asp-for="DateOfBirth" class="form-control" />
@@ -43,16 +55,19 @@
         <input asp-for="PhotoFile" class="form-control" type="file" id="photoBrowser" />
         <span asp-validation-for="PhotoFile" class="text-danger"></span>
     </div>
+    @if (Model.Id == 0)
+    {
+        <div class="form-group col-md-2">
+                <label asp-for="SignFile" class="control-label">Signature Photo</label>
+                <input asp-for="SignFile" class="form-control" type="file" id="signBrowser" />
+                <span asp-validation-for="SignFile" class="text-danger"></span>
+        </div>
+    }
     <div class="form-group col-md-2">
-        <label asp-for="SignFile" class="control-label">Signature Photo</label>
-        <input asp-for="SignFile" class="form-control" type="file" id="signBrowser" />
-        <span asp-validation-for="SignFile" class="text-danger"></span>
-    </div>
-    <div class="form-group col-md-2">
-        <label asp-for="Code" class="control-label">Case Number</label>
+        <label asp-for="Code" class="control-label">Case Number MH</label>
         <input asp-for="Code" class="form-control" />
         <span asp-validation-for="Code" class="text-danger"></span>
-    </div>    
+    </div>
     <div class="form-group col-md-2">
         <label asp-for="MedicaidID" class="control-label"></label>
         <input asp-for="MedicaidID" class="form-control" />
@@ -68,6 +83,34 @@
         <input asp-for="SSN" class="form-control" />
         <span asp-validation-for="SSN" class="text-danger"></span>
     </div>
+    @if (Model.Id > 0)
+    {
+        @if (Model.Clients_HealthInsurances == null || Model.Clients_HealthInsurances.Count() == 0)
+        {
+            <div class="form-group col-md-2">
+                <label class="control-label">Active Health Insurance</label>
+                <input class="form-control" disabled />
+            </div>
+        }
+        else
+        {
+            @if (@Model.Clients_HealthInsurances.Where(n => n.Active == true).Count() > 0)
+            {
+                <div class=" form-group col-md-2">
+                    <label asp-for="Clients_HealthInsurances.Where(n => n.Active == true).ElementAtOrDefault(0).HealthInsurance.Name" class="control-label">Active Health Insurance</label>
+                    <input asp-for="Clients_HealthInsurances.Where(n => n.Active == true).ElementAtOrDefault(0).HealthInsurance.Name" class="form-control" disabled />
+                    <span asp-validation-for="Clients_HealthInsurances.First(n => n.Active == true).HealthInsurance.Name" class="text-danger"></span>
+                </div>
+            }
+            else
+            {
+                <div class="form-group col-md-2">
+                    <label class="control-label">Active Health Insurance</label>
+                    <input class="form-control" disabled />
+                </div>
+            }
+        }
+    }
 </div>
 <div class="col-md-push-12">
     &nbsp;
@@ -120,33 +163,5 @@
                 </div>
             }
         </div>
-    </div>
-    @if (Model.Id > 0)
-    {
-        @if (Model.Clients_HealthInsurances == null || Model.Clients_HealthInsurances.Count() == 0)
-        {
-            <div class="form-group col-md-4">
-                <label class="control-label">Active Health Insurance</label>
-                <input class="form-control" disabled />
-            </div>
-        }
-        else
-        {
-            @if (@Model.Clients_HealthInsurances.Where(n => n.Active == true).Count() > 0)
-            {
-                <div class=" form-group col-md-4">
-                    <label asp-for="Clients_HealthInsurances.Where(n => n.Active == true).ElementAtOrDefault(0).HealthInsurance.Name" class="control-label">Active Health Insurance</label>
-                    <input asp-for="Clients_HealthInsurances.Where(n => n.Active == true).ElementAtOrDefault(0).HealthInsurance.Name" class="form-control" disabled />
-                    <span asp-validation-for="Clients_HealthInsurances.First(n => n.Active == true).HealthInsurance.Name" class="text-danger"></span>
-                </div>
-            }
-            else
-            {
-                <div class="form-group col-md-4">
-                    <label class="control-label">Active Health Insurance</label>
-                    <input class="form-control" disabled />
-                </div>
-            }
-        }
-    }
+    </div>    
 </div>

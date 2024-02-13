@@ -1,0 +1,71 @@
+﻿@model KyoS.Web.Models.SafetyPlanViewModel
+
+<div class="col-md-push-12">
+    <div class="form-group col-md-4">
+        <label asp-for="Client.Name" class="control-label">Name of Recipient</label>
+        <input asp-for="Client.Name" class="form-control" readonly>
+        <span asp-validation-for="Client.Name" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="Client.Code" class="control-label">Case No.</label>
+        <input asp-for="Client.Code" class="form-control" readonly>
+        <span asp-validation-for="Client.Code" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="Client.AdmisionDate" class="control-label">Date of Admission</label>
+        <input asp-for="Client.AdmisionDate" class="form-control" readonly>
+        <span asp-validation-for="Client.AdmisionDate" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="Client.MedicaidID" class="control-label"></label>
+        <input asp-for="Client.MedicaidID" class="form-control" readonly>
+        <span asp-validation-for="Client.MedicaidID" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="Client.Telephone" class="control-label">Telephone</label>
+        <input asp-for="Client.Telephone" class="form-control" readonly>
+        <span asp-validation-for="Client.Telephone" class="text-danger"></span>
+    </div>
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-4">
+        <label asp-for="Client.FullAddress" class="control-label">Address</label>
+        <input asp-for="Client.FullAddress" class="form-control" readonly>
+        <span asp-validation-for="Client.FullAddress" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-3">
+        <label asp-for="Client.City" class="control-label">City</label>
+        <input asp-for="Client.City" class="form-control" readonly>
+        <span asp-validation-for="Client.City" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-3">
+        <label asp-for="Client.State" class="control-label">State</label>
+        <input asp-for="Client.State" class="form-control" readonly>
+        <span asp-validation-for="Client.State" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="Client.ZipCode" class="control-label">Zip Code</label>
+        <input asp-for="Client.ZipCode" class="form-control" readonly>
+        <span asp-validation-for="Client.ZipCode" class="text-danger"></span>
+    </div>
+
+</div>
+<div class="col-md-push-12">
+    <div class="container-fluid col-md-12">
+    <pre>    
+    Date Document: <input asp-for="DateDocument" disabled> <br />
+    People I can call or talk to for help(3 minimum)
+    <textarea asp-for="PeopleIcanCall" style="width:95%" rows="3" readonly></textarea>   <br />
+    Warning signs of crisis:
+    <textarea asp-for="WarningSignsOfCrisis" style="width:95%" rows="3" readonly></textarea>  
+    Ways to keep myself safe:
+    <textarea asp-for="WaysToKeepmyselfSafe" style="width:95%" rows="3" readonly></textarea>  
+    Things that help when I feel this way:
+    <textarea asp-for="ThingsThat" style="width:95%" rows="3" readonly></textarea> 
+    Advice I would give a friend:
+    <textarea asp-for="AdviceIwould" style="width:95%" rows="3" readonly></textarea> 
+    Ways to distract myself:
+    <textarea asp-for="WaysToDistract" style="width:95%" rows="3" readonly></textarea> 
+    </pre>
+    </div>
+</div>

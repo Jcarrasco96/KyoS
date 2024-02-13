@@ -1,7 +1,7 @@
 ﻿@model KyoS.Web.Models.GroupViewModel
 
 @{
-    ViewData["Title"] = "Create Individual-Therapy Group";
+    ViewData["Title"] = "Create Individual Group";
 }
 
 <link rel="stylesheet" href="~/css/prism.css">
@@ -13,11 +13,11 @@
             <i class="icon-home"></i>
             @Html.ActionLink("Individual-Therapy Group", "Individual", "Groups")
         </li>
-        <li class="active">Create GT Individual</li>
+        <li class="active">Create Individual Group</li>
     </ul><!--.breadcrumb-->
 </div>
 
-<h4>Create GT Individual</h4>
+<h4>Create Individual Group</h4>
 <hr />
 <div class="row">
     <div class="col-md-12">
@@ -29,7 +29,7 @@
                 </button>
                 <i class="icon-ok green"></i>
                 <strong class="green">
-                    GT Group been successfully created
+                    Individual Group been successfully created
                 </strong>
 
             </div>
@@ -48,7 +48,7 @@
         }
     </div>
     <div>
-        <form asp-action="CreateIndividualGroup">
+        <form asp-action="CreateIndividualGroup" onsubmit="return false;" id="form1">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <partial name="_GroupsIndividual" />
@@ -56,14 +56,12 @@
            
             <div class="form-group col-md-12"></div>
             <div class="form-group col-md-12">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Save" class="btn btn-primary" id="btnSave"/>
                 <a asp-action="Individual" class="btn btn-success">Back</a>
             </div>
         </form>
     </div>
 </div>
-
-
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
@@ -71,5 +69,16 @@
     <script src="~/js/chosen.jquery.js" type="text/javascript"></script>
     <script src="~/js/prism.js" type="text/javascript" charset="utf-8"></script>
     <script src="~/js/init.js" type="text/javascript" charset="utf-8"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#btnSave").click(function () {
+                if (($("#cbFacilitator option:selected").text() != "[Select facilitator...]") && ($("#cbSchedule option:selected").text() != "[Select Schedule...]")) {
+                    $("#btnSave").prop('disabled', true);
+                    form1.submit();
+                }
+            });
+        });
+    </script>
 }
 

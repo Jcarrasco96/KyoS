@@ -1,0 +1,98 @@
+﻿@model KyoS.Web.Models.TCMIntakePersonalWellbeingViewModel
+@if (User.IsInRole("CaseManager"))
+{
+    <div class="col-md-12">
+    <pre>  
+    <strong>CLIENT NAME</strong> <strong>(@Html.DisplayFor(modelItem => Model.TcmClient.Client.Name))</strong>   
+ 
+    <strong>1. How satisfied are you with your standard of living?</strong>             <input asp-for="Living">
+                                                                        
+    <strong>2. How satisfied are you with your health?</strong>                         <input asp-for="Health">
+                                                                        
+    <strong>3. How satisfied are you with what you are achieving in life?</strong>      <input asp-for="Life">
+              
+    <strong>4. How satisfied are you with your personal relationships?</strong>         <input asp-for="Relationships">
+
+    <strong>5. How satisfied are you with how safe you feel?</strong>                   <input asp-for="Feel">
+
+    <strong>6. How satisfied are you with feeling part of your community?</strong>      <input asp-for="Community">
+
+    <strong>7. How satisfied are you with your future security?</strong>                <input asp-for="Security">
+
+    <strong>8. How satisfied are you with your spirituality or religion?</strong>       <input asp-for="Religion">
+
+
+    No satisfaction at all                                                          Completely Satisfied
+        <input type="checkbox" class="form-check-input" disabled><strong> 1 </strong>    <input type="checkbox" class="form-check-input" disabled><strong> 2 </strong>          <input type="checkbox" class="form-check-input" disabled><strong> 3 </strong>    <input type="checkbox" class="form-check-input" disabled><strong> 4 </strong>     <input type="checkbox" class="form-check-input regex" disabled><strong> 5 </strong>    <input type="checkbox" class="form-check-input" disabled><strong> 6 </strong>    <input type="checkbox" class="form-check-input" disabled><strong> 7 </strong>    <input type="checkbox" class="form-check-input" disabled><strong> 8 </strong>       <input type="checkbox" class="form-check-input" disabled><strong> 9 </strong>    <input type="checkbox" class="form-check-input" disabled><strong> 10 </strong>
+
+    </pre>
+    </div>
+
+    <div class="col-md-12">
+        <pre>
+     @if (Model.Id == 0)
+        {
+        <input type="checkbox" class="form-check-input" > <i>Signed</i>
+        }
+        else
+        { 
+        <input type="checkbox" class="form-check-input" checked disabled> <i>Signed</i>
+        }
+        <strong>Staff Signature: </strong>   <strong>(@Html.DisplayFor(modelItem => Model.AdmissionedFor))</strong>   <input asp-for="DateSignatureEmployee">                                                                 
+    </pre>
+    </div>
+    <div class="col-md-12">
+        &nbsp;
+    </div>    
+    <br />
+}
+else
+{
+    <div class="col-md-12">
+        <pre>  
+        <strong>CLIENT NAME</strong> <strong>(@Html.DisplayFor(modelItem => Model.TcmClient.Client.Name))</strong>   
+ 
+        <strong>1. How satisfied are you with your standard of living?</strong>             <input asp-for="Living" disabled>
+                                                                        
+        <strong>2. How satisfied are you with your health?</strong>                         <input asp-for="Health" disabled>
+                                                                        
+        <strong>3. How satisfied are you with what you are achieving in life?</strong>      <input asp-for="Life" disabled>
+              
+        <strong>4. How satisfied are you with your personal relationships?</strong>         <input asp-for="Relationships" disabled>
+
+        <strong>5. How satisfied are you with how safe you feel?</strong>                   <input asp-for="Feel" disabled>
+
+        <strong>6. How satisfied are you with feeling part of your community?</strong>      <input asp-for="Community" disabled>
+
+        <strong>7. How satisfied are you with your future security?</strong>                <input asp-for="Security" disabled>
+
+        <strong>8. How satisfied are you with your spirituality or religion?</strong>       <input asp-for="Religion" disabled>
+
+
+    No satisfaction at all                                                          Completely Satisfied
+        <input type="checkbox" class="form-check-input" disabled><strong> 1 </strong>    <input type="checkbox" class="form-check-input" disabled><strong> 2 </strong>          <input type="checkbox" class="form-check-input" disabled><strong> 3 </strong>    <input type="checkbox" class="form-check-input" disabled><strong> 4 </strong>     <input type="checkbox" class="form-check-input regex" disabled><strong> 5 </strong>    <input type="checkbox" class="form-check-input" disabled><strong> 6 </strong>    <input type="checkbox" class="form-check-input" disabled><strong> 7 </strong>    <input type="checkbox" class="form-check-input" disabled><strong> 8 </strong>       <input type="checkbox" class="form-check-input" disabled><strong> 9 </strong>    <input type="checkbox" class="form-check-input" disabled><strong> 10 </strong>
+
+    </pre>
+    </div>
+
+    <div class="col-md-12">
+        <pre>
+         @if (Model.Id == 0)
+        {
+        <input type="checkbox" class="form-check-input"> <i>Signed</i>
+        }
+        else
+        { 
+        <input type="checkbox" class="form-check-input" checked disabled> <i>Signed</i>
+        }
+        <strong>Staff Signature: </strong>   <strong>(@Html.DisplayFor(modelItem => Model.AdmissionedFor))</strong>   <input asp-for="DateSignatureEmployee" disabled>
+    </pre>
+    </div>
+    <div class="col-md-12">
+        &nbsp;
+    </div>    
+    <br />
+}
+
+
+

@@ -1,0 +1,331 @@
+﻿@model KyoS.Web.Data.Entities.TCMClientEntity
+@{
+    ViewData["Title"] = "TCM Case History";
+    ViewData["origin"] = 8;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+</head>
+<body>
+    <link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" href="~/css/datepicker.min.css">
+
+    <div class="breadcrumbs" id="breadcrumbs">
+        <ul class="breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                @Html.ActionLink("Cases", "Index", "TCMClients")
+            </li>
+            <li class="active">TCM Case History</li>
+        </ul><!--.breadcrumb-->
+    </div>
+
+    <div class="row">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <partial name="_TCMCaseAllData" />
+        <div class="col-md-12">
+            <hr />
+        </div>
+        <div class="col-md-push-12">
+            <div class="">
+                <div id="view-farsForClient">
+                    @if (Model.TCMAssessment != null)
+                    {
+                        @await Html.PartialAsync("_ViewAssessmentForCase", Model.TCMAssessment)
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <hr />
+        </div>
+        <div class="col-md-push-12">
+            <div id="view-farsForClient">
+                @if (Model.Younger == true)
+                {
+                    @if (Model.TcmIntakeAppendixI != null)
+                    {
+                        @await Html.PartialAsync("_ViewAppendixIForCase", Model.TcmIntakeAppendixI)
+                    }
+                }
+                else
+                {
+                    @if (Model.TcmIntakeAppendixJ != null)
+                    {
+                        @await Html.PartialAsync("_ViewAppendixJForCase", Model.TcmIntakeAppendixJ)
+                    }
+                }
+            </div>
+        </div>
+        <div class="col-md-12">
+            <hr />
+        </div>
+        <div class="col-md-push-12">
+            <div id="view-farsForClient">
+                @if (Model.TcmServicePlan != null)
+                {
+                    @await Html.PartialAsync("_ViewServicePlanForCase", Model.TcmServicePlan)
+                }
+            </div>
+        </div>
+        <div class="col-md-12">
+            <hr />
+        </div>
+        <div class="col-md-push-12">
+            <div id="view-farsForClient">
+                @if (Model.TcmServicePlan != null && Model.TcmServicePlan.TCMAdendum.Count() > 0)
+                {
+                    @await Html.PartialAsync("_ViewAddendumForCase", Model.TcmServicePlan.TCMAdendum.ToList())
+                }
+            </div>
+        </div>
+        <div class="col-md-12">
+            <hr />
+        </div>
+        <div class="col-md-push-12">
+            <div id="view-farsForClient">
+                @if (Model.TcmServicePlan != null && Model.TcmServicePlan.TCMServicePlanReview != null)
+                {
+                    @await Html.PartialAsync("_ViewServicePlanRForCase", Model.TcmServicePlan.TCMServicePlanReview)
+                }
+            </div>
+        </div>
+        <div class="col-md-12">
+            <hr />
+        </div>
+        <div class="col-md-push-12">
+            <div id="view-farsForClient">
+                @await Html.PartialAsync("_ViewTCMFars", Model.TCMFarsFormList)
+            </div>
+        </div>
+        <div class="col-md-12">
+            <hr />
+        </div>
+        <div class="col-md-push-12">
+            <div id="view-farsForClient">
+                @if (Model.TcmServicePlan != null && Model.TcmServicePlan.TCMDischarge != null)
+                {
+                    @await Html.PartialAsync("_ViewDischarge", Model.TcmServicePlan.TCMDischarge)
+                }
+            </div>
+        </div>
+        <div class="col-md-12">
+            <hr />
+        </div>
+        <div class="col-md-push-12">
+            <div id="view-farsForClient">
+                @if (Model.TCMNote.Count() > 0)
+                {
+                    @await Html.PartialAsync("_ViewTCMNotesForCase", Model.TCMNote.ToList())
+                }
+            </div>
+        </div>
+        <div class="col-md-12">
+            <hr />
+        </div>
+
+    </div>
+</body>
+</html>
+
+<partial name="_ModalPopupLg" />
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script src="~/js/jquery.dataTables.min.js"></script>
+    <script src="~/js/moment.min.js"></script>
+    <script src="~/js/datetime-moment.js"></script>
+    <script src="~/js/datepicker.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="~/js/datepicker.en.js" type="text/javascript" charset="utf-8"></script>
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            $.fn.dataTable.moment('MM/DD/YYYY');
+
+            $('#MyTable').DataTable({
+                "order": [[0, "asc"]],
+                "lengthMenu": [[100, 200, -1], [100, 200, "All"]],
+                "pageLength": 200
+            });
+
+            //$('#datepicker').datepicker({
+            //    autoClose: true
+            //})
+        });
+
+        function ConfirmDeleteAppendixJ(e) {
+            Swal.fire({
+                title: 'Do you want to do this action?',
+                text: "Note: The appendix J will be deleted, this action is irreversible.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, do it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var url = "@Url.Action("DeleteAppendixJ", "TCMIntakes")";
+                    window.location.href = url + '/' + e;
+                }
+            });
+        }
+        function ConfirmDeleteServicePlan(e) {
+            Swal.fire({
+                title: 'Do you want to do this action?',
+                text: "Note: The services plan, addendums, services plan review, discharge and notes will be deleteds, this action is irreversible.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, do it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var url = "@Url.Action("Delete", "TCMServicePlans")";
+                    window.location.href = url + '/' + e;
+                }
+            });
+        }
+         function ConfirmDeleteAddendum(e) {
+            Swal.fire({
+                title: 'Do you want to do this action?',
+                text: "Note: The addendums and notes will be deleteds, this action is irreversible.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, do it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var url = "@Url.Action("DeleteAddendum", "TCMServicePlans")";
+                    window.location.href = url + '/' + e;
+                }
+            });
+        }
+
+        function ConfirmDeleteAssessment(e) {
+            Swal.fire({
+                title: 'Do you want to do this action?',
+                text: "Note: The assessment will be deleted, this action is irreversible.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, do it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var url = "@Url.Action("Delete", "TCMAssessments")";
+                    window.location.href = url + '/' + e;
+                }
+            });
+        }
+
+        function ConfirmDeleteNote(e) {
+            Swal.fire({
+                title: 'Do you want to delete?',
+                text: "Note: All data related to this element will be deleted.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var url = "@Url.Action("Delete", "TCMNotes")";
+                    window.location.href = url + '?id=' + e + '&origin=' + @ViewData["origin"];
+                }
+            });
+        }
+
+        function ConfirmDeleteSPR(e) {
+            Swal.fire({
+                title: 'Do you want to do this action?',
+                text: "Note: The addendums and notes will be deleteds, this action is irreversible.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, do it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var url = "@Url.Action("DeleteSPR", "TCMServicePlanReviews")";
+                    window.location.href = url + '/' + e;
+                }
+            });
+        }
+
+        function ConfirmDeleteAppendixI(e) {
+            Swal.fire({
+                title: 'Do you want to do this action?',
+                text: "Note: The appendix I will be deleted, this action is irreversible.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, do it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var url = "@Url.Action("DeleteAppendixI", "TCMIntakes")";
+                    window.location.href = url + '/' + e;
+                }
+            });
+        }
+        function ConfirmDeleteDischarge(e) {
+            Swal.fire({
+                title: 'Do you want to do this action?',
+                text: "Note: The Discharge I will  deleted, this action is irreversible.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, do it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var url = "@Url.Action("Delete", "TCMDischarge")";
+                    window.location.href = url + '/' + e;
+                }
+            });
+        }
+        function ConfirmDeleteDischarge(e) {
+            Swal.fire({
+                title: 'Do you want to delete?',
+                text: "Note: All data related to this element will be deleted.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var url = "@Url.Action("Delete1", "TCMDischarges")";
+                    window.location.href = url + '?id=' + e;
+                }
+            });
+        }
+        function ConfirmDeleteFARS(e) {
+            Swal.fire({
+                title: 'Do you want to do this action?',
+                text: "Note: The FARS and messages will be deleteds, this action is irreversible.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, do it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var url = "@Url.Action("Delete1", "TCMFarsForms")";
+                    window.location.href = url + '/' + e;
+                }
+            });
+        }
+    </script>
+
+
+}
+

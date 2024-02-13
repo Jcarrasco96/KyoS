@@ -116,7 +116,14 @@
                                                                                 }
                                                                             </td>
                                                                             <td align="center">
-                                                                                <a onclick="showInPopup('@Url.Action("ChangeSessionInd", "Notes", new { id = day_client.Id }, Context.Request.Scheme)','Change Session')" class="btn btn-default" title="Change Session"><i class="glyphicon glyphicon-calendar"></i></a>
+                                                                                @if (day_client.Client != null)
+                                                                                {
+                                                                                    <a onclick="showInPopup('@Url.Action("ChangeSessionInd", "Notes", new { id = day_client.Id }, Context.Request.Scheme)','Change Session')" class="btn btn-default" title="Change Session"><i class="glyphicon glyphicon-calendar"></i></a>
+                                                                                }
+                                                                                else
+                                                                                { 
+                                                                                    <a onclick="showInPopup('@Url.Action("ChangeSessionInd", "Notes", new { id = day_client.Id }, Context.Request.Scheme)','Change Session')" class="btn btn-default disabled" title="Change Session"><i class="glyphicon glyphicon-calendar"></i></a>
+                                                                                }
                                                                             </td>
                                                                             <td align="right">
                                                                                 @if (day_client.IndividualNote == null)

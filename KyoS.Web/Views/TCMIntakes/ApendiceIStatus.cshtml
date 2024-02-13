@@ -1,0 +1,209 @@
+﻿@model IEnumerable<KyoS.Web.Data.Entities.TCMIntakeAppendixIEntity>
+@{
+    ViewData["Title"] = "TCM Appendix I";
+}
+<link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
+
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home"></i>
+            @Html.ActionLink("Dashboard", "Index", "Desktop")
+        </li>
+        <li class="active">TCM Appendix I</li>
+    </ul><!--.breadcrumb-->
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Pending Appendix I</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-hover table-responsive table-striped" id="MyTable">
+                    <thead>
+                        <tr>
+                            <th class="col-md-3">
+                                TCM Name
+                            </th>
+                            <th class="col-md-3">
+                                Client Name
+                            </th>
+                            <th class="col-md-1" style="text-align: center;">
+                                Case Number
+                            </th>
+                            <th class="col-md-1" style="text-align: center;">
+                                Open
+                            </th>
+                            <th class="col-md-1" style="text-align: center;">
+                                Date
+                            </th>
+                            <th class="col-md-1" style="text-align: center;">
+                                Status
+                            </th>
+                            <th class="col-md-2" style="text-align: center;">
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td >
+                                    @Html.DisplayFor(modelItem => item.TcmClient.Casemanager.Name)
+                                </td>
+                                <td>
+                                    @if (item.TcmClient.Client.Gender == KyoS.Common.Enums.GenderType.Female)
+                                    {
+                                        <i class="glyphicon glyphicon-user btn-danger"></i>
+                                    }
+                                    @if (item.TcmClient.Client.Gender == KyoS.Common.Enums.GenderType.Male)
+                                    {
+                                        <i class="glyphicon glyphicon-user btn-primary"></i>
+                                    }
+                                    &nbsp;
+                                    @Html.DisplayFor(modelItem => item.TcmClient.Client.Name)
+                                </td>
+                                 <td align="center">
+                                    @if (item.TcmClient.Status == KyoS.Common.Enums.StatusType.Open)
+                                    {
+                                        <span class="label label-success">
+                                            @Html.DisplayFor(modelItem => item.TcmClient.CaseNumber)
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="label label-default">
+                                            @Html.DisplayFor(modelItem => item.TcmClient.CaseNumber)
+                                        </span>
+                                    }
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.TcmClient.DataOpen)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.Date)
+                                </td>
+                                <td align="center">
+                                    @if (item.Approved == 0)
+                                    {
+                                        <span class="label label-warning">
+                                            Edition
+                                        </span>
+                                    }
+                                    @if (item.Approved == 1)
+                                    {
+                                        <span class="label label-info">
+                                            Pending
+                                        </span>
+                                    }
+                                    @if (item.Approved == 2)
+                                    {
+                                        <span class="label label-success">
+                                            Approved
+                                        </span>
+                                    }
+                                </td>
+                                <td align="right">
+                                    @if (User.IsInRole("CaseManager"))
+                                    {
+                                        @if (item.Approved == 0)
+                                        {
+                                            <a asp-action="CreateTCMAppendixI" asp-route-id="@item.TcmClient.Id" class="btn btn-warning" title="Create Appendix I"><i class="glyphicon glyphicon-pencil"></i></a>
+                                            <a asp-action="FinishEditing" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-success" title="Finish Editing Appendix I"><i class="glyphicon glyphicon-ok"></i></a>
+                                            <i title="Approved" class="btn btn-success disabled glyphicon glyphicon-print"></i>
+                                        }
+                                        @if (item.Approved == 1)
+                                        {
+                                            <a asp-action="CreateTCMAppendixI" asp-route-id="@item.TcmClient.Id" class="btn btn-warning" title="Edit Appendix I"><i class="glyphicon glyphicon-pencil"></i></a>
+                                            <i title="Approved" class="btn btn-success disabled glyphicon glyphicon-ok"></i>
+                                            <i title="Approved" class="btn btn-success disabled glyphicon glyphicon-print"></i>
+                                        }
+                                        @if (item.Approved == 2)
+                                        {
+                                            <i title="Approved" class="btn btn-warning disabled glyphicon glyphicon-pencil"></i>
+                                            <i title="Approved" class="btn btn-success disabled glyphicon glyphicon-ok"></i>
+                                            <a asp-route-id="@item.TcmClient_FK" asp-action="PrintTCMAppendixI" class="btn btn-success" title="Print Appendix I" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                        }
+                                    }
+                                    @if (User.IsInRole("TCMSupervisor"))
+                                    {
+                                        @if (item.Approved == 0)
+                                        {
+                                            <i title="Approved" class="btn btn-warning disabled glyphicon glyphicon-pencil"></i>
+                                            <i title="Approved" class="btn btn-success disabled glyphicon glyphicon-ok"></i>
+                                            <i title="Approved" class="btn btn-success disabled glyphicon glyphicon-print"></i>
+                                        }
+
+                                        @if (item.Approved == 1)
+                                        {
+                                            <i title="Approved" class="btn btn-warning disabled glyphicon glyphicon-pencil"></i>
+                                            <a asp-action="CreateTCMAppendixIReadOnly" asp-route-id="@item.TcmClient.Id" class="btn btn-success" title="Pending Approval"><i class="glyphicon glyphicon-ok"></i></a>
+                                            <i title="Approved" class="btn btn-success disabled glyphicon glyphicon-print"></i>
+                                        }
+                                        @if (item.Approved == 2)
+                                        {
+                                            <i title="Approved" class="btn btn-warning disabled glyphicon glyphicon-pencil"></i>
+                                            <i title="Approved" class="btn btn-success disabled glyphicon glyphicon-ok"></i>
+                                            <a asp-action="PrintTCMAppendixI" asp-route-id="@item.TcmClient_FK" class="btn btn-success" title="Print Appendix I"><i class="glyphicon glyphicon-print"></i></a>
+                                        }
+                                    }
+                                    @if (User.IsInRole("Manager"))
+                                    {
+                                        @if (item.Approved <= 1)
+                                        {
+                                            <i title="Approved" class="btn btn-warning disabled glyphicon glyphicon-pencil"></i>
+                                            <i title="Approved" class="btn btn-success disabled glyphicon glyphicon-ok"></i>
+                                            <i title="Approved" class="btn btn-success disabled glyphicon glyphicon-print"></i>
+                                        }
+                                        @if (item.Approved == 2)
+                                        {
+                                            <i title="Approved" class="btn btn-warning disabled glyphicon glyphicon-pencil"></i>
+                                            <i title="Approved" class="btn btn-success disabled glyphicon glyphicon-ok"></i>
+                                            <a asp-action="PrintTCMAppendixI" asp-route-id="@item.TcmClient_FK" class="btn btn-success" title="Print Appendix I"><i class="glyphicon glyphicon-print"></i></a>
+                                        }
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<partial name="_DeleteDialog" />
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/jquery.dataTables.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#MyTable').DataTable({
+                                "order": [[0, "asc"]],
+                                "pageLength": 100
+                            });
+
+            // Delete item
+            var item_to_delete;
+
+            $('.deleteItem').click((e) => {
+                item_to_delete = e.currentTarget.dataset.id;
+            });
+
+            $("#btnYesDelete").click(function () {
+                var url = "@Url.Action("Delete", "Fars")";
+                window.location.href = url + '/' + item_to_delete;
+            });
+        });
+
+    </script>
+}
+
+
+
+
+

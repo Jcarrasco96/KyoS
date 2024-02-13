@@ -17,16 +17,15 @@
     <span asp-validation-for="TcmServicePlan.TcmClient.DataOpen" class="text-danger"></span>
 </div>
 <div class="form-group col-md-2">
-    <label asp-for="StaffingDate" class="control-label">Staffing Date</label>&nbsp;*
-    <input asp-for="StaffingDate" class="form-control" readonly>
-    <span asp-validation-for="StaffingDate" class="text-danger"></span>
-</div>
-<div class="form-group col-md-2">
     <label asp-for="DischargeDate" class="control-label">Date of Discharge</label>&nbsp;*
     <input asp-for="DischargeDate" class="form-control" readonly>
     <span asp-validation-for="DischargeDate" class="text-danger"></span>
 </div>
-
+<div class="form-group col-md-2">
+    <label asp-for="StaffingDate" class="control-label">Staffing Date</label>&nbsp;*
+    <input asp-for="StaffingDate" class="form-control" readonly>
+    <span asp-validation-for="StaffingDate" class="text-danger"></span>
+</div>
 <div class="form-group col-md-6">
     <br />
     <label asp-for="PresentProblems" class="control-label">Present Problems (According to the “Presenting Problems” section of the Assessment that was completed upon admission)</label><br />
@@ -44,7 +43,7 @@
 <div class="form-group col-md-12 ">
     <pre>
     <strong><u>Reason for Discharge </u></strong>(check only one):
-    <input type="checkbox" asp-for="AllServiceInPlace" disabled> All services in place/coordinated                           <input type="checkbox" asp-for="AllServiceInPlace" disabled> Non-compliance with agency rules  
+    <input type="checkbox" asp-for="AllServiceInPlace" disabled> All services in place/coordinated                           <input type="checkbox" asp-for="NonComplianceWithAgencyRules" disabled> Non-compliance with agency rules  
     <input type="checkbox" asp-for="Referred" disabled> Referred/Transferred to other provider                      <input type="checkbox" asp-for="ClientMovedOutArea" disabled> Client moved out of area
     <input type="checkbox" asp-for="ClientLeftVoluntarily" disabled> Client left voluntarily/refused services                    <input type="checkbox" asp-for="LackOfProgress" disabled>  Lack of progress
     <input type="checkbox" asp-for="Other" disabled> Other:                     <input asp-for="Other_Explain" style="width:80%" disabled>

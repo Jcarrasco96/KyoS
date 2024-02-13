@@ -1,0 +1,44 @@
+﻿@model KyoS.Web.Models.TCMPaystubPaidViewModel
+@{
+    Layout = null;
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="UpdatePaid" asp-route-id="@Model.Id" onsubmit="return jQueryAjaxTCMPaystubPaid(this);">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            
+            <div>
+                <div class="form-group col-md-6">
+                    <label asp-for="Amount" class="control-label"> Amount</label>
+                    <input asp-for="Amount" class="form-control" />
+                    <span asp-validation-for="Amount" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    <label asp-for="DatePayStubPayment" class="control-label"> Date Paystub Payment</label>
+                    <input asp-for="DatePayStubPayment" class="form-control" />
+                    <span asp-validation-for="DatePayStubPayment" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div form-group">
+                    <hr />
+                </div>
+            </div>
+            <div>
+                <div class="col-md-offset-9 form-group">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                    <a asp-action="Index" class="btn btn-success">Back</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/jquery.dataTables.min.js"></script>
+}
+
+

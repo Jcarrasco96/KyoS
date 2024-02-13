@@ -69,7 +69,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("NotAuthorized", "Account");
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Frontdesk")]
         public IActionResult Create(int idClient = 0, int origin = 0)
         {
             if (idClient != 0)
@@ -94,7 +94,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Manager, Supervisor, CaseManager")]
+        [Authorize(Roles = "Manager, Supervisor, CaseManager, Frontdesk")]
         public async Task<IActionResult> Create(int id, EligibilityViewModel eligibilityViewModel, int origin = 0)
         {
             UserEntity user_logged = _context.Users
@@ -168,7 +168,7 @@ namespace KyoS.Web.Controllers
 
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Frontdesk")]
         public IActionResult Delete(int id = 0)
         {
             if (id > 0)
@@ -194,7 +194,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Frontdesk")]
         public async Task<IActionResult> Delete(DeleteViewModel elegibilityModel)
         {
             UserEntity user_logged = _context.Users.Include(u => u.Clinic)
@@ -321,7 +321,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("NotAuthorized", "Account");
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Frontdesk")]
         public async Task<IActionResult> OpenDocument(int id)
         {
             EligibilityEntity elegibility = await _context.Eligibilities

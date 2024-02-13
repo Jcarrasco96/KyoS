@@ -8,7 +8,7 @@
     var @value1 = value + 1;
     
     <div class="col-md-12">
-        <div class="col-md-3">
+        <div class="col-md-2">
             &nbsp;
         </div>
         <div class="col-md-2">            
@@ -37,8 +37,14 @@
                     }
                 </h4>
             </div>
-        </div>        
-        <div class="col-md-3">
+        </div>
+         <div class="col-md-2">
+            <div class="thumbnail list-group-item list-group-item-danger">                
+                <p style="text-align:center">Available units</p>
+                <h4 style="text-align:center; font-weight:bold;">@ViewData["Id"].ToString()</h4>
+            </div>
+        </div>
+        <div class="col-md-2">
             &nbsp;
         </div>
     </div>
@@ -57,10 +63,10 @@
                             <th class="col-md-1" style="text-align:center;">
                                 Setting
                             </th>
-                            <th class="col-md-1" style="text-align:center;">
+                            <th class="col-md-2" style="text-align:left;">
                                 Domain
                             </th>
-                            <th class="col-md-6" style="text-align:left;">
+                            <th class="col-md-4" style="text-align:left;">
                                 Description
                             </th>
                             <th class="col-md-1" style="text-align:center;">
@@ -72,21 +78,24 @@
                             <th class="col-md-1" style="text-align:center;">
                                 Minutes
                             </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Billable
+                            </th>
                             <th class="col-md-1">
 
                             </th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var item in Model)
+                        @foreach (var item in Model.OrderBy(n => n.StartTime.TimeOfDay))
                         {
                             minutes = minutes + item.Minutes;
                             <tr>
                                 <td align="center">
                                     @Html.DisplayFor(modelItem => item.Setting)
                                 </td>
-                                <td align="center">
-                                    @Html.DisplayFor(modelItem => item.TCMDomain.Code)
+                                <td align="left">
+                                    @Html.DisplayFor(modelItem => item.TCMDomain.Name)
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.DescriptionOfService)
@@ -100,18 +109,28 @@
                                 <td align="center">
                                     @Html.DisplayFor(modelItem => item.Minutes)
                                 </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.Billable)
+                                </td>
                                 <td align="right">
                                     @if (User.IsInRole("CaseManager"))
                                     {
-                                        <a onclick="showInPopupLg('@Url.Action("EditNoteActivity", "TCMNotes", new { id = item.Id }, Context.Request.Scheme)','Edit TCM Note')" class="btn btn-warning" title="Edit activity"><i class="glyphicon glyphicon-pencil"></i></a>
-                                        <a asp-action="DeleteTCMNoteActivity" asp-route-id="@item.Id" class="btn btn-danger" title="Delete element"><i class="glyphicon glyphicon-trash"></i></a>
+                                        <a onclick="showInPopupLg('@Url.Action("EditNoteActivity", "TCMNotes", new { id = item.Id, unitsAvaliable = @ViewData["Id"]}, Context.Request.Scheme)','Edit Service')" class="btn btn-warning" title="Edit service"><i class="glyphicon glyphicon-pencil"></i></a>
+                                        <a asp-action="DeleteTCMNoteActivity" asp-route-id="@item.Id" class="btn btn-danger" title="Delete service"><i class="glyphicon glyphicon-trash"></i></a>
                                     }
                                     else
                                     {
-                                        <a onclick="showInPopupLg('@Url.Action("EditNoteActivity", "TCMNotes", new { id = item.Id }, Context.Request.Scheme)','Edit TCM Note')" class="btn btn-warning disabled" title="Edit activity"><i class="glyphicon glyphicon-pencil"></i></a>
-                                        <a asp-action="DeleteTCMNoteActivity" asp-route-id="@item.Id" class="btn btn-danger disabled" title="Delete element"><i class="glyphicon glyphicon-trash"></i></a>
+                                        @if (User.IsInRole("TCMSupervisor") == true && item.TCMNote.TCMClient.Casemanager.Clinic.Setting.TCMSupervisorEdit == true)
+                                        {
+                                            <a onclick="showInPopupLg('@Url.Action("EditNoteActivity", "TCMNotes", new { id = item.Id, unitsAvaliable = @ViewData["Id"] }, Context.Request.Scheme)','Edit Service')" class="btn btn-warning" title="Edit service"><i class="glyphicon glyphicon-pencil"></i></a>
+                                            <a asp-action="DeleteTCMNoteActivity" asp-route-id="@item.Id" class="btn btn-danger" title="Delete service"><i class="glyphicon glyphicon-trash"></i></a>
+                                        }
+                                        else
+                                        {
+                                            <a onclick="showInPopupLg('@Url.Action("EditNoteActivityReadOnly", "TCMNotes", new { id = item.Id }, Context.Request.Scheme)','Edit Service')" class="btn btn-info" title="Review service"><i class="glyphicon glyphicon-search"></i></a>
+                                            <a asp-action="DeleteTCMNoteActivity" asp-route-id="@item.Id" class="btn btn-danger disabled" title="Delete service"><i class="glyphicon glyphicon-trash"></i></a>
+                                        }
                                     }
-
                                 </td>
                             </tr>
                         }

@@ -12,16 +12,18 @@
             <input type="hidden" asp-for="Id_ServicePlan" />
             <input type="hidden" asp-for="CreatedBy" />
             <input type="hidden" asp-for="CreatedOn" />
+            <input type="hidden" asp-for="NameSubService" />
+            <input type="hidden" asp-for="Id_SubService" />
             <div class="form-group">
                 <div class="col-md-12 form-group">
-                    <label asp-for="Id_Service" class="control-label">Service</label>&nbsp;*
+                    <label asp-for="Id_Service" class="control-label">Domain</label>&nbsp;*
                     <select asp-for="Id_Service" asp-items="Model.Services" class="form-control"></select>
                     <span asp-validation-for="Id_Service" class="text-danger"></span>
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-md-3 form-group">
-                    <label asp-for="Code" class="control-label">Service code</label>
+                    <label asp-for="Code" class="control-label">Domain code</label>
                     <input asp-for="Code" class="form-control" readonly />
                     <span asp-validation-for="Code" class="text-danger"></span>
                 </div>
@@ -38,8 +40,10 @@
                     <input asp-for="DateIdentified" class="form-control" />
                     <span asp-validation-for="DateIdentified" class="text-danger"></span>
                 </div>
-                <div class="container-fluid">
-                    &nbsp;
+                <div class="col-md-8">
+                    <label asp-for="NameSubService" class="control-label">Sub-Service Name</label>
+                    <input asp-for="NameSubService" class="form-control" readonly />
+                    <span asp-validation-for="NameSubService" class="text-danger"></span>
                 </div>
             </div>
             <div class="col-md-12">

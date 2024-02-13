@@ -25,14 +25,14 @@
             <input type="hidden" asp-for="IdUserCreatedBy" />
             @if (ViewData["CreatedBy"].ToString() == "1")
             {
-                <div class="col-md-3">
+                <div class="col-md-6">
                     <div class="form-group">
                         <label asp-for="IdClient" class="control-label"></label>&nbsp;*
                         <select asp-for="IdClient" asp-items="Model.Clients" class="form-control"></select>
                         <span asp-validation-for="IdClient" class="text-danger"></span>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-6">
                     <div class="form-group">
                         <label asp-for="IdUserAssigned" class="control-label"></label>&nbsp;
                         <select asp-for="IdUserAssigned" asp-items="Model.Users" class="form-control"></select>
@@ -42,7 +42,7 @@
                 <div class="col-md-12">
                     &nbsp;
                 </div>
-                <div class="col-md-6 form-group">
+                <div class="col-md-12 form-group">
                     <label asp-for="Description" class="control-label"></label>&nbsp;*
                     <textarea asp-for="Description" class="form-control" rows="8"></textarea>
                     <span asp-validation-for="Description" class="text-danger"></span>
@@ -53,14 +53,14 @@
             }
             else
             {
-                <div class="col-md-3">
+                <div class="col-md-6">
                     <div class="form-group">
                         <label asp-for="IdClient" class="control-label"></label>&nbsp;*
                         <select asp-for="IdClient" asp-items="Model.Clients" class="form-control" disabled></select>
                         <span asp-validation-for="IdClient" class="text-danger"></span>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-6">
                     <div class="form-group">
                         <label asp-for="IdUserAssigned" class="control-label"></label>&nbsp;
                         <select asp-for="IdUserAssigned" asp-items="Model.Users" class="form-control" disabled></select>
@@ -70,7 +70,7 @@
                 <div class="col-md-12">
                     &nbsp;
                 </div>
-                <div class="col-md-6 form-group">
+                <div class="col-md-12 form-group">
                     <label asp-for="Description" class="control-label"></label>&nbsp;*
                     <textarea asp-for="Description" class="form-control" rows="8" readonly></textarea>
                     <span asp-validation-for="Description" class="text-danger"></span>
@@ -81,7 +81,7 @@
             }
             @if (ViewData["Assigned"].ToString() == "1" || User.IsInRole("Admin") || User.IsInRole("Manager"))
             {
-                <div class="col-md-3">
+                <div class="col-md-12">
                     <label asp-for="Status" class="control-label"></label>&nbsp;*
                     <select asp-for="IdStatus" asp-items="Model.StatusList" class="form-control"></select>
                     <span asp-validation-for="Status" class="text-danger"></span>
@@ -89,7 +89,7 @@
             }
             else
             {
-                <div class="col-md-3">
+                <div class="col-md-12">
                     <label asp-for="Status" class="control-label"></label>&nbsp;*
                     <select asp-for="IdStatus" asp-items="Model.StatusList" class="form-control" disabled></select>
                     <span asp-validation-for="Status" class="text-danger"></span>

@@ -25,8 +25,9 @@ namespace KyoS.Web.Controllers
         private readonly IRenderHelper _renderHelper;
         private readonly IReportHelper _reportHelper;
         private readonly DataContext _context;
+        private readonly IOverlapindHelper _overlapingHelper;
 
-        public FarsFormsController(IUserHelper userHelper, IConverterHelper converterHelper, ICombosHelper combosHelper, IRenderHelper renderHelper, DataContext context, IReportHelper reportHelper)
+        public FarsFormsController(IUserHelper userHelper, IConverterHelper converterHelper, ICombosHelper combosHelper, IRenderHelper renderHelper, DataContext context, IReportHelper reportHelper, IOverlapindHelper overlapingHelper)
         {
             _userHelper = userHelper;
             _combosHelper = combosHelper;
@@ -34,9 +35,10 @@ namespace KyoS.Web.Controllers
             _renderHelper = renderHelper;
             _converterHelper = converterHelper;
             _reportHelper = reportHelper;
+            _overlapingHelper = overlapingHelper;
         }
 
-        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant, Frontdesk")]
         public async Task<IActionResult> Index(int idError = 0)
         {
             if (idError == 1) //Imposible to delete
@@ -58,7 +60,7 @@ namespace KyoS.Web.Controllers
             else
             {
                 FacilitatorEntity facilitator = _context.Facilitators.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
-                if (User.IsInRole("Manager")|| User.IsInRole("Supervisor"))
+                if (User.IsInRole("Manager")|| User.IsInRole("Supervisor") || User.IsInRole("Frontdesk"))
                     return View(await _context.Clients
 
                                               .Include(f => f.FarsFormList)
@@ -127,7 +129,7 @@ namespace KyoS.Web.Controllers
                    HyperAffectScale = 0,
                    InterpersonalScale = 0,
                    MCOID = "",
-                   MedicaidProviderID = client.Clinic.ProviderMedicaidId,
+                   MedicaidProviderID = client.Clinic.ProviderTaxId,
                    MedicaidRecipientID = client.MedicaidID,
                    MedicalScale = 0,
                    M_GafScore = "",
@@ -152,7 +154,9 @@ namespace KyoS.Web.Controllers
                    IdSupervisor = 0,
                    Supervisor = new SupervisorEntity(),
                    IdType = 0,
-                   FarsType = _combosHelper.GetComboFARSType()
+                   FarsType = _combosHelper.GetComboFARSType(),
+                   StartTime = DateTime.Now,
+                   EndTime = DateTime.Now.AddMinutes(15)
                 };
 
                 SupervisorEntity supervisor = _context.Supervisors.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
@@ -213,7 +217,29 @@ namespace KyoS.Web.Controllers
                         FarsFormViewModel.Units = units;
                     }
 
+                    DateTime start = new DateTime(FarsFormViewModel.EvaluationDate.Year, FarsFormViewModel.EvaluationDate.Month, FarsFormViewModel.EvaluationDate.Day, FarsFormViewModel.StartTime.Hour, FarsFormViewModel.StartTime.Minute, FarsFormViewModel.StartTime.Second);
+                    FarsFormViewModel.StartTime = start;
+                    DateTime end = new DateTime(FarsFormViewModel.EvaluationDate.Year, FarsFormViewModel.EvaluationDate.Month, FarsFormViewModel.EvaluationDate.Day, FarsFormViewModel.EndTime.Hour, FarsFormViewModel.EndTime.Minute, FarsFormViewModel.EndTime.Second);
+                    FarsFormViewModel.EndTime = end;
                     farsFormEntity = await _converterHelper.ToFarsFormEntity(FarsFormViewModel, true, user_logged.UserName);
+
+                    if (User.IsInRole("Documents_Assistant"))
+                    {
+                        DocumentsAssistantEntity documentAssistant = _context.DocumentsAssistant.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
+                        string overlapping = _overlapingHelper.OverlapingDocumentsAssistant(documentAssistant.Id, FarsFormViewModel.StartTime, FarsFormViewModel.EndTime, FarsFormViewModel.Id, DocumentDescription.Fars);
+                        if ( overlapping != string.Empty)
+                        {
+                            ModelState.AddModelError(string.Empty, $"Error. There are documents created in that time interval " + overlapping);
+                            ViewData["Origin"] = origin;
+                            FarsFormViewModel.Client = _context.Clients
+                                                               .Include(n => n.Clinic)
+                                                               .FirstOrDefault(n => n.Id == FarsFormViewModel.IdClient);
+
+                            FarsFormViewModel.FarsType = _combosHelper.GetComboFARSType();
+                            return View(FarsFormViewModel);
+                        }
+                    }
+
                     _context.FarsForm.Add(farsFormEntity);
                     try
                     {
@@ -319,6 +345,11 @@ namespace KyoS.Web.Controllers
                     }
                     else
                     {
+                        //redirect to MTPR print report
+                        if (FarsForm.Status == FarsStatus.Approved)
+                        {
+                            return RedirectToAction("PrintFarsForm", new { id = FarsForm.Id });
+                        }
 
                         model = _converterHelper.ToFarsFormViewModel(FarsForm);
                         model.Origin = origin;
@@ -355,7 +386,28 @@ namespace KyoS.Web.Controllers
                     farsFormViewModel.Units = units;
                 }
 
+                DateTime start = new DateTime(farsFormViewModel.EvaluationDate.Year, farsFormViewModel.EvaluationDate.Month, farsFormViewModel.EvaluationDate.Day, farsFormViewModel.StartTime.Hour, farsFormViewModel.StartTime.Minute, farsFormViewModel.StartTime.Second);
+                farsFormViewModel.StartTime = start;
+                DateTime end = new DateTime(farsFormViewModel.EvaluationDate.Year, farsFormViewModel.EvaluationDate.Month, farsFormViewModel.EvaluationDate.Day, farsFormViewModel.EndTime.Hour, farsFormViewModel.EndTime.Minute, farsFormViewModel.EndTime.Second);
+                farsFormViewModel.EndTime = end;
                 FarsFormEntity farsFormEntity = await _converterHelper.ToFarsFormEntity(farsFormViewModel, false, user_logged.Id);
+
+                if (User.IsInRole("Documents_Assistant"))
+                {
+                    DocumentsAssistantEntity documentAssistant = _context.DocumentsAssistant.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
+                    string overlapping = _overlapingHelper.OverlapingDocumentsAssistant(documentAssistant.Id, farsFormViewModel.StartTime, farsFormViewModel.EndTime, farsFormViewModel.Id, DocumentDescription.Fars);
+                    if (overlapping != string.Empty)
+                    {
+                        ModelState.AddModelError(string.Empty, $"Error. There are documents created in that time interval " + overlapping);
+                        farsFormViewModel.Client = _context.Clients
+                                                           .Include(n => n.Clinic)
+                                                           .FirstOrDefault(n => n.Id == farsFormViewModel.IdClient);
+
+                        farsFormViewModel.FarsType = _combosHelper.GetComboFARSType();
+                        return View(farsFormViewModel);
+                    }
+                }
+
                 _context.FarsForm.Update(farsFormEntity);
                 try
                 {
@@ -404,6 +456,10 @@ namespace KyoS.Web.Controllers
                     {
                         return RedirectToAction(nameof(EditionFars));
                     }
+                    if (farsFormViewModel.Origin == 5)
+                    {
+                        return RedirectToAction("IndexDocumentsAssistant", "Calendar");
+                    }
                     return RedirectToAction(nameof(Index));
                 }
                 catch (System.Exception ex)
@@ -446,7 +502,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("ClientHistory", "Clients", new { idClient = clientId });
         }
 
-        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant, Frondesk")]
         public IActionResult PrintFarsForm(int id)
         {
             FarsFormEntity entity = _context.FarsForm
@@ -481,11 +537,40 @@ namespace KyoS.Web.Controllers
                 Stream stream = _reportHelper.CommunityHTCFarsReport(entity);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
-
+            if (entity.Client.Clinic.Name == "PRINCIPLE CARE CENTER INC")
+            {
+                Stream stream = _reportHelper.PrincipleCCIFarsReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (entity.Client.Clinic.Name == "SAPPHIRE MENTAL HEALTH CENTER LLC")
+            {
+                Stream stream = _reportHelper.SapphireMHCFarsReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }            
+            if (entity.Client.Clinic.Name == "MEDICAL & REHAB OF HILLSBOROUGH INC")
+            {
+                Stream stream = _reportHelper.MedicalRehabFarsReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (entity.Client.Clinic.Name == "MY FLORIDA CASE MANAGEMENT SERVICES LLC")
+            {
+                Stream stream = _reportHelper.MyFloridaFarsReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (entity.Client.Clinic.Name == "ORION MENTAL HEALTH CENTER LLC")
+            {
+                Stream stream = _reportHelper.OrionFarsReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (entity.Client.Clinic.Name == "ALLIED HEALTH GROUP LLC")
+            {
+                Stream stream = _reportHelper.AlliedFarsReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
             return null;
         }
 
-        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant, Frondesk")]
         public async Task<IActionResult> ClientswithoutInitialFARS(int idError = 0)
         {
             UserEntity user_logged = await _context.Users
@@ -505,7 +590,7 @@ namespace KyoS.Web.Controllers
                 
                 List<ClientEntity> ClientList = await _context.Clients
                                                               .Include(n => n.FarsFormList)
-                                                              .Where(n => n.FarsFormList.Count == 0 
+                                                              .Where(n => n.FarsFormList.Where(f => f.Type == FARSType.Initial).Count() == 0 
                                                                  && n.Clinic.Id == user_logged.Clinic.Id
                                                                  && (n.IdFacilitatorPSR == facilitator.Id 
                                                                     || n.IndividualTherapyFacilitator.Id == facilitator.Id
@@ -518,11 +603,12 @@ namespace KyoS.Web.Controllers
             else
             {
                 List<ClientEntity> ClientList = await _context.Clients
-                                                          .Include(n => n.FarsFormList)
-                                                          .Where(n => n.FarsFormList.Count == 0 
-                                                              && n.Clinic.Id == user_logged.Clinic.Id
-                                                              && n.OnlyTCM == false)
-                                                          .ToListAsync();
+                                                              .Include(n => n.FarsFormList)
+                                                              .Include(n => n.Bio)
+                                                              .Where(n => n.FarsFormList.Where(f => f.Type == FARSType.Initial).Count() == 0
+                                                                       && n.Clinic.Id == user_logged.Clinic.Id
+                                                                       && n.OnlyTCM == false)
+                                                              .ToListAsync();
 
                 return View(ClientList);
             }
@@ -570,7 +656,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        [Authorize(Roles = "Supervisor, Manager")]
+        [Authorize(Roles = "Supervisor, Manager, Frondesk")]
         public async Task<IActionResult> PendingFars(int idError = 0)
         {
             UserEntity user_logged = await _context.Users
@@ -644,7 +730,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("Index");
         }
 
-        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant, Frondesk")]
         public async Task<IActionResult> FarsForClient(int idClient = 0)
         {
             UserEntity user_logged = await _context.Users
@@ -775,7 +861,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("ClientHistory", "Clients", new { idClient = clientId });
         }
 
-        [Authorize(Roles = "Manager, Supervisor, Facilitator")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Frondesk")]
         public async Task<IActionResult> AuditFARS()
         {
             UserEntity user_logged = _context.Users
@@ -805,10 +891,10 @@ namespace KyoS.Web.Controllers
                                       .Include(m => m.FarsFormList)
                                       .Include(m => m.DischargeList)
                                       .Include(m => m.IndividualTherapyFacilitator)
-                                      .Include(m => m.Workdays_Clients)
-                                      .ThenInclude(m => m.Workday)
+                                      //.Include(m => m.Workdays_Clients)
+                                      //.ThenInclude(m => m.Workday)
                                       .Where(n => n.Clinic.Id == user_logged.Clinic.Id
-                                            && n.MTPs.Count() > 0)
+                                               && n.MTPs.Where(n => n.Active == true).Count() > 0)
                                       .ToList();
 
             }
@@ -855,6 +941,10 @@ namespace KyoS.Web.Controllers
                 review = mtp.MtpReviewList.Count();
                 addendums = mtp.AdendumList.Count();
                 discharge = item.DischargeList.Count();
+                item.Workdays_Clients = _context.Clients
+                                                .Include(n => n.Workdays_Clients)
+                                                .ThenInclude(m => m.Workday)
+                                                .FirstOrDefault(n => n.Id == item.Id).Workdays_Clients;
 
                 if (item.Workdays_Clients.Where(n => n.Workday.Service == ServiceType.PSR).Count() > 0)
                 {
@@ -905,7 +995,7 @@ namespace KyoS.Web.Controllers
             return View(auditClient_List);
         }
 
-        [Authorize(Roles = "Manager, Supervisor, Facilitator")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Frondesk")]
         public async Task<IActionResult> ClientswithoutFARS(int idError = 0)
         {
             UserEntity user_logged = await _context.Users
@@ -958,7 +1048,7 @@ namespace KyoS.Web.Controllers
 
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Frondesk")]
         public async Task<IActionResult> FARSMissingForClient()
         {
             UserEntity user_logged = await _context.Users
@@ -984,7 +1074,7 @@ namespace KyoS.Web.Controllers
                                                                   || (n.DischargeList.Where(d => d.TypeService == ServiceType.PSR).Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.Discharge_PSR).Count() == 0)
                                                                   || (n.DischargeList.Where(d => d.TypeService == ServiceType.Individual).Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.Discharge_Ind).Count() == 0)
                                                                   || (n.DischargeList.Where(d => d.TypeService == ServiceType.Group).Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.Discharge_Group).Count() == 0)
-                                                                  || (n.MTPs.Where(m => m.AdendumList.Count() > 0).Count() > n.FarsFormList.Where(f => f.Type == FARSType.Addendums).Count()))
+                                                                  || (n.MTPs.Where(m => m.AdendumList.Count() > n.FarsFormList.Where(f => f.Type == FARSType.Addendums).Count()).Count() > 0))
                                                                  && n.OnlyTCM == false)
                                                           .ToListAsync();
 
@@ -994,7 +1084,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("NotAuthorized", "Account");
         }
 
-        [Authorize(Roles = "Manager, Facilitator")]
+        [Authorize(Roles = "Manager, Facilitator, Frondesk")]
         public async Task<IActionResult> AuditFARSforId(int id = 0)
         {
             UserEntity user_logged = _context.Users
@@ -1035,8 +1125,7 @@ namespace KyoS.Web.Controllers
 
             MTPEntity mtp = new MTPEntity();
             List<MTPReviewEntity> review = new List<MTPReviewEntity>();
-            bool initialFars = false;
-            bool reviewFars = false;
+            bool initialFars = false;            
             bool individualFars = false;
             bool PSRFars = false;
             bool GroupFars = false;
@@ -1068,12 +1157,7 @@ namespace KyoS.Web.Controllers
                 }
 
             }
-
-            if (review.Count() <= client.FarsFormList.Count(f => f.Type == FARSType.MtpReview))
-            {
-                reviewFars = true;
-            }
-
+            
             if (initialFars == false)
             {
                 auditClient.NameClient = client.Name;
@@ -1119,7 +1203,10 @@ namespace KyoS.Web.Controllers
                     {
                         if (client.FarsFormList.Exists(n => n.EvaluationDate == element.Dateidentified && n.Type == FARSType.Addendums) == true)
                         {
+                            FarsFormEntity aux = client.FarsFormList.FirstOrDefault(n => n.EvaluationDate == element.Dateidentified && n.Type == FARSType.Addendums);
 
+                            client.FarsFormList.Remove(aux);
+                            aux = new FarsFormEntity();
                         }
                         else
                         {
@@ -1129,13 +1216,29 @@ namespace KyoS.Web.Controllers
                             if (element.Facilitator != null)
                             {
                                 auditClient.Responsible = element.Facilitator.Name;
+                                if (client.FarsFormList.Exists(n => n.AdmissionedFor == element.Facilitator.Name && n.Type == FARSType.Addendums) == true)
+                                {
+                                    auditClient.Active = 1;
+                                    auditClient.Description = "Check date FARS type Addendums";
+                                }
+                                else
+                                {
+                                    auditClient.Active = 0;
+                                }
                             }
                             else
                             {
                                 auditClient.Responsible = element.CreatedBy;
+                                if (client.FarsFormList.Exists(n => n.CreatedBy == element.CreatedBy && n.Type == FARSType.Addendums) == true)
+                                {
+                                    auditClient.Active = 1;
+                                    auditClient.Description = "Check date FARS type Addendums";
+                                }
+                                else
+                                {
+                                    auditClient.Active = 0;
+                                }
                             }
-
-                            auditClient.Active = 0;
 
                             auditClient_List.Add(auditClient);
                             auditClient = new AuditFARS();

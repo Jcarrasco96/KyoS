@@ -28,13 +28,14 @@
             <input type="hidden" asp-for="TCMClient.Casemanager.Name" />
             <input type="hidden" asp-for="CreatedOn" />
             <input type="hidden" asp-for="CreatedBy" />
+            <input type="hidden" asp-for="CodeBill" />
             <partial name="_TCMNotes" />
             <div class="col-md-push-12">
                 <div class="col-md-12 form-group">
-                    <a onclick="showInPopupLg('@Url.Action("CreateNoteActivityTemp", "TCMNotes", new { initDate = Model.DateOfService, idTCMClient = Model.IdTCMClient}, Context.Request.Scheme)','Add Service')" class="btn btn-success" title="Add service"><i class="glyphicon glyphicon-plus"></i> Add Service</a>
+                    <a onclick="showInPopupLg('@Url.Action("CreateNoteActivityTemp", "TCMNotes", new { initDate = Model.DateOfService, idTCMClient = Model.IdTCMClient, billable = Model.Billable}, Context.Request.Scheme)','Add Service')" class="btn btn-success" title="Add service"><i class="glyphicon glyphicon-plus"></i> Add Service</a>
                 </div>
                 <div id="view-NoteActivityTemp">
-                    @await Html.PartialAsync("_ViewTCMNoteActivityTemp", Model.TCMNoteActivityTemp)
+                    @await Html.PartialAsync("_ViewTCMNoteActivityTemp", Model.TCMNoteActivityTemp, new ViewDataDictionary(ViewData) { { "Id", @ViewData["available"] } })
                 </div>
             </div>
             <partial name="_TCMNotes1" />
@@ -48,10 +49,9 @@
                 {
                     @if (@ViewData["origin"].ToString() == "1")
                     {
-                        <a asp-action="Index" asp-controller="TCMBilling" class="btn btn-success">Back</a>
+                        <a asp-action="Index" asp-controller="TCMBilling" asp-route-initDate="@Model.DateOfService.ToString()" class="btn btn-success">Back</a>
                     }
-
-                }             
+                }
             </div>
         </form>
     </div>

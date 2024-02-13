@@ -1,0 +1,57 @@
+﻿@model KyoS.Web.Models.IntakeForeignLanguageViewModel
+<div class="col-md-12">
+    <pre>
+    <strong>ACUSE DE RECIBO DE IDIOMA EXTRANJERO</strong>
+    <strong>FOREIGN LANGUAGE ACKNOWLEDGEMENT </strong>
+
+    Yo, <strong>@Html.DisplayFor(modelItem => Model.Client.Name)</strong>, cliente de <strong>@Html.DisplayFor(modelItem => Model.Client.Clinic.Name)</strong> y yo<strong> @Html.DisplayFor(modelItem => Model.Client.LegalGuardian.Name)</strong> custodio legal o representante autorizado <i>(en caso de ser aplicable)</i>, mediante
+    la presente reconozco que toda la información presentada ante mí, incluyendo formularios, consentimientos legales y cualquier otro tipo de documentación perteneciente a mi caso,
+    fue debidamente explicada a mí en toda su extensión en <strong>mi idioma primario</strong> <strong><i>(@Html.DisplayFor(modelItem => Model.Client.PreferredLanguage))</i></strong>, y en términos que yo puedo entender. Mi firma en cada uno de los documentos indica
+    que yo no solo <strong>entiendo</strong> sino que también <strong>estoy de acuerdo</strong> con su contenido. Copias de los documentos disponibles en <strong>mi idioma primario</strong> <strong><i>(@Html.DisplayFor(modelItem => Model.Client.PreferredLanguage))</i></strong> fueron ofrecidas a mí. 
+
+    I, <strong>@Html.DisplayFor(modelItem => Model.Client.Name)</strong>, recipient of services at <strong>@Html.DisplayFor(modelItem => Model.Client.Clinic.Name)</strong> and I, <strong>@Html.DisplayFor(modelItem => Model.Client.LegalGuardian.Name)</strong> (if applicable), do hereby acknowledge that all the 
+    information presented before me, including forms, legal consents and any other type documentation pertaining to my case, was duly explained to me in all its extent in my 
+    primary language (Spanish) and in terms that I can understand. My signature on each of the documents indicates that I not only understand but also agree with all its 
+    content. Copy of documents available in my primary language (Spanish) were offered to me. 
+    </pre>
+</div>
+ <div class="col-md-12">
+        <pre>
+         @if (Model.Client.LegalGuardian.Name != "")
+        {
+        <strong>Person served signature date</strong>    <input asp-for="DateSignaturePerson" >
+        <strong>(@Html.DisplayFor(modelItem => Model.Client.Name))</strong>
+        }
+        else
+        {
+        <strong>Legal Guardian signature date</strong>    <input asp-for="DateSignatureLegalGuardian" >
+        <strong>(@Html.DisplayFor(modelItem => Model.Client.LegalGuardian.Name))</strong>
+        }
+
+        @if (Model.Id == 0)
+        {
+        <input type="checkbox" class="form-check-input" disabled> <i>Signed</i>
+        }
+        else
+        {
+        <input type="checkbox" class="form-check-input" checked disabled> <i>Signed</i>
+        }
+        <strong>Employee signature date</strong>         <input asp-for="DateSignatureEmployee">
+        <strong>(@Html.DisplayFor(modelItem => Model.AdmissionedFor))</strong>
+    </pre>
+    </div>
+    <div class="col-md-12">
+        &nbsp;
+    </div>
+    <div>
+        <div class="form-group col-md-12">
+            <input type="checkbox" asp-for="Documents" class="form-check-input" id="Documents"> Documents were verbally translated to me in my native language.<br />
+            <label asp-for="Documents" class="forgot">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>@Html.DisplayFor(modelItem => Model.Client.Clinic.Name)</strong>
+            </label>
+        </div>
+    </div>
+    <br />
+
+
+

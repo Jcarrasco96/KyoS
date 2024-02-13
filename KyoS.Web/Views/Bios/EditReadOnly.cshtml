@@ -42,6 +42,7 @@
             <input type="hidden" asp-for="CreatedBy" />
             <input type="hidden" asp-for="CreatedOn" />
             <input type="hidden" asp-for="AdmissionedFor" />
+            <input type="hidden" asp-for="PresentingProblem" />
             <partial name="_Bios1ReadOnly" />
             <div class="col-md-push-12">
                 <div class="">
@@ -69,16 +70,33 @@
             </div>
             <partial name="_Bios2ReadOnly" />
             <div class="col-md-push-12">
-                <div class="">
-                    <div class="col-md-12 form-group">
-                        <a onclick="showInPopup('@Url.Action("AddDiagnostic", "Bios",new { id = @Model.IdClient}, Context.Request.Scheme)','Add diagnostics')" class="btn btn-success disabled" title="Add Diagnostics"><i class="glyphicon glyphicon-plus"></i> Add Diagnostics</a>
+                @if (Model.Client.Clinic.Setting.SupervisorEdit == true)
+                {
+                    <div class="">
+                        <div class="col-md-12 form-group">
+                            <a onclick="showInPopup('@Url.Action("AddDiagnostic", "Bios", new { id = @Model.IdClient }, Context.Request.Scheme)','Add diagnostics')" class="btn btn-success" title="Add Diagnostics"><i class="glyphicon glyphicon-plus"></i> Add Diagnostics</a>
+                        </div>
                     </div>
-                </div>
-                <div class="">
-                    <div id="view-ClientDiagnostics">
-                        @await Html.PartialAsync("_ViewDiagnosticReadOnly", Model.Client.Clients_Diagnostics.ToList())
+                    <div class="">
+                        <div id="view-ClientDiagnostics">
+                            @await Html.PartialAsync("_ViewDiagnostic", Model.Client.Clients_Diagnostics.ToList())
+                        </div>
                     </div>
-                </div>
+                }
+                else
+                {
+                    <div class="">
+                        <div class="col-md-12 form-group">
+                            <a onclick="showInPopup('@Url.Action("AddDiagnostic", "Bios",new { id = @Model.IdClient}, Context.Request.Scheme)','Add diagnostics')" class="btn btn-success disabled" title="Add Diagnostics"><i class="glyphicon glyphicon-plus"></i> Add Diagnostics</a>
+                        </div>
+                    </div>
+                    <div class="">
+                        <div id="view-ClientDiagnostics">
+                            @await Html.PartialAsync("_ViewDiagnosticReadOnly", Model.Client.Clients_Diagnostics.ToList())
+                        </div>
+                    </div>
+                }
+
             </div>
             <partial name="_Bios3ReadOnly" />
             <div class="form-group col-md-12">
@@ -611,6 +629,66 @@
             check125.checked = false;
         } else {
             check125.checked = true;
+        }
+        //---------------------------------
+        check26.addEventListener('change', (e) => {
+            if (check26.checked == true) {
+                check126.checked = false;
+            } else {
+                check126.checked = true;
+            }
+        })
+        check126.addEventListener('change', (e) => {
+            if (check126.checked == true) {
+                check26.checked = false;
+            } else {
+                check26.checked = true;
+            }
+        })
+        if (check26.checked == true) {
+            check126.checked = false;
+        } else {
+            check126.checked = true;
+        }
+        //---------------------------------
+        check27.addEventListener('change', (e) => {
+            if (check27.checked == true) {
+                check127.checked = false;
+            } else {
+                check127.checked = true;
+            }
+        })
+        check127.addEventListener('change', (e) => {
+            if (check127.checked == true) {
+                check27.checked = false;
+            } else {
+                check27.checked = true;
+            }
+        })
+        if (check27.checked == true) {
+            check127.checked = false;
+        } else {
+            check127.checked = true;
+        }
+        //---------------------------------
+        check28.addEventListener('change', (e) => {
+            if (check28.checked == true) {
+                check128.checked = false;
+            } else {
+                check128.checked = true;
+            }
+        })
+        check128.addEventListener('change', (e) => {
+            if (check128.checked == true) {
+                check28.checked = false;
+            } else {
+                check28.checked = true;
+            }
+        })
+        if (check28.checked == true) {
+            check128.checked = false;
+        } else {
+            check128.checked = true;
         }
     </script>
 }

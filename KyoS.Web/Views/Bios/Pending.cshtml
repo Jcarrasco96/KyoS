@@ -171,8 +171,8 @@
                                 <td align="right">
                                     @if (User.IsInRole("Supervisor"))
                                     {
-                                        <a asp-action="EditReadOnly" asp-route-id="@item.Id" asp-route-origi="1" class="btn btn-warning" title="Review BIO"><i class="glyphicon glyphicon-pencil"></i></a>
-                                        <a asp-action="Approve" asp-route-id="@item.Id" asp-route-origi="1" class="btn btn-success" title="Approve BIO"><i class="glyphicon glyphicon-ok"></i></a>
+                                        <a asp-action="EditReadOnly" asp-route-id="@item.Id" asp-route-origi="1" class="btn btn-success" title="Review BIO"><i class="glyphicon glyphicon-ok"></i></a>
+                                        @*<a asp-action="Approve" asp-route-id="@item.Id" asp-route-origi="1" class="btn btn-success" title="Approve BIO"><i class="glyphicon glyphicon-ok"></i></a>*@
                                     }
                                     else
                                     {

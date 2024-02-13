@@ -1,0 +1,49 @@
+﻿@model KyoS.Web.Models.ClientViewModel
+
+<div class="col-md-12">
+    &nbsp;
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-3">
+        <label asp-for="Psychiatrist.Name" class="control-label">Name Psychiatrists</label>&nbsp;*
+        <input asp-for="Psychiatrist.Name" class="form-control" disabled id="nameP"/>
+        <span asp-validation-for="Psychiatrist.Name" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-3">
+        <label asp-for="Psychiatrist.Address" class="control-label">Address</label>
+        <input asp-for="Psychiatrist.Address" class="form-control" disabled id="addressP"/>
+        <span asp-validation-for="Psychiatrist.Address" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="Psychiatrist.City" class="control-label">City</label>
+        <input asp-for="Psychiatrist.City" class="form-control" disabled id="cityP"/>
+        <span asp-validation-for="Psychiatrist.City" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="Psychiatrist.State" class="control-label">State</label>
+        <input asp-for="Psychiatrist.State" class="form-control" disabled id="stateP"/>
+        <span asp-validation-for="Psychiatrist.State" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="Psychiatrist.ZipCode" class="control-label">Zip Code</label>
+        <input asp-for="Psychiatrist.ZipCode" class="form-control" disabled id="zipP"/>
+        <span asp-validation-for="Psychiatrist.ZipCode" class="text-danger"></span>
+    </div>
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-2">
+        <label asp-for="Psychiatrist.Telephone" class="control-label">Telephone</label>
+        <input asp-for="Psychiatrist.Telephone" class="form-control" disabled id="phoneP" />
+        <span asp-validation-for="Psychiatrist.Telephone" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="Psychiatrist.FaxNumber" class="control-label">Fax Number</label>
+        <input asp-for="Psychiatrist.FaxNumber" class="form-control" disabled id="faxP" />
+        <span asp-validation-for="Psychiatrist.FaxNumber" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-3">
+        <label asp-for="Psychiatrist.Email" class="control-label">Email</label>
+        <input asp-for="Psychiatrist.Email" class="form-control" disabled id="emailP" />
+        <span asp-validation-for="Psychiatrist.Email" class="text-danger"></span>
+    </div>
+</div>

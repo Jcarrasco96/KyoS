@@ -53,13 +53,23 @@ namespace KyoS.Web.Controllers
             else
             {
                 CaseMannagerEntity caseManager = _context.CaseManagers.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
-                if (User.IsInRole("Manager") || User.IsInRole("TCMSupervisor"))
+                if (User.IsInRole("Manager") )
                     return View(await _context.TCMClient
 
                                               .Include(f => f.TCMAssessment)
                                               .Include(f => f.Client)
                                               .ThenInclude(f => f.Clinic)
                                               .Where(n => n.Client.Clinic.Id == user_logged.Clinic.Id)
+                                              .OrderBy(f => f.Client.Name)
+                                              .ToListAsync());
+                if (User.IsInRole("TCMSupervisor"))
+                    return View(await _context.TCMClient
+
+                                              .Include(f => f.TCMAssessment)
+                                              .Include(f => f.Client)
+                                              .ThenInclude(f => f.Clinic)
+                                              .Where(n => n.Client.Clinic.Id == user_logged.Clinic.Id
+                                                    && n.Casemanager.TCMSupervisor.LinkedUser == user_logged.UserName)
                                               .OrderBy(f => f.Client.Name)
                                               .ToListAsync());
 
@@ -117,6 +127,10 @@ namespace KyoS.Web.Controllers
                                                         .ThenInclude(n => n.Client_Referred)
                                                         .ThenInclude(n => n.Referred)
                                                         .Include(n => n.TCMIntakeForm)
+                                                        .Include(n => n.Casemanager)
+                                                        .ThenInclude(n => n.TCMSupervisor)
+                                                        .Include(n => n.Client)
+                                                        .ThenInclude(n => n.MedicationList)
                                                         .FirstOrDefault(n => n.Id == id);
 
                     if (tcmClient.TCMIntakeForm == null)
@@ -126,7 +140,8 @@ namespace KyoS.Web.Controllers
                     {
                         Approved = 0,
                         TcmClient = tcmClient,
-                        AreChild = false,
+                        AreChild = YesNoNAType.NA,
+                        IdYesNoNAAreChild = 2,
                         AreChildAddress = "",
                         AreChildCity = "",
                         AreChildName = "",
@@ -140,8 +155,8 @@ namespace KyoS.Web.Controllers
                         Family = false,
                         Id = 0,
                         Married = false,
-                        MayWe = false,
-                        MayWeNA = false,
+                        IdYesNoNAWe = 0,
+                        YesNoNAs = _combosHelper.GetComboYesNoNA(),
                         NeverMarried = false,
                         Other = false,
                         OtherExplain = "",
@@ -181,7 +196,7 @@ namespace KyoS.Web.Controllers
                         CaseManagerWasDueTo = "",
                         Citizen = false,
                         ColonCancer = "",
-                        CongredatedHowOften = 0,
+                        CongredatedHowOften = string.Empty,
                         CongredatedProvider = "",
                         CongredatedReceive = false,
                         ContinueToLive = false,
@@ -227,7 +242,7 @@ namespace KyoS.Web.Controllers
                         EmployerCityState = "",
                         EmployerContactPerson = "",
                         EmployerPhone = "",
-                        EmploymentStatus = "",
+                        EmploymentStatuss = _combosHelper.GetComboEmployed(),
                         ExcessiveCluter = false,
                         FailToEelementary = false,
                         FailToHigh = false,
@@ -240,10 +255,10 @@ namespace KyoS.Web.Controllers
                         FeedingTotal = false,
                         FireHazards = false,
                         Flooring = false,
-                        FoodPantryHowOften = 0,
+                        FoodPantryHowOften = string.Empty,
                         FoodPantryProvider = "",
                         FoodPantryReceive = false,
-                        FoodStampHowOften = 0,
+                        FoodStampHowOften = string.Empty,
                         FoodStampProvider = "",
                         FoodStampReceive = false,
                         FriendOrFamily = false,
@@ -255,7 +270,7 @@ namespace KyoS.Web.Controllers
                         HasClientEverArrest = false,
                         HasClientEverArrestLastTime = "",
                         HasClientEverArrestManyTime = "",
-                        HomeDeliveredHowOften = 0,
+                        HomeDeliveredHowOften = string.Empty,
                         HomeDeliveredProvider = "",
                         HomeDeliveredReceive = false,
                         IfThereAnyHousing = "",
@@ -293,14 +308,14 @@ namespace KyoS.Web.Controllers
                         MakingTotal = false,
                         Mammogram = "",
                         MayWeLeaveSend = false,
-                        MonthlyFamilyIncome = 0,
+                        MonthlyFamilyIncome = string.Empty,
                         NoAirCondition = false,
                         NoTelephone = false,
                         NotHot = false,
                         NumberOfBedrooms = 0,
                         NumberOfPersonLiving = 0,
                         OtherFinancial = "",
-                        OtherHowOften = 0,
+                        OtherHowOften = string.Empty,
                         OtherProvider = "",
                         OtherReceive = false,
                         PapAndHPV = "",
@@ -334,7 +349,7 @@ namespace KyoS.Web.Controllers
                         RelationshipMiddle = false,
                         RelationshipPreSchool = false,
                         Resident = false,
-                        ResidentStatus = "",
+                        ResidentStatuss = _combosHelper.GetComboResidential(),
                         SchoolAddress = "",
                         SchoolCityState = "",
                         SchoolDistrict = "",
@@ -425,7 +440,7 @@ namespace KyoS.Web.Controllers
                         Suicidal = false,
                         Status = TCMDocumentStatus.Edition,
                         DoesParanoia = false,
-                        HowActive = "",
+                        FrecuencyActiveList = _combosHelper.GetComboFrecuencyActive(),
                         TCMSupervisor = new TCMSupervisorEntity(),
                         DoesPoor = false,
                         DoesSadness = false,
@@ -467,8 +482,6 @@ namespace KyoS.Web.Controllers
                         HowWeelWithSome = false,
                         IndividualAgencyList = new List<TCMAssessmentIndividualAgencyEntity>(),
                         IsClientCurrently = false,
-                        IsClientPregnancy = false,
-                        IsClientPregnancyNA = false,
                         IsSheReceiving = false,
                         Issues = "",
                         LastModifiedBy = "",
@@ -502,7 +515,7 @@ namespace KyoS.Web.Controllers
                         Provider = "",
                         SurgeryList = new List<TCMAssessmentSurgeryEntity>(),
                         TypeOfAssessmentAnnual = false,
-                        TypeOfAssessmentInitial = false,
+                        TypeOfAssessmentInitial = true,
                         TypeOfAssessmentOther = false,
                         TypeOfAssessmentOtherExplain = "",
                         TypeOfAssessmentSignificant = false,
@@ -525,7 +538,7 @@ namespace KyoS.Web.Controllers
                     };
                     if (model.IndividualAgencyList == null)
                         model.IndividualAgencyList = new List<TCMAssessmentIndividualAgencyEntity>();
-
+                   
                     ViewData["origi"] = origi;
                     return View(model);
                 }
@@ -547,33 +560,39 @@ namespace KyoS.Web.Controllers
                                              .Include(u => u.Clinic)
                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
-            TCMIntakeFormEntity intake = _context.TCMIntakeForms
-                                                .FirstOrDefault(u => u.TcmClient.Id == tcmAssessmentViewModel.TcmClient_FK);
+         
 
             if (ModelState.IsValid)
             {
-                if (intake != null)
-                {
-                    intake.Psychiatrist_Name = tcmAssessmentViewModel.Psychiatrist_Name;
-                    intake.Psychiatrist_Address = tcmAssessmentViewModel.Psychiatrist_Address;
-                    intake.Psychiatrist_Phone = tcmAssessmentViewModel.Psychiatrist_Phone;
-                    intake.Psychiatrist_CityStateZip = tcmAssessmentViewModel.Psychiatrist_CityStateZip;
-
-                    intake.PCP_Name = tcmAssessmentViewModel.PCP_Name;
-                    intake.PCP_Address = tcmAssessmentViewModel.PCP_Address;
-                    intake.PCP_Phone = tcmAssessmentViewModel.PCP_Phone;
-                    intake.PCP_CityStateZip = tcmAssessmentViewModel.PCP_CityStateZip;
-
-                    _context.TCMIntakeForms.Update(intake);
-                    await _context.SaveChangesAsync();
-                }
-
                 TCMAssessmentEntity tcmAssessmentEntity = _context.TCMAssessment.Find(tcmAssessmentViewModel.Id);
                 if (tcmAssessmentEntity == null)
                 {
+                    tcmAssessmentViewModel.IdYesNoNAPregnancy = 1;
                     tcmAssessmentEntity = await _converterHelper.ToTCMAssessmentEntity(tcmAssessmentViewModel, true, user_logged.UserName);
                     tcmAssessmentEntity.Approved = 0;
                     _context.TCMAssessment.Add(tcmAssessmentEntity);
+
+                    TCMClientEntity tcmclient = _context.TCMClient
+                                                        .Include(n => n.Client)
+                                                        .ThenInclude(n => n.MedicationList)
+                                                        .FirstOrDefault(n => n.Id == tcmAssessmentViewModel.TcmClient_FK);
+                    tcmAssessmentEntity.MedicationList = new List<TCMAssessmentMedicationEntity>();
+                    foreach (var item in tcmclient.Client.MedicationList)
+                    {
+                        if (tcmAssessmentEntity.MedicationList.Where(n => n.Name == item.Name).Count() == 0)
+                        {
+                            TCMAssessmentMedicationEntity medicine = new TCMAssessmentMedicationEntity()
+                            {
+                                Name = item.Name,
+                                Dosage = item.Dosage,
+                                Frequency = item.Frequency,
+                                Prescriber = item.Prescriber,
+                                ReasonPurpose = string.Empty
+                            };
+                            tcmAssessmentEntity.MedicationList.Add(medicine);
+                        }
+                    }
+
                     try
                     {
                         await _context.SaveChangesAsync();
@@ -612,17 +631,18 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Create", tcmAssessmentViewModel) });
         }
 
-        [Authorize(Roles = "CaseManager")]
+        [Authorize(Roles = "CaseManager, TCMSupervisor")]
         public IActionResult Edit(int id = 0, int origi = 0)
         {
             TCMAssessmentViewModel model;
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(u => u.Setting)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
-            if (User.IsInRole("CaseManager"))
+            if (User.IsInRole("CaseManager") || (User.IsInRole("TCMSupervisor") && user_logged.Clinic.Setting.TCMSupervisorEdit == true))
             {
-                UserEntity user_logged = _context.Users
-                                                 .Include(u => u.Clinic)
-                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
-
+            
                 if (user_logged.Clinic != null)
                 {
 
@@ -644,6 +664,10 @@ namespace KyoS.Web.Controllers
                                                                 .Include(b => b.MedicalProblemList)
                                                                 .Include(b => b.SurgeryList)
                                                                 .Include(b => b.TcmClient)
+                                                                .Include(b => b.TcmClient)
+                                                                .ThenInclude(b => b.Casemanager)
+                                                                .ThenInclude(b => b.TCMSupervisor)
+                                                                .Include(b => b.TcmClient)
                                                                 .ThenInclude(b => b.TCMIntakeForm)
                                                                 .FirstOrDefault(m => m.Id == id);
                     if (TcmAssessment == null)
@@ -652,21 +676,8 @@ namespace KyoS.Web.Controllers
                     }
                     else
                     {
-
                         model = _converterHelper.ToTCMAssessmentViewModel(TcmAssessment);
 
-                        if (TcmAssessment.TcmClient.TCMIntakeForm != null)
-                        {
-                            model.Psychiatrist_Name = model.TcmClient.TCMIntakeForm.Psychiatrist_Name;
-                            model.Psychiatrist_Address = model.TcmClient.TCMIntakeForm.Psychiatrist_Address;
-                            model.Psychiatrist_Phone = model.TcmClient.TCMIntakeForm.Psychiatrist_Phone;
-                            model.Psychiatrist_CityStateZip = model.TcmClient.TCMIntakeForm.Psychiatrist_CityStateZip;
-
-                            model.PCP_Name = model.TcmClient.TCMIntakeForm.PCP_Name;
-                            model.PCP_Address = model.TcmClient.TCMIntakeForm.PCP_Address;
-                            model.PCP_Phone = model.TcmClient.TCMIntakeForm.PCP_Phone;
-                            model.PCP_CityStateZip = model.TcmClient.TCMIntakeForm.PCP_CityStateZip;
-                        }
                         ViewData["origi"] = origi;
                         return View(model);
                     }
@@ -680,19 +691,19 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "CaseManager")]
+        [Authorize(Roles = "CaseManager, TCMSupervisor")]
         public async Task<IActionResult> Edit(TCMAssessmentViewModel tcmAssessmentViewModel, int origi = 0)
         {
             UserEntity user_logged = _context.Users
                                              .Include(u => u.Clinic)
                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
-            TCMIntakeFormEntity intake = _context.TCMIntakeForms
-                                                .FirstOrDefault(u => u.TcmClient.Id == tcmAssessmentViewModel.TcmClient_FK);
+            //TCMIntakeFormEntity intake = _context.TCMIntakeForms
+            //                                    .FirstOrDefault(u => u.TcmClient.Id == tcmAssessmentViewModel.TcmClient_FK);
 
             if (ModelState.IsValid)
             {
-                if (intake != null)
+               /* if (intake != null)
                 {
                     intake.Psychiatrist_Name = tcmAssessmentViewModel.Psychiatrist_Name;
                     intake.Psychiatrist_Address = tcmAssessmentViewModel.Psychiatrist_Address;
@@ -706,14 +717,17 @@ namespace KyoS.Web.Controllers
 
                     _context.TCMIntakeForms.Update(intake);
                     await _context.SaveChangesAsync();
-                }
+                }*/
 
                 TCMAssessmentEntity tcmAssessmentEntity = await _converterHelper.ToTCMAssessmentEntity(tcmAssessmentViewModel, false, user_logged.UserName);
                 if (tcmAssessmentEntity.Approved != 1)
                 {
                     tcmAssessmentEntity.Approved = 0;
                 }
-
+                if (origi == 5)
+                {
+                    tcmAssessmentEntity.Approved = 2;
+                }
                 List<TCMMessageEntity> messages = tcmAssessmentEntity.TcmMessages.Where(m => (m.Status == MessageStatus.NotRead && m.Notification == false)).ToList();
                 //todos los mensajes no leidos que tiene el Workday_Client de la nota los pongo como leidos
                 foreach (TCMMessageEntity value in messages)
@@ -760,6 +774,18 @@ namespace KyoS.Web.Controllers
                     {
                         return RedirectToAction("GetCaseNotServicePlan", "TCMClients");
                     }
+                    if (origi == 3)
+                    {
+                        return RedirectToAction("Index", "DeskTop");
+                    }
+                    if (origi == 4)
+                    {
+                        return RedirectToAction("TCMAssessmentApproved", "TCMAssessments", new { approved = 0});
+                    }
+                    if (origi == 5)
+                    {
+                        return RedirectToAction("UpdateAssessment", "TCMAssessments");
+                    }
                 }
                 catch (System.Exception ex)
                 {
@@ -774,7 +800,7 @@ namespace KyoS.Web.Controllers
         [Authorize(Roles = "CaseManager")]
         public async Task<IActionResult> FinishEditing(int id)
         {
-            TCMAssessmentEntity tcmAssessment = _context.TCMAssessment.FirstOrDefault(u => u.TcmClient.Id == id);
+            TCMAssessmentEntity tcmAssessment = _context.TCMAssessment.FirstOrDefault(u => u.Id == id);
 
             if (tcmAssessment != null)
             {
@@ -806,21 +832,39 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "TCMSupervisor")]
-        public async Task<IActionResult> ApproveAssessments(int id, int origi = 0)
+        public async Task<IActionResult> ApproveAssessments(int id, TCMAssessmentViewModel model, int origi = 0)
         {
-            TCMAssessmentEntity tcmAssessment = _context.TCMAssessment.FirstOrDefault(u => u.Id == id);
+            TCMAssessmentEntity tcmAssessment = new TCMAssessmentEntity();
 
             if (tcmAssessment != null)
             {
                 if (User.IsInRole("TCMSupervisor"))
                 {
-                    UserEntity user_logged = _context.Users.Include(u => u.Clinic)
-                                                           .FirstOrDefault(u => u.UserName == User.Identity.Name);
+                    UserEntity user_logged = _context.Users
+                                                     .Include(u => u.Clinic)
+                                                     .ThenInclude(u => u.Setting)
+                                                     .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
                     if (user_logged.Clinic != null)
                     {
-                        tcmAssessment.Approved = 2;
-                        _context.Update(tcmAssessment);
+                        if (user_logged.Clinic.Setting.TCMSupervisorEdit == true)
+                        {
+                            tcmAssessment = await _converterHelper.ToTCMAssessmentEntity(model, false, user_logged.UserName);
+                            tcmAssessment.Approved = 2;
+                            tcmAssessment.TCMSupervisor = await _context.TCMSupervisors.FirstOrDefaultAsync(n => n.LinkedUser == user_logged.UserName);
+                            _context.Update(tcmAssessment);
+                        }
+                        else
+                        {
+                            tcmAssessment = _context.TCMAssessment
+                                                    .Include(n => n.TcmClient)
+                                                    .FirstOrDefault(u => u.Id == id);
+                            tcmAssessment.Approved = 2;
+                            tcmAssessment.TCMSupervisor = await _context.TCMSupervisors.FirstOrDefaultAsync(n => n.LinkedUser == user_logged.UserName);
+                            _context.Update(tcmAssessment);
+                        }
+
+                        
                         try
                         {
                             await _context.SaveChangesAsync();
@@ -832,6 +876,11 @@ namespace KyoS.Web.Controllers
                             {
                                 return RedirectToAction("Notifications", "TCMMessages");
                             }
+                            if (origi == 2)
+                            {
+                                return RedirectToAction("TCMIntakeSectionDashboardReadOnly", "TCMIntakes", new { id = tcmAssessment.TcmClient.Id, section = 4 });
+                            }
+                            
                         }
                         catch (System.Exception ex)
                         {
@@ -845,17 +894,18 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("Index", "TCMAssessments");
         }
 
-        [Authorize(Roles = "CaseManager")]
+        [Authorize(Roles = "CaseManager, TCMSupervisor")]
         public IActionResult CreateIndividualAgencyModal(int idAssessment = 0)
         {
 
             UserEntity user_logged = _context.Users
                                              .Include(u => u.Clinic)
+                                             .ThenInclude(u => u.Setting)
                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
             TCMAssessmentIndividualAgencyViewModel model;
 
-            if (User.IsInRole("CaseManager"))
+            if (User.IsInRole("CaseManager") || (User.IsInRole("TCMSupervisor") && user_logged.Clinic.Setting.TCMSupervisorEdit == true))
             {
                 if (user_logged.Clinic != null)
                 {
@@ -902,7 +952,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "CaseManager")]
+        [Authorize(Roles = "CaseManager, TCMSupervisor")]
         public async Task<IActionResult> CreateIndividualAgencyModal(TCMAssessmentIndividualAgencyViewModel IndividualAgencyViewModel)
         {
             UserEntity user_logged = _context.Users
@@ -955,17 +1005,18 @@ namespace KyoS.Web.Controllers
         }
 
 
-        [Authorize(Roles = "CaseManager")]
+        [Authorize(Roles = "CaseManager, TCMSupervisor")]
         public IActionResult EditIndividualAgencyModal(int id = 0)
         {
             TCMAssessmentIndividualAgencyViewModel model;
-
-            if (User.IsInRole("CaseManager"))
-            {
-                UserEntity user_logged = _context.Users
+            
+            UserEntity user_logged = _context.Users
                                                  .Include(u => u.Clinic)
+                                                 .ThenInclude(n => n.Setting)
                                                  .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
+            if (User.IsInRole("CaseManager") || (User.IsInRole("TCMSupervisor") && user_logged.Clinic.Setting.TCMSupervisorEdit == true))
+            {
                 if (user_logged.Clinic != null)
                 {
 
@@ -995,7 +1046,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "CaseManager")]
+        [Authorize(Roles = "CaseManager, TCMSupervisor")]
         public async Task<IActionResult> EditIndividualAgencyModal(TCMAssessmentIndividualAgencyViewModel IndividualAgencyViewModel)
         {
             UserEntity user_logged = _context.Users
@@ -1027,17 +1078,18 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditIndividualAgencyModal", IndividualAgencyViewModel) });
         }
 
-        [Authorize(Roles = "CaseManager")]
+        [Authorize(Roles = "CaseManager, TCMSupervisor")]
         public IActionResult CreateHouseCompositionModal(int idAssessment = 0)
         {
 
             UserEntity user_logged = _context.Users
                                              .Include(u => u.Clinic)
+                                             .ThenInclude(n => n.Setting)
                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
             TCMAssessmentHouseCompositionViewModel model;
 
-            if (User.IsInRole("CaseManager"))
+            if (User.IsInRole("CaseManager") || (User.IsInRole("TCMSupervisor") && user_logged.Clinic.Setting.TCMSupervisorEdit == true))
             {
                 if (user_logged.Clinic != null)
                 {
@@ -1083,7 +1135,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "CaseManager")]
+        [Authorize(Roles = "CaseManager, TCMSupervisor")]
         public async Task<IActionResult> CreateHouseCompositionModal(TCMAssessmentHouseCompositionViewModel HouseCompositionViewModel)
         {
             UserEntity user_logged = _context.Users
@@ -1135,17 +1187,19 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateHouseCompositionModal", model) });
         }
 
-        [Authorize(Roles = "CaseManager")]
+        [Authorize(Roles = "CaseManager, TCMSupervisor")]
         public IActionResult EditHouseCompositionModal(int id = 0)
         {
             TCMAssessmentHouseCompositionViewModel model;
-
-            if (User.IsInRole("CaseManager"))
-            {
-                UserEntity user_logged = _context.Users
+            
+            UserEntity user_logged = _context.Users
                                                  .Include(u => u.Clinic)
+                                                 .ThenInclude(u => u.Setting)
                                                  .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
+            if (User.IsInRole("CaseManager") || (User.IsInRole("TCMSupervisor") && user_logged.Clinic.Setting.TCMSupervisorEdit == true))
+            {
+                
                 if (user_logged.Clinic != null)
                 {
 
@@ -1175,7 +1229,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "CaseManager")]
+        [Authorize(Roles = "CaseManager, TCMSupervisor")]
         public async Task<IActionResult> EditHouseCompositionModal(TCMAssessmentHouseCompositionViewModel HouseCompositionViewModel)
         {
             UserEntity user_logged = _context.Users
@@ -1207,21 +1261,20 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditHouseCompositionModal", HouseCompositionViewModel) });
         }
 
-        [Authorize(Roles = "CaseManager")]
+        [Authorize(Roles = "CaseManager, TCMSupervisor")]
         public IActionResult CreatePastCurrentModal(int idAssessment = 0)
         {
-
             UserEntity user_logged = _context.Users
                                              .Include(u => u.Clinic)
+                                             .ThenInclude(u => u.Setting)
                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
             TCMAssessmentPastCurrentServiceViewModel model;
 
-            if (User.IsInRole("CaseManager"))
+            if (User.IsInRole("CaseManager") || (User.IsInRole("TCMSupervisor") && user_logged.Clinic.Setting.TCMSupervisorEdit == true))
             {
                 if (user_logged.Clinic != null)
                 {
-
                     model = new TCMAssessmentPastCurrentServiceViewModel
                     {
                         IdTCMAssessment = idAssessment,
@@ -1233,8 +1286,8 @@ namespace KyoS.Web.Controllers
                         Id = 0,
                         CreatedBy = user_logged.UserName,
                         CreatedOn = DateTime.Now,
-                        Efectiveness = "",
-                        DateReceived = DateTime.Now,
+                        EffectivessList = _combosHelper.GetComboEffectiveness(),
+                        DateReceived = string.Empty,
                         ProviderAgency = "",
                         TypeService = ""
                     };
@@ -1255,8 +1308,8 @@ namespace KyoS.Web.Controllers
                 Id = 0,
                 CreatedBy = user_logged.UserName,
                 CreatedOn = DateTime.Now,
-                Efectiveness = "",
-                DateReceived = DateTime.Now,
+                EffectivessList = _combosHelper.GetComboEffectiveness(),
+                DateReceived = string.Empty,
                 ProviderAgency = "",
                 TypeService = ""
                 
@@ -1267,7 +1320,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "CaseManager")]
+        [Authorize(Roles = "CaseManager, TCMSupervisor")]
         public async Task<IActionResult> CreatePastCurrentModal(TCMAssessmentPastCurrentServiceViewModel PastCurrentViewModel)
         {
             UserEntity user_logged = _context.Users
@@ -1320,20 +1373,20 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreatePastCurrentModal", model) });
         }
 
-        [Authorize(Roles = "CaseManager")]
+        [Authorize(Roles = "CaseManager, TCMSupervisor")]
         public IActionResult EditPastCurrentModal(int id = 0)
         {
             TCMAssessmentPastCurrentServiceViewModel model;
 
-            if (User.IsInRole("CaseManager"))
-            {
-                UserEntity user_logged = _context.Users
-                                                 .Include(u => u.Clinic)
-                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(u => u.Setting)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
+            if (User.IsInRole("CaseManager") || (User.IsInRole("TCMSupervisor") && user_logged.Clinic.Setting.TCMSupervisorEdit == true))
+            {
                 if (user_logged.Clinic != null)
                 {
-
                     TCMAssessmentPastCurrentServiceEntity PastCurrent = _context.TCMAssessmentPastCurrentService
                                                                                    .Include(m => m.TcmAssessment)
                                                                                    .ThenInclude(m => m.TcmClient)
@@ -1345,7 +1398,6 @@ namespace KyoS.Web.Controllers
                     }
                     else
                     {
-
                         model = _converterHelper.ToTCMAssessmentPastCurrentServiceViewModel(PastCurrent);
 
                         return View(model);
@@ -1360,7 +1412,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "CaseManager")]
+        [Authorize(Roles = "CaseManager, TCMSupervisor")]
         public async Task<IActionResult> EditPastCurrentModal(TCMAssessmentPastCurrentServiceViewModel PastCurrentViewModel)
         {
             UserEntity user_logged = _context.Users
@@ -1392,17 +1444,18 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditPastCurrentModal", PastCurrentViewModel) });
         }
 
-        [Authorize(Roles = "CaseManager")]
+        [Authorize(Roles = "CaseManager, TCMSupervisor")]
         public IActionResult CreateMedicationModal(int idAssessment = 0)
         {
 
             UserEntity user_logged = _context.Users
                                              .Include(u => u.Clinic)
+                                             .ThenInclude(n => n.Setting)
                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
             TCMAssessmentMedicationViewModel model;
 
-            if (User.IsInRole("CaseManager"))
+            if (User.IsInRole("CaseManager") || (User.IsInRole("TCMSupervisor") && user_logged.Clinic.Setting.TCMSupervisorEdit == true))
             {
                 if (user_logged.Clinic != null)
                 {
@@ -1454,7 +1507,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "CaseManager")]
+        [Authorize(Roles = "CaseManager, TCMSupervisor")]
         public async Task<IActionResult> CreateMedicationModal(TCMAssessmentMedicationViewModel MedicationViewModel)
         {
             UserEntity user_logged = _context.Users
@@ -1468,6 +1521,25 @@ namespace KyoS.Web.Controllers
                 {
                     MedicationEntity = await _converterHelper.ToTCMAssessmenMedicationEntity(MedicationViewModel, true, user_logged.UserName);
                     _context.TCMAssessmentMedication.Add(MedicationEntity);
+
+                    if (_context.Medication.Where(n => n.Name == MedicationEntity.Name).Count() == 0)
+                    {
+                        MedicationEntity medicine = new MedicationEntity()
+                        {
+                            Name = MedicationEntity.Name,
+                            Dosage = MedicationEntity.Dosage,
+                            Frequency = MedicationEntity.Frequency,
+                            Prescriber = MedicationEntity.Prescriber,
+                            ReasonPurpose = MedicationEntity.ReasonPurpose,
+                            CreatedOn = MedicationEntity.CreatedOn,
+                            CreatedBy = MedicationEntity.CreatedBy,
+                            LastModifiedBy = MedicationEntity.LastModifiedBy,
+                            LastModifiedOn = MedicationEntity.LastModifiedOn,
+                            Client = _context.TCMClient.Include(n => n.Client).FirstOrDefault(n => n.TCMAssessment.Id == MedicationViewModel.IdTCMAssessment).Client
+                        };
+                        _context.Medication.Add(medicine);
+                    }
+
                     try
                     {
                         await _context.SaveChangesAsync();
@@ -1508,25 +1580,28 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateMedicationModal", model) });
         }
 
-        [Authorize(Roles = "CaseManager")]
+        [Authorize(Roles = "CaseManager, TCMSupervisor")]
         public IActionResult EditMedicationModal(int id = 0)
         {
             TCMAssessmentMedicationViewModel model;
 
-            if (User.IsInRole("CaseManager"))
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(u => u.Setting)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (User.IsInRole("CaseManager") || (User.IsInRole("TCMSupervisor") && user_logged.Clinic.Setting.TCMSupervisorEdit == true))
             {
-                UserEntity user_logged = _context.Users
-                                                 .Include(u => u.Clinic)
-                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+               
 
                 if (user_logged.Clinic != null)
                 {
 
                     TCMAssessmentMedicationEntity MedicationEntity = _context.TCMAssessmentMedication
-                                                                        .Include(m => m.TcmAssessment)
-                                                                        .ThenInclude(m => m.TcmClient)
-                                                                        .ThenInclude(m => m.Client)
-                                                                        .FirstOrDefault(m => m.Id == id);
+                                                                             .Include(m => m.TcmAssessment)
+                                                                             .ThenInclude(m => m.TcmClient)
+                                                                             .ThenInclude(m => m.Client)
+                                                                             .FirstOrDefault(m => m.Id == id);
                     if (MedicationEntity == null)
                     {
                         return RedirectToAction("NotAuthorized", "Account");
@@ -1535,7 +1610,7 @@ namespace KyoS.Web.Controllers
                     {
 
                         model = _converterHelper.ToTCMAssessmentMedicationViewModel(MedicationEntity);
-
+                        model.OldName = MedicationEntity.Name;
                         return View(model);
                     }
 
@@ -1559,6 +1634,25 @@ namespace KyoS.Web.Controllers
             {
                 TCMAssessmentMedicationEntity MedicationEntity = await _converterHelper.ToTCMAssessmenMedicationEntity(MedicationViewModel, false, user_logged.UserName);
                 _context.TCMAssessmentMedication.Update(MedicationEntity);
+                MedicationEntity medication = _context.Medication
+                                                      .FirstOrDefault(n => n.Name == MedicationViewModel.OldName
+                                                                        && n.Client.Id == _context.TCMClient
+                                                                                                  .Include(n => n.Client)
+                                                                                                  .FirstOrDefault(n => n.TCMAssessment.Id == MedicationViewModel.IdTCMAssessment).Client.Id);
+                if (medication != null)
+                {
+                    medication.Name = MedicationEntity.Name;
+                    medication.Dosage = MedicationEntity.Dosage;
+                    medication.Frequency = MedicationEntity.Frequency;
+                    medication.Prescriber = MedicationEntity.Prescriber;
+                    medication.ReasonPurpose = MedicationEntity.ReasonPurpose;
+                    medication.CreatedOn = MedicationEntity.CreatedOn;
+                    medication.CreatedBy = MedicationEntity.CreatedBy;
+                    medication.LastModifiedBy = MedicationEntity.LastModifiedBy;
+                    medication.LastModifiedOn = MedicationEntity.LastModifiedOn;
+                    _context.Medication.Update(medication);
+                }
+
                 try
                 {
                     await _context.SaveChangesAsync();
@@ -1580,17 +1674,18 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditMedicationModal", MedicationViewModel) });
         }
 
-        [Authorize(Roles = "CaseManager")]
+        [Authorize(Roles = "CaseManager, TCMSupervisor")]
         public IActionResult CreateHospitalModal(int idAssessment = 0)
         {
 
             UserEntity user_logged = _context.Users
                                              .Include(u => u.Clinic)
+                                             .ThenInclude(u => u.Setting)
                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
             TCMAssessmentHospitalViewModel model;
 
-            if (User.IsInRole("CaseManager"))
+            if (User.IsInRole("CaseManager") || (User.IsInRole("TCMSupervisor") && user_logged.Clinic.Setting.TCMSupervisorEdit == true))
             {
                 if (user_logged.Clinic != null)
                 {
@@ -1638,7 +1733,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "CaseManager")]
+        [Authorize(Roles = "CaseManager, TCMSupervisor")]
         public async Task<IActionResult> CreateHospitalModal(TCMAssessmentHospitalViewModel HospitalViewModel)
         {
             UserEntity user_logged = _context.Users
@@ -1694,12 +1789,13 @@ namespace KyoS.Web.Controllers
         {
             TCMAssessmentHospitalViewModel model;
 
-            if (User.IsInRole("CaseManager"))
-            {
-                UserEntity user_logged = _context.Users
-                                                 .Include(u => u.Clinic)
-                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(u => u.Setting)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
+            if (User.IsInRole("CaseManager") || (User.IsInRole("TCMSupervisor") && user_logged.Clinic.Setting.TCMSupervisorEdit == true))
+            {
                 if (user_logged.Clinic != null)
                 {
 
@@ -1729,7 +1825,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "CaseManager")]
+        [Authorize(Roles = "CaseManager, TCMSupervisor")]
         public async Task<IActionResult> EditHospitalModal(TCMAssessmentHospitalViewModel HospitalViewModel)
         {
             UserEntity user_logged = _context.Users
@@ -1761,17 +1857,18 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditHospitalModal", HospitalViewModel) });
         }
 
-        [Authorize(Roles = "CaseManager")]
+        [Authorize(Roles = "CaseManager, TCMSupervisor")]
         public IActionResult CreateDrugModal(int idAssessment = 0)
         {
 
             UserEntity user_logged = _context.Users
                                              .Include(u => u.Clinic)
+                                             .ThenInclude(u => u.Setting)
                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
             TCMAssessmentDrugViewModel model;
 
-            if (User.IsInRole("CaseManager"))
+            if (User.IsInRole("CaseManager") || (User.IsInRole("TCMSupervisor") && user_logged.Clinic.Setting.TCMSupervisorEdit == true))
             {
                 if (user_logged.Clinic != null)
                 {
@@ -1791,7 +1888,7 @@ namespace KyoS.Web.Controllers
                         Frequency = "",
                         DateBegin = DateTime.Now,
                         LastTimeUsed = "",
-                        SustanceName = ""
+                        DrugsList = _combosHelper.GetComboDrugs()
                     };
                     if (model.TcmAssessment.DrugList == null)
                         model.TcmAssessment.DrugList = new List<TCMAssessmentDrugEntity>();
@@ -1814,7 +1911,7 @@ namespace KyoS.Web.Controllers
                 Frequency = "",
                 DateBegin = DateTime.Now,
                 LastTimeUsed = "",
-                SustanceName = ""
+                DrugsList = _combosHelper.GetComboDrugs()
 
             };
 
@@ -1823,7 +1920,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "CaseManager")]
+        [Authorize(Roles = "CaseManager, TCMSupervisor")]
         public async Task<IActionResult> CreateDrugModal(TCMAssessmentDrugViewModel DrugViewModel)
         {
             UserEntity user_logged = _context.Users
@@ -1876,25 +1973,26 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateDrugModal", model) });
         }
 
-        [Authorize(Roles = "CaseManager")]
+        [Authorize(Roles = "CaseManager, TCMSupervisor")]
         public IActionResult EditDrugModal(int id = 0)
         {
             TCMAssessmentDrugViewModel model;
 
-            if (User.IsInRole("CaseManager"))
-            {
-                UserEntity user_logged = _context.Users
-                                                 .Include(u => u.Clinic)
-                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(u => u.Setting)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
+            if (User.IsInRole("CaseManager") || (User.IsInRole("TCMSupervisor") && user_logged.Clinic.Setting.TCMSupervisorEdit == true))
+            {
                 if (user_logged.Clinic != null)
                 {
 
                     TCMAssessmentDrugEntity DrugEntity = _context.TCMAssessmentDrug
-                                                                           .Include(m => m.TcmAssessment)
-                                                                           .ThenInclude(m => m.TcmClient)
-                                                                           .ThenInclude(m => m.Client)
-                                                                           .FirstOrDefault(m => m.Id == id);
+                                                                 .Include(m => m.TcmAssessment)
+                                                                 .ThenInclude(m => m.TcmClient)
+                                                                 .ThenInclude(m => m.Client)
+                                                                 .FirstOrDefault(m => m.Id == id);
                     if (DrugEntity == null)
                     {
                         return RedirectToAction("NotAuthorized", "Account");
@@ -1916,7 +2014,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "CaseManager")]
+        [Authorize(Roles = "CaseManager, TCMSupervisor")]
         public async Task<IActionResult> EditDrugModal(TCMAssessmentDrugViewModel DrugViewModel)
         {
             UserEntity user_logged = _context.Users
@@ -1932,9 +2030,9 @@ namespace KyoS.Web.Controllers
                     await _context.SaveChangesAsync();
 
                     List<TCMAssessmentDrugEntity> DruglList = await _context.TCMAssessmentDrug
-                                                                                .Include(g => g.TcmAssessment)
-                                                                                .Where(g => g.TcmAssessment.Id == DrugViewModel.IdTCMAssessment)
-                                                                                .ToListAsync();
+                                                                            .Include(g => g.TcmAssessment)
+                                                                            .Where(g => g.TcmAssessment.Id == DrugViewModel.IdTCMAssessment)
+                                                                            .ToListAsync();
 
                     return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDrug", DruglList) });
                 }
@@ -1948,17 +2046,18 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditDrugModal", DrugViewModel) });
         }
 
-        [Authorize(Roles = "CaseManager")]
+        [Authorize(Roles = "CaseManager, TCMSupervisor")]
         public IActionResult CreateMedicalProblemModal(int idAssessment = 0)
         {
 
             UserEntity user_logged = _context.Users
                                              .Include(u => u.Clinic)
+                                             .ThenInclude(u => u.Setting)
                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
             TCMAssessmentMedicalProblemViewModel model;
 
-            if (User.IsInRole("CaseManager"))
+            if (User.IsInRole("CaseManager") || (User.IsInRole("TCMSupervisor") && user_logged.Clinic.Setting.TCMSupervisorEdit == true))
             {
                 if (user_logged.Clinic != null)
                 {
@@ -2008,7 +2107,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "CaseManager")]
+        [Authorize(Roles = "CaseManager, TCMSupervisor")]
         public async Task<IActionResult> CreateMedicalProblemModal(TCMAssessmentMedicalProblemViewModel MedicalProblemViewModel)
         {
             UserEntity user_logged = _context.Users
@@ -2060,17 +2159,18 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateMedicalProblemModal", model) });
         }
 
-        [Authorize(Roles = "CaseManager")]
+        [Authorize(Roles = "CaseManager, TCMSupervisor")]
         public IActionResult EditMedicalProblemModal(int id = 0)
         {
             TCMAssessmentMedicalProblemViewModel model;
 
-            if (User.IsInRole("CaseManager"))
-            {
-                UserEntity user_logged = _context.Users
-                                                 .Include(u => u.Clinic)
-                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(u => u.Setting)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
+            if (User.IsInRole("CaseManager") || (User.IsInRole("TCMSupervisor") && user_logged.Clinic.Setting.TCMSupervisorEdit == true))
+            {
                 if (user_logged.Clinic != null)
                 {
 
@@ -2100,7 +2200,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "CaseManager")]
+        [Authorize(Roles = "CaseManager, TCMSupervisor")]
         public async Task<IActionResult> EditMedicalProblemModal(TCMAssessmentMedicalProblemViewModel DrugViewModel)
         {
             UserEntity user_logged = _context.Users
@@ -2132,17 +2232,18 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditMedicalProblemModal", DrugViewModel) });
         }
 
-        [Authorize(Roles = "CaseManager")]
+        [Authorize(Roles = "CaseManager, TCMSupervisor")]
         public IActionResult CreateSurgeryModal(int idAssessment = 0)
         {
 
             UserEntity user_logged = _context.Users
                                              .Include(u => u.Clinic)
+                                             .ThenInclude(u => u.Setting)
                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
             TCMAssessmentSurgeryViewModel model;
 
-            if (User.IsInRole("CaseManager"))
+            if (User.IsInRole("CaseManager") || (User.IsInRole("TCMSupervisor") && user_logged.Clinic.Setting.TCMSupervisorEdit == true))
             {
                 if (user_logged.Clinic != null)
                 {
@@ -2192,7 +2293,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "CaseManager")]
+        [Authorize(Roles = "CaseManager, TCMSupervisor")]
         public async Task<IActionResult> CreateSurgeryModal(TCMAssessmentSurgeryViewModel SurgeryViewModel)
         {
             UserEntity user_logged = _context.Users
@@ -2249,12 +2350,13 @@ namespace KyoS.Web.Controllers
         {
             TCMAssessmentSurgeryViewModel model;
 
-            if (User.IsInRole("CaseManager"))
-            {
-                UserEntity user_logged = _context.Users
-                                                 .Include(u => u.Clinic)
-                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(u => u.Setting)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
+            if (User.IsInRole("CaseManager") || (User.IsInRole("TCMSupervisor") && user_logged.Clinic.Setting.TCMSupervisorEdit == true))
+            {
                 if (user_logged.Clinic != null)
                 {
 
@@ -2284,7 +2386,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "CaseManager")]
+        [Authorize(Roles = "CaseManager, TCMSupervisor")]
         public async Task<IActionResult> EditSurgeryModal(TCMAssessmentSurgeryViewModel SurgeryViewModel)
         {
             UserEntity user_logged = _context.Users
@@ -2332,17 +2434,38 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("NotAuthorized", "Account");
             }
 
-            if (User.IsInRole("Manager") || (User.IsInRole("TCMSupervisor")))
+            if (User.IsInRole("Manager"))
             {
                 List<TCMAssessmentEntity> tcmAssessment = await _context.TCMAssessment
                                                                         .Include(m => m.TcmClient)
                                                                         .ThenInclude(m => m.Client)
                                                                         .Include(m => m.TcmMessages)
+                                                                        .Include(m => m.TcmClient)
+                                                                        .ThenInclude(m => m.Casemanager)
                                                                         .Where(m => m.Approved == approved
-                                                                            && m.TcmClient.Client.Clinic.Id == user_logged.Clinic.Id)
+                                                                                 && m.TcmClient.Client.Clinic.Id == user_logged.Clinic.Id)
+                                                                        .OrderBy(m => m.TcmClient.CaseNumber)
+                                                                        .ToListAsync();
+                ViewData["approved"] = approved;
+
+                return View(tcmAssessment);
+            }
+
+            if (User.IsInRole("TCMSupervisor"))
+            {
+                List<TCMAssessmentEntity> tcmAssessment = await _context.TCMAssessment
+                                                                        .Include(m => m.TcmClient)
+                                                                        .ThenInclude(m => m.Client)
+                                                                        .Include(m => m.TcmMessages)
+                                                                        .Include(m => m.TcmClient)
+                                                                        .ThenInclude(m => m.Casemanager)
+                                                                        .Where(m => m.Approved == approved
+                                                                                 && m.TcmClient.Client.Clinic.Id == user_logged.Clinic.Id
+                                                                                 && m.TcmClient.Casemanager.TCMSupervisor.LinkedUser == user_logged.UserName)
                                                                         .OrderBy(m => m.TcmClient.CaseNumber)
                                                                         .ToListAsync();
 
+                ViewData["approved"] = approved;
                 return View(tcmAssessment);
             }
 
@@ -2352,23 +2475,26 @@ namespace KyoS.Web.Controllers
                                                                          .Include(m => m.TcmClient)
                                                                          .ThenInclude(m => m.Client)
                                                                          .Include(m => m.TcmMessages)
+                                                                         .Include(m => m.TcmClient)
+                                                                         .ThenInclude(m => m.Casemanager)
                                                                          .Where(m => m.Approved == approved
                                                                              && m.TcmClient.Client.Clinic.Id == user_logged.Clinic.Id
                                                                              && m.TcmClient.Casemanager.LinkedUser == user_logged.UserName)
                                                                          .OrderBy(m => m.TcmClient.CaseNumber)
                                                                          .ToListAsync();
+                ViewData["approved"] = approved;
                 return View(tcmAssessment);
 
             }
             return RedirectToAction("NotAuthorized", "Account");
         }
 
-        [Authorize(Roles = "TCMSupervisor")]
+        [Authorize(Roles = "Manager, TCMSupervisor, CaseManager")]
         public IActionResult EditReadOnly(int id = 0, int origi = 0)
         {
             TCMAssessmentViewModel model;
 
-            if (User.IsInRole("TCMSupervisor"))
+            if (User.IsInRole("Manager") || User.IsInRole("TCMSupervisor") || User.IsInRole("CaseManager"))
             {
                 UserEntity user_logged = _context.Users
                                                  .Include(u => u.Clinic)
@@ -2393,6 +2519,15 @@ namespace KyoS.Web.Controllers
                                                                 .Include(b => b.DrugList)
                                                                 .Include(b => b.MedicalProblemList)
                                                                 .Include(b => b.SurgeryList)
+                                                                .Include(b => b.TcmClient)
+                                                                .ThenInclude(b => b.Client)
+                                                                .ThenInclude(b => b.Clinic)
+                                                                .ThenInclude(b => b.Setting)
+                                                                .Include(b => b.TcmClient)
+                                                                .ThenInclude(b => b.Casemanager)
+                                                                .ThenInclude(b => b.TCMSupervisor)
+                                                                .Include(b => b.TcmClient)
+                                                                .ThenInclude(b => b.TCMIntakeForm)
                                                                 .FirstOrDefault(m => m.Id == id);
                     if (TcmAssessment == null)
                     {
@@ -2485,11 +2620,52 @@ namespace KyoS.Web.Controllers
         [Authorize(Roles = "CaseManager")]
         public async Task<IActionResult> AddReferred(int id, ReferredTempViewModel referredTempViewModel)
         {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
             if (ModelState.IsValid)
             {
-                if (id > 0)
+                if (referredTempViewModel.Name != null && referredTempViewModel.Name != string.Empty)
                 {
-                   Client_Referred Client_referred = new Client_Referred
+                    DateTime createdDate = DateTime.Now;
+                    ReferredViewModel referred = new ReferredViewModel
+                    {
+                        Id = 0,
+                        Address = referredTempViewModel.Address,
+                        Agency = referredTempViewModel.Agency,
+                        Email = referredTempViewModel.Email,
+                        Name = referredTempViewModel.Name,
+                        Telephone = referredTempViewModel.Telephone,
+                        Title = referredTempViewModel.Title,
+                        CreatedBy = user_logged.Id,
+                        CreatedOn = createdDate,
+                        City = referredTempViewModel.City,
+                        State = referredTempViewModel.State,
+                        ZidCode = referredTempViewModel.ZidCode
+
+                    };
+
+                    //_context.Add(referred);
+                    ReferredEntity referredEntity = _converterHelper.ToReferredEntity(referred, true, user_logged.Id);
+
+                    Client_Referred Client_referred = new Client_Referred
+                    {
+                        Id = 0,
+                        Client = await _context.Clients.FirstOrDefaultAsync(d => d.Id == id),
+                        Referred = referred,//await _context.Referreds.FirstOrDefaultAsync(d => d.CreatedOn == createdDate),
+                        ReferredNote = referredTempViewModel.ReferredNote,
+                        Service = ServiceAgency.TCM
+
+                    };
+
+                    _context.Add(Client_referred);
+
+                }
+                else
+                {
+
+                    Client_Referred Client_referred = new Client_Referred
                     {
                         Id = 0,
                         Client = await _context.Clients.FirstOrDefaultAsync(d => d.Id == id),
@@ -2497,19 +2673,41 @@ namespace KyoS.Web.Controllers
                         ReferredNote = referredTempViewModel.ReferredNote,
                         Service = ServiceAgency.TCM
 
-                   };
+                    };
                     _context.Add(Client_referred);
-                    await _context.SaveChangesAsync();
                 }
-                List <Client_Referred> clientList = await _context.Clients_Referreds
+                await _context.SaveChangesAsync();
+
+                List<Client_Referred> clientList = await _context.Clients_Referreds
                                                            .Include(m => m.Referred)
                                                            .Where(n => n.Client.Id == id && n.Service == ServiceAgency.TCM)
                                                            .ToListAsync();
-                return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewReferred", clientList)});
+                return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewReferred", clientList) });
+            }
+            else
+            {
+                if (referredTempViewModel.Id_Referred > 0)
+                {
+                    Client_Referred Client_referred = new Client_Referred
+                    {
+                        Id = 0,
+                        Client = await _context.Clients.FirstOrDefaultAsync(d => d.Id == id),
+                        Referred = await _context.Referreds.FirstOrDefaultAsync(d => d.Id == referredTempViewModel.Id_Referred),
+                        ReferredNote = referredTempViewModel.ReferredNote,
+                        Service = ServiceAgency.TCM
+
+                    };
+                    _context.Add(Client_referred);
+                    await _context.SaveChangesAsync();
+
+                    List<Client_Referred> clientList = await _context.Clients_Referreds
+                                                               .Include(m => m.Referred)
+                                                               .Where(n => n.Client.Id == id && n.Service == ServiceAgency.TCM)
+                                                               .ToListAsync();
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewReferred", clientList) });
+                }
             }
 
-            UserEntity user_logged = _context.Users.Include(u => u.Clinic)
-                                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
             ReferredTempViewModel model = new ReferredTempViewModel
             {
                 IdReferred = 0,
@@ -2546,5 +2744,145 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewReferred", clientList) });
         }
 
+        [Authorize(Roles = "TCMSupervisor")]
+        public async Task<IActionResult> UpdateAssessment()
+        {
+            UserEntity user_logged = await _context.Users
+
+                                                   .Include(u => u.Clinic)
+                                                   .ThenInclude(c => c.Setting)
+
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic || !user_logged.Clinic.Setting.TCMSupervisorEdit)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+            else
+            {
+                if (User.IsInRole("TCMSupervisor"))
+                    return View(await _context.TCMClient
+
+                                              .Include(f => f.TCMAssessment)
+                                              .Include(f => f.Client)
+                                              .ThenInclude(f => f.Clinic)
+                                              .Include(f => f.Casemanager)
+                                              .Where(n => n.Client.Clinic.Id == user_logged.Clinic.Id
+                                                       && n.Casemanager.TCMSupervisor.Id == _context.TCMSupervisors.FirstOrDefault(m => m.LinkedUser == user_logged.UserName).Id
+                                                       && n.TCMAssessment.Approved == 2)
+                                              .OrderBy(f => f.Client.Name)
+                                              .ToListAsync());
+
+            }
+            return RedirectToAction("NotAuthorized", "Account");
+        }
+
+        public IActionResult Details(int id = 0, int origi = 0)
+        {
+            TCMAssessmentViewModel model;
+
+            
+                UserEntity user_logged = _context.Users
+                                                 .Include(u => u.Clinic)
+                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                if (user_logged.Clinic != null)
+                {
+
+                    TCMAssessmentEntity TcmAssessment = _context.TCMAssessment
+                                                                .Include(b => b.TcmClient)
+                                                                .ThenInclude(b => b.Client)
+                                                                .ThenInclude(b => b.Clients_Diagnostics)
+                                                                .ThenInclude(b => b.Diagnostic)
+                                                                .Include(b => b.TcmClient.Client.Client_Referred)
+                                                                .Include(b => b.TcmClient.Client.Doctor)
+                                                                .Include(b => b.TcmClient.Client.Psychiatrist)
+                                                                .Include(b => b.IndividualAgencyList)
+                                                                .Include(b => b.HouseCompositionList)
+                                                                .Include(b => b.MedicationList)
+                                                                .Include(b => b.PastCurrentServiceList)
+                                                                .Include(b => b.HospitalList)
+                                                                .Include(b => b.DrugList)
+                                                                .Include(b => b.MedicalProblemList)
+                                                                .Include(b => b.SurgeryList)
+                                                                .Include(b => b.TcmClient)
+                                                                .ThenInclude(b => b.Client)
+                                                                .ThenInclude(b => b.Clinic)
+                                                                .ThenInclude(b => b.Setting)
+                                                                .Include(b => b.TcmClient)
+                                                                .ThenInclude(b => b.Casemanager)
+                                                                .ThenInclude(b => b.TCMSupervisor)
+                                                                .FirstOrDefault(m => m.Id == id);
+                    if (TcmAssessment == null)
+                    {
+                        return RedirectToAction("NotAuthorized", "Account");
+                    }
+                    else
+                    {
+                        model = _converterHelper.ToTCMAssessmentViewModel(TcmAssessment);
+
+                        ViewData["origi"] = origi;
+                        return View(model);
+
+                    }
+
+               
+            }
+
+            model = new TCMAssessmentViewModel();
+            return View(model);
+        }
+
+        [Authorize(Roles = "Manager, TCMSupervisor")]
+        public async Task<IActionResult> ReturnTo(int? id, int tcmClientId = 0)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            TCMAssessmentEntity assessmentEntity = await _context.TCMAssessment.FirstOrDefaultAsync(s => s.Id == id);
+            if (assessmentEntity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            try
+            {
+                assessmentEntity.Approved = 0;
+                _context.TCMAssessment.Update(assessmentEntity);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Index", new { idError = 1 });
+            }
+
+            return RedirectToAction("TCMCaseHistory", "TCMClients", new { id = tcmClientId });
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            TCMAssessmentEntity assessment = await _context.TCMAssessment
+                                                           .Include(n => n.TcmClient)
+                                                           .FirstOrDefaultAsync(d => d.Id == id);
+
+            if (assessment == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+           
+            _context.TCMAssessment.Remove(assessment);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("TCMCaseHistory", "TCMClients", new { id = assessment.TcmClient.Id });
+            
+        }
     }
 }

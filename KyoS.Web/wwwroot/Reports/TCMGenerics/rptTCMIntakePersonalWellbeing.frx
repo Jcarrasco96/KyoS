@@ -1,0 +1,365 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="10/14/2023 13:29:09" ReportInfo.CreatorVersion="2021.1.0.0">
+  <Dictionary>
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pKiygLNrR2GSkUua6CZa7zWuDzNGOn7cjq7mn0WTOnccDkyyV5BLvtFa1BRlcYFBrP1JwiK70oKVI2UZ1KF9CeQ==">
+      <TableDataSource Name="Clinics" DataType="System.Int32" Enabled="true" TableName="Clinics">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Name" DataType="System.String"/>
+        <Column Name="LogoPath" DataType="System.String"/>
+        <Column Name="Schema" DataType="System.Int32"/>
+        <Column Name="Address" DataType="System.String"/>
+        <Column Name="CEO" DataType="System.String"/>
+        <Column Name="City" DataType="System.String"/>
+        <Column Name="FaxNo" DataType="System.String"/>
+        <Column Name="Phone" DataType="System.String"/>
+        <Column Name="State" DataType="System.String"/>
+        <Column Name="ZipCode" DataType="System.String"/>
+        <Column Name="ClinicalDirector" DataType="System.String"/>
+        <Column Name="ProviderTaxId" DataType="System.String"/>
+        <Column Name="ProviderMedicaidId" DataType="System.String"/>
+      </TableDataSource>
+      <TableDataSource Name="Clients" DataType="System.Int32" Enabled="true" TableName="Clients">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Name" DataType="System.String"/>
+        <Column Name="Gender" DataType="System.Int32"/>
+        <Column Name="Code" DataType="System.String"/>
+        <Column Name="ClinicId" DataType="System.Int32"/>
+        <Column Name="DateOfBirth" DataType="System.DateTime"/>
+        <Column Name="ZipCode" DataType="System.String"/>
+        <Column Name="Status" DataType="System.Int32"/>
+        <Column Name="GroupId" DataType="System.Int32"/>
+        <Column Name="AlternativeAddress" DataType="System.String"/>
+        <Column Name="City" DataType="System.String"/>
+        <Column Name="Country" DataType="System.String"/>
+        <Column Name="CreatedBy" DataType="System.String"/>
+        <Column Name="CreatedOn" DataType="System.DateTime"/>
+        <Column Name="DoctorId" DataType="System.Int32"/>
+        <Column Name="Email" DataType="System.String"/>
+        <Column Name="EmergencyContactId" DataType="System.Int32"/>
+        <Column Name="Ethnicity" DataType="System.Int32"/>
+        <Column Name="FullAddress" DataType="System.String"/>
+        <Column Name="LastModifiedBy" DataType="System.String"/>
+        <Column Name="LastModifiedOn" DataType="System.DateTime"/>
+        <Column Name="LegalGuardianId" DataType="System.Int32"/>
+        <Column Name="MaritalStatus" DataType="System.Int32"/>
+        <Column Name="MedicaidID" DataType="System.String"/>
+        <Column Name="OtherLanguage" DataType="System.String"/>
+        <Column Name="PhotoPath" DataType="System.String"/>
+        <Column Name="PreferredLanguage" DataType="System.Int32"/>
+        <Column Name="PsychiatristId" DataType="System.Int32"/>
+        <Column Name="Race" DataType="System.Int32"/>
+        <Column Name="SSN" DataType="System.String"/>
+        <Column Name="SignPath" DataType="System.String"/>
+        <Column Name="State" DataType="System.String"/>
+        <Column Name="Telephone" DataType="System.String"/>
+        <Column Name="TelephoneSecondary" DataType="System.String"/>
+        <Column Name="RelationShipOfLegalGuardian" DataType="System.Int32"/>
+        <Column Name="Service" DataType="System.Int32"/>
+        <Column Name="IndividualTherapyFacilitatorId" DataType="System.Int32"/>
+        <Column Name="AdmisionDate" DataType="System.DateTime"/>
+        <Column Name="PlaceOfBirth" DataType="System.String"/>
+        <Column Name="RelationShipOfEmergencyContact" DataType="System.Int32"/>
+        <Column Name="IdFacilitatorPSR" DataType="System.Int32"/>
+        <Column Name="OtherLanguage_Read" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="OtherLanguage_Speak" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="OtherLanguage_Understand" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="MedicareId" DataType="System.String"/>
+        <Column Name="DateOfClose" DataType="System.DateTime"/>
+        <Column Name="OnlyTCM" DataType="System.Boolean" BindableControl="CheckBox"/>
+      </TableDataSource>
+      <TableDataSource Name="CaseManagers" DataType="System.Int32" Enabled="true" TableName="CaseManagers">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Name" DataType="System.String"/>
+        <Column Name="ProviderNumber" DataType="System.String"/>
+        <Column Name="Status" DataType="System.Int32"/>
+        <Column Name="LinkedUser" DataType="System.String"/>
+        <Column Name="SignaturePath" DataType="System.String"/>
+        <Column Name="ClinicId" DataType="System.Int32"/>
+        <Column Name="Email" DataType="System.String"/>
+        <Column Name="Phone" DataType="System.String"/>
+        <Column Name="Credentials" DataType="System.String"/>
+        <Column Name="Money" DataType="System.Decimal"/>
+      </TableDataSource>
+      <TableDataSource Name="TCMClient" DataType="System.Int32" Enabled="true" TableName="TCMClient">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="CasemanagerId" DataType="System.Int32"/>
+        <Column Name="CaseNumber" DataType="System.String"/>
+        <Column Name="ClientId" DataType="System.Int32"/>
+        <Column Name="DataClose" DataType="System.DateTime"/>
+        <Column Name="DataOpen" DataType="System.DateTime"/>
+        <Column Name="Period" DataType="System.Int32"/>
+        <Column Name="Status" DataType="System.Int32"/>
+        <Column Name="CreatedBy" DataType="System.String"/>
+        <Column Name="CreatedOn" DataType="System.DateTime"/>
+        <Column Name="LastModifiedBy" DataType="System.String"/>
+        <Column Name="LastModifiedOn" DataType="System.DateTime"/>
+      </TableDataSource>
+      <TableDataSource Name="Classifications" Alias="Signatures" DataType="System.Int32" Enabled="true" TableName="Classifications">
+        <Column Name="supervisorSignature" DataType="System.Byte[]" PropName="Id"/>
+        <Column Name="facilitatorSignature" DataType="System.Byte[]" PropName="Name"/>
+      </TableDataSource>
+      <TableDataSource Name="TCMIntakePersonalWellbeing" DataType="System.Int32" Enabled="true" TableName="TCMIntakePersonalWellbeing">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="TcmClient_FK" DataType="System.Int32"/>
+        <Column Name="Living" DataType="System.Int32"/>
+        <Column Name="Health" DataType="System.Int32"/>
+        <Column Name="Life" DataType="System.Int32"/>
+        <Column Name="Relationships" DataType="System.Int32"/>
+        <Column Name="Feel" DataType="System.Int32"/>
+        <Column Name="Community" DataType="System.Int32"/>
+        <Column Name="Security" DataType="System.Int32"/>
+        <Column Name="Religion" DataType="System.Int32"/>
+        <Column Name="AdmissionedFor" DataType="System.String"/>
+        <Column Name="DateSignatureEmployee" DataType="System.DateTime"/>
+        <Column Name="CreatedBy" DataType="System.String"/>
+        <Column Name="CreatedOn" DataType="System.DateTime"/>
+        <Column Name="LastModifiedBy" DataType="System.String"/>
+        <Column Name="LastModifiedOn" DataType="System.DateTime"/>
+      </TableDataSource>
+    </MsSqlDataConnection>
+    <Parameter Name="session1" DataType="System.String"/>
+  </Dictionary>
+  <ReportPage Name="Page1" PaperWidth="215.9" PaperHeight="279.4" RawPaperSize="1" LeftMargin="5" TopMargin="5" RightMargin="5" BottomMargin="5" Watermark.Enabled="true" Watermark.Font="Arial, 60pt">
+    <ReportTitleBand Name="ReportTitle1" Width="778.3" Height="89.6">
+      <TextObject Name="Textbox12" Left="170.1" Top="9.45" Width="431.15" Height="20" CanGrow="true" Text="[Clinics.Name]" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 12pt, style=Bold"/>
+      <TextObject Name="Textbox64" Left="170.1" Top="31.33" Width="431.15" Height="22" CanGrow="true" Text="Mental Health Targeted Case Management Program" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 11pt, style=Bold"/>
+      <LineObject Name="Line3" Left="160.65" Top="14.45" Height="37.2"/>
+      <LineObject Name="Line4" Left="774.52" Top="74.6" Width="-776"/>
+      <PictureObject Name="Picture1" Left="18.9" Top="5.45" Width="103.95" Height="66.15"/>
+      <LineObject Name="Line6" Left="159.65" Top="13.45" Height="37.8"/>
+      <LineObject Name="Line7" Left="774.9" Top="73.7" Width="-776"/>
+    </ReportTitleBand>
+    <DataBand Name="Data1" Top="93.45" Width="778.3" Height="1705.29" DataSource="CaseManagers">
+      <TextObject Name="Text304" Left="3" Top="42.8" Width="102.06" Height="17.01" Text="Client's Name:" HorzAlign="Right" VertAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text305" Left="106.95" Top="40.8" Width="313.36" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Clients.Name]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text318" Left="170.1" Width="431.15" Height="22" CanGrow="true" Text="Personal Wellbeing Index" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 12pt, style=Bold"/>
+      <PictureObject Name="Picture3" Left="159.12" Top="1607.6" Width="95" Height="63.45" DataColumn="Signatures.facilitatorSignature"/>
+      <TextObject Name="Text316" Left="76.07" Top="1682.55" Width="264.6" Height="22.68" CanGrow="true" Text="Employee / TCM Signature" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
+      <LineObject Name="Line17" Left="344.67" Top="1681.1" Width="-268.38"/>
+      <TextObject Name="Text317" Left="75.62" Top="1662.2" Width="268.38" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[CaseManagers.Name]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
+      <PictureObject Name="Picture4" Left="162.12" Top="1522.65" Width="95" Height="63.45" DataColumn="Signatures.supervisorSignature"/>
+      <TextObject Name="Text324" Left="75.97" Top="1597.6" Width="264.6" Height="22.68" CanGrow="true" Text="Client / Parent / Legal Guardian Signature" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
+      <LineObject Name="Line18" Left="345.67" Top="1596.15" Width="-268.38"/>
+      <TextObject Name="Text325" Left="75.6" Top="1577.25" Width="268.38" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Clients.Name]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text322" Left="532.22" Top="1682.61" Width="153.09" Height="22.68" CanGrow="true" Text="Date" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
+      <LineObject Name="Line19" Left="687.42" Top="1680.44" Width="-154.98"/>
+      <TextObject Name="Text323" Left="532.22" Top="1662.2" Width="158.76" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[TCMIntakePersonalWellbeing.DateSignatureEmployee]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text357" Top="81.6" Width="432.81" Height="17.01" Text="1. How satisfied are you with your standard of living?" VertAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      <ContainerObject Name="Container1" Left="4" Top="103.95" Width="770.36" Height="103.95" Border.Lines="All">
+        <CheckBoxObject Name="CheckBox37" Left="43.35" Top="72.15" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Living] == 0,true,false)"/>
+        <CheckBoxObject Name="CheckBox38" Left="110.5" Top="72.15" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Living] == 1,true,false)"/>
+        <CheckBoxObject Name="CheckBox39" Left="176.65" Top="72.15" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Living] == 2,true,false)"/>
+        <CheckBoxObject Name="CheckBox40" Left="243.8" Top="72.15" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Living] == 3,true,false)"/>
+        <CheckBoxObject Name="CheckBox41" Left="308.95" Top="72.15" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Living] == 4,true,false)"/>
+        <CheckBoxObject Name="CheckBox42" Left="376.1" Top="72.15" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Living] == 5,true,false)"/>
+        <CheckBoxObject Name="CheckBox43" Left="439.25" Top="72.15" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Living] == 6,true,false)"/>
+        <CheckBoxObject Name="CheckBox44" Left="506.4" Top="72.15" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Living] == 7,true,false)"/>
+        <CheckBoxObject Name="CheckBox45" Left="574" Top="72.15" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Living] == 8,true,false)"/>
+        <CheckBoxObject Name="CheckBox46" Left="641.15" Top="72.15" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Living] == 9,true,false)"/>
+        <CheckBoxObject Name="CheckBox47" Left="706.3" Top="72.15" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Living] == 10,true,false)"/>
+        <TextObject Name="Text360" Left="41.35" Top="49.25" Width="18.9" Height="18.9" Text="0" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text361" Left="108.5" Top="49.25" Width="18.9" Height="18.9" Text="1" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text362" Left="174.65" Top="49.25" Width="18.9" Height="18.9" Text="2" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text363" Left="241.8" Top="49.25" Width="18.9" Height="18.9" Text="3" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text364" Left="306.95" Top="49.25" Width="18.9" Height="18.9" Text="4" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text365" Left="374.1" Top="49.25" Width="18.9" Height="18.9" Text="5" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text366" Left="437.25" Top="49.25" Width="18.9" Height="18.9" Text="6" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text367" Left="504.4" Top="49.25" Width="18.9" Height="18.9" Text="7" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text368" Left="572" Top="49.25" Width="18.9" Height="18.9" Text="8" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text369" Left="639.15" Top="49.25" Width="18.9" Height="18.9" Text="9" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text370" Left="699.3" Top="49.25" Width="28.35" Height="18.9" Text="10" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text358" Left="9.45" Top="11.45" Width="130.41" Height="17.01" Text="No satisfaction at all" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+        <TextObject Name="Text359" Left="623.7" Top="11.45" Width="130.41" Height="17.01" Text="Completely Satisfied" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+      </ContainerObject>
+      <TextObject Name="Text371" Top="233.8" Width="432.81" Height="17.01" Text="2. How satisfied are you with your health?" VertAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      <ContainerObject Name="Container2" Left="4" Top="255.15" Width="770.36" Height="103.95" Border.Lines="All">
+        <CheckBoxObject Name="CheckBox48" Left="43.35" Top="72.15" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Health] == 0,true,false)"/>
+        <CheckBoxObject Name="CheckBox49" Left="110.5" Top="72.15" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Health] == 1,true,false)"/>
+        <CheckBoxObject Name="CheckBox50" Left="176.65" Top="72.15" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Health] == 2,true,false)"/>
+        <CheckBoxObject Name="CheckBox51" Left="243.8" Top="72.15" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Health] == 3,true,false)"/>
+        <CheckBoxObject Name="CheckBox52" Left="308.95" Top="72.15" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Health] == 4,true,false)"/>
+        <CheckBoxObject Name="CheckBox53" Left="376.1" Top="72.15" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Health] == 5,true,false)"/>
+        <CheckBoxObject Name="CheckBox54" Left="439.25" Top="72.15" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Health] == 6,true,false)"/>
+        <CheckBoxObject Name="CheckBox55" Left="506.4" Top="72.15" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Health] == 7,true,false)"/>
+        <CheckBoxObject Name="CheckBox56" Left="574" Top="72.15" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Health] == 8,true,false)"/>
+        <CheckBoxObject Name="CheckBox57" Left="641.15" Top="72.15" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Health] == 9,true,false)"/>
+        <CheckBoxObject Name="CheckBox58" Left="706.3" Top="72.15" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Health] == 10,true,false)"/>
+        <TextObject Name="Text372" Left="41.35" Top="49.25" Width="18.9" Height="18.9" Text="0" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text373" Left="108.5" Top="49.25" Width="18.9" Height="18.9" Text="1" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text374" Left="174.65" Top="49.25" Width="18.9" Height="18.9" Text="2" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text375" Left="241.8" Top="49.25" Width="18.9" Height="18.9" Text="3" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text376" Left="306.95" Top="49.25" Width="18.9" Height="18.9" Text="4" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text377" Left="374.1" Top="49.25" Width="18.9" Height="18.9" Text="5" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text378" Left="437.25" Top="49.25" Width="18.9" Height="18.9" Text="6" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text379" Left="504.4" Top="49.25" Width="18.9" Height="18.9" Text="7" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text380" Left="572" Top="49.25" Width="18.9" Height="18.9" Text="8" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text381" Left="639.15" Top="49.25" Width="18.9" Height="18.9" Text="9" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text382" Left="699.3" Top="49.25" Width="28.35" Height="18.9" Text="10" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text383" Left="9.45" Top="11.45" Width="130.41" Height="17.01" Text="No satisfaction at all" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+        <TextObject Name="Text384" Left="623.7" Top="11.45" Width="130.41" Height="17.01" Text="Completely Satisfied" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+      </ContainerObject>
+      <TextObject Name="Text385" Top="387.45" Width="442.26" Height="17.01" Text="3. How satisfied are you with what you are achieving in life?" VertAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      <ContainerObject Name="Container3" Left="4" Top="408.8" Width="770.36" Height="103.95" Border.Lines="All">
+        <CheckBoxObject Name="CheckBox59" Left="43.35" Top="72.15" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Life] == 0,true,false)"/>
+        <CheckBoxObject Name="CheckBox60" Left="110.5" Top="72.15" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Life] == 1,true,false)"/>
+        <CheckBoxObject Name="CheckBox61" Left="176.65" Top="72.15" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Life] == 2,true,false)"/>
+        <CheckBoxObject Name="CheckBox62" Left="243.8" Top="72.15" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Life] == 3,true,false)"/>
+        <CheckBoxObject Name="CheckBox63" Left="308.95" Top="72.15" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Life] == 4,true,false)"/>
+        <CheckBoxObject Name="CheckBox64" Left="376.1" Top="72.15" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Life] == 5,true,false)"/>
+        <CheckBoxObject Name="CheckBox65" Left="439.25" Top="72.15" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Life] == 6,true,false)"/>
+        <CheckBoxObject Name="CheckBox66" Left="506.4" Top="72.15" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Life] == 7,true,false)"/>
+        <CheckBoxObject Name="CheckBox67" Left="574" Top="72.15" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Life] == 8,true,false)"/>
+        <CheckBoxObject Name="CheckBox68" Left="641.15" Top="72.15" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Life] == 9,true,false)"/>
+        <CheckBoxObject Name="CheckBox69" Left="706.3" Top="72.15" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Life] == 10,true,false)"/>
+        <TextObject Name="Text386" Left="41.35" Top="49.25" Width="18.9" Height="18.9" Text="0" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text387" Left="108.5" Top="49.25" Width="18.9" Height="18.9" Text="1" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text388" Left="174.65" Top="49.25" Width="18.9" Height="18.9" Text="2" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text389" Left="241.8" Top="49.25" Width="18.9" Height="18.9" Text="3" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text390" Left="306.95" Top="49.25" Width="18.9" Height="18.9" Text="4" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text391" Left="374.1" Top="49.25" Width="18.9" Height="18.9" Text="5" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text392" Left="437.25" Top="49.25" Width="18.9" Height="18.9" Text="6" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text393" Left="504.4" Top="49.25" Width="18.9" Height="18.9" Text="7" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text394" Left="572" Top="49.25" Width="18.9" Height="18.9" Text="8" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text395" Left="639.15" Top="49.25" Width="18.9" Height="18.9" Text="9" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text396" Left="699.3" Top="49.25" Width="28.35" Height="18.9" Text="10" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text397" Left="9.45" Top="11.45" Width="130.41" Height="17.01" Text="No satisfaction at all" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+        <TextObject Name="Text398" Left="623.7" Top="11.45" Width="130.41" Height="17.01" Text="Completely Satisfied" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+      </ContainerObject>
+      <TextObject Name="Text399" Top="544.1" Width="442.26" Height="17.01" Text="4. How satisfied are you with your personal relationships?" VertAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      <ContainerObject Name="Container4" Left="4" Top="565.45" Width="770.36" Height="103.95" Border.Lines="All">
+        <CheckBoxObject Name="CheckBox70" Left="43.35" Top="77.6" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Relationships] == 0,true,false)"/>
+        <CheckBoxObject Name="CheckBox71" Left="110.5" Top="77.6" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Relationships] == 1,true,false)"/>
+        <CheckBoxObject Name="CheckBox72" Left="176.65" Top="77.6" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Relationships] == 2,true,false)"/>
+        <CheckBoxObject Name="CheckBox73" Left="243.8" Top="77.6" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Relationships] == 3,true,false)"/>
+        <CheckBoxObject Name="CheckBox74" Left="308.95" Top="77.6" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Relationships] == 4,true,false)"/>
+        <CheckBoxObject Name="CheckBox75" Left="376.1" Top="77.6" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Relationships] == 5,true,false)"/>
+        <CheckBoxObject Name="CheckBox76" Left="439.25" Top="77.6" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Relationships] == 6,true,false)"/>
+        <CheckBoxObject Name="CheckBox77" Left="506.4" Top="77.6" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Relationships] == 7,true,false)"/>
+        <CheckBoxObject Name="CheckBox78" Left="574" Top="77.6" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Relationships] == 8,true,false)"/>
+        <CheckBoxObject Name="CheckBox79" Left="641.15" Top="77.6" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Relationships] == 9,true,false)"/>
+        <CheckBoxObject Name="CheckBox80" Left="706.3" Top="77.6" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Relationships] == 10,true,false)"/>
+        <TextObject Name="Text400" Left="41.35" Top="54.7" Width="18.9" Height="18.9" Text="0" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text401" Left="108.5" Top="54.7" Width="18.9" Height="18.9" Text="1" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text402" Left="174.65" Top="54.7" Width="18.9" Height="18.9" Text="2" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text403" Left="241.8" Top="54.7" Width="18.9" Height="18.9" Text="3" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text404" Left="306.95" Top="54.7" Width="18.9" Height="18.9" Text="4" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text405" Left="374.1" Top="54.7" Width="18.9" Height="18.9" Text="5" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text406" Left="437.25" Top="54.7" Width="18.9" Height="18.9" Text="6" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text407" Left="504.4" Top="54.7" Width="18.9" Height="18.9" Text="7" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text408" Left="572" Top="54.7" Width="18.9" Height="18.9" Text="8" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text409" Left="639.15" Top="54.7" Width="18.9" Height="18.9" Text="9" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text410" Left="699.3" Top="54.7" Width="28.35" Height="18.9" Text="10" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text411" Left="9.45" Top="16.9" Width="130.41" Height="17.01" Text="No satisfaction at all" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+        <TextObject Name="Text412" Left="623.7" Top="16.9" Width="130.41" Height="17.01" Text="Completely Satisfied" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+      </ContainerObject>
+      <TextObject Name="Text413" Top="699.3" Width="442.26" Height="17.01" Text="5. How satisfied are you with how safe you feel?" VertAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      <ContainerObject Name="Container5" Left="4" Top="720.65" Width="770.36" Height="103.95" Border.Lines="All">
+        <CheckBoxObject Name="CheckBox81" Left="43.35" Top="77.6" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Feel] == 0,true,false)"/>
+        <CheckBoxObject Name="CheckBox82" Left="110.5" Top="77.6" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Feel] == 1,true,false)"/>
+        <CheckBoxObject Name="CheckBox83" Left="176.65" Top="77.6" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Feel] == 2,true,false)"/>
+        <CheckBoxObject Name="CheckBox84" Left="243.8" Top="77.6" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Feel] == 3,true,false)"/>
+        <CheckBoxObject Name="CheckBox85" Left="308.95" Top="77.6" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Feel] == 4,true,false)"/>
+        <CheckBoxObject Name="CheckBox86" Left="376.1" Top="77.6" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Feel] == 5,true,false)"/>
+        <CheckBoxObject Name="CheckBox87" Left="439.25" Top="77.6" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Feel] == 6,true,false)"/>
+        <CheckBoxObject Name="CheckBox88" Left="506.4" Top="77.6" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Feel] == 7,true,false)"/>
+        <CheckBoxObject Name="CheckBox89" Left="574" Top="77.6" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Feel] == 8,true,false)"/>
+        <CheckBoxObject Name="CheckBox90" Left="641.15" Top="77.6" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Feel] == 9,true,false)"/>
+        <CheckBoxObject Name="CheckBox91" Left="706.3" Top="77.6" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Feel] == 10,true,false)"/>
+        <TextObject Name="Text414" Left="41.35" Top="54.7" Width="18.9" Height="18.9" Text="0" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text415" Left="108.5" Top="54.7" Width="18.9" Height="18.9" Text="1" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text416" Left="174.65" Top="54.7" Width="18.9" Height="18.9" Text="2" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text417" Left="241.8" Top="54.7" Width="18.9" Height="18.9" Text="3" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text418" Left="306.95" Top="54.7" Width="18.9" Height="18.9" Text="4" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text419" Left="374.1" Top="54.7" Width="18.9" Height="18.9" Text="5" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text420" Left="437.25" Top="54.7" Width="18.9" Height="18.9" Text="6" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text421" Left="504.4" Top="54.7" Width="18.9" Height="18.9" Text="7" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text422" Left="572" Top="54.7" Width="18.9" Height="18.9" Text="8" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text423" Left="639.15" Top="54.7" Width="18.9" Height="18.9" Text="9" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text424" Left="699.3" Top="54.7" Width="28.35" Height="18.9" Text="10" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text425" Left="9.45" Top="16.9" Width="130.41" Height="17.01" Text="No satisfaction at all" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+        <TextObject Name="Text426" Left="623.7" Top="16.9" Width="130.41" Height="17.01" Text="Completely Satisfied" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+      </ContainerObject>
+      <TextObject Name="Text427" Top="932.1" Width="480.06" Height="17.01" CanBreak="false" Text="6. How satisfied are you with feeling part of your community?" VertAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      <ContainerObject Name="Container6" Left="4" Top="953.45" Width="770.36" Height="103.95" Border.Lines="All">
+        <CheckBoxObject Name="CheckBox92" Left="43.35" Top="77.6" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Community] == 0,true,false)"/>
+        <CheckBoxObject Name="CheckBox93" Left="110.5" Top="77.6" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Community] == 1,true,false)"/>
+        <CheckBoxObject Name="CheckBox94" Left="176.65" Top="77.6" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Community] == 2,true,false)"/>
+        <CheckBoxObject Name="CheckBox95" Left="243.8" Top="77.6" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Community] == 3,true,false)"/>
+        <CheckBoxObject Name="CheckBox96" Left="308.95" Top="77.6" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Community] == 4,true,false)"/>
+        <CheckBoxObject Name="CheckBox97" Left="376.1" Top="77.6" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Community] == 5,true,false)"/>
+        <CheckBoxObject Name="CheckBox98" Left="439.25" Top="77.6" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Community] == 6,true,false)"/>
+        <CheckBoxObject Name="CheckBox99" Left="506.4" Top="77.6" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Community] == 7,true,false)"/>
+        <CheckBoxObject Name="CheckBox100" Left="574" Top="77.6" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Community] == 8,true,false)"/>
+        <CheckBoxObject Name="CheckBox101" Left="641.15" Top="77.6" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Community] == 9,true,false)"/>
+        <CheckBoxObject Name="CheckBox102" Left="706.3" Top="77.6" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Community] == 10,true,false)"/>
+        <TextObject Name="Text428" Left="41.35" Top="54.7" Width="18.9" Height="18.9" Text="0" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text429" Left="108.5" Top="54.7" Width="18.9" Height="18.9" Text="1" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text430" Left="174.65" Top="54.7" Width="18.9" Height="18.9" Text="2" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text431" Left="241.8" Top="54.7" Width="18.9" Height="18.9" Text="3" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text432" Left="306.95" Top="54.7" Width="18.9" Height="18.9" Text="4" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text433" Left="374.1" Top="54.7" Width="18.9" Height="18.9" Text="5" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text434" Left="437.25" Top="54.7" Width="18.9" Height="18.9" Text="6" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text435" Left="504.4" Top="54.7" Width="18.9" Height="18.9" Text="7" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text436" Left="572" Top="54.7" Width="18.9" Height="18.9" Text="8" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text437" Left="639.15" Top="54.7" Width="18.9" Height="18.9" Text="9" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text438" Left="699.3" Top="54.7" Width="28.35" Height="18.9" Text="10" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text439" Left="9.45" Top="16.9" Width="130.41" Height="17.01" Text="No satisfaction at all" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+        <TextObject Name="Text440" Left="623.7" Top="16.9" Width="130.41" Height="17.01" Text="Completely Satisfied" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+      </ContainerObject>
+      <TextObject Name="Text441" Top="1086.75" Width="480.06" Height="17.01" CanBreak="false" Text="7. How satisfied are you with your future security?" VertAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      <ContainerObject Name="Container7" Left="4" Top="1108.1" Width="770.36" Height="103.95" Border.Lines="All">
+        <CheckBoxObject Name="CheckBox103" Left="43.35" Top="77.6" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Security] == 0,true,false)"/>
+        <CheckBoxObject Name="CheckBox104" Left="110.5" Top="77.6" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Security] == 1,true,false)"/>
+        <CheckBoxObject Name="CheckBox105" Left="176.65" Top="77.6" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Security] == 2,true,false)"/>
+        <CheckBoxObject Name="CheckBox106" Left="243.8" Top="77.6" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Security] == 3,true,false)"/>
+        <CheckBoxObject Name="CheckBox107" Left="308.95" Top="77.6" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Security] == 4,true,false)"/>
+        <CheckBoxObject Name="CheckBox108" Left="376.1" Top="77.6" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Security] == 5,true,false)"/>
+        <CheckBoxObject Name="CheckBox109" Left="439.25" Top="77.6" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Security] == 6,true,false)"/>
+        <CheckBoxObject Name="CheckBox110" Left="506.4" Top="77.6" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Security] == 7,true,false)"/>
+        <CheckBoxObject Name="CheckBox111" Left="574" Top="77.6" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Security] == 8,true,false)"/>
+        <CheckBoxObject Name="CheckBox112" Left="641.15" Top="77.6" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Security] == 9,true,false)"/>
+        <CheckBoxObject Name="CheckBox113" Left="706.3" Top="77.6" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Security] == 10,true,false)"/>
+        <TextObject Name="Text442" Left="41.35" Top="54.7" Width="18.9" Height="18.9" Text="0" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text443" Left="108.5" Top="54.7" Width="18.9" Height="18.9" Text="1" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text444" Left="174.65" Top="54.7" Width="18.9" Height="18.9" Text="2" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text445" Left="241.8" Top="54.7" Width="18.9" Height="18.9" Text="3" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text446" Left="306.95" Top="54.7" Width="18.9" Height="18.9" Text="4" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text447" Left="374.1" Top="54.7" Width="18.9" Height="18.9" Text="5" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text448" Left="437.25" Top="54.7" Width="18.9" Height="18.9" Text="6" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text449" Left="504.4" Top="54.7" Width="18.9" Height="18.9" Text="7" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text450" Left="572" Top="54.7" Width="18.9" Height="18.9" Text="8" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text451" Left="639.15" Top="54.7" Width="18.9" Height="18.9" Text="9" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text452" Left="699.3" Top="54.7" Width="28.35" Height="18.9" Text="10" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text453" Left="9.45" Top="16.9" Width="130.41" Height="17.01" Text="No satisfaction at all" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+        <TextObject Name="Text454" Left="623.7" Top="16.9" Width="130.41" Height="17.01" Text="Completely Satisfied" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+      </ContainerObject>
+      <TextObject Name="Text455" Top="1242.4" Width="480.06" Height="17.01" CanBreak="false" Text="8. How satisfied are you with your spirituality or religion?" VertAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      <ContainerObject Name="Container8" Left="4" Top="1263.75" Width="770.36" Height="103.95" Border.Lines="All">
+        <CheckBoxObject Name="CheckBox114" Left="43.35" Top="77.6" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Religion] == 0,true,false)"/>
+        <CheckBoxObject Name="CheckBox115" Left="110.5" Top="77.6" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Religion] == 1,true,false)"/>
+        <CheckBoxObject Name="CheckBox116" Left="176.65" Top="77.6" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Religion] == 2,true,false)"/>
+        <CheckBoxObject Name="CheckBox117" Left="243.8" Top="77.6" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Religion] == 3,true,false)"/>
+        <CheckBoxObject Name="CheckBox118" Left="308.95" Top="77.6" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Religion] == 4,true,false)"/>
+        <CheckBoxObject Name="CheckBox119" Left="376.1" Top="77.6" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Religion] == 5,true,false)"/>
+        <CheckBoxObject Name="CheckBox120" Left="439.25" Top="77.6" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Religion] == 6,true,false)"/>
+        <CheckBoxObject Name="CheckBox121" Left="506.4" Top="77.6" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Religion] == 7,true,false)"/>
+        <CheckBoxObject Name="CheckBox122" Left="574" Top="77.6" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Religion] == 8,true,false)"/>
+        <CheckBoxObject Name="CheckBox123" Left="641.15" Top="77.6" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Religion] == 9,true,false)"/>
+        <CheckBoxObject Name="CheckBox124" Left="706.3" Top="77.6" Width="15.12" Height="15.12" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMIntakePersonalWellbeing.Religion] == 10,true,false)"/>
+        <TextObject Name="Text456" Left="41.35" Top="54.7" Width="18.9" Height="18.9" Text="0" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text457" Left="108.5" Top="54.7" Width="18.9" Height="18.9" Text="1" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text458" Left="174.65" Top="54.7" Width="18.9" Height="18.9" Text="2" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text459" Left="241.8" Top="54.7" Width="18.9" Height="18.9" Text="3" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text460" Left="306.95" Top="54.7" Width="18.9" Height="18.9" Text="4" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text461" Left="374.1" Top="54.7" Width="18.9" Height="18.9" Text="5" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text462" Left="437.25" Top="54.7" Width="18.9" Height="18.9" Text="6" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text463" Left="504.4" Top="54.7" Width="18.9" Height="18.9" Text="7" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text464" Left="572" Top="54.7" Width="18.9" Height="18.9" Text="8" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text465" Left="639.15" Top="54.7" Width="18.9" Height="18.9" Text="9" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text466" Left="699.3" Top="54.7" Width="28.35" Height="18.9" Text="10" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
+        <TextObject Name="Text467" Left="9.45" Top="16.9" Width="130.41" Height="17.01" Text="No satisfaction at all" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+        <TextObject Name="Text468" Left="623.7" Top="16.9" Width="130.41" Height="17.01" Text="Completely Satisfied" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+      </ContainerObject>
+    </DataBand>
+  </ReportPage>
+</Report>

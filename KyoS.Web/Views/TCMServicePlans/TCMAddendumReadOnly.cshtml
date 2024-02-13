@@ -9,32 +9,60 @@
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
                 <div class="col-md-3">
-                    <label asp-for="ID_TcmServicePlan" class="control-label">Case Number</label>&nbsp;*
+                    <label asp-for="ID_TcmServicePlan" class="control-label">Case Number</label>
                     <select asp-for="ID_TcmServicePlan" asp-items="Model.ListTcmServicePlan" class="form-control" readonly></select>
                     <span asp-validation-for="ID_TcmServicePlan" class="text-danger"></span>
                 </div>
-                <div class="col-md-3">
-                    <label asp-for="Date_Identified" class="control-label">Identified Date</label>
-                    <input asp-for="Date_Identified" class="form-control"readonly />
-                    <span asp-validation-for="Date_Identified" class="text-danger"></span>
-                </div>
+                @if (ViewData["editSupervisor"].ToString() == "1" && ViewData["origin"].ToString() != "5")
+                {
+                    <div class="col-md-3">
+                        <label asp-for="Date_Identified" class="control-label">Identified Date</label>
+                        <input asp-for="Date_Identified" class="form-control" />
+                        <span asp-validation-for="Date_Identified" class="text-danger"></span>
+                    </div>
+                }
+                else
+                { 
+                    <div class="col-md-3">
+                        <label asp-for="Date_Identified" class="control-label">Identified Date</label>
+                        <input asp-for="Date_Identified" class="form-control"readonly />
+                        <span asp-validation-for="Date_Identified" class="text-danger"></span>
+                    </div>
+                }
                 <div class="form-group col-md-6">
-                    <label asp-for="ID_TcmDominio" class="control-label">Service Code</label>&nbsp;*
+                    <label asp-for="ID_TcmDominio" class="control-label">Service Code</label>
                     <select asp-for="ID_TcmDominio" asp-items="Model.TcmDominio" class="form-control" readonly></select>
                     <span asp-validation-for="ID_TcmDominio" class="text-danger"></span>
                 </div>
             </div>
             <div class="form-group">
-                <div class="col-md-6">
-                    <label asp-for="Needs_Identified" class="control-label">Identified Needs</label>
-                    <textarea asp-for="Needs_Identified" class="form-control" rows="3" readonly></textarea>
-                    <span asp-validation-for="Needs_Identified" class="text-danger"></span>
-                </div>
-                <div class="form-group col-md-6">
-                    <label asp-for="Long_term" class="control-label">Long Term</label>
-                    <textarea asp-for="Long_term" class="form-control" rows="3" readonly></textarea>
-                    <span asp-validation-for="Long_term" class="text-danger"></span>
-                </div>
+                @if (ViewData["editSupervisor"].ToString() == "1" && ViewData["origin"].ToString() != "5")
+                {
+                    <div class="col-md-6">
+                        <label asp-for="Needs_Identified" class="control-label">Identified Needs</label>
+                        <textarea asp-for="Needs_Identified" class="form-control" rows="3" ></textarea>
+                        <span asp-validation-for="Needs_Identified" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label asp-for="Long_term" class="control-label">Long Term</label>
+                        <textarea asp-for="Long_term" class="form-control" rows="3" ></textarea>
+                        <span asp-validation-for="Long_term" class="text-danger"></span>
+                    </div>
+                }
+                else
+                {
+                    <div class="col-md-6">
+                        <label asp-for="Needs_Identified" class="control-label">Identified Needs</label>
+                        <textarea asp-for="Needs_Identified" class="form-control" rows="3" readonly></textarea>
+                        <span asp-validation-for="Needs_Identified" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label asp-for="Long_term" class="control-label">Long Term</label>
+                        <textarea asp-for="Long_term" class="form-control" rows="3" readonly></textarea>
+                        <span asp-validation-for="Long_term" class="text-danger"></span>
+                    </div>
+                }
+
             </div>
             <div class="col-md-12">
                 &nbsp;

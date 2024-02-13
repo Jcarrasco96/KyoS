@@ -1,0 +1,139 @@
+﻿@model KyoS.Web.Data.Entities.TCMDischargeEntity
+
+@if (Model != null)
+{
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Discharge</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-hover table-responsive table-striped" >
+                    <thead>
+                        <tr>
+                            <th class="col-md-3">
+                                Client
+                            </th>
+                            <th class="col-md-1" style="text-align:center">
+                                Admission
+                            </th>
+                            <th class="col-md-2" style="text-align:center">
+                                Evaluation Date
+                            </th>
+                            <th class="col-md-2" style="text-align:center">
+                                Admissioned for
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Case
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Status
+                            </th>
+                            <th class="col-md-2">
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                       
+                            <tr>
+                                <td>
+                                    @if (Model.TcmServicePlan.TcmClient.Client.Gender == KyoS.Common.Enums.GenderType.Female)
+                                    {
+                                        <i class="glyphicon glyphicon-user btn-danger"></i>
+                                    }
+                                    @if (Model.TcmServicePlan.TcmClient.Client.Gender == KyoS.Common.Enums.GenderType.Male)
+                                    {
+                                        <i class="glyphicon glyphicon-user btn-primary"></i>
+                                    }
+                                    &nbsp;
+                                    @Html.DisplayFor(modelItem => Model.TcmServicePlan.TcmClient.Client.Name)
+                                    |
+                                    @Html.DisplayFor(modelItem => Model.TcmServicePlan.TcmClient.CaseNumber)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => Model.TcmServicePlan.TcmClient.Client.AdmisionDate)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => Model.DischargeDate)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => Model.TcmServicePlan.TcmClient.Casemanager.Name)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => Model.TcmServicePlan.TcmClient.Status)
+                                </td>
+                                <td align="center">
+                                    @if (Model.Approved == 0)
+                                    {
+                                        <span class="label label-warning">
+                                            Edition
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        if (Model.Approved == 1)
+                                        {
+                                            <span class="label label-info">
+                                                Pending
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            if (Model.Approved == 2)
+                                            {
+                                                <span class="label label-success">
+                                                    Approved
+                                                </span>
+                                            }
+                                        }
+                                    }
+                                </td>
+                                <td align="right">
+                                    @if (User.IsInRole("Manager") || User.IsInRole("TCMSupervisor"))
+                                    {
+                                        @if (Model.Approved == 2)
+                                        {
+                                            <a asp-action="ReturnTo" asp-controller="TCMDischarges" asp-route-id="@Model.Id" asp-route-tcmClientId="@Model.TcmServicePlan.TcmClient_FK" class="btn btn-warning" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                            <a asp-action="EditReadOnly" asp-controller="TCMDischarges" asp-route-id="@Model.Id" asp-route-origi="3" class="btn btn-info" title="View Discharge"><i class="glyphicon glyphicon-list"></i></a>
+                                            <a asp-action="PrintDischarge" asp-controller="TCMIntakes" asp-route-id="@Model.Id" class="btn btn-success" title="Print Discharge" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                        }
+                                        else
+                                        {
+                                            @if (Model.Approved == 1)
+                                            {
+                                                <a asp-action="ReturnTo" asp-controller="TCMServicePlans" asp-route-id="@Model.Id" asp-route-tcmClientId="@Model.TcmServicePlan.TcmClient_FK" class="btn btn-warning" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                                <a asp-action="EditReadOnly" asp-controller="TCMServicePlans" asp-route-id="@Model.Id" asp-route-origi="3" class="btn btn-info" title="View Discharge"><i class="glyphicon glyphicon-list"></i></a>
+                                                <a asp-action="PrintServicePlan" asp-controller="TCMServicePlans" asp-route-id="@Model.Id" class="btn btn-success disabled" title="Print Discharge" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                            }
+                                            else
+                                            {
+                                                <a asp-action="ReturnTo" asp-controller="Bios" asp-route-id="@Model.Id" asp-route-clientId="@Model.TcmServicePlan.TcmClient_FK" class="btn btn-warning disabled" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                                <a asp-action="EditReadOnly" asp-controller="TCMServicePlans" asp-route-id="@Model.Id" asp-route-origi="3" class="btn btn-info" title="View Discharge"><i class="glyphicon glyphicon-list"></i></a>
+                                                <a asp-action="PrintServicePlan" asp-controller="TCMServicePlans" asp-route-id="@Model.Id" class="btn btn-success disabled" title="Print Discharge" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                            }
+                                        }
+                                        <a onclick="ConfirmDeleteDischarge(@Model.Id)" class="btn btn-danger" title="Delete Discharge"><i class="glyphicon glyphicon-trash"></i></a>
+                                    }
+                                    else
+                                    {
+                                        <a asp-action="ReturnTo" asp-controller="Bios" asp-route-id="@Model.Id" asp-route-clientId="@Model.TcmServicePlan.TcmClient_FK" class="btn btn-warning disabled" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                        <a asp-action="EditReadOnly" asp-controller="TCMServicePlans" asp-route-id="@Model.Id" asp-route-origi="3" class="btn btn-info" title="View Discharge"><i class="glyphicon glyphicon-list"></i></a>
+                                        @if (Model.Approved == 2)
+                                        {
+                                            <a asp-action="PrintDischarge" asp-controller="TCMIntakes" asp-route-id="@Model.Id" class="btn btn-success" title="Print Discharge" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                        }
+                                        else
+                                        {
+                                            <a asp-action="PrintServicePlan" asp-controller="TCMServicePlans" asp-route-id="@Model.Id" class="btn btn-success disabled" title="Print Discharge" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                        }
+                                        <a onclick="ConfirmDeleteDischarge(@Model.Id)" class="btn btn-danger disabled" title="Delete Discharge"><i class="glyphicon glyphicon-trash"></i></a>
+                                    }
+                                </td>
+                            </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}
+ 

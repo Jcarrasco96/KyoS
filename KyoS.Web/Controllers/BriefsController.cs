@@ -1,19 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using KyoS.Common.Enums;
+﻿using KyoS.Common.Enums;
+using KyoS.Common.Helpers;
 using KyoS.Web.Data;
 using KyoS.Web.Data.Entities;
 using KyoS.Web.Helpers;
 using KyoS.Web.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
 using System.IO;
-using KyoS.Common.Helpers;
+using System.Linq;
+using System.Threading.Tasks;
 
 
 namespace KyoS.Web.Controllers
@@ -26,8 +24,9 @@ namespace KyoS.Web.Controllers
         private readonly IRenderHelper _renderHelper;
         private readonly IReportHelper _reportHelper;
         private readonly DataContext _context;
+        private readonly IOverlapindHelper _overlapingHelper;
 
-        public BriefsController(IUserHelper userHelper, IConverterHelper converterHelper, ICombosHelper combosHelper, IRenderHelper renderHelper, DataContext context, IReportHelper reportHelper)
+        public BriefsController(IUserHelper userHelper, IConverterHelper converterHelper, ICombosHelper combosHelper, IRenderHelper renderHelper, DataContext context, IReportHelper reportHelper, IOverlapindHelper overlapingHelper)
         {
             _userHelper = userHelper;
             _combosHelper = combosHelper;
@@ -35,9 +34,10 @@ namespace KyoS.Web.Controllers
             _renderHelper = renderHelper;
             _converterHelper = converterHelper;
             _reportHelper = reportHelper;
+            _overlapingHelper = overlapingHelper;
         }
 
-        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant, Frontdesk")]
         public async Task<IActionResult> Index(int idError = 0)
         {
             if (idError == 1) //Imposible to delete
@@ -107,7 +107,7 @@ namespace KyoS.Web.Controllers
                                            .ToListAsync();
                 }
                 return View(client);
-            }            
+            }
         }
 
         [Authorize(Roles = "Supervisor, Documents_Assistant")]
@@ -135,7 +135,7 @@ namespace KyoS.Web.Controllers
                                                  .Include(n => n.Client_Referred)
                                                  .ThenInclude(n => n.Referred)
                                                  .Include(n => n.List_BehavioralHistory)
-                                                 .Include(f => f. Clients_Diagnostics)
+                                                 .Include(f => f.Clients_Diagnostics)
                                                  .ThenInclude(f => f.Diagnostic)
                                                  .FirstOrDefault(n => n.Id == id),
                         Affect_Angry = false,
@@ -217,7 +217,7 @@ namespace KyoS.Web.Controllers
                         RiskToSelf_Low = false,
                         RiskToSelf_Medium = false,
                         SafetyPlan = false,
-                        Setting = "02",
+                        Setting = "53",
                         Speech_Impoverished = false,
                         Speech_Loud = false,
                         Speech_Mumbled = false,
@@ -253,7 +253,8 @@ namespace KyoS.Web.Controllers
                         EndTime = DateTime.Now,*/
                         CreatedOn = DateTime.Now,
                         CreatedBy = user_logged.UserName,
-                        AdmissionedFor = user_logged.FullName
+                        AdmissionedFor = user_logged.FullName,
+                        Code90791 = false
                     };
                     if (model.Client.LegalGuardian == null)
                         model.Client.LegalGuardian = new LegalGuardianEntity();
@@ -274,7 +275,7 @@ namespace KyoS.Web.Controllers
                     {
                         model.ReferralName = model.Client.Client_Referred.Where(n => n.Service == ServiceAgency.CMH).ElementAt(0).Referred.Name;
                     }
-                   
+
                     model.LegalGuardianName = model.Client.LegalGuardian.Name;
                     model.LegalGuardianTelephone = model.Client.LegalGuardian.Telephone;
                     model.EmergencyContactName = model.Client.EmergencyContact.Name;
@@ -304,7 +305,34 @@ namespace KyoS.Web.Controllers
                 if (briefEntity == null)
                 {
                     DocumentsAssistantEntity documentAssistant = await _context.DocumentsAssistant.FirstOrDefaultAsync(m => m.LinkedUser == user_logged.UserName);
+                    
+                    DateTime start = new DateTime(briefViewModel.DateBio.Year, briefViewModel.DateBio.Month, briefViewModel.DateBio.Day, briefViewModel.StartTime.Hour, briefViewModel.StartTime.Minute, briefViewModel.StartTime.Second);
+                    briefViewModel.StartTime = start;
+                    DateTime end = new DateTime(briefViewModel.DateBio.Year, briefViewModel.DateBio.Month, briefViewModel.DateBio.Day, briefViewModel.EndTime.Hour, briefViewModel.EndTime.Minute, briefViewModel.EndTime.Second);
+                    briefViewModel.EndTime = end;
+
                     briefEntity = await _converterHelper.ToBriefEntity(briefViewModel, true, user_logged.UserName);
+
+                    if (User.IsInRole("Documents_Assistant"))
+                    {
+                        string overlapping = _overlapingHelper.OverlapingDocumentsAssistant(documentAssistant.Id, briefViewModel.StartTime, briefViewModel.EndTime, briefViewModel.Id, DocumentDescription.Others);
+                        if (overlapping != string.Empty)
+                        {
+                            ModelState.AddModelError(string.Empty, $"Error. There are documents created in that time interval " + overlapping);
+                            briefViewModel.Client = _context.Clients
+                                                          .Include(n => n.LegalGuardian)
+                                                          .Include(n => n.EmergencyContact)
+                                                          .Include(n => n.MedicationList)
+                                                          .Include(n => n.Client_Referred)
+                                                          .ThenInclude(n => n.Referred)
+                                                          .Include(n => n.List_BehavioralHistory)
+                                                          .Include(f => f.Clients_Diagnostics)
+                                                          .ThenInclude(f => f.Diagnostic)
+                                                          .FirstOrDefault(n => n.Id == briefViewModel.Client_FK);
+                          
+                            return View(briefViewModel);
+                        }
+                    }
 
                     if (documentAssistant != null)
                     {
@@ -327,7 +355,7 @@ namespace KyoS.Web.Controllers
                         {
                             return RedirectToAction("ClientswithoutBIO", "Bios");
                         }
-                        
+
                     }
                     catch (System.Exception ex)
                     {
@@ -462,10 +490,11 @@ namespace KyoS.Web.Controllers
                 Treatmentrecomendations = "",
                 ClientDenied = false,
                 StartTime = DateTime.Now,
-                EndTime = DateTime.Now
-                
+                EndTime = DateTime.Now,
+                Code90791 = false
+
             };
-            
+
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Create", model) });
         }
 
@@ -495,6 +524,11 @@ namespace KyoS.Web.Controllers
 
             if (User.IsInRole("Supervisor") || User.IsInRole("Documents_Assistant"))
             {
+                //redirect to briefs print report
+                if (entity.Status == BioStatus.Approved)
+                {
+                    return RedirectToAction("PrintBrief", new { id = entity.Id });
+                }
                 UserEntity user_logged = _context.Users
 
                                                  .Include(u => u.Clinic)
@@ -557,7 +591,36 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
+                DateTime start = new DateTime(briefViewModel.DateBio.Year, briefViewModel.DateBio.Month, briefViewModel.DateBio.Day, briefViewModel.StartTime.Hour, briefViewModel.StartTime.Minute, briefViewModel.StartTime.Second);
+                briefViewModel.StartTime = start;
+                DateTime end = new DateTime(briefViewModel.DateBio.Year, briefViewModel.DateBio.Month, briefViewModel.DateBio.Day, briefViewModel.EndTime.Hour, briefViewModel.EndTime.Minute, briefViewModel.EndTime.Second);
+                briefViewModel.EndTime = end;
+
                 BriefEntity briefEntity = await _converterHelper.ToBriefEntity(briefViewModel, false, user_logged.UserName);
+
+                if (User.IsInRole("Documents_Assistant"))
+                {
+                    DocumentsAssistantEntity documentAssistant = await _context.DocumentsAssistant.FirstOrDefaultAsync(m => m.LinkedUser == user_logged.UserName);
+                    string overlapping = _overlapingHelper.OverlapingDocumentsAssistant(documentAssistant.Id, briefViewModel.StartTime, briefViewModel.EndTime, briefViewModel.Id, DocumentDescription.Others);
+                    if (overlapping != string.Empty)
+                    {
+                        ModelState.AddModelError(string.Empty, $"Error. There are documents created in that time interval " + overlapping);
+                        briefViewModel.Client = _context.Clients
+                                                      .Include(n => n.LegalGuardian)
+                                                      .Include(n => n.EmergencyContact)
+                                                      .Include(n => n.MedicationList)
+                                                      .Include(n => n.Client_Referred)
+                                                      .ThenInclude(n => n.Referred)
+                                                      .Include(n => n.List_BehavioralHistory)
+                                                      .Include(f => f.Clients_Diagnostics)
+                                                      .ThenInclude(f => f.Diagnostic)
+                                                      .FirstOrDefault(n => n.Id == briefViewModel.Client_FK);
+
+                        ViewData["origi"] = origi;
+                        return View(briefViewModel);
+                    }
+                }
+
                 _context.Brief.Update(briefEntity);
                 try
                 {
@@ -592,7 +655,7 @@ namespace KyoS.Web.Controllers
                     }
 
                     await _context.SaveChangesAsync();
-                    if(origi == 0)
+                    if (origi == 0)
                     {
                         return RedirectToAction("Index", "Briefs");
                     }
@@ -603,6 +666,10 @@ namespace KyoS.Web.Controllers
                     if (origi == 2)
                     {
                         return RedirectToAction("BriefWithReview", "Briefs");
+                    }
+                    if (origi == 3)
+                    {
+                        return RedirectToAction("IndexDocumentsAssistant", "Calendar");
                     }
                 }
                 catch (System.Exception ex)
@@ -667,7 +734,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                
+
                 Bio_BehavioralHistoryEntity bioEntity = await _converterHelper.ToBio_BehaviorEntity(bioViewModel, true);
                 _context.Bio_BehavioralHistory.Add(bioEntity);
                 try
@@ -680,13 +747,13 @@ namespace KyoS.Web.Controllers
                                                                           .ToListAsync();
 
                     return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewBehavioralHealth", bio) });
-                        
+
                 }
                 catch (System.Exception ex)
                 {
                     ModelState.AddModelError(string.Empty, ex.InnerException.Message);
                 }
-               
+
             }
             Bio_BehavioralHistoryEntity model;
             model = new Bio_BehavioralHistoryEntity
@@ -844,10 +911,10 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("Index", new { idError = 1 });
             }
 
-            return RedirectToAction(nameof(IndexBehavioralHealthHistory));            
+            return RedirectToAction(nameof(IndexBehavioralHealthHistory));
         }
 
-        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant, Frontdesk")]
         public IActionResult PrintBrief(int id)
         {
             BriefEntity entity = _context.Brief
@@ -890,12 +957,12 @@ namespace KyoS.Web.Controllers
 
             if (entity.Client.Clinic.Name == "FLORIDA SOCIAL HEALTH SOLUTIONS")
             {
-                Stream stream = _reportHelper.FloridaSocialHSBriefReport(entity);                
+                Stream stream = _reportHelper.FloridaSocialHSBriefReport(entity);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
             if (entity.Client.Clinic.Name == "DREAMS MENTAL HEALTH INC")
             {
-                Stream stream = _reportHelper.DreamsMentalHealthBriefReport(entity);                
+                Stream stream = _reportHelper.DreamsMentalHealthBriefReport(entity);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
             if (entity.Client.Clinic.Name == "COMMUNITY HEALTH THERAPY CENTER")
@@ -903,7 +970,36 @@ namespace KyoS.Web.Controllers
                 Stream stream = _reportHelper.CommunityHTCBriefReport(entity);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
-
+            if (entity.Client.Clinic.Name == "PRINCIPLE CARE CENTER INC")
+            {
+                Stream stream = _reportHelper.PrincipleCCIBriefReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (entity.Client.Clinic.Name == "SAPPHIRE MENTAL HEALTH CENTER LLC")
+            {
+                Stream stream = _reportHelper.SapphireMHCBriefReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (entity.Client.Clinic.Name == "MEDICAL & REHAB OF HILLSBOROUGH INC")
+            {
+                Stream stream = _reportHelper.MedicalRehabBriefReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (entity.Client.Clinic.Name == "MY FLORIDA CASE MANAGEMENT SERVICES LLC")
+            {
+                Stream stream = _reportHelper.MyFloridaBriefReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (entity.Client.Clinic.Name == "ORION MENTAL HEALTH CENTER LLC")
+            {
+                Stream stream = _reportHelper.OrionBriefReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (entity.Client.Clinic.Name == "ALLIED HEALTH GROUP LLC")
+            {
+                Stream stream = _reportHelper.AlliedBriefReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
             return null;
         }
 
@@ -967,7 +1063,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                
+
                 MedicationEntity medicationEntity = await _converterHelper.ToMedicationEntity(medicationViewModel, true);
                 _context.Medication.Add(medicationEntity);
                 try
@@ -984,7 +1080,7 @@ namespace KyoS.Web.Controllers
                 {
                     ModelState.AddModelError(string.Empty, ex.InnerException.Message);
                 }
-                
+
             }
             MedicationViewModel model;
             model = new MedicationViewModel
@@ -1110,7 +1206,7 @@ namespace KyoS.Web.Controllers
             }
         }
 
-        [Authorize(Roles = "Supervisor, Documents_Assistant, Manager, Facilitator")]
+        [Authorize(Roles = "Supervisor, Documents_Assistant, Manager, Facilitator, Frontdesk")]
         public IActionResult EditReadOnly(int id = 0, int origi = 0)
         {
             BriefEntity entity = _context.Brief
@@ -1135,53 +1231,53 @@ namespace KyoS.Web.Controllers
 
             BriefViewModel model;
 
-           
-                UserEntity user_logged = _context.Users
 
-                                                 .Include(u => u.Clinic)
+            UserEntity user_logged = _context.Users
 
-                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+                                             .Include(u => u.Clinic)
 
-                if (user_logged.Clinic != null)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic != null)
+            {
+                model = _converterHelper.ToBriefViewModel(entity);
+                if (model.Client.LegalGuardian == null)
+                    model.Client.LegalGuardian = new LegalGuardianEntity();
+                if (model.Client.EmergencyContact == null)
+                    model.Client.EmergencyContact = new EmergencyContactEntity();
+                if (model.Client.MedicationList == null)
+                    model.Client.MedicationList = new List<MedicationEntity>();
+                if (model.Client.Doctor == null)
+                    model.Client.Doctor = new DoctorEntity();
+
+                if (model.Client.Client_Referred == null || model.Client.Client_Referred.Where(n => n.Service == ServiceAgency.CMH).Count() == 0)
                 {
-                    model = _converterHelper.ToBriefViewModel(entity);
-                    if (model.Client.LegalGuardian == null)
-                        model.Client.LegalGuardian = new LegalGuardianEntity();
-                    if (model.Client.EmergencyContact == null)
-                        model.Client.EmergencyContact = new EmergencyContactEntity();
-                    if (model.Client.MedicationList == null)
-                        model.Client.MedicationList = new List<MedicationEntity>();
-                    if (model.Client.Doctor == null)
-                        model.Client.Doctor = new DoctorEntity();
-                   
-                    if (model.Client.Client_Referred == null || model.Client.Client_Referred.Where(n => n.Service == ServiceAgency.CMH).Count() == 0)
-                    {
-                        Client_Referred client_referred = new Client_Referred();
-                        model.Client.Client_Referred = new List<Client_Referred>();
-                        model.Client.Client_Referred.Add(client_referred);
-                        model.ReferralName = "Not have referred";
-                    }
-                    else
-                    {
-                        model.ReferralName = model.Client.Client_Referred.Where(n => n.Service == ServiceAgency.CMH).ElementAt(0).Referred.Name;
-                    }
-
-                    if (model.Client.FarsFormList == null)
-                        model.Client.FarsFormList = new List<FarsFormEntity>();
-                    if (model.Client.MedicationList == null)
-                        model.Client.MedicationList = new List<MedicationEntity>();
-                    if (model.Client.List_BehavioralHistory == null)
-                        model.Client.List_BehavioralHistory = new List<Bio_BehavioralHistoryEntity>();
-
-                    model.LegalGuardianName = model.Client.LegalGuardian.Name;
-                    model.LegalGuardianTelephone = model.Client.LegalGuardian.Telephone;
-                    model.EmergencyContactName = model.Client.EmergencyContact.Name;
-                    model.EmergencyContactTelephone = model.Client.EmergencyContact.Telephone;
-                    model.RelationShipOfEmergencyContact = model.Client.RelationShipOfEmergencyContact.ToString();
-
-                    ViewData["origi"] = origi;
-                    return View(model);
+                    Client_Referred client_referred = new Client_Referred();
+                    model.Client.Client_Referred = new List<Client_Referred>();
+                    model.Client.Client_Referred.Add(client_referred);
+                    model.ReferralName = "Not have referred";
                 }
+                else
+                {
+                    model.ReferralName = model.Client.Client_Referred.Where(n => n.Service == ServiceAgency.CMH).ElementAt(0).Referred.Name;
+                }
+
+                if (model.Client.FarsFormList == null)
+                    model.Client.FarsFormList = new List<FarsFormEntity>();
+                if (model.Client.MedicationList == null)
+                    model.Client.MedicationList = new List<MedicationEntity>();
+                if (model.Client.List_BehavioralHistory == null)
+                    model.Client.List_BehavioralHistory = new List<Bio_BehavioralHistoryEntity>();
+
+                model.LegalGuardianName = model.Client.LegalGuardian.Name;
+                model.LegalGuardianTelephone = model.Client.LegalGuardian.Telephone;
+                model.EmergencyContactName = model.Client.EmergencyContact.Name;
+                model.EmergencyContactTelephone = model.Client.EmergencyContact.Telephone;
+                model.RelationShipOfEmergencyContact = model.Client.RelationShipOfEmergencyContact.ToString();
+
+                ViewData["origi"] = origi;
+                return View(model);
+            }
 
             ViewData["origi"] = origi;
             model = new BriefViewModel();
@@ -1235,7 +1331,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        [Authorize(Roles = "Supervisor, Manager, Documents_Assistant")]
+        [Authorize(Roles = "Supervisor, Manager, Documents_Assistant, Frontdesk")]
         public async Task<IActionResult> Pending(int idError = 0)
         {
             UserEntity user_logged = await _context.Users
@@ -1330,7 +1426,7 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("Pending");
 
             if (messageViewModel.Origin == 2)
-                return RedirectToAction("Notifications","Messages");
+                return RedirectToAction("Notifications", "Messages");
 
             return RedirectToAction("Index");
         }
@@ -1416,14 +1512,14 @@ namespace KyoS.Web.Controllers
                     Client = client,
                     Diagnostic = diagnostic,
                     Principal = client_diagnosticViewModel.Principal
-                   
+
                 };
-                
+
                 _context.Add(client_diagnostic);
                 try
                 {
                     await _context.SaveChangesAsync();
-                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDiagnostic", _context.Clients_Diagnostics.Include(n => n.Diagnostic).Where(d => (d.Client.Id == client.Id )).ToList()) });
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDiagnostic", _context.Clients_Diagnostics.Include(n => n.Diagnostic).Where(d => (d.Client.Id == client.Id)).ToList()) });
                 }
                 catch (System.Exception ex)
                 {
@@ -1489,7 +1585,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDiagnostic", _context.Clients_Diagnostics.Where(d => d.Client.Id == 0).ToList()) });
         }
 
-        [Authorize(Roles = "Manager, Supervisor, Facilitator")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Frontdesk")]
         public async Task<IActionResult> AuditBrief()
         {
             UserEntity user_logged = _context.Users
@@ -1527,7 +1623,7 @@ namespace KyoS.Web.Controllers
                     FacilitatorEntity facilitator = await _context.Facilitators.FirstOrDefaultAsync(f => f.LinkedUser == user_logged.UserName);
 
                     client_List = _context.Clients
-                                         
+
                                           .Include(m => m.IndividualTherapyFacilitator)
                                           .Where(n => n.Clinic.Id == user_logged.Clinic.Id
                                               && n.MTPs.Count() > 0 && (n.IdFacilitatorPSR == facilitator.Id || n.IndividualTherapyFacilitator.Id == facilitator.Id || n.IdFacilitatorGroup == facilitator.Id))
@@ -1604,9 +1700,9 @@ namespace KyoS.Web.Controllers
                             auditClient = new AuditBIO();
                         }
                     }
-                    
+
                 }
-         
+
             }
 
             return View(auditClient_List);

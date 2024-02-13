@@ -35,23 +35,25 @@
                     <tbody>
                         @foreach (var item in Model)
                         {
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.FacilitatorName)
-                            </td>
-                            <td align="center">
-                                @Html.DisplayFor(modelItem => item.PSRReview)
-                            </td>
-                            <td align="center">
-                                @Html.DisplayFor(modelItem => item.IndReview)
-                            </td>
-                            <td align="center">
-                                @Html.DisplayFor(modelItem => item.GroupReview)
-                            </td>
-                            <td align="center">
-                                @(item.PSRReview + item.IndReview + item.GroupReview)
-                        </tr>
-
+                            @if (item.PSRReview > 0 || item.IndReview > 0 || item.GroupReview > 0)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.FacilitatorName)
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.PSRReview)
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.IndReview)
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.GroupReview)
+                                    </td>
+                                    <td align="center">
+                                        @(item.PSRReview + item.IndReview + item.GroupReview)
+                                </tr>
+                            }
                         }
                     </tbody>
                 </table>

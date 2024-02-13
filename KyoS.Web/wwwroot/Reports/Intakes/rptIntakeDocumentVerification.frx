@@ -1,0 +1,165 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="12/30/2023 17:56:50" ReportInfo.CreatorVersion="2021.1.0.0">
+  <Dictionary>
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pKiygLNrR2GSkUua6CZa7zWuDzNGOn7cjq7mn0WTOnccDkyyV5BLvtFa1BRlcYFBrNIgcm8oxDE7TBgquDN2NuQ==">
+      <TableDataSource Name="Clinics" DataType="System.Int32" Enabled="true" TableName="Clinics">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Name" DataType="System.String"/>
+        <Column Name="LogoPath" DataType="System.String"/>
+        <Column Name="Schema" DataType="System.Int32"/>
+        <Column Name="Address" DataType="System.String"/>
+        <Column Name="CEO" DataType="System.String"/>
+        <Column Name="City" DataType="System.String"/>
+        <Column Name="FaxNo" DataType="System.String"/>
+        <Column Name="Phone" DataType="System.String"/>
+        <Column Name="State" DataType="System.String"/>
+        <Column Name="ZipCode" DataType="System.String"/>
+        <Column Name="ClinicalDirector" DataType="System.String"/>
+        <Column Name="ProviderTaxId" DataType="System.String"/>
+        <Column Name="ProviderMedicaidId" DataType="System.String"/>
+      </TableDataSource>
+      <TableDataSource Name="Clients" DataType="System.Int32" Enabled="true" TableName="Clients">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Name" DataType="System.String"/>
+        <Column Name="Gender" DataType="System.Int32"/>
+        <Column Name="Code" DataType="System.String"/>
+        <Column Name="ClinicId" DataType="System.Int32"/>
+        <Column Name="DateOfBirth" DataType="System.DateTime"/>
+        <Column Name="ZipCode" DataType="System.String"/>
+        <Column Name="Status" DataType="System.Int32"/>
+        <Column Name="GroupId" DataType="System.Int32"/>
+        <Column Name="AlternativeAddress" DataType="System.String"/>
+        <Column Name="City" DataType="System.String"/>
+        <Column Name="Country" DataType="System.String"/>
+        <Column Name="CreatedBy" DataType="System.String"/>
+        <Column Name="CreatedOn" DataType="System.DateTime"/>
+        <Column Name="DoctorId" DataType="System.Int32"/>
+        <Column Name="Email" DataType="System.String"/>
+        <Column Name="EmergencyContactId" DataType="System.Int32"/>
+        <Column Name="Ethnicity" DataType="System.Int32"/>
+        <Column Name="FullAddress" DataType="System.String"/>
+        <Column Name="LastModifiedBy" DataType="System.String"/>
+        <Column Name="LastModifiedOn" DataType="System.DateTime"/>
+        <Column Name="LegalGuardianId" DataType="System.Int32"/>
+        <Column Name="MaritalStatus" DataType="System.Int32"/>
+        <Column Name="MedicaidID" DataType="System.String"/>
+        <Column Name="OtherLanguage" DataType="System.String"/>
+        <Column Name="PhotoPath" DataType="System.String"/>
+        <Column Name="PreferredLanguage" DataType="System.Int32"/>
+        <Column Name="PsychiatristId" DataType="System.Int32"/>
+        <Column Name="Race" DataType="System.Int32"/>
+        <Column Name="SSN" DataType="System.String"/>
+        <Column Name="SignPath" DataType="System.String"/>
+        <Column Name="State" DataType="System.String"/>
+        <Column Name="Telephone" DataType="System.String"/>
+        <Column Name="TelephoneSecondary" DataType="System.String"/>
+        <Column Name="RelationShipOfLegalGuardian" DataType="System.Int32"/>
+        <Column Name="Service" DataType="System.Int32"/>
+        <Column Name="IndividualTherapyFacilitatorId" DataType="System.Int32"/>
+        <Column Name="AdmisionDate" DataType="System.DateTime"/>
+        <Column Name="PlaceOfBirth" DataType="System.String"/>
+        <Column Name="RelationShipOfEmergencyContact" DataType="System.Int32"/>
+        <Column Name="IdFacilitatorPSR" DataType="System.Int32"/>
+        <Column Name="OtherLanguage_Read" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="OtherLanguage_Speak" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="OtherLanguage_Understand" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="MedicareId" DataType="System.String"/>
+        <Column Name="DateOfClose" DataType="System.DateTime"/>
+        <Column Name="OnlyTCM" DataType="System.Boolean" BindableControl="CheckBox"/>
+      </TableDataSource>
+      <TableDataSource Name="Classifications" Alias="Signatures" DataType="System.Int32" Enabled="true" TableName="Classifications">
+        <Column Name="supervisorSignature" DataType="System.Byte[]" PropName="Id"/>
+        <Column Name="facilitatorSignature" DataType="System.Byte[]" PropName="Name"/>
+      </TableDataSource>
+      <TableDataSource Name="IntakeClientDocumentVerification" DataType="System.Int32" Enabled="true" TableName="IntakeClientDocumentVerification">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Client_FK" DataType="System.Int32"/>
+        <Column Name="Id_DriverLicense" DataType="System.String"/>
+        <Column Name="Social" DataType="System.String"/>
+        <Column Name="MedicaidId" DataType="System.String"/>
+        <Column Name="MedicareCard" DataType="System.String"/>
+        <Column Name="HealthPlan" DataType="System.String"/>
+        <Column Name="Passport_Resident" DataType="System.String"/>
+        <Column Name="Other_Name" DataType="System.String"/>
+        <Column Name="Other_Identification" DataType="System.String"/>
+        <Column Name="AdmissionedFor" DataType="System.String"/>
+        <Column Name="DateSignatureLegalGuardianOrClient" DataType="System.DateTime"/>
+        <Column Name="DateSignatureEmployee" DataType="System.DateTime"/>
+        <Column Name="CreatedBy" DataType="System.String"/>
+        <Column Name="CreatedOn" DataType="System.DateTime"/>
+        <Column Name="LastModifiedBy" DataType="System.String"/>
+        <Column Name="LastModifiedOn" DataType="System.DateTime"/>
+      </TableDataSource>
+    </MsSqlDataConnection>
+    <Parameter Name="nameEmployee" DataType="System.String"/>
+  </Dictionary>
+  <ReportPage Name="Page1" PaperWidth="215.9" PaperHeight="279.4" RawPaperSize="1" LeftMargin="5" TopMargin="5" RightMargin="5" BottomMargin="5" Watermark.Enabled="true" Watermark.Font="Arial, 60pt">
+    <ReportTitleBand Name="ReportTitle1" Width="778.3" Height="89.6">
+      <TextObject Name="Textbox12" Left="170.1" Top="9.45" Width="431.15" Height="20" CanGrow="true" Text="[Clinics.Name]" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 12pt, style=Bold"/>
+      <TextObject Name="Textbox64" Left="170.1" Top="31.33" Width="431.15" Height="22" CanGrow="true" Text="Community Mental Health Program" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 11pt, style=Bold"/>
+      <LineObject Name="Line3" Left="160.65" Top="14.45" Height="37.2"/>
+      <LineObject Name="Line4" Left="774.52" Top="74.6" Width="-776"/>
+      <PictureObject Name="Picture1" Left="18.9" Top="5.45" Width="103.95" Height="66.15"/>
+      <LineObject Name="Line6" Left="159.65" Top="13.45" Height="37.8"/>
+      <LineObject Name="Line7" Left="774.9" Top="73.7" Width="-776"/>
+    </ReportTitleBand>
+    <DataBand Name="Data1" Top="93.45" Width="778.3" Height="808.8">
+      <TextObject Name="Text304" Left="3" Top="72.6" Width="102.06" Height="17.01" Text="Client's Name:" HorzAlign="Right" VertAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text305" Left="106.95" Top="70.6" Width="313.36" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Clients.Name]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text48" Left="1" Top="133.85" Width="774.9" Height="132.3" Text="This form is to verify client’s identity in order to prevent intentional deception, misrepresentation or unauthorized services, which may constitute fraud under federal and state laws related to Medicaid. The use of this form is &lt;u&gt;&lt;b&gt;mandatory&lt;/b&gt;&lt;/u&gt; when copies of original documents &lt;u&gt;&lt;b&gt;cannot&lt;/b&gt;&lt;/u&gt; be obtained (you must provide reason). &#13;&#10;The information on this form is for identity verification purpose only and will be kept in the strictest confidentiality, as required by law, and will not be shared with any entity or person outside the agency, unless so requested by client/legal guardian.&#13;&#10;&#13;&#10;I hereby certify that the following original identification documents were produced/presented to me by client/legal guardian (check all IDs presented and verified):" HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text318" Left="170.1" Width="431.15" Height="22" CanGrow="true" Text="ID Documents Verification Form" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 12pt, style=Bold"/>
+      <TextObject Name="Text320" Left="464.5" Top="72.15" Width="102.06" Height="17.01" Text="Record Nro:" HorzAlign="Right" VertAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text321" Left="568.45" Top="70.15" Width="124.36" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Clients.Code]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TableObject Name="Table1" Left="80.05" Top="283.5" Width="614.25" Height="211.68">
+        <TableColumn Name="Column1" Width="340.2"/>
+        <TableColumn Name="Column2" Width="274.05"/>
+        <TableRow Name="Row1" Height="26.46">
+          <TableCell Name="Cell1" Border.Lines="All" Fill.Color="Silver" Text="Type of Document" VertAlign="Center" Font="Arial, 10pt, style=Bold, Italic"/>
+          <TableCell Name="Cell2" Border.Lines="All" Fill.Color="Silver" Text="Number" VertAlign="Center" Font="Arial, 10pt, style=Bold, Italic"/>
+        </TableRow>
+        <TableRow Name="Row2" Height="26.46">
+          <TableCell Name="Cell6" Border.Lines="All" Text="State ID or Driver’s License" VertAlign="Center" Font="Arial, 10pt"/>
+          <TableCell Name="Cell7" Border.Lines="All" Text="[IntakeClientDocumentVerification.Id_DriverLicense]" VertAlign="Center" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row3" Height="26.46">
+          <TableCell Name="Cell11" Border.Lines="All" Text="Social Security Card" VertAlign="Center" Font="Arial, 10pt"/>
+          <TableCell Name="Cell12" Border.Lines="All" Text="[IntakeClientDocumentVerification.Social]" VertAlign="Center" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row4" Height="26.46">
+          <TableCell Name="Cell16" Border.Lines="All" Text="Medicaid Recipient ID Card" VertAlign="Center" Font="Arial, 10pt"/>
+          <TableCell Name="Cell17" Border.Lines="All" Text="[IntakeClientDocumentVerification.MedicaidId]" VertAlign="Center" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row8" Height="26.46">
+          <TableCell Name="Cell27" Border.Lines="All" Text="Medicare Card  " VertAlign="Center" Font="Arial, 10pt"/>
+          <TableCell Name="Cell28" Border.Lines="All" Text="[IntakeClientDocumentVerification.MedicareCard]" VertAlign="Center" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row7" Height="26.46">
+          <TableCell Name="Cell25" Border.Lines="All" Text="Health Plan (HMO) Member ID Card  " VertAlign="Center" Font="Arial, 10pt"/>
+          <TableCell Name="Cell26" Border.Lines="All" Text="[IntakeClientDocumentVerification.HealthPlan]" VertAlign="Center" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row6" Height="26.46">
+          <TableCell Name="Cell23" Border.Lines="All" Text="Passport/Residence Card " VertAlign="Center" Font="Arial, 10pt"/>
+          <TableCell Name="Cell24" Border.Lines="All" Text="[IntakeClientDocumentVerification.Passport_Resident]" VertAlign="Center" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row5" Height="26.46">
+          <TableCell Name="Cell21" Border.Lines="All" Text="Other: [IntakeClientDocumentVerification.Other_Name]" VertAlign="Center" Font="Arial, 10pt"/>
+          <TableCell Name="Cell22" Border.Lines="All" Text="[IntakeClientDocumentVerification.Other_Identification]" VertAlign="Center" Font="Arial, 10pt"/>
+        </TableRow>
+      </TableObject>
+      <PictureObject Name="Picture3" Left="166.12" Top="701.3" Width="95" Height="63.45" DataColumn="Signatures.facilitatorSignature"/>
+      <TextObject Name="Text316" Left="76.07" Top="782.25" Width="264.6" Height="24.57" CanGrow="true" Text="Employee / Signature" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
+      <LineObject Name="Line17" Left="344.67" Top="780.8" Width="-268.38"/>
+      <TextObject Name="Text317" Left="75.62" Top="761.9" Width="268.38" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[nameEmployee]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
+      <PictureObject Name="Picture4" Left="169.12" Top="595.35" Width="95" Height="63.45" DataColumn="Signatures.supervisorSignature"/>
+      <TextObject Name="Text324" Left="75.97" Top="676.3" Width="264.6" Height="25.7" CanGrow="true" Text="Client / Parent / Legal Guardian Signature" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
+      <LineObject Name="Line18" Left="345.67" Top="674.85" Width="-268.38"/>
+      <TextObject Name="Text325" Left="75.6" Top="655.95" Width="268.38" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Clients.Name]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text291" Left="532.22" Top="676.47" Width="153.09" Height="24.57" CanGrow="true" Text="Date" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
+      <LineObject Name="Line16" Left="687.42" Top="675.3" Width="-154.98"/>
+      <TextObject Name="Text292" Left="532.22" Top="656.06" Width="158.76" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[IntakeClientDocumentVerification.DateSignatureLegalGuardianOrClient]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text322" Left="532.22" Top="782.31" Width="153.09" Height="24.57" CanGrow="true" Text="Date" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
+      <LineObject Name="Line19" Left="687.42" Top="780.14" Width="-154.98"/>
+      <TextObject Name="Text323" Left="532.22" Top="761.9" Width="158.76" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[IntakeClientDocumentVerification.DateSignatureEmployee]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
+    </DataBand>
+  </ReportPage>
+</Report>

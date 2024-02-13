@@ -1,0 +1,37 @@
+﻿@model KyoS.Web.Models.TCMTransferViewModel
+@{
+    Layout = null;
+}
+
+<div class="row">
+    <form asp-action="ReturnTransfer">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="IdTCMClient" />
+        <input type="hidden" asp-for="IdCaseManagerFrom" />
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="TCMClient.Client.Name" class="control-label">Client Name</label>
+                <input asp-for="TCMClient.Client.Name" class="form-control" readonly />
+                <span asp-validation-for="TCMClient.Client.Name" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="TCMAssignedFrom.Name" class="control-label">Return case to TCM previous </label>
+                <input asp-for="TCMAssignedFrom.Name" class="form-control" readonly />
+                <span asp-validation-for="TCMAssignedFrom.Name" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="container-fluid">
+            &nbsp;
+        </div>
+        <div class="col-md-12">
+            <div class="col-md-offset-9">
+                <input type="submit" value="Return" class="btn btn-primary" />
+                <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </form>
+</div>
+

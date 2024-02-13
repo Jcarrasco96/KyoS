@@ -54,13 +54,16 @@
                             <th class="col-md-2" style="text-align:center;">
                                 @Html.DisplayNameFor(model => model.Client.AdmisionDate)
                             </th>
-                           <th class="col-md-1" style="text-align:center;">
-                                Code
+                            <th class="col-md-1" style="text-align:center;">
+                                Case TCM
                             </th>
                             <th class="col-md-1" style="text-align:center;">
                                 Status
                             </th>
-                            <th class="col-md-1">
+                            <th class="col-md-1" style="text-align:center;">
+                                Signature
+                            </th>
+                            <th class="col-md-2">
                             </th>
                         </tr>
                     </thead>
@@ -88,7 +91,6 @@
                                     <td align="center">
                                         @Html.DisplayFor(modelItem => item.Client.AdmisionDate)
                                     </td>
-                                    
                                     <td align="center">
                                         @Html.DisplayFor(modelItem => item.CaseNumber)
                                     </td>
@@ -106,18 +108,40 @@
                                             </span>
                                         }
                                     </td>
-                                    @if (User.IsInRole("CaseManager"))
-                                    {
-                                        @*<td align="right">
-                                            <a asp-action="Edit" asp-controller="Clients" asp-route-id="@item.Client.Id" asp-route-origin="2" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i></a>
-                                        </td>
-                                    }
-                                    else
-                                    {*@
-                                        <td align="right">
-                                            <a asp-action="Details" asp-controller="Clients" asp-route-id="@item.Id" class="btn btn-info" title="Details"><i class="glyphicon glyphicon-align-justify"></i></a>
-                                        </td>
-                                    }
+                                    <td align="center">
+                                        @if (item.Client.SignPath == string.Empty || item.Client.SignPath == null)
+                                        {
+                                            <span class="label label-danger">
+                                                No
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="label label-success">
+                                                Yes
+                                            </span>
+                                        }
+                                    </td>
+                                    <td align="right">
+                                        @if (User.IsInRole("CaseManager") )
+                                        {
+                                            <a asp-action="EditSignature" asp-route-id="@item.Id" class="btn btn-warning" title="Edit client's signature"><i class="glyphicon glyphicon-cloud-upload"></i></a>
+                                            <a asp-action="Edit" asp-controller="Clients" asp-route-id="@item.Client.Id" asp-route-origin="2" class="btn btn-warning" title="Edit client"><i class="glyphicon glyphicon-pencil"></i></a>
+                                        }
+                                        else
+                                        { 
+                                            @if (User.IsInRole("TCMSupervisor"))
+                                            {
+                                                <a asp-action="EditSignature" asp-route-id="@item.Id" class="btn btn-warning" title="Edit client's signature"><i class="glyphicon glyphicon-cloud-upload disabled" ></i></a>
+                                                <a asp-action="Details" asp-controller="Clients" asp-route-id="@item.Client.Id" asp-route-origin="1" class="btn btn-info" title="Details"><i class="glyphicon glyphicon-align-justify"></i></a>
+                                            }
+                                            else
+                                            {
+                                                <a asp-action="EditSignature" asp-route-id="@item.Id" class="btn btn-warning" title="Edit client's signature"><i class="glyphicon glyphicon-cloud-upload disabled"></i></a>
+                                                <a asp-action="Details" asp-controller="Clients" asp-route-id="@item.Client.Id" asp-route-origin="1" class="btn btn-info disabled" title="Details"><i class="glyphicon glyphicon-align-justify"></i></a>
+                                            }
+                                        }
+                                    </td>
                                 </tr>
                             }
                             @if (item.Status == KyoS.Common.Enums.StatusType.Open)
@@ -158,18 +182,40 @@
                                             </span>
                                         }
                                     </td>
-                                    @if (User.IsInRole("CaseManager"))
-                                    {
-                                        @*<td align="right">
-                                            <a asp-action="Edit" asp-controller="Clients" asp-route-id="@item.Client.Id" asp-route-origin="2" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i></a>
-                                       </td>
-                                    }
-                                    else
-                                    {*@
-                                        <td align="right">
-                                            <a asp-action="Details" asp-controller="Clients" asp-route-origin="1" asp-route-id="@item.Id" class="btn btn-info" title="Details"><i class="glyphicon glyphicon-align-justify"></i></a>
-                                        </td>
-                                    }
+                                    <td align="center">
+                                        @if (item.Client.SignPath == string.Empty || item.Client.SignPath == null)
+                                        {
+                                            <span class="label label-danger">
+                                                No
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="label label-success">
+                                                Yes
+                                            </span>
+                                        }
+                                    </td>
+                                    <td align="right">
+                                        @if (User.IsInRole("CaseManager"))
+                                        {
+                                            <a asp-action="EditSignature" asp-route-id="@item.Client.Id" class="btn btn-warning" title="Edit client's signature"><i class="glyphicon glyphicon-cloud-upload"></i></a>
+                                            <a asp-action="Edit" asp-controller="Clients" asp-route-id="@item.Client.Id" asp-route-origin="2" class="btn btn-warning" title="Edit client"><i class="glyphicon glyphicon-pencil"></i></a>
+                                        }
+                                        else
+                                        {
+                                            @if (User.IsInRole("CaseManager") || User.IsInRole("TCMSupervisor"))
+                                            {
+                                                <a asp-action="EditSignature" asp-route-id="@item.Client.Id" class="btn btn-warning" title="Edit client's signature"><i class="glyphicon glyphicon-cloud-upload disabled"></i></a>
+                                                <a asp-action="Details" asp-controller="Clients" asp-route-id="@item.Client.Id" asp-route-origin="1" class="btn btn-info" title="Details"><i class="glyphicon glyphicon-align-justify"></i></a>
+                                            }
+                                            else
+                                            {
+                                                <a asp-action="EditSignature" asp-route-id="@item.Client.Id" class="btn btn-warning" title="Edit client's signature"><i class="glyphicon glyphicon-cloud-upload disabled"></i></a>
+                                                <a asp-action="Details" asp-controller="Clients" asp-route-id="@item.Client.Id" asp-route-origin="1" class="btn btn-info disabled" title="Details"><i class="glyphicon glyphicon-align-justify"></i></a>
+                                            }
+                                        }
+                                    </td>
                                 </tr>
                             }
                         }

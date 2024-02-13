@@ -13,17 +13,27 @@
         <li class="active">Medical History</li>
     </ul><!--.breadcrumb-->
 </div>
-
+@if ((Model.Count() > 0) && (Model.ElementAt(0).Clinic.Setting.MentalHealthClinic == true) && (Model.ElementAt(0).Clinic.Setting.MHProblems == true))
+{
+    <a onclick="showInPopupLg('@Url.Action("AuditMedicalHistory", "Intakes", null, Context.Request.Scheme)','Audit Medical History')" class="btn btn-danger" title="Audit Client"><i class="glyphicon glyphicon-alert"></i>&nbsp;&nbsp;Audit medical history</a>
+}
+else
+{
+    <a class="btn btn-danger disabled" title="Audit Clients"><i class="glyphicon glyphicon-alert"></i>&nbsp;&nbsp;Audit Clients</a>
+}
+<div>
+    &nbsp;
+</div>
 <div class="row">
     <!--<div class="col-md-12">-->
-        @*<div class="alert alert-warning" role="alert">
-            <span class="sr-only"></span>*@
-        @*<strong>Note: </strong> All clients will be displayed, orange color means the client has not intake documents*@
-        @*</div>*@
+    @*<div class="alert alert-warning" role="alert">
+        <span class="sr-only"></span>*@
+    @*<strong>Note: </strong> All clients will be displayed, orange color means the client has not intake documents*@
+    @*</div>*@
     <!--</div>-->
     @*<div class="col-md-12">
-        &nbsp;
-    </div>*@
+            &nbsp;
+        </div>*@
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
@@ -102,7 +112,7 @@
                                         {
                                             <a class="btn btn-warning disabled" title="New Intake"><i class="glyphicon glyphicon-plus"></i></a>
                                         }
-                                       
+                                        <a asp-action="PrintMedicalHistory" asp-route-id="@item.Id" class="btn btn-success disabled" title="Print Medical History" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                     </td>
                                 </tr>
                             }
@@ -153,7 +163,7 @@
                                         {
                                             <a class="btn btn-warning disabled" title="Edit Medical History"><i class="glyphicon glyphicon-pencil"></i></a>
                                         }
-                                            <a asp-action="PrintMedicalHistory" asp-route-id="@item.Id" class="btn btn-success" title="Print Medical History" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                        <a asp-action="PrintMedicalHistory" asp-route-id="@item.Id" class="btn btn-success" title="Print Medical History" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                     </td>
                                 </tr>
                             }
@@ -165,6 +175,7 @@
     </div>
 </div>
 
+<partial name="_ModalPopupLg" />
 <partial name="_DeleteDialog" />
 
 @section Scripts {

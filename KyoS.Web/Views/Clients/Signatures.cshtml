@@ -25,6 +25,9 @@
                 <table class="table table-hover table-responsive table-striped" id="MyTable">
                     <thead>
                         <tr>
+                            <th class="col-md-1">
+                               
+                            </th>
                             <th class="col-md-3">
                                 @Html.DisplayNameFor(model => model.Name)
                             </th>
@@ -37,16 +40,13 @@
                             <th class="col-md-1" style="text-align:center;">
                                 Admission
                             </th>
-                            <th class="col-md-2" style="text-align:center;">
-                                Individual Therapy
-                            </th>
                             <th class="col-md-1" style="text-align:center;">
                                 Status
                             </th>
                             <th class="col-md-1" style="text-align:center;">
                                 Sign
                             </th>
-                            <th class="col-md-1">
+                            <th class="col-md-2">
                             </th>
                         </tr>
                     </thead>
@@ -56,6 +56,56 @@
                             @if (item.Status == KyoS.Common.Enums.StatusType.Close)
                             {
                                 <tr style="color: darkgrey;">
+                                    @if (item.LegalGuardian != null)
+                                    {
+                                        <td align="center">
+                                            @if (item.LegalGuardian != null)
+                                            {
+                                                <a class="icon-plus-sign-alt"></a>
+                                            }                                            
+                                            <div style="display:none">
+                                                <table class="table table-striped table-bordered">
+                                                    <tr>
+                                                        <th class="col-md-3" style="text-align:center">Name</th>
+                                                        <th class="col-md-2" style="text-align:center">RelationShip</th>
+                                                        <th class="col-md-2" style="text-align:center">Phone</th>
+                                                        <th class="col-md-3" style="text-align:center">Address</th>
+                                                        <th class="col-md-1" style="text-align:center">Sign</th>
+                                                        <th class="col-md-1"></th>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td align="center">@item.LegalGuardian.Name</td>
+                                                        <td align="center">@item.RelationShipOfLegalGuardian</td>
+                                                        <td align="center">@item.LegalGuardian.Telephone</td>
+                                                        <td align="center">@item.LegalGuardian.Address</td>
+                                                        <td align="center">
+                                                            @if (item.LegalGuardian.SignPath == string.Empty || item.LegalGuardian.SignPath == null)
+                                                            {
+                                                                <span class="label label-danger">
+                                                                    No
+                                                                </span>
+                                                            }
+                                                            else
+                                                            {
+                                                                <span class="label label-success">
+                                                                    Yes
+                                                                </span>
+                                                            }
+                                                        </td>
+                                                        <td align="center">
+                                                            <a asp-action="EditSignatureLegalGuardian" asp-route-id="@item.LegalGuardian.Id" class="btn btn-warning" title="Edit Legal Guradian's signature"><i class="glyphicon glyphicon-cloud-upload"></i></a>
+                                                        </td>
+                                                    </tr>
+
+                                                </table>
+                                            </div>
+                                        </td>
+                                    }
+                                    else
+                                    { 
+                                        <td></td>
+                                    }
                                     <td>
                                         @if (item.Gender == KyoS.Common.Enums.GenderType.Female)
                                         {
@@ -86,12 +136,6 @@
                                         @Html.DisplayFor(modelItem => item.AdmisionDate)
                                     </td>
                                     <td align="center">
-                                        @if (item.IndividualTherapyFacilitator != null)
-                                        {
-                                            @Html.DisplayFor(modelItem => item.IndividualTherapyFacilitator.Name)
-                                        }
-                                    </td>
-                                    <td align="center">
                                         @if (item.Status == KyoS.Common.Enums.StatusType.Open)
                                         {
                                             <span class="label label-success">
@@ -106,7 +150,7 @@
                                         }
                                     </td>   
                                      <td align="center">
-                                        @if (item.SignPath == null)
+                                        @if (item.SignPath == string.Empty || item.SignPath == null)
                                         {
                                             <span class="label label-danger">
                                                 No
@@ -127,6 +171,60 @@
                             @if (item.Status == KyoS.Common.Enums.StatusType.Open)
                             {
                                 <tr>
+                                   @if (item.LegalGuardian != null)
+                                    {
+                                        <td align="center">
+                                            @if (item.LegalGuardian != null)
+                                            {
+                                                <a class="icon-plus-sign-alt"></a>
+                                            }
+                                            else
+                                            {
+
+                                            }
+                                            <div style="display:none">
+                                                <table class="table table-striped table-bordered">
+                                                    <tr>
+                                                        <th class="col-md-3" style="text-align:center">Name</th>
+                                                        <th class="col-md-2" style="text-align:center">RelationShip</th>
+                                                        <th class="col-md-2" style="text-align:center">Phone</th>
+                                                        <th class="col-md-3" style="text-align:center">Address</th>
+                                                        <th class="col-md-1" style="text-align:center">Sign</th>
+                                                        <th class="col-md-1"></th>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td align="center">@item.LegalGuardian.Name</td>
+                                                        <td align="center">@item.RelationShipOfLegalGuardian</td>
+                                                        <td align="center">@item.LegalGuardian.Telephone</td>
+                                                        <td align="center">@item.LegalGuardian.Address</td>
+                                                        <td align="center">
+                                                            @if (item.LegalGuardian.SignPath == string.Empty || item.LegalGuardian.SignPath == null)
+                                                            {
+                                                                <span class="label label-danger">
+                                                                    No
+                                                                </span>
+                                                            }
+                                                            else
+                                                            {
+                                                                <span class="label label-success">
+                                                                    Yes
+                                                                </span>
+                                                            }
+                                                        </td>
+                                                        <td align="center">
+                                                            <a asp-action="EditSignatureLegalGuardian" asp-route-id="@item.LegalGuardian.Id" class="btn btn-warning" title="Edit Legal Guradian's signature"><i class="glyphicon glyphicon-cloud-upload"></i></a>
+                                                        </td>
+                                                    </tr>
+
+                                                </table>
+                                            </div>
+                                        </td>
+                                    }
+                                    else
+                                    { 
+                                        <td></td>
+                                    }
                                     <td>
                                         @if (item.Gender == KyoS.Common.Enums.GenderType.Female)
                                         {
@@ -157,12 +255,6 @@
                                         @Html.DisplayFor(modelItem => item.AdmisionDate)
                                     </td>
                                     <td align="center">
-                                        @if (item.IndividualTherapyFacilitator != null)
-                                        {
-                                            @Html.DisplayFor(modelItem => item.IndividualTherapyFacilitator.Name)
-                                        }
-                                    </td>
-                                    <td align="center">
                                         @if (item.Status == KyoS.Common.Enums.StatusType.Open)
                                         {
                                             <span class="label label-success">
@@ -177,7 +269,7 @@
                                         }
                                     </td>
                                     <td align="center">
-                                        @if (item.SignPath == null)
+                                        @if (item.SignPath == string.Empty || item.SignPath == null)
                                         {
                                             <span class="label label-danger">
                                                 No
@@ -211,7 +303,7 @@
     <script src="~/js/jquery.dataTables.min.js"></script>
 
     <script type="text/javascript">
-                        $(document).ready(function () {
+         $(document).ready(function () {
                             $('#MyTable').DataTable({
                                 "order": [[0, "asc"]],
                                 "pageLength": 100
@@ -229,6 +321,19 @@
                                 window.location.href = url + '/' + item_to_delete;
                             });
                         });
+        $(function () {
+
+            //Assign Click event to Plus Image.
+            $("body").on("click", "a[class*='icon-plus-sign-alt']", function () {
+                $(this).closest("tr").after("<tr><td></td><td colspan = '999'>" + $(this).next().html() + "</td></tr>");
+                $(this).attr("class", "icon-minus-sign-alt");
+            });
+            //Assign Click event to Minus Image.
+            $("body").on("click", "a[class*='icon-minus-sign-alt']", function () {
+                $(this).attr("class", "icon-plus-sign-alt");
+                $(this).closest("tr").next().remove();
+            });
+        });
     </script>
 }
 

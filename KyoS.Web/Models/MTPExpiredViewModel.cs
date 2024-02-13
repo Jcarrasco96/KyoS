@@ -14,6 +14,7 @@ namespace KyoS.Web.Models
         public int ExpiredDays { get; set; }
         public DateTime DateExpired { get; set; }
         public int TypeDocument { get; set; }
+        public int MtpReviewCount { get; set; }
 
     }
 }

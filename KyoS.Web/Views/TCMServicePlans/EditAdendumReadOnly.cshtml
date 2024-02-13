@@ -1,40 +1,47 @@
 ﻿@model KyoS.Web.Models.TCMAdendumViewModel
 @{
-    ViewData["Title"] = "Edit Addendum";
+    ViewData["Title"] = "Approve Addendum";
     ViewData["idAddendum"] = Model.Id;
-
 }
 
 <!DOCTYPE html>
 
 <html>
-<link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
 <head>
     <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
 </head>
 <body>
     <div class="breadcrumbs" id="breadcrumbs">
         <ul class="breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                @if (ViewData["aview"].ToString() == "0")
+
+                @if (ViewData["origin"].ToString() == "5")
                 {
-                    @Html.ActionLink("TCM Addendum Pending", "AdendumApproved", "TCMServicePlans", new { approved = 1, caseNumber = Model.TcmServicePlan.TcmClient.CaseNumber, aview = @ViewData["aview"] })
+                    @Html.ActionLink("TCM Client History", "TCMCaseHistory", "TCMClients", new { id = @Model.TcmServicePlan.TcmClient_FK })
                 }
-                @if (ViewData["aview"].ToString() == "1")
+                else
                 {
-                    @Html.ActionLink("TCM Addendum all", "Adendum", "TCMServicePlans", new { aview = @ViewData["aview"] })
-                }
-                @if (ViewData["aview"].ToString() == "2")
-                {
-                    @Html.ActionLink("TCM Addendum Notification", "Notifications", "TCMMessages")
+                    @if (ViewData["aview"].ToString() == "0")
+                    {
+                        @Html.ActionLink("TCM Addendum Pending", "AdendumApproved", "TCMServicePlans", new { approved = 1, caseNumber = Model.TcmServicePlan.TcmClient.CaseNumber, aview = @ViewData["aview"] })
+                    }
+                    @if (ViewData["aview"].ToString() == "1")
+                    {
+                        @Html.ActionLink("TCM Addendum all", "Adendum", "TCMServicePlans", new { aview = @ViewData["aview"] })
+                    }
+                    @if (ViewData["aview"].ToString() == "2")
+                    {
+                        @Html.ActionLink("TCM Addendum Notification", "Notifications", "TCMMessages")
+                    }
                 }
             </li>
-            <li class="active">Approve</li>
+            <li class="active">Approve Addendum</li>
         </ul><!--.breadcrumb-->
     </div>
 
-    <h4>Approve new Addendum</h4>
+    <h4>Approve Addendum</h4>
     <hr />
 
     <div class="row">
@@ -47,9 +54,6 @@
                 <input type="hidden" asp-for="CreatedOn" />
                 <partial name="TCMAddendumReadOnly" />
                 <div class="col-md-push-12">
-                    <div class="col-md-12 form-group">
-                        @* <a onclick="showInPopup('@Url.Action("CreateDomain", "TCMServicePlans", new {id = Model.Id}, Context.Request.Scheme)','Create domain of service plan')" class="btn btn-success" title="Create domain of this service plan"><i class="glyphicon glyphicon-plus"></i> Add Domain</a>*@
-                    </div>
                     <div class="col-md-12">
                         <div id="view-TCMdomain">
                             @await Html.PartialAsync("_ViewDomainsAddendum", Model.TcmDomain, ViewData)
@@ -57,27 +61,36 @@
                     </div>
                 </div>
                 <br />
+                <partial name="TCMAddendum1" />
+                <div class="col-md-12">
+                    <hr />
+                </div>
                 <div class="form-group col-md-12">
-                    <input type="submit" value="Approve" class="btn btn-primary" />
-                    @if (User.IsInRole("TCMSupervisor"))
+
+                    @if (User.IsInRole("TCMSupervisor") && ViewData["origin"].ToString() != "5")
                     {
+                        <input type="submit" value="Approve" class="btn btn-primary" />
                         <a class="btn btn-warning" onclick="showInPopup('@Url.Action("AddMessageAddendumEntity","TCMServicePlans",new {id = Model.Id, origi = @ViewData["aview"]},Context.Request.Scheme)','Add message to casemanager')" title="Not approved tcm addendum due to problems">Review</a>
+                    }
+                   
+                    @if (ViewData["origin"].ToString() == "5")
+                    {
+                        <a asp-action="TCMCaseHistory" asp-controller="TCMClients" asp-route-id="@Model.TcmServicePlan.TcmClient_FK" class="btn btn-success">Back</a>
                     }
                     else
                     {
-                        <a asp-action="Review" class="btn btn-warning disabled">Review</a>
-                    }
-                    @if (ViewData["aview"].ToString() == "0")
-                    {
-                        <a asp-action="AdendumApproved" asp-route-approved="1" asp-route-caseNumber="@Model.TcmServicePlan.TcmClient.CaseNumber" asp-route-aview="@ViewData["aview"]" class="btn btn-success">Back</a>
-                    }
-                    @if (ViewData["aview"].ToString() == "1")
-                    {
-                        <a asp-action="Adendum" asp-route-aview="@ViewData["aview"]" class="btn btn-success">Back</a>
-                    }
-                    @if (ViewData["aview"].ToString() == "2")
-                    {
-                        <a asp-action="Notifications" asp-controller="TCMMessages" class="btn btn-success">Back</a>
+                        @if (ViewData["aview"].ToString() == "0")
+                        {
+                            <a asp-action="AdendumApproved" asp-route-approved="1" asp-route-caseNumber="@Model.TcmServicePlan.TcmClient.CaseNumber" asp-route-aview="@ViewData["aview"]" class="btn btn-success">Back</a>
+                        }
+                        @if (ViewData["aview"].ToString() == "1")
+                        {
+                            <a asp-action="Adendum" asp-route-aview="@ViewData["aview"]" class="btn btn-success">Back</a>
+                        }
+                        @if (ViewData["aview"].ToString() == "2")
+                        {
+                            <a asp-action="Notifications" asp-controller="TCMMessages" class="btn btn-success">Back</a>
+                        }
                     }
                 </div>
             </div>
@@ -90,6 +103,7 @@
 
 
 <partial name="_ModalPopup" />
+<partial name="_ModalPopupLg" />
 <partial name="_DeleteDialog" />
 
 @section Scripts {

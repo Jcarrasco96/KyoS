@@ -16,7 +16,22 @@
         <ul class="breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                @Html.ActionLink("Adendums", "Index", "MTPs")
+                @if (Model.Origin == 0)
+                {
+                    @Html.ActionLink("Adendums", "IndexAdendum", "MTPs")
+                }
+                @if (Model.Origin == 1)
+                {
+                    @Html.ActionLink("Messages", "MessagesOfAddendums", "Messages")
+                }
+                @if (Model.Origin == 2)
+                {
+                    @Html.ActionLink("Adendums in Edition", "AdendumInEdition", "MTPs")
+                }
+                @if (Model.Origin == 3)
+                {
+                    @Html.ActionLink("Pending Adendums", "PendingAdendum", "MTPs")
+                }
             </li>
             <li class="active">Edit Addendum</li>
         </ul><!--.breadcrumb-->
@@ -33,9 +48,10 @@
             <input type="hidden" asp-for="CreatedBy" />
             <input type="hidden" asp-for="CreatedOn" />
             <input type="hidden" asp-for="LastModifiedBy" />
-            <input type="hidden" asp-for="LastModifiedOn" /> 
+            <input type="hidden" asp-for="LastModifiedOn" />
             <input type="hidden" asp-for="Origin" />
-            <partial name="_Adendums" />            
+            <input type="hidden" asp-for="Status" />
+            <partial name="_Adendums" />
             <div class="col-md-push-12">
                 <div class="col-md-12 form-group">
                     <a onclick="showInPopup('@Url.Action("CreateGoalModal", "MTPs", new {id =  @Model.IdMTP, idAdendum = @Model.Id}, Context.Request.Scheme)','Create goal of addendum')" class="btn btn-success" title="Create Goal of this addendum"><i class="glyphicon glyphicon-plus"></i> Add Goal</a>
@@ -61,6 +77,14 @@
                 @if (Model.Origin == 1)
                 {
                     <a asp-action="MessagesOfAddendums" asp-controller="Messages" class="btn btn-success">Back</a>
+                }
+                @if (Model.Origin == 2)
+                {
+                    <a asp-action="AdendumInEdition" class="btn btn-success">Back</a>
+                }
+                @if (Model.Origin == 3)
+                {
+                    <a asp-action="PendingAdendum" class="btn btn-success">Back</a>
                 }
             </div>
         </form>

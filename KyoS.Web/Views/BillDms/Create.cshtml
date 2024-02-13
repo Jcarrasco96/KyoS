@@ -1,0 +1,147 @@
+﻿@model KyoS.Web.Models.BillDmsViewModel
+@{
+    ViewData["Title"] = "DMS Invoice";
+}
+
+<link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
+
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home"></i>
+            @Html.ActionLink("Invoice history", "Index", "BillDms")
+        </li>
+        <li class="active">DMS Invoice Details</li>
+    </ul><!--.breadcrumb-->
+</div>
+
+<p>
+
+</p>
+
+<div class="row">
+    <div class="col-md-12">
+        @if (User.IsInRole("Admin"))
+        {
+            <form asp-action="Create" asp-route-dateBillclose="@DateTime.Today" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="Amount" />
+                <input type="hidden" asp-for="Units" />
+                <input type="hidden" asp-for="IdStatus" />
+
+                <div class="col-md-4">
+                    &nbsp;
+                </div>
+                <div class="col-md-2 form-group">
+                    <label asp-for="DateBillClose" class="control-label"> Close Date</label>
+                    <input asp-for="DateBillClose" class="form-control" id="cbDateClose" />
+                    <span asp-validation-for="DateBillClose" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-2 form-group">
+                    <br />
+                    <input type="submit" value="Generate next invoice for this period" class="btn btn-success" />
+                </div>
+                <div class="col-md-4 form-group">
+                    &nbsp;
+                </div>
+            </form>           
+        }
+        else
+        {
+            @if (User.IsInRole("Manager"))
+            {
+                <div class="col-md-5">
+                    &nbsp;
+                </div>
+                <div class="col-md-2 form-group">
+                    <label asp-for="DateBillClose" class="control-label">Close Date</label>
+                    <input asp-for="DateBillClose" class="form-control" id="cbDateClose" />
+                    <span asp-validation-for="DateBillClose" class="text-danger"></span>
+                </div>
+                <div class="col-md-5 form-group">
+                    &nbsp;
+                </div>
+            }
+        }
+    </div>
+    <div class="col-md-12">
+        <div class="col-md-2">
+            &nbsp;
+        </div>
+        <div class="col-md-1">
+            <div class="thumbnail list-group-item list-group-item-danger">
+                <p style="text-align:center">Clients</p>
+                <h4 style="text-align:center; font-weight:bold;">@Model.BillDmsDetails.GroupBy(n => n.NameClient).Count()</h4>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="thumbnail list-group-item list-group-item-danger">
+                <p style="text-align:center">CMH Notes</p>
+                <h4 style="text-align:center; font-weight:bold;">@Model.AmountCMHNotes</h4>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="thumbnail list-group-item list-group-item-danger">
+                <p style="text-align:center">TCM Notes</p>
+                <h4 style="text-align:center; font-weight:bold;">@Model.AmountTCMNotes</h4>
+            </div>
+        </div>
+        <div class="col-md-1">
+            <div class="thumbnail list-group-item list-group-item-danger">
+                <p style="text-align:center">Units</p>
+                <h4 style="text-align:center; font-weight:bold;">@Model.Units</h4>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="thumbnail list-group-item list-group-item-warning">
+                <p style="text-align:center">Estimated Income</p>
+                <h4 style="text-align:center; font-weight:bold;">$ @Model.Amount</h4>
+            </div>
+        </div>
+        <div class="col-md-2">
+            &nbsp;
+        </div>
+    </div>
+    <div class="col-md-12">
+        <hr />
+    </div>
+</div>
+
+<div class="row">
+    <div id="view-billdms">
+        @await Html.PartialAsync("_ViewBillDmsDetails", Model.BillDmsDetails)
+    </div>
+</div>
+
+<partial name="_ModalPopup" />
+<partial name="_DeleteDialog" />
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script src="~/js/jquery.dataTables.min.js"></script>
+    <script src="~/js/moment.min.js"></script>
+    <script src="~/js/datetime-moment.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $.fn.dataTable.moment('MM/DD/YYYY');
+
+            $('#MyTable').DataTable({
+                "order": [[3, "asc"]],
+                "pageLength": 100
+            });
+
+            $("#cbDateClose").change(function () {
+                var wwwUrlPath = window.document.location.href;
+                var pos = wwwUrlPath.indexOf('/BillDms/Create');
+                var localhostPath = wwwUrlPath.substring(0, pos);
+                var url = 'BillDms/Create';
+                window.location.href = localhostPath + '/' + url + '?dateBillclose=' + $("#cbDateClose").val();
+            })
+        })
+    </script>
+}
+

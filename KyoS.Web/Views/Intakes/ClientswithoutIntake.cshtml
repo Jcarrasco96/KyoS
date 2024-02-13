@@ -86,7 +86,7 @@
                                     @Html.DisplayFor(modelItem => item.Service)
                                 </td>
                                 <td align="right">
-                                    @if (User.IsInRole("Manager"))
+                                    @if (User.IsInRole("Manager") || User.IsInRole("Documents_Assistant"))
                                     {
                                         <a asp-action="Create" asp-controller="Intakes" asp-route-id="@item.Id"class="btn btn-primary" title="Create Intake"><i class="glyphicon glyphicon-plus"></i></a>
                                     }

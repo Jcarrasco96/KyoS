@@ -39,6 +39,7 @@ namespace KyoS.Web.Data.Entities
         public bool Priv { get; set; }
         public bool BioH0031HN { get; set; }
         public bool IDAH0031HO { get; set; }
+        public bool Code90791 { get; set; }
 
         //2. CLIENT’S PRESENTING PROBLEM 
         public string PresentingProblem { get; set; }
@@ -168,13 +169,13 @@ namespace KyoS.Web.Data.Entities
         public bool ClientFamilyAbusoTrauma { get; set; }
 
         [Display(Name = "Date of Abuse")]
-        [DataType(DataType.Date)]
-        public DateTime DateAbuse { get; set; }
+        
+        public string DateAbuse { get; set; }
         public string PersonInvolved { get; set; }
 
         [Display(Name = "Date of Approximate Date Report")]
-        [DataType(DataType.Date)]
-        public DateTime ApproximateDateReport { get; set; }
+        
+        public string ApproximateDateReport { get; set; }
 
         public string ApproximateDateReport_Where { get; set; }
         public string RelationShips { get; set; }
@@ -215,18 +216,24 @@ namespace KyoS.Web.Data.Entities
         public bool Takes3OrMore { get; set; }
         public bool WithoutWanting { get; set; }
         public bool NotAlwaysPhysically { get; set; }
+        //new
+        public bool AnyFood { get; set; }
+        public bool AnyEating { get; set; }
 
         public string If6_ReferredTo { get; set; }
 
         [Display(Name = "Date If 6 or referred")]
         [DataType(DataType.Date)]
-        public DateTime If6_Date { get; set; }
+        public DateTime? If6_Date { get; set; }
         public Bio_Appetite Appetite { get; set; }
         public Bio_Hydration Hydration { get; set; }
         public Bio_RecentWeightChange RecentWeight { get; set; }
 
         //7. PSYCHOSOCIAL HISTORY
         public string SubstanceAbuse { get; set; }
+        public bool MilitaryServiceHistory { get; set; }
+        public string MilitaryServiceHistory_Explain { get; set; }
+        public string VocationalAssesment { get; set; }
         public string LegalHistory { get; set; }
         public string PersonalFamilyPsychiatric { get; set; }
         public bool DoesClientRequired { get; set; }

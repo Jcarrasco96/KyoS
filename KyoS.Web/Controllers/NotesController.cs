@@ -559,7 +559,8 @@ namespace KyoS.Web.Controllers
                     Goals4 = goals,
                     Objetives4 = objs,
 
-                    Workday_Cient = workday_Client
+                    Workday_Cient = workday_Client,
+                    Setting = "53"
                 };
             }
             else
@@ -692,6 +693,7 @@ namespace KyoS.Web.Controllers
                     Objetives4 = _combosHelper.GetComboObjetives(((note_Activity.Count > 3) && (note_Activity[3].Objetive != null))
                                                                         ? note_Activity[3].Objetive.Goal.Id : 0),
                     Intervention4 = ((note_Activity.Count > 3) && (note_Activity[3].Objetive != null)) ? note_Activity[3].Objetive.Intervention : string.Empty,
+                    Setting = note.Setting
                 };
             }
             return View(noteViewModel);
@@ -759,7 +761,7 @@ namespace KyoS.Web.Controllers
                     noteEntity.Regression = (form["Progress"] == "Regression") ? true : false;
                     noteEntity.Decompensating = (form["Progress"] == "Decompensating") ? true : false;
                     noteEntity.UnableToDetermine = (form["Progress"] == "Unable") ? true : false;
-                    noteEntity.Setting = workday_Client.Client.MTPs.FirstOrDefault().Setting;
+                    noteEntity.Setting = model.Setting;
                     
                     //vinculo el mtp activo del cliente a la nota que se creará
                     Workday_Client workday_client = await _context.Workdays_Clients
@@ -912,6 +914,7 @@ namespace KyoS.Web.Controllers
                     note.ShortSpanned = model.ShortSpanned;
                     note.MildlyImpaired = model.MildlyImpaired;
                     note.SeverelyImpaired = model.SeverelyImpaired;
+                    note.Setting = model.Setting;
 
                     //actualizo el mtp activo del cliente a la nota que se creará
                     Workday_Client workday_client = await _context.Workdays_Clients
@@ -1208,7 +1211,7 @@ namespace KyoS.Web.Controllers
                                     .ThenInclude(n => n.Objetives)
                                     .FirstOrDefault(m => (m.Client.Id == workday_Client.Client.Id && m.Active == true));
 
-            //--------------compruebo que tenga algun objetivo que valide el servicio--------------------
+            //----------compruebo que tenga algun objetivo que valide el servicio----------//
             if (mtp != null)
             {
                 if (mtp.Goals.Where(n => n.Objetives.Where(o => o.DateResolved.Date >= workday_Client.Workday.Date && o.Goal.Service == workday_Client.Workday.Service && o.Compliment == false).Count() > 0).Count() == 0)
@@ -1225,10 +1228,8 @@ namespace KyoS.Web.Controllers
                         return RedirectToAction("NotesWithReview", "Notes", new { id = 0, expired = 1 });
                     if (origin == 5)
                         return RedirectToAction("MessagesOfNotes", "Messages");
-
                 }
             }
-
            
             List<Workday_Activity_Facilitator> activities;
             if (am == true)
@@ -1349,7 +1350,9 @@ namespace KyoS.Web.Controllers
                     stressManagement4 = activities[3].stressManagement == null ? false : Convert.ToBoolean(activities[3].stressManagement),
 
                     Workday_Cient = workday_Client,
-                    MTPId = mtp.Id
+                    MTPId = mtp.Id,
+                    Title = activities[0].TitleNote
+                   
                 };
             }
             else
@@ -1639,9 +1642,7 @@ namespace KyoS.Web.Controllers
                             return RedirectToAction(nameof(EditNoteP), new { id = model.Id, error = 5, origin = model.Origin });
                         }
                     }
-                    //Verify the client is not present in other services of notes at the same time
-                   
-
+                    
                     noteEntity = await _converterHelper.ToNotePEntity(model, true);
                     noteEntity.Setting = form["Setting"].ToString();
 
@@ -1668,7 +1669,7 @@ namespace KyoS.Web.Controllers
                         noteEntity.Attentive = true;
                     }
                                         
-                    // I will calculate teh real units of the note
+                    // I will calculate the real units of the note
                     int realUnits = 0;
                     realUnits = (model.Present1) ? realUnits + 4 : realUnits;
                     realUnits = (model.Present2) ? realUnits + 4 : realUnits;
@@ -2124,6 +2125,9 @@ namespace KyoS.Web.Controllers
                                                                            .Include(wc => wc.Workday)
                                                                            .ThenInclude(w => w.Week)
 
+                                                                           .Include(wc => wc.Schedule)
+                                                                           .ThenInclude(c => c.SubSchedules)
+
                                                                            .FirstOrDefaultAsync(wc => wc.Id == id);
 
             if (workday_Client == null)
@@ -2218,6 +2222,7 @@ namespace KyoS.Web.Controllers
 
             UserEntity user_logged = _context.Users
                                              .Include(u => u.Clinic)
+                                             .ThenInclude(u => u.Setting)
                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);            
 
             if (note == null)   //la nota no está creada
@@ -2230,11 +2235,32 @@ namespace KyoS.Web.Controllers
                     Goals1 = goals,
                     Objetives1 = objs,
                     Workday_Cient = workday_Client,
-                    Clients = _combosHelper.GetComboClientsForIndNotes(user_logged.Clinic.Id, workday_Client.Workday.Week.Id, facilitator_logged.Id, id),
                     IdClient = 0,
                     MTPId = 0,
-                    CodeBill = user_logged.Clinic.CodeIndTherapy
+                    CodeBill = user_logged.Clinic.CodeIndTherapy,
+                    Setting = "53"
                 };
+                if (user_logged.Clinic.Setting.IndNoteForAppointment == true)
+                {
+                    ClientEntity clientAppointment = AppointmentIndNote(facilitator_logged.Id, workday_Client.Workday.Date, workday_Client.Schedule.Id, workday_Client.Session);
+
+                    if (clientAppointment  != null)
+                    {
+                        List<SelectListItem> list = new List<SelectListItem>();
+                        list.Insert(0, new SelectListItem
+                        {
+                            Text = clientAppointment.Name,
+                            Value = $"{clientAppointment.Id}"
+                        });
+
+                        individualNoteViewModel.IdClient = clientAppointment.Id;
+                        individualNoteViewModel.Clients = list;
+                    }
+                }
+                else
+                {
+                    individualNoteViewModel.Clients = _combosHelper.GetComboClientsForIndNotes(user_logged.Clinic.Id, workday_Client.Workday.Week.Id, facilitator_logged.Id, id);
+                }                
             }
             else
             {
@@ -2307,7 +2333,8 @@ namespace KyoS.Web.Controllers
                     Objetives1 = _combosHelper.GetComboObjetives((note.Objective == null) ? 0 : note.Objective.Goal.Id),
                     Intervention1 = (note.Objective == null) ? string.Empty : note.Objective.Intervention,
                     MTPId = mtp.Id,
-                    IdSubSchedule = (note.SubSchedule == null) ? 0: note.SubSchedule.Id
+                    IdSubSchedule = (note.SubSchedule == null) ? 0: note.SubSchedule.Id,
+                    Setting = note.Setting
                 };
             }
 
@@ -2510,7 +2537,8 @@ namespace KyoS.Web.Controllers
                     note.CBT = model.CBT;
                     note.Psychodynamic = model.Psychodynamic;
                     note.BehaviorModification = model.BehaviorModification;
-                    note.Other_Intervention = model.Other_Intervention;  
+                    note.Other_Intervention = model.Other_Intervention;
+                    note.Setting = model.Setting;
                     
 
                     note.Objective = (model.IdObjetive1 != 0) ? await _context.Objetives.FirstOrDefaultAsync(o => o.Id == model.IdObjetive1) : null;
@@ -2634,6 +2662,7 @@ namespace KyoS.Web.Controllers
 
                                                           .Include(wc => wc.Client)
                                                           .ThenInclude(c => c.Clinic)
+                                                          .ThenInclude(c => c.Setting)
 
                                                           .Include(wc => wc.Client)
                                                           .ThenInclude(c => c.Group)
@@ -2799,7 +2828,8 @@ namespace KyoS.Web.Controllers
                     Goals2 = goals,
                     Objetives2 = objs,                    
 
-                    Workday_Cient = workday_Client
+                    Workday_Cient = workday_Client,
+                    Setting = "10"
                 };
             }
             else
@@ -2843,6 +2873,7 @@ namespace KyoS.Web.Controllers
                     PlanNote = note.PlanNote,
                     Status = note.Status,
                     CodeBill = workday_Client.CodeBill,
+                    Setting = note.Setting,
 
                     Groomed = note.Groomed,
                     Unkempt = note.Unkempt,
@@ -3211,6 +3242,7 @@ namespace KyoS.Web.Controllers
 
                                                           .Include(wc => wc.Client)
                                                           .ThenInclude(c => c.Clinic)
+                                                          .ThenInclude(c => c.Setting)
 
                                                           .Include(wc => wc.Client)
                                                           .ThenInclude(c => c.Group)
@@ -3348,7 +3380,9 @@ namespace KyoS.Web.Controllers
 
                     Workday_Cient = workday_Client,
                     Schema = workday_Client.Client.Clinic.SchemaGroup,
-                    Workday_Client_FK = workday_Client.Id
+                    Workday_Client_FK = workday_Client.Id,
+                    Setting = "10"
+                    
                 };
             }
             else
@@ -3392,6 +3426,7 @@ namespace KyoS.Web.Controllers
                     Status = note.Status,
                     CodeBill = workday_Client.CodeBill,
                     Schema = note.Schema,
+                    Setting = note.Setting,
                     
                     Other = note.Other,
                     Impaired = note.Impaired,
@@ -3658,7 +3693,7 @@ namespace KyoS.Web.Controllers
                     note.Withdrawn = model.Withdrawn;
                     note.Hostile = model.Hostile;
                     note.Schema = model.Schema;
-                    
+                    note.Setting = model.Setting;
                     
                     //actualizo el mtp activo del cliente a la nota que se creará                   
                     MTPEntity mtp = await _context.MTPs.FirstOrDefaultAsync(m => (m.Client.Id == workday_Client.Client.Id && m.Active == true));
@@ -3918,6 +3953,7 @@ namespace KyoS.Web.Controllers
                     Origin = origin,
                     CodeBill = workday_Client.Client.Clinic.CodeGroupTherapy,
                     GroupLeaderFacilitatorAbout = workday_Client.Workday.Workdays_Activities_Facilitators.ElementAt(0).Activity.Theme.Name,
+                    Setting = "10",
 
                     //IdTopic1 = (activities.Count > 0) ? activities[0].Activity.Theme.Id : 0,
                     Topic1 = (activities.Count > 0) ? activities[0].Activity.Theme.Name : string.Empty,
@@ -3928,7 +3964,8 @@ namespace KyoS.Web.Controllers
 
                     Workday_Cient = workday_Client,
                     Schema = workday_Client.Client.Clinic.SchemaGroup,
-                    Workday_Client_FK = workday_Client.Id
+                    Workday_Client_FK = workday_Client.Id,
+                    MTPId = mtp.Id
                 };
             }
             else
@@ -3972,6 +4009,7 @@ namespace KyoS.Web.Controllers
                     Status = note.Status,
                     CodeBill = workday_Client.CodeBill,
                     Schema = note.Schema,
+                    Setting = note.Setting,
                    
                     Other = note.Other,
                     Impaired = note.Impaired,
@@ -4041,7 +4079,7 @@ namespace KyoS.Web.Controllers
                     //Paso el IdGoal1 como parametro
                     Objetives1 = _combosHelper.GetComboObjetives(((note_Activity.Count > 0) && (note_Activity[0].Objetive != null)) ? note_Activity[0].Objetive.Goal.Id : 0),
                     Intervention1 = ((note_Activity.Count > 0) && (note_Activity[0].Objetive != null)) ? note_Activity[0].Objetive.Intervention : string.Empty,
-
+                    MTPId = mtp.Id
                 };
             }
             return View(noteViewModel);
@@ -4217,6 +4255,7 @@ namespace KyoS.Web.Controllers
                     note.Withdrawn = model.Withdrawn;
                     note.Hostile = model.Hostile;
                     note.Schema = model.Schema;
+                    note.Setting = model.Setting;
 
                     //actualizo el mtp activo del cliente a la nota que se creará                   
                     MTPEntity mtp = await _context.MTPs.FirstOrDefaultAsync(m => (m.Client.Id == workday_Client.Client.Id && m.Active == true));
@@ -4887,6 +4926,7 @@ namespace KyoS.Web.Controllers
                     Origin = origin,
                     Schema = note.Schema,
                     CodeBill = workday_Client.CodeBill,
+                    MTPId = _context.MTPs.FirstOrDefault(n => n.Active == true && n.Client.Id == workday_Client.Client.Id).Id,
 
                     OrientedX3 = note.OrientedX3,
                     NotTime = note.NotTime,
@@ -4958,6 +4998,7 @@ namespace KyoS.Web.Controllers
                     Origin = origin,
                     Schema = note.Schema,
                     CodeBill = workday_Client.CodeBill,
+                    MTPId = _context.MTPs.FirstOrDefault(n => n.Active == true && n.Client.Id == workday_Client.Client.Id).Id,
 
                     OrientedX3 = note.OrientedX3,
                     NotTime = note.NotTime,
@@ -5067,6 +5108,11 @@ namespace KyoS.Web.Controllers
                                              .ThenInclude(waf => waf.Activity)
                                              .ThenInclude(a => a.Theme)
 
+                                             .Include(n => n.Workday_Cient)
+                                             .ThenInclude(wc => wc.Client)
+                                             .ThenInclude(wc => wc.Clinic)
+                                             .ThenInclude(wc => wc.Setting)
+
                                              .FirstOrDefaultAsync(n => n.Id == id);
 
             if (note == null)
@@ -5123,6 +5169,7 @@ namespace KyoS.Web.Controllers
                     Schema = note.Schema,
                     Setting = note.Setting,
                     CodeBill = note.Workday_Cient.CodeBill,
+                    MTPId = _context.MTPs.FirstOrDefault(n => n.Active == true && n.Client.Id == note.Workday_Cient.Client.Id).Id,
 
                     Title = note.Title,
 
@@ -5280,7 +5327,9 @@ namespace KyoS.Web.Controllers
                     Confused4 = (note_Activity.Count > 3) ? note_Activity[3].Confused : false,
                     Aggresive4 = (note_Activity.Count > 3) ? note_Activity[3].Aggresive : false,
                     Resistant4 = (note_Activity.Count > 3) ? note_Activity[3].Resistant : false,
-                    Other4 = (note_Activity.Count > 3) ? note_Activity[3].Other : false
+                    Other4 = (note_Activity.Count > 3) ? note_Activity[3].Other : false,
+
+                    DateOfApprove = note.Workday_Cient.Workday.Date
                 };
             }
             
@@ -5304,7 +5353,7 @@ namespace KyoS.Web.Controllers
                                              .FirstOrDefaultAsync(n => n.Id == model.Id);
 
             note.Status = NoteStatus.Approved;
-            note.DateOfApprove = DateTime.Now;
+            note.DateOfApprove = model.DateOfApprove;
             note.Supervisor = await _context.Supervisors.FirstOrDefaultAsync(s => s.LinkedUser == User.Identity.Name);
 
             _context.Update(note);
@@ -5343,11 +5392,16 @@ namespace KyoS.Web.Controllers
             IndividualNoteEntity note = await _context.IndividualNotes
                                                       
                                                       .Include(n => n.Workday_Cient)
-                                                      .ThenInclude(wc => wc.Client)                                                  
+                                                      .ThenInclude(wc => wc.Client)
+                                                      .ThenInclude(wc => wc.Clinic)
+                                                      .ThenInclude(wc => wc.Setting)
 
                                                       .Include(n => n.Workday_Cient)
-                                                      .ThenInclude(wc => wc.Facilitator)   
-                                                      
+                                                      .ThenInclude(wc => wc.Facilitator)
+
+                                                      .Include(n => n.Workday_Cient)
+                                                      .ThenInclude(wc => wc.Workday)
+
                                                       .Include(n => n.Objective)
                                                       .ThenInclude(o => o.Goal)
                                                       .ThenInclude(o => o.MTP)
@@ -5367,7 +5421,8 @@ namespace KyoS.Web.Controllers
                 PlanNote = note.PlanNote,
                 Origin = origin,
                 CodeBill = workday_Client.CodeBill,
-
+                Setting = note.Setting,
+                
                 Groomed = note.Groomed,
                 Unkempt = note.Unkempt,
                 Disheveled = note.Disheveled,
@@ -5412,7 +5467,8 @@ namespace KyoS.Web.Controllers
                 Goal1 = (note.Objective == null) ? string.Empty : note.Objective.Goal.Number.ToString(),
                 Objetive1 = (note.Objective == null) ? string.Empty : note.Objective.Objetive,                
                 Intervention1 = (note.Objective == null) ? string.Empty : note.Objective.Intervention,
-                MTPId = note.Objective.Goal.MTP.Id
+                MTPId = note.Objective.Goal.MTP.Id,
+                DateOfApprove = note.Workday_Cient.Workday.Date
             };           
 
             return View(individualNoteViewModel);
@@ -5433,7 +5489,7 @@ namespace KyoS.Web.Controllers
 
 
             note.Status = NoteStatus.Approved;
-            note.DateOfApprove = DateTime.Now;
+            note.DateOfApprove = model.DateOfApprove;
             note.Supervisor = await _context.Supervisors.FirstOrDefaultAsync(s => s.LinkedUser == User.Identity.Name);
             _context.Update(note);
 
@@ -5475,6 +5531,9 @@ namespace KyoS.Web.Controllers
                                                  .ThenInclude(wc => wc.Client)
                                                  .ThenInclude(c => c.Group)
                                                  .ThenInclude(g => g.Facilitator)
+
+                                                 .Include(n => n.Workday_Cient)
+                                                 .ThenInclude(wc => wc.Workday)
 
                                                  .Include(n => n.GroupNotes_Activities)
                                                  .ThenInclude(na => na.Activity)
@@ -5569,7 +5628,9 @@ namespace KyoS.Web.Controllers
                 AnswerClient2 = note_Activity[1].AnswerClient,
                 AnswerFacilitator2 = note_Activity[1].AnswerFacilitator,
                 Goal2 = (note_Activity[1].Objetive != null) ? note_Activity[1].Objetive.Goal.Number.ToString() : string.Empty,
-                Objetive2 = (note_Activity[1].Objetive != null) ? note_Activity[1].Objetive.Objetive : string.Empty                
+                Objetive2 = (note_Activity[1].Objetive != null) ? note_Activity[1].Objetive.Objetive : string.Empty,
+                
+                DateOfApprove = note.Workday_Cient.Workday.Date
             };           
 
             return View(noteViewModel);
@@ -5643,6 +5704,9 @@ namespace KyoS.Web.Controllers
                                                  .ThenInclude(wc => wc.Client)
                                                  .ThenInclude(c => c.Group)
                                                  .ThenInclude(g => g.Facilitator)
+
+                                                 .Include(n => n.Workday_Cient)
+                                                 .ThenInclude(wc => wc.Workday)
 
                                                  .Include(n => n.GroupNotes2_Activities)
                                                  .ThenInclude(na => na.Activity)
@@ -5738,7 +5802,9 @@ namespace KyoS.Web.Controllers
                     Activity2 = note_Activity[1].Activity.Name,
                     AnswerClient2 = note_Activity[1].AnswerClient,
                     Goal2 = (note_Activity[1].Objetive != null) ? note_Activity[1].Objetive.Goal.Number.ToString() : string.Empty,
-                    Objetive2 = (note_Activity[1].Objetive != null) ? note_Activity[1].Objetive.Objetive : string.Empty
+                    Objetive2 = (note_Activity[1].Objetive != null) ? note_Activity[1].Objetive.Objetive : string.Empty,
+
+                    DateOfApprove = note.Workday_Cient.Workday.Date
                 };
                 return View(noteViewModel);
             }
@@ -5766,7 +5832,7 @@ namespace KyoS.Web.Controllers
 
 
             note.Status = NoteStatus.Approved;
-            note.DateOfApprove = DateTime.Now;
+            note.DateOfApprove = model.DateOfApprove;
             note.Supervisor = await _context.Supervisors.FirstOrDefaultAsync(s => s.LinkedUser == User.Identity.Name);
             _context.Update(note);
 
@@ -5804,15 +5870,23 @@ namespace KyoS.Web.Controllers
 
             GroupNote2Entity note = await _context.GroupNotes2
 
-                                                 .Include(n => n.Workday_Cient)
-                                                 .ThenInclude(wc => wc.Client)
-                                                 .ThenInclude(c => c.Group)
-                                                 .ThenInclude(g => g.Facilitator)
+                                                  .Include(n => n.Workday_Cient)
+                                                  .ThenInclude(wc => wc.Client)
+                                                  .ThenInclude(c => c.Group)
+                                                  .ThenInclude(g => g.Facilitator)
 
-                                                 .Include(n => n.GroupNotes2_Activities)
-                                                 .ThenInclude(na => na.Activity)
+                                                  .Include(n => n.Workday_Cient)
+                                                  .ThenInclude(wc => wc.Client)
+                                                  .ThenInclude(c => c.Clinic)
+                                                  .ThenInclude(g => g.Setting)
 
-                                                 .FirstOrDefaultAsync(n => n.Workday_Cient.Id == id);
+                                                  .Include(n => n.Workday_Cient)
+                                                  .ThenInclude(wc => wc.Workday)
+
+                                                  .Include(n => n.GroupNotes2_Activities)
+                                                  .ThenInclude(na => na.Activity)
+
+                                                  .FirstOrDefaultAsync(n => n.Workday_Cient.Id == id);
 
 
             List<GroupNote2_Activity> note_Activity = await _context.GroupNotes2_Activities
@@ -5822,6 +5896,7 @@ namespace KyoS.Web.Controllers
 
                                                                    .Include(n => n.Objetive)
                                                                    .ThenInclude(o => o.Goal)
+                                                                   .ThenInclude(o => o.MTP)
 
                                                                    .Where(na => na.GroupNote2.Id == note.Id)
                                                                    .ToListAsync();
@@ -5836,6 +5911,7 @@ namespace KyoS.Web.Controllers
                     Workday_Cient = workday_Client,
                     Status = note.Status,
                     CodeBill = workday_Client.CodeBill,
+                    Setting = note.Setting,
 
                     Other = note.Other,
                     Impaired = note.Impaired,
@@ -5898,7 +5974,10 @@ namespace KyoS.Web.Controllers
                     Activity1 = note_Activity[0].Activity.Name,
                     AnswerClient1 = note_Activity[0].AnswerClient,
                     Goal1 = (note_Activity[0].Objetive != null) ? note_Activity[0].Objetive.Goal.Number.ToString() : string.Empty,
-                    Objetive1 = (note_Activity[0].Objetive != null) ? note_Activity[0].Objetive.Objetive : string.Empty
+                    Objetive1 = (note_Activity[0].Objetive != null) ? note_Activity[0].Objetive.Objetive : string.Empty,
+                    MTPId = (note_Activity[0].Objetive != null) ? note_Activity[0].Objetive.Goal.MTP.Id : 0,
+
+                    DateOfApprove = note.Workday_Cient.Workday.Date
 
                 };
                
@@ -5923,7 +6002,7 @@ namespace KyoS.Web.Controllers
 
 
             note.Status = NoteStatus.Approved;
-            note.DateOfApprove = DateTime.Now;
+            note.DateOfApprove = model.DateOfApprove;
             note.Supervisor = await _context.Supervisors.FirstOrDefaultAsync(s => s.LinkedUser == User.Identity.Name);
             _context.Update(note);
 
@@ -5939,7 +6018,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction(nameof(GroupNotesSupervision));
         }
 
-        [Authorize(Roles = "Facilitator")]
+        [Authorize(Roles = "Facilitator, Supervisor")]
         public async Task<IActionResult> PrintNotes(int id)
         {
             WorkdayEntity workday = await _context.Workdays.FirstOrDefaultAsync(w => w.Id == id);
@@ -5959,7 +6038,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Facilitator")]
+        [Authorize(Roles = "Facilitator, Supervisor")]
         public async Task<IActionResult> PrintNotes(PrintNotesViewModel model, IFormCollection form)
         {
             var meridian = (form["classifications"] == "First") ? "AM" : "PM";
@@ -6226,11 +6305,6 @@ namespace KyoS.Web.Controllers
 
                 if ((workdayClient.IndividualNote != null) && (workdayClient.IndividualNote.Status == NoteStatus.Approved))
                 {
-                    if (workdayClient.IndividualNote.Supervisor.Clinic.Name == "DAVILA")
-                    {                       
-                       Stream stream = _reportHelper.DavilaIndNoteReportSchema1(workdayClient);
-                       fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"{workdayClient.Client.Name}.pdf"));                        
-                    }
                     if (workdayClient.IndividualNote.Supervisor.Clinic.Name == "FLORIDA SOCIAL HEALTH SOLUTIONS")
                     {
                         Stream stream = _reportHelper.FloridaSocialHSIndNoteReportSchema1(workdayClient);
@@ -6400,7 +6474,7 @@ namespace KyoS.Web.Controllers
             return File(_fileHelper.Zip(fileContentList), "application/zip", $"{workday.Date.ToShortDateString()}.zip");
         }
 
-        [Authorize(Roles = "Facilitator, Manager")]        
+        [Authorize(Roles = "Facilitator, Manager, Frontdesk, Supervisor")]        
         public IActionResult PrintNote(int id)
         {
             Workday_Client workdayClient = _context.Workdays_Clients
@@ -6501,7 +6575,7 @@ namespace KyoS.Web.Controllers
             return null;
         }
 
-        [Authorize(Roles = "Facilitator, Manager")]
+        [Authorize(Roles = "Facilitator, Manager, Frontdesk, Supervisor")]
         public IActionResult PrintNoteP(int id)
         {
             Workday_Client workdayClient = _context.Workdays_Clients
@@ -6581,10 +6655,88 @@ namespace KyoS.Web.Controllers
                 }
             }
 
+            if (workdayClient.NoteP.Supervisor.Clinic.Name == "PRINCIPLE CARE CENTER INC")
+            {
+                if (workdayClient.NoteP.Schema == Common.Enums.SchemaType.Schema3)
+                {
+                    Stream stream;
+                    if (!workdayClient.SharedSession)
+                        stream = _reportHelper.PrincipleCCINoteReportSchema3(workdayClient);
+                    else
+                        stream = _reportHelper.PrincipleCCINoteReportSchema3SS(workdayClient);
+                    return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+                }
+            }
+
+            if (workdayClient.NoteP.Supervisor.Clinic.Name == "SAPPHIRE MENTAL HEALTH CENTER LLC")
+            {
+                if (workdayClient.NoteP.Schema == Common.Enums.SchemaType.Schema3)
+                {
+                    Stream stream;
+                    if (!workdayClient.SharedSession)
+                        stream = _reportHelper.SapphireMHCNoteReportSchema3(workdayClient);
+                    else
+                        stream = _reportHelper.SapphireMHCNoteReportSchema3SS(workdayClient);
+                    return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+                }
+            }
+
+            if (workdayClient.NoteP.Supervisor.Clinic.Name == "MEDICAL & REHAB OF HILLSBOROUGH INC")
+            {
+                if (workdayClient.NoteP.Schema == Common.Enums.SchemaType.Schema3)
+                {
+                    Stream stream;
+                    if (!workdayClient.SharedSession)
+                        stream = _reportHelper.MedicalRehabNoteReportSchema3(workdayClient);
+                    else
+                        stream = _reportHelper.MedicalRehabNoteReportSchema3SS(workdayClient);
+                    return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+                }
+            }
+
+            if (workdayClient.NoteP.Supervisor.Clinic.Name == "MY FLORIDA CASE MANAGEMENT SERVICES LLC")
+            {
+                if (workdayClient.NoteP.Schema == Common.Enums.SchemaType.Schema3)
+                {
+                    Stream stream;
+                    if (!workdayClient.SharedSession)
+                        stream = _reportHelper.MyFloridaNoteReportSchema3(workdayClient);
+                    else
+                        stream = _reportHelper.MyFloridaNoteReportSchema3SS(workdayClient);
+                    return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+                }
+            }
+
+            if (workdayClient.NoteP.Supervisor.Clinic.Name == "ORION MENTAL HEALTH CENTER LLC")
+            {
+                if (workdayClient.NoteP.Schema == Common.Enums.SchemaType.Schema3)
+                {
+                    Stream stream;
+                    if (!workdayClient.SharedSession)
+                        stream = _reportHelper.OrionNoteReportSchema3(workdayClient);
+                    else
+                        stream = _reportHelper.OrionNoteReportSchema3SS(workdayClient);
+                    return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+                }
+            }
+
+            if (workdayClient.NoteP.Supervisor.Clinic.Name == "ALLIED HEALTH GROUP LLC")
+            {
+                if (workdayClient.NoteP.Schema == Common.Enums.SchemaType.Schema3)
+                {
+                    Stream stream;
+                    if (!workdayClient.SharedSession)
+                        stream = _reportHelper.AlliedNoteReportSchema3(workdayClient);
+                    else
+                        stream = _reportHelper.AlliedNoteReportSchema3SS(workdayClient);
+                    return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+                }
+            }
+
             return null;
         }
 
-        [Authorize(Roles = "Facilitator, Manager")]
+        [Authorize(Roles = "Facilitator, Manager, Frontdesk, Supervisor")]
         public IActionResult PrintIndNote(int id)
         {
             Workday_Client workdayClient = _context.Workdays_Clients
@@ -6615,11 +6767,6 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("Home/Error404");
             }
 
-            if (workdayClient.IndividualNote.Supervisor.Clinic.Name == "DAVILA")
-            {
-                Stream stream = _reportHelper.DavilaIndNoteReportSchema1(workdayClient);
-                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);                
-            }
             if (workdayClient.IndividualNote.Supervisor.Clinic.Name == "FLORIDA SOCIAL HEALTH SOLUTIONS")
             {
                 Stream stream = _reportHelper.FloridaSocialHSIndNoteReportSchema1(workdayClient);
@@ -6635,10 +6782,40 @@ namespace KyoS.Web.Controllers
                 Stream stream = _reportHelper.CommunityHTCIndNoteReportSchema1(workdayClient);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
+            if (workdayClient.IndividualNote.Supervisor.Clinic.Name == "PRINCIPLE CARE CENTER INC")
+            {
+                Stream stream = _reportHelper.PrincipleCCIIndNoteReportSchema1(workdayClient);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (workdayClient.IndividualNote.Supervisor.Clinic.Name == "SAPPHIRE MENTAL HEALTH CENTER LLC")
+            {
+                Stream stream = _reportHelper.SapphireMHCIndNoteReportSchema1(workdayClient);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (workdayClient.IndividualNote.Supervisor.Clinic.Name == "MEDICAL & REHAB OF HILLSBOROUGH INC")
+            {
+                Stream stream = _reportHelper.MedicalRehabIndNoteReportSchema1(workdayClient);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (workdayClient.IndividualNote.Supervisor.Clinic.Name == "MY FLORIDA CASE MANAGEMENT SERVICES LLC")
+            {
+                Stream stream = _reportHelper.MyFloridaIndNoteReportSchema1(workdayClient);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (workdayClient.IndividualNote.Supervisor.Clinic.Name == "ORION MENTAL HEALTH CENTER LLC")
+            {
+                Stream stream = _reportHelper.OrionIndNoteReportSchema1(workdayClient);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (workdayClient.IndividualNote.Supervisor.Clinic.Name == "ALLIED HEALTH GROUP LLC")
+            {
+                Stream stream = _reportHelper.AlliedIndNoteReportSchema1(workdayClient);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
             return null;
         }
 
-        [Authorize(Roles = "Facilitator, Manager")]
+        [Authorize(Roles = "Facilitator, Manager, Frontdesk, Supervisor")]
         public IActionResult PrintGroupNote(int id)
         {
             Workday_Client workdayClient = _context.Workdays_Clients
@@ -6697,7 +6874,7 @@ namespace KyoS.Web.Controllers
             return null;
         }
 
-        [Authorize(Roles = "Facilitator, Manager")]
+        [Authorize(Roles = "Facilitator, Manager, Frontdesk, Supervisor")]
         public IActionResult PrintGroupNote2(int id)
         {
             Workday_Client workdayClient = _context.Workdays_Clients
@@ -6726,6 +6903,10 @@ namespace KyoS.Web.Controllers
                                                    .Include(wc => wc.Workday)
                                                    
                                                    .Include(wc => wc.Schedule)
+
+                                                   .Include(wc => wc.Client)
+                                                   .ThenInclude(c => c.Clients_Diagnostics)
+                                                   .ThenInclude(cd => cd.Diagnostic)
 
                                                    .FirstOrDefault(wc => (wc.Id == id && wc.GroupNote2.Status == NoteStatus.Approved));
             if (workdayClient == null)
@@ -6774,6 +6955,96 @@ namespace KyoS.Web.Controllers
                 if (workdayClient.GroupNote2.Schema == SchemaTypeGroup.Schema3)
                 {
                     stream = _reportHelper.CommunityHTCGroupNoteReportSchema3(workdayClient);
+                }
+
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (workdayClient.GroupNote2.Supervisor.Clinic.Name == "PRINCIPLE CARE CENTER INC")
+            {
+                Stream stream = null;
+
+                if (workdayClient.GroupNote2.Schema == SchemaTypeGroup.Schema2)
+                {
+                    stream = _reportHelper.PrincipleCCIGroupNoteReportSchema2(workdayClient);
+                }
+                if (workdayClient.GroupNote2.Schema == SchemaTypeGroup.Schema3)
+                {
+                    stream = _reportHelper.PrincipleCCIGroupNoteReportSchema3(workdayClient);
+                }
+
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (workdayClient.GroupNote2.Supervisor.Clinic.Name == "SAPPHIRE MENTAL HEALTH CENTER LLC")
+            {
+                Stream stream = null;
+
+                if (workdayClient.GroupNote2.Schema == SchemaTypeGroup.Schema2)
+                {
+                    stream = _reportHelper.SapphireMHCGroupNoteReportSchema2(workdayClient);
+                }
+                if (workdayClient.GroupNote2.Schema == SchemaTypeGroup.Schema3)
+                {
+                    stream = _reportHelper.SapphireMHCGroupNoteReportSchema3(workdayClient);
+                }
+
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }            
+            if (workdayClient.GroupNote2.Supervisor.Clinic.Name == "MEDICAL & REHAB OF HILLSBOROUGH INC")
+            {
+                Stream stream = null;
+
+                if (workdayClient.GroupNote2.Schema == SchemaTypeGroup.Schema2)
+                {
+                    stream = _reportHelper.MedicalRehabGroupNoteReportSchema2(workdayClient);
+                }
+                if (workdayClient.GroupNote2.Schema == SchemaTypeGroup.Schema3)
+                {
+                    stream = _reportHelper.MedicalRehabGroupNoteReportSchema3(workdayClient);
+                }
+
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (workdayClient.GroupNote2.Supervisor.Clinic.Name == "MY FLORIDA CASE MANAGEMENT SERVICES LLC")
+            {
+                Stream stream = null;
+
+                if (workdayClient.GroupNote2.Schema == SchemaTypeGroup.Schema2)
+                {
+                    stream = _reportHelper.MyFloridaGroupNoteReportSchema2(workdayClient);
+                }
+                if (workdayClient.GroupNote2.Schema == SchemaTypeGroup.Schema3)
+                {
+                    stream = _reportHelper.MyFloridaGroupNoteReportSchema3(workdayClient);
+                }
+
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (workdayClient.GroupNote2.Supervisor.Clinic.Name == "ORION MENTAL HEALTH CENTER LLC")
+            {
+                Stream stream = null;
+
+                if (workdayClient.GroupNote2.Schema == SchemaTypeGroup.Schema2)
+                {
+                    stream = _reportHelper.OrionGroupNoteReportSchema2(workdayClient);
+                }
+                if (workdayClient.GroupNote2.Schema == SchemaTypeGroup.Schema3)
+                {
+                    stream = _reportHelper.OrionGroupNoteReportSchema3(workdayClient);
+                }
+
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (workdayClient.GroupNote2.Supervisor.Clinic.Name == "ALLIED HEALTH GROUP LLC")
+            {
+                Stream stream = null;
+
+                if (workdayClient.GroupNote2.Schema == SchemaTypeGroup.Schema2)
+                {
+                    stream = _reportHelper.AlliedGroupNoteReportSchema2(workdayClient);
+                }
+                if (workdayClient.GroupNote2.Schema == SchemaTypeGroup.Schema3)
+                {
+                    stream = _reportHelper.AlliedGroupNoteReportSchema3(workdayClient);
                 }
 
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
@@ -10624,7 +10895,7 @@ namespace KyoS.Web.Controllers
             return Json(text = _translateHelper.TranslateText("es", "en", text));            
         }
 
-        [Authorize(Roles = "Facilitator, Manager")]
+        [Authorize(Roles = "Facilitator, Manager, Frontdesk")]
         public async Task<IActionResult> NotStartedNotes(string name, int id = 0, int expired = 0)
         {
             if (expired == 1)
@@ -10681,16 +10952,39 @@ namespace KyoS.Web.Controllers
             {
                 ViewBag.MtpExpired = "E";
             }
-
-            return View(await _context.Workdays_Clients.Include(wc => wc.IndividualNote)
+            List<Workday_ClientIndTherapyViewModel> models = new List<Workday_ClientIndTherapyViewModel>();
+            
+            List<Workday_Client> workday_Client = await _context.Workdays_Clients.Include(wc => wc.IndividualNote)
                                                        .Include(wc => wc.Facilitator)
                                                        .Include(wc => wc.Client)
                                                        .Include(wc => wc.Workday)
                                                        .ThenInclude(w => w.Week)
+                                                       .Include(wc => wc.Schedule)
                                                        .Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name
                                                                         && wc.IndividualNote == null && wc.Present == true
                                                                         && wc.Workday.Service == ServiceType.Individual))                                                       
-                                                       .ToListAsync());
+                                                       .ToListAsync();
+
+            List<CiteEntity> cites = await _context.Cites
+                                                   .Include(n => n.SubSchedule)
+                                                   .Include(n => n.Client)
+                                                   .Where(n => n.Facilitator.LinkedUser == User.Identity.Name
+                                                            && n.Status == CiteStatus.A)
+                                                   .ToListAsync();
+            ClientEntity client = new ClientEntity();
+            foreach (var item in workday_Client)
+            {
+                Workday_ClientIndTherapyViewModel model_temp = new Workday_ClientIndTherapyViewModel();
+                client = AppointmentIndNote(item.Facilitator.Id, item.Workday.Date, item.Schedule.Id, item.Session);
+                if (client != null)
+                {
+                    model_temp.NombreClient = client.Name;
+                }
+               
+                model_temp.workday_Client = item;
+                models.Add(model_temp);
+            }
+            return View(models);
         }
 
         [Authorize(Roles = "Facilitator")]
@@ -10805,7 +11099,10 @@ namespace KyoS.Web.Controllers
             {
                 ViewBag.MtpExpired = "E";
             }
-
+            if (error == 1)
+            {
+                ViewBag.Error = "E";
+            }
             if (User.IsInRole("Facilitator"))
             {
                 return View(await _context.Workdays_Clients.Include(wc => wc.Note)
@@ -10911,13 +11208,16 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Facilitator, Supervisor")]
-        public async Task<IActionResult> PendingGroupNotes(int id = 0, int expired = 0)
+        public async Task<IActionResult> PendingGroupNotes(int id = 0, int expired = 0, int error = 0)
         {
             if (expired == 1)
             {
                 ViewBag.MtpExpired = "E";
             }
-
+            if (error == 1)
+            {
+                ViewBag.Error = "E";
+            }
             if (User.IsInRole("Facilitator"))
             {
                 return View(await _context.Workdays_Clients.Include(wc => wc.Note)
@@ -10954,6 +11254,8 @@ namespace KyoS.Web.Controllers
 
                                                                .Include(wc => wc.Workday)
                                                                .ThenInclude(w => w.Week)
+                                                               .Include(wc => wc.GroupNote)
+                                                               .Include(wc => wc.GroupNote2)
 
                                                                .Include(wc => wc.Messages.Where(m => m.Notification == false))
 
@@ -11030,7 +11332,7 @@ namespace KyoS.Web.Controllers
                                       .ToListAsync());
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Frontdesk, Supervisor")]
         public async Task<IActionResult> ApprovedNotesClinic(string dateInterval = "", int idFacilitator = 0, int idClient = 0)
         {
             UserEntity user_logged = await _context.Users
@@ -11049,6 +11351,8 @@ namespace KyoS.Web.Controllers
 
                                 .Include(wc => wc.GroupNote)
 
+                                .Include(wc => wc.GroupNote2)
+
                                 .Include(wc => wc.NoteP)
 
                                 .Include(wc => wc.Facilitator)
@@ -11060,6 +11364,7 @@ namespace KyoS.Web.Controllers
                                 .Where(wc => (wc.Facilitator.Clinic.Id == user_logged.Clinic.Id
                                             && (wc.Note.Status == NoteStatus.Approved || wc.IndividualNote.Status == NoteStatus.Approved
                                                                                     || wc.GroupNote.Status == NoteStatus.Approved
+                                                                                    || wc.GroupNote2.Status == NoteStatus.Approved
                                                                                     || wc.NoteP.Status == NoteStatus.Approved)
                                             && wc.Workday.Date >= DateTime.Now.AddMonths(-1)));
 
@@ -11083,6 +11388,8 @@ namespace KyoS.Web.Controllers
 
                             .Include(wc => wc.GroupNote)
 
+                            .Include(wc => wc.GroupNote2)
+
                             .Include(wc => wc.NoteP)
 
                             .Include(wc => wc.Facilitator)
@@ -11094,6 +11401,7 @@ namespace KyoS.Web.Controllers
                             .Where(wc => (wc.Facilitator.Clinic.Id == user_logged.Clinic.Id
                                         && (wc.Note.Status == NoteStatus.Approved || wc.IndividualNote.Status == NoteStatus.Approved
                                                                                   || wc.GroupNote.Status == NoteStatus.Approved
+                                                                                  || wc.GroupNote2.Status == NoteStatus.Approved
                                                                                   || wc.NoteP.Status == NoteStatus.Approved)));
 
             if (dateInterval != string.Empty)
@@ -11129,7 +11437,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Supervisor")]
         public IActionResult ApprovedNotesClinic(ApprovedNotesClinicViewModel model)
         {
             UserEntity user_logged = _context.Users
@@ -11378,7 +11686,7 @@ namespace KyoS.Web.Controllers
             return View();
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Frontdesk")]
         public async Task<IActionResult> NotNotesSummary()
         {
             UserEntity user_logged = await _context.Users
@@ -11414,7 +11722,7 @@ namespace KyoS.Web.Controllers
             return View(notStarted);
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Frontdesk")]
         public async Task<IActionResult> EditingSummary()
         {
             UserEntity user_logged = await _context.Users.Include(u => u.Clinic)
@@ -11448,7 +11756,7 @@ namespace KyoS.Web.Controllers
             return View(editing);
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Frontdesk")]
         public async Task<IActionResult> PendingSummary()
         {
             UserEntity user_logged = await _context.Users.Include(u => u.Clinic)
@@ -11483,7 +11791,7 @@ namespace KyoS.Web.Controllers
             return View(pending);
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Frontdesk")]
         public async Task<IActionResult> ReviewSummary()
         {
             UserEntity user_logged = await _context.Users.Include(u => u.Clinic)
@@ -11583,7 +11891,7 @@ namespace KyoS.Web.Controllers
                                       .ToListAsync());
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Frontdesk")]
         public async Task<IActionResult> NotPresentNotesClinic(string dateInterval = "", int idFacilitator = 0, int idClient = 0)
         {
             UserEntity user_logged = await _context.Users
@@ -11662,7 +11970,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Frontdesk")]
         public IActionResult NotPresentNotesClinic(NotPresentNotesClinicViewModel model)
         {
             UserEntity user_logged = _context.Users
@@ -11677,7 +11985,7 @@ namespace KyoS.Web.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "Facilitator, Manager")]
+        [Authorize(Roles = "Facilitator, Manager, Frontdesk")]
         public IActionResult PrintAbsenceNote(int id)
         {
             Workday_Client workdayClient = _context.Workdays_Clients
@@ -11699,41 +12007,16 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("Home/Error404");
             }
 
-            if (workdayClient.Client.Clinic.Name == "DAVILA")
-            {
-                Stream stream = _reportHelper.DavilaAbsenceNoteReport(workdayClient);
-                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
-            }
-            if (workdayClient.Client.Clinic.Name == "LARKIN BEHAVIOR")
-            {
-                Stream stream = _reportHelper.LarkinAbsenceNoteReport(workdayClient);
-                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
-            }
-            if (workdayClient.Client.Clinic.Name == "SOL & VIDA")
-            {
-                Stream stream = _reportHelper.SolAndVidaAbsenceNoteReport(workdayClient);
-                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
-            }
             if (workdayClient.Client.Clinic.Name == "DREAMS MENTAL HEALTH INC")
             {
                 Stream stream = _reportHelper.DreamsMentalHealthAbsenceNoteReport(workdayClient);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
-            }
-            if (workdayClient.Client.Clinic.Name == "ADVANCED GROUP MEDICAL CENTER")
-            {
-                Stream stream = _reportHelper.AdvancedGroupMCAbsenceNoteReport(workdayClient);
-                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
-            }
+            }            
             if (workdayClient.Client.Clinic.Name == "FLORIDA SOCIAL HEALTH SOLUTIONS")
             {
                 Stream stream = _reportHelper.FloridaSocialHSAbsenceNoteReport(workdayClient);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
-            }
-            if (workdayClient.Client.Clinic.Name == "ATLANTIC GROUP MEDICAL CENTER")
-            {
-                Stream stream = _reportHelper.AtlanticGroupMCAbsenceNoteReport(workdayClient);
-                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
-            }
+            }            
             if (workdayClient.Client.Clinic.Name == "DEMO CLINIC SCHEMA 1")
             {
                 Stream stream = _reportHelper.DemoClinic1AbsenceNoteReport(workdayClient);
@@ -11749,11 +12032,41 @@ namespace KyoS.Web.Controllers
                 Stream stream = _reportHelper.CommunityHTCAbsenceNoteReport(workdayClient);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
+            if (workdayClient.Client.Clinic.Name == "PRINCIPLE CARE CENTER INC")
+            {
+                Stream stream = _reportHelper.PrincipleCCIAbsenceNoteReport(workdayClient);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (workdayClient.Client.Clinic.Name == "SAPPHIRE MENTAL HEALTH CENTER LLC")
+            {
+                Stream stream = _reportHelper.SapphireMHCAbsenceNoteReport(workdayClient);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (workdayClient.Client.Clinic.Name == "MEDICAL & REHAB OF HILLSBOROUGH INC")
+            {
+                Stream stream = _reportHelper.MedicalRehabAbsenceNoteReport(workdayClient);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (workdayClient.Client.Clinic.Name == "MY FLORIDA CASE MANAGEMENT SERVICES LLC")
+            {
+                Stream stream = _reportHelper.MyFloridaAbsenceNoteReport(workdayClient);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (workdayClient.Client.Clinic.Name == "ORION MENTAL HEALTH CENTER LLC")
+            {
+                Stream stream = _reportHelper.OrionAbsenceNoteReport(workdayClient);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (workdayClient.Client.Clinic.Name == "ALLIED HEALTH GROUP LLC")
+            {
+                Stream stream = _reportHelper.AlliedAbsenceNoteReport(workdayClient);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
 
             return null;
         }
 
-        [Authorize(Roles = "Facilitator, Manager")]
+        [Authorize(Roles = "Facilitator, Manager, Frontdesk")]
         public IActionResult PrintAbsenceIndNote(int id)
         {
             Workday_Client workdayClient = _context.Workdays_Clients
@@ -11775,41 +12088,16 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("Home/Error404");
             }
 
-            if (workdayClient.Facilitator.Clinic.Name == "DAVILA")
-            {
-                Stream stream = _reportHelper.DavilaAbsenceNoteReport(workdayClient);
-                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
-            }
-            if (workdayClient.Facilitator.Clinic.Name == "LARKIN BEHAVIOR")
-            {
-                Stream stream = _reportHelper.LarkinAbsenceNoteReport(workdayClient);
-                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
-            }
-            if (workdayClient.Facilitator.Clinic.Name == "SOL & VIDA")
-            {
-                Stream stream = _reportHelper.SolAndVidaAbsenceNoteReport(workdayClient);
-                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
-            }
             if (workdayClient.Facilitator.Clinic.Name == "DREAMS MENTAL HEALTH INC")
             {
                 Stream stream = _reportHelper.DreamsMentalHealthAbsenceNoteReport(workdayClient);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
-            }
-            if (workdayClient.Facilitator.Clinic.Name == "ADVANCED GROUP MEDICAL CENTER")
-            {
-                Stream stream = _reportHelper.AdvancedGroupMCAbsenceNoteReport(workdayClient);
-                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
-            }
+            }            
             if (workdayClient.Facilitator.Clinic.Name == "FLORIDA SOCIAL HEALTH SOLUTIONS")
             {
                 Stream stream = _reportHelper.FloridaSocialHSAbsenceNoteReport(workdayClient);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
-            }
-            if (workdayClient.Facilitator.Clinic.Name == "ATLANTIC GROUP MEDICAL CENTER")
-            {
-                Stream stream = _reportHelper.AtlanticGroupMCAbsenceNoteReport(workdayClient);
-                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
-            }
+            }            
             if (workdayClient.Facilitator.Clinic.Name == "DEMO CLINIC SCHEMA 1")
             {
                 Stream stream = _reportHelper.DemoClinic1AbsenceNoteReport(workdayClient);
@@ -11825,11 +12113,41 @@ namespace KyoS.Web.Controllers
                 Stream stream = _reportHelper.CommunityHTCAbsenceNoteReport(workdayClient);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
+            if (workdayClient.Facilitator.Clinic.Name == "PRINCIPLE CARE CENTER INC")
+            {
+                Stream stream = _reportHelper.PrincipleCCIAbsenceNoteReport(workdayClient);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (workdayClient.Facilitator.Clinic.Name == "SAPPHIRE MENTAL HEALTH CENTER LLC")
+            {
+                Stream stream = _reportHelper.SapphireMHCAbsenceNoteReport(workdayClient);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (workdayClient.Client.Clinic.Name == "MEDICAL & REHAB OF HILLSBOROUGH INC")
+            {
+                Stream stream = _reportHelper.MedicalRehabAbsenceNoteReport(workdayClient);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (workdayClient.Client.Clinic.Name == "MY FLORIDA CASE MANAGEMENT SERVICES LLC")
+            {
+                Stream stream = _reportHelper.MyFloridaAbsenceNoteReport(workdayClient);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (workdayClient.Client.Clinic.Name == "ORION MENTAL HEALTH CENTER LLC")
+            {
+                Stream stream = _reportHelper.OrionAbsenceNoteReport(workdayClient);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (workdayClient.Client.Clinic.Name == "ALLIED HEALTH GROUP LLC")
+            {
+                Stream stream = _reportHelper.AlliedAbsenceNoteReport(workdayClient);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
 
             return null;
         }
 
-        [Authorize(Roles = "Facilitator, Manager")]
+        [Authorize(Roles = "Facilitator, Manager, Frontdesk")]
         public IActionResult PrintAbsenceGroupNote(int id)
         {
             Workday_Client workdayClient = _context.Workdays_Clients
@@ -11851,41 +12169,16 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("Home/Error404");
             }
 
-            if (workdayClient.Facilitator.Clinic.Name == "DAVILA")
-            {
-                Stream stream = _reportHelper.DavilaAbsenceNoteReport(workdayClient);
-                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
-            }
-            if (workdayClient.Facilitator.Clinic.Name == "LARKIN BEHAVIOR")
-            {
-                Stream stream = _reportHelper.LarkinAbsenceNoteReport(workdayClient);
-                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
-            }
-            if (workdayClient.Facilitator.Clinic.Name == "SOL & VIDA")
-            {
-                Stream stream = _reportHelper.SolAndVidaAbsenceNoteReport(workdayClient);
-                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
-            }
             if (workdayClient.Facilitator.Clinic.Name == "DREAMS MENTAL HEALTH INC")
             {
                 Stream stream = _reportHelper.DreamsMentalHealthAbsenceNoteReport(workdayClient);
-                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
-            }
-            if (workdayClient.Facilitator.Clinic.Name == "ADVANCED GROUP MEDICAL CENTER")
-            {
-                Stream stream = _reportHelper.AdvancedGroupMCAbsenceNoteReport(workdayClient);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
             if (workdayClient.Facilitator.Clinic.Name == "FLORIDA SOCIAL HEALTH SOLUTIONS")
             {
                 Stream stream = _reportHelper.FloridaSocialHSAbsenceNoteReport(workdayClient);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
-            }
-            if (workdayClient.Facilitator.Clinic.Name == "ATLANTIC GROUP MEDICAL CENTER")
-            {
-                Stream stream = _reportHelper.AtlanticGroupMCAbsenceNoteReport(workdayClient);
-                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
-            }
+            }            
             if (workdayClient.Facilitator.Clinic.Name == "DEMO CLINIC SCHEMA 1")
             {
                 Stream stream = _reportHelper.DemoClinic1AbsenceNoteReport(workdayClient);
@@ -11899,6 +12192,36 @@ namespace KyoS.Web.Controllers
             if (workdayClient.Facilitator.Clinic.Name == "COMMUNITY HEALTH THERAPY CENTER")
             {
                 Stream stream = _reportHelper.CommunityHTCAbsenceNoteReport(workdayClient);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (workdayClient.Facilitator.Clinic.Name == "PRINCIPLE CARE CENTER INC")
+            {
+                Stream stream = _reportHelper.PrincipleCCIAbsenceNoteReport(workdayClient);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (workdayClient.Facilitator.Clinic.Name == "SAPPHIRE MENTAL HEALTH CENTER LLC")
+            {
+                Stream stream = _reportHelper.SapphireMHCAbsenceNoteReport(workdayClient);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (workdayClient.Client.Clinic.Name == "MEDICAL & REHAB OF HILLSBOROUGH INC")
+            {
+                Stream stream = _reportHelper.MedicalRehabAbsenceNoteReport(workdayClient);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (workdayClient.Client.Clinic.Name == "MY FLORIDA CASE MANAGEMENT SERVICES LLC")
+            {
+                Stream stream = _reportHelper.MyFloridaAbsenceNoteReport(workdayClient);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (workdayClient.Client.Clinic.Name == "ORION MENTAL HEALTH CENTER LLC")
+            {
+                Stream stream = _reportHelper.OrionAbsenceNoteReport(workdayClient);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (workdayClient.Client.Clinic.Name == "ALLIED HEALTH GROUP LLC")
+            {
+                Stream stream = _reportHelper.AlliedAbsenceNoteReport(workdayClient);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
 
@@ -12062,11 +12385,11 @@ namespace KyoS.Web.Controllers
                                                         .ThenInclude(d => d.Schedule)
                                                         .ThenInclude(d => d.SubSchedules)
 
-                                                        .Where(w => (w.Clinic.Id == user_logged.Clinic.Id && w.InitDate >= DateTime.Now.AddMonths(-3) && w.FinalDate <= DateTime.Now.AddDays(6)));                                              
+                                                        .Where(w => (w.Clinic.Id == user_logged.Clinic.Id && w.InitDate >= DateTime.Now.AddMonths(-2) && w.FinalDate <= DateTime.Now.AddDays(6)));                                              
 
                 BillingReportViewModel model = new BillingReportViewModel
                 {
-                    DateIterval = $"{DateTime.Now.AddMonths(-3).ToShortDateString()} - {DateTime.Now.AddDays(6).ToShortDateString()}",
+                    DateIterval = $"{DateTime.Now.AddMonths(-2).ToShortDateString()} - {DateTime.Now.AddDays(6).ToShortDateString()}",
                     IdFacilitator = 0,
                     Facilitators = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id),
                     IdClient = 0,
@@ -12108,44 +12431,46 @@ namespace KyoS.Web.Controllers
 
             if (idWeek != 0)
             {
-                IQueryable<WeekEntity> query = _context.Weeks
+                List<WeekEntity> query = await _context.Weeks
 
-                                                       .Include(w => w.Days)
-                                                       .ThenInclude(d => d.Workdays_Clients)
-                                                       .ThenInclude(g => g.Facilitator)
+                                                        .Include(w => w.Days)
+                                                        .ThenInclude(d => d.Workdays_Clients)
+                                                        .ThenInclude(g => g.Facilitator)
 
-                                                       .Include(w => w.Days)
-                                                       .ThenInclude(d => d.Workdays_Clients)
-                                                       .ThenInclude(wc => wc.Note)
+                                                        .Include(w => w.Days)
+                                                        .ThenInclude(d => d.Workdays_Clients)
+                                                        .ThenInclude(wc => wc.Note)
 
-                                                       .Include(w => w.Days)
-                                                       .ThenInclude(d => d.Workdays_Clients)
-                                                       .ThenInclude(wc => wc.NoteP)
+                                                        .Include(w => w.Days)
+                                                        .ThenInclude(d => d.Workdays_Clients)
+                                                        .ThenInclude(wc => wc.NoteP)
 
-                                                       .Include(w => w.Days)
-                                                       .ThenInclude(d => d.Workdays_Clients)
-                                                       .ThenInclude(wc => wc.GroupNote)
-                                                       .ThenInclude(wc => wc.GroupNotes_Activities)
+                                                        .Include(w => w.Days)
+                                                        .ThenInclude(d => d.Workdays_Clients)
+                                                        .ThenInclude(wc => wc.GroupNote)
+                                                        .ThenInclude(wc => wc.GroupNotes_Activities)
 
-                                                       .Include(w => w.Days)
-                                                       .ThenInclude(d => d.Workdays_Clients)
-                                                       .ThenInclude(wc => wc.GroupNote2)
-                                                       .ThenInclude(wc => wc.GroupNotes2_Activities)
+                                                        .Include(w => w.Days)
+                                                        .ThenInclude(d => d.Workdays_Clients)
+                                                        .ThenInclude(wc => wc.GroupNote2)
+                                                        .ThenInclude(wc => wc.GroupNotes2_Activities)
 
-                                                       .Include(w => w.Days)
-                                                       .ThenInclude(d => d.Workdays_Clients)
-                                                       .ThenInclude(wc => wc.Client)
-                                                       .ThenInclude(c => c.Clients_Diagnostics)
-                                                       .ThenInclude(cd => cd.Diagnostic)
+                                                        .Include(w => w.Days)
+                                                        .ThenInclude(d => d.Workdays_Clients)
+                                                        .ThenInclude(wc => wc.Client)
+                                                        .ThenInclude(c => c.Clients_Diagnostics)
+                                                        .ThenInclude(cd => cd.Diagnostic)
 
-                                                       .Include(w => w.Clinic)
+                                                        .Include(w => w.Clinic)
+                                                        .ThenInclude(w => w.Setting)
 
-                                                       .Include(w => w.Days)
-                                                       .ThenInclude(d => d.Workdays_Clients)
-                                                       .ThenInclude(d => d.Schedule)
-                                                       .ThenInclude(d => d.SubSchedules)
+                                                        .Include(w => w.Days)
+                                                        .ThenInclude(d => d.Workdays_Clients)
+                                                        .ThenInclude(d => d.Schedule)
+                                                        .ThenInclude(d => d.SubSchedules)
 
-                                                       .Where(w => (w.Clinic.Id == user_logged.Clinic.Id && w.Id == idWeek));
+                                                        .Where(w => (w.Clinic.Id == user_logged.Clinic.Id && w.Id == idWeek))
+                                                        .ToListAsync();
 
                 try
                 {
@@ -12155,7 +12480,7 @@ namespace KyoS.Web.Controllers
                         Facilitators = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id),
                         IdClient = 0,
                         Clients = _combosHelper.GetComboClientsByClinic(user_logged.Clinic.Id),
-                        Weeks = query.ToList(),
+                        Weeks = query,
                         IdWeek = idWeek,
                         WeeksListName = _combosHelper.GetComboWeeksNameByClinic(user_logged.Clinic.Id)
                     };
@@ -12176,7 +12501,7 @@ namespace KyoS.Web.Controllers
                     max = week.Max(m => m.Id);
                 }
 
-                IQueryable<WeekEntity> query = _context.Weeks
+                List<WeekEntity> query = await _context.Weeks
 
                                                        .Include(w => w.Days)
                                                        .ThenInclude(d => d.Workdays_Clients)
@@ -12207,13 +12532,15 @@ namespace KyoS.Web.Controllers
                                                        .ThenInclude(cd => cd.Diagnostic)
 
                                                        .Include(w => w.Clinic)
+                                                       .ThenInclude(w => w.Setting)
 
                                                        .Include(w => w.Days)
                                                        .ThenInclude(d => d.Workdays_Clients)
                                                        .ThenInclude(d => d.Schedule)
                                                        .ThenInclude(d => d.SubSchedules)
 
-                                                       .Where(w => (w.Clinic.Id == user_logged.Clinic.Id && w.Id == max));
+                                                       .Where(w => (w.Clinic.Id == user_logged.Clinic.Id && w.Id == max))
+                                                       .ToListAsync();
                 
                 BillingReport1ViewModel model = new BillingReport1ViewModel
                 {
@@ -12221,7 +12548,7 @@ namespace KyoS.Web.Controllers
                     Facilitators = _combosHelper.GetComboFacilitatorsByClinic(user_logged.Clinic.Id),
                     IdClient = 0,
                     Clients = _combosHelper.GetComboClientsByClinic(user_logged.Clinic.Id),
-                    Weeks = query.ToList(),
+                    Weeks = query,
                     IdWeek = max,
                     WeeksListName = _combosHelper.GetComboWeeksNameByClinic(user_logged.Clinic.Id)
                 };
@@ -12321,7 +12648,7 @@ namespace KyoS.Web.Controllers
                             }
                         }
                     }
-                    clients.Add(await _converterHelper.ToClientAUXViewModel(item, MTPRReview));
+                    clients.Add(_converterHelper.ToClientAUXViewModel(item, MTPRReview));
                     MTPRReview = new List<MTPReviewEntity>();
                 }
 
@@ -12530,7 +12857,7 @@ namespace KyoS.Web.Controllers
                             }
                         }
                     }
-                    clients.Add(await _converterHelper.ToClientAUXViewModel(item, MTPRReview));
+                    clients.Add(_converterHelper.ToClientAUXViewModel(item, MTPRReview));
                     MTPRReview = new List<MTPReviewEntity>();
                 }
 
@@ -12816,7 +13143,7 @@ namespace KyoS.Web.Controllers
                             }
                             
                         }
-                        clients.Add(await _converterHelper.ToClientAUXViewModel(item, MTPRReview));
+                        clients.Add(_converterHelper.ToClientAUXViewModel(item, MTPRReview));
                         MTPRReview = new List<MTPReviewEntity>();
                     }
 
@@ -12839,8 +13166,6 @@ namespace KyoS.Web.Controllers
 
                         if (clients[i].Bio != null)
                         {
-                            if (clients[i].Bio.DateBio != null)
-                            {
                                 if (clients[i].Bio.DateBio >= workday_client.Workday.Week.InitDate && clients[i].Bio.DateBio <= workday_client.Workday.Week.FinalDate && clients[i].Bio.BilledDate == null)
                                 {
 
@@ -12848,8 +13173,7 @@ namespace KyoS.Web.Controllers
                                 else
                                 {
                                     clients[i].Bio = null;
-                                }
-                            }
+                                }                            
                         }
 
                         clients[i].Workdays_Clients = _context.Workdays_Clients
@@ -12932,7 +13256,7 @@ namespace KyoS.Web.Controllers
                                 }
                             }
                         }
-                        clients.Add(await _converterHelper.ToClientAUXViewModel(item, MTPRReview));
+                        clients.Add(_converterHelper.ToClientAUXViewModel(item, MTPRReview));
                         MTPRReview = new List<MTPReviewEntity>();
                     }
 
@@ -12954,18 +13278,15 @@ namespace KyoS.Web.Controllers
                         }
 
                         if (clients[i].Bio != null)
-                        {
-                            if (clients[i].Bio.DateBio != null)
+                        {                            
+                            if (clients[i].Bio.DateBio >= workday_client.Workday.Week.InitDate && clients[i].Bio.DateBio <= workday_client.Workday.Week.FinalDate && clients[i].Bio.BilledDate != null)
                             {
-                                if (clients[i].Bio.DateBio >= workday_client.Workday.Week.InitDate && clients[i].Bio.DateBio <= workday_client.Workday.Week.FinalDate && clients[i].Bio.BilledDate != null)
-                                {
 
-                                }
-                                else
-                                {
-                                    clients[i].Bio = null;
-                                }
                             }
+                            else
+                            {
+                                clients[i].Bio = null;
+                            }                            
                         }
 
                         clients[i].Workdays_Clients = _context.Workdays_Clients
@@ -13096,7 +13417,7 @@ namespace KyoS.Web.Controllers
                                 }
                             }
                         }
-                        clients.Add(await _converterHelper.ToClientAUXViewModel(item, MTPRReview));
+                        clients.Add(_converterHelper.ToClientAUXViewModel(item, MTPRReview));
                         MTPRReview = new List<MTPReviewEntity>();
                     }
 
@@ -13119,18 +13440,15 @@ namespace KyoS.Web.Controllers
                         }
 
                         if (clients[i].Bio != null)
-                        {
-                            if (clients[i].Bio.DateBio != null)
+                        {                            
+                            if (clients[i].Bio.DateBio >= workday_client.Workday.Week.InitDate && clients[i].Bio.DateBio <= workday_client.Workday.Week.FinalDate && clients[i].Bio.BilledDate != null)
                             {
-                                if (clients[i].Bio.DateBio >= workday_client.Workday.Week.InitDate && clients[i].Bio.DateBio <= workday_client.Workday.Week.FinalDate && clients[i].Bio.BilledDate != null)
-                                {
 
-                                }
-                                else
-                                {
-                                    clients[i].Bio = null;
-                                }
                             }
+                            else
+                            {
+                                clients[i].Bio = null;
+                            }                            
                         }
 
                         clients[i].Workdays_Clients = _context.Workdays_Clients
@@ -13239,7 +13557,7 @@ namespace KyoS.Web.Controllers
                             }
                             
                         }
-                        clients.Add(await _converterHelper.ToClientAUXViewModel(item, MTPRReview));
+                        clients.Add(_converterHelper.ToClientAUXViewModel(item, MTPRReview));
                         MTPRReview = new List<MTPReviewEntity>();
                     }
 
@@ -13261,18 +13579,15 @@ namespace KyoS.Web.Controllers
                         }
 
                         if (clients[i].Bio != null)
-                        {
-                            if (clients[i].Bio.DateBio != null)
+                        {                            
+                            if (clients[i].Bio.DateBio >= workday_client.Workday.Week.InitDate && clients[i].Bio.DateBio <= workday_client.Workday.Week.FinalDate && clients[i].Bio.BilledDate != null)
                             {
-                                if (clients[i].Bio.DateBio >= workday_client.Workday.Week.InitDate && clients[i].Bio.DateBio <= workday_client.Workday.Week.FinalDate && clients[i].Bio.BilledDate != null)
-                                {
 
-                                }
-                                else
-                                {
-                                    clients[i].Bio = null;
-                                }
                             }
+                            else
+                            {
+                                clients[i].Bio = null;
+                            }                            
                         }
 
                         clients[i].Workdays_Clients = _context.Workdays_Clients
@@ -13315,7 +13630,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "PaymentReceived", model) });
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Frontdesk")]
         public async Task<IActionResult> NotesSummaryDetails(string dateInterval = "")
         {
             UserEntity user_logged = await _context.Users
@@ -13408,7 +13723,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Frontdesk")]
         public IActionResult NotesSummaryDetails(BillingReportViewModel model)
         {
             UserEntity user_logged = _context.Users
@@ -13423,7 +13738,7 @@ namespace KyoS.Web.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Frontdesk")]
         public async Task<IActionResult> IndNotesSummaryDetails(string dateInterval = "")
         {
             UserEntity user_logged = await _context.Users
@@ -13507,7 +13822,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Frontdesk")]
         public IActionResult IndNotesSummaryDetails(BillingReportViewModel model)
         {
             UserEntity user_logged = _context.Users
@@ -13522,7 +13837,7 @@ namespace KyoS.Web.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Frontdesk")]
         public async Task<IActionResult> GroupNotesSummaryDetails(string dateInterval = "")
         {
             UserEntity user_logged = await _context.Users
@@ -13614,7 +13929,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Frontdesk")]
         public IActionResult GroupNotesSummaryDetails(BillingReportViewModel model)
         {
             UserEntity user_logged = _context.Users
@@ -13745,10 +14060,14 @@ namespace KyoS.Web.Controllers
                                                               || (n.SubSchedule.InitialTime.TimeOfDay >= initialTime.TimeOfDay
                                                                 && n.SubSchedule.InitialTime.TimeOfDay <= endTime.TimeOfDay)
                                                               || (n.SubSchedule.EndTime.TimeOfDay >= initialTime.TimeOfDay
-                                                                && n.SubSchedule.EndTime.TimeOfDay <= endTime.TimeOfDay))
+                                                                && n.SubSchedule.EndTime.TimeOfDay <= endTime.TimeOfDay)
+                                                              || (n.SubSchedule.InitialTime.TimeOfDay <= initialTime.TimeOfDay
+                                                                && n.SubSchedule.EndTime.TimeOfDay >= initialTime.TimeOfDay)
+                                                              || (n.SubSchedule.InitialTime.TimeOfDay <= endTime.TimeOfDay
+                                                                && n.SubSchedule.EndTime.TimeOfDay >= endTime.TimeOfDay))
                                                              ).Count() > 0)
                                 return true;
-
+                           
                         }
                         else
                         {
@@ -13801,10 +14120,14 @@ namespace KyoS.Web.Controllers
                                                               || (n.SubSchedule.InitialTime.TimeOfDay >= initialTime.TimeOfDay
                                                                 && n.SubSchedule.InitialTime.TimeOfDay <= endTime.TimeOfDay)
                                                               || (n.SubSchedule.EndTime.TimeOfDay >= initialTime.TimeOfDay
-                                                                && n.SubSchedule.EndTime.TimeOfDay <= endTime.TimeOfDay))
+                                                                && n.SubSchedule.EndTime.TimeOfDay <= endTime.TimeOfDay)
+                                                              || (n.SubSchedule.InitialTime.TimeOfDay <= initialTime.TimeOfDay
+                                                                && n.SubSchedule.EndTime.TimeOfDay >= initialTime.TimeOfDay)
+                                                              || (n.SubSchedule.InitialTime.TimeOfDay <= endTime.TimeOfDay
+                                                                && n.SubSchedule.EndTime.TimeOfDay >= endTime.TimeOfDay))
                                                              ).Count() > 0)
                                     return true;
-
+                                
                             }
                             else
                             {
@@ -13864,8 +14187,10 @@ namespace KyoS.Web.Controllers
         #endregion
 
         [Authorize(Roles = "Manager")]
-        public async Task<IActionResult> ChangeNotes(string dateInterval = "")
-        {           
+        public async Task<IActionResult> ChangeNotes(string dateInterval = "", int service = 0)
+        {
+            ServiceType serviceType = ServiceUtils.GetServiceByIndex(service);
+
             UserEntity user_logged = await _context.Users
 
                                                    .Include(u => u.Clinic)
@@ -13902,10 +14227,22 @@ namespace KyoS.Web.Controllers
 
                                                        .Include(w => w.Days)
                                                        .ThenInclude(d => d.Workdays_Clients)
+                                                       .ThenInclude(wc => wc.GroupNote)
+
+                                                       .Include(w => w.Days)
+                                                       .ThenInclude(d => d.Workdays_Clients)
+                                                       .ThenInclude(wc => wc.GroupNote2)
+
+                                                       .Include(w => w.Days)
+                                                       .ThenInclude(d => d.Workdays_Clients)
+                                                       .ThenInclude(wc => wc.IndividualNote)
+
+                                                       .Include(w => w.Days)
+                                                       .ThenInclude(d => d.Workdays_Clients)
                                                        .ThenInclude(wc => wc.Schedule)
 
                                                        .Where(w => (w.Clinic.Id == user_logged.Clinic.Id
-                                                                 && w.Days.Where(d => (d.Service == ServiceType.PSR)).Count() > 0
+                                                                 && w.Days.Where(d => (d.Service == serviceType)).Count() > 0
                                                                  && w.InitDate >= Convert.ToDateTime(date[0]) && w.FinalDate <= Convert.ToDateTime(date[1])));                                                
                                 
                 BillingReportViewModel model = new BillingReportViewModel
@@ -13915,7 +14252,9 @@ namespace KyoS.Web.Controllers
                     Facilitators = null,
                     IdClient = 0,
                     Clients = null,
-                    Weeks = query.ToList()
+                    Weeks = query.ToList(),
+                    IdService = service,
+                    Services = _combosHelper.GetComboServices()
                 };
 
                 return View(model);                
@@ -13942,10 +14281,22 @@ namespace KyoS.Web.Controllers
 
                                                        .Include(w => w.Days)
                                                        .ThenInclude(d => d.Workdays_Clients)
+                                                       .ThenInclude(wc => wc.GroupNote)
+
+                                                       .Include(w => w.Days)
+                                                       .ThenInclude(d => d.Workdays_Clients)
+                                                       .ThenInclude(wc => wc.GroupNote2)
+
+                                                       .Include(w => w.Days)
+                                                       .ThenInclude(d => d.Workdays_Clients)
+                                                       .ThenInclude(wc => wc.IndividualNote)
+
+                                                       .Include(w => w.Days)
+                                                       .ThenInclude(d => d.Workdays_Clients)
                                                        .ThenInclude(wc => wc.Schedule)
 
                                                        .Where(w => (w.Clinic.Id == user_logged.Clinic.Id
-                                                                 && w.Days.Where(d => (d.Service == ServiceType.PSR)).Count() > 0
+                                                                 && w.Days.Where(d => (d.Service == serviceType)).Count() > 0
                                                                  && w.InitDate >= DateTime.Now.AddMonths(-1) && w.FinalDate <= DateTime.Now.AddDays(6)));                                                        
 
                 BillingReportViewModel model = new BillingReportViewModel
@@ -13955,7 +14306,9 @@ namespace KyoS.Web.Controllers
                     Facilitators = null,
                     IdClient = 0,
                     Clients = null,
-                    Weeks = query.ToList()
+                    Weeks = query.ToList(),
+                    IdService = 0,
+                    Services = _combosHelper.GetComboServices()
                 };
 
                 return View(model);
@@ -13973,7 +14326,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                return RedirectToAction(nameof(ChangeNotes), new { dateInterval = model.DateIterval });
+                return RedirectToAction(nameof(ChangeNotes), new { dateInterval = model.DateIterval, service  = model.IdService});
             }
 
             return View(model);
@@ -14832,7 +15185,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("ClientHistory", "Clients", new { idClient = clientId });
         }
 
-        [Authorize(Roles = "Manager, Supervisor, Facilitator")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Frontdesk")]
         public async Task<IActionResult> AuditGroups()
         {
             UserEntity user_logged = _context.Users
@@ -14928,8 +15281,8 @@ namespace KyoS.Web.Controllers
             return View(auditGroup);
         }
 
-        [Authorize(Roles = "Manager, Supervisor, Facilitator")]
-        public async Task<IActionResult> AuditGoalsObjective(int idMtp = 0)
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Frontdesk")]
+        public async Task<IActionResult> AuditGoalsObjective(int idMtp = 0, ServiceType service = ServiceType.PSR )
         {
             UserEntity user_logged = _context.Users
 
@@ -14946,50 +15299,171 @@ namespace KyoS.Web.Controllers
             List<AuditGoalsObjective> auditGoalsObjetive_List = new List<AuditGoalsObjective>();
             AuditGoalsObjective auditGoalsObjetive = new AuditGoalsObjective();
 
-            MTPEntity mtp = _context.MTPs
-                                    .Include(n => n.Goals)
-                                    .ThenInclude(n => n.Objetives)
-                                    //.Include(n => n.Client)
-                                    .FirstOrDefault(n => n.Id == idMtp);
-
-            List<NotePEntity> note = await _context.NotesP
-                                                   .Include(n => n.NotesP_Activities)
-                                                   .ThenInclude(n => n.Objetive)
-                                                   .ThenInclude(n => n.Goal)
-
-                                                   .Where(w => (w.Workday_Cient.Workday.Week.Clinic.Id == user_logged.Clinic.Id
-                                                        && w.MTPId == idMtp
-                                                        && w.Status != NoteStatus.Edition))
-                                                   .ToListAsync();
-            int tempCount = 0;
-            foreach (var goal in mtp.Goals.Where(n => n.Service == ServiceType.PSR))
+            if (idMtp > 0)
             {
-                foreach (var objective in goal.Objetives.OrderBy(n => n.Objetive))
+                MTPEntity mtp = _context.MTPs
+                                       .Include(n => n.Goals)
+                                       .ThenInclude(n => n.Objetives)
+                                       //.Include(n => n.Client)
+                                       .FirstOrDefault(n => n.Id == idMtp);
+
+                if (service == ServiceType.PSR)
                 {
-                    auditGoalsObjetive.NumberGoal = goal.Number;
-                    auditGoalsObjetive.NumberObjective = objective.Objetive;
-                    tempCount = note.Where(n => n.NotesP_Activities.FirstOrDefault(m => m.Objetive != null).Objetive.Id == objective.Id).Count();
-                    auditGoalsObjetive.Count = tempCount;
-                    auditGoalsObjetive.Porciento = Math.Round((tempCount * 100) / Convert.ToDouble(note.Count()),1);
-                    if (tempCount == 0)
+                    List<NotePEntity> note = await _context.NotesP
+                                                           .Include(n => n.NotesP_Activities)
+                                                           .ThenInclude(n => n.Objetive)
+                                                           .ThenInclude(n => n.Goal)
+
+                                                           .Where(w => (w.Workday_Cient.Workday.Week.Clinic.Id == user_logged.Clinic.Id
+                                                                && w.MTPId == idMtp
+                                                                && w.Status != NoteStatus.Edition))
+                                                           .ToListAsync();
+                    int tempCount = 0;
+                    foreach (var goal in mtp.Goals.Where(n => n.Service == service))
                     {
-                        auditGoalsObjetive.Active = 0;
+                        foreach (var objective in goal.Objetives.OrderBy(n => n.Objetive))
+                        {
+                            auditGoalsObjetive.NumberGoal = goal.Number;
+                            auditGoalsObjetive.NumberObjective = objective.Objetive;
+                            tempCount = note.Where(n => n.NotesP_Activities.FirstOrDefault(m => m.Objetive != null).Objetive.Id == objective.Id).Count();
+                            auditGoalsObjetive.Count = tempCount;
+                            auditGoalsObjetive.Porciento = Math.Round((tempCount * 100) / Convert.ToDouble(note.Count()), 1);
+                            if (tempCount == 0)
+                            {
+                                auditGoalsObjetive.Active = 0;
+                            }
+                            else
+                            {
+                                auditGoalsObjetive.Active = 2;
+                            }
+                            auditGoalsObjetive_List.Add(auditGoalsObjetive);
+                            tempCount = 0;
+                            auditGoalsObjetive = new AuditGoalsObjective();
+                        }
+
+                    }
+                }
+                else
+                {
+                    if (service == ServiceType.Group)
+                    {
+                        List<GroupNoteEntity> noteGroup = await _context.GroupNotes
+                                                                   .Include(n => n.GroupNotes_Activities)
+                                                                   .ThenInclude(n => n.Objetive)
+                                                                   .ThenInclude(n => n.Goal)
+
+                                                                   .Where(w => (w.Workday_Cient.Workday.Week.Clinic.Id == user_logged.Clinic.Id
+                                                                             && w.MTPId == idMtp
+                                                                             && w.Status != NoteStatus.Edition))
+                                                                   .ToListAsync();
+                        if (noteGroup.Count >= 0)
+                        {
+                            int tempCount = 0;
+                            foreach (var goal in mtp.Goals.Where(n => n.Service == service))
+                            {
+                                foreach (var objective in goal.Objetives.OrderBy(n => n.Objetive))
+                                {
+                                    auditGoalsObjetive.NumberGoal = goal.Number;
+                                    auditGoalsObjetive.NumberObjective = objective.Objetive;
+                                    tempCount = noteGroup.Where(n => n.GroupNotes_Activities.FirstOrDefault(m => m.Objetive != null).Objetive.Id == objective.Id).Count();
+                                    auditGoalsObjetive.Count = tempCount;
+                                    auditGoalsObjetive.Porciento = Math.Round((tempCount * 100) / Convert.ToDouble(noteGroup.Count()), 1);
+                                    if (tempCount == 0)
+                                    {
+                                        auditGoalsObjetive.Active = 0;
+                                    }
+                                    else
+                                    {
+                                        auditGoalsObjetive.Active = 2;
+                                    }
+                                    auditGoalsObjetive_List.Add(auditGoalsObjetive);
+                                    tempCount = 0;
+                                    auditGoalsObjetive = new AuditGoalsObjective();
+                                }
+                            }
+                        }
+                        else
+                        {
+                            List<GroupNote2Entity> noteGroup2 = await _context.GroupNotes2
+                                                                      .Include(n => n.GroupNotes2_Activities)
+                                                                      .ThenInclude(n => n.Objetive)
+                                                                      .ThenInclude(n => n.Goal)
+
+                                                                      .Where(w => (w.Workday_Cient.Workday.Week.Clinic.Id == user_logged.Clinic.Id
+                                                                                && w.MTPId == idMtp
+                                                                                && w.Status != NoteStatus.Edition))
+                                                                      .ToListAsync();
+                            int tempCount = 0;
+                            foreach (var goal in mtp.Goals.Where(n => n.Service == service))
+                            {
+                                foreach (var objective in goal.Objetives.OrderBy(n => n.Objetive))
+                                {
+                                    auditGoalsObjetive.NumberGoal = goal.Number;
+                                    auditGoalsObjetive.NumberObjective = objective.Objetive;
+                                    tempCount = noteGroup2.Where(n => n.GroupNotes2_Activities.FirstOrDefault(m => m.Objetive != null).Objetive.Id == objective.Id).Count();
+                                    auditGoalsObjetive.Count = tempCount;
+                                    auditGoalsObjetive.Porciento = Math.Round((tempCount * 100) / Convert.ToDouble(noteGroup2.Count()), 1);
+                                    if (tempCount == 0)
+                                    {
+                                        auditGoalsObjetive.Active = 0;
+                                    }
+                                    else
+                                    {
+                                        auditGoalsObjetive.Active = 2;
+                                    }
+                                    auditGoalsObjetive_List.Add(auditGoalsObjetive);
+                                    tempCount = 0;
+                                    auditGoalsObjetive = new AuditGoalsObjective();
+                                }
+                            }
+                        }
+
                     }
                     else
                     {
-                        auditGoalsObjetive.Active = 2;
+                        if (service == ServiceType.Individual)
+                        {
+                            List<IndividualNoteEntity> noteInd = await _context.IndividualNotes
+                                                                               .Include(n => n.Objective)
+                                                                               .ThenInclude(n => n.Goal)
+
+                                                                               .Where(w => (w.Workday_Cient.Workday.Week.Clinic.Id == user_logged.Clinic.Id
+                                                                                         && w.MTPId == idMtp
+                                                                                         && w.Status != NoteStatus.Edition))
+                                                                               .ToListAsync();
+                            int tempCount = 0;
+                            foreach (var goal in mtp.Goals.Where(n => n.Service == service))
+                            {
+                                foreach (var objective in goal.Objetives.OrderBy(n => n.Objetive))
+                                {
+                                    auditGoalsObjetive.NumberGoal = goal.Number;
+                                    auditGoalsObjetive.NumberObjective = objective.Objetive;
+                                    tempCount = noteInd.Where(n => n.Objective != null && n.Objective.Id == objective.Id).Count();
+                                    auditGoalsObjetive.Count = tempCount;
+                                    auditGoalsObjetive.Porciento = Math.Round((tempCount * 100) / Convert.ToDouble(noteInd.Count()), 1);
+                                    if (tempCount == 0)
+                                    {
+                                        auditGoalsObjetive.Active = 0;
+                                    }
+                                    else
+                                    {
+                                        auditGoalsObjetive.Active = 2;
+                                    }
+                                    auditGoalsObjetive_List.Add(auditGoalsObjetive);
+                                    tempCount = 0;
+                                    auditGoalsObjetive = new AuditGoalsObjective();
+                                }
+
+                            }
+                        }
                     }
-                    auditGoalsObjetive_List.Add(auditGoalsObjetive);
-                    tempCount = 0;
-                    auditGoalsObjetive = new AuditGoalsObjective();
                 }
-                
             }
            
             return View(auditGoalsObjetive_List);
         }
 
-        [Authorize(Roles = "Manager, Supervisor, Facilitator")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Frontdesk")]
         public async Task<IActionResult> AuditGoalsObjectiveInd(int idMtp = 0)
         {
             UserEntity user_logged = _context.Users
@@ -15094,7 +15568,7 @@ namespace KyoS.Web.Controllers
 
         }
 
-        [Authorize(Roles = "Manager, Supervisor, Facilitator")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant")]
         public IActionResult ViewAllGoals(int idMtp = 0)
         {
             UserEntity user_logged = _context.Users
@@ -15142,6 +15616,7 @@ namespace KyoS.Web.Controllers
                 goal_temp.AreaFocus = goal.AreaOfFocus;
                 goal_temp.Service = goal.Service;
                 goal_temp.Compliment = goal.Compliment;
+                goal_temp.IdMtp = goal.Id;
                 if (goal.Adendum != null)
                 {
                     goal_temp.Document = "Addendum";
@@ -15166,6 +15641,7 @@ namespace KyoS.Web.Controllers
                     objective_temp.Description = objective.Description;
                     objective_temp.Intervention = objective.Intervention;
                     objective_temp.DateTarget = objective.DateResolved.ToShortDateString().ToString();
+                    objective_temp.IdObjective = objective.Id;
 
                     goal_temp.AllObjectives.Add(objective_temp);
                     objective_temp = new AllObjectives();
@@ -15691,7 +16167,7 @@ namespace KyoS.Web.Controllers
                             }
                         }
                     }
-                    client = await _converterHelper.ToClientAUXViewModel(clientEntity, MTPRReview);
+                    client = _converterHelper.ToClientAUXViewModel(clientEntity, MTPRReview);
                     
 
                     if (client.MTPRList.Where(n => n.DataOfService >= workday_client.Workday.Week.InitDate && n.DataOfService <= workday_client.Workday.Week.FinalDate && n.BilledDate == null).Count() == 0)
@@ -15707,14 +16183,6 @@ namespace KyoS.Web.Controllers
                     if (client.FarsFormList.Where(n => n.EvaluationDate >= workday_client.Workday.Week.InitDate && n.EvaluationDate <= workday_client.Workday.Week.FinalDate && n.BilledDate == null).Count() == 0)
                     {
                         client.FarsFormList = null;
-                    }
-
-                    if (client.Bio != null)
-                    {
-                        if (client.Bio.DateBio != null)
-                        {
-                            client.Bio = null;
-                        }
                     }
 
                     client.Workdays_Clients = _context.Workdays_Clients
@@ -15790,7 +16258,7 @@ namespace KyoS.Web.Controllers
                             }
                         }
                     }
-                    client = await _converterHelper.ToClientAUXViewModel(clientEntity, MTPRReview);
+                    client = _converterHelper.ToClientAUXViewModel(clientEntity, MTPRReview);
 
 
                     if (client.MTPRList.Where(n => n.DataOfService >= workday_client.Workday.Week.InitDate && n.DataOfService <= workday_client.Workday.Week.FinalDate && n.BilledDate != null).Count() == 0)
@@ -15806,14 +16274,6 @@ namespace KyoS.Web.Controllers
                     if (client.FarsFormList.Where(n => n.EvaluationDate >= workday_client.Workday.Week.InitDate && n.EvaluationDate <= workday_client.Workday.Week.FinalDate && n.BilledDate != null).Count() == 0)
                     {
                         client.FarsFormList = null;
-                    }
-
-                    if (client.Bio != null)
-                    {
-                        if (client.Bio.DateBio == null)
-                        {
-                            client.Bio = null;
-                        }
                     }
 
                     client.Workdays_Clients = _context.Workdays_Clients
@@ -15950,7 +16410,7 @@ namespace KyoS.Web.Controllers
                         }
                     }
                 }
-                client = await _converterHelper.ToClientAUXViewModel(clientEntity, MTPRReview);
+                client = _converterHelper.ToClientAUXViewModel(clientEntity, MTPRReview);
 
                 if (client.MTPRList.Where(n => n.DataOfService >= workday_client.Workday.Week.InitDate && n.DataOfService <= workday_client.Workday.Week.FinalDate && n.BilledDate != null).Count() == 0)
                 {
@@ -15965,14 +16425,6 @@ namespace KyoS.Web.Controllers
                 if (client.FarsFormList.Where(n => n.EvaluationDate >= workday_client.Workday.Week.InitDate && n.EvaluationDate <= workday_client.Workday.Week.FinalDate && n.BilledDate != null).Count() == 0)
                 {
                     client.FarsFormList = null;
-                }
-
-                if (client.Bio != null)
-                {
-                    if (client.Bio.DateBio == null)
-                    {
-                        client.Bio = null;
-                    }
                 }
 
                 client.Workdays_Clients = _context.Workdays_Clients
@@ -16105,8 +16557,12 @@ namespace KyoS.Web.Controllers
 
                                              .Include(w => w.Note)
                                              .Include(w => w.NoteP)
+                                             .ThenInclude(w => w.NotesP_Activities)
                                              .Include(w => w.IndividualNote)
                                              .Include(w => w.GroupNote)
+                                             .ThenInclude(w => w.GroupNotes_Activities)
+                                             .Include(w => w.GroupNote2)
+                                             .ThenInclude(w => w.GroupNotes2_Activities)
 
                                              .Where(n => n.Facilitator.Clinic.Id == user_logged.Clinic.Id
                                                    && n.Workday.Week.Id == idWeek
@@ -16136,8 +16592,12 @@ namespace KyoS.Web.Controllers
 
                                                  .Include(w => w.Note)
                                                  .Include(w => w.NoteP)
+                                                 .ThenInclude(w => w.NotesP_Activities)
                                                  .Include(w => w.IndividualNote)
                                                  .Include(w => w.GroupNote)
+                                                 .ThenInclude(w => w.GroupNotes_Activities)
+                                                 .Include(w => w.GroupNote2)
+                                                 .ThenInclude(w => w.GroupNotes2_Activities)
 
                                                  .Where(n => n.Facilitator.Clinic.Id == user_logged.Clinic.Id
                                                        && n.Workday.Week.Id == idWeek
@@ -16158,7 +16618,46 @@ namespace KyoS.Web.Controllers
             }
             else
             {
-                return RedirectToAction("NotAuthorized", "Account");
+                string Periodo = "";
+                string ReportName = "SuperBill Unbilled Full Report.xlsx";
+                string data = "";
+                workday_Client = _context.Workdays_Clients
+                                             .Include(f => f.Facilitator)
+                                             .Include(c => c.Client)
+                                             .Include(w => w.Workday)
+
+                                             .Include(w => w.Client)
+                                             .ThenInclude(w => w.Clients_Diagnostics)
+                                             .ThenInclude(w => w.Diagnostic)
+
+                                             .Include(w => w.Client)
+                                             .ThenInclude(w => w.Clients_HealthInsurances)
+                                             .ThenInclude(w => w.HealthInsurance)
+
+                                             .Include(w => w.Note)
+                                             .Include(w => w.NoteP)
+                                             .ThenInclude(w => w.NotesP_Activities)
+                                             .Include(w => w.IndividualNote)
+                                             .Include(w => w.GroupNote)
+                                             .ThenInclude(w => w.GroupNotes_Activities)
+                                             .Include(w => w.GroupNote2)
+                                             .ThenInclude(w => w.GroupNotes2_Activities)
+
+                                             .Where(n => n.Facilitator.Clinic.Id == user_logged.Clinic.Id
+                                                   && n.Present == true
+                                                   && n.Client != null
+                                                   && n.BilledDate == null)
+                                             .OrderBy(n => n.Client.Name)
+                                             .ThenBy(n => n.Workday.Date)
+                                             .ToList();
+                Periodo = "Unbilled Full Report";
+                data = "NOT BILLED";
+
+
+                byte[] content = _exportExcelHelper.ExportBillForWeekHelper(workday_Client, Periodo, user_logged.Clinic.Name, data);
+
+                return File(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", ReportName);
+                //return RedirectToAction("NotAuthorized", "Account");
             }
         }
 
@@ -16905,7 +17404,7 @@ namespace KyoS.Web.Controllers
                                 }
                             }
                         }
-                        clients.Add(await _converterHelper.ToClientAUXViewModel(item, MTPRReview));
+                        clients.Add(_converterHelper.ToClientAUXViewModel(item, MTPRReview));
                         MTPRReview = new List<MTPReviewEntity>();
                     }
 
@@ -17008,7 +17507,7 @@ namespace KyoS.Web.Controllers
                                 }
                             }
                         }
-                        clients.Add(await _converterHelper.ToClientAUXViewModel(item, MTPRReview));
+                        clients.Add(_converterHelper.ToClientAUXViewModel(item, MTPRReview));
                         MTPRReview = new List<MTPReviewEntity>();
                     }
 
@@ -17154,7 +17653,7 @@ namespace KyoS.Web.Controllers
                                 }
                             }
                         }
-                        clients.Add(await _converterHelper.ToClientAUXViewModel(item, MTPRReview));
+                        clients.Add(_converterHelper.ToClientAUXViewModel(item, MTPRReview));
                         MTPRReview = new List<MTPReviewEntity>();
                     }
 
@@ -17315,7 +17814,7 @@ namespace KyoS.Web.Controllers
                             }
                         }
                     }
-                    client = await _converterHelper.ToClientAUXViewModel(clientEntity, MTPRReview);
+                    client = _converterHelper.ToClientAUXViewModel(clientEntity, MTPRReview);
 
                 }
                 else
@@ -17382,7 +17881,7 @@ namespace KyoS.Web.Controllers
                             }
                         }
                     }
-                    client = await _converterHelper.ToClientAUXViewModel(clientEntity, MTPRReview);
+                    client = _converterHelper.ToClientAUXViewModel(clientEntity, MTPRReview);
 
                 }
                 ViewData["Billed"] = abilled;
@@ -17485,7 +17984,7 @@ namespace KyoS.Web.Controllers
                         }
                     }
                 }
-                client = await _converterHelper.ToClientAUXViewModel(clientEntity, MTPRReview);
+                client = _converterHelper.ToClientAUXViewModel(clientEntity, MTPRReview);
 
                 return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_BillingClient", client) });
             }
@@ -17578,7 +18077,7 @@ namespace KyoS.Web.Controllers
                                 }
                             }
                         }
-                        clients.Add(await _converterHelper.ToClientAUXViewModel(item, MTPRReview));
+                        clients.Add(_converterHelper.ToClientAUXViewModel(item, MTPRReview));
                         MTPRReview = new List<MTPReviewEntity>();
                     }
 
@@ -17681,7 +18180,7 @@ namespace KyoS.Web.Controllers
                                 }
                             }
                         }
-                        clients.Add(await _converterHelper.ToClientAUXViewModel(item, MTPRReview));
+                        clients.Add(_converterHelper.ToClientAUXViewModel(item, MTPRReview));
                         MTPRReview = new List<MTPReviewEntity>();
                     }
 
@@ -17827,7 +18326,7 @@ namespace KyoS.Web.Controllers
                                 }
                             }
                         }
-                        clients.Add(await _converterHelper.ToClientAUXViewModel(item, MTPRReview));
+                        clients.Add(_converterHelper.ToClientAUXViewModel(item, MTPRReview));
                         MTPRReview = new List<MTPReviewEntity>();
                     }
 
@@ -17988,7 +18487,7 @@ namespace KyoS.Web.Controllers
                             }
                         }
                     }
-                    client = await _converterHelper.ToClientAUXViewModel(clientEntity, MTPRReview);
+                    client = _converterHelper.ToClientAUXViewModel(clientEntity, MTPRReview);
                 }
                 else
                 {
@@ -18054,7 +18553,7 @@ namespace KyoS.Web.Controllers
                             }
                         }
                     }
-                    client = await _converterHelper.ToClientAUXViewModel(clientEntity, MTPRReview);
+                    client = _converterHelper.ToClientAUXViewModel(clientEntity, MTPRReview);
                 }
                 ViewData["Billed"] = abilled;
 
@@ -18156,7 +18655,7 @@ namespace KyoS.Web.Controllers
                         }
                     }
                 }
-                client = await _converterHelper.ToClientAUXViewModel(clientEntity, MTPRReview);
+                client = _converterHelper.ToClientAUXViewModel(clientEntity, MTPRReview);
 
                 return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_BillingClient", client) });
             }
@@ -18249,7 +18748,7 @@ namespace KyoS.Web.Controllers
                                 }
                             }
                         }
-                        clients.Add(await _converterHelper.ToClientAUXViewModel(item, MTPRReview));
+                        clients.Add(_converterHelper.ToClientAUXViewModel(item, MTPRReview));
                         MTPRReview = new List<MTPReviewEntity>();
                     }
 
@@ -18352,7 +18851,7 @@ namespace KyoS.Web.Controllers
                                 }
                             }
                         }
-                        clients.Add(await _converterHelper.ToClientAUXViewModel(item, MTPRReview));
+                        clients.Add(_converterHelper.ToClientAUXViewModel(item, MTPRReview));
                         MTPRReview = new List<MTPReviewEntity>();
                     }
 
@@ -18498,7 +18997,7 @@ namespace KyoS.Web.Controllers
                                 }
                             }
                         }
-                        clients.Add(await _converterHelper.ToClientAUXViewModel(item, MTPRReview));
+                        clients.Add(_converterHelper.ToClientAUXViewModel(item, MTPRReview));
                         MTPRReview = new List<MTPReviewEntity>();
                     }
 
@@ -18654,7 +19153,7 @@ namespace KyoS.Web.Controllers
                             }
                         }
                     }
-                    client = await _converterHelper.ToClientAUXViewModel(clientEntity, MTPRReview);
+                    client = _converterHelper.ToClientAUXViewModel(clientEntity, MTPRReview);
 
                 }
                 else
@@ -18721,7 +19220,7 @@ namespace KyoS.Web.Controllers
                             }
                         }
                     }
-                    client = await _converterHelper.ToClientAUXViewModel(clientEntity, MTPRReview);
+                    client = _converterHelper.ToClientAUXViewModel(clientEntity, MTPRReview);
 
                 }
                 ViewData["Billed"] = abilled;
@@ -18825,7 +19324,7 @@ namespace KyoS.Web.Controllers
                         }
                     }
                 }
-                client = await _converterHelper.ToClientAUXViewModel(clientEntity, MTPRReview);
+                client = _converterHelper.ToClientAUXViewModel(clientEntity, MTPRReview);
 
                 return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_BillingClient", client) });
             }
@@ -18922,7 +19421,7 @@ namespace KyoS.Web.Controllers
                                 }
                             }
                         }
-                        clients.Add(await _converterHelper.ToClientAUXViewModel(item, MTPRReview));
+                        clients.Add(_converterHelper.ToClientAUXViewModel(item, MTPRReview));
                         MTPRReview = new List<MTPReviewEntity>();
                     }
 
@@ -19034,7 +19533,7 @@ namespace KyoS.Web.Controllers
                                 }
                             }
                         }
-                        clients.Add(await _converterHelper.ToClientAUXViewModel(item, MTPRReview));
+                        clients.Add(_converterHelper.ToClientAUXViewModel(item, MTPRReview));
                         MTPRReview = new List<MTPReviewEntity>();
                     }
 
@@ -19189,7 +19688,7 @@ namespace KyoS.Web.Controllers
                                 }
                             }
                         }
-                        clients.Add(await _converterHelper.ToClientAUXViewModel(item, MTPRReview));
+                        clients.Add(_converterHelper.ToClientAUXViewModel(item, MTPRReview));
                         MTPRReview = new List<MTPReviewEntity>();
                     }
 
@@ -19352,7 +19851,7 @@ namespace KyoS.Web.Controllers
                             }
                         }
                     }
-                    client = await _converterHelper.ToClientAUXViewModel(clientEntity, MTPRReview);
+                    client = _converterHelper.ToClientAUXViewModel(clientEntity, MTPRReview);
 
                 }
                 else
@@ -19421,7 +19920,7 @@ namespace KyoS.Web.Controllers
                             }
                         }
                     }
-                    client = await _converterHelper.ToClientAUXViewModel(clientEntity, MTPRReview);
+                    client = _converterHelper.ToClientAUXViewModel(clientEntity, MTPRReview);
 
                 }
                 ViewData["Billed"] = abilled;
@@ -19526,7 +20025,7 @@ namespace KyoS.Web.Controllers
                         }
                     }
                 }
-                client = await _converterHelper.ToClientAUXViewModel(clientEntity, MTPRReview);
+                client = _converterHelper.ToClientAUXViewModel(clientEntity, MTPRReview);
 
                 return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_BillingClient", client) });
             }
@@ -19589,6 +20088,10 @@ namespace KyoS.Web.Controllers
 
             if (group2 != null)
             {
+                List<GroupNote2_Activity> noteActivity = _context.GroupNotes2_Activities
+                                                                 .Where(n => n.GroupNote2.Id == group2.Id)
+                                                                 .ToList();
+                _context.RemoveRange(noteActivity);
                 _context.Remove(group2);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("ClientHistory", "Clients", new { idClient = idClient });
@@ -19599,6 +20102,10 @@ namespace KyoS.Web.Controllers
 
             if (note != null)
             {
+                List<Note_Activity> noteActivity = _context.Notes_Activities
+                                                           .Where(n => n.Note.Id == note.Id)
+                                                           .ToList();
+                _context.RemoveRange(noteActivity);
                 _context.Remove(note);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("ClientHistory", "Clients", new { idClient = idClient });
@@ -19609,6 +20116,10 @@ namespace KyoS.Web.Controllers
 
             if (noteP != null)
             {
+                List<NoteP_Activity> noteActivity = _context.NotesP_Activities
+                                                            .Where(n => n.NoteP.Id == noteP.Id)
+                                                            .ToList();
+                _context.RemoveRange(noteActivity);
                 _context.Remove(noteP);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("ClientHistory", "Clients", new { idClient = idClient });
@@ -19617,7 +20128,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("ClientHistory", "Clients", new { idClient = idClient });
         }
 
-        [Authorize(Roles = "Manager, Supervisor, Facilitator")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Frontdesk")]
         public IActionResult AuditOverlapin(int idWeek = 0)
         {
             UserEntity user_logged = _context.Users
@@ -19635,7 +20146,10 @@ namespace KyoS.Web.Controllers
             List<AuditOverlapin> auditClient_List = new List<AuditOverlapin>();
             AuditOverlapin auditClient = new AuditOverlapin();
 
-            WeekEntity week = _context.Weeks.FirstOrDefault(n => n.Id == idWeek);
+            List<WorkdayEntity> workDayList = _context.Workdays
+                                                  .Include(n => n.Week)
+                                                  .Where(n => n.Week.Id == idWeek)
+                                                  .ToList();
 
             List<ClientEntity> client_List = _context.Clients
                                                      .Where(n => (n.Clinic.Id == user_logged.Clinic.Id
@@ -19694,7 +20208,7 @@ namespace KyoS.Web.Controllers
                         {
                             auditClient.Name = item.Name;
                             auditClient.Date = value.Workday.Date;
-                            auditClient.Schedule = value.Session;
+                            auditClient.Schedule = value.Schedule.InitialTime.ToShortTimeString() + " - " + value.Schedule.EndTime.ToShortTimeString();
 
                             if (value.Workday.Service == ServiceType.PSR)
                                 auditClient.Services = "PSR";
@@ -19706,11 +20220,948 @@ namespace KyoS.Web.Controllers
                         }
                     }
                 }
+
+                foreach (var workday in workDayList)
+                {
+                    if (workday_clientTemp.Where(n => n.Client.Id == item.Id && n.Workday.Id == workday.Id).Count() > 1)
+                    {
+                        auditClient.Name = item.Name;
+                        auditClient.Date = workday.Date;
+                        auditClient.Schedule = string.Empty;
+
+                        if (workday.Service == ServiceType.Individual)
+                            auditClient.Services = "Ind.";
+                        if (workday.Service == ServiceType.PSR)
+                            auditClient.Services = "PSR";
+                        if (workday.Service == ServiceType.Group)
+                            auditClient.Services = "GROUP";
+
+                        auditClient_List.Add(auditClient);
+                        auditClient = new AuditOverlapin();
+                    }
+                }
+
                 workday_clientTemp = new List<Workday_Client>();
             }
             return View(auditClient_List);
         }
 
+        [Authorize(Roles = "Supervisor")]
+        public async Task<IActionResult> ApproveNotePBatchGroup(int id, int origin = 0)
+        {
+            GroupNoteEntity noteGroup = await _context.GroupNotes
+
+                                                      .Include(n => n.Workday_Cient)
+                                                      .ThenInclude(wc => wc.Client)
+
+                                                      .Include(n => n.Workday_Cient)
+                                                      .ThenInclude(wc => wc.Facilitator)
+
+                                                      .Include(n => n.Workday_Cient)
+                                                      .ThenInclude(w => w.Workday)
+
+                                                      .FirstOrDefaultAsync(n => n.Workday_Cient.Id == id);
+           
+
+            if (noteGroup == null)
+            {
+                //return RedirectToAction("Home/Error404");
+                return View(null);
+            }
+            else
+            {
+                List<GroupNoteEntity> notelist = await _context.GroupNotes
+                                                               .Include(n => n.Workday_Cient)
+                                                               .ThenInclude(wc => wc.Client)
+
+                                                               .Include(n => n.Workday_Cient)
+                                                               .ThenInclude(wc => wc.Facilitator)
+
+                                                               .Include(n => n.Workday_Cient)
+                                                               .ThenInclude(wc => wc.Messages)
+
+                                                               .Include(n => n.Workday_Cient)
+                                                               .ThenInclude(w => w.Workday)
+
+                                                               .Where(n => (n.Workday_Cient.Facilitator.Id == noteGroup.Workday_Cient.Facilitator.Id
+                                                                         && n.Status == NoteStatus.Pending
+                                                                         && n.Workday_Cient.Workday.Id == noteGroup.Workday_Cient.Workday.Id
+                                                                         && n.Workday_Cient.Messages.Count() == 0))
+                                                               .ToListAsync();
+                if (notelist.Count() == 0)
+                {
+                    return RedirectToAction("PendingGroupNotes", "Notes", new { id = id, error = 1 });
+                }
+                return View(notelist);
+            }
+           
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Supervisor")]
+        public async Task<IActionResult> ApproveNotePBatchGroup(int id = 0)
+        {
+            GroupNoteEntity noteGroup = await _context.GroupNotes
+
+                                                      .Include(n => n.Workday_Cient)
+                                                      .ThenInclude(wc => wc.Client)
+
+                                                      .Include(n => n.Workday_Cient)
+                                                      .ThenInclude(wc => wc.Facilitator)
+
+                                                      .Include(n => n.Workday_Cient)
+                                                      .ThenInclude(w => w.Workday)
+
+                                                      .FirstOrDefaultAsync(n => n.Id == id);
+
+            if (noteGroup == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+            else
+            {
+                List<GroupNoteEntity> model = await _context.GroupNotes
+                                                            .Include(n => n.Workday_Cient)
+                                                            .ThenInclude(wc => wc.Client)
+
+                                                            .Include(n => n.Workday_Cient)
+                                                            .ThenInclude(wc => wc.Facilitator)
+
+                                                            .Include(n => n.Workday_Cient)
+                                                            .ThenInclude(wc => wc.Messages)
+
+                                                            .Include(n => n.Workday_Cient)
+                                                            .ThenInclude(w => w.Workday)
+
+                                                            .Where(n => (n.Workday_Cient.Facilitator.Id == noteGroup.Workday_Cient.Facilitator.Id
+                                                                      && n.Status == NoteStatus.Pending
+                                                                      && n.Workday_Cient.Workday.Id == noteGroup.Workday_Cient.Workday.Id
+                                                                      && n.Workday_Cient.Messages.Count() == 0))
+                                                            .ToListAsync();
+
+                foreach (var item in model)
+                {
+                    item.Status = NoteStatus.Approved;
+                    item.DateOfApprove = DateTime.Now;
+                    item.Supervisor = await _context.Supervisors.FirstOrDefaultAsync(s => s.LinkedUser == User.Identity.Name);
+                    _context.Update(item);
+
+                    await _context.SaveChangesAsync();
+                }
+
+                return RedirectToAction(nameof(PendingGroupNotes));
+            }
+            
+        }
+
+        [Authorize(Roles = "Supervisor")]
+        public async Task<IActionResult> ApproveNotePBatchGroup2(int id, int origin = 0)
+        {
+            GroupNote2Entity noteGroup2 = await _context.GroupNotes2
+
+                                                .Include(n => n.Workday_Cient)
+                                                .ThenInclude(wc => wc.Client)
+
+                                                .Include(n => n.Workday_Cient)
+                                                .ThenInclude(wc => wc.Facilitator)
+
+                                                .Include(n => n.Workday_Cient)
+                                                .ThenInclude(w => w.Workday)
+
+                                                .FirstOrDefaultAsync(n => n.Workday_Cient.Id == id);
+
+            if (noteGroup2 == null)
+            {
+                //return RedirectToAction("Home/Error404");
+                return View(null);
+            }
+            else
+            {
+                List<GroupNote2Entity> notelist = await _context.GroupNotes2
+                                                                    .Include(n => n.Workday_Cient)
+                                                                    .ThenInclude(wc => wc.Client)
+
+                                                                    .Include(n => n.Workday_Cient)
+                                                                    .ThenInclude(wc => wc.Facilitator)
+
+                                                                    .Include(n => n.Workday_Cient)
+                                                                    .ThenInclude(wc => wc.Messages)
+
+                                                                    .Include(n => n.Workday_Cient)
+                                                                    .ThenInclude(w => w.Workday)
+
+                                                                    .Where(n => (n.Workday_Cient.Facilitator.Id == noteGroup2.Workday_Cient.Facilitator.Id
+                                                                              && n.Status == NoteStatus.Pending
+                                                                              && n.Workday_Cient.Workday.Id == noteGroup2.Workday_Cient.Workday.Id
+                                                                              && n.Workday_Cient.Messages.Count() == 0))
+                                                                    .ToListAsync();
+                if (notelist.Count() == 0)
+                {
+                    return RedirectToAction("PendingGroupNotes", "Notes", new { id = id, error = 1});
+                }
+                return View(notelist);
+            }
+            
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Supervisor")]
+        public async Task<IActionResult> ApproveNotePBatchGroup2(int id = 0)
+        {
+            GroupNote2Entity noteGroup2 = await _context.GroupNotes2
+
+                                                        .Include(n => n.Workday_Cient)
+                                                        .ThenInclude(wc => wc.Client)
+
+                                                        .Include(n => n.Workday_Cient)
+                                                        .ThenInclude(wc => wc.Facilitator)
+
+                                                        .Include(n => n.Workday_Cient)
+                                                        .ThenInclude(w => w.Workday)
+
+                                                        .FirstOrDefaultAsync(n => n.Id == id);
+
+            if (noteGroup2 == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+            else
+            {
+                List<GroupNote2Entity> model = await _context.GroupNotes2
+                                                                .Include(n => n.Workday_Cient)
+                                                                .ThenInclude(wc => wc.Client)
+
+                                                                .Include(n => n.Workday_Cient)
+                                                                .ThenInclude(wc => wc.Facilitator)
+
+                                                                .Include(n => n.Workday_Cient)
+                                                                .ThenInclude(wc => wc.Messages)
+
+                                                                .Include(n => n.Workday_Cient)
+                                                                .ThenInclude(w => w.Workday)
+
+                                                                .Where(n => (n.Workday_Cient.Facilitator.Id == noteGroup2.Workday_Cient.Facilitator.Id
+                                                                          && n.Status == NoteStatus.Pending
+                                                                          && n.Workday_Cient.Workday.Id == noteGroup2.Workday_Cient.Workday.Id
+                                                                          && n.Workday_Cient.Messages.Count() == 0))
+                                                                .ToListAsync();
+
+                foreach (var item in model)
+                {
+                    item.Status = NoteStatus.Approved;
+                    item.DateOfApprove = DateTime.Now;
+                    item.Supervisor = await _context.Supervisors.FirstOrDefaultAsync(s => s.LinkedUser == User.Identity.Name);
+                    _context.Update(item);
+
+                    await _context.SaveChangesAsync();
+                }
+
+                return RedirectToAction(nameof(PendingGroupNotes));
+            }
+            
+        }
+
+        [Authorize(Roles = "Manager")]
+        public IActionResult DeleteIndNoteModal(int id = 0, int weekId = 0, int facilitatorId = 0)
+        {
+            if (id > 0)
+            {
+                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                DeleteViewModel model = new DeleteViewModel
+                {
+                    Id_Element = id,
+                    Desciption = "Do you want to delete this record?"
+
+                };
+                ViewData["week"] = weekId;
+                ViewData["facilitator"] = facilitatorId;
+                return View(model);
+            }
+            else
+            {
+                //Edit
+                //return View(new Client_DiagnosticViewModel());
+                return null;
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> DeleteIndNoteModal(DeleteViewModel worday_client_model, int weekId = 0, int facilitatorId = 0)
+        {
+            UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                      .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            List<WeekEntity> list = await _context.Weeks
+
+                                                 .Include(w => w.Days)
+                                                 .ThenInclude(d => d.Workdays_Clients)
+                                                 .ThenInclude(wc => wc.Client)
+
+                                                 .Include(w => w.Days)
+                                                 .ThenInclude(d => d.Workdays_Clients)
+                                                 .ThenInclude(g => g.Facilitator)
+
+                                                 .Include(w => w.Days)
+                                                 .ThenInclude(d => d.Workdays_Clients)
+                                                 .ThenInclude(wc => wc.IndividualNote)
+
+                                                 .Where(w => (w.Clinic.Id == user_logged.Clinic.Id
+                                                           && w.Days.Where(d => (d.Service == ServiceType.Individual
+                                                                              && d.Workdays_Clients.Where(wc => (wc.Facilitator.Id == facilitatorId
+                                                                                                              && wc.Workday.Week.Id == weekId)).Count() > 0)).Count() > 0))
+                                                 .ToListAsync();
+            if (ModelState.IsValid)
+            {
+                Workday_Client workday_client = await _context.Workdays_Clients
+                                                              .FirstAsync(n => n.Id == worday_client_model.Id_Element 
+                                                                            && n.Workday.Service == ServiceType.Individual
+                                                                            && n.IndividualNote == null);
+                try
+                {
+                    _context.Workdays_Clients.Remove(workday_client);
+                    await _context.SaveChangesAsync();
+
+                    list = await _context.Weeks
+
+                                         .Include(w => w.Days)
+                                         .ThenInclude(d => d.Workdays_Clients)
+                                         .ThenInclude(wc => wc.Client)
+
+                                         .Include(w => w.Days)
+                                         .ThenInclude(d => d.Workdays_Clients)
+                                         .ThenInclude(g => g.Facilitator)
+
+                                         .Include(w => w.Days)
+                                         .ThenInclude(d => d.Workdays_Clients)
+                                         .ThenInclude(wc => wc.IndividualNote)
+
+                                         .Where(w => (w.Clinic.Id == user_logged.Clinic.Id
+                                                   && w.Days.Where(d => (d.Service == ServiceType.Individual
+                                                                      && d.Workdays_Clients.Where(wc => (wc.Facilitator.Id == facilitatorId
+                                                                                                      && wc.Workday.Week.Id == weekId)).Count() > 0)).Count() > 0))
+                                         .ToListAsync();
+
+                    ViewData["facilitatorId"] = facilitatorId;
+
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewNotesIndForFacilitator", list) });
+                }
+                catch (Exception)
+                {
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewNotesIndForFacilitator", list) });
+
+                }
+
+            }
+
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "ClientIndForWeek", list/*, new { weekId = weekId, facilitatorId = facilitatorId }*/) });
+        }
+
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Frontdesk")]
+        public async Task<IActionResult> AuditNotes()
+        {
+            UserEntity user_logged = _context.Users
+
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(c => c.Setting)
+
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic || !user_logged.Clinic.Setting.MHProblems)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+            List<AuditNotes> auditNotes_List = new List<AuditNotes>();
+            AuditNotes auditNote = new AuditNotes();
+
+            List<Workday_Client> workDay_List = new List<Workday_Client>();
+
+            if (User.IsInRole("Manager") || User.IsInRole("Supervisor"))
+            {
+                workDay_List = _context.Workdays_Clients
+                                       .Include(m => m.Client)
+                                       .ThenInclude(m => m.Clients_Diagnostics)
+                                       .Include(m => m.Workday)
+                                       .Include(m => m.Note)
+                                       .Include(m => m.NoteP)
+                                       .Include(m => m.GroupNote)
+                                       .Include(m => m.GroupNote2)
+                                       .Include(m => m.IndividualNote)
+                                       .Where(n => n.Client.Clinic.Id == user_logged.Clinic.Id)
+                                       .ToList();
+
+            }
+            else
+            {
+                if (User.IsInRole("Facilitator"))
+                {
+                    FacilitatorEntity facilitator = await _context.Facilitators.FirstOrDefaultAsync(f => f.LinkedUser == user_logged.UserName);
+
+                    workDay_List = _context.Workdays_Clients
+                                           .Include(m => m.Client)
+                                           .ThenInclude(m => m.Clients_Diagnostics)
+                                           .Include(m => m.Workday)
+                                           .Include(m => m.Note)
+                                           .Include(m => m.NoteP)
+                                           .Include(m => m.GroupNote)
+                                           .Include(m => m.GroupNote2)
+                                           .Include(m => m.IndividualNote)
+                                           .Where(n => n.Client.Clinic.Id == user_logged.Clinic.Id
+                                               && n.Facilitator.Id == facilitator.Id )
+                                      .ToList();
+
+                }
+
+            }
+
+            foreach (var item in workDay_List)
+            {
+                if (item.CodeBill == null || item.CodeBill == string.Empty)
+                {
+                    auditNote.NameClient = item.Client.Name;
+                    auditNote.NoteDate = item.Workday.Date.ToShortDateString();
+                    auditNote.Description = "The client has no CTP code";
+                    auditNote.Active = 0;
+
+                    auditNotes_List.Add(auditNote);
+                    auditNote = new AuditNotes();
+                }
+                if (item.Client.Id == 0)
+                {
+                    auditNote.NameClient = item.Client.Name;
+                    auditNote.NoteDate = item.Workday.Date.ToShortDateString();
+                    auditNote.Description = "The client has no Client Id";
+                    auditNote.Active = 0;
+
+                    auditNotes_List.Add(auditNote);
+                    auditNote = new AuditNotes();
+                }
+                if (item.Client.Clients_Diagnostics.Count(n => n.Principal == true) == 0)
+                {
+                    auditNote.NameClient = item.Client.Name;
+                    auditNote.NoteDate = item.Workday.Date.ToShortDateString();
+                    auditNote.Description = "The client has no Dx";
+                    auditNote.Active = 0;
+
+                    auditNotes_List.Add(auditNote);
+                    auditNote = new AuditNotes();
+                }
+                if (item.Note != null)
+                {
+                    if (item.Note.Setting == null || item.Note.Setting == string.Empty)
+                    {
+                        auditNote.NameClient = item.Client.Name;
+                        auditNote.NoteDate = item.Workday.Date.ToShortDateString();
+                        auditNote.Description = "The client has no Setting";
+                        auditNote.Active = 0;
+
+                        auditNotes_List.Add(auditNote);
+                        auditNote = new AuditNotes();
+                    }
+                    
+                }
+                else
+                {
+                    if (item.NoteP != null)
+                    {
+                        if (item.NoteP.Setting == null || item.NoteP.Setting == string.Empty)
+                        {
+                            auditNote.NameClient = item.Client.Name;
+                            auditNote.NoteDate = item.Workday.Date.ToShortDateString();
+                            auditNote.Description = "The client has no Setting";
+                            auditNote.Active = 0;
+
+                            auditNotes_List.Add(auditNote);
+                            auditNote = new AuditNotes();
+                        }
+                    }
+                    else
+                    {
+                        if (item.GroupNote != null)
+                        {
+                            if (item.GroupNote.Setting == null || item.GroupNote.Setting == string.Empty)
+                            {
+                                auditNote.NameClient = item.Client.Name;
+                                auditNote.NoteDate = item.Workday.Date.ToShortDateString();
+                                auditNote.Description = "The client has no Setting";
+                                auditNote.Active = 0;
+
+                                auditNotes_List.Add(auditNote);
+                                auditNote = new AuditNotes();
+                            }
+                        }
+                        else
+                        {
+                            if (item.GroupNote2 != null)
+                            {
+                                if (item.GroupNote2.Setting == null || item.GroupNote2.Setting == string.Empty)
+                                {
+                                    auditNote.NameClient = item.Client.Name;
+                                    auditNote.NoteDate = item.Workday.Date.ToShortDateString();
+                                    auditNote.Description = "The client has no Setting";
+                                    auditNote.Active = 0;
+
+                                    auditNotes_List.Add(auditNote);
+                                    auditNote = new AuditNotes();
+                                }
+                            }
+                            else
+                            {
+                                if (item.IndividualNote != null)
+                                {
+                                    if (item.IndividualNote.Setting == null || item.IndividualNote.Setting == string.Empty)
+                                    {
+                                        auditNote.NameClient = item.Client.Name;
+                                        auditNote.NoteDate = item.Workday.Date.ToShortDateString();
+                                        auditNote.Description = "The client has no Setting";
+                                        auditNote.Active = 0;
+
+                                        auditNotes_List.Add(auditNote);
+                                        auditNote = new AuditNotes();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+           
+            return View(auditNotes_List);
+        }
+
+        [Authorize(Roles = "Manager")]
+        public IActionResult UpdateBillFullWeek(int idWeek = 0)
+        {
+            if (idWeek > 0)
+            {
+                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+                List<Workday_Client> worday_client = _context.Workdays_Clients
+                                                             .Include(n => n.Workday)
+                                                             .Where(n => n.Workday.Week.Id == idWeek
+                                                                      && n.BilledDate == null
+                                                                      && n.Present == true
+                                                                      && n.Client != null)
+                                                             .ToList();
+                WeekEntity week = _context.Weeks.First(n => n.Id == idWeek);
+                if (worday_client.Count() > 0)
+                {
+                    UpdateBillViewModel model = new UpdateBillViewModel
+                    {
+                        IdWeek = idWeek,
+                        CountNotesPSR = worday_client.Where(n => n.Workday.Service == ServiceType.PSR).Count(),
+                        CountNotesGroup = worday_client.Where(n => n.Workday.Service == ServiceType.Group).Count(),
+                        CountNotesInd = worday_client.Where(n => n.Workday.Service == ServiceType.Individual).Count(),
+                        DateLong = week.InitDate.ToLongDateString() + " - " + week.FinalDate.ToLongDateString()
+                    };
+
+                    return View(model);
+                }
+                else
+                {
+                    UpdateBillViewModel model = new UpdateBillViewModel
+                    {
+                        IdWeek = idWeek,
+                        CountNotesPSR = 0,
+                        CountNotesGroup = 0,
+                        CountNotesInd = 0,
+                        DateLong = week.InitDate.ToLongDateString() + " - " + week.FinalDate.ToLongDateString()
+                    };
+
+                    return View(model);
+                }
+            }
+            else
+            {
+                //Edit
+                //return View(new Client_DiagnosticViewModel());
+                return null;
+            }
+
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> UpdateBillFullWeek(UpdateBillViewModel updateBillWeekViewModel)
+        {
+            UserEntity user_logged = _context.Users
+
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(c => c.Setting)
+
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic || !user_logged.Clinic.Setting.BillSemanalMH)
+            {
+                return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "BillingReport1", new { idWeek = updateBillWeekViewModel.IdWeek }) });
+            }
+
+            List<Workday_Client> workday_Clients = new List<Workday_Client>();
+            List<Workday_Client> salida = new List<Workday_Client>();
+           
+            if (User.IsInRole("Manager"))
+            {
+                workday_Clients = _context.Workdays_Clients
+                                          .Where(n => n.Client.Clinic.Id == user_logged.Clinic.Id
+                                             && n.Workday.Week.Id == updateBillWeekViewModel.IdWeek
+                                             && n.BilledDate == null
+                                             && n.Present == true
+                                             && n.Client != null)
+                                          .ToList();
+
+            }
+
+            if (workday_Clients.Count() > 0)
+            {
+                foreach (var item in workday_Clients)
+                {
+                    item.BilledDate = DateTime.Now;
+                    salida.Add(item);
+                }
+
+                _context.UpdateRange(salida);
+                try
+                {
+                    await _context.SaveChangesAsync();
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "BillingReport1", new { idWeek = updateBillWeekViewModel.IdWeek }) });
+
+                }
+                catch (System.Exception ex)
+                {
+                    if (ex.InnerException.Message.Contains("duplicate"))
+                    {
+                        ModelState.AddModelError(string.Empty, $"TEXT ");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+            }
+            return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "BillingReport1", new { idWeek = updateBillWeekViewModel.IdWeek }) });
+        }
+
+        [Authorize(Roles = "Facilitator")]
+        private ClientEntity AppointmentIndNote(int idFacilitator, DateTime date, int idSchedule, string session)
+        {
+            List<SubScheduleEntity> subSchedules = new List<SubScheduleEntity>();
+            SubScheduleEntity subScheduleEntity = new SubScheduleEntity();
+            subSchedules = _context.SubSchedule.Where(n => n.Schedule.Id == idSchedule).OrderBy(n => n.InitialTime).ToList();
+
+            string time = session.Substring(0, 7);
+            foreach (var value in subSchedules)
+            {
+                if (value.InitialTime.ToShortTimeString().ToString().Contains(time) == true)
+                {
+                    subScheduleEntity = value;
+                }
+            }
+
+
+            CiteEntity cite = _context.Cites
+                                      .Include(n => n.Client)                    
+                                      .FirstOrDefault(n => n.Facilitator.Id == idFacilitator
+                                                        && n.DateCite.Date == date.Date
+                                                        && n.SubSchedule.Id == subScheduleEntity.Id
+                                                        && n.Status == CiteStatus.A);
+            if (cite != null)
+            {
+                return cite.Client;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> ChangeFacilitator(int idClient = 0)
+        {
+            //success
+           /* if (update)
+            {
+                ViewBag.Error = "1";
+                ViewBag.Text = $"Succesfully updated";
+            }
+           */
+            UserEntity user_logged = _context.Users
+
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(c => c.Setting)
+
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+            MultiSelectList clients_list;
+            List<ClientEntity> clients = await _context.Clients
+                                                       .Where(f => (f.Clinic.Id == user_logged.Clinic.Id && f.Status == StatusType.Open))
+                                                       .OrderBy(c => c.Name)
+                                                       .ToListAsync();
+
+            ClientEntity client = await _context.Clients
+                                                .Include(n => n.Workdays_Clients)
+                                                .ThenInclude(n => n.Workday)
+                                                .Include(n => n.Workdays_Clients)
+                                                .ThenInclude(n => n.Note)
+                                                .Include(n => n.Workdays_Clients)
+                                                .ThenInclude(n => n.NoteP)
+                                                .Include(n => n.Workdays_Clients)
+                                                .ThenInclude(n => n.GroupNote)
+                                                .Include(n => n.Workdays_Clients)
+                                                .ThenInclude(n => n.GroupNote2)
+                                                .Include(n => n.Workdays_Clients)
+                                                .ThenInclude(n => n.IndividualNote)
+                                                .Include(n => n.Workdays_Clients)
+                                                .ThenInclude(n => n.Facilitator)
+                                                .FirstOrDefaultAsync(n => n.Id == idClient);
+
+            clients_list = new MultiSelectList(clients, "Id", "Name");
+
+            if (idClient == 0)
+            {
+                client = await _context.Clients
+                                       .Include(n => n.Workdays_Clients)
+                                       .ThenInclude(n => n.Workday)
+                                       .Include(n => n.Workdays_Clients)
+                                       .ThenInclude(n => n.Note)
+                                       .Include(n => n.Workdays_Clients)
+                                       .ThenInclude(n => n.NoteP)
+                                       .Include(n => n.Workdays_Clients)
+                                       .ThenInclude(n => n.GroupNote)
+                                       .Include(n => n.Workdays_Clients)
+                                       .ThenInclude(n => n.GroupNote2)
+                                       .Include(n => n.Workdays_Clients)
+                                       .ThenInclude(n => n.IndividualNote)
+                                       .Include(n => n.Workdays_Clients)
+                                       .ThenInclude(n => n.Facilitator)
+                                       .FirstOrDefaultAsync(n => n.Id == clients.ElementAtOrDefault(0).Id);
+            }
+          
+            FacilitatorChanageViewModel model = new FacilitatorChanageViewModel
+            {
+                Clients = clients_list,
+                Client = client,
+                IdClient = idClient
+
+            };
+
+            return View(model);
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> ChangeFacilitatorModal(int? id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            Workday_Client workday_client = await _context.Workdays_Clients
+                                                          .Include(f => f.Facilitator)
+                                                          .ThenInclude(f => f.Workdays_Activities_Facilitators)
+                                                          .ThenInclude(f => f.Activity)
+                                                          .Include(f => f.Facilitator)
+                                                          .ThenInclude(f => f.Workdays_Activities_Facilitators)
+                                                          .ThenInclude(f => f.Workday)
+                                                          .Include(f => f.Workday)
+                                                          .Include(f => f.Client)
+                                                          .FirstOrDefaultAsync(f => f.Id == id);
+            if (workday_client == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            List<SelectListItem> facilitators_list = new List<SelectListItem>();
+            List<FacilitatorEntity> facilitators = await _context.Facilitators
+                                                                 .Include(n => n.Workdays_Activities_Facilitators)
+                                                                 .ThenInclude(f => f.Activity)
+                                                                 .Include(n => n.Workdays_Activities_Facilitators)
+                                                                 .ThenInclude(f => f.Workday)
+                                                                 .Where(n => n.Id != workday_client.Facilitator.Id)
+                                                                 .OrderBy(n => n.Name)
+                                                                 .ToListAsync();
+
+            FacilitatorSelectViewModel model = new FacilitatorSelectViewModel();
+
+            if (User.IsInRole("Manager"))
+            {
+                UserEntity user_logged = _context.Users
+                                                 .Include(u => u.Clinic)
+                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                // facilitators_list = new MultiSelectList(facilitators, "Id", "Name");
+                List<SelectListItem> list = facilitators.Select(u => new SelectListItem
+                {
+                    Text = $"{u.Name}",
+                    Value = $"{u.Id}"
+                }).ToList();
+
+               
+                List<Workday_Activity_Facilitator> wprkdayActivityFacilitator = workday_client.Facilitator
+                                                                                              .Workdays_Activities_Facilitators
+                                                                                              .Where(n => n.Workday.Id == workday_client.Workday.Id)
+                                                                                              .ToList();
+
+                foreach (var product in list)
+                {
+                    bool flag = false;
+                    foreach (var item in wprkdayActivityFacilitator)
+                    {
+                        if (facilitators.FirstOrDefault(n => n.Id.ToString() == product.Value.ToString()).Workdays_Activities_Facilitators.Any(n => n.Activity.Id == item.Activity.Id && n.Workday.Id == workday_client.Workday.Id) == false)
+                        {
+                            flag = true;
+                        }
+                    }
+                    if (flag == true)
+                    {
+                        product.Text += " / Activities do not match";
+                    }
+                    else
+                    {
+                        product.Text += " / Perfect! Activities match";
+                    }
+                    facilitators_list.Add(product);
+                }
+
+                model = new FacilitatorSelectViewModel
+                {
+                    IdFacilitator = workday_client.Facilitator.Id,
+                    IdWorkdayClient = workday_client.Id,
+                    Workday_Client = workday_client,
+                    Facilitators = facilitators_list
+                };
+            }
+            else
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            ViewData["name"] = "Client Name: " + workday_client.Client.Name;
+            ViewData["date"] = "Date: " + workday_client.Workday.Date.ToLongDateString();
+            return View(model);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Manager")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangeFacilitatorModal(int id, FacilitatorSelectViewModel facilitatorViewModel)
+        {
+            if (id != facilitatorViewModel.IdWorkdayClient)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            
+            List<SelectListItem> list = new List<SelectListItem>();
+
+            if (ModelState.IsValid)
+            {
+                Workday_Client workdayClient = await _context.Workdays_Clients
+                                                             .Include(n => n.Note)
+                                                             .ThenInclude(n => n.Notes_Activities)
+                                                             .Include(n => n.NoteP)
+                                                             .ThenInclude(n => n.NotesP_Activities)
+                                                             .Include(n => n.GroupNote)
+                                                             .ThenInclude(n => n.GroupNotes_Activities)
+                                                             .Include(n => n.GroupNote2)
+                                                             .ThenInclude(n => n.GroupNotes2_Activities)
+                                                             .Include(n => n.Workday)
+                                                             .Include(n => n.Client)
+                                                             .Include(n => n.Facilitator)
+                                                             .FirstOrDefaultAsync(t => t.Id == facilitatorViewModel.IdWorkdayClient);
+                if (workdayClient == null)
+                {
+                    return RedirectToAction("Home/Error404");
+                }
+
+                FacilitatorEntity Newfacilitator = await _context.Facilitators.FirstOrDefaultAsync(n => n.Id == facilitatorViewModel.IdFacilitator);
+                List<Workday_Activity_Facilitator> group1 = await _context.Workdays_Activities_Facilitators.Include(n => n.Activity).Where(n => n.Facilitator.Id == Newfacilitator.Id && n.Workday.Id == workdayClient.Workday.Id).ToListAsync();
+                List<Workday_Activity_Facilitator> group2 = await _context.Workdays_Activities_Facilitators.Include(n => n.Activity).Where(n => n.Facilitator.Id == workdayClient.Facilitator.Id && n.Workday.Id == workdayClient.Workday.Id).ToListAsync();
+
+                try
+                {
+                    bool flag = false;
+                    foreach (var item in group2)
+                    {
+                        if (group1.Any(n => n.Activity.Id == item.Activity.Id) == false)
+                        {
+                            flag = true;
+                        }
+                    }
+
+                    if (flag == true)
+                    {
+                        if (workdayClient.NoteP != null)
+                        {
+                            _context.NotesP_Activities.RemoveRange(workdayClient.NoteP.NotesP_Activities);
+                            _context.NotesP.Remove(workdayClient.NoteP);
+                        }
+                        else
+                        {
+                            if (workdayClient.GroupNote2 != null)
+                            {
+                                _context.GroupNotes2_Activities.RemoveRange(workdayClient.GroupNote2.GroupNotes2_Activities);
+                                _context.GroupNotes2.Remove(workdayClient.GroupNote2);
+                            }
+                            else
+                            {
+                                if (workdayClient.Note != null)
+                                {
+                                    _context.Notes_Activities.RemoveRange(workdayClient.Note.Notes_Activities);
+                                    _context.Notes.Remove(workdayClient.Note);
+                                }
+                                else
+                                {
+                                    if (workdayClient.GroupNote != null)
+                                    {
+                                        _context.GroupNotes_Activities.RemoveRange(workdayClient.GroupNote.GroupNotes_Activities);
+                                        _context.GroupNotes.Remove(workdayClient.GroupNote);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    workdayClient.Facilitator = Newfacilitator;
+                   
+                    await _context.SaveChangesAsync();
+                    
+                    List<Workday_Client> List = await _context.Workdays_Clients
+                                                              .Include(n => n.Workday)
+                                                              .Include(n => n.Note)
+                                                              .Include(n => n.NoteP)
+                                                              .Include(n => n.GroupNote)
+                                                              .Include(n => n.GroupNote2)
+                                                              .Include(n => n.IndividualNote)
+                                                              .Include(n => n.Facilitator)
+                                                              .Include(n => n.Client)
+                                                              .Where(n => n.Client.Id == workdayClient.Client.Id)
+                                                              .ToListAsync();
+
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewClients", List) });
+                }
+                catch (System.Exception)
+                {
+                    return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "ChangeFacilitator", null) });
+                }
+            }
+
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "ChangeFacilitator", null) });
+        }
 
     }
 }

@@ -7,9 +7,9 @@
         <span asp-validation-for="TcmClient.Client.Name" class="text-danger"></span>
     </div>
     <div class="form-group col-md-2">
-        <label asp-for="TcmClient.Client.Code" class="control-label">Case No</label>
-        <input asp-for="TcmClient.Client.Code" class="form-control" readonly>
-        <span asp-validation-for="TcmClient.Client.Code" class="text-danger"></span>
+        <label asp-for="TcmClient.CaseNumber" class="control-label">Case No</label>
+        <input asp-for="TcmClient.CaseNumber" class="form-control" readonly>
+        <span asp-validation-for="TcmClient.CaseNumber" class="text-danger"></span>
     </div>
     <div class="form-group col-md-2">
         <label asp-for="TcmClient.Client.DateOfBirth" class="control-label">DOB</label>
@@ -50,88 +50,226 @@
 <div class="col-md-12">
     <hr />
 </div>
-<div class="form-group col-md-12">
-<pre>    
-    <strong>THIS WILL AUTHORIZE:</strong>
-    Clinic Name: <u>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Name)</u>     Address: <u>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Address)</u>     City: <u>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.City)</u>     State: <u>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.State)</u>     Zip: <u>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.ZipCode)</u>                                        
-    Phone No: <u>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Phone)</u>     Fax No: <u>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.FaxNo)</u>
-    
-    <input type="checkbox" asp-for="ToRelease" class="form-check-input" id="ToRelease"> to release/request general medical, psychiatric/psychological, alcohol and drug abuse information and/or records in accordance with Florida Statues 394, 
-    459, 396, 11, 297, 053, 90.50 and 458.21 to/ from:
 
-</pre>
-</div>
-<div class="col-md-push-12">
-    <div class="form-group col-md-3">
-        <label asp-for="NameOfFacility" class="control-label">Name of Facility, Individual or Agency</label>
-        <input asp-for="NameOfFacility" class="form-control" >
-        <span asp-validation-for="NameOfFacility" class="text-danger"></span>
+@if (User.IsInRole("CaseManager"))
+{
+    <div class="col-md-push-12">
+        <div class="form-group col-md-3">
+            <label asp-for="Idtype" class="control-label"></label>
+            <select asp-for="Idtype" asp-items="Model.ConsentList" class="form-control"></select>
+            <span asp-validation-for="Idtype" class="text-danger"></span>
+        </div>
+        <div class="container-fluid">
+            &nbsp;
+        </div>
     </div>
-    <div class="form-group col-md-3">
-        <label asp-for="Address" class="control-label">Address</label>
-        <input asp-for="Address" class="form-control" >
-        <span asp-validation-for="Address" class="text-danger"></span>
+    <div class="form-group col-md-12">
+        <pre>    
+        <strong>THIS WILL AUTHORIZE:</strong>                                                                
+        Clinic Name: <u>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Name)</u>     Address: <u>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Address)</u>     City: <u>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.City)</u>     State: <u>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.State)</u>     Zip: <u>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.ZipCode)</u>                                        
+        Phone No: <u>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Phone)</u>     Fax No: <u>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.FaxNo)</u>
+    
+        <input type="checkbox" asp-for="ToRelease" class="form-check-input" id="ToRelease"> to release/request general medical, psychiatric/psychological, alcohol and drug abuse information and/or records in accordance with Florida Statues 394, 
+        459, 396, 11, 297, 053, 90.50 and 458.21 to/ from:
+
+        </pre>
     </div>
-    <div class="form-group col-md-2">
-        <label asp-for="CityStateZip" class="control-label">City, State, Zip</label>
-        <input asp-for="CityStateZip" class="form-control" >
-        <span asp-validation-for="CityStateZip" class="text-danger"></span>
+    <div class="col-md-push-12">
+        <div class="form-group col-md-3">
+            <label asp-for="NameOfFacility" class="control-label">Name of Facility, Individual or Agency</label>
+            <input asp-for="NameOfFacility" class="form-control">
+            <span asp-validation-for="NameOfFacility" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-3">
+            <label asp-for="Address" class="control-label">Address</label>
+            <input asp-for="Address" class="form-control">
+            <span asp-validation-for="Address" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-2">
+            <label asp-for="CityStateZip" class="control-label">City, State, Zip</label>
+            <input asp-for="CityStateZip" class="form-control">
+            <span asp-validation-for="CityStateZip" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-2">
+            <label asp-for="PhoneNo" class="control-label">Phone No</label>
+            <input asp-for="PhoneNo" class="form-control">
+            <span asp-validation-for="PhoneNo" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-2">
+            <label asp-for="FaxNo" class="control-label">Fax No</label>
+            <input asp-for="FaxNo" class="form-control">
+            <span asp-validation-for="FaxNo" class="text-danger"></span>
+        </div>
     </div>
-    <div class="form-group col-md-2">
-        <label asp-for="PhoneNo" class="control-label">Phone No</label>
-        <input asp-for="PhoneNo" class="form-control" >
-        <span asp-validation-for="PhoneNo" class="text-danger"></span>
-    </div>
-    <div class="form-group col-md-2">
-        <label asp-for="FaxNo" class="control-label">Fax No</label>
-        <input asp-for="FaxNo" class="form-control" >
-        <span asp-validation-for="FaxNo" class="text-danger"></span>
-    </div>
-</div>
-<div class="col-md-12">
-    <pre>    
-    <strong>In the form of: </strong>              <input type="checkbox" asp-for="InForm_VerbalInformation" class="form-check-input" id="InForm_VerbalInformation"> Verbal Information            <input type="checkbox" asp-for="InForm_Facsimile" class="form-check-input" id="InForm_Facsimile"> Facsimile              <input type="checkbox" asp-for="InForm_WrittenRecords" class="form-check-input" id="InForm_WrittenRecords"> Written Records   
-    <strong>For the purpose of: </strong>          <input type="checkbox" asp-for="ForPurpose_CaseManagement" class="form-check-input" id="ForPurpose_Treatment"> Treatment/Treatment Planning     <input type="checkbox" asp-for="ForPurpose_CaseManagement" class="form-check-input" id="ForPurpose_CaseManagement"> Case Management     <input type="checkbox" asp-for="ForPurpose_Other" class="form-check-input" id="ForPurpose_Other"> Other     <input asp-for="ForPurpose_OtherExplain">
+    <div class="col-md-12">
+        <pre>    
+        <strong>In the form of: </strong>              <input type="checkbox" asp-for="InForm_VerbalInformation" class="form-check-input" id="InForm_VerbalInformation"> Verbal Information            <input type="checkbox" asp-for="InForm_Facsimile" class="form-check-input" id="InForm_Facsimile"> Facsimile              <input type="checkbox" asp-for="InForm_WrittenRecords" class="form-check-input" id="InForm_WrittenRecords"> Written Records   
+        <strong>For the purpose of: </strong>          <input type="checkbox" asp-for="ForPurpose_CaseManagement" class="form-check-input" id="ForPurpose_Treatment"> Treatment/Treatment Planning     <input type="checkbox" asp-for="ForPurpose_CaseManagement" class="form-check-input" id="ForPurpose_CaseManagement"> Case Management     <input type="checkbox" asp-for="ForPurpose_Other" class="form-check-input" id="ForPurpose_Other"> Other     <input asp-for="ForPurpose_OtherExplain">
       
-    <strong>I understand that the specific reports disclosed might include: </strong>
-    <input type="checkbox" asp-for="Discharge" class="form-check-input" id="Discharge"> Discharge/Termination summary     <input type="checkbox" asp-for="SchoolRecord" class="form-check-input" id="SchoolRecord"> School records     <input type="checkbox" asp-for="ProgressReports" class="form-check-input" id="ProgressReports"> Progress reports    <input type="checkbox" asp-for="IncidentReport" class="form-check-input" id="IncidentReport"> Incident Reports
-    <input type="checkbox" asp-for="PsychologycalEvaluation" class="form-check-input" id="PsychologycalEvaluation"> Psychiatric/Psychological Evaluations    <input type="checkbox" asp-for="History" class="form-check-input" id="History"> History, Physical     <input type="checkbox" asp-for="LabWork" class="form-check-input" id="LabWork"> Lab Work     <input type="checkbox" asp-for="HospitalRecord" class="form-check-input" id="HospitalRecord"> Hospital Records
-    <input type="checkbox" asp-for="Other" class="form-check-input" id="Other"> Other (explain)     <input asp-for="Other_Explain">
+        <strong>I understand that the specific reports disclosed might include: </strong>
+        <input type="checkbox" asp-for="Discharge" class="form-check-input" id="Discharge"> Discharge/Termination summary     <input type="checkbox" asp-for="SchoolRecord" class="form-check-input" id="SchoolRecord"> School records     <input type="checkbox" asp-for="ProgressReports" class="form-check-input" id="ProgressReports"> Progress reports    <input type="checkbox" asp-for="IncidentReport" class="form-check-input" id="IncidentReport"> Incident Reports
+        <input type="checkbox" asp-for="PsychologycalEvaluation" class="form-check-input" id="PsychologycalEvaluation"> Psychiatric/Psychological Evaluations    <input type="checkbox" asp-for="History" class="form-check-input" id="History"> History, Physical     <input type="checkbox" asp-for="LabWork" class="form-check-input" id="LabWork"> Lab Work     <input type="checkbox" asp-for="HospitalRecord" class="form-check-input" id="HospitalRecord"> Hospital Records
+        <input type="checkbox" asp-for="Other" class="form-check-input" id="Other"> Other (explain)              <textarea asp-for="Other_Explain" style="width:70%" rows="1"></textarea>
+        <strong>Other Purpose Request</strong>           <textarea asp-for="OtherPurposeRequest" style="width:70%" rows="1"></textarea>
+        <strong>Other Authorized Information</strong>    <textarea asp-for="OtherAutorizedInformation" style="width:70%" rows="1"></textarea>
     </pre>
-</div>
-<div class="col-md-12">
-    <pre>
+    </div>
+    <div class="col-md-12">
+        <pre>
     I understand this consent is revocable upon written notice to <strong>__@Html.DisplayFor(modelItem => Model.TcmClient.Client.Name)__ </strong> except to the extent that action by <strong>__@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Name)__</strong>. 
     Has been taken in reliance on this authorization and that this authorization shall remain in force for a twelve-month period in order to effect the purpose
     for which it is given, unless resolved by person served or legal representative, as above.
     
-    <strong>Alcohol and drug abuse information if present may be disclosed from records whose confidentiality is protected by Federal regulations (42 CFR, Part II)
+        <strong>Alcohol and drug abuse information if present may be disclosed from records whose confidentiality is protected by Federal regulations (42 CFR, Part II)
     prohibit making any further disclosure of records without the specific written authorization of the person served or legal representative, 
     or as otherwise permitted by such regulations. This information may not be used to criminally prosecute the person served.</strong>
     </pre>
-</div>
-<div class="col-md-12">
-    <pre>
-    
-    <strong>Person served signature date</strong>    <input asp-for="DateSignaturePerson">      <strong>Legal Guardian signature date</strong>    <input asp-for="DateSignatureLegalGuardian">
-    <strong>(@Html.DisplayFor(modelItem => Model.TcmClient.Client.Name))</strong>     
-    
-    <strong>Employee signature date</strong>         <input asp-for="DateSignatureEmployee">
-    <strong>(@Html.DisplayFor(modelItem => Model.AdmissionedFor))</strong>                                                                    
-    </pre>
-</div>
-<div class="col-md-12">
-    &nbsp;
-</div>
-<div>
-    <div class="form-group col-md-12">
-        <input type="checkbox" asp-for="Documents" class="form-check-input" id="Documents"> Documents were verbally translated to me in my native language.<br />
-        <label asp-for="Documents" class="forgot">
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Name)</strong>
-        </label>
     </div>
-</div>
-<br />
+    <div class="col-md-12">
+        <pre>
+         @if (Model.TcmClient.Client.LegalGuardian.Name != "")
+        {
+        <strong>Person served signature date</strong>    <input asp-for="DateSignaturePerson" >
+        <strong>(@Html.DisplayFor(modelItem => Model.TcmClient.Client.Name))</strong>
+        }
+        else
+        { 
+        <strong>Legal Guardian signature date</strong>    <input asp-for="DateSignatureLegalGuardian" >
+        <strong>(@Html.DisplayFor(modelItem => Model.TcmClient.Client.LegalGuardian.Name))</strong>
+        }        
+        <br />
+        @if (Model.Id == 0)
+        {
+        <input type="checkbox" class="form-check-input" disabled> <i>Signed</i>
+        }
+        else
+        { 
+        <input type="checkbox" class="form-check-input" checked disabled> <i>Signed</i>
+        }
+        <strong>Employee signature date</strong>         <input asp-for="DateSignatureEmployee">
+        <strong>(@Html.DisplayFor(modelItem => Model.AdmissionedFor))</strong>                                                                    
+    </pre>
+    </div>
+    <div class="col-md-12">
+        &nbsp;
+    </div>
+    <div>
+        <div class="form-group col-md-12">
+            <input type="checkbox" asp-for="Documents" class="form-check-input" id="Documents"> Documents were verbally translated to me in my native language.<br />
+            <label asp-for="Documents" class="forgot">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Name)</strong>
+            </label>
+        </div>
+    </div>
+    <br />
+}
+else
+{
+    <div class="col-md-12">
+        <hr />
+    </div>
+    <div class="form-group col-md-12">
+<pre>    
+        <strong>THIS WILL AUTHORIZE:</strong>
+    Clinic Name: <u>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Name)</u>     Address: <u>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Address)</u>     City: <u>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.City)</u>     State: <u>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.State)</u>     Zip: <u>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.ZipCode)</u>                                        
+    Phone No: <u>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Phone)</u>     Fax No: <u>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.FaxNo)</u>
+    
+        <input type="checkbox" asp-for="ToRelease" class="form-check-input" id="ToRelease" disabled> to release/request general medical, psychiatric/psychological, alcohol and drug abuse information and/or records in accordance with Florida Statues 394, 
+    459, 396, 11, 297, 053, 90.50 and 458.21 to/ from:
+
+</pre>
+    </div>
+    <div class="col-md-push-12">
+        <div class="form-group col-md-3">
+            <label asp-for="NameOfFacility" class="control-label">Name of Facility, Individual or Agency</label>
+            <input asp-for="NameOfFacility" class="form-control" readonly>
+            <span asp-validation-for="NameOfFacility" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-3">
+            <label asp-for="Address" class="control-label">Address</label>
+            <input asp-for="Address" class="form-control" readonly>
+            <span asp-validation-for="Address" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-2">
+            <label asp-for="CityStateZip" class="control-label">City, State, Zip</label>
+            <input asp-for="CityStateZip" class="form-control" readonly>
+            <span asp-validation-for="CityStateZip" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-2">
+            <label asp-for="PhoneNo" class="control-label">Phone No</label>
+            <input asp-for="PhoneNo" class="form-control" readonly>
+            <span asp-validation-for="PhoneNo" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-2">
+            <label asp-for="FaxNo" class="control-label">Fax No</label>
+            <input asp-for="FaxNo" class="form-control" readonly>
+            <span asp-validation-for="FaxNo" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <pre>    
+        <strong>In the form of: </strong>              <input type="checkbox" asp-for="InForm_VerbalInformation" class="form-check-input" id="InForm_VerbalInformation" disabled> Verbal Information            <input type="checkbox" asp-for="InForm_Facsimile" class="form-check-input" id="InForm_Facsimile" disabled> Facsimile              <input type="checkbox" asp-for="InForm_WrittenRecords" class="form-check-input" id="InForm_WrittenRecords" disabled> Written Records   
+        <strong>For the purpose of: </strong>          <input type="checkbox" asp-for="ForPurpose_CaseManagement" class="form-check-input" id="ForPurpose_Treatment" disabled> Treatment/Treatment Planning     <input type="checkbox" asp-for="ForPurpose_CaseManagement" class="form-check-input" id="ForPurpose_CaseManagement" disabled> Case Management     <input type="checkbox" asp-for="ForPurpose_Other" class="form-check-input" id="ForPurpose_Other" disabled> Other     <input asp-for="ForPurpose_OtherExplain" disabled>
+      
+        <strong>I understand that the specific reports disclosed might include: </strong>
+        <input type="checkbox" asp-for="Discharge" class="form-check-input" id="Discharge" disabled> Discharge/Termination summary     <input type="checkbox" asp-for="SchoolRecord" class="form-check-input" id="SchoolRecord" disabled> School records     <input type="checkbox" asp-for="ProgressReports" class="form-check-input" id="ProgressReports" disabled> Progress reports    <input type="checkbox" asp-for="IncidentReport" class="form-check-input" id="IncidentReport" disabled> Incident Reports
+        <input type="checkbox" asp-for="PsychologycalEvaluation" class="form-check-input" id="PsychologycalEvaluation" disabled> Psychiatric/Psychological Evaluations    <input type="checkbox" asp-for="History" class="form-check-input" id="History" disabled> History, Physical     <input type="checkbox" asp-for="LabWork" class="form-check-input" id="LabWork" disabled> Lab Work     <input type="checkbox" asp-for="HospitalRecord" class="form-check-input" id="HospitalRecord" disabled> Hospital Records
+        <input type="checkbox" asp-for="Other" class="form-check-input" id="Other" disabled> Other (explain)     
+        <input type="checkbox" asp-for="Other" class="form-check-input" id="Other" disabled> Other (explain)              <textarea asp-for="Other_Explain" style="width:70%" rows="1" disabled></textarea>
+        <strong>Other Purpose Request</strong>           <textarea asp-for="OtherPurposeRequest" style="width:70%" rows="1" disabled></textarea>
+        <strong>Other Authorized Information</strong>    <textarea asp-for="OtherAutorizedInformation" style="width:70%" rows="1" disabled></textarea>
+    </pre>
+    </div>
+    <div class="col-md-12">
+        <pre>
+    I understand this consent is revocable upon written notice to <strong>__@Html.DisplayFor(modelItem => Model.TcmClient.Client.Name)__ </strong> except to the extent that action by <strong>__@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Name)__</strong>. 
+    Has been taken in reliance on this authorization and that this authorization shall remain in force for a twelve-month period in order to effect the purpose
+    for which it is given, unless resolved by person served or legal representative, as above.
+    
+        <strong>Alcohol and drug abuse information if present may be disclosed from records whose confidentiality is protected by Federal regulations (42 CFR, Part II)
+    prohibit making any further disclosure of records without the specific written authorization of the person served or legal representative, 
+    or as otherwise permitted by such regulations. This information may not be used to criminally prosecute the person served.</strong>
+    </pre>
+    </div>
+    <div class="col-md-12">
+        <pre>
+         @if (Model.TcmClient.Client.LegalGuardian.Name != "")
+        {
+        <strong>Person served signature date</strong>    <input asp-for="DateSignaturePerson" disabled>
+        <strong>(@Html.DisplayFor(modelItem => Model.TcmClient.Client.Name))</strong>
+        }
+        else
+        { 
+        <strong>Legal Guardian signature date</strong>    <input asp-for="DateSignatureLegalGuardian" disabled>
+        <strong>(@Html.DisplayFor(modelItem => Model.TcmClient.Client.LegalGuardian.Name))</strong>
+        }
+
+        @if (Model.Id == 0)
+        {
+        <input type="checkbox" class="form-check-input" disabled> <i>Signed</i>
+        }
+        else
+        { 
+        <input type="checkbox" class="form-check-input" checked disabled> <i>Signed</i>
+        }
+        <strong>Employee signature date</strong>         <input asp-for="DateSignatureEmployee" disabled>
+        <strong>(@Html.DisplayFor(modelItem => Model.AdmissionedFor))</strong>                                                                    
+    </pre>
+    </div>
+    <div class="col-md-12">
+        &nbsp;
+    </div>
+    <div>
+        <div class="form-group col-md-12">
+            <input type="checkbox" asp-for="Documents" class="form-check-input" id="Documents" disabled> Documents were verbally translated to me in my native language.<br />
+            <label asp-for="Documents" class="forgot">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Name)</strong>
+            </label>
+        </div>
+    </div>
+    <br />
+}
+
 
 
 

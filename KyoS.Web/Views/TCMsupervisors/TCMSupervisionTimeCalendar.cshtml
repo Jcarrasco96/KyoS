@@ -1,0 +1,131 @@
+﻿@model KyoS.Web.Models.TCMSupervisionTimeViewModel
+@{
+    ViewData["Title"] = "TCM Supervision";
+}
+<link rel="stylesheet" href="~/lib/fullcalendar/lib/main.css" />
+
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home"></i>
+            @Html.ActionLink("Dashboard", "Index", "Desktop")
+        </li>
+        <li class="active">Supervision</li>
+    </ul><!--.breadcrumb-->
+</div>
+
+<div class="row">
+    <div class="col-md-3">
+        <label asp-for="IdCaseManager" class="control-label">Select Case Manager</label>
+        <select asp-for="IdCaseManager" asp-items="Model.CaseManagers" class="form-control" id="cbCaseManager"></select>
+        <span asp-validation-for="IdCaseManager" class="text-danger"></span>
+    </div>
+    <div class="col-md-1">
+        <br />
+        <a asp-action="TCMSupervisionTimeCalendar" class="btn btn-success" title="Refresh"><i class="glyphicon glyphicon-refresh"></i></a>
+    </div>
+    <div class="col-md-8">
+        &nbsp;
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <hr />
+    </div>
+
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div id='calendar'></div>
+    </div>
+</div>
+
+<partial name="_ModalPopup" />
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/lib/fullcalendar/lib/main.js"></script>
+
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', function () {
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                headerToolbar: {
+                  start: 'timeGridWeek,timeGridDay',
+                  center: 'title',
+                  end: 'today prev,next'
+                },
+                initialView: 'timeGridWeek',
+                allDaySlot: false,
+                slotDuration: '00:15:00',
+                slotLabelFormat: {
+                      hour: 'numeric',
+                      minute: '2-digit',
+                      omitZeroMinute: false,
+                      meridiem: 'large'
+                },
+                slotLabelInterval: '00:15:00',
+                slotMinTime: '06:00:00',
+                slotMaxTime: '20:00:00',
+                navLinks: true,
+                firstDay: 1,
+                hiddenDays: [0],
+                dateClick: function(info) {
+                    $.ajax({
+                        type: 'GET',
+                        url: '@Url.Action("CreateSupervisionTime", "TCMsupervisors", null, Context.Request.Scheme)' + '?date=' + info.dateStr,
+                        success: function (res) {
+                            $('#form-modal .modal-body').html(res);
+                            $('#form-modal .modal-title').html('Add Supervision Time');
+                            $('#form-modal').modal('show');
+                            // to make popup draggable
+                            $('.modal-dialog').draggable({
+                                handle: ".modal-header"
+                            });
+                        }
+                    })
+                },
+                eventTimeFormat: { // like '14:30:00'
+                    hour: 'numeric',
+                    minute: '2-digit',
+                    meridiem: true
+                },
+                events: {
+                            url: '@Url.Action("Events", "TCMsupervisors")',
+                            method: 'POST',
+                            extraParams: function() {
+                                return {
+                                    idCaseManager: $("#cbCaseManager").val()
+                                };
+                            },
+                            success: function() {
+
+                            },
+                },
+                 eventClick: function (info) {
+                    $.ajax({
+                        type: 'GET',
+                        url: '@Url.Action("EditSupervisionTime", "TCMsupervisors", null, Context.Request.Scheme)' + '?id=' + info.event.id,
+                        success: function (res) {
+                            $('#form-modal .modal-body').html(res);
+                            $('#form-modal .modal-title').html('Edit Supervision Time');
+                            $('#form-modal').modal('show');
+                            // to make popup draggable
+                            $('.modal-dialog').draggable({
+                                handle: ".modal-header"
+                            });
+                        }
+                    })
+                }
+            });
+            calendar.render();
+
+            $("#cbCaseManager").change(function () {
+                calendar.refetchEvents();
+            })
+        });
+    </script>
+}
+
+

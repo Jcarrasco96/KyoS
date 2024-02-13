@@ -21,5 +21,7 @@ namespace KyoS.Web.Data.Entities
 
         public bool AM { get; set; }
         public bool PM { get; set; }
+
+        public string TitleNote { get; set; }
     }
 }

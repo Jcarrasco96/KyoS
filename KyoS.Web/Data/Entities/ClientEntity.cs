@@ -212,5 +212,15 @@ namespace KyoS.Web.Data.Entities
 
         public string Annotations { get; set; }
 
+        public List<CiteEntity> CiteList { get; set; }
+
+        public IntakeConsentForTelehealthEntity IntakeConsentForTelehealth { get; set; }
+        public IntakeNoDuplicateServiceEntity IntakeNoDuplicateService { get; set; }
+        public IntakeAdvancedDirectiveEntity IntakeAdvancedDirective { get; set; }
+        public ReferralFormEntity ReferralForm { get; set; }
+        public IntakeForeignLanguageEntity IntakeForeignLanguage { get; set; }
+        public IntakeClientIdDocumentVerificationEntity IntakeClientIdDocumentVerification { get; set; }
+        public SafetyPlanEntity SafetyPlan { get; set; }
+        public List<IncidentReportEntity> IncidentReport { get; set; }
     }
 }

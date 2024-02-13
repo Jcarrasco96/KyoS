@@ -27,6 +27,10 @@
                 {
                     @Html.ActionLink("BIOs with rview ", "BioWithReview", "Bios")
                 }
+                @if (ViewData["origi"].ToString() == "3")
+                {
+                    @Html.ActionLink("Documents Assistant CMH Calendar", "IndexDocumentsAssistant", "Calendar")
+                }
             </li>
             <li class="active">Edit</li>
         </ul><!--.breadcrumb-->
@@ -95,6 +99,10 @@
                 @if (ViewData["origi"].ToString() == "2")
                 {
                     <a asp-action="BioWithReview" asp-controller="Bios" class="btn btn-success">Back</a>
+                }
+                @if (ViewData["origi"].ToString() == "3")
+                {
+                    <a asp-action="IndexDocumentsAssistant" asp-controller="Calendar" class="btn btn-success">Back</a>
                 }
             </div>
         </form>
@@ -608,6 +616,66 @@
             check125.checked = false;
         } else {
             check125.checked = true;
+        }
+        //---------------------------------
+        check26.addEventListener('change', (e) => {
+            if (check26.checked == true) {
+                check126.checked = false;
+            } else {
+                check126.checked = true;
+            }
+        })
+        check126.addEventListener('change', (e) => {
+            if (check126.checked == true) {
+                check26.checked = false;
+            } else {
+                check26.checked = true;
+            }
+        })
+        if (check26.checked == true) {
+            check126.checked = false;
+        } else {
+            check126.checked = true;
+        }
+        //---------------------------------
+        check27.addEventListener('change', (e) => {
+            if (check27.checked == true) {
+                check127.checked = false;
+            } else {
+                check127.checked = true;
+            }
+        })
+        check127.addEventListener('change', (e) => {
+            if (check127.checked == true) {
+                check27.checked = false;
+            } else {
+                check27.checked = true;
+            }
+        })
+        if (check27.checked == true) {
+            check127.checked = false;
+        } else {
+            check127.checked = true;
+        }
+        //---------------------------------
+        check28.addEventListener('change', (e) => {
+            if (check28.checked == true) {
+                check128.checked = false;
+            } else {
+                check128.checked = true;
+            }
+        })
+        check128.addEventListener('change', (e) => {
+            if (check128.checked == true) {
+                check28.checked = false;
+            } else {
+                check28.checked = true;
+            }
+        })
+        if (check28.checked == true) {
+            check128.checked = false;
+        } else {
+            check128.checked = true;
         }
     </script>
 }

@@ -1,0 +1,311 @@
+﻿@model IEnumerable<KyoS.Web.Data.Entities.AdendumEntity>
+@{
+    ViewData["Title"] = "Pending Addendums";
+}
+<link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
+
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home"></i>
+            @Html.ActionLink("Dashboard", "Index", "Desktop")
+        </li>
+        <li class="active">Addendums in Edition</li>
+    </ul><!--.breadcrumb-->
+</div>
+
+<div class="row">    
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Addendums in Edition</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-hover table-responsive table-striped" id="MyTable">
+                    <thead>
+                        <tr>
+                            <th class="col-md-1">
+
+                            </th>
+                            <th class="col-md-3">
+                                Client Name
+                            </th>
+                            <th class="col-md-2">
+                                Facilitator Name
+                            </th>
+                            <th class="col-md-2" style="text-align:center;">
+                                @Html.DisplayNameFor(model => model.Mtp.Client.AdmisionDate)
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Identified Date
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Status
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Review
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                MH Therapy
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td align="center">
+                                    <a class="icon-plus-sign-alt"></a>
+
+                                    <div style="display:none">
+                                        <table class="table table-striped table-bordered">
+                                            <tr>
+                                                <th class="col-md-1" style="text-align:center"></th>
+                                                <th class="col-md-1" style="text-align:center">Identified Date</th>
+                                                <th class="col-md-1" style="text-align:center">Unit</th>
+                                                <th class="col-md-2" style="text-align:center"> Frecuency</th>
+                                                <th class="col-md-1" style="text-align:center">Duration (month)</th>
+                                                <th class="col-md-4" style="text-align:center">Problem Statement</th>
+                                                <th class="col-md-1" style="text-align:center">Status</th>
+                                                <th class="col-md-1"></th>
+                                            </tr>
+                                            <tr>
+                                                <td align="center">
+                                                    @if (item.Goals.Count() != 0)
+                                                    {
+                                                        <a class="icon-plus-sign-alt"></a>
+                                                    }
+                                                    else
+                                                    {
+
+                                                    }
+                                                    <div style="display:none">
+                                                        <table class="table table-striped table-bordered">
+                                                            <tr>
+                                                                <th class="col-md-1" style="text-align:center"></th>
+                                                                <th class="col-md-2" style="text-align:center">Number of Goal</th>
+                                                                <th class="col-md-4" style="text-align:left">Name of Goal</th>
+                                                                <th class="col-md-5" style="text-align:left"> Area of Focus</th>
+                                                            </tr>
+                                                            @foreach (var product in item.Goals)
+                                                            {
+                                                                <tr>
+                                                                    <td align="center">
+                                                                        @if (product.Objetives.Count() != 0)
+                                                                        {
+                                                                            <a class="icon-plus-sign-alt"></a>
+                                                                        }
+                                                                        else
+                                                                        {
+
+                                                                        }
+                                                                        <div style="display:none">
+                                                                            <table class="table table-striped table-bordered">
+                                                                                <tr>
+                                                                                    <th class="col-md-1" style="text-align:center">Objective</th>
+                                                                                    <th class="col-md-5" style="text-align:left">Description</th>
+                                                                                    <th class="col-md-5" style="text-align:left">Intervention</th>
+                                                                                </tr>
+                                                                                @foreach (var product1 in product.Objetives)
+                                                                                {
+                                                                                    <tr>
+                                                                                        <td align="center">@Html.DisplayFor(modelItem => product1.Objetive)</td>
+                                                                                        <td align="left">@Html.DisplayFor(modelItem => product1.Description)</td>
+                                                                                        <td align="left">@Html.DisplayFor(modelItem => product1.Intervention)</td>
+                                                                                    </tr>
+
+                                                                                }
+                                                                            </table>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td align="center">@Html.DisplayFor(modelItem => product.Number)</td>
+                                                                    <td align="left">@Html.DisplayFor(modelItem => product.Name)</td>
+                                                                    <td align="left">@Html.DisplayFor(modelItem => product.AreaOfFocus)</td>
+                                                                </tr>
+
+                                                            }
+                                                        </table>
+                                                    </div>
+                                                </td>
+                                                <td align="center">@Html.DisplayFor(modelItem => item.Dateidentified)</td>
+                                                <td align="center">@Html.DisplayFor(modelItem => item.Unit)</td>
+                                                <td align="center">@Html.DisplayFor(modelItem => item.Frecuency)</td>
+                                                <td align="center">@Html.DisplayFor(modelItem => item.Duration)</td>
+                                                <td align="left">@Html.DisplayFor(modelItem => item.ProblemStatement)</td>
+                                                <td align="center">
+                                                    @if (item.Status == KyoS.Common.Enums.AdendumStatus.Edition)
+                                                    {
+                                                        <span class="label label-warning">
+                                                            Edition
+                                                        </span>
+                                                    }
+                                                    @if (item.Status == KyoS.Common.Enums.AdendumStatus.Pending)
+                                                    {
+                                                        <span class="label label-info">
+                                                            Pending
+                                                        </span>
+                                                    }
+                                                    @if (item.Status == KyoS.Common.Enums.AdendumStatus.Approved)
+                                                    {
+                                                        <span class="label label-success">
+                                                            Approved
+                                                        </span>
+                                                    }
+                                                </td>
+                                                <td align="center">
+                                                    @if (item.Mtp.Client.Status == KyoS.Common.Enums.StatusType.Open && item.Status == KyoS.Common.Enums.AdendumStatus.Edition && User.Identity.Name == item.CreatedBy)
+                                                    {
+                                                        <a asp-action="EditAdendum" asp-route-id="@item.Id" asp-route-origin="2" class="btn btn-warning" title="Edit Addendum"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                        <a asp-action="FinishEditingAdendum" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-success" title="Finish de edition of Addendum"><i class="glyphicon glyphicon-ok"></i></a>
+                                                    }
+                                                    else
+                                                    {
+                                                        <a class="btn btn-warning disabled" title="Finish edition of Addendum"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                        <a class="btn btn-success disabled" title="Finish edition of Addendum"><i class="glyphicon glyphicon-ok"></i></a>
+                                                    }
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </td>
+                                <td>
+                                    @if (item.Mtp.Client.Gender == KyoS.Common.Enums.GenderType.Female)
+                                    {
+                                        <i class="glyphicon glyphicon-user btn-danger"></i>
+                                    }
+                                    @if (item.Mtp.Client.Gender == KyoS.Common.Enums.GenderType.Male)
+                                    {
+                                        <i class="glyphicon glyphicon-user btn-primary"></i>
+                                    }
+                                    &nbsp;
+                                    @Html.DisplayFor(modelItem => item.Mtp.Client.Name)
+                                    |
+                                    @Html.DisplayFor(modelItem => item.Mtp.Client.Code)
+                                </td>
+                                <td >
+                                    @if (item.Facilitator != null)
+                                    {
+                                        @Html.DisplayFor(modelItem => item.Facilitator.Name)
+                                    }
+                                    else
+                                    {
+                                        @if (item.Supervisor != null)
+                                        {
+                                            @Html.DisplayFor(modelItem => item.Supervisor.Name)
+                                        }
+                                        else
+                                        { 
+                                        <a> - </a>
+                                        }
+                                    }
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.Mtp.Client.AdmisionDate)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.Dateidentified)
+                                </td>
+                                <td align="center">
+                                    @if (item.Mtp.Client.Status == KyoS.Common.Enums.StatusType.Open)
+                                    {
+                                        <span class="label label-success">
+                                            Open
+                                        </span>
+                                    }
+                                    @if (item.Mtp.Client.Status == KyoS.Common.Enums.StatusType.Close)
+                                    {
+                                        <span class="label label-default">
+                                            Close
+                                        </span>
+                                    }
+                                </td>
+                                <td align="center">
+                                    @if (item.Messages.Count() == 0)
+                                    {
+                                        <span>
+                                            -
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        bool read = false;
+                                        @foreach (var message in item.Messages.OrderBy(m => m.DateCreated))
+                                        {
+                                            @if (message.Status.ToString() == "NotRead")
+                                            {
+                                                read = false;
+                                                break;
+                                            }
+                                            @if (message.Status.ToString() == "Read")
+                                            {
+                                                read = true;
+                                            }
+                                        }
+                                        @*<span class="label label-warning">
+                            Yes &nbsp;
+                        </span>*@
+                                        if (read)
+                                        {
+                                            <i class="glyphicon glyphicon-thumbs-up"></i>
+                                        }
+                                        else
+                                        {
+                                            <i class="glyphicon glyphicon-thumbs-down"></i>
+                                        }
+                                    }
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.Mtp.Client.Service)
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<partial name="_DeleteDialog" />
+<partial name="_ModalPopup" />
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/jquery.dataTables.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#MyTable').DataTable({
+                                "order": [[0, "asc"]],
+                                "pageLength": 100
+                            });
+
+            // Delete item
+            var item_to_delete;
+
+            $('.deleteItem').click((e) => {
+                item_to_delete = e.currentTarget.dataset.id;
+            });
+
+            $("#btnYesDelete").click(function () {
+                var url = "@Url.Action("Delete", "Adendums")";
+                window.location.href = url + '/' + item_to_delete;
+            });
+        });
+        $(function () {
+
+            //Assign Click event to Plus Image.
+            $("body").on("click", "a[class*='icon-plus-sign-alt']", function () {
+                $(this).closest("tr").after("<tr><td></td><td colspan = '999'>" + $(this).next().html() + "</td></tr>");
+                $(this).attr("class", "icon-minus-sign-alt");
+            });
+            //Assign Click event to Minus Image.
+            $("body").on("click", "a[class*='icon-minus-sign-alt']", function () {
+                $(this).attr("class", "icon-plus-sign-alt");
+                $(this).closest("tr").next().remove();
+            });
+        });
+    </script>
+}
+
+

@@ -16,7 +16,8 @@
 </div>
 
 <p>
-    <a asp-action="Create" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Create Facilitator</a>
+    @*<a asp-action="Create" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Create Facilitator</a>*@
+    <a onclick="showInPopup('@Url.Action("CreateModal","Facilitators",null,Context.Request.Scheme)','Create Facilitator')" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Create Facilitator</a>
     <a asp-action="Signatures" class="btn btn-default"><i class="glyphicon glyphicon-pencil"></i> Facilitators' Signatures</a>
     <a asp-action="EXCEL" class="btn btn-success"><i class="glyphicon glyphicon-download-alt"></i> Export Facilitators</a>
 </p>
@@ -35,106 +36,16 @@
             </div>
         }
     </div>
-    <div class="col-md-12">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">Facilitators</h3>
-            </div>
-            <div class="panel-body">
-                <table class="table table-hover table-responsive table-striped" id="MyTable">
-                    <thead>
-                        <tr>
-                            <th class="col-md-4">
-                                @Html.DisplayNameFor(model => model.Name)
-                            </th>
-                            <th class="col-md-2" style="text-align:center;">
-                                @Html.DisplayNameFor(model => model.Codigo)
-                            </th>
-                            <th class="col-md-1" style="text-align:center;">
-                                Status
-                            </th>
-                            <th class="col-md-3" style="text-align:center;">
-                                Clinic
-                            </th>
-                            <th class="col-md-2">
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Model)
-                        {
-                            @if (item.Status == KyoS.Common.Enums.StatusType.Close)
-                            {
-                                <tr style="color: darkgrey;">
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Name)
-                                    </td>
-                                    <td align="center">
-                                        @Html.DisplayFor(modelItem => item.Codigo)
-                                    </td>
-                                    <td align="center">
-                                        @if (item.Status == KyoS.Common.Enums.StatusType.Open)
-                                        {
-                                            <span class="label label-success">
-                                                Open
-                                            </span>
-                                        }
-                                        @if (item.Status == KyoS.Common.Enums.StatusType.Close)
-                                        {
-                                            <span class="label label-default">
-                                                Close
-                                            </span>
-                                        }
-                                    </td>
-                                    <td align="center">
-                                        @Html.DisplayFor(modelItem => item.Clinic.Name)
-                                    </td>
-                                    <td align="right">
-                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i></a>
-                                        <button data-id="@item.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog"><i class="glyphicon glyphicon-trash"></i></button>
-                                    </td>
-                                </tr>
-                            }
-                            @if (item.Status == KyoS.Common.Enums.StatusType.Open)
-                            {
-                                <tr>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Name)
-                                    </td>
-                                    <td align="center">
-                                        @Html.DisplayFor(modelItem => item.Codigo)
-                                    </td>
-                                    <td align="center">
-                                        @if (item.Status == KyoS.Common.Enums.StatusType.Open)
-                                        {
-                                            <span class="label label-success">
-                                                Open
-                                            </span>
-                                        }
-                                        @if (item.Status == KyoS.Common.Enums.StatusType.Close)
-                                        {
-                                            <span class="label label-default">
-                                                Close
-                                            </span>
-                                        }
-                                    </td>
-                                    <td align="center">
-                                        @Html.DisplayFor(modelItem => item.Clinic.Name)
-                                    </td>
-                                    <td align="right">
-                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i></a>
-                                        <button data-id="@item.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog"><i class="glyphicon glyphicon-trash"></i></button>
-                                    </td>
-                                </tr>
-                            }
-                        }
-                    </tbody>
-                </table>
-            </div>
-        </div>
+   
+</div>
+
+<div class="row">
+    <div id="view-facilitators">
+        @await Html.PartialAsync("_ViewFacilitators", Model)
     </div>
 </div>
 
+<partial name="_ModalPopup" />
 <partial name="_DeleteDialog" />
 
 @section Scripts {
@@ -154,9 +65,25 @@
 
                             $("#btnYesDelete").click(function () {
                                 var url = "@Url.Action("Delete", "Facilitators")";
-                                window.location.href = url + '/' + item_to_delete;                                
+                                window.location.href = url + '/' + item_to_delete;
                             });
                         });
+        function ConfirmDelete(e) {
+            Swal.fire({
+                title: 'Do you want to delete?',
+                text: "Note: All data related to this element will be deleted.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var url = "@Url.Action("Delete", "Facilitators")";
+                    window.location.href = url + '/' + e;
+                }
+            });
+        }
     </script>
 }
 

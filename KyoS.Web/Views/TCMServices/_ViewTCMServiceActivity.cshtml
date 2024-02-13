@@ -16,8 +16,8 @@
                                 <th class="col-md-1">
 
                                 </th>
-                                <th class="col-md-2" style="text-align:center;">
-                                    Service Code
+                                <th class="col-md-1" style="text-align:center;">
+                                    Code
                                 </th>
                                 <th class="col-md-2">
                                     Service Name
@@ -31,12 +31,12 @@
                                 <th class="col-md-1" style="text-align:center;">
                                     Units
                                 </th>
-                                <th class="col-md-1" style="text-align:center;">
+                                <th class="col-md-2" style="text-align:center;">
                                 </th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var item in Model)
+                            @foreach (var item in Model.OrderBy(n => n.Code))
                             {
                                 <tr>
                                     <td align="center">
@@ -59,7 +59,7 @@
                                                     <th class="col-md-1" style="text-align:center;">Status</th>
                                                     <th class="col-md-2" style="text-align:center;"></th>
                                                 </tr>
-                                                @foreach (var product in item.TCMServiceActivity)
+                                                @foreach (var product in item.TCMServiceActivity.OrderBy(n => n.Name))
                                                 {
                                                     <tr>
                                                         <td>@Html.DisplayFor(modelItem => product.Name)</td>
@@ -93,7 +93,7 @@
                                                                 {
                                                                     <a class="btn btn-success disabled" title="Approved Activity"><i class="glyphicon glyphicon-ok"></i></a>
                                                                 }
-
+                                                                <button onclick="ConfirmDelete(@product.Id)" class="btn btn-danger deleteItem"><i class="glyphicon glyphicon-trash"></i></button>
                                                             }
                                                             else
                                                             {
@@ -108,12 +108,13 @@
                                                                     {
                                                                         <a class="btn btn-success disabled" title="Approved Activity"><i class="glyphicon glyphicon-ok"></i></a>
                                                                     }
-
+                                                                    <button onclick="ConfirmDelete(@product.Id)" class="btn btn-danger deleteItem"><i class="glyphicon glyphicon-trash"></i></button>
                                                                 }
                                                                 else
                                                                 {
                                                                     <a class="btn btn-warning disabled" title="Edit Activity"><i class="glyphicon glyphicon-pencil"></i></a>
                                                                     <a class="btn btn-success disabled" title="Approved Activity"><i class="glyphicon glyphicon-ok"></i></a>
+                                                                    <a class="btn btn-danger disabled" title="Delete Activity"><i class="glyphicon glyphicon-trash"></i></a>
                                                                 }
 
                                                             }
@@ -142,7 +143,15 @@
                                     <td align="right">
                                         @if (User.IsInRole("TCMSupervisor") || User.IsInRole("Manager"))
                                         {
-                                            <a onclick="showInPopup('@Url.Action("CreateActivity", "TCMServices", new { id = item.Id }, Context.Request.Scheme)','Create TCM Activity')" class="btn btn-info" title="Create new Activity"><i class="glyphicon glyphicon-plus"></i></a>
+                                            <a onclick="showInPopup('@Url.Action("CreateActivity", "TCMServices", new { id = item.Id }, Context.Request.Scheme)','Create TCM Activity')" class="btn btn-info" title="Create new Activities"><i class="glyphicon glyphicon-plus"></i></a>
+                                            @if (item.TCMServiceActivity.Count() == 0)
+                                            {
+                                                <a onclick="showInPopup('@Url.Action("CopyActivity", "TCMServices", new { idServiceTo = item.Id }, Context.Request.Scheme)','Copy TCM Activities')" class="btn btn-primary" title="Copy Activities"><i class="glyphicon glyphicon-copy"></i></a>
+                                            }
+                                            else
+                                            { 
+                                                <a onclick="showInPopup('@Url.Action("CopyActivity", "TCMServices", new { idServiceTo = item.Id }, Context.Request.Scheme)','Copy TCM Activities')" class="btn btn-primary disabled" title="Copy Activities"><i class="glyphicon glyphicon-copy"></i></a>
+                                            }
                                         }
                                         else
                                         {
@@ -165,20 +174,7 @@
 
 @section scripts {
     <script type="text/javascript">
-        $(function () {
-
-            //Assign Click event to Plus Image.
-            $("body").on("click", "a[class*='icon-plus-sign-alt']", function () {
-                $(this).closest("tr").after("<tr><td></td><td colspan = '999'>" + $(this).next().html() + "</td></tr>");
-                $(this).attr("class", "icon-minus-sign-alt");
-            });
-            //Assign Click event to Minus Image.
-            $("body").on("click", "a[class*='icon-minus-sign-alt']", function () {
-                $(this).attr("class", "icon-plus-sign-alt");
-                $(this).closest("tr").next().remove();
-            });
-        });
-
+       
     </script>
 }
 

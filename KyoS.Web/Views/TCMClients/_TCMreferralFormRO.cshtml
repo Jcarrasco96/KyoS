@@ -1,0 +1,52 @@
+﻿@model KyoS.Web.Models.TCMReferralFormViewModel
+<div class="col-md-12">
+    <pre>
+    <strong>CLIENT'S INFORMATION</strong>      
+            
+           Client's Name: <strong>@Html.DisplayFor(modelItem => Model.NameClient)</strong>                 Case: <strong>@Html.DisplayFor(modelItem => Model.CaseNumber)</strong>
+           Date of Birth: <strong>@Html.DisplayFor(modelItem => Model.DateOfBirth)</strong>                      SSN: <strong>@Html.DisplayFor(modelItem => Model.SSN)</strong>              Gender: <strong> @Html.DisplayFor(modelItem => Model.Gender)</strong>
+                 Address: <strong>@Html.DisplayFor(modelItem => Model.Address)</strong>
+    Primary Phone Number: <strong>@Html.DisplayFor(modelItem => Model.PrimaryPhone)</strong>                              Other: <strong> @Html.DisplayFor(modelItem => Model.SecondaryPhone)</strong>
+          
+          Legal Guardian: <strong>@Html.DisplayFor(modelItem => Model.LegalGuardianName)</strong>       Phone: <strong> @Html.DisplayFor(modelItem => Model.LegalGuardianPhone)</strong>
+    </pre>
+</div>
+<div class="col-md-12">
+    <pre>
+    <strong>DIAGNOSIS AND REFERRAL INFORMATION</strong>  
+                
+               Diagnosis: <strong>@Html.DisplayFor(modelItem => Model.Dx), @Html.DisplayFor(modelItem => Model.Dx_Description)</strong>
+             Referred by: <strong>@Html.DisplayFor(modelItem => Model.ReferredBy_Name), @Html.DisplayFor(modelItem => Model.ReferredBy_Title), @Html.DisplayFor(modelItem => Model.ReferredBy_Phone)</strong>          
+   </pre>
+</div>
+<div class="col-md-12">
+    <pre>
+    <strong>INSURANCE INFORMATION AND ELEGIBILITY VERIFICATION</strong>       
+           
+             Medicaid ID: <strong>@Html.DisplayFor(modelItem => Model.MedicaidId)</strong>              
+                     HMO: <strong>@Html.DisplayFor(modelItem => Model.HMO)</strong>
+          Units Approved: <strong>@Html.DisplayFor(modelItem => Model.UnitsApproved)</strong>              Auth Date: <strong>@Html.DisplayFor(modelItem => Model.AuthorizedDate)</strong>             Exp Date: <strong> @Html.DisplayFor(modelItem => Model.ExperatedDate)</strong>
+   </pre>
+</div>
+<div class="col-md-12">
+    <pre>
+    <strong>CASE ASSIGNMENT</strong>       
+           
+                 Program: <strong>@Html.DisplayFor(modelItem => Model.Program)</strong> 
+             Assigned to: <strong>@Html.DisplayFor(modelItem => Model.AssignedTo)</strong>              Date: <strong> @Html.DisplayFor(modelItem => Model.DateAssigned)</strong>  
+              Supervisor: <strong>@Html.DisplayFor(modelItem => Model.NameSupervisor)</strong>    <input type="checkbox" asp-for="TCMSupervisorSign" disabled/> Signature
+
+                Comments: 
+                <textarea asp-for="Comments" style="width:90%" rows="3" readonly></textarea> 
+   </pre>
+</div>
+<div class="col-md-12">
+    <pre>
+            
+    Case accepted:   Yes <input type="checkbox" asp-for="CaseAccepted" class="form-check-input" disabled id="check1">   No <input type="checkbox" class="form-check-input" disabled id="check101">            <input type="checkbox" asp-for="TCMSign" class="form-check-input" disabled> Staff Signature
+   </pre>
+</div>
+
+<div class="col-md-12">
+    &nbsp;
+</div>

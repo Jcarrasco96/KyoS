@@ -1,6 +1,6 @@
 ﻿@model KyoS.Web.Models.TCMBillingViewModel
 @{
-    ViewData["Title"] = "Billing";
+    ViewData["Title"] = "TCM Calendar";
 }
 <link rel="stylesheet" href="~/lib/fullcalendar/lib/main.css" />
 
@@ -10,18 +10,26 @@
             <i class="icon-home"></i>
             @Html.ActionLink("Dashboard", "Index", "Desktop")
         </li>
-        <li class="active">Billing</li>
+        <li class="active">TCM Calendar</li>
     </ul><!--.breadcrumb-->
 </div>
-
+@if (ViewBag.DateBlocked == "B")
+{
+    <div class="alert alert-block alert-danger">
+        <button type="button" class="close" data-dismiss="alert">
+            <i class="icon-remove"></i>
+        </button>
+        <i class="icon-ok red"></i>
+        <strong class="red">
+            Error. The date is disabled for the manager, it is unavailable for create notes.
+        </strong>
+    </div>
+}
 <div class="row">
-    <div class="col-md-3">
+    <div class="col-md-4">
         <label asp-for="IdClient" class="control-label"></label>
         <select asp-for="IdClient" asp-items="Model.Clients" class="form-control" id="cbClient"></select>
-        <span asp-validation-for="IdClient" class="text-danger"></span>
-    </div>
-    <div class="col-md-1">
-        &nbsp;
+        <span asp-validation-for="IdClient" class="text-danger"></span>        
     </div>
     <div class="col-md-1">
         <div class="thumbnail list-group-item list-group-item-success">
@@ -52,10 +60,10 @@
     </div>
 </div>
 <div class="row">
-    <div class = "col-md-12">
+    <div class="col-md-12">
         <hr />
     </div>
-    
+
 </div>
 
 <div class="row">
@@ -79,6 +87,7 @@
                   center: 'title',
                   end: 'today prev,next'
                 },
+                initialDate: '@Model.StartDate',
                 initialView: 'timeGridWeek',
                 allDaySlot: false,
                 slotDuration: '00:15:00',
@@ -150,7 +159,7 @@
             $("#cbClient").change(function () {
                 calendar.refetchEvents();
             })
-        });
+        });        
     </script>
 }
 

@@ -20,8 +20,12 @@ namespace KyoS.Web.Data.Entities
 
         public NoteStatus Status { get; set; }
 
+        [Display(Name = "Outcome")]
+        [Required(ErrorMessage = "The field {0} is mandatory.")]
         public string Outcome { get; set; }
 
+        [Display(Name = "Next Step")]
+        [Required(ErrorMessage = "The field {0} is mandatory.")]
         public string NextStep { get; set; }
 
         public TCMClientEntity TCMClient { get; set; }
@@ -31,5 +35,25 @@ namespace KyoS.Web.Data.Entities
         public List<TCMNoteActivityEntity> TCMNoteActivity { get; set; }
 
         public IEnumerable<TCMMessageEntity> TCMMessages { get; set; }
+
+        [DataType(DataType.Date)]
+        public DateTime? BilledDate { get; set; }
+
+        [DataType(DataType.Date)]
+        public DateTime? PaymentDate { get; set; }
+
+        public bool DeniedBill { get; set; }
+
+        public string CodeBill { get; set; }
+
+        [DataType(DataType.Date)]
+        public DateTime? ApprovedDate { get; set; }
+
+        public bool Sign { get; set; }
+        [DataType(DataType.Date)]
+        public BillDmsEntity BillDms { get; set; }
+        [DataType(DataType.Date)]
+        public TCMPayStubEntity PayStub { get; set; }
+
     }
 }

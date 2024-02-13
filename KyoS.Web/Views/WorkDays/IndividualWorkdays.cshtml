@@ -68,13 +68,32 @@
                                     <div style="display:none">
                                         <table class="table table-striped">
                                             <tr>
+                                                <th class="col-md-1"></th>
                                                 <th class="col-md-3">Date</th>
-                                                <th class="col-md-7">Day</th>
+                                                <th class="col-md-6">Day</th>
                                                 <th></th>
                                             </tr>
                                             @foreach (var day in item.Days.Where(d => d.Service == KyoS.Common.Enums.ServiceType.Individual).OrderBy(d => d.Date))
                                             {
                                                 <tr>
+                                                    <td align="center">
+                                                        <a class="icon-plus-sign-alt"></a>
+                                                        <div style="display:none">
+                                                            <table class="table table-striped">
+                                                                <tr>
+                                                                    <th class="col-md-12">Facilitator</th>
+                                                                </tr>
+                                                                @foreach (var facilitator in day.Workdays_Clients.GroupBy(n => n.Facilitator))
+                                                                {
+                                                                    <tr>
+                                                                        <td>
+                                                                            @Html.DisplayFor(modelItem => facilitator.Key.Name)
+                                                                        </td>
+                                                                    </tr>
+                                                                }
+                                                            </table>
+                                                        </div>
+                                                    </td>
                                                     <td>
                                                         @Html.DisplayFor(modelItem => day.Date)
                                                     </td>

@@ -99,7 +99,14 @@
                                     @Html.DisplayFor(modelItem => item.Active)
                                 </td>
                                 <td align="right">
-                                      <a asp-action="PrintMTP" asp-route-id="@item.Id" class="btn btn-success " title="Print Fars Form"><i class="glyphicon glyphicon-print"></i></a>
+                                    @if (item.Status == KyoS.Common.Enums.MTPStatus.Approved)
+                                    {
+                                        <a asp-action="PrintMTP" asp-route-id="@item.Id" class="btn btn-success " title="Print Fars Form"><i class="glyphicon glyphicon-print"></i></a>
+                                    }
+                                    else
+                                    {
+                                        <a asp-action="PrintMTP" asp-route-id="@item.Id" class="btn btn-success disabled" title="Print Fars Form"><i class="glyphicon glyphicon-print"></i></a>
+                                    }
                                 </td>
                             </tr>
                         }

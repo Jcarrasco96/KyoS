@@ -15,17 +15,20 @@
                                 <th class="col-md-3">
                                     Name
                                 </th>
+                                <th class="col-md-1" style="text-align:center;">
+                                    Service
+                                </th>
                                 <th class="col-md-1">
                                     Member ID
                                 </th>
-                                <th class="col-md-2" style="text-align:center;">
-                                    Approved Date
+                                <th class="col-md-1" style="text-align:center;">
+                                    Approved
                                 </th>
                                 <th class="col-md-1" style="text-align:center;">
-                                    Expired Date
+                                    Expired
                                 </th>
-                                <th class="col-md-2" style="text-align:center;">
-                                    Authorization Number
+                                <th class="col-md-1" style="text-align:center;">
+                                    Auth Number
                                 </th>
                                 <th class="col-md-1" style="text-align:center;">
                                     Active
@@ -43,6 +46,9 @@
                                 <tr>
                                     <td>
                                         @Html.DisplayFor(modelItem => item.Name)
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.Agency)
                                     </td>
                                      <td>
                                         @Html.DisplayFor(modelItem => item.MemberId)
@@ -65,10 +71,16 @@
                                         @Html.DisplayFor(modelItem => item.Units)
                                     </td>
                                     <td align="right">
-                                        @if (User.IsInRole("Manager") || User.IsInRole("Supervisor") || User.IsInRole("Documents_Assistant"))
+                                        @if (User.IsInRole("Manager"))
                                         {
-                                            <a onclick="showInPopup('@Url.Action("EditHealthInsuranceClient","Clients",new { id = item.Id},Context.Request.Scheme)','Edit Health Insurance')" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i></a>
-                                            <a onclick="showInPopup('@Url.Action("DeleteHealthInsuranceTempModal","Clients",new { id = item.Id},Context.Request.Scheme)','Delete Health Insurance')" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i></a>
+                                            <a onclick="showInPopup('@Url.Action("EditHealthInsuranceClient", "Clients", new { id = item.Id }, Context.Request.Scheme)','Edit Health Insurance')" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i></a>
+                                            <a onclick="showInPopup('@Url.Action("DeleteHealthInsuranceTempModal", "Clients", new { id = item.Id }, Context.Request.Scheme)','Delete Health Insurance')" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i></a>
+                                            @*<button type="button" onclick="DeleteHealthInsuranceTemp(@item.Id)" class="btn btn-danger deleteItem" title="Delete Health Insurance"><i class="glyphicon glyphicon-trash"></i></button>*@
+                                        }
+                                        else
+                                        {
+                                            <a onclick="showInPopup('@Url.Action("EditHealthInsuranceClient","Clients",new { id = item.Id},Context.Request.Scheme)','Edit Health Insurance')" class="btn btn-warning disabled"><i class="glyphicon glyphicon-pencil disabled"></i></a>
+                                            <a onclick="showInPopup('@Url.Action("DeleteHealthInsuranceTempModal","Clients",new { id = item.Id},Context.Request.Scheme)','Delete Health Insurance')" class="btn btn-danger disabled"><i class="glyphicon glyphicon-trash disabled"></i></a>
                                             @*<button type="button" onclick="DeleteHealthInsuranceTemp(@item.Id)" class="btn btn-danger deleteItem" title="Delete Health Insurance"><i class="glyphicon glyphicon-trash"></i></button>*@
                                         }
                                     </td>

@@ -11,13 +11,16 @@ namespace KyoS.Web.Models
 {
     public class TCMAdendumViewModel : TCMAdendumEntity
     {
+        [DataType(DataType.Date)]
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         public DateTime Date_Identified { get; set; }
 
         [Required(ErrorMessage = "The field {0} is mandatory.")]
+        [Range(1, int.MaxValue, ErrorMessage = "You must select a case number.")]
         public int ID_TcmServicePlan { get; set; }
 
         [Required(ErrorMessage = "The field {0} is mandatory.")]
+        [Range(1, int.MaxValue, ErrorMessage = "You must select a Domain.")]
         public int ID_TcmDominio { get; set; }
 
         public string Needs_Identified { get; set; }

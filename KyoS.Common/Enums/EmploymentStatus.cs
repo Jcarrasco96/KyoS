@@ -12,7 +12,8 @@ namespace KyoS.Common.Enums
         Disabled,
         Homemaker,
         Student,
-        Unemployed
+        Unemployed,
+        N_A
     }
 
     public class EmployedUtils
@@ -25,7 +26,8 @@ namespace KyoS.Common.Enums
                    (index == 3) ? EmploymentStatus.Disabled :
                    (index == 4) ? EmploymentStatus.Homemaker :
                    (index == 5) ? EmploymentStatus.Student :
-                   (index == 6) ? EmploymentStatus.Unemployed : EmploymentStatus.EmployetFT;
+                   (index == 6) ? EmploymentStatus.Unemployed :
+                   (index == 7) ? EmploymentStatus.N_A : EmploymentStatus.EmployetFT;
         }
     }
 }

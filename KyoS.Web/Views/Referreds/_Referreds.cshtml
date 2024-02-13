@@ -1,24 +1,41 @@
 ﻿@model KyoS.Web.Models.ReferredViewModel
     <div class="col-md-push-12">
-        <div class="form-group col-md-4">
+        <div class="form-group col-md-6">
             <label asp-for="Name" class="control-label"></label>&nbsp;*
             <input asp-for="Name" class="form-control" />
             <span asp-validation-for="Name" class="text-danger"></span>
         </div>
-        <div class="form-group col-md-4">
+        <div class="form-group col-md-3">
+            <label asp-for="Email" class="control-label"></label>
+            <input asp-for="Email" class="form-control" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-3">
+            <label asp-for="Telephone" class="control-label"></label>
+            <input asp-for="Telephone" class="form-control" />
+            <span asp-validation-for="Telephone" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-md-push-12">
+        <div class="form-group col-md-5">
             <label asp-for="Address" class="control-label"></label>
             <input asp-for="Address" class="form-control" />
             <span asp-validation-for="Address" class="text-danger"></span>
         </div>
         <div class="form-group col-md-2">
-            <label asp-for="Email" class="control-label"></label>
-            <input asp-for="Email" class="form-control" />
-            <span asp-validation-for="Email" class="text-danger"></span>
+            <label asp-for="City" class="control-label"></label>
+            <input asp-for="City" class="form-control" />
+            <span asp-validation-for="City" class="text-danger"></span>
         </div>
         <div class="form-group col-md-2">
-            <label asp-for="Telephone" class="control-label"></label>
-            <input asp-for="Telephone" class="form-control" />
-            <span asp-validation-for="Telephone" class="text-danger"></span>
+            <label asp-for="State" class="control-label"></label>
+            <input asp-for="State" class="form-control" />
+            <span asp-validation-for="State" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-2">
+            <label asp-for="ZidCode" class="control-label"></label>
+            <input asp-for="ZidCode" class="form-control" />
+            <span asp-validation-for="ZidCode" class="text-danger"></span>
         </div>
     </div>
     <div class="col-md-12">

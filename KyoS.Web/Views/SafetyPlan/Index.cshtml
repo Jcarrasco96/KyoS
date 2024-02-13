@@ -1,0 +1,163 @@
+﻿@model IEnumerable<KyoS.Web.Data.Entities.ClientEntity>
+@{
+    ViewData["Title"] = "All Safety Plans";
+}
+<link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
+
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home"></i>
+            @Html.ActionLink("Dashboard", "Index", "Desktop")
+        </li>
+        <li class="active">All Safety Plans</li>
+    </ul><!--.breadcrumb-->
+</div>
+<div class="row">
+    <div class="col-md-12">
+        @if ((Model.Count() > 0) && (Model.ElementAtOrDefault(0).Clinic.Setting.MHProblems == true))
+        {
+            <a onclick="showInPopupLg('@Url.Action("AuditSafetyPlan", "SafetyPlan", null, Context.Request.Scheme)','Audit Safety Plans')" class="btn btn-danger" title="Audit SafetyPlan"><i class="glyphicon glyphicon-alert"></i>&nbsp;&nbsp;Audit Safety Plans</a>
+        }
+        else
+        {
+            <a class="btn btn-danger disabled" title="Audit Safety Plans"><i class="glyphicon glyphicon-alert"></i>&nbsp;&nbsp;Audit Safety Plans</a>
+        }
+    </div>   
+    <div class="col-md-12">
+        &nbsp;
+    </div>
+    <div class="col-md-12">
+        @if (ViewBag.Delete == "N")
+        {
+            <div class="alert alert-block alert-danger">
+                <button type="button" class="close" data-dismiss="alert">
+                    <i class="icon-remove"></i>
+                </button>
+                <strong class="red">
+                    Error. It is not posible delete the Safety Plan
+                </strong>
+            </div>
+        }
+    </div>
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Safety Plans</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-hover table-responsive table-striped" id="MyTable">
+                    <thead>
+                        <tr>
+                            <th class="col-md-3">
+                                @Html.DisplayNameFor(model => model.Name)
+                            </th>
+                            <th class="col-md-2" style="text-align:center;">
+                                @Html.DisplayNameFor(model => model.Code)
+                            </th>
+                            <th class="col-md-2" style="text-align:center;">
+                                Admission Date
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Status
+                            </th>
+                            <th class="col-md-2" style="text-align:center;">
+                                MH Therapy
+                            </th>
+                            <th class="col-md-2" align="right">
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @if (item.Gender == KyoS.Common.Enums.GenderType.Female)
+                                    {
+                                        <i class="glyphicon glyphicon-user btn-danger"></i>
+                                    }
+                                    @if (item.Gender == KyoS.Common.Enums.GenderType.Male)
+                                    {
+                                        <i class="glyphicon glyphicon-user btn-primary"></i>
+                                    }
+                                    &nbsp;
+                                    @Html.DisplayFor(modelItem => item.Name)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.Code)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.AdmisionDate)
+                                </td>
+                                <td align="center">
+                                    @if (item.Status == KyoS.Common.Enums.StatusType.Open)
+                                    {
+                                        <span class="label label-success">
+                                            Open
+                                        </span>
+                                    }
+                                    @if (item.Status == KyoS.Common.Enums.StatusType.Close)
+                                    {
+                                        <span class="label label-default">
+                                            Close
+                                        </span>
+                                    }
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.Service)
+                                </td>
+                                <td align="right">
+                                    <a asp-action="EditReadOnly" asp-route-id="@item.SafetyPlan.Id" class="btn btn-info" title="View Safety Plan"><i class="glyphicon glyphicon-search"></i></a>
+                                    <a class="btn btn-success" asp-action="PrintSafetyPlan" asp-route-id="@item.SafetyPlan.Id" title="Print Safety Plan" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<partial name="_ModalPopupLg" />
+<partial name="_DeleteDialog" />
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/jquery.dataTables.min.js"></script>
+
+    <script type="text/javascript">
+         $(document).ready(function () {
+              $('#MyTable').DataTable({
+                  "order": [[0, "asc"]],
+                   "pageLength": 100
+              });
+
+             // Delete item
+             var item_to_delete;
+             $('.deleteItem').click((e) => {
+                 item_to_delete = e.currentTarget.dataset.dataset.id;
+             });
+
+             $("#btnYesDelete").click(function () {
+             var url = "@Url.Action("Delete", "FarsForms")";
+                 window.location.href = url + '/' + item_to_delete;
+             });
+         });
+        $(function () {
+
+            //Assign Click event to Plus Image.
+            $("body").on("click", "a[class*='icon-plus-sign-alt']", function () {
+                $(this).closest("tr").after("<tr><td></td><td colspan = '999'>" + $(this).next().html() + "</td></tr>");
+                $(this).attr("class", "icon-minus-sign-alt");
+            });
+            //Assign Click event to Minus Image.
+            $("body").on("click", "a[class*='icon-minus-sign-alt']", function () {
+                $(this).attr("class", "icon-plus-sign-alt");
+                $(this).closest("tr").next().remove();
+            });
+        });
+    </script>
+}
+

@@ -1,0 +1,175 @@
+﻿@model KyoS.Web.Models.CiteViewModel
+@{
+    Layout = null;
+}
+
+<div class="row">
+
+    @if (ViewBag.Creado == "E")
+    {
+        <div class="col-md-12">
+            <div class="alert alert-block alert-danger">
+                <button type="button" class="close" data-dismiss="alert">
+                    <i class="icon-remove"></i>
+                </button>
+                <i class="icon-ok red"></i>
+                <strong class="red">
+                    Error. Appointment already exist
+                </strong>
+            </div>
+        </div>
+    }
+
+    <form asp-action="CreateModal" asp-route-id="@Model.Id" onsubmit="return RedirectToAppointments(this);">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        
+        <div class="container-fluid">
+            <div class="col-md-6 form-group">
+                <label asp-for="IdFacilitator" class="control-label"></label>&nbsp;*
+                <select asp-for="IdFacilitator" asp-items="Model.FacilitatorsList" class="form-control" id="cbFacilitator2"></select>
+                <span asp-validation-for="IdFacilitator" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-3">
+                <label asp-for="DateCite" class="control-label">Date</label>&nbsp;*
+                <input asp-for="DateCite" class="form-control" readonly id="lbDateCite"/>
+                <span asp-validation-for="DateCite" class="text-danger"></span>
+            </div>
+            <div class="col-md-3 form-group">
+                <label asp-for="IdSubSchedule" class="control-label"></label>&nbsp;*
+                <select asp-for="IdSubSchedule" asp-items="Model.SubSchedulesList" class="form-control" id="cbSubSchedule"></select>
+                <span asp-validation-for="IdSubSchedule" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="container-fluid">
+            <div class="col-md-6 form-group">
+                <label asp-for="IdClient" class="control-label"></label>&nbsp;*
+                <select asp-for="IdClient" asp-items="Model.ClientsList" class="form-control" id="cbClient"></select>
+                <span asp-validation-for="IdClient" class="text-danger"></span>
+            </div>
+            <div class="col-md-3 form-group">
+                <label asp-for="IdStatus" class="control-label"></label>&nbsp;*
+                <select asp-for="IdStatus" asp-items="Model.StatusList" class="form-control"></select>
+                <span asp-validation-for="IdStatus" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-3">
+                <label asp-for="Copay" class="control-label"></label>
+                <input asp-for="Copay" class="form-control" />
+                <span asp-validation-for="Copay" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="container-fluid">
+            <div class="col-md-3 form-group">
+                <label asp-for="Client.DateOfBirth" class="control-label">Client's Date of Birth</label>
+                <input class="form-control" disabled id="lbDateOfBirth"/>
+                <span asp-validation-for="Client.DateOfBirth" class="text-danger"></span>
+            </div>
+            <div class="col-md-3 form-group">
+                <label asp-for="Client.Telephone" class="control-label">Client's Telephone</label>
+                <input class="form-control" disabled id="lbTelephone"/>
+                <span asp-validation-for="Client.Telephone" class="text-danger"></span>
+            </div>
+            <div class="col-md-6 form-group">
+                <label asp-for="Client.FullAddress" class="control-label">Client's Full Address</label>
+                <input class="form-control" disabled id="lbFullAddress"/>
+                <span asp-validation-for="Client.FullAddress" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="container-fluid">
+            <div class="form-group col-md-6">
+                <label asp-for="EventNote" class="control-label"></label>
+                <textarea asp-for="EventNote" class="form-control" rows="3"></textarea>
+                <span asp-validation-for="EventNote" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-6">
+                <label asp-for="PatientNote" class="control-label"></label>
+                <textarea asp-for="PatientNote" class="form-control" rows="3"></textarea>
+                <span asp-validation-for="PatientNote" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div form-group">
+                <hr />
+            </div>
+        </div>
+        <div class="container-fluid">
+            <div class="col-md-offset-10 form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+                <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </form>
+
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#cbFacilitator2").change(function () {
+            var url = "@Url.Action("GetClients", "Cites")";
+            $.get(url, { Facilitator: $("#cbFacilitator2").val() }, function (data) {
+                $("#cbClient").empty();
+                $.each(data, function (index, row) {
+                    $("#cbClient").append("<option value='" + row.value + "'>" + row.text + "</option>")
+                });
+            });
+
+            url = "@Url.Action("GetSubSchedule", "Cites")";
+            $.get(url, { Facilitator: $("#cbFacilitator2").val(), DateOfAppoitment: $("#lbDateCite").val() }, function (data) {
+                $("#cbSubSchedule").empty();
+                $.each(data, function (index, row) {
+                    $("#cbSubSchedule").append("<option value='" + row.value + "'>" + row.text + "</option>")
+                });
+            });
+
+            $("#lbDateOfBirth").val("");
+            $("#lbTelephone").val("");
+            $("#lbFullAddress").val("");
+        })
+
+        $("#cbClient").change(function () {
+            var url = "@Url.Action("GetDateOfBirth", "Cites")";
+            $.get(url, { ClientId: $("#cbClient").val() }, function (data) {
+                $("#lbDateOfBirth").val(data);
+            });
+
+            url = "@Url.Action("GetTelephone", "Cites")";
+            $.get(url, { ClientId: $("#cbClient").val() }, function (data) {
+                $("#lbTelephone").val(data);
+            });
+
+            url = "@Url.Action("GetFullAddress", "Cites")";
+            $.get(url, { ClientId: $("#cbClient").val() }, function (data) {
+                $("#lbFullAddress").val(data);
+            });
+        })
+    });
+
+    RedirectToAppointments = form => {
+            try {
+                $.ajax({
+                    type: 'POST',
+                    url: form.action,
+                    data: new FormData(form),
+                    contentType: false,
+                    processData: false,
+                    success: function (res) {
+                        if (res.isValid) {
+                            var url = "@Url.Action("Schedule", "Calendar")";
+                            window.location.href = url + '?facilitatorId=' + res.html;
+                        }
+                        else
+                            $('#form-modal-lg .modal-body').html(res.html);
+                    },
+                    error: function (err) {
+                        console.log(err)
+                    }
+                })
+                //to prevent default form submit event
+                return false;
+            } catch (ex) {
+                console.log(ex)
+            }
+        }
+</script>
+
+
+

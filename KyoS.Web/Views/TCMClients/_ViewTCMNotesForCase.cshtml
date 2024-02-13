@@ -1,0 +1,171 @@
+﻿@model IEnumerable<KyoS.Web.Data.Entities.TCMNoteEntity>
+
+@if (Model.Count() > 0)
+{
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">TCM Notes</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-hover table-responsive table-striped" >
+                    <thead>
+                        <tr>
+                            <th class="col-md-1" style="text-align:center">
+                                Date Service
+                            </th>
+                            <th class="col-md-3">
+                                Client Name
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Status
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Services
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Minutes
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Units
+                            </th>
+                            <th class="col-md-1" style="text-align:center">
+                                Approved
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Billed
+                            </th>
+                            <th class="col-md-2">
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            var minutes = @item.TCMNoteActivity.Sum(n => n.Minutes);
+                            var unit = minutes / 15;
+                            var residuo = minutes % 15;
+                            if(residuo > 7)
+                            {
+                                unit = unit + 1;
+                            }
+                            <tr>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.DateOfService)
+                                </td>
+                                <td>
+                                    @if (item.TCMClient.Client.Gender == KyoS.Common.Enums.GenderType.Female)
+                                    {
+                                        <i class="glyphicon glyphicon-user btn-danger"></i>
+                                    }
+                                    @if (item.TCMClient.Client.Gender == KyoS.Common.Enums.GenderType.Male)
+                                    {
+                                        <i class="glyphicon glyphicon-user btn-primary"></i>
+                                    }
+                                    &nbsp;
+                                    @Html.DisplayFor(modelItem => item.TCMClient.Client.Name)
+                                    |
+                                    @Html.DisplayFor(modelItem => item.TCMClient.CaseNumber)
+                                </td>
+                                <td align="center">
+                                    @if (item.Status == KyoS.Common.Enums.NoteStatus.Edition)
+                                    {
+                                        <span class="label label-warning">
+                                            Edition
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        if (item.Status == KyoS.Common.Enums.NoteStatus.Pending)
+                                        {
+                                            <span class="label label-info">
+                                                Pending
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            if (item.Status == KyoS.Common.Enums.NoteStatus.Approved)
+                                            {
+                                                <span class="label label-success">
+                                                    Approved
+                                                </span>
+                                            }
+                                        }
+                                    }
+                                </td>
+                                <td align="center">
+                                    @item.TCMNoteActivity.Count()
+                                </td>
+                                <td align="center">
+                                    @item.TCMNoteActivity.Sum(n => n.Minutes)
+                                </td>
+                                <td align="center">
+                                    @unit
+                                </td>
+                                <td align="center">
+                                    @if (item.ApprovedDate == null)
+                                    {
+                                        <p>-</p>
+                                    }
+                                    else
+                                    {
+                                        @Html.DisplayFor(modelItem => item.ApprovedDate)
+                                    }
+                                </td>
+                                 <td align="center">
+                                    @if (item.BilledDate == null)
+                                    {
+                                        <p>-</p>
+                                    }
+                                    else
+                                    { 
+                                         @Html.DisplayFor(modelItem => item.BilledDate)
+                                    }
+                                </td>
+                                 <td align="right">
+                                     @if (User.IsInRole("Manager") || User.IsInRole("TCMSupervisor"))
+                                     {
+                                         @if (item.Status == KyoS.Common.Enums.NoteStatus.Approved)
+                                         {
+                                             <a asp-action="ReturnTo" asp-controller="TCMNotes" asp-route-id="@item.Id" asp-route-tcmClientId="@item.TCMClient.Id" class="btn btn-warning" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                             <a asp-action="PrintNote" asp-controller="TCMNotes" asp-route-id="@item.Id" class="btn btn-success" title="Print Service Plan" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                         }
+                                         else
+                                         {
+                                             @if (item.Status == KyoS.Common.Enums.NoteStatus.Pending)
+                                             {
+                                                 <a asp-action="ReturnTo" asp-controller="TCMNotes" asp-route-id="@item.Id" asp-route-tcmClientId="@item.TCMClient.Id" class="btn btn-warning" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                                 <a asp-action="PrintNote" asp-controller="TCMNotes" asp-route-id="@item.Id" class="btn btn-success disabled" title="Print Note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                             }
+                                             else
+                                             {
+                                                 <a asp-action="AddendumReturnTo" asp-controller="Bios" asp-route-id="@item.Id" asp-route-clientId="@item.TCMClient.Id" class="btn btn-warning disabled" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                                 <a asp-action="PrintNote" asp-controller="TCMNotes" asp-route-id="@item.Id" class="btn btn-success disabled" title="Print Note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                             }
+                                         }
+                                         <a onclick="ConfirmDeleteNote(@item.Id)" class="btn btn-danger" title="Delete Note"><i class="glyphicon glyphicon-trash"></i></a>
+                                     }
+                                     else
+                                     {
+                                         <a asp-action="ReturnTo" asp-controller="TCMNotes" asp-route-id="@item.Id" asp-route-clientId="@item.TCMClient.Id" class="btn btn-warning disabled" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                         @if (item.Status == KyoS.Common.Enums.NoteStatus.Approved)
+                                         {
+                                             <a asp-action="PrintNote" asp-controller="TCMNotes" asp-route-id="@item.Id" class="btn btn-success" title="Print Note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                         }
+                                         else
+                                         {
+                                             <a asp-action="PrintNote" asp-controller="TCMNotes" asp-route-id="@item.Id" class="btn btn-success disabled" title="Print Note" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                         }
+                                         <a onclick="ConfirmDeleteNote(@item.Id)" class="btn btn-danger disabled" title="Delete Note"><i class="glyphicon glyphicon-trash"></i></a>
+                                     }
+                                 </td>
+                            </tr>
+                        }
+                            
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}
+ 

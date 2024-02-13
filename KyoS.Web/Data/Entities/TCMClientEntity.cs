@@ -66,5 +66,25 @@ namespace KyoS.Web.Data.Entities
         public TCMAssessmentEntity TCMAssessment { get; set; }
 
         public List<TCMNoteEntity> TCMNote{ get; set; }
+
+        public TCMIntakeClientSignatureVerificationEntity TCMIntakeClientSignatureVerification { get; set; }
+
+        public TCMIntakeClientIdDocumentVerificationEntity TCMIntakeClientIdDocumentVerification { get; set; }
+
+        public TCMIntakePainScreenEntity TCMIntakePainScreen { get; set; }
+
+        public TCMIntakeColumbiaSuicideEntity TCMIntakeColumbiaSuicide { get; set; }
+
+        public TCMIntakePersonalWellbeingEntity TCMIntakePersonalWellbeing { get; set; }
+
+        public TCMIntakeNutritionalScreenEntity TCMIntakeNutritionalScreen { get; set; }
+        public TCMReferralFormEntity TCMReferralForm { get; set; }
+
+        public List<TCMTransferEntity> TCMTransferList { get; set; }
+
+        public bool Younger { get; set; }
+
+        public TCMIntakeAppendixIEntity TcmIntakeAppendixI { get; set; }
+        public TCMIntakeMedicalHistoryEntity TCMIntakeMedicalHistory { get; set; }
     }
 }

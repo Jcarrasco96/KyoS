@@ -1,0 +1,90 @@
+﻿@model IEnumerable<KyoS.Web.Data.Entities.BillDmsDetailsEntity>
+
+@if (Model != null)
+{
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">DMS Invoice Details </h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-hover table-responsive table-striped" id="MyTable">
+                    <thead>
+                        <tr>
+                            <th class="col-md-2">
+                                Client Name
+                            </th>
+                            <th class="col-md-2" style="text-align:center;">
+                                Service Date
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Service
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Units
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Amount
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Billed
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.OrderBy(n => n.NameClient).ThenBy(m => m.DateService))
+                        {
+                            <tr style="color: darkgrey;">
+                                <td>
+                                    @item.NameClient
+                                </td>
+                                <td  align="center">
+                                    @item.DateService.ToShortDateString()
+                                </td>
+                                <td align="center">
+                                    @item.ServiceAgency
+                                </td>
+                                <td align="center">
+                                    @item.Unit
+                                </td>
+                                <td align="center">
+                                    @item.Amount
+                                </td>
+                                @*<td align="center">
+                                    @item.StatusBill
+                                </td>
+                                <td align="center">
+                                    @if (item.PaidDate.ToShortDateString() == "01/01/0001")
+                                    {
+                                        <a> - </a>
+                                    }
+                                    else
+                                    {
+                                        @item.PaidDate.ToShortDateString()
+                                    }
+                                </td>*@
+                                <td align="center">
+                                    @if (item.MedicaidBill == false)
+                                    {
+                                         <span class="label label-danger">
+                                                Not Billed
+                                         </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="label label-success">
+                                            Billed
+                                        </span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}
+
+
+

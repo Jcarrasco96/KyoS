@@ -58,14 +58,31 @@ namespace KyoS.Web.Controllers
             {
                 CaseMannagerEntity caseManager = _context.CaseManagers.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
                 ViewData["origin"] = origin.ToString();
-                if (User.IsInRole("Manager")|| User.IsInRole("TCMSupervisor"))
-                    return View(await _context.TCMClient
-                                              .Include(f => f.Client)
-                                              .Include(f => f.TCMFarsFormList)
+                if (User.IsInRole("Manager") || User.IsInRole("TCMSupervisor"))
+                {
+                    if (idTCMClient == 0)
+                    {
+                        return View(await _context.TCMClient
+                                                  .Include(f => f.Client)
+                                                  .Include(f => f.TCMFarsFormList)
 
-                                              .Where(n => n.Client.Clinic.Id == user_logged.Clinic.Id)
-                                              .OrderBy(f => f.Client.Name)
-                                              .ToListAsync());
+                                                  .Where(n => n.Client.Clinic.Id == user_logged.Clinic.Id)
+                                                  .OrderBy(f => f.Client.Name)
+                                                  .ToListAsync());
+                    }
+                    else
+                    {
+                        return View(await _context.TCMClient
+                                                  .Include(f => f.Client)
+                                                  .Include(f => f.TCMFarsFormList)
+
+                                                  .Where(n => n.Client.Clinic.Id == user_logged.Clinic.Id
+                                                           && n.Id == idTCMClient)
+                                                  .OrderBy(f => f.Client.Name)
+                                                  .ToListAsync());
+                    }
+
+                }
 
                 if (User.IsInRole("CaseManager"))
                 {
@@ -437,9 +454,29 @@ namespace KyoS.Web.Controllers
                 Stream stream = _reportHelper.TCMFloridaSocialHSFarsReport(entity);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
+            if (entity.TCMClient.Client.Clinic.Name == "COMMUNITY HEALTH THERAPY CENTER")
+            {
+                Stream stream = _reportHelper.TCMCommunityHTCFarsReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
             if (entity.TCMClient.Client.Clinic.Name == "DREAMS MENTAL HEALTH INC")
             {
                 Stream stream = _reportHelper.TCMDreamsMentalHealthFarsReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (entity.TCMClient.Client.Clinic.Name == "SAPPHIRE MENTAL HEALTH CENTER LLC")
+            {
+                Stream stream = _reportHelper.TCMSapphireMHCFarsReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (entity.TCMClient.Client.Clinic.Name == "ORION MENTAL HEALTH CENTER LLC")
+            {
+                Stream stream = _reportHelper.TCMOrionMHCFarsReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (entity.TCMClient.Client.Clinic.Name == "MY FLORIDA CASE MANAGEMENT SERVICES LLC")
+            {
+                Stream stream = _reportHelper.TCMMyFloridaFarsReport(entity);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
 
@@ -622,7 +659,7 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("NotAuthorized", "Account");
             }
 
-            if (User.IsInRole("Manager") || (User.IsInRole("TCMSupervisor")))
+            if (User.IsInRole("Manager"))
             {
                 List<TCMFarsFormEntity> tcmFars = await _context.TCMFarsForm
                                                                 .Include(m => m.TCMClient)
@@ -633,6 +670,20 @@ namespace KyoS.Web.Controllers
                                                                 .OrderBy(m => m.TCMClient.CaseNumber)
                                                                 .ToListAsync();
                
+                return View(tcmFars);
+            }
+
+            if ((User.IsInRole("TCMSupervisor")))
+            {
+                List<TCMFarsFormEntity> tcmFars = await _context.TCMFarsForm
+                                                                .Include(m => m.TCMClient)
+                                                                .ThenInclude(m => m.Client)
+                                                                .Include(m => m.TcmMessages)
+                                                                .Where(m => m.Status == status
+                                                                         && m.TCMClient.Casemanager.TCMSupervisor.LinkedUser == user_logged.UserName)
+                                                                .OrderBy(m => m.TCMClient.CaseNumber)
+                                                                .ToListAsync();
+
                 return View(tcmFars);
             }
 
@@ -654,12 +705,12 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("NotAuthorized", "Account");
         }
 
-        [Authorize(Roles = "TCMSupervisor")]
+        [Authorize(Roles = "Manager, TCMSupervisor")]
         public IActionResult EditReadOnly(int id = 0, int origi = 0)
         {
             TCMFarsFormViewModel model;
 
-            if (User.IsInRole("TCMSupervisor") || User.IsInRole("CaseManager"))
+            if (User.IsInRole("TCMSupervisor") || User.IsInRole("Manager"))
             {
                 UserEntity user_logged = _context.Users
                                                  .Include(u => u.Clinic)
@@ -796,6 +847,57 @@ namespace KyoS.Web.Controllers
             return View();
         }
 
+        [Authorize(Roles = "Manager, TCMSupervisor")]
+        public async Task<IActionResult> Delete1(int id = 0)
+        {
+            TCMFarsFormEntity tcmFars = _context.TCMFarsForm
+                                                .Include(n => n.TCMClient)
+                                                .Include(n => n.TcmMessages)
+                                                .FirstOrDefault(m => m.Id == id);
+            if (tcmFars == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            try
+            {
+                _context.TCMFarsForm.Remove(tcmFars);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+
+            }
+            return RedirectToAction("TCMCaseHistory", "TCMClients", new { id = tcmFars.TCMClient.Id });
+        }
+
+        [Authorize(Roles = "Manager, TCMSupervisor")]
+        public async Task<IActionResult> ReturnTo(int? id, int tcmClientId = 0)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            TCMFarsFormEntity tcmFars = await _context.TCMFarsForm.FirstOrDefaultAsync(s => s.Id == id);
+            if (tcmFars == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            try
+            {
+                tcmFars.Status = FarsStatus.Edition;
+                _context.TCMFarsForm.Update(tcmFars);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Index", new { idError = 1 });
+            }
+
+            return RedirectToAction("TCMCaseHistory", "TCMClients", new { id = tcmClientId });
+        }
 
     }
 }

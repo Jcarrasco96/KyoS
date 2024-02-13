@@ -1,0 +1,206 @@
+﻿@model IEnumerable<KyoS.Web.Data.Entities.MTPReviewEntity>
+@{
+    ViewData["Title"] = "MTPR";
+}
+<link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
+
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home"></i>
+            @Html.ActionLink("Dashboard", "Index", "Desktop")
+        </li>
+        <li class="active">MTPR</li>
+    </ul><!--.breadcrumb-->
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">MTPRs</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-hover table-responsive table-striped" id="MyTable">
+                    <thead>
+                        <tr>
+                            <th class="col-md-3">
+                                Name
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Admission
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Status
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Service
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Review On
+                            </th>
+                            <th class="col-md-2" style="text-align:center;">
+                                Admission for
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Doc.
+                            </th>
+                            <th class="col-md-2">
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @if (item.Mtp.Client.Gender == KyoS.Common.Enums.GenderType.Female)
+                                    {
+                                        <i class="glyphicon glyphicon-user btn-danger"></i>
+                                    }
+                                    @if (item.Mtp.Client.Gender == KyoS.Common.Enums.GenderType.Male)
+                                    {
+                                        <i class="glyphicon glyphicon-user btn-primary"></i>
+                                    }
+                                    &nbsp;
+                                    @Html.DisplayFor(modelItem => item.Mtp.Client.Name)
+                                    |
+                                    @Html.DisplayFor(modelItem => item.Mtp.Client.Code)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.Mtp.Client.AdmisionDate)
+                                </td>
+                                <td align="center">
+                                    @if (item.Mtp.Client.Status == KyoS.Common.Enums.StatusType.Open)
+                                    {
+                                        <span class="label label-success">
+                                            Open
+                                        </span>
+                                    }
+                                    @if (item.Mtp.Client.Status == KyoS.Common.Enums.StatusType.Close)
+                                    {
+                                        <span class="label label-default">
+                                            Close
+                                        </span>
+                                    }
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.DataOfService)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.ReviewedOn)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.Therapist)
+                                </td>
+                                <td align="center">
+                                    @if (item.Status == KyoS.Common.Enums.AdendumStatus.Edition)
+                                    {
+                                        <span class="label label-warning">
+                                            Edition
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        @if (item.Status == KyoS.Common.Enums.AdendumStatus.Pending)
+                                        {
+                                            <span class="label label-info">
+                                                Pending
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            @if (item.Status == KyoS.Common.Enums.AdendumStatus.Approved)
+                                            {
+                                                <span class="label label-success">
+                                                    Approved
+                                                </span>
+                                            }
+                                        }
+                                    }
+                                </td>
+                                <td align="right">
+                                    @if (User.IsInRole("Facilitator") || User.IsInRole("Documents_Assistant"))
+                                    {
+                                        @if (item.Status == KyoS.Common.Enums.AdendumStatus.Edition)
+                                        {
+                                            <a asp-action="EditMTPReview" asp-route-id="@item.Id" asp-route-origin="7" class="btn btn-warning" title="New Addendum"><i class="glyphicon glyphicon-pencil"></i></a>
+                                        }
+                                        else
+                                        {
+                                            <a class="btn btn-warning disabled" title="Edit MTPR"><i class="glyphicon glyphicon-pencil"></i></a>
+                                        }
+                                        @if (item.Status == KyoS.Common.Enums.AdendumStatus.Approved)
+                                        {
+                                            <a asp-action="PrintMTPReview" asp-route-id="@item.Id" class="btn btn-success" title="Print MTP Review" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                        }
+                                        else
+                                        {
+                                            <a asp-action="PrintMTPReview" asp-route-id="@item.Id" class="btn btn-success disabled" title="Print MTP Review" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                        }
+                                        <a class="btn btn-danger disabled" title="Delete MTPR"><i class="glyphicon glyphicon-trash"></i></a>
+                                    }
+                                    else
+                                    {
+                                        <a class="btn btn-warning disabled" title="Edit MTPR"><i class="glyphicon glyphicon-pencil"></i></a>
+                                        @if (item.Status == KyoS.Common.Enums.AdendumStatus.Approved)
+                                        {
+                                            <a asp-action="PrintMTPReview" asp-route-id="@item.Id" class="btn btn-success" title="Print MTP Review" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                        }
+                                        else
+                                        {
+                                            <a asp-action="PrintMTPReview" asp-route-id="@item.Id" class="btn btn-success disabled" title="Print MTP Review" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                        }
+                                        <a class="btn btn-danger disabled" title="Delete MTPR"><i class="glyphicon glyphicon-trash"></i></a>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<partial name="_DeleteDialog" />
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/jquery.dataTables.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#MyTable').DataTable({
+                                "order": [[1, "asc"]],
+                                "pageLength": 100
+                            });
+
+            // Delete item
+            var item_to_delete;
+
+            $('.deleteItem').click((e) => {
+                item_to_delete = e.currentTarget.dataset.id;
+            });
+
+            $("#btnYesDelete").click(function () {
+                var url = "@Url.Action("Delete", "Adendums")";
+                window.location.href = url + '/' + item_to_delete;
+            });
+        });
+        $(function () {
+
+            //Assign Click event to Plus Image.
+            $("body").on("click", "a[class*='icon-plus-sign-alt']", function () {
+                $(this).closest("tr").after("<tr><td></td><td colspan = '999'>" + $(this).next().html() + "</td></tr>");
+                $(this).attr("class", "icon-minus-sign-alt");
+            });
+            //Assign Click event to Minus Image.
+            $("body").on("click", "a[class*='icon-minus-sign-alt']", function () {
+                $(this).attr("class", "icon-plus-sign-alt");
+                $(this).closest("tr").next().remove();
+            });
+        });
+    </script>
+}
+

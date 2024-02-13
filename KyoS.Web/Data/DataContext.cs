@@ -90,6 +90,7 @@ namespace KyoS.Web.Data
         public DbSet<MedicationEntity> Medication { get; set; }
         public DbSet<FarsFormEntity> FarsForm { get; set; }
         public DbSet<BioEntity> Bio { get; set; }
+        public DbSet<BioTempEntity> BioTemp { get; set; }
         public DbSet<Bio_BehavioralHistoryEntity> Bio_BehavioralHistory { get; set; }
         public DbSet<AdendumEntity> Adendums { get; set; }
         public DbSet<MTPReviewEntity> MTPReviews { get; set; }
@@ -134,8 +135,35 @@ namespace KyoS.Web.Data
         public DbSet<SubScheduleEntity> SubSchedule { get; set; }
         public DbSet<ManagerEntity> Manager { get; set; }
         public DbSet<EligibilityEntity> Eligibilities { get; set; }
-
-
+        public DbSet<TCMIntakeClientSignatureVerificationEntity> TCMIntakeClientSignatureVerification { get; set; }
+        public DbSet<TCMIntakeClientIdDocumentVerificationEntity> TCMIntakeClientDocumentVerification { get; set; }
+        public DbSet<TCMIntakePainScreenEntity> TCMIntakePainScreen { get; set; }
+        public DbSet<TCMIntakeColumbiaSuicideEntity> TCMIntakeColumbiaSuicide { get; set; }
+        public DbSet<TCMIntakeNutritionalScreenEntity> TCMIntakeNutritionalScreen { get; set; }
+        public DbSet<TCMIntakePersonalWellbeingEntity> TCMIntakePersonalWellbeing { get; set; }
+        public DbSet<TCMDateBlockedEntity> TCMDateBlocked { get; set; }
+        public DbSet<CiteEntity> Cites { get; set; }
+        public DbSet<BillDmsEntity> BillDms { get; set; }
+        public DbSet<BillDmsDetailsEntity> BillDmsDetails { get; set; }
+        public DbSet<BillDmsPaidEntity> BillDmsPaid { get; set; }
+        public DbSet<TCMReferralFormEntity> TCMReferralForms { get; set; }
+        public DbSet<TCMSupervisionTimeEntity> TCMSupervisionTimes { get; set; }
+        public DbSet<TCMSubServiceEntity> TCMSubServices { get; set; }
+        public DbSet<TCMTransferEntity> TCMTransfers { get; set; }
+        public DbSet<IntakeConsentForTelehealthEntity> IntakeConsentForTelehealth { get; set; }
+        public DbSet<IntakeNoDuplicateServiceEntity> IntakeNoDuplicateService { get; set; }
+        public DbSet<IntakeAdvancedDirectiveEntity> IntakeAdvancedDirective { get; set; }
+        public DbSet<ReferralFormEntity> ReferralForms { get; set; }
+        public DbSet<TCMIntakeAppendixIEntity> TCMIntakeAppendixI { get; set; }
+        public DbSet<IntakeClientIdDocumentVerificationEntity> IntakeClientDocumentVerification { get; set; }
+        public DbSet<IntakeForeignLanguageEntity> IntakeForeignLanguage { get; set; }
+        public DbSet<SafetyPlanEntity> SafetyPlan { get; set; }
+        public DbSet<IncidentReportEntity> IncidentReport { get; set; }
+        public DbSet<MeetingNoteEntity> MeetingNotes { get; set; }
+        public DbSet<MeetingNotes_Facilitator> MeetingNotes_Facilitators { get; set; }
+        public DbSet<TCMPayStubEntity> TCMPayStubs { get; set; }
+        public DbSet<TCMPayStubDetailsEntity> TCMPayStubDetails { get; set; }
+        public DbSet<TCMIntakeMedicalHistoryEntity> TCMIntakeMedicalHistory { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -598,6 +626,112 @@ namespace KyoS.Web.Data
                         .HasOne(wd => wd.GroupNote2)
                         .WithOne(n => n.Workday_Cient)
                         .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<TCMClientEntity>()
+                       .HasOne(c => c.TCMIntakeClientSignatureVerification)
+                       .WithOne(s => s.TcmClient)
+                       .OnDelete(DeleteBehavior.Cascade)
+                       .HasForeignKey<TCMIntakeClientSignatureVerificationEntity>(s => s.TcmClient_FK);
+
+            modelBuilder.Entity<TCMClientEntity>()
+                       .HasOne(c => c.TCMIntakeClientIdDocumentVerification)
+                       .WithOne(s => s.TcmClient)
+                       .OnDelete(DeleteBehavior.Cascade)
+                       .HasForeignKey<TCMIntakeClientIdDocumentVerificationEntity>(s => s.TcmClient_FK);
+
+            modelBuilder.Entity<TCMClientEntity>()
+                      .HasOne(c => c.TCMIntakePainScreen)
+                      .WithOne(s => s.TcmClient)
+                      .OnDelete(DeleteBehavior.Cascade)
+                      .HasForeignKey<TCMIntakePainScreenEntity>(s => s.TcmClient_FK);
+
+            modelBuilder.Entity<TCMClientEntity>()
+                      .HasOne(c => c.TCMIntakeColumbiaSuicide)
+                      .WithOne(s => s.TcmClient)
+                      .OnDelete(DeleteBehavior.Cascade)
+                      .HasForeignKey<TCMIntakeColumbiaSuicideEntity>(s => s.TcmClient_FK);
+
+            modelBuilder.Entity<TCMClientEntity>()
+                      .HasOne(c => c.TCMIntakeNutritionalScreen)
+                      .WithOne(s => s.TcmClient)
+                      .OnDelete(DeleteBehavior.Cascade)
+                      .HasForeignKey<TCMIntakeNutritionalScreenEntity>(s => s.TcmClient_FK);
+
+            modelBuilder.Entity<TCMClientEntity>()
+                      .HasOne(c => c.TCMIntakePersonalWellbeing)
+                      .WithOne(s => s.TcmClient)
+                      .OnDelete(DeleteBehavior.Cascade)
+                      .HasForeignKey<TCMIntakePersonalWellbeingEntity>(s => s.TcmClient_FK);
+
+            modelBuilder.Entity<TCMClientEntity>()
+                        .HasOne(c => c.TCMReferralForm)
+                        .WithOne(s => s.TcmClient)
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey<TCMReferralFormEntity>(s => s.TcmClient_FK);
+
+            modelBuilder.Entity<ClientEntity>()
+                       .HasOne(c => c.IntakeConsentForTelehealth)
+                       .WithOne(s => s.Client)
+                       .OnDelete(DeleteBehavior.Cascade)
+                       .HasForeignKey<IntakeConsentForTelehealthEntity>(s => s.Client_FK);
+
+            modelBuilder.Entity<ClientEntity>()
+                      .HasOne(c => c.IntakeNoDuplicateService)
+                      .WithOne(s => s.Client)
+                      .OnDelete(DeleteBehavior.Cascade)
+                      .HasForeignKey<IntakeNoDuplicateServiceEntity>(s => s.Client_FK);
+
+            modelBuilder.Entity<ClientEntity>()
+                      .HasOne(c => c.IntakeAdvancedDirective)
+                      .WithOne(s => s.Client)
+                      .OnDelete(DeleteBehavior.Cascade)
+                      .HasForeignKey<IntakeAdvancedDirectiveEntity>(s => s.Client_FK);
+            
+            modelBuilder.Entity<ClientEntity>()
+                        .HasOne(c => c.ReferralForm)
+                        .WithOne(s => s.Client)
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey<ReferralFormEntity>(s => s.Client_FK);
+
+            modelBuilder.Entity<TCMClientEntity>()
+                       .HasOne(c => c.TcmIntakeAppendixI)
+                       .WithOne(s => s.TcmClient)
+                       .OnDelete(DeleteBehavior.Cascade)
+                       .HasForeignKey<TCMIntakeAppendixIEntity>(s => s.TcmClient_FK);
+
+            modelBuilder.Entity<ClientEntity>()
+                       .HasOne(c => c.IntakeForeignLanguage)
+                       .WithOne(s => s.Client)
+                       .OnDelete(DeleteBehavior.Cascade)
+                       .HasForeignKey<IntakeForeignLanguageEntity>(s => s.Client_FK);
+
+            modelBuilder.Entity<ClientEntity>()
+                      .HasOne(c => c.IntakeClientIdDocumentVerification)
+                      .WithOne(s => s.Client)
+                      .OnDelete(DeleteBehavior.Cascade)
+                      .HasForeignKey<IntakeClientIdDocumentVerificationEntity>(s => s.Client_FK);
+
+            modelBuilder.Entity<ClientEntity>()
+                     .HasOne(c => c.SafetyPlan)
+                     .WithOne(s => s.Client)
+                     .OnDelete(DeleteBehavior.Cascade)
+                     .HasForeignKey<SafetyPlanEntity>(s => s.Client_FK);
+
+            modelBuilder.Entity<IncidentReportEntity>()
+                         .HasOne(g => g.Client)
+                         .WithMany(m => m.IncidentReport)
+                         .OnDelete(DeleteBehavior.Cascade);
+
+             modelBuilder.Entity<MeetingNotes_Facilitator>()
+                        .HasOne(cd => cd.MeetingNoteEntity)
+                        .WithMany(c => c.FacilitatorList)
+                        .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<TCMClientEntity>()
+                        .HasOne(c => c.TCMIntakeMedicalHistory)
+                        .WithOne(s => s.TCMClient)
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey<TCMIntakeMedicalHistoryEntity>(s => s.TCMClient_FK);
         }
     }
 }

@@ -14,6 +14,10 @@ namespace KyoS.Web.Models
         //este campo lo uso para saber de que pagina se viene
         public int Origin { get; set; }
         public IEnumerable<TCMNoteActivityTempEntity> TCMNoteActivityTemp { get; set; }
+        public bool SignSupervisor { get; set; }
+
+        public bool Billable { get; set; }
+
 
     }
 }

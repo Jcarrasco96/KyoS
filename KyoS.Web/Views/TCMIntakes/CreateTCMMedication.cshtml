@@ -15,7 +15,14 @@
         <ul class="breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                @Html.ActionLink("TCM Intake Section 3", "TCMIntakeSectionDashboard", "TCMIntakes", new { id = @Model.IdTCMClient, section = 3 })
+                @if (User.IsInRole("CaseManager"))
+                {
+                    @Html.ActionLink("TCM Intake Section 3", "TCMIntakeSectionDashboard", "TCMIntakes", new { id = @Model.IdTCMClient, section = 3 })
+                }
+                else
+                {
+                    @Html.ActionLink("TCM Intake Section 3", "TCMIntakeSectionDashboardReadOnly", "TCMIntakes", new { id = @Model.IdTCMClient, section = 3 })
+                }
             </li>
             <li class="active">Create Medications List</li>
         </ul><!--.breadcrumb-->
@@ -31,7 +38,14 @@
             <partial name="_TCMMedications" />
             <div class="col-md-12">
                 <input type="submit" value="Create" class="btn btn-primary" />
-                <a asp-action="TCMIntakeSectionDashboard" asp-route-id="@Model.IdTCMClient" asp-route-section="3" class="btn btn-success">Back</a>
+                @if (User.IsInRole("CaseManager"))
+                {
+                    <a asp-action="TCMIntakeSectionDashboard" asp-route-id="@Model.IdTCMClient" asp-route-section="3" class="btn btn-success">Back</a>
+                }
+                else
+                {
+                    <a asp-action="TCMIntakeSectionDashboardReadOnly" asp-route-id="@Model.IdTCMClient" asp-route-section="3" class="btn btn-success">Back</a>
+                }
             </div>
         </form>
     </div>
@@ -53,7 +67,7 @@
                         <th class="col-md-2" style="text-align:center;">
                             @Html.DisplayNameFor(model => model.Frequency)
                         </th>
-                        <th class="col-md-3" style="text-align:center;">
+                        <th class="col-md-3">
                             @Html.DisplayNameFor(model => model.Prescriber)
                         </th>
                         <th class="col-md-1" style="text-align:center;">
@@ -74,7 +88,7 @@
                             <td align="center">
                                 @Html.DisplayFor(modelItem => item.Frequency)
                             </td>
-                            <td align="center">
+                            <td>
                                 @Html.DisplayFor(modelItem => item.Prescriber)
                             </td>
                             <td align="center">

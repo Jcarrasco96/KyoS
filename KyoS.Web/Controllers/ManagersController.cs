@@ -25,15 +25,16 @@ namespace KyoS.Web.Controllers
         private readonly ICombosHelper _combosHelper;
         private readonly IImageHelper _imageHelper;
         private readonly IExportExcellHelper _exportExcelHelper;
+        private readonly IRenderHelper _renderHelper;
 
-        public ManagersController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper, IImageHelper imageHelper, IExportExcellHelper exportExcelHelper)
+        public ManagersController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper, IImageHelper imageHelper, IExportExcellHelper exportExcelHelper, IRenderHelper renderHelper)
         {
             _context = context;
             _combosHelper = combosHelper;
             _converterHelper = converterHelper;
             _imageHelper = imageHelper;
             _exportExcelHelper = exportExcelHelper;
-
+            _renderHelper = renderHelper;
 
         }
 
@@ -334,6 +335,263 @@ namespace KyoS.Web.Controllers
 
             return Json(new { redirectToUrl = Url.Action("Signatures", "Managers") });
         }
+
+        public IActionResult CreateModal(int id = 0)
+        {
+            if (id == 1)
+            {
+                ViewBag.Creado = "Y";
+            }
+            else
+            {
+                if (id == 2)
+                {
+                    ViewBag.Creado = "E";
+                }
+                else
+                {
+                    ViewBag.Creado = "N";
+                }
+            }
+
+            ManagerViewModel model;
+
+            if (User.IsInRole("Admin"))
+            {
+                ClinicEntity clinic = _context.Clinics.FirstOrDefault();
+                List<SelectListItem> list = new List<SelectListItem>();
+                list.Insert(0, new SelectListItem
+                {
+                    Text = clinic.Name,
+                    Value = $"{clinic.Id}"
+                });
+                model = new ManagerViewModel
+                {
+                    Clinics = list,
+                    IdClinic = clinic.Id,
+                    StatusList = _combosHelper.GetComboClientStatus(),
+                    UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.Manager, clinic.Id)
+                };
+                return View(model);
+            }
+
+            return RedirectToAction("Home/Error404");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateModal(ManagerViewModel managerViewModel)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (ModelState.IsValid)
+            {
+                ManagerEntity manager = await _context.Manager.FirstOrDefaultAsync(f => f.Name == managerViewModel.Name);
+                if (manager == null)
+                {
+                    if (managerViewModel.IdUser == "0")
+                    {
+                        ModelState.AddModelError(string.Empty, "You must select a linked user");
+                        ClinicEntity clinic = _context.Clinics.FirstOrDefault();
+                        List<SelectListItem> list = new List<SelectListItem>();
+                        list.Insert(0, new SelectListItem
+                        {
+                            Text = clinic.Name,
+                            Value = $"{clinic.Id}"
+                        });
+
+                        managerViewModel.Clinics = list;
+                        managerViewModel.IdClinic = clinic.Id;
+                        managerViewModel.StatusList = _combosHelper.GetComboClientStatus();
+                        managerViewModel.UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.Manager, clinic.Id);
+
+                        return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateModal", managerViewModel) });
+                    }
+
+                    string path = string.Empty;
+                    if (managerViewModel.SignatureFile != null)
+                    {
+                        path = await _imageHelper.UploadImageAsync(managerViewModel.SignatureFile, "Signatures");
+                    }
+
+                    ManagerEntity managerEntity = await _converterHelper.ToManagerEntity(managerViewModel, path, true);
+
+                    _context.Add(managerEntity);
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+
+                        List<ManagerEntity> managers_List = await _context.Manager
+                                                                          .Include(n => n.Clinic)
+                                                                          .ToListAsync();
+
+                        return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewManagers", managers_List) });
+                    }
+                    catch (System.Exception ex)
+                    {
+                        if (ex.InnerException.Message.Contains("duplicate"))
+                        {
+                            ModelState.AddModelError(string.Empty, $"Already exists the manager: {managerEntity.Name}");
+                        }
+                        else
+                        {
+                            ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                        }
+                    }
+                }
+                else
+                {
+                    ClinicEntity clinic = _context.Clinics.FirstOrDefault();
+                    List<SelectListItem> list = new List<SelectListItem>();
+                    list.Insert(0, new SelectListItem
+                    {
+                        Text = clinic.Name,
+                        Value = $"{clinic.Id}"
+                    });
+
+                    managerViewModel.Clinics = list;
+                    managerViewModel.IdClinic = clinic.Id;
+                    managerViewModel.StatusList = _combosHelper.GetComboClientStatus();
+                    managerViewModel.UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.Manager, clinic.Id);
+
+                    return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateModal", managerViewModel) });
+                }
+            }
+            else
+            {
+
+                ClinicEntity clinic = _context.Clinics.FirstOrDefault();
+                List<SelectListItem> list = new List<SelectListItem>();
+                list.Insert(0, new SelectListItem
+                {
+                    Text = clinic.Name,
+                    Value = $"{clinic.Id}"
+                });
+
+                managerViewModel.Clinics = list;
+                managerViewModel.IdClinic = clinic.Id;
+                managerViewModel.StatusList = _combosHelper.GetComboClientStatus();
+                managerViewModel.UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.Manager, clinic.Id);
+
+            }
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateModal", managerViewModel) });
+        }
+
+        public async Task<IActionResult> EditModal(int? id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            ManagerEntity managerEntity = await _context.Manager.Include(f => f.Clinic).FirstOrDefaultAsync(f => f.Id == id);
+            if (managerEntity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            ManagerViewModel managerViewModel;
+            if (User.IsInRole("Admin"))
+            {
+                ClinicEntity clinic = await _context.Clinics.FirstOrDefaultAsync();
+                managerViewModel = _converterHelper.ToManagerViewModel(managerEntity);
+                List<SelectListItem> list = new List<SelectListItem>();
+                list.Insert(0, new SelectListItem
+                {
+                    Text = clinic.Name,
+                    Value = $"{clinic.Id}"
+                });
+
+                return View(managerViewModel);
+            }
+
+            return RedirectToAction("Home/Error404");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditModal(int id, ManagerViewModel managerViewModel)
+        {
+            UserEntity user_logged = _context.Users
+                                            .Include(u => u.Clinic)
+                                            .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            ClinicEntity clinic = _context.Clinics.FirstOrDefault();
+            List<SelectListItem> list = new List<SelectListItem>();
+
+            if (id != managerViewModel.Id)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            if (ModelState.IsValid)
+            {
+                if (managerViewModel.IdUser == "0")
+                {
+                    ModelState.AddModelError(string.Empty, "You must select a linked user");
+                   
+                    list.Insert(0, new SelectListItem
+                    {
+                        Text = clinic.Name,
+                        Value = $"{clinic.Id}"
+                    });
+
+                    managerViewModel.Clinics = list;
+                    managerViewModel.IdClinic = clinic.Id;
+                    managerViewModel.StatusList = _combosHelper.GetComboClientStatus();
+                    managerViewModel.UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.Manager, user_logged.Clinic.Id);
+
+                    return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditModal", managerViewModel) });
+                }
+
+                string path = managerViewModel.SignaturePath;
+                if (managerViewModel.SignatureFile != null)
+                {
+                    path = await _imageHelper.UploadImageAsync(managerViewModel.SignatureFile, "Signatures");
+                }
+
+                ManagerEntity managerEntity = await _converterHelper.ToManagerEntity(managerViewModel, path, false);
+                _context.Update(managerEntity);
+                
+                try
+                {
+                    await _context.SaveChangesAsync();
+
+                    List<ManagerEntity> managers_List = await _context.Manager
+                                                                          .Include(n => n.Clinic)
+                                                                          .ToListAsync();
+
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewManagers", managers_List) });
+                }
+                catch (System.Exception ex)
+                {
+                    if (ex.InnerException.Message.Contains("duplicate"))
+                    {
+                        ModelState.AddModelError(string.Empty, $"Already exists the manager: {managerEntity.Name}");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+            }
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = clinic.Name,
+                Value = $"{clinic.Id}"
+            });
+
+            managerViewModel.Clinics = list;
+            managerViewModel.IdClinic = clinic.Id;
+            managerViewModel.StatusList = _combosHelper.GetComboClientStatus();
+            managerViewModel.UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.Manager, user_logged.Clinic.Id);
+
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditModal", managerViewModel) });
+        }
+
     }
 
 }

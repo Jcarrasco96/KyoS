@@ -1,0 +1,143 @@
+﻿@model KyoS.Web.Models.IncidentReportViewModel
+
+<div class="col-md-push-12">
+    <div class="form-group col-md-4">
+        <label asp-for="Client.Name" class="control-label">Name of Recipient</label>
+        <input asp-for="Client.Name" class="form-control" readonly>
+        <span asp-validation-for="Client.Name" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="Client.Code" class="control-label">Case No.</label>
+        <input asp-for="Client.Code" class="form-control" readonly>
+        <span asp-validation-for="Client.Code" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="Client.AdmisionDate" class="control-label">Date of Admission</label>
+        <input asp-for="Client.AdmisionDate" class="form-control" readonly>
+        <span asp-validation-for="Client.AdmisionDate" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="Client.MedicaidID" class="control-label"></label>
+        <input asp-for="Client.MedicaidID" class="form-control" readonly>
+        <span asp-validation-for="Client.MedicaidID" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="Client.Telephone" class="control-label">Telephone</label>
+        <input asp-for="Client.Telephone" class="form-control" readonly>
+        <span asp-validation-for="Client.Telephone" class="text-danger"></span>
+    </div>
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-4">
+        <label asp-for="Client.FullAddress" class="control-label">Address</label>
+        <input asp-for="Client.FullAddress" class="form-control" readonly>
+        <span asp-validation-for="Client.FullAddress" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-3">
+        <label asp-for="Client.City" class="control-label">City</label>
+        <input asp-for="Client.City" class="form-control" readonly>
+        <span asp-validation-for="Client.City" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-3">
+        <label asp-for="Client.State" class="control-label">State</label>
+        <input asp-for="Client.State" class="form-control" readonly>
+        <span asp-validation-for="Client.State" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="Client.ZipCode" class="control-label">Zip Code</label>
+        <input asp-for="Client.ZipCode" class="form-control" readonly>
+        <span asp-validation-for="Client.ZipCode" class="text-danger"></span>
+    </div>
+
+</div>
+<div class="col-md-push-12">
+    <div class="container-fluid col-md-12">
+    <pre>
+<strong>THE INCIDENT</strong>  <br />
+    Date of Incident: <input asp-for="DateIncident">              Time of Incident: <input asp-for="TimeIncident"><br />
+    Location: <input asp-for="Location" style="width:50%"> 
+
+    Describe the Incident: 
+    <textarea asp-for="DescriptionIncident" style="width:95%" rows="4"></textarea>
+    </pre>
+    </div>
+</div>
+<div class="col-md-push-12">
+    <div class="container-fluid col-md-12">
+    <pre>
+<strong>INJURIES</strong>  <br />
+    Was anyone injured?  Yes <input type="checkbox" asp-for="Injured" class="form-check-input" readonly id="check1">   No <input type="checkbox" class="form-check-input" id="check101">
+    
+    If yes, describe the injuries: 
+    <textarea asp-for="Injured_Description" style="width:95%" rows="4"></textarea>
+    </pre>
+    </div>
+</div>
+<div class="col-md-push-12">
+    <div class="container-fluid col-md-12">
+    <pre>
+<strong>WITNESSES</strong>  <br />
+    Were there witnesses to the incident?   Yes <input type="checkbox" asp-for="Witnesses" class="form-check-input" readonly id="check2">   No <input type="checkbox" class="form-check-input" id="check102">
+    
+    If yes, enter the witnessess' name and contact info: 
+    <textarea asp-for="Witnesses_Contact" style="width:95%" rows="4"></textarea>
+    </pre>
+    </div>
+</div>
+<div class="col-md-12">
+    <pre>    
+    <strong>Date report </strong>                    <input asp-for="DateReport">      
+    
+    <strong>Employee signature date</strong>         <input asp-for="DateSignatureEmployee">
+    <strong>(@Html.DisplayFor(modelItem => Model.AdmissionFor))</strong>                                                                    
+    </pre>
+</div>
+<div class="col-md-12">
+    &nbsp;
+</div>
+<script>
+
+    check1.addEventListener('change', (e) => {
+        if (check1.checked == true) {
+            check101.checked = false;
+        } else {
+            check101.checked = true;
+        }
+
+    })
+    check101.addEventListener('change', (e) => {
+        if (check101.checked == true) {
+            check1.checked = false;
+        } else {
+            check1.checked = true;
+        }
+
+    })
+    if (check1.checked == true) {
+        check101.checked = false;
+    } else {
+        check101.checked = true;
+    }
+    //-------------------------------
+    check2.addEventListener('change', (e) => {
+        if (check2.checked == true) {
+            check102.checked = false;
+        } else {
+            check102.checked = true;
+        }
+
+    })
+    check102.addEventListener('change', (e) => {
+        if (check102.checked == true) {
+            check2.checked = false;
+        } else {
+            check2.checked = true;
+        }
+
+    })
+    if (check2.checked == true) {
+        check102.checked = false;
+    } else {
+        check102.checked = true;
+    }
+</script>

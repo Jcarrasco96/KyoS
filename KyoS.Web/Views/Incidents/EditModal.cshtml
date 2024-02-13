@@ -1,0 +1,98 @@
+﻿@model KyoS.Web.Models.IncidentViewModel
+@{
+    Layout = null;
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="EditModal" asp-route-id="@Model.Id" onsubmit="return jQueryAjaxPostIncidents(this);">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="CreatedDate" />
+            <input type="hidden" asp-for="IdUserCreatedBy" />
+            <input type="hidden" asp-for="IdUserAssigned" />
+            <input type="hidden" asp-for="IdClient" />
+            @if (ViewData["CreatedBy"].ToString() == "1")
+            {
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="IdClient" class="control-label"></label>&nbsp;*
+                        <select asp-for="IdClient" asp-items="Model.Clients" class="form-control" disabled></select>
+                        <span asp-validation-for="IdClient" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="IdUserAssigned" class="control-label"></label>&nbsp;
+                        <select asp-for="IdUserAssigned" asp-items="Model.Users" class="form-control" disabled></select>
+                        <span asp-validation-for="IdUserAssigned" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-12 form-group">
+                    <label asp-for="Description" class="control-label"></label>&nbsp;*
+                    <textarea asp-for="Description" class="form-control" rows="8"></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+            }
+            else
+            {
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="IdClient" class="control-label"></label>&nbsp;*
+                        <select asp-for="IdClient" asp-items="Model.Clients" class="form-control" disabled></select>
+                        <span asp-validation-for="IdClient" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="IdUserAssigned" class="control-label"></label>&nbsp;
+                        <select asp-for="IdUserAssigned" asp-items="Model.Users" class="form-control" disabled></select>
+                        <span asp-validation-for="IdUserAssigned" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-12 form-group">
+                    <label asp-for="Description" class="control-label"></label>&nbsp;*
+                    <textarea asp-for="Description" class="form-control" rows="8" readonly></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+                <div class="container-fluid">
+                    &nbsp;
+                </div>
+            }
+            @if (ViewData["Assigned"].ToString() == "1" || User.IsInRole("Admin") || User.IsInRole("Manager") || (ViewData["CreatedBy"].ToString() == "1"))
+            {
+                <div class="col-md-12">
+                    <label asp-for="Status" class="control-label"></label>&nbsp;*
+                    <select asp-for="IdStatus" asp-items="Model.StatusList" class="form-control"></select>
+                    <span asp-validation-for="Status" class="text-danger"></span>
+                </div>
+            }
+            else
+            {
+                <div class="col-md-12">
+                    <label asp-for="Status" class="control-label"></label>&nbsp;*
+                    <select asp-for="IdStatus" asp-items="Model.StatusList" class="form-control" disabled></select>
+                    <span asp-validation-for="Status" class="text-danger"></span>
+                </div>
+            }
+            <div class="col-md-12">
+                <div form-group">
+                    <hr />
+                </div>
+            </div>
+            <div>
+                <div class="col-md-offset-9 form-group">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                    <a asp-action="Index" class="btn btn-success">Back</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/jquery.dataTables.min.js"></script>
+}
+
+
