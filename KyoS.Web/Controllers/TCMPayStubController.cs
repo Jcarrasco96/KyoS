@@ -49,6 +49,11 @@ namespace KyoS.Web.Controllers
         [Authorize(Roles = "Manager, CaseManager")]
         public async Task<IActionResult> Index(int idError = 0)
         {
+            if (idError == 1) //Imposible to delete
+            {
+                ViewBag.Delete = "N";
+            }
+
             UserEntity user_logged = await _context.Users
                                                    .Include(u => u.Clinic)
                                                    .ThenInclude(c => c.Setting)
@@ -58,17 +63,14 @@ namespace KyoS.Web.Controllers
             {
                 return RedirectToAction("NotAuthorized", "Account");
             }
-
-            if (idError == 1) //Imposible to delete
-            {
-                ViewBag.Delete = "N";
-            }
+            
             if (User.IsInRole("Manager"))
             {
                 List<TCMPayStubEntity> salida = await _context.TCMPayStubs
                                                               .Include(c => c.TCMPayStubDetails)
                                                               .Include(c => c.TCMNotes)
                                                               .Include(c => c.CaseMannager)
+                                                              .AsSplitQuery()
                                                               .ToListAsync();
                 return View(salida);
             }
@@ -78,6 +80,7 @@ namespace KyoS.Web.Controllers
                                                               .Include(c => c.TCMPayStubDetails)
                                                               .Include(c => c.TCMNotes)
                                                               .Include(c => c.CaseMannager)
+                                                              .AsSplitQuery()
                                                               .Where(n => n.CaseMannager.LinkedUser == user_logged.UserName)
                                                               .ToListAsync();
                 return View(salida);
