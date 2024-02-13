@@ -340,6 +340,8 @@ namespace KyoS.Web.Controllers
                                                                   .Include(t => t.TCMClient.Casemanager)
                                                                   .Include(t => t.TCMNoteActivity)
 
+                                                                  .AsSplitQuery()
+
                                                                   .Where(t => (t.DateOfService >= Convert.ToDateTime(date[0]) 
                                                                             && t.DateOfService <= Convert.ToDateTime(date[1])
                                                                             && t.TCMNoteActivity.Count() > 0
@@ -376,6 +378,8 @@ namespace KyoS.Web.Controllers
 
                                                                   .Include(t => t.TCMClient.Casemanager)
                                                                   .Include(t => t.TCMNoteActivity)
+
+                                                                  .AsSplitQuery()
 
                                                                   .Where(t => (t.ApprovedDate >= Convert.ToDateTime(date[0]) 
                                                                             && t.ApprovedDate <= Convert.ToDateTime(date[1])
@@ -425,6 +429,8 @@ namespace KyoS.Web.Controllers
                                                                   .Include(t => t.TCMClient.Casemanager)
                                                                   .Include(t => t.TCMNoteActivity)
 
+                                                                  .AsSplitQuery()
+
                                                                   .Where(t => (t.DateOfService >= Convert.ToDateTime(date[0])
                                                                             && t.DateOfService <= Convert.ToDateTime(date[1])
                                                                             && t.BilledDate == null
@@ -463,6 +469,8 @@ namespace KyoS.Web.Controllers
                                                                   .Include(t => t.TCMClient)
                                                                   .ThenInclude(t => t.Casemanager)
                                                                   .Include(t => t.TCMNoteActivity)
+
+                                                                  .AsSplitQuery()
 
                                                                   .Where(t => (t.ApprovedDate >= Convert.ToDateTime(date[0])
                                                                             && t.ApprovedDate <= Convert.ToDateTime(date[1])
@@ -512,6 +520,8 @@ namespace KyoS.Web.Controllers
                                                                   .Include(t => t.TCMClient.Casemanager)
                                                                   .Include(t => t.TCMNoteActivity)
 
+                                                                  .AsSplitQuery()
+
                                                                   .Where(t => (t.DateOfService >= Convert.ToDateTime(date[0])
                                                                             && t.DateOfService <= Convert.ToDateTime(date[1])
                                                                             && t.BilledDate != null
@@ -549,6 +559,8 @@ namespace KyoS.Web.Controllers
 
                                                                       .Include(t => t.TCMClient.Casemanager)
                                                                       .Include(t => t.TCMNoteActivity)
+
+                                                                      .AsSplitQuery()
 
                                                                       .Where(t => (t.ApprovedDate >= Convert.ToDateTime(date[0])
                                                                                 && t.ApprovedDate <= Convert.ToDateTime(date[1])
@@ -600,6 +612,8 @@ namespace KyoS.Web.Controllers
                                                                   .Include(t => t.TCMClient.Casemanager)
                                                                   .Include(t => t.TCMNoteActivity)
 
+                                                                  .AsSplitQuery()
+
                                                                   .Where(t => (t.DateOfService >= Convert.ToDateTime(date[0])
                                                                             && t.DateOfService <= Convert.ToDateTime(date[1])
                                                                             && t.BilledDate != null
@@ -638,6 +652,8 @@ namespace KyoS.Web.Controllers
 
                                                                   .Include(t => t.TCMClient.Casemanager)
                                                                   .Include(t => t.TCMNoteActivity)
+
+                                                                  .AsSplitQuery()
 
                                                                   .Where(t => (t.ApprovedDate >= Convert.ToDateTime(date[0])
                                                                             && t.ApprovedDate <= Convert.ToDateTime(date[1])
@@ -678,13 +694,6 @@ namespace KyoS.Web.Controllers
                 int mod;
                 foreach (TCMNoteEntity item in list)
                 {
-                    /*foreach (var activity in item.TCMNoteActivity)
-                    {
-                        minutes = activity.Minutes;
-                        value = minutes / 15;
-                        mod = minutes % 15;
-                        totalUnits = (mod > 7) ? totalUnits + value + 1 : totalUnits + value;
-                    }*/
                     minutes = item.TCMNoteActivity.Sum(n => n.Minutes);
                     value = minutes / 15;
                     mod = minutes % 15;
@@ -1405,6 +1414,8 @@ namespace KyoS.Web.Controllers
                                      .Include(c => c.TCMNote)
                                      .ThenInclude(t => t.TCMNoteActivity)
 
+                                     .AsSplitQuery()
+
                                      .Where(t => t.TCMNote.Where(n => n.BilledDate == null 
                                                                    && n.Status == Common.Enums.NoteStatus.Approved
                                                                    && n.TCMNoteActivity.Where(m => m.Billable == true).Count() > 0).Count() > 0)
@@ -1425,6 +1436,8 @@ namespace KyoS.Web.Controllers
                                     .Include(t => t.Casemanager)
                                     .Include(c => c.TCMNote)
                                     .ThenInclude(t => t.TCMNoteActivity)
+
+                                    .AsSplitQuery()
 
                                     .Where(t => t.TCMNote.Where(n => n.PaymentDate == null
                                                                   && n.Status == Common.Enums.NoteStatus.Approved
@@ -1447,6 +1460,9 @@ namespace KyoS.Web.Controllers
                                      .Include(t => t.Casemanager)
                                      .Include(c => c.TCMNote)
                                      .ThenInclude(t => t.TCMNoteActivity)
+
+                                     .AsSplitQuery()
+
                                      .Where(n => n.TCMNote.Where(t => t.TCMNoteActivity.Where(m => m.Billable == true).Count() > 0).Count() > 0)
                                      .ToListAsync();
 

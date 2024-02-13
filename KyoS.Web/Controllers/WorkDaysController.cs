@@ -55,6 +55,7 @@ namespace KyoS.Web.Controllers
 
             return View(await _context.Weeks
                                       .Include(w => w.Days)
+                                      .AsSplitQuery()
                                       .Where(w => (w.Clinic.Id == user_logged.Clinic.Id && w.Days.Where(d => d.Service == ServiceType.PSR).Count() > 0))
                                       .ToListAsync());
         }
@@ -81,6 +82,7 @@ namespace KyoS.Web.Controllers
             return View(await _context.Weeks.Include(w => w.Days)
                                             .ThenInclude(n => n.Workdays_Clients)
                                             .ThenInclude(f => f.Facilitator)
+                                            .AsSplitQuery()
                                             .Where(w => (w.Clinic.Id == user_logged.Clinic.Id 
                                                       && w.Days.Where(d => d.Service == ServiceType.Individual).Count() > 0))
                                             .ToListAsync());
@@ -107,6 +109,7 @@ namespace KyoS.Web.Controllers
 
             return View(await _context.Weeks
                                       .Include(w => w.Days)
+                                      .AsSplitQuery()
                                       .Where(w => (w.Clinic.Id == user_logged.Clinic.Id && w.Days.Where(d => d.Service == ServiceType.Group).Count() > 0))
                                       .ToListAsync());
         }

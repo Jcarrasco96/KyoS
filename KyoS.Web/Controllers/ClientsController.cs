@@ -17,7 +17,6 @@ using AspNetCore.Reporting;
 using System.Reflection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
-using Microsoft.AspNetCore.Http.Timeouts;
 
 namespace KyoS.Web.Controllers
 {
@@ -76,6 +75,7 @@ namespace KyoS.Web.Controllers
                                           .Include(c => c.Clients_HealthInsurances)
                                           .ThenInclude(c => c.HealthInsurance)
                                           .Include(c => c.ReferralForm)
+                                          .AsSplitQuery()
                                           .Where(c => c.Clinic.Id == user_logged.Clinic.Id)
                                           .OrderBy(c => c.Name).ToListAsync());
             }
@@ -87,6 +87,7 @@ namespace KyoS.Web.Controllers
                                           .Include(c => c.Clients_HealthInsurances)
                                           .ThenInclude(c => c.HealthInsurance)
                                           .Include(c => c.ReferralForm)
+                                          .AsSplitQuery()
                                           .Where(c => (c.Clinic.Id == user_logged.Clinic.Id
                                                 && (c.Bio.CreatedBy == user_logged.UserName
                                                      || c.MTPs.Where(m => m.CreatedBy == user_logged.UserName).Count() > 0)))
@@ -102,6 +103,7 @@ namespace KyoS.Web.Controllers
                                           .Include(c => c.Clients_HealthInsurances)
                                           .ThenInclude(c => c.HealthInsurance)
                                           .Include(c => c.ReferralForm)
+                                          .AsSplitQuery()
                                           .Where(c => (c.Clinic.Id == user_logged.Clinic.Id
                                                 && (c.Workdays_Clients.Where(m => m.Facilitator.Id == facilitator.Id).Count() > 0
                                                     || c.IndividualTherapyFacilitator.Id == facilitator.Id
@@ -120,11 +122,16 @@ namespace KyoS.Web.Controllers
                                                           
                                                           .Include(n => n.Client)
                                                           .ThenInclude(c => c.IndividualTherapyFacilitator)
+
                                                           .Include(c => c.Client)
                                                           .ThenInclude(c => c.Clients_HealthInsurances)
                                                           .ThenInclude(c => c.HealthInsurance)
+
                                                           .Include(c => c.Client)
                                                           .ThenInclude(c => c.ReferralForm)
+
+                                                          .AsSplitQuery()
+
                                                           .FirstOrDefaultAsync(f => f.Casemanager.Id == casemanager.Id);
 
                 return View(tcmClient.Client);
@@ -204,8 +211,6 @@ namespace KyoS.Web.Controllers
                         Relationships = _combosHelper.GetComboRelationships(),
                         IdRelationshipEC = 0,
                         RelationshipsEC = _combosHelper.GetComboRelationships(),
-                        //IdReferred = 0,
-                        //Referreds = _combosHelper.GetComboReferredsByClinic(user_logged.Id),
                         IdEmergencyContact = 0,
                         EmergencyContacts = _combosHelper.GetComboEmergencyContactsByClinic(user_logged.Id),
                         IdDoctor = 0,
@@ -1634,6 +1639,9 @@ namespace KyoS.Web.Controllers
                                                               .ThenInclude(g => g.AdendumList)
                                                               .Include(g => g.MTPs)
                                                               .ThenInclude(g => g.MtpReviewList)
+
+                                                              .AsSplitQuery()
+
                                                               .Where(g => (g.IdFacilitatorPSR == afacilitator.Id
                                                                         && g.OnlyTCM == false))
                                                               .OrderBy(g => g.Name)
@@ -1670,6 +1678,9 @@ namespace KyoS.Web.Controllers
                                                               .ThenInclude(g => g.AdendumList)
                                                               .Include(g => g.MTPs)
                                                               .ThenInclude(g => g.MtpReviewList)
+
+                                                              .AsSplitQuery()
+
                                                               .Where(g => (g.Clinic.Id == user_logged.Clinic.Id
                                                                         && g.OnlyTCM == false))
                                                               .OrderBy(g => g.Name)
@@ -1677,7 +1688,6 @@ namespace KyoS.Web.Controllers
 
                return View(ClientList);
             }
-
             if (user_logged.UserType.ToString() == "Documents_Assistant")
             {
                 if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
@@ -1706,6 +1716,9 @@ namespace KyoS.Web.Controllers
                                                               .ThenInclude(g => g.AdendumList)
                                                               .Include(g => g.MTPs)
                                                               .ThenInclude(g => g.MtpReviewList)
+
+                                                              .AsSplitQuery()
+
                                                               .Where(g => (g.Clinic.Id == user_logged.Clinic.Id
                                                                         && g.Bio.CreatedBy == user_logged.UserName
                                                                         && g.OnlyTCM == false))
@@ -3231,7 +3244,7 @@ namespace KyoS.Web.Controllers
         {
             UserEntity user_logged = await _context.Users
                                                    .Include(u => u.Clinic)
-                                                   .ThenInclude(c => c.Setting)
+                                                        .ThenInclude(c => c.Setting)
                                                    .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
 
             if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || (!user_logged.Clinic.Setting.MentalHealthClinic && !user_logged.Clinic.Setting.TCMClinic))
@@ -3246,6 +3259,9 @@ namespace KyoS.Web.Controllers
                                       .Include(c => c.Clients_HealthInsurances)
                                         .ThenInclude(c => c.HealthInsurance)
                                       .Include(c => c.LegalGuardian)
+
+                                      .AsSplitQuery()
+
                                       .Where(c => c.Clinic.Id == user_logged.Clinic.Id)
                                       .OrderBy(c => c.Name).ToListAsync());       
         }
@@ -3312,6 +3328,8 @@ namespace KyoS.Web.Controllers
                                       .Include(c => c.Clients_HealthInsurances)
                                           .ThenInclude(c => c.HealthInsurance)
 
+                                      .AsSplitQuery()
+
                                       .Where(c => c.Clinic.Id == user_logged.Clinic.Id)
                                       .OrderBy(c => c.Name).ToListAsync());                     
         }
@@ -3375,7 +3393,9 @@ namespace KyoS.Web.Controllers
 
                                                 .Include(c => c.Client_Referred)
                                                     .ThenInclude(cr => cr.Referred)
-                                                             
+
+                                                .AsSplitQuery()
+
                                                 .FirstOrDefaultAsync(c => (c.Id == id));                                                                                       
                                                                           
             if (client == null)
@@ -3695,6 +3715,8 @@ namespace KyoS.Web.Controllers
 
                                             .Include(wc => wc.Workday)
 
+                                            .AsSplitQuery()
+
                                             .Where(wc => (wc.Client.Id == idClient && (wc.Note != null && wc.Note.Status == NoteStatus.Approved)))
                                             .ToListAsync();
             }            
@@ -3754,7 +3776,9 @@ namespace KyoS.Web.Controllers
 
                                             .Include(wc => wc.Workday)
                                             .ThenInclude(w => w.Workdays_Activities_Facilitators)
-                                                .ThenInclude(waf => waf.Facilitator)                                                                    
+                                                .ThenInclude(waf => waf.Facilitator)
+
+                                            .AsSplitQuery()
 
                                             .Where(wc => (wc.Client.Id == idClient && (wc.NoteP != null && wc.NoteP.Status == NoteStatus.Approved)))
                                             .ToListAsync();
@@ -3832,6 +3856,8 @@ namespace KyoS.Web.Controllers
 
                                             .Include(wc => wc.Workday)
 
+                                            .AsSplitQuery()
+
                                             .Where(wc => (wc.Client.Id == idClient && (wc.GroupNote != null && wc.GroupNote.Status == NoteStatus.Approved)))
                                             .ToListAsync();
             }
@@ -3891,6 +3917,8 @@ namespace KyoS.Web.Controllers
                                             .ThenInclude(c => c.Clients_Diagnostics)
                                                 .ThenInclude(cd => cd.Diagnostic)
 
+                                            .AsSplitQuery()
+
                                             .Where(wc => (wc.Client.Id == idClient && (wc.GroupNote2 != null && wc.GroupNote2.Status == NoteStatus.Approved)))
                                             .ToListAsync();
             }
@@ -3940,6 +3968,8 @@ namespace KyoS.Web.Controllers
                                             .ThenInclude(n => n.Objective)
 
                                             .Include(wc => wc.Workday)
+
+                                            .AsSplitQuery()
 
                                             .Where(wc => (wc.Client.Id == idClient && (wc.IndividualNote != null && wc.IndividualNote.Status == NoteStatus.Approved)))
                                             .ToListAsync();
@@ -5067,6 +5097,7 @@ namespace KyoS.Web.Controllers
                                         .Include(n => n.Clients_HealthInsurances)
                                         .ThenInclude(n => n.HealthInsurance)
                                         .Include(n => n.IndividualTherapyFacilitator)
+                                        .AsSplitQuery()
                                         .Where(c => c.Status == StatusType.Open
                                                  && c.Clinic.Id == user_logged.Clinic.Id)
                                         .ToListAsync();
@@ -5081,6 +5112,7 @@ namespace KyoS.Web.Controllers
                                         .Include(n => n.Clients_HealthInsurances)
                                         .ThenInclude(n => n.HealthInsurance)
                                         .Include(n => n.IndividualTherapyFacilitator)
+                                        .AsSplitQuery()
                                         .Where(c => c.Status == StatusType.Open
                                                  && c.Clinic.Id == user_logged.Clinic.Id
                                                  && (c.Workdays_Clients.Where(m => m.Facilitator.Id == facilitator.Id).Count() > 0
@@ -5097,6 +5129,7 @@ namespace KyoS.Web.Controllers
                                         .Include(n => n.Clients_HealthInsurances)
                                         .ThenInclude(n => n.HealthInsurance)
                                         .Include(n => n.IndividualTherapyFacilitator)
+                                        .AsSplitQuery()
                                         .Where(c => c.Status == StatusType.Open
                                                  && c.Clinic.Id == user_logged.Clinic.Id)
                                         .ToListAsync();
@@ -5120,6 +5153,7 @@ namespace KyoS.Web.Controllers
                                      .ThenInclude(n => n.Adendum)
                                      .Include(n => n.Goal)
                                      .ThenInclude(n => n.MTP)
+                                     .AsSplitQuery()
                                      .Where(g => g.Compliment == false 
                                               && g.Goal.MTP.Client.Id == item.Id 
                                               && g.Goal.MTP.Active == true 
@@ -5131,6 +5165,7 @@ namespace KyoS.Web.Controllers
                                         .ThenInclude(n => n.Adendum)
                                         .Include(n => n.Goal)
                                         .ThenInclude(n => n.MTP)
+                                        .AsSplitQuery()
                                         .Where(g => g.Compliment == false
                                                  && g.Goal.MTP.Client.Id == item.Id
                                                  && g.Goal.MTP.Active == true

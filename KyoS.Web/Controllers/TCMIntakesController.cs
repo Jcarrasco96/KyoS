@@ -66,6 +66,7 @@ namespace KyoS.Web.Controllers
                                                                     .Include(n => n.Client)
                                                                     .ThenInclude(n => n.Clinic)
                                                                     .Include(n => n.Casemanager)
+                                                                    .AsSplitQuery()
                                                                     .Where(n => (n.Client.Clinic.Id == user_logged.Clinic.Id
                                                                        && n.Status == status))
                                                                     .ToListAsync();
@@ -88,6 +89,7 @@ namespace KyoS.Web.Controllers
                                                                     .Include(n => n.Client)
                                                                     .ThenInclude(n => n.Clinic)
                                                                     .Include(n => n.Casemanager)
+                                                                    .AsSplitQuery()
                                                                     .Where(n => (n.Client.Clinic.Id == user_logged.Clinic.Id
                                                                               && n.Status == status
                                                                               && n.Casemanager.TCMSupervisor.LinkedUser == user_logged.UserName))
@@ -111,6 +113,7 @@ namespace KyoS.Web.Controllers
                                                                     .Include(n => n.Client)
                                                                     .ThenInclude(n => n.Clinic)
                                                                     .Include(n => n.Casemanager)
+                                                                    .AsSplitQuery()
                                                                     .Where(n => (n.Client.Clinic.Id == user_logged.Clinic.Id
                                                                      && n.Casemanager.LinkedUser == user_logged.UserName
                                                                      && n.Status == status))

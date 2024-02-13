@@ -356,9 +356,7 @@ namespace KyoS.Web.Controllers
 
             ViewData["agency"] = agency;
             return View(unitsList);
-        }
-
-      
+        }      
        
         public async Task<IActionResult> UnitsPerClientsInsurances()
         {

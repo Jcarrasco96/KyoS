@@ -1757,6 +1757,7 @@ namespace KyoS.Web.Controllers
                                      .ThenInclude(d => d.Casemanager)
                                      .Include(w => w.TCMNoteActivity)
                                      .Include(w => w.TCMMessages)
+                                     .AsSplitQuery()
                                      .Where(w => (w.TCMClient.Client.Clinic.Id == user_logged.Clinic.Id
                                         && w.Status == status
                                         && w.TCMClient.Casemanager.LinkedUser == user_logged.UserName))
@@ -1775,6 +1776,7 @@ namespace KyoS.Web.Controllers
                                          .ThenInclude(d => d.Casemanager)
                                          .Include(w => w.TCMNoteActivity)
                                          .Include(w => w.TCMMessages)
+                                         .AsSplitQuery()
                                          .Where(w => (w.TCMClient.Client.Clinic.Id == user_logged.Clinic.Id
                                             && w.Status == status
                                             && w.TCMClient.Casemanager.TCMSupervisor.LinkedUser == user_logged.UserName))
@@ -1791,6 +1793,7 @@ namespace KyoS.Web.Controllers
                                         .ThenInclude(d => d.Casemanager)
                                         .Include(w => w.TCMNoteActivity)
                                         .Include(w => w.TCMMessages)
+                                        .AsSplitQuery()
                                         .Where(w => (w.TCMClient.Client.Clinic.Id == user_logged.Clinic.Id
                                           && w.Status == status))
                                         .ToListAsync();

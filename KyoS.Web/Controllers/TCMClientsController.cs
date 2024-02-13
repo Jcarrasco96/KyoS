@@ -588,6 +588,7 @@ namespace KyoS.Web.Controllers
                                                                   .Include(g => g.TCMIntakeForm)
                                                                   .Include(g => g.TCMIntakeOrientationChecklist)
                                                                   .Include(g => g.TCMIntakeWelcome)
+                                                                  .AsSplitQuery()
                                                                   .Where(g => (g.Casemanager.Id == caseManager.Id
                                                                         && g.Status == StatusType.Open
                                                                         && (g.TcmServicePlan == null 
@@ -623,6 +624,7 @@ namespace KyoS.Web.Controllers
                                                                   .Include(g => g.TCMIntakeForm)
                                                                   .Include(g => g.TCMIntakeOrientationChecklist)
                                                                   .Include(g => g.TCMIntakeWelcome)
+                                                                  .AsSplitQuery()
                                                                   .Where(g => (g.Casemanager.TCMSupervisor.LinkedUser == user_logged.UserName
                                                                         && g.Status == StatusType.Open
                                                                         && (g.TcmServicePlan == null
@@ -658,6 +660,7 @@ namespace KyoS.Web.Controllers
                                                                  .Include(g => g.TCMIntakeForm)
                                                                  .Include(g => g.TCMIntakeOrientationChecklist)
                                                                  .Include(g => g.TCMIntakeWelcome)
+                                                                 .AsSplitQuery()
                                                                  .Where(s => (s.Client.Clinic.Id == user_logged.Clinic.Id
                                                                     && s.Status == StatusType.Open
                                                                     && (s.TcmServicePlan == null
@@ -710,6 +713,7 @@ namespace KyoS.Web.Controllers
                                                                     .Include(g => g.TCMIntakeForeignLanguage)
                                                                     .Include(g => g.TCMIntakeWelcome)
                                                                     .Include(g => g.TcmIntakeAppendixI)
+                                                                    .AsSplitQuery()
                                                                     .Where(g => (g.Casemanager.Id == caseManager.Id))
                                                                     .OrderBy(g => g.Client.Name)
                                                                     .ToListAsync();
@@ -763,6 +767,7 @@ namespace KyoS.Web.Controllers
                                                                     .Include(g => g.TCMIntakeForeignLanguage)
                                                                     .Include(g => g.TCMIntakeWelcome)
                                                                     .Include(g => g.TcmIntakeAppendixI)
+                                                                    .AsSplitQuery()
                                                                     .Where(g => (g.Client.Clinic.Id == user_logged.Clinic.Id))
                                                                     .OrderBy(g => g.Client.Name)
                                                                     .ToListAsync();
@@ -816,6 +821,7 @@ namespace KyoS.Web.Controllers
                 return View(await _context.TCMClient
                                           .Include(c => c.Client)
                                           .ThenInclude(c => c.Clinic)
+                                          .AsSplitQuery()
                                           .Where(c => c.Casemanager.LinkedUser == user_logged.UserName)
                                           .OrderBy(c => c.Client.Name).ToListAsync());
             }
@@ -824,6 +830,7 @@ namespace KyoS.Web.Controllers
                 return View(await _context.TCMClient
                                           .Include(c => c.Client)
                                           .ThenInclude(c => c.Clinic)
+                                          .AsSplitQuery()
                                           .Where(c => c.Casemanager.TCMSupervisor.LinkedUser == user_logged.UserName)
                                           .OrderBy(c => c.Client.Name).ToListAsync());
             }

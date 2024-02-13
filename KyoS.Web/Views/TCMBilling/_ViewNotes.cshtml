@@ -44,24 +44,6 @@
                         {
                             var @unit = 0;
                            
-                            /*foreach (var note in item.TCMNote.Where(n => n.BilledDate == null))
-                            {
-                                foreach (var activity in note.TCMNoteActivity)
-                                {
-                                    valor = (activity.Minutes) / 15;
-                                    residuo = (activity.Minutes) % 15;
-                                    valorAumentado = valor + 1;
-                                    @if (@residuo > 7)
-                                    {
-                                        unit = unit + valorAumentado;
-                                    }
-                                    else
-                                    {
-                                        unit = unit + valor;
-                                    }
-                                }
-                            }*/
-
                             <tr>
                                 <td>
                                     @if (item.TCMNote.Count() != 0)

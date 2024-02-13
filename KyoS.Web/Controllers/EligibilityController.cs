@@ -59,6 +59,7 @@ namespace KyoS.Web.Controllers
                                                            .Include(n => n.EligibilityList)
                                                            .Include(n => n.Clients_HealthInsurances)
                                                            .ThenInclude(n => n.HealthInsurance)
+                                                           .AsSplitQuery()
                                                            .Where(m => m.Clinic.Id == user_logged.Clinic.Id)
                                                            .ToListAsync();
 
