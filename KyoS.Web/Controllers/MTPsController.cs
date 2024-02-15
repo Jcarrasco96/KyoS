@@ -2238,6 +2238,8 @@ namespace KyoS.Web.Controllers
 
                                                .Include(m => m.Supervisor)
 
+                                               .AsSplitQuery()
+
                                                .FirstOrDefault(m => (m.Id == id));
             if (mtpEntity == null)
             {
@@ -2297,6 +2299,11 @@ namespace KyoS.Web.Controllers
             if (mtpEntity.Client.Clinic.Name == "ALLIED HEALTH GROUP LLC")
             {
                 Stream stream = _reportHelper.AlliedMTPReport(mtpEntity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (mtpEntity.Client.Clinic.Name == "YOUR NEIGHBOR MEDICAL GROUP")
+            {
+                Stream stream = _reportHelper.YourNeighborMTPReport(mtpEntity);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
             return null;
@@ -2911,6 +2918,8 @@ namespace KyoS.Web.Controllers
                                            .ThenInclude(c => c.Clients_Diagnostics)
                                            .ThenInclude(cd => cd.Diagnostic)
 
+                                           .AsSplitQuery()
+
                                            .FirstOrDefault(a => (a.Id == id));
 
             if (entity == null)
@@ -2961,6 +2970,11 @@ namespace KyoS.Web.Controllers
             if (entity.Mtp.Client.Clinic.Name == "ALLIED HEALTH GROUP LLC")
             {
                 Stream stream = _reportHelper.AlliedAddendumReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (entity.Mtp.Client.Clinic.Name == "YOUR NEIGHBOR MEDICAL GROUP")
+            {
+                Stream stream = _reportHelper.YourNeighborAddendumReport(entity);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
             return null;
@@ -3840,6 +3854,8 @@ namespace KyoS.Web.Controllers
                                              .ThenInclude(c => c.Clients_Diagnostics)
                                              .ThenInclude(cd => cd.Diagnostic)
 
+                                             .AsSplitQuery()
+
                                              .FirstOrDefault(a => (a.Id == id));
 
             if (entity == null)
@@ -3890,6 +3906,11 @@ namespace KyoS.Web.Controllers
             if (entity.Mtp.Client.Clinic.Name == "ALLIED HEALTH GROUP LLC")
             {
                 Stream stream = _reportHelper.AlliedMTPReviewReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (entity.Mtp.Client.Clinic.Name == "YOUR NEIGHBOR MEDICAL GROUP")
+            {
+                Stream stream = _reportHelper.YourNeighborMTPReviewReport(entity);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
             return null;

@@ -12044,8 +12044,7 @@ namespace KyoS.Web.Controllers
                                                    .ThenInclude(c => c.Clinic)
 
                                                    .Include(wc => wc.Client)
-                                                   .ThenInclude(c => c.Clinic)
-
+                                                   
                                                    .Include(wc => wc.Client)
                                                    .ThenInclude(c => c.Group)
 
@@ -12112,6 +12111,11 @@ namespace KyoS.Web.Controllers
                 Stream stream = _reportHelper.AlliedAbsenceNoteReport(workdayClient);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
+            if (workdayClient.Client.Clinic.Name == "YOUR NEIGHBOR MEDICAL GROUP")
+            {
+                Stream stream = _reportHelper.YourNeighborAbsenceNoteReport(workdayClient);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
 
             return null;
         }
@@ -12125,8 +12129,7 @@ namespace KyoS.Web.Controllers
                                                    .ThenInclude(c => c.Clinic)
 
                                                    .Include(wc => wc.Client)
-                                                   .ThenInclude(c => c.Clinic)
-
+                                                   
                                                    .Include(wc => wc.Client)
                                                    .ThenInclude(c => c.Group)
 
@@ -12173,24 +12176,29 @@ namespace KyoS.Web.Controllers
                 Stream stream = _reportHelper.SapphireMHCAbsenceNoteReport(workdayClient);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
-            if (workdayClient.Client.Clinic.Name == "MEDICAL & REHAB OF HILLSBOROUGH INC")
+            if (workdayClient.Facilitator.Clinic.Name == "MEDICAL & REHAB OF HILLSBOROUGH INC")
             {
                 Stream stream = _reportHelper.MedicalRehabAbsenceNoteReport(workdayClient);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
-            if (workdayClient.Client.Clinic.Name == "MY FLORIDA CASE MANAGEMENT SERVICES LLC")
+            if (workdayClient.Facilitator.Clinic.Name == "MY FLORIDA CASE MANAGEMENT SERVICES LLC")
             {
                 Stream stream = _reportHelper.MyFloridaAbsenceNoteReport(workdayClient);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
-            if (workdayClient.Client.Clinic.Name == "ORION MENTAL HEALTH CENTER LLC")
+            if (workdayClient.Facilitator.Clinic.Name == "ORION MENTAL HEALTH CENTER LLC")
             {
                 Stream stream = _reportHelper.OrionAbsenceNoteReport(workdayClient);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
-            if (workdayClient.Client.Clinic.Name == "ALLIED HEALTH GROUP LLC")
+            if (workdayClient.Facilitator.Clinic.Name == "ALLIED HEALTH GROUP LLC")
             {
                 Stream stream = _reportHelper.AlliedAbsenceNoteReport(workdayClient);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (workdayClient.Facilitator.Clinic.Name == "YOUR NEIGHBOR MEDICAL GROUP")
+            {
+                Stream stream = _reportHelper.YourNeighborAbsenceNoteReport(workdayClient);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
 
@@ -12206,8 +12214,7 @@ namespace KyoS.Web.Controllers
                                                    .ThenInclude(c => c.Clinic)
 
                                                    .Include(wc => wc.Client)
-                                                   .ThenInclude(c => c.Clinic)
-
+                                                   
                                                    .Include(wc => wc.Client)
                                                    .ThenInclude(c => c.Group)
 
@@ -12254,24 +12261,29 @@ namespace KyoS.Web.Controllers
                 Stream stream = _reportHelper.SapphireMHCAbsenceNoteReport(workdayClient);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
-            if (workdayClient.Client.Clinic.Name == "MEDICAL & REHAB OF HILLSBOROUGH INC")
+            if (workdayClient.Facilitator.Clinic.Name == "MEDICAL & REHAB OF HILLSBOROUGH INC")
             {
                 Stream stream = _reportHelper.MedicalRehabAbsenceNoteReport(workdayClient);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
-            if (workdayClient.Client.Clinic.Name == "MY FLORIDA CASE MANAGEMENT SERVICES LLC")
+            if (workdayClient.Facilitator.Clinic.Name == "MY FLORIDA CASE MANAGEMENT SERVICES LLC")
             {
                 Stream stream = _reportHelper.MyFloridaAbsenceNoteReport(workdayClient);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
-            if (workdayClient.Client.Clinic.Name == "ORION MENTAL HEALTH CENTER LLC")
+            if (workdayClient.Facilitator.Clinic.Name == "ORION MENTAL HEALTH CENTER LLC")
             {
                 Stream stream = _reportHelper.OrionAbsenceNoteReport(workdayClient);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
-            if (workdayClient.Client.Clinic.Name == "ALLIED HEALTH GROUP LLC")
+            if (workdayClient.Facilitator.Clinic.Name == "ALLIED HEALTH GROUP LLC")
             {
                 Stream stream = _reportHelper.AlliedAbsenceNoteReport(workdayClient);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (workdayClient.Facilitator.Clinic.Name == "YOUR NEIGHBOR MEDICAL GROUP")
+            {
+                Stream stream = _reportHelper.YourNeighborAbsenceNoteReport(workdayClient);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
 
@@ -12527,7 +12539,7 @@ namespace KyoS.Web.Controllers
 
                                                         .AsSplitQuery()
 
-                                                        .Where(w => (w.Clinic.Id == user_logged.Clinic.Id && w.Id == idWeek))
+                                                        .Where(w => (w.Clinic.Id == user_logged.Clinic.Id && w.Id == idWeek))                                                        
                                                         .ToListAsync();
 
                 try
@@ -12597,7 +12609,7 @@ namespace KyoS.Web.Controllers
 
                                                        .AsSplitQuery()
 
-                                                       .Where(w => (w.Clinic.Id == user_logged.Clinic.Id && w.Id == max))
+                                                       .Where(w => (w.Clinic.Id == user_logged.Clinic.Id && w.Id == max))                                                       
                                                        .ToListAsync();
 
                 BillingReport1ViewModel model = new BillingReport1ViewModel

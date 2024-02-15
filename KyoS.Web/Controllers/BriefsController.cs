@@ -949,6 +949,8 @@ namespace KyoS.Web.Controllers
                                             .ThenInclude(c => c.Client_Referred)
                                                 .ThenInclude(cr => cr.Referred)
 
+                                         .AsSplitQuery()
+
                                          .FirstOrDefault(i => (i.Id == id));
             if (entity == null)
             {
@@ -998,6 +1000,11 @@ namespace KyoS.Web.Controllers
             if (entity.Client.Clinic.Name == "ALLIED HEALTH GROUP LLC")
             {
                 Stream stream = _reportHelper.AlliedBriefReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (entity.Client.Clinic.Name == "YOUR NEIGHBOR MEDICAL GROUP")
+            {
+                Stream stream = _reportHelper.YourNeighborBriefReport(entity);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
             return null;
