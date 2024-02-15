@@ -744,9 +744,6 @@ namespace KyoS.Web.Controllers
                                                    .ThenInclude(c => c.LegalGuardian)
 
                                                    .Include(i => i.Client)
-                                                   .ThenInclude(c => c.IntakeScreening)
-
-                                                   .Include(i => i.Client)
                                                    .ThenInclude(c => c.IntakeConsentForTreatment)
 
                                                    .Include(i => i.Client)
