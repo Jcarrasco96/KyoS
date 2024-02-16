@@ -3439,9 +3439,12 @@ namespace KyoS.Web.Controllers
                                                                             .Include(n => n.TcmIntakeAppendixJ)
                                                                             .Include(n => n.TCMAssessment)
                                                                             .ThenInclude(n => n.HouseCompositionList)
-                                                                            .ThenInclude(n => n.TcmAssessment.MedicationList)
-                                                                            .ThenInclude(n => n.TcmAssessment.IndividualAgencyList)
-                                                                            .ThenInclude(n => n.TcmAssessment.PastCurrentServiceList)
+                                                                            .Include(n => n.TCMAssessment)
+                                                                            .ThenInclude(n => n.MedicationList)
+                                                                            .Include(n => n.TCMAssessment)
+                                                                            .ThenInclude(n => n.IndividualAgencyList)
+                                                                            .Include(n => n.TCMAssessment)
+                                                                            .ThenInclude(n => n.PastCurrentServiceList)
                                                                             .Include(n => n.TcmIntakeAppendixI)
                                                                             .FirstOrDefaultAsync(c => c.Id == id);
 

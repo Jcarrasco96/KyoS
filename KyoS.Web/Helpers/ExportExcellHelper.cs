@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace KyoS.Web.Helpers
 {
@@ -1152,14 +1153,11 @@ namespace KyoS.Web.Helpers
                     worksheet.Cell(currentRow, 2).Value = item.TCMClient.Client.Code;
                     worksheet.Cell(currentRow, 3).Value = item.TCMClient.Client.DateOfBirth.ToShortDateString();
                     worksheet.Cell(currentRow, 4).Value = item.TCMClient.Client.MedicaidID;
-                    if (item.TCMClient.Client.Clients_HealthInsurances.Where(n => n.Active == true).Count() > 0)
+                 
+                    if (item.TCMClient.Client.Clients_HealthInsurances.Where(n => n.ApprovedDate <= item.DateOfService).Count() > 0)
                     {
-                        worksheet.Cell(currentRow, 5).Value = item.TCMClient.Client.Clients_HealthInsurances.First(n => n.Active == true).HealthInsurance.Name;
-                        worksheet.Cell(currentRow, 5).Value += " | " + item.TCMClient.Client.Clients_HealthInsurances.First(n => n.Active == true).MemberId;
-                    }
-                    else
-                    {
-                        worksheet.Cell(currentRow, 5).Value = "-";
+                        worksheet.Cell(currentRow, 5).Value = item.TCMClient.Client.Clients_HealthInsurances.Where(n => n.ApprovedDate <= item.DateOfService).OrderByDescending(n => n.ApprovedDate).ElementAtOrDefault(0).HealthInsurance.Name;
+                        worksheet.Cell(currentRow, 5).Value += " | " + item.TCMClient.Client.Clients_HealthInsurances.Where(n => n.ApprovedDate <= item.DateOfService).OrderByDescending(n => n.ApprovedDate).ElementAtOrDefault(0).MemberId;
                     }
                     if (item.TCMClient.Client.Clients_Diagnostics.Count() > 0)
                     {
@@ -1399,10 +1397,10 @@ namespace KyoS.Web.Helpers
                             worksheet.Cell(currentRow, 2).Value = product.TCMClient.Client.Code;
                             worksheet.Cell(currentRow, 3).Value = product.TCMClient.Client.DateOfBirth.ToShortDateString();
                             worksheet.Cell(currentRow, 4).Value = product.TCMClient.Client.MedicaidID;
-                            if (product.TCMClient.Client.Clients_HealthInsurances.Where(n => n.Active == true).Count() > 0)
+                            if (product.TCMClient.Client.Clients_HealthInsurances.Where(n => n.ApprovedDate <= product.DateOfService).Count() > 0)
                             {
-                                worksheet.Cell(currentRow, 5).Value = product.TCMClient.Client.Clients_HealthInsurances.First(n => n.Active == true).HealthInsurance.Name;
-                                worksheet.Cell(currentRow, 5).Value += " | " + product.TCMClient.Client.Clients_HealthInsurances.First(n => n.Active == true).MemberId;
+                                worksheet.Cell(currentRow, 5).Value = product.TCMClient.Client.Clients_HealthInsurances.Where(n => n.ApprovedDate <= product.DateOfService).OrderByDescending(n => n.ApprovedDate).ElementAtOrDefault(0).HealthInsurance.Name;
+                                worksheet.Cell(currentRow, 5).Value += " | " + product.TCMClient.Client.Clients_HealthInsurances.Where(n => n.ApprovedDate <= product.DateOfService).OrderByDescending(n => n.ApprovedDate).ElementAtOrDefault(0).MemberId;
                             }
                             else
                             {
@@ -1514,6 +1512,7 @@ namespace KyoS.Web.Helpers
                 worksheet.Cells("A1").Style.Font.FontColor = XLColor.Gold;
                 worksheet.Cells("A1").Style.Fill.SetBackgroundColor(XLColor.Black);
                 worksheet.Cell("A1").Style.Font.FontSize = 20;
+                worksheet.Cell("A1").Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
                 worksheet.Cell("A3").Value = ClinicName;
                 worksheet.Cell("A3").Style.Font.FontColor = XLColor.Black;
                 worksheet.Cell("A3").Style.Font.Bold = true;

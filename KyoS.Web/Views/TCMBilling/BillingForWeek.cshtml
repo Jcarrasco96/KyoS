@@ -293,6 +293,8 @@
                     <tbody>
                         @foreach (var item in Model.TCMNotes.OrderBy(t => t.DateOfService))
                         {
+                            var date = DateTime.Today;
+                            date = item.DateOfService;
                             var @valor = (@item.TCMNoteActivity.ToList().Sum(n => n.Minutes) / 15);
                             var @residuo = (@item.TCMNoteActivity.ToList().Sum(n => n.Minutes) % 15);
                             var @valorAumentado = valor + 1;
@@ -338,12 +340,18 @@
                                     @Html.DisplayFor(modelItem => item.TCMClient.CaseNumber)
                                 </td>
                                 <td align="center">
-                                    @if (item.TCMClient.Client.Clients_HealthInsurances.Where(n => n.Active == true).Count() > 0)
+                                    @if (item.TCMClient.Client.Clients_HealthInsurances.Where(n => n.ApprovedDate <= date).Count() > 0)
+                                    {
+                                        @item.TCMClient.Client.Clients_HealthInsurances.Where(n => n.ApprovedDate <= date).OrderByDescending(n => n.ApprovedDate).ElementAtOrDefault(0).HealthInsurance.Name
+                                        <a> | </a>
+                                        @item.TCMClient.Client.Clients_HealthInsurances.Where(n => n.ApprovedDate <= date).OrderByDescending(n => n.ApprovedDate).ElementAtOrDefault(0).MemberId
+                                    }
+                                    @*@if (item.TCMClient.Client.Clients_HealthInsurances.Where(n => n.Active == true).Count() > 0)
                                     {
                                         @Html.DisplayFor(modelItem => item.TCMClient.Client.Clients_HealthInsurances.First(n => n.Active == true).HealthInsurance.Name)
                                         <a>|</a>
                                         @Html.DisplayFor(modelItem => item.TCMClient.Client.Clients_HealthInsurances.First(n => n.Active == true).AuthorizationNumber)
-                                    }
+                                    }*@
                                 </td>
                                 <td align="center">
                                     @if (item.TCMClient.Client.Clients_Diagnostics.Count() > 0)
