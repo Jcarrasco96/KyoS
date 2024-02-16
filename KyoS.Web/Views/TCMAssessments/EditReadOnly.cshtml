@@ -54,6 +54,18 @@
                         </div>
                     </div>
                     <div class="">
+                        <div id="view-referreds">
+                            @await Html.PartialAsync("_ViewReferred", @Model.TcmClient.Client.Client_Referred.ToList())
+                        </div>
+                    </div>
+                </div>
+                <partial name="_TCMAssessment0" />
+                <div class="col-md-push-12">
+                    <div class="">
+                        <div class="col-md-12 form-group">
+                        </div>
+                    </div>
+                    <div class="">
                         <div id="view-AssessmentIndividual">
                             @await Html.PartialAsync("_ViewIndividualAgency", Model.IndividualAgencyList.ToList())
                         </div>
@@ -146,6 +158,17 @@
             else
             {
                 <partial name="_TCMAssessmentReadOnly" />
+                <div class="col-md-push-12">
+                    <div class="">
+                        <div class="col-md-12 form-group">
+                        </div>
+                    </div>
+                    <div class="">
+                        <div id="view-referreds">
+                            @await Html.PartialAsync("_ViewReferred", @Model.TcmClient.Client.Client_Referred.ToList())
+                        </div>
+                    </div>
+                </div>
                 <div class="col-md-push-12">
                     <div class="">
                         <div class="col-md-12 form-group">

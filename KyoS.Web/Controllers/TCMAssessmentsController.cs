@@ -2508,6 +2508,10 @@ namespace KyoS.Web.Controllers
                                                                 .ThenInclude(b => b.Client)
                                                                 .ThenInclude(b => b.Clients_Diagnostics)
                                                                 .ThenInclude(b => b.Diagnostic)
+                                                                .Include(b => b.TcmClient)
+                                                                 .ThenInclude(b => b.Client)
+                                                                 .ThenInclude(b => b.Client_Referred)
+                                                                 .ThenInclude(b => b.Referred)
                                                                 .Include(b => b.TcmClient.Client.Client_Referred)
                                                                 .Include(b => b.TcmClient.Client.Doctor)
                                                                 .Include(b => b.TcmClient.Client.Psychiatrist)
@@ -2529,7 +2533,7 @@ namespace KyoS.Web.Controllers
                                                                 .Include(b => b.TcmClient)
                                                                 .ThenInclude(b => b.TCMIntakeForm)
                                                                 .FirstOrDefault(m => m.Id == id);
-                    if (TcmAssessment == null)
+                     if (TcmAssessment == null)
                     {
                         return RedirectToAction("NotAuthorized", "Account");
                     }
