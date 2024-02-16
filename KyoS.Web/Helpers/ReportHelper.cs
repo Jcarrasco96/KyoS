@@ -968,6 +968,53 @@ namespace KyoS.Web.Helpers
 
             return stream;
         }
+        public Stream YourNeighborAbsenceNoteReport(Workday_Client workdayClient)
+        {
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\AbsencesNotes\\rptAbsenceNoteYourNeighbor.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(GetWorkdayClientDS(workdayClient));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Workdays_Clients");
+            DataSet dataSet1 = new DataSet();
+            dataSet1.Tables.Add(GetClientDS(workdayClient.Client));
+            WebReport.Report.RegisterData(dataSet1.Tables[0], "Clients");
+            DataSet dataSet2 = new DataSet();
+            dataSet2.Tables.Add(GetFacilitatorDS(workdayClient.Facilitator));
+            WebReport.Report.RegisterData(dataSet2.Tables[0], "Facilitators");
+
+            string date = $"{workdayClient.Workday.Date.DayOfWeek}, {workdayClient.Workday.Date.ToShortDateString()}";
+            string dateFacilitator = workdayClient.Workday.Date.ToShortDateString();
+            WebReport.Report.SetParameterValue("dateNote", date);
+            WebReport.Report.SetParameterValue("dateFacilitator", dateFacilitator);
+
+            //signatures images 
+            byte[] stream1 = null;
+            byte[] stream2 = null;
+            string path;
+
+            if ((workdayClient.Facilitator != null) && (!string.IsNullOrEmpty(workdayClient.Facilitator.SignaturePath)))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(workdayClient.Facilitator.SignaturePath)}");
+                stream2 = _imageHelper.ImageToByteArray(path);
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream1, stream2));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
+
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
+        }
         #endregion
 
         #region MTP reports
@@ -3630,6 +3677,263 @@ namespace KyoS.Web.Helpers
             byte[] stream2 = null;
             string path;
             if ((mtp.Supervisor != null) && (!string.IsNullOrEmpty(mtp.Supervisor.SignaturePath)))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(mtp.Supervisor.SignaturePath)}");
+                stream1 = _imageHelper.ImageToByteArray(path);
+            }
+            if ((mtp.DocumentAssistant != null) && (!string.IsNullOrEmpty(mtp.DocumentAssistant.SignaturePath)))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(mtp.DocumentAssistant.SignaturePath)}");
+                stream2 = _imageHelper.ImageToByteArray(path);
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream1, stream2));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
+
+            //signatures images 
+            byte[] stream3 = null;
+            byte[] stream4 = null;
+            if ((mtp.Client != null) && (!string.IsNullOrEmpty(mtp.Client.SignPath)))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(mtp.Client.SignPath)}");
+                stream3 = _imageHelper.ImageToByteArray(path);
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream3, stream4));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures1");
+
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
+        }
+        public Stream YourNeighborMTPReport(MTPEntity mtp)
+        {
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\MTPs\\rptMTPYourNeighbor.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(GetClientDS(mtp.Client));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetMtpDS(mtp));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "MTPs");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetDiagnosticsListDS(mtp.Client.Clients_Diagnostics.ToList()));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Diagnostics");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSupervisorDS(mtp.Supervisor));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Supervisors");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetDocumentAssistantDS(mtp.DocumentAssistant));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "DocumentsAssistant");
+
+            List<GoalEntity> goals1 = new List<GoalEntity>();
+            List<ObjetiveEntity> objetives1 = new List<ObjetiveEntity>();
+            List<GoalEntity> goals2 = new List<GoalEntity>();
+            List<ObjetiveEntity> objetives2 = new List<ObjetiveEntity>();
+            List<GoalEntity> goals3 = new List<GoalEntity>();
+            List<ObjetiveEntity> objetives3 = new List<ObjetiveEntity>();
+            List<GoalEntity> goals4 = new List<GoalEntity>();
+            List<ObjetiveEntity> objetives4 = new List<ObjetiveEntity>();
+            List<GoalEntity> goals5 = new List<GoalEntity>();
+            List<ObjetiveEntity> objetives5 = new List<ObjetiveEntity>();
+            List<GoalEntity> goals6 = new List<GoalEntity>();
+            List<ObjetiveEntity> objetives6 = new List<ObjetiveEntity>();
+            List<GoalEntity> goals7 = new List<GoalEntity>();
+            List<ObjetiveEntity> objetives7 = new List<ObjetiveEntity>();
+            List<GoalEntity> goals8 = new List<GoalEntity>();
+            List<ObjetiveEntity> objetives8 = new List<ObjetiveEntity>();
+            List<GoalEntity> goals9 = new List<GoalEntity>();
+            List<ObjetiveEntity> objetives9 = new List<ObjetiveEntity>();
+            List<GoalEntity> goals10 = new List<GoalEntity>();
+            List<ObjetiveEntity> objetives10 = new List<ObjetiveEntity>();
+
+            int i = 0;
+
+            foreach (GoalEntity item in mtp.Goals.Where(g => (g.Adendum == null && g.IdMTPReview == 0)))
+            {
+                if (i == 0)
+                {
+                    goals1 = new List<GoalEntity> { item };
+                    if (item.Objetives != null)
+                    {
+                        objetives1 = item.Objetives.ToList();
+                    }
+                }
+                if (i == 1)
+                {
+                    goals2 = new List<GoalEntity> { item };
+                    if (item.Objetives != null)
+                    {
+                        objetives2 = item.Objetives.ToList();
+                    }
+                }
+                if (i == 2)
+                {
+                    goals3 = new List<GoalEntity> { item };
+                    if (item.Objetives != null)
+                    {
+                        objetives3 = item.Objetives.ToList();
+                    }
+                }
+                if (i == 3)
+                {
+                    goals4 = new List<GoalEntity> { item };
+                    if (item.Objetives != null)
+                    {
+                        objetives4 = item.Objetives.ToList();
+                    }
+                }
+                if (i == 4)
+                {
+                    goals5 = new List<GoalEntity> { item };
+                    if (item.Objetives != null)
+                    {
+                        objetives5 = item.Objetives.ToList();
+                    }
+                }
+                if (i == 5)
+                {
+                    goals6 = new List<GoalEntity> { item };
+                    if (item.Objetives != null)
+                    {
+                        objetives6 = item.Objetives.ToList();
+                    }
+                }
+                if (i == 6)
+                {
+                    goals7 = new List<GoalEntity> { item };
+                    if (item.Objetives != null)
+                    {
+                        objetives7 = item.Objetives.ToList();
+                    }
+                }
+                if (i == 7)
+                {
+                    goals8 = new List<GoalEntity> { item };
+                    if (item.Objetives != null)
+                    {
+                        objetives8 = item.Objetives.ToList();
+                    }
+                }
+                if (i == 8)
+                {
+                    goals9 = new List<GoalEntity> { item };
+                    if (item.Objetives != null)
+                    {
+                        objetives9 = item.Objetives.ToList();
+                    }
+                }
+                if (i == 9)
+                {
+                    goals10 = new List<GoalEntity> { item };
+                    if (item.Objetives != null)
+                    {
+                        objetives10 = item.Objetives.ToList();
+                    }
+                }
+                i = ++i;
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetGoalsListDS(goals1));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Goals1");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetObjetivesListDS(objetives1));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Objetives1");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetGoalsListDS(goals2));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Goals2");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetObjetivesListDS(objetives2));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Objetives2");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetGoalsListDS(goals3));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Goals3");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetObjetivesListDS(objetives3));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Objetives3");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetGoalsListDS(goals4));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Goals4");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetObjetivesListDS(objetives4));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Objetives4");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetGoalsListDS(goals5));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Goals5");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetObjetivesListDS(objetives5));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Objetives5");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetGoalsListDS(goals6));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Goals6");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetObjetivesListDS(objetives6));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Objetives6");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetGoalsListDS(goals7));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Goals7");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetObjetivesListDS(objetives7));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Objetives7");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetGoalsListDS(goals8));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Goals8");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetObjetivesListDS(objetives8));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Objetives8");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetGoalsListDS(goals9));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Goals9");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetObjetivesListDS(objetives9));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Objetives9");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetGoalsListDS(goals10));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Goals10");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetObjetivesListDS(objetives10));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Objetives10");
+
+            //signatures images 
+            byte[] stream1 = null;
+            byte[] stream2 = null;
+            string path;
+            if (!string.IsNullOrEmpty(mtp.Supervisor.SignaturePath))
             {
                 path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(mtp.Supervisor.SignaturePath)}");
                 stream1 = _imageHelper.ImageToByteArray(path);
@@ -13457,6 +13761,125 @@ namespace KyoS.Web.Helpers
 
             return stream;
         }
+        public Stream YourNeighborIntakeReport(IntakeScreeningEntity intake)
+        {
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\Intakes\\rptIntakeYourNeighbor.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(GetClientDS(intake.Client));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetClinicDS(intake.Client.Clinic));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clinics");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetEmergencyContactDS(intake.Client.EmergencyContact));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "EmergencyContacts");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetLegalGuardianDS(intake.Client.LegalGuardian));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "LegalGuardians");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetIntakeScreeningsDS(intake.Client.IntakeScreening));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "IntakeScreenings");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetIntakeConsentForTreatmentDS(intake.Client.IntakeConsentForTreatment));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "IntakeConsentForTreatment");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetIntakeConsentForReleaseDS(intake.Client.IntakeConsentForRelease));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "IntakeConsentForRelease");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetIntakeConsumerRightsDS(intake.Client.IntakeConsumerRights));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "IntakeConsumerRights");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetIntakeAcknowledgementDS(intake.Client.IntakeAcknowledgementHipa));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "IntakeAcknowledgement");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetIntakeAccessToServicesDS(intake.Client.IntakeAccessToServices));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "IntakeAccessToServices");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetIntakeOrientationCheckListDS(intake.Client.IntakeOrientationChecklist));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "IntakeOrientationCheckList");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetIntakeFeeAgreementDS(intake.Client.IntakeFeeAgreement));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "IntakeFeeAgreement");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetIntakeTuberculosisDS(intake.Client.IntakeTuberculosis));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "IntakeTuberculosis");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetIntakeTransportationDS(intake.Client.IntakeTransportation));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "IntakeTransportation");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetIntakeConsentPhotographDS(intake.Client.IntakeConsentPhotograph));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "IntakeConsentPhotograph");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetIntakeMedicalHistoryDS(intake.Client.IntakeMedicalHistory));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "IntakeMedicalHistory");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetDischargeDS(intake.Client.DischargeList.ElementAtOrDefault(0)));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Discharge");
+
+            ManagerEntity manager = _context.Manager
+                                            .FirstOrDefault(s => s.Name == intake.InformationGatheredBy);
+
+            //signatures images 
+            byte[] stream1 = null;
+            byte[] stream2 = null;
+            string path;
+            if ((manager != null) && (!string.IsNullOrEmpty(manager.SignaturePath)))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(manager.SignaturePath)}");
+                stream1 = _imageHelper.ImageToByteArray(path);
+            }
+            else
+            {
+                DocumentsAssistantEntity assistant = _context.DocumentsAssistant
+                                                             .FirstOrDefault(s => s.Name == intake.InformationGatheredBy);
+
+                if ((assistant != null) && (!string.IsNullOrEmpty(assistant.SignaturePath)))
+                {
+                    path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(assistant.SignaturePath)}");
+                    stream1 = _imageHelper.ImageToByteArray(path);
+                }
+            }
+
+            if ((intake.Client != null) && (!string.IsNullOrEmpty(intake.Client.SignPath)))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(intake.Client.SignPath)}");
+                stream2 = _imageHelper.ImageToByteArray(path);
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream1, stream2));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
+
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
+        }
         #endregion
 
         #region Fars Form reports
@@ -14129,6 +14552,89 @@ namespace KyoS.Web.Helpers
             WebReport WebReport = new WebReport();
 
             string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\Fars\\rptFarsAllied.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(GetClientDS(fars.Client));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetClinicDS(fars.Client.Clinic));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clinics");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetEmergencyContactDS(fars.Client.EmergencyContact));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "EmergencyContacts");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetLegalGuardianDS(fars.Client.LegalGuardian));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "LegalGuardians");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetFarsDS(fars));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "FarsForm");
+
+            //signatures images 
+            byte[] stream1 = null;
+            byte[] stream2 = null;
+            string path;
+
+            FacilitatorEntity facilitator = _context.Facilitators
+                                                    .FirstOrDefault(f => f.LinkedUser == fars.CreatedBy);
+            if (facilitator != null)
+            {
+                if (!string.IsNullOrEmpty(facilitator.SignaturePath))
+                {
+                    path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(facilitator.SignaturePath)}");
+                    stream2 = _imageHelper.ImageToByteArray(path);
+                }
+            }
+            else
+            {
+                SupervisorEntity supervisor = _context.Supervisors
+                                                      .FirstOrDefault(f => f.LinkedUser == fars.CreatedBy);
+                if (supervisor != null)
+                {
+                    if (!string.IsNullOrEmpty(supervisor.SignaturePath))
+                    {
+                        path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(supervisor.SignaturePath)}");
+                        stream2 = _imageHelper.ImageToByteArray(path);
+                    }
+                }
+                else
+                {
+                    DocumentsAssistantEntity assistant = _context.DocumentsAssistant
+                                                                 .FirstOrDefault(f => f.LinkedUser == fars.CreatedBy);
+                    if (assistant != null)
+                    {
+                        if (!string.IsNullOrEmpty(assistant.SignaturePath))
+                        {
+                            path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(assistant.SignaturePath)}");
+                            stream2 = _imageHelper.ImageToByteArray(path);
+                        }
+                    }
+                }
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream1, stream2));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
+
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
+        }
+        public Stream YourNeighborFarsReport(FarsFormEntity fars)
+        {
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\Fars\\rptFarsYourNeighbor.frx";
 
             RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
             WebReport.Report.Load(rdlcFilePath);
@@ -15614,6 +16120,162 @@ namespace KyoS.Web.Helpers
 
             return stream;
         }
+        public Stream YourNeighborDischargeReport(DischargeEntity discharge)
+        {
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\Discharges\\rptDischargeYourNeighbor.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(GetClientDS(discharge.Client));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetDischargeDS(discharge));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Discharge");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSupervisorDS(discharge.Supervisor));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Supervisors");
+
+            //signatures images 
+            byte[] stream1 = null;
+            byte[] stream2 = null;
+            string path;
+
+            if (discharge.Supervisor != null)
+            {
+                if (!string.IsNullOrEmpty(discharge.Supervisor.SignaturePath))
+                {
+                    path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(discharge.Supervisor.SignaturePath)}");
+                    stream1 = _imageHelper.ImageToByteArray(path);
+                }
+            }
+
+            FacilitatorEntity facilitator = _context.Facilitators
+                                                    .FirstOrDefault(f => f.LinkedUser == discharge.CreatedBy);
+            if (facilitator != null)
+            {
+                if (!string.IsNullOrEmpty(facilitator.SignaturePath))
+                {
+                    path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(facilitator.SignaturePath)}");
+                    stream2 = _imageHelper.ImageToByteArray(path);
+                }
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream1, stream2));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
+
+            //signatures images 
+            byte[] stream3 = null;
+            byte[] stream4 = null;
+            if ((discharge.Client != null) && (!string.IsNullOrEmpty(discharge.Client.SignPath)))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(discharge.Client.SignPath)}");
+                stream3 = _imageHelper.ImageToByteArray(path);
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream3, stream4));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures1");
+
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
+        }
+        public Stream YourNeighborDischargeJCReport(DischargeEntity discharge)
+        {
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\Discharges\\rptDischargeYourNeighborJC.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(GetClientDS(discharge.Client));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetDischargeDS(discharge));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Discharge");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSupervisorDS(discharge.Supervisor));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Supervisors");
+
+            //signatures images 
+            byte[] stream1 = null;
+            byte[] stream2 = null;
+            string path;
+
+            if (discharge.Supervisor != null)
+            {
+                if (!string.IsNullOrEmpty(discharge.Supervisor.SignaturePath))
+                {
+                    path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(discharge.Supervisor.SignaturePath)}");
+                    stream1 = _imageHelper.ImageToByteArray(path);
+                }
+            }
+
+            FacilitatorEntity facilitator = _context.Facilitators
+                                                    .FirstOrDefault(f => f.LinkedUser == discharge.CreatedBy);
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetFacilitatorDS(facilitator));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Facilitators");
+
+            if (facilitator != null)
+            {
+                if (!string.IsNullOrEmpty(facilitator.SignaturePath))
+                {
+                    path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(facilitator.SignaturePath)}");
+                    stream2 = _imageHelper.ImageToByteArray(path);
+                }
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream1, stream2));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
+
+            //signatures images 
+            byte[] stream3 = null;
+            byte[] stream4 = null;
+            if ((discharge.Client != null) && (!string.IsNullOrEmpty(discharge.Client.SignPath)))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(discharge.Client.SignPath)}");
+                stream3 = _imageHelper.ImageToByteArray(path);
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream3, stream4));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures1");
+
+            TimeSpan dif = discharge.DateDischarge - discharge.DateAdmissionService;
+            int months = dif.Days / 30;
+            int weeks = (dif.Days % 30) / 7;
+            int days = (dif.Days % 30) % 7;
+
+            WebReport.Report.SetParameterValue("Months", months.ToString());
+            WebReport.Report.SetParameterValue("Weeks", weeks.ToString());
+            WebReport.Report.SetParameterValue("Days", days.ToString());
+
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
+        }
         #endregion
 
         #region Bio reports         
@@ -16654,6 +17316,134 @@ namespace KyoS.Web.Helpers
             WebReport WebReport = new WebReport();
 
             string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\Bios\\rptBioAllied.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(GetClientDS(bio.Client));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetClinicDS(bio.Client.Clinic));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clinics");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetEmergencyContactDS(bio.Client.EmergencyContact));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "EmergencyContacts");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetLegalGuardianDS(bio.Client.LegalGuardian));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "LegalGuardians");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetMedicationsListDS(bio.Client.MedicationList.ToList()));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Medication");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetBioBehavioralHistoryListDS(bio.Client.List_BehavioralHistory.ToList()));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Bio_BehavioralHistory");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetBioDS(bio));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Bio");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetDiagnosticsListDS(bio.Client.Clients_Diagnostics.ToList()));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Diagnostics");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetDoctorDS(bio.Client.Doctor));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Doctors");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSupervisorDS(bio.Supervisor));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Supervisors");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetDocumentAssistantDS(bio.DocumentsAssistant));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "DocumentsAssistant");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetReferredsListDS(bio.Client.Client_Referred.ToList(), ServiceAgency.CMH));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Referreds");
+
+            int nutritionScoreTotal = 0;
+            if (bio.HasAnIllnes)
+            {
+                nutritionScoreTotal++;
+            }
+            if (bio.EastFewer)
+            {
+                nutritionScoreTotal++;
+            }
+            if (bio.EastFew)
+            {
+                nutritionScoreTotal++;
+            }
+            if (bio.Has3OrMore)
+            {
+                nutritionScoreTotal++;
+            }
+            if (bio.HasTooth)
+            {
+                nutritionScoreTotal++;
+            }
+            if (bio.DoesNotAlways)
+            {
+                nutritionScoreTotal++;
+            }
+            if (bio.EastAlone)
+            {
+                nutritionScoreTotal++;
+            }
+            if (bio.Takes3OrMore)
+            {
+                nutritionScoreTotal++;
+            }
+            if (bio.WithoutWanting)
+            {
+                nutritionScoreTotal++;
+            }
+            if (bio.NotAlwaysPhysically)
+            {
+                nutritionScoreTotal++;
+            }
+
+            WebReport.Report.SetParameterValue("nutritionScoreTotal", nutritionScoreTotal);
+
+            //signatures images 
+            byte[] stream1 = null;
+            byte[] stream2 = null;
+            string path;
+            if ((bio.Supervisor != null) && (!string.IsNullOrEmpty(bio.Supervisor.SignaturePath)))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(bio.Supervisor.SignaturePath)}");
+                stream1 = _imageHelper.ImageToByteArray(path);
+            }
+            if ((bio.DocumentsAssistant != null) && (!string.IsNullOrEmpty(bio.DocumentsAssistant.SignaturePath)))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(bio.DocumentsAssistant.SignaturePath)}");
+                stream2 = _imageHelper.ImageToByteArray(path);
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream1, stream2));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
+
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
+        }
+        public Stream YourNeighborBioReport(BioEntity bio)
+        {
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\Bios\\rptBioYourNeighbor.frx";
 
             RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
             WebReport.Report.Load(rdlcFilePath);
@@ -18067,6 +18857,149 @@ namespace KyoS.Web.Helpers
 
             return stream;
         }
+        public Stream YourNeighborAddendumReport(AdendumEntity addendum)
+        {
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\Addendums\\rptAddendumYourNeighbor.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(GetMtpDS(addendum.Mtp));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "MTPs");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetClientDS(addendum.Mtp.Client));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetClinicDS(addendum.Mtp.Client.Clinic));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clinics");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetDiagnosticsListDS(addendum.Mtp.Client.Clients_Diagnostics.ToList()));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Diagnostics");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetLegalGuardianDS(addendum.Mtp.Client.LegalGuardian));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "LegalGuardians");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetFacilitatorDS(addendum.Facilitator));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Facilitators");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSupervisorDS(addendum.Supervisor));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Supervisors");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetAddendumDS(addendum));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Adendums");
+
+            List<GoalEntity> goals1 = new List<GoalEntity>();
+            List<ObjetiveEntity> objetives1 = new List<ObjetiveEntity>();
+            List<GoalEntity> goals2 = new List<GoalEntity>();
+            List<ObjetiveEntity> objetives2 = new List<ObjetiveEntity>();
+            List<GoalEntity> goals3 = new List<GoalEntity>();
+            List<ObjetiveEntity> objetives3 = new List<ObjetiveEntity>();
+
+            int i = 0;
+
+            foreach (GoalEntity item in addendum.Goals)
+            {
+                if (i == 0)
+                {
+                    goals1 = new List<GoalEntity> { item };
+                    if (item.Objetives != null)
+                    {
+                        objetives1 = item.Objetives.ToList();
+                    }
+                }
+                if (i == 1)
+                {
+                    goals2 = new List<GoalEntity> { item };
+                    if (item.Objetives != null)
+                    {
+                        objetives2 = item.Objetives.ToList();
+                    }
+                }
+                if (i == 2)
+                {
+                    goals3 = new List<GoalEntity> { item };
+                    if (item.Objetives != null)
+                    {
+                        objetives3 = item.Objetives.ToList();
+                    }
+                }
+                i = ++i;
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetGoalsListDS(goals1));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Goals1");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetObjetivesListDS(objetives1));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Objetives1");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetGoalsListDS(goals2));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Goals2");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetObjetivesListDS(objetives2));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Objetives2");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetGoalsListDS(goals3));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Goals3");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetObjetivesListDS(objetives3));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Objetives3");
+
+            //signatures images 
+            byte[] stream1 = null;
+            byte[] stream2 = null;
+            string path;
+            if ((addendum.Supervisor != null) && (!string.IsNullOrEmpty(addendum.Supervisor.SignaturePath)))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(addendum.Supervisor.SignaturePath)}");
+                stream1 = _imageHelper.ImageToByteArray(path);
+            }
+            if ((addendum.Facilitator != null) && (!string.IsNullOrEmpty(addendum.Facilitator.SignaturePath)))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(addendum.Facilitator.SignaturePath)}");
+                stream2 = _imageHelper.ImageToByteArray(path);
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream1, stream2));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
+
+            //signatures images 
+            byte[] stream3 = null;
+            byte[] stream4 = null;
+            if ((addendum.Mtp.Client != null) && (!string.IsNullOrEmpty(addendum.Mtp.Client.SignPath)))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(addendum.Mtp.Client.SignPath)}");
+                stream3 = _imageHelper.ImageToByteArray(path);
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream3, stream4));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures1");
+
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
+        }
         #endregion
 
         #region MTP Review reports
@@ -18853,6 +19786,93 @@ namespace KyoS.Web.Helpers
 
             return stream;
         }
+        public Stream YourNeighborMTPReviewReport(MTPReviewEntity review)
+        {
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\MTPReviews\\rptMTPReviewYourNeighbor.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(GetMtpDS(review.Mtp));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "MTPs");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetClientDS(review.Mtp.Client));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetClinicDS(review.Mtp.Client.Clinic));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clinics");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetDiagnosticsListDS(review.Mtp.Client.Clients_Diagnostics.ToList()));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Diagnostics");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetLegalGuardianDS(review.Mtp.Client.LegalGuardian));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "LegalGuardians");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetMTPReviewDS(review));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "MTPReviews");
+
+            FacilitatorEntity facilitator = _context.Facilitators
+                                                    .FirstOrDefault(f => f.Name == review.Therapist);
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetFacilitatorDS(facilitator));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Facilitators");
+
+            SupervisorEntity supervisor = _context.Supervisors
+                                                  .FirstOrDefault(s => s.Name == review.LicensedPractitioner);
+
+            //signatures images 
+            byte[] stream1 = null;
+            byte[] stream2 = null;
+            string path;
+            if ((supervisor != null) && (!string.IsNullOrEmpty(supervisor.SignaturePath)))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(supervisor.SignaturePath)}");
+                stream1 = _imageHelper.ImageToByteArray(path);
+            }
+            if ((facilitator != null) && (!string.IsNullOrEmpty(facilitator.SignaturePath)))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(facilitator.SignaturePath)}");
+                stream2 = _imageHelper.ImageToByteArray(path);
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream1, stream2));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
+
+            //signatures images 1
+            byte[] stream3 = null;
+            byte[] stream4 = null;
+            if ((review.Mtp.Client.Clinic != null) && (!string.IsNullOrEmpty(review.Mtp.Client.Clinic.SignaturePath)))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(review.Mtp.Client.Clinic.SignaturePath)}");
+                stream3 = _imageHelper.ImageToByteArray(path);
+            }
+            if ((review.Mtp.Client != null) && (!string.IsNullOrEmpty(review.Mtp.Client.SignPath)))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(review.Mtp.Client.SignPath)}");
+                stream4 = _imageHelper.ImageToByteArray(path);
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream3, stream4));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures1");
+
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
+        }
         #endregion
 
         #region Medical History
@@ -19429,6 +20449,77 @@ namespace KyoS.Web.Helpers
             WebReport WebReport = new WebReport();
 
             string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\MedicalHistory\\rptMedicalHistoryAllied.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(GetClientDS(medicalHistory.Client));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetClinicDS(medicalHistory.Client.Clinic));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clinics");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetIntakeMedicalHistoryDS(medicalHistory));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "IntakeMedicalHistory");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetIntakeTuberculosisDS(medicalHistory.Client.IntakeTuberculosis));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "IntakeTuberculosis");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetMedicationsListDS(medicalHistory.Client.MedicationList));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Medication");
+
+            DocumentsAssistantEntity assistant = _context.DocumentsAssistant
+                                                         .FirstOrDefault(a => a.Name == medicalHistory.AdmissionedFor);
+
+            //signatures images 
+            string path;
+            byte[] stream1 = null;
+            byte[] stream2 = null;
+
+            if ((assistant != null) && (!string.IsNullOrEmpty(assistant.SignaturePath)))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(assistant.SignaturePath)}");
+                stream1 = _imageHelper.ImageToByteArray(path);
+            }
+            else
+            {
+                SupervisorEntity supervisor = _context.Supervisors
+                                                      .FirstOrDefault(a => a.Name == medicalHistory.AdmissionedFor);
+                if ((supervisor != null) && (!string.IsNullOrEmpty(supervisor.SignaturePath)))
+                {
+                    path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(supervisor.SignaturePath)}");
+                    stream1 = _imageHelper.ImageToByteArray(path);
+                }
+            }
+
+            if ((medicalHistory.Client != null) && (!string.IsNullOrEmpty(medicalHistory.Client.SignPath)))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(medicalHistory.Client.SignPath)}");
+                stream2 = _imageHelper.ImageToByteArray(path);
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream1, stream2));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
+
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
+        }
+        public Stream YourNeighborMedicalHistoryReport(IntakeMedicalHistoryEntity medicalHistory)
+        {
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\MedicalHistory\\rptMedicalHistoryYourNeighbor.frx";
 
             RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
             WebReport.Report.Load(rdlcFilePath);
@@ -20279,6 +21370,103 @@ namespace KyoS.Web.Helpers
             WebReport WebReport = new WebReport();
 
             string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\Briefs\\rptBriefAllied.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(GetClientDS(brief.Client));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetClinicDS(brief.Client.Clinic));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clinics");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetEmergencyContactDS(brief.Client.EmergencyContact));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "EmergencyContacts");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetLegalGuardianDS(brief.Client.LegalGuardian));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "LegalGuardians");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetMedicationsListDS(brief.Client.MedicationList.ToList()));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Medication");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetBioBehavioralHistoryListDS(brief.Client.List_BehavioralHistory.ToList()));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Bio_BehavioralHistory");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetBriefDS(brief));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Bio");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetDiagnosticsListDS(brief.Client.Clients_Diagnostics.ToList()));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Diagnostics");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetDoctorDS(brief.Client.Doctor));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Doctors");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSupervisorDS(brief.Supervisor));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Supervisors");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetDocumentAssistantDS(brief.DocumentsAssistant));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "DocumentsAssistant");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetReferredsListDS(brief.Client.Client_Referred.ToList(), ServiceAgency.CMH));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Referreds");
+
+            //signatures images 
+            byte[] stream1 = null;
+            byte[] stream2 = null;
+            string path;
+            if ((brief.Supervisor != null) && (!string.IsNullOrEmpty(brief.Supervisor.SignaturePath)))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(brief.Supervisor.SignaturePath)}");
+                stream1 = _imageHelper.ImageToByteArray(path);
+            }
+            if ((brief.DocumentsAssistant != null) && (!string.IsNullOrEmpty(brief.DocumentsAssistant.SignaturePath)))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(brief.DocumentsAssistant.SignaturePath)}");
+                stream2 = _imageHelper.ImageToByteArray(path);
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream1, stream2));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
+
+            //signatures images 
+            byte[] stream3 = null;
+            byte[] stream4 = null;
+            if ((brief.Client != null) && (!string.IsNullOrEmpty(brief.Client.SignPath)))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(brief.Client.SignPath)}");
+                stream3 = _imageHelper.ImageToByteArray(path);
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream3, stream4));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures1");
+
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
+        }
+        public Stream YourNeighborBriefReport(BriefEntity brief)
+        {
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\Briefs\\rptBriefYourNeighbor.frx";
 
             RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
             WebReport.Report.Load(rdlcFilePath);

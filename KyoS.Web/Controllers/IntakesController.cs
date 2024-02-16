@@ -9,8 +9,6 @@ using KyoS.Web.Data.Entities;
 using KyoS.Web.Helpers;
 using KyoS.Web.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.IO;
 using KyoS.Common.Helpers;
@@ -746,9 +744,6 @@ namespace KyoS.Web.Controllers
                                                    .ThenInclude(c => c.LegalGuardian)
 
                                                    .Include(i => i.Client)
-                                                   .ThenInclude(c => c.IntakeScreening)
-
-                                                   .Include(i => i.Client)
                                                    .ThenInclude(c => c.IntakeConsentForTreatment)
 
                                                    .Include(i => i.Client)
@@ -783,6 +778,8 @@ namespace KyoS.Web.Controllers
 
                                                    .Include(i => i.Client)
                                                    .ThenInclude(c => c.DischargeList)
+
+                                                   .AsSplitQuery()
 
                                                    .FirstOrDefault(i => (i.Id == id));
             if (entity == null)
@@ -835,6 +832,11 @@ namespace KyoS.Web.Controllers
                 Stream stream = _reportHelper.AlliedIntakeReport(entity);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
+            if (entity.Client.Clinic.Name == "YOUR NEIGHBOR MEDICAL GROUP")
+            {
+                Stream stream = _reportHelper.YourNeighborIntakeReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
             return null;
         }
 
@@ -849,6 +851,8 @@ namespace KyoS.Web.Controllers
                                                             .ThenInclude(c => c.IntakeTuberculosis)
                                                         .Include(i => i.Client)
                                                             .ThenInclude(c => c.MedicationList)
+
+                                                        .AsSplitQuery()
 
                                                         .FirstOrDefault(i => (i.Client.Id == id));
             if (entity == null)
@@ -899,6 +903,11 @@ namespace KyoS.Web.Controllers
             if (entity.Client.Clinic.Name == "ALLIED HEALTH GROUP LLC")
             {
                 Stream stream = _reportHelper.AlliedMedicalHistoryReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (entity.Client.Clinic.Name == "YOUR NEIGHBOR MEDICAL GROUP")
+            {
+                Stream stream = _reportHelper.YourNeighborMedicalHistoryReport(entity);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
             return null;

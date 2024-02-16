@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="12/21/2023 12:57:39" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="02/15/2024 13:20:19" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u36YuAkPIv93psWL8ZDpw3/Q==">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3qwGAdk2urnzaMoE0VJn6Ew==">
       <TableDataSource Name="Clinics" DataType="System.Int32" Enabled="true" TableName="Clinics">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -150,7 +150,7 @@
         <Column Name="facilitatorSignature" DataType="System.Byte[]" PropName="Name"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection1" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3dn91oaEHOo61w6lIItEP/w==">
+    <MsSqlDataConnection Name="Connection1" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3NCf8DkbRf4XajUUws2t4+A==">
       <TableDataSource Name="Classifications1" Alias="Signatures1" DataType="System.Int32" Enabled="true" TableName="Classifications">
         <Column Name="supervisorSignature" DataType="System.Byte[]" PropName="Id"/>
         <Column Name="facilitatorSignature" DataType="System.Byte[]" PropName="Name"/>
@@ -230,10 +230,10 @@
       <TextObject Name="Text791" Left="3" Top="661.85" Width="255.15" Height="32.13" Text="Clinical Director / Reviewer Name / Signature" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
       <TextObject Name="Text794" Left="662.7" Top="661.4" Width="122.85" Height="18.9" Text="Date" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
       <TextObject Name="Text796" Left="393" Top="661.85" Width="255.15" Height="37.8" Text="Licensed Practitioner Name / Signature" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
-      <TextObject Name="Text813" Left="263.6" Top="568" Width="113.4" Height="18.9" Text="[MTPReviews.DateSignaturePerson]" Format="Date" Format.Format="d" HorzAlign="Center" Font="Arial, 10pt"/>
-      <TextObject Name="Text814" Left="661.5" Top="568" Width="113.4" Height="18.9" Text="[MTPReviews.DateTherapist]" Format="Date" Format.Format="d" HorzAlign="Center" Font="Arial, 10pt"/>
-      <TextObject Name="Text815" Left="264.6" Top="642.15" Width="113.4" Height="18.9" Text="[MTPReviews.DateClinicalDirector]" Format="Date" Format.Format="d" HorzAlign="Center" Font="Arial, 10pt"/>
-      <TextObject Name="Text816" Left="661.5" Top="641.7" Width="113.4" Height="18.9" Text="[MTPReviews.DateLicensedPractitioner]" Format="Date" Format.Format="d" HorzAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text813" Left="263.6" Top="568" Width="113.4" Height="18.9" Text="[IIf(Year([MTPReviews.DateSignaturePerson]) == 1,&quot;&quot;,[MTPReviews.DateSignaturePerson])]" Format="Date" Format.Format="d" HorzAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text814" Left="661.5" Top="568" Width="113.4" Height="18.9" Text="[IIf(Year([MTPReviews.DateTherapist]) == 1,&quot;&quot;,[MTPReviews.DateTherapist])]" Format="Date" Format.Format="d" HorzAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text815" Left="264.6" Top="642.15" Width="113.4" Height="18.9" Text="[IIf(Year([MTPReviews.DateClinicalDirector]) == 1,&quot;&quot;,[MTPReviews.DateClinicalDirector])]" Format="Date" Format.Format="d" HorzAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text816" Left="661.5" Top="641.7" Width="113.4" Height="18.9" Text="[IIf(Year([MTPReviews.DateLicensedPractitioner]) == 1,&quot;&quot;,[MTPReviews.DateLicensedPractitioner])]" Format="Date" Format.Format="d" HorzAlign="Center" Font="Arial, 10pt"/>
       <PictureObject Name="Picture5" Left="574" Top="527.65" Width="95" Height="63.45" DataColumn="Signatures.facilitatorSignature"/>
       <PictureObject Name="Picture7" Left="574" Top="601.8" Width="95" Height="63.45" DataColumn="Signatures.supervisorSignature"/>
       <TextObject Name="Text817" Left="383" Top="568.65" Width="194.67" Height="18.9" Text="[MTPReviews.Therapist]" Font="Arial, 10pt"/>

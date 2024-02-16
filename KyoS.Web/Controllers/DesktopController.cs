@@ -878,38 +878,55 @@ namespace KyoS.Web.Controllers
             using (DataContext db = new DataContext(options))
             {
                 total += await db.IntakeAcknowledgement
+                                 .AsNoTracking()
                                  .CountAsync(i => (i.Client.Clinic.Id == idClinic && i.Client.OnlyTCM == false));
                 total += await db.IntakeConsentForRelease
+                                 .AsNoTracking()
                                  .CountAsync(i => (i.Client.Clinic.Id == idClinic && i.Client.OnlyTCM == false));
                 total += await db.IntakeConsentForTreatment
+                                 .AsNoTracking()
                                  .CountAsync(i => (i.Client.Clinic.Id == idClinic && i.Client.OnlyTCM == false));
                 total += await db.IntakeConsumerRights
+                                 .AsNoTracking()
                                  .CountAsync(i => (i.Client.Clinic.Id == idClinic && i.Client.OnlyTCM == false));
                 total += await db.IntakeOrientationCheckList
+                                 .AsNoTracking()
                                  .CountAsync(i => (i.Client.Clinic.Id == idClinic && i.Client.OnlyTCM == false));
                 total += await db.IntakeAccessToServices
+                                 .AsNoTracking()
                                  .CountAsync(i => (i.Client.Clinic.Id == idClinic && i.Client.OnlyTCM == false));
                 total += await db.IntakeConsentPhotograph
+                                 .AsNoTracking()
                                  .CountAsync(i => (i.Client.Clinic.Id == idClinic && i.Client.OnlyTCM == false));
                 total += await db.IntakeFeeAgreement
+                                 .AsNoTracking()
                                  .CountAsync(i => (i.Client.Clinic.Id == idClinic && i.Client.OnlyTCM == false));
                 total += await db.IntakeMedicalHistory
+                                 .AsNoTracking()
                                  .CountAsync(i => (i.Client.Clinic.Id == idClinic && i.Client.OnlyTCM == false));
                 total += await db.IntakeScreenings
+                                 .AsNoTracking()
                                  .CountAsync(i => (i.Client.Clinic.Id == idClinic && i.Client.OnlyTCM == false));
                 total += await db.IntakeTransportation
+                                 .AsNoTracking()
                                  .CountAsync(i => (i.Client.Clinic.Id == idClinic && i.Client.OnlyTCM == false));
                 total += await db.Bio
+                                 .AsNoTracking()
                                  .CountAsync(b => (b.Client.Clinic.Id == idClinic && b.Client.OnlyTCM == false));
                 total += await db.MTPs
+                                 .AsNoTracking()
                                  .CountAsync(m => (m.Client.Clinic.Id == idClinic && m.Client.OnlyTCM == false));
                 total += await db.MTPReviews
+                                 .AsNoTracking()
                                  .CountAsync(m => (m.Mtp.Client.Clinic.Id == idClinic && m.Mtp.Client.OnlyTCM == false));
                 total += await db.Adendums
+                                 .AsNoTracking()
                                  .CountAsync(a => (a.Mtp.Client.Clinic.Id == idClinic && a.Mtp.Client.OnlyTCM == false));
                 total += await db.Discharge
+                                 .AsNoTracking()
                                  .CountAsync(d => (d.Client.Clinic.Id == idClinic && d.Client.OnlyTCM == false));
                 total += await db.FarsForm
+                                 .AsNoTracking()
                                  .CountAsync(f => (f.Client.Clinic.Id == idClinic && f.Client.OnlyTCM == false));
             }
             return total;
@@ -921,6 +938,7 @@ namespace KyoS.Web.Controllers
             using (DataContext db = new DataContext(options))
             {
                 return await db.Workdays_Clients
+                               .AsNoTracking()
                                .CountAsync(wc => (wc.Facilitator.Clinic.Id == clinicId
                                                 && (wc.Note.Status == NoteStatus.Pending
                                                 || wc.IndividualNote.Status == NoteStatus.Pending
@@ -936,6 +954,7 @@ namespace KyoS.Web.Controllers
             using (DataContext db = new DataContext(options))
             {
                 return await db.Workdays_Clients
+                               .AsNoTracking()
                                .CountAsync(wc => (wc.Facilitator.Clinic.Id == clinicId
                                                 && (wc.Note.Status == NoteStatus.Edition
                                                 || wc.IndividualNote.Status == NoteStatus.Edition
@@ -951,6 +970,7 @@ namespace KyoS.Web.Controllers
             using (DataContext db = new DataContext(options))
             {
                 return await db.Workdays_Clients
+                               .AsNoTracking()
                                .CountAsync(wc => (wc.Facilitator.Clinic.Id == clinicId
                                                 && wc.Note == null
                                                 && wc.IndividualNote == null
@@ -967,6 +987,7 @@ namespace KyoS.Web.Controllers
             using (DataContext db = new DataContext(options))
             {
                 return await db.Clients
+                               .AsNoTracking()
                                .CountAsync(c => (c.Clinic.Id == clinicId && c.OnlyTCM == false
                                               && c.MTPs.Count == 0));
             }
@@ -978,6 +999,7 @@ namespace KyoS.Web.Controllers
             using (DataContext db = new DataContext(options))
             {
                 return await db.Workdays_Clients
+                               .AsNoTracking()
                                .CountAsync(wc => (wc.Facilitator.Clinic.Id == clinicId &&
                                                  (wc.Note.Status == NoteStatus.Pending
                                                  || wc.IndividualNote.Status == NoteStatus.Pending
@@ -994,6 +1016,7 @@ namespace KyoS.Web.Controllers
             using (DataContext db = new DataContext(options))
             {
                 return await db.Workdays_Clients
+                               .AsNoTracking()
                                .CountAsync(wc => (wc.Facilitator.Clinic.Id == clinicId &&
                                                  (wc.Note.Status == NoteStatus.Approved
                                                  || wc.IndividualNote.Status == NoteStatus.Approved
@@ -1009,6 +1032,7 @@ namespace KyoS.Web.Controllers
             using (DataContext db = new DataContext(options))
             {
                 return await db.Workdays_Clients
+                               .AsNoTracking()
                                .CountAsync(wc => (wc.Facilitator.Clinic.Id == clinicId &&
                                                   wc.Present == false));
             }
@@ -1020,6 +1044,7 @@ namespace KyoS.Web.Controllers
             using (DataContext db = new DataContext(options))
             {
                 return await db.MTPs
+                               .AsNoTracking()
                                .CountAsync(m => (m.Client.Clinic.Id == clinicId
                                                 && m.Client.Status == StatusType.Open
                                                 && m.Active == true
@@ -1035,6 +1060,7 @@ namespace KyoS.Web.Controllers
             using (DataContext db = new DataContext(options))
             {
                 return await db.Clients
+                               .AsNoTracking()
                                .CountAsync(wc => (wc.Clinic.Id == clinicId
                                                  && wc.Bio == null && wc.Brief == null
                                                  && wc.OnlyTCM == false));
@@ -1047,6 +1073,7 @@ namespace KyoS.Web.Controllers
             using (DataContext db = new DataContext(options))
             {
                 return await db.Clients
+                               .AsNoTracking()
                                .CountAsync(wc => (wc.Clinic.Id == clinicId
                                                  && wc.FarsFormList.Where(n => n.Type == FARSType.Initial).Count() == 0
                                                  && wc.OnlyTCM == false));
@@ -1059,6 +1086,7 @@ namespace KyoS.Web.Controllers
             using (DataContext db = new DataContext(options))
             {
                 return await db.Clients
+                               .AsNoTracking()
                                .CountAsync(wc => (wc.Clinic.Id == clinicId
                                           && wc.IntakeMedicalHistory == null
                                           && wc.OnlyTCM == false));
@@ -1071,6 +1099,7 @@ namespace KyoS.Web.Controllers
             using (DataContext db = new DataContext(options))
             {
                 return await db.Clients
+                               .AsNoTracking()
                                .CountAsync(wc => (wc.Clinic.Id == clinicId
                                                  && wc.IntakeScreening == null
                                                  && wc.IntakeConsentForTreatment == null
@@ -1093,6 +1122,7 @@ namespace KyoS.Web.Controllers
             using (DataContext db = new DataContext(options))
             {
                 return await db.Clients
+                               .AsNoTracking()
                                .CountAsync(n => n.Clinic.Id == clinicId
                                              && ((n.MTPs.FirstOrDefault(m => m.Active == true).MtpReviewList.Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.MtpReview).Count() == 0)
                                              || (n.DischargeList.Where(d => d.TypeService == ServiceType.PSR).Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.Discharge_PSR).Count() == 0)
@@ -1109,16 +1139,19 @@ namespace KyoS.Web.Controllers
             using (DataContext db = new DataContext(options))
             {
                 int clientListPSR = await db.Clients
+                                            .AsNoTracking()
                                             .CountAsync(m => (m.Clinic.Id == clinicId
                                                              && m.Status == StatusType.Close
                                                              && m.Workdays_Clients.Where(w => w.Workday.Service == ServiceType.PSR).Count() > 0
                                                              && m.DischargeList.Where(d => d.TypeService == ServiceType.PSR).Count() == 0));
                 int clientListIND = await db.Clients
+                                            .AsNoTracking()
                                             .CountAsync(m => (m.Clinic.Id == clinicId
                                                                  && m.Status == StatusType.Close
                                                                  && m.Workdays_Clients.Where(w => w.Workday.Service == ServiceType.Individual).Count() > 0
                                                                  && m.DischargeList.Where(d => d.TypeService == ServiceType.Individual).Count() == 0));
                 int clientListGroup = await db.Clients
+                                              .AsNoTracking()
                                               .CountAsync(m => (m.Clinic.Id == clinicId
                                                                    && m.Status == StatusType.Close
                                                                    && m.Workdays_Clients.Where(w => w.Workday.Service == ServiceType.Group).Count() > 0
@@ -1134,6 +1167,7 @@ namespace KyoS.Web.Controllers
             using (DataContext db = new DataContext(options))
             {
                 return await db.Clients
+                               .AsNoTracking()
                                .CountAsync(n => n.Status == StatusType.Open
                                                && n.Service == ServiceType.PSR
                                                && n.Clinic.Id == clinicId
@@ -1149,6 +1183,7 @@ namespace KyoS.Web.Controllers
             using (DataContext db = new DataContext(options))
             {
                 return await db.Clients
+                               .AsNoTracking()
                                .CountAsync(n => n.DateOfBirth.Month == DateTime.Today.Month && n.Status == StatusType.Open);
             }
         }
@@ -1159,6 +1194,7 @@ namespace KyoS.Web.Controllers
             using (DataContext db = new DataContext(options))
             {
                 return await db.Clients
+                               .AsNoTracking()
                                .CountAsync(n => n.EligibilityList.Where(m => m.EligibilityDate.Year == DateTime.Today.Year
                                                                             && m.EligibilityDate.Month == DateTime.Today.Month).Count() == 0
                                                                             && n.Status == StatusType.Open
@@ -1172,6 +1208,7 @@ namespace KyoS.Web.Controllers
             using (DataContext db = new DataContext(options))
             {
                 return await db.Clients
+                               .AsNoTracking()
                                .CountAsync(c => (c.Clinic.Id == clinicId && c.OnlyTCM == false
                                                 && c.SafetyPlan == null));
             }
@@ -1183,6 +1220,7 @@ namespace KyoS.Web.Controllers
             using (DataContext db = new DataContext(options))
             {
                 return await db.TCMClient
+                               .AsNoTracking()
                                .CountAsync(s => (s.Client.Clinic.Id == clinicId
                                                     && s.Status == StatusType.Open
                                                     && (s.TcmServicePlan == null
@@ -1198,6 +1236,7 @@ namespace KyoS.Web.Controllers
             using (DataContext db = new DataContext(options))
             {
                 return await db.TCMClient
+                               .AsNoTracking()
                                .CountAsync(g => (g.Status == StatusType.Open
                                                     && g.Client.Clinic.Id == clinicId));
             }
@@ -1209,6 +1248,7 @@ namespace KyoS.Web.Controllers
             using (DataContext db = new DataContext(options))
             {
                 return await db.TCMClient
+                               .AsNoTracking()
                                .CountAsync(g => (g.Status == StatusType.Open
                                                     && g.Client.Clinic.Id == clinicId
                                                     && g.TcmServicePlan.Approved == 1));
@@ -1221,6 +1261,7 @@ namespace KyoS.Web.Controllers
             using (DataContext db = new DataContext(options))
             {
                 return await db.TCMClient
+                               .AsNoTracking()
                                .CountAsync(g => (g.Status == StatusType.Open
                                                     && g.Client.Clinic.Id == clinicId
                                                     && g.TcmServicePlan.TCMAdendum.Where(n => n.Approved == 1).Count() > 0));
@@ -1233,6 +1274,7 @@ namespace KyoS.Web.Controllers
             using (DataContext db = new DataContext(options))
             {
                 return await db.TCMClient
+                               .AsNoTracking()
                                .CountAsync(g => (g.Status == StatusType.Open
                                                 && g.Client.Clinic.Id == clinicId
                                                 && g.TcmServicePlan.TCMServicePlanReview.Approved == 1));
@@ -1245,6 +1287,7 @@ namespace KyoS.Web.Controllers
             using (DataContext db = new DataContext(options))
             {
                 return await db.TCMClient
+                               .AsNoTracking()
                                .CountAsync(g => (g.Status == StatusType.Open
                                                 && g.Client.Clinic.Id == clinicId
                                                 && g.TcmServicePlan.TCMDischarge.Approved == 1));
@@ -1257,6 +1300,7 @@ namespace KyoS.Web.Controllers
             using (DataContext db = new DataContext(options))
             {
                 return await db.CaseManagers
+                               .AsNoTracking()
                                .CountAsync(g => (g.Status == StatusType.Open
                                                     && g.Clinic.Id == clinicId));
             }
@@ -1268,6 +1312,7 @@ namespace KyoS.Web.Controllers
             using (DataContext db = new DataContext(options))
             {
                 return await db.TCMFarsForm
+                               .AsNoTracking()
                                .CountAsync(g => (g.Status == FarsStatus.Pending
                                                     && g.TCMClient.Client.Clinic.Id == clinicId));
             }
@@ -1279,6 +1324,7 @@ namespace KyoS.Web.Controllers
             using (DataContext db = new DataContext(options))
             {
                 return await db.TCMAssessment
+                               .AsNoTracking()
                                .CountAsync(g => (g.Approved == 1
                                                 && g.TcmClient.Client.Clinic.Id == clinicId));
             }
@@ -1290,6 +1336,7 @@ namespace KyoS.Web.Controllers
             using (DataContext db = new DataContext(options))
             {
                 return await db.TCMClient
+                               .AsNoTracking()
                                .CountAsync(g => g.Client.Clinic.Id == clinicId);
             }
         }
@@ -1300,6 +1347,7 @@ namespace KyoS.Web.Controllers
             using (DataContext db = new DataContext(options))
             {
                 return await db.TCMNote
+                               .AsNoTracking()
                                .CountAsync(g => (g.Status == NoteStatus.Edition
                                                     && g.TCMClient.Client.Clinic.Id == clinicId));
             }
@@ -1311,6 +1359,7 @@ namespace KyoS.Web.Controllers
             using (DataContext db = new DataContext(options))
             {
                 return await db.TCMNote
+                               .AsNoTracking()
                                .CountAsync(g => (g.Status == NoteStatus.Pending
                                                     && g.TCMClient.Client.Clinic.Id == clinicId));
             }
@@ -1322,6 +1371,7 @@ namespace KyoS.Web.Controllers
             using (DataContext db = new DataContext(options))
             {
                 return await db.TCMNote
+                               .AsNoTracking()
                                .CountAsync(g => (g.Status == NoteStatus.Approved
                                                 && g.TCMClient.Client.Clinic.Id == clinicId));
             }
@@ -1333,6 +1383,7 @@ namespace KyoS.Web.Controllers
             using (DataContext db = new DataContext(options))
             {
                 return await db.TCMNote
+                               .AsNoTracking()
                                .CountAsync(wc => (wc.TCMClient.Casemanager.Clinic.Id == clinicId &&
                                                         wc.Status == NoteStatus.Pending &&
                                                         wc.TCMMessages.Count() > 0));
@@ -1345,6 +1396,7 @@ namespace KyoS.Web.Controllers
             using (DataContext db = new DataContext(options))
             {
                 return await db.TCMSupervisors
+                               .AsNoTracking()
                                .CountAsync(g => (g.Status == StatusType.Open
                                                     && g.Clinic.Id == clinicId));
             }
@@ -1356,6 +1408,7 @@ namespace KyoS.Web.Controllers
             using (DataContext db = new DataContext(options))
             {
                 return await db.TCMClient
+                               .AsNoTracking()
                                .CountAsync(g => (g.Status == StatusType.Open
                                                     && g.Client.Clinic.Id == clinicId));
             }
