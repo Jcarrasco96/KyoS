@@ -595,42 +595,45 @@ namespace KyoS.Web.Controllers
             {
 
                 List<TCMServicePlanEntity> servicePlan = await _context.TCMServicePlans
-                                                    .Include(h => h.TCMDomain)
-                                                    .ThenInclude(h => h.TCMObjetive)
-                                                    .Include(g => g.TcmClient)
-                                                    .ThenInclude(f => f.Client)
-                                                    .Include(t => t.TcmClient.Casemanager)
-                                                    .Where(g => (g.TcmClient.Casemanager.Id == caseManager.Id
-                                                       && g.Approved == 2))
-                                                    .ToListAsync();
+                                                                       .Include(h => h.TCMDomain)
+                                                                       .ThenInclude(h => h.TCMObjetive)
+                                                                       .Include(g => g.TcmClient)
+                                                                       .ThenInclude(f => f.Client)
+                                                                       .Include(t => t.TcmClient.Casemanager)
+                                                                       .AsSplitQuery()
+                                                                       .Where(g => (g.TcmClient.Casemanager.Id == caseManager.Id
+                                                                                 && g.Approved == 2))
+                                                                       .ToListAsync();
 
                 return View(servicePlan);
             }
             if (user_logged.UserType.ToString() == "Manager")
             {
                 List<TCMServicePlanEntity> servicePlan = await _context.TCMServicePlans
-                                                     .Include(h => h.TCMDomain)
-                                                     .ThenInclude(h => h.TCMObjetive)
-                                                     .Include(g => g.TcmClient)
-                                                     .ThenInclude(f => f.Client)
-                                                     .Include(t => t.TcmClient.Casemanager)
-                                                     .Where(g => (g.TcmClient.Client.Clinic.Id == clinic.Id
-                                                         && g.Approved == 2))
-                                                     .ToListAsync();
+                                                                       .Include(h => h.TCMDomain)
+                                                                       .ThenInclude(h => h.TCMObjetive)
+                                                                       .Include(g => g.TcmClient)
+                                                                       .ThenInclude(f => f.Client)
+                                                                       .Include(t => t.TcmClient.Casemanager)
+                                                                       .AsSplitQuery()
+                                                                       .Where(g => (g.TcmClient.Client.Clinic.Id == clinic.Id
+                                                                                 && g.Approved == 2))
+                                                                       .ToListAsync();
                 return View(servicePlan);
             }
             if (user_logged.UserType.ToString() == "TCMSupervisor")
             {
                 List<TCMServicePlanEntity> servicePlan = await _context.TCMServicePlans
-                                                     .Include(h => h.TCMDomain)
-                                                     .ThenInclude(h => h.TCMObjetive)
-                                                     .Include(g => g.TcmClient)
-                                                     .ThenInclude(f => f.Client)
-                                                     .Include(t => t.TcmClient.Casemanager)
-                                                     .Where(g => (g.TcmClient.Client.Clinic.Id == clinic.Id
-                                                               && g.Approved == 2
-                                                               && g.TcmClient.Casemanager.TCMSupervisor.LinkedUser == user_logged.UserName))
-                                                     .ToListAsync();
+                                                                       .Include(h => h.TCMDomain)
+                                                                       .ThenInclude(h => h.TCMObjetive)
+                                                                       .Include(g => g.TcmClient)
+                                                                       .ThenInclude(f => f.Client)
+                                                                       .Include(t => t.TcmClient.Casemanager)
+                                                                       .AsSplitQuery()
+                                                                       .Where(g => (g.TcmClient.Client.Clinic.Id == clinic.Id
+                                                                               && g.Approved == 2
+                                                                               && g.TcmClient.Casemanager.TCMSupervisor.LinkedUser == user_logged.UserName))
+                                                                       .ToListAsync();
                 return View(servicePlan);
             }
 

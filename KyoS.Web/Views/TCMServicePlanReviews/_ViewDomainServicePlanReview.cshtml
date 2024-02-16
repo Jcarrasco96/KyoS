@@ -33,11 +33,7 @@
                             @if (item.TCMServicePlanRevDomainObjectiive.Count() != 0)
                             {
                                 <a class="icon-plus-sign-alt"></a>
-                            }
-                            else
-                            {
-
-                            }
+                            }                            
                             <div style="display:none">
                                 <table class="table table-striped table-bordered">
                                     <tr>
@@ -47,7 +43,7 @@
                                         <th class="col-md-5" style="text-align:center">Objectives Changes / Updates</th>
                                         <th class="col-md-2" style="text-align:center"></th>
                                     </tr>
-                                    @foreach (var value in item.TCMServicePlanRevDomainObjectiive)
+                                    @foreach (var value in item.TCMServicePlanRevDomainObjectiive.OrderBy(o => o.IdObjective))
                                     {
                                         <tr>
                                             <td align="center">@Html.DisplayFor(modelItem => value.IdObjective)</td>
