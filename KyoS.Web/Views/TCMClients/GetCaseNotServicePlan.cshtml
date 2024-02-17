@@ -30,7 +30,7 @@
                             <th class="col-md-2">
                                 Case Manager
                             </th>
-                            <th class="col-md-2">
+                            <th class="col-md-3">
                                 Client Name
                             </th>
                             <th class="col-md-1" style="text-align: center;">
@@ -40,21 +40,17 @@
                                 Open Date
                             </th>
                             <th class="col-md-1" style="text-align: center;">
-                                Close Date
-                            </th>
-                            <th class="col-md-1" style="text-align: center;">
                                 Consent
                             </th>
                             <th class="col-md-1" style="text-align: center;">
                                 Assessment
                             </th>
-                            <th class="col-md-1" style="text-align: center;">
+                            <th class="col-md-2" style="text-align: center;">
                                 Service Plan
                             </th>
                             <th class="col-md-1" style="text-align: center;">
                                 Appendix J
-                            </th>
-                            
+                            </th>                            
                         </tr>
                     </thead>
                     <tbody>
@@ -95,9 +91,6 @@
                                 <td align="center">
                                     @Html.DisplayFor(modelItem => item.DataOpen)
                                 </td>
-                                <td align="center">
-                                    @Html.DisplayFor(modelItem => item.DataClose)
-                                </td>  
                                 <td align="center">
                                     @if (User.IsInRole("CaseManager"))
                                     {
