@@ -2232,7 +2232,7 @@ namespace KyoS.Web.Controllers
                 stream = _reportHelper.TCMIntakeFormReport(intakeForm);
                 //string name = tcmNote.TCMClient.Client.Name + " - " + tcmNote.DateOfService.ToShortDateString() + " - " + tcmNote.TCMNoteActivity.FirstOrDefault().ServiceName;
                 string name = "Intake Form";
-                fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"Intake/{name}.pdf"));
+                fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"Section 1/{name}.pdf"));
             }
 
             return fileContentList;
@@ -2264,7 +2264,7 @@ namespace KyoS.Web.Controllers
                 stream = _reportHelper.TCMIntakeConsentForTreatmentReport(consentForTreament);
                 //string name = tcmNote.TCMClient.Client.Name + " - " + tcmNote.DateOfService.ToShortDateString() + " - " + tcmNote.TCMNoteActivity.FirstOrDefault().ServiceName;
                 string name = "Consent for Treament";
-                fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"Intake/{name}.pdf"));
+                fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"Section 1/{name}.pdf"));
             }
 
             return fileContentList;
@@ -2299,7 +2299,7 @@ namespace KyoS.Web.Controllers
                     stream = _reportHelper.TCMIntakeConsentForRelease(item);
                     //string name = tcmNote.TCMClient.Client.Name + " - " + tcmNote.DateOfService.ToShortDateString() + " - " + tcmNote.TCMNoteActivity.FirstOrDefault().ServiceName;
                     string name = "Consent for Release";
-                    fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"Intake/{name}.pdf"));
+                    fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"Section 1/{name}.pdf"));
                 }
                 
             }
@@ -2333,7 +2333,7 @@ namespace KyoS.Web.Controllers
                 stream = _reportHelper.TCMIntakeConsumerRights(consumerRight);
                 //string name = tcmNote.TCMClient.Client.Name + " - " + tcmNote.DateOfService.ToShortDateString() + " - " + tcmNote.TCMNoteActivity.FirstOrDefault().ServiceName;
                 string name = "Consumer Rights";
-                fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"Intake/{name}.pdf"));
+                fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"Section 1/{name}.pdf"));
             }
 
             return fileContentList;
@@ -2365,7 +2365,7 @@ namespace KyoS.Web.Controllers
                 stream = _reportHelper.TCMIntakeAcknowledgementHippa(acknoledgement);
                 //string name = tcmNote.TCMClient.Client.Name + " - " + tcmNote.DateOfService.ToShortDateString() + " - " + tcmNote.TCMNoteActivity.FirstOrDefault().ServiceName;
                 string name = "Acknowledgement Hippa";
-                fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"Intake/{name}.pdf"));
+                fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"Section 1/{name}.pdf"));
             }
 
             return fileContentList;
@@ -2397,7 +2397,7 @@ namespace KyoS.Web.Controllers
                 stream = _reportHelper.TCMIntakeOrientationCheckList(orientactionChechList);
                 //string name = tcmNote.TCMClient.Client.Name + " - " + tcmNote.DateOfService.ToShortDateString() + " - " + tcmNote.TCMNoteActivity.FirstOrDefault().ServiceName;
                 string name = "Orientation Check List";
-                fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"Intake/{name}.pdf"));
+                fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"Section 1/{name}.pdf"));
             }
 
             return fileContentList;
@@ -2429,7 +2429,7 @@ namespace KyoS.Web.Controllers
                 stream = _reportHelper.TCMIntakeAdvancedDirective(advancedDirective);
                 //string name = tcmNote.TCMClient.Client.Name + " - " + tcmNote.DateOfService.ToShortDateString() + " - " + tcmNote.TCMNoteActivity.FirstOrDefault().ServiceName;
                 string name = "Advanced Directive";
-                fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"Intake/{name}.pdf"));
+                fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"Section 1/{name}.pdf"));
             }
 
             return fileContentList;
@@ -2461,7 +2461,7 @@ namespace KyoS.Web.Controllers
                 stream = _reportHelper.TCMIntakeForeignLanguage(foreignLanguage);
                 //string name = tcmNote.TCMClient.Client.Name + " - " + tcmNote.DateOfService.ToShortDateString() + " - " + tcmNote.TCMNoteActivity.FirstOrDefault().ServiceName;
                 string name = "Foreign Language";
-                fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"Intake/{name}.pdf"));
+                fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"Section 1/{name}.pdf"));
             }
 
             return fileContentList;
@@ -2493,7 +2493,7 @@ namespace KyoS.Web.Controllers
                 stream = _reportHelper.TCMIntakeWelcome(welcome);
                 //string name = tcmNote.TCMClient.Client.Name + " - " + tcmNote.DateOfService.ToShortDateString() + " - " + tcmNote.TCMNoteActivity.FirstOrDefault().ServiceName;
                 string name = "Correspondenc";
-                fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"Intake/{name}.pdf"));
+                fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"Section 1/{name}.pdf"));
             }
 
             return fileContentList;
@@ -2525,7 +2525,7 @@ namespace KyoS.Web.Controllers
                 stream = _reportHelper.TCMIntakeClientSignatureVerification(clientSignaure);
                 //string name = tcmNote.TCMClient.Client.Name + " - " + tcmNote.DateOfService.ToShortDateString() + " - " + tcmNote.TCMNoteActivity.FirstOrDefault().ServiceName;
                 string name = "Client Signature Verification Form";
-                fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"Intake/{name}.pdf"));
+                fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"Section 1/{name}.pdf"));
             }
 
             return fileContentList;
@@ -2557,7 +2557,7 @@ namespace KyoS.Web.Controllers
                 stream = _reportHelper.TCMIntakeClientDocumentVerification(idDocuments);
                 //string name = tcmNote.TCMClient.Client.Name + " - " + tcmNote.DateOfService.ToShortDateString() + " - " + tcmNote.TCMNoteActivity.FirstOrDefault().ServiceName;
                 string name = "Id Documents Verification Form";
-                fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"Intake/{name}.pdf"));
+                fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"Section 1/{name}.pdf"));
             }
 
             return fileContentList;
@@ -2589,7 +2589,7 @@ namespace KyoS.Web.Controllers
                 stream = _reportHelper.TCMIntakeNutritionalScreen(nutritional);
                 //string name = tcmNote.TCMClient.Client.Name + " - " + tcmNote.DateOfService.ToShortDateString() + " - " + tcmNote.TCMNoteActivity.FirstOrDefault().ServiceName;
                 string name = "Nutritional Screen";
-                fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"Intake/{name}.pdf"));
+                fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"Section 1/{name}.pdf"));
             }
 
             return fileContentList;
@@ -2621,7 +2621,7 @@ namespace KyoS.Web.Controllers
                 stream = _reportHelper.TCMIntakePersonalWellbeing(personal);
                 //string name = tcmNote.TCMClient.Client.Name + " - " + tcmNote.DateOfService.ToShortDateString() + " - " + tcmNote.TCMNoteActivity.FirstOrDefault().ServiceName;
                 string name = "Personal Wellbeing";
-                fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"Intake/{name}.pdf"));
+                fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"Section 1/{name}.pdf"));
             }
 
             return fileContentList;
@@ -2653,7 +2653,7 @@ namespace KyoS.Web.Controllers
                 stream = _reportHelper.TCMIntakeColumbiaSuicide(columb);
                 //string name = tcmNote.TCMClient.Client.Name + " - " + tcmNote.DateOfService.ToShortDateString() + " - " + tcmNote.TCMNoteActivity.FirstOrDefault().ServiceName;
                 string name = "Columb-Suicide";
-                fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"Intake/{name}.pdf"));
+                fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"Section 1/{name}.pdf"));
             }
 
             return fileContentList;
@@ -2685,7 +2685,7 @@ namespace KyoS.Web.Controllers
                 stream = _reportHelper.TCMIntakePainScreen(pain);
                 //string name = tcmNote.TCMClient.Client.Name + " - " + tcmNote.DateOfService.ToShortDateString() + " - " + tcmNote.TCMNoteActivity.FirstOrDefault().ServiceName;
                 string name = "Pain Screen";
-                fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"Intake/{name}.pdf"));
+                fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"Section 1/{name}.pdf"));
             }
 
             return fileContentList;
@@ -2774,9 +2774,18 @@ namespace KyoS.Web.Controllers
                                      .Include(n => n.MedicationList)
                                      .Include(n => n.PastCurrentServiceList)
                                      .Include(n => n.SurgeryList)
+                                     .Include(n => n.TCMSupervisor)
+                                     .Include(n => n.TcmClient)
+                                     .ThenInclude(n => n.Client)
+                                     .ThenInclude(n => n.Psychiatrist)
+                                     .Include(n => n.TcmClient)
+                                     .ThenInclude(n => n.Client)
+                                     .ThenInclude(n => n.Doctor)
+                                     
                                      .AsSplitQuery()
 
-                                     .FirstOrDefaultAsync(wc => wc.TcmClient.Id == idTCMClient);
+                                     .FirstOrDefaultAsync(wc => wc.TcmClient.Id == idTCMClient
+                                                             && wc.Approved == 2);
             }
 
             List<FileContentResult> fileContentList = new List<FileContentResult>();
@@ -2808,7 +2817,8 @@ namespace KyoS.Web.Controllers
                                    .ThenInclude(n => n.Client)
                                    .AsSplitQuery()
 
-                                   .FirstOrDefaultAsync(wc => wc.TcmClient.Id == idTCMClient);
+                                   .FirstOrDefaultAsync(wc => wc.TcmClient.Id == idTCMClient
+                                                           && wc.Approved == 2);
             }
 
             List<FileContentResult> fileContentList = new List<FileContentResult>();
@@ -2838,9 +2848,11 @@ namespace KyoS.Web.Controllers
                                    .ThenInclude(n => n.Clinic)
                                    .Include(n => n.TcmClient)
                                    .ThenInclude(n => n.Client)
+                                   .Include(n => n.TcmSupervisor)
                                    .AsSplitQuery()
 
-                                   .FirstOrDefaultAsync(wc => wc.TcmClient.Id == idTCMClient);
+                                   .FirstOrDefaultAsync(wc => wc.TcmClient.Id == idTCMClient 
+                                                           && wc.Approved == 2);
             }
 
             List<FileContentResult> fileContentList = new List<FileContentResult>();
@@ -2880,7 +2892,8 @@ namespace KyoS.Web.Controllers
                                       .Include(n => n.TCMSupervisor)
                                       .AsSplitQuery()
 
-                                      .FirstOrDefaultAsync(wc => wc.TcmClient.Id == idTCMClient);
+                                      .FirstOrDefaultAsync(wc => wc.TcmClient.Id == idTCMClient
+                                                              && wc.Approved == 2);
             }
 
             List<FileContentResult> fileContentList = new List<FileContentResult>();
@@ -2943,11 +2956,14 @@ namespace KyoS.Web.Controllers
                                                  .Include(n => n.TcmServicePlan)
                                                  .ThenInclude(n => n.TcmClient)
                                                  .ThenInclude(n => n.Client)
-                                                  .Include(n => n.TcmDomain)
+                                                 .Include(n => n.TcmDomain)
                                                  .ThenInclude(n => n.TCMObjetive)
+                                                 .Include(n => n.TcmServicePlan)
+                                                 .ThenInclude(n => n.TCMSupervisor)
                                                  .AsSplitQuery()
                                                  
-                                                 .Where(wc => wc.TcmServicePlan.TcmClient_FK == idTCMClient)
+                                                 .Where(wc => wc.TcmServicePlan.TcmClient_FK == idTCMClient
+                                                           && wc.Approved == 2)
                                                  .ToListAsync();
             }
 
@@ -2979,7 +2995,7 @@ namespace KyoS.Web.Controllers
                                        .Include(n => n.TcmServicePlan)
                                        .ThenInclude(n => n.TcmClient)
                                        .ThenInclude(n => n.Casemanager)
-                                       .ThenInclude(n => n.Clinic)
+                                       
                                        .Include(n => n.TcmServicePlan)
                                        .ThenInclude(n => n.TcmClient)
                                        .ThenInclude(n => n.Client)
@@ -2991,7 +3007,8 @@ namespace KyoS.Web.Controllers
                                        .ThenInclude(n => n.TCMServicePlanRevDomainObjectiive)
                                        .AsSplitQuery()
 
-                                       .FirstOrDefaultAsync(wc => wc.TcmServicePlan.TcmClient.Id == idTCMClient);
+                                       .FirstOrDefaultAsync(wc => wc.TcmServicePlan.TcmClient.Id == idTCMClient
+                                                               && wc.Approved == 2);
             }
 
             List<FileContentResult> fileContentList = new List<FileContentResult>();
@@ -3025,9 +3042,13 @@ namespace KyoS.Web.Controllers
                                     .ThenInclude(n => n.Client)
                                     .Include(n => n.TcmDischargeFollowUp)
                                     .Include(n => n.TcmDischargeServiceStatus)
+                                    .Include(n => n.TCMSupervisor)
+                                    .Include(n => n.TcmServicePlan)
+                                    .ThenInclude(n => n.TCMDomain)
                                     .AsSplitQuery()
 
-                                    .FirstOrDefaultAsync(wc => wc.TcmServicePlan.TcmClient.Id == idTCMClient);
+                                    .FirstOrDefaultAsync(wc => wc.TcmServicePlan.TcmClient.Id == idTCMClient 
+                                                            && wc.Approved == 2);
             }
 
             List<FileContentResult> fileContentList = new List<FileContentResult>();
@@ -3039,6 +3060,135 @@ namespace KyoS.Web.Controllers
                 //string name = tcmNote.TCMClient.Client.Name + " - " + tcmNote.DateOfService.ToShortDateString() + " - " + tcmNote.TCMNoteActivity.FirstOrDefault().ServiceName;
                 string name = "Discharge";
                 fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"Section 4/{name}.pdf"));
+            }
+
+            return fileContentList;
+        }
+
+        public async Task<IActionResult> DownloadTCMIntakeSection5Simultaneous(int id)
+        {
+            TCMClientEntity TCMclient = await _context.TCMClient
+                                                          .Include(n => n.Client)
+                                                          .Include(n => n.Casemanager)
+                                                          .ThenInclude(n => n.Clinic)
+                                                          .Include(n => n.TCMFarsFormList)
+                                                          .FirstOrDefaultAsync(c => c.Id == id);
+
+            if (TCMclient == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            Task<List<FileContentResult>> fileContent1Task = TCMInterventionLogPrint(id);
+            Task<List<FileContentResult>> fileContent1Task1 = TCMFarsPrint(id);
+           
+
+
+
+            await Task.WhenAll(fileContent1Task, fileContent1Task1);
+            var fileContent = await fileContent1Task;
+            var fileContent1 = await fileContent1Task1;
+          
+
+            List<FileContentResult> fileContentList = new List<FileContentResult>();
+            fileContentList.AddRange(fileContent);
+            fileContentList.AddRange(fileContent1);
+          
+            return File(_fileHelper.Zip(fileContentList), "application/zip", $"{TCMclient.Client.Name}_Documents.zip");
+        }
+
+        private async Task<List<FileContentResult>> TCMInterventionLogPrint(int idTCMClient)
+        {
+            TCMIntakeInterventionLogEntity interventionLog = new TCMIntakeInterventionLogEntity();
+
+            var options = new DbContextOptionsBuilder<DataContext>().UseSqlServer(Configuration.GetConnectionString("KyoSConnection")).Options;
+            using (DataContext db = new DataContext(options))
+            {
+                interventionLog = await db.TCMIntakeInterventionLog
+                                          .Include(n => n.TcmClient)
+                                          .ThenInclude(n => n.Client)
+                                          .AsSplitQuery()
+
+                                          .FirstOrDefaultAsync(wc => wc.TcmClient.Id == idTCMClient);
+            }
+
+            List<FileContentResult> fileContentList = new List<FileContentResult>();
+            Stream stream = null;
+
+            if (interventionLog != null)
+            {
+               // stream = _reportHelper.TCMInterventionLog(interventionLog);
+               // string name = "Discharge";
+                //fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"Section 4/{name}.pdf"));
+            }
+
+            return fileContentList;
+        }
+
+        private async Task<List<FileContentResult>> TCMFarsPrint(int idTCMClient)
+        {
+            List<TCMFarsFormEntity> farsList = new List<TCMFarsFormEntity>();
+
+            var options = new DbContextOptionsBuilder<DataContext>().UseSqlServer(Configuration.GetConnectionString("KyoSConnection")).Options;
+            using (DataContext db = new DataContext(options))
+            {
+                farsList = await db.TCMFarsForm
+                                   .Include(n => n.TCMClient)
+                                   .ThenInclude(n => n.Casemanager)
+                                   .ThenInclude(n => n.Clinic)
+                                   .Include(n => n.TCMClient)
+                                   .ThenInclude(n => n.Client)
+                                   .ThenInclude(n => n.Clinic)
+                                   .AsSplitQuery()
+
+                                   .Where(wc => wc.TCMClient.Id == idTCMClient
+                                             && wc.Status == FarsStatus.Approved)
+                                   .ToListAsync();
+            }
+
+            List<FileContentResult> fileContentList = new List<FileContentResult>();
+            Stream stream = null;
+
+            if (farsList.Count() > 0)
+            {
+                foreach (var item in farsList)
+                {
+                    if (item.TCMClient.Client.Clinic.Name == "FLORIDA SOCIAL HEALTH SOLUTIONS")
+                    {
+                        stream = _reportHelper.TCMFloridaSocialHSFarsReport(item);
+                        //string name = tcmNote.TCMClient.Client.Name + " - " + tcmNote.DateOfService.ToShortDateString() + " - " + tcmNote.TCMNoteActivity.FirstOrDefault().ServiceName;
+                        string name = "FARS FORM";
+                        fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"Section 4/{name}.pdf"));
+                    }
+                    if (item.TCMClient.Client.Clinic.Name == "SAPPHIRE MENTAL HEALTH CENTER LLC")
+                    {
+                        stream = _reportHelper.TCMSapphireMHCFarsReport(item);
+                        //string name = tcmNote.TCMClient.Client.Name + " - " + tcmNote.DateOfService.ToShortDateString() + " - " + tcmNote.TCMNoteActivity.FirstOrDefault().ServiceName;
+                        string name = "FARS FORM";
+                        fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"Section 4/{name}.pdf"));
+                    }
+                    if (item.TCMClient.Client.Clinic.Name == "ORION MENTAL HEALTH CENTER LLC")
+                    {
+                        stream = _reportHelper.TCMOrionMHCFarsReport(item);
+                        //string name = tcmNote.TCMClient.Client.Name + " - " + tcmNote.DateOfService.ToShortDateString() + " - " + tcmNote.TCMNoteActivity.FirstOrDefault().ServiceName;
+                        string name = "FARS FORM";
+                        fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"Section 4/{name}.pdf"));
+                    }
+                    if (item.TCMClient.Client.Clinic.Name == "MY FLORIDA CASE MANAGEMENT SERVICES LLC")
+                    {
+                        stream = _reportHelper.TCMMyFloridaFarsReport(item);
+                        //string name = tcmNote.TCMClient.Client.Name + " - " + tcmNote.DateOfService.ToShortDateString() + " - " + tcmNote.TCMNoteActivity.FirstOrDefault().ServiceName;
+                        string name = "FARS FORM";
+                        fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"Section 4/{name}.pdf"));
+                    }
+                    if (item.TCMClient.Client.Clinic.Name == "COMMUNITY HEALTH THERAPY CENTER")
+                    {
+                        stream = _reportHelper.TCMCommunityHTCFarsReport(item);
+                        //string name = tcmNote.TCMClient.Client.Name + " - " + tcmNote.DateOfService.ToShortDateString() + " - " + tcmNote.TCMNoteActivity.FirstOrDefault().ServiceName;
+                        string name = "FARS FORM";
+                        fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"Section 4/{name}.pdf"));
+                    }
+                }
             }
 
             return fileContentList;
