@@ -3683,6 +3683,7 @@ namespace KyoS.Web.Controllers
             
             if (User.IsInRole("Facilitator"))
             {
+                FacilitatorEntity facilitator = _context.Facilitators.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
                 model = new MTPReviewViewModel
                 {
                     CreatedOn = DateTime.Now,
@@ -3719,7 +3720,9 @@ namespace KyoS.Web.Controllers
                     Origin = origin,
                     DateIndFacilitator = DateTime.Now,
                     IndFacilitator = (mtp.Client.IndividualTherapyFacilitator != null) ? _context.Facilitators.FirstOrDefault(n => n.Id == mtp.Client.IndividualTherapyFacilitator.Id) : null,
-                    IdIndFacilitator = (mtp.Client.IndividualTherapyFacilitator != null) ? mtp.Client.IndividualTherapyFacilitator.Id : 0
+                    IdIndFacilitator = (mtp.Client.IndividualTherapyFacilitator != null) ? mtp.Client.IndividualTherapyFacilitator.Id : 0,
+                    Facilitator = facilitator,
+                    IdFacilitator = facilitator.Id
                 };
 
             }
@@ -3806,7 +3809,7 @@ namespace KyoS.Web.Controllers
                             }
                             else
                             {
-                                if (User.IsInRole("Documents_Assistant") || (item.MTP.Client.IndividualTherapyFacilitator.LinkedUser == user_logged.UserName))
+                                if (User.IsInRole("Documents_Assistant") || (item.MTP.Client.IndividualTherapyFacilitator != null && item.MTP.Client.IndividualTherapyFacilitator.LinkedUser == user_logged.UserName))
                                 {
                                     foreach (var obj in item.Objetives)
                                     {
