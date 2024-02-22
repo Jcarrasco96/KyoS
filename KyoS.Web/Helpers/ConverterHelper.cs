@@ -325,7 +325,8 @@ namespace KyoS.Web.Helpers
                 MedicareId = model.MedicareId,
                 DateOfClose = model.DateOfClose,
                 OnlyTCM = model.OnlyTCM,
-                Annotations = model.Annotations
+                Annotations = model.Annotations,
+                DocumentsAssistant = await _context.DocumentsAssistant.FirstOrDefaultAsync(d => d.Id == model.IdDocumentsAssistant)
             };
         }
 
@@ -411,9 +412,11 @@ namespace KyoS.Web.Helpers
                 Doctor = clientEntity.Doctor,
                 Psychiatrist = clientEntity.Psychiatrist,
                 LegalGuardian = clientEntity.LegalGuardian,
-                EmergencyContact = clientEntity.EmergencyContact
+                EmergencyContact = clientEntity.EmergencyContact,
+                IdDocumentsAssistant = (clientEntity.DocumentsAssistant != null) ? clientEntity.DocumentsAssistant.Id : 0,
+                DocumentsAssistant = clientEntity.DocumentsAssistant,
+                DocumentsAssistants = _combosHelper.GetComboDocumentsAssistantByClinic(user_logged.Clinic.Id,false,false)
 
-                
             };
         }
 

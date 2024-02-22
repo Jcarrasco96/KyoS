@@ -636,29 +636,39 @@ namespace KyoS.Web.Controllers
 
                 List<ClientEntity> client = await _context.Clients
                                                           .Include(c => c.MTPs)
+                                                          .Include(c => c.DocumentsAssistant)
                                                           .Where(c => (c.Clinic.Id == user_logged.Clinic.Id
                                                                     && c.OnlyTCM == false)).ToListAsync();
-                client = client.Where(wc => wc.MTPs.Count == 0).ToList();
+                client = client.Where(wc => wc.MTPs.Count == 0 
+                                        && ((wc.DocumentsAssistant != null && wc.DocumentsAssistant.LinkedUser == user_logged.UserName
+                                            ||wc.DocumentsAssistant == null)))
+                               .ToList();
                 ViewBag.MTPMissing = client.Count.ToString();
 
                 ViewBag.PendingBIO = await _context.Clients
-                                             .CountAsync(wc => (wc.Clinic.Id == user_logged.Clinic.Id
-                                                            && (wc.Bio == null && wc.Brief == null)
-                                                            && wc.OnlyTCM == false));
+                                                   .CountAsync(wc => (wc.Clinic.Id == user_logged.Clinic.Id
+                                                                  && (wc.Bio == null && wc.Brief == null)
+                                                                  && wc.OnlyTCM == false)
+                                                                  && ((wc.DocumentsAssistant != null && wc.DocumentsAssistant.LinkedUser == user_logged.UserName)
+                                                                     ||wc.DocumentsAssistant == null));
 
                 ViewBag.PendingInitialFars = await _context.Clients
                                                            .CountAsync(wc => (wc.Clinic.Id == user_logged.Clinic.Id
                                                                            && (wc.FarsFormList.Where(n => n.Type == FARSType.Initial).Count() == 0)
                                                                            && (wc.Bio.CreatedBy == User.Identity.Name
                                                                             || wc.Bio == null)
-                                                                           && wc.OnlyTCM == false));
+                                                                           && wc.OnlyTCM == false)
+                                                                           && ((wc.DocumentsAssistant != null && wc.DocumentsAssistant.LinkedUser == user_logged.UserName)
+                                                                             || wc.DocumentsAssistant == null));
 
                 ViewBag.MedicalHistoryMissing = await _context.Clients
                                                               .CountAsync(wc => (wc.Clinic.Id == user_logged.Clinic.Id
                                                                               && wc.IntakeMedicalHistory == null
                                                                               && (wc.Bio.CreatedBy == User.Identity.Name
                                                                                || wc.Bio == null)
-                                                                              && wc.OnlyTCM == false));
+                                                                              && wc.OnlyTCM == false)
+                                                                              && ((wc.DocumentsAssistant != null && wc.DocumentsAssistant.LinkedUser == user_logged.UserName)
+                                                                                || wc.DocumentsAssistant == null));
 
                 List<MTPEntity> MtpPending = await _context.MTPs                                                           
                                                            .Where(n => (n.Status == MTPStatus.Pending
@@ -740,7 +750,9 @@ namespace KyoS.Web.Controllers
                                                                           && wc.IntakeConsentPhotograph == null
                                                                           && wc.IntakeFeeAgreement == null
                                                                           && wc.IntakeTuberculosis == null
-                                                                          && wc.OnlyTCM == false));
+                                                                          && wc.OnlyTCM == false)
+                                                                          && ((wc.DocumentsAssistant != null && wc.DocumentsAssistant.LinkedUser == user_logged.UserName)
+                                                                             || wc.DocumentsAssistant == null));
             }
             if (User.IsInRole("TCMSupervisor"))
             {
