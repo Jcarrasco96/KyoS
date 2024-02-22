@@ -236,11 +236,11 @@ namespace KyoS.Web.Controllers
                                                                         && m.SignIndTherapy == false));                
                 ViewBag.MTPReviewPending = await _context.MTPReviews
                                                          .CountAsync(m => (m.Mtp.Client.Clinic.Id == user_logged.Clinic.Id
-                                                                        && m.Status == AdendumStatus.Pending
+                                                                        && (m.Status == AdendumStatus.Pending || (m.SignTherapy == true && m.Status == AdendumStatus.Edition))
                                                                         && m.CreatedBy == user_logged.UserName)
                                                                         ||
                                                                           (m.Mtp.Client.Clinic.Id == user_logged.Clinic.Id
-                                                                        && m.Status == AdendumStatus.Pending
+                                                                        && (m.Status == AdendumStatus.Pending || (m.SignIndTherapy == true && m.Status == AdendumStatus.Edition))
                                                                         && m.IndFacilitator.LinkedUser == user_logged.UserName));
 
                 ViewBag.ClientWithoutFARS = await _context.Clients                                                    
