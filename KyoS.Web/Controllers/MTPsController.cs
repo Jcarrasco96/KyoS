@@ -3072,6 +3072,7 @@ namespace KyoS.Web.Controllers
                                                                        .Include(m => m.Mtp.Goals)
                                                                        .ThenInclude(m => m.Objetives)
                                                                        .Include(m => m.IndFacilitator)
+                                                                       .Include(m => m.Facilitator)
                                                                        .FirstOrDefaultAsync(m => m.Id == id);
             if (mtpReviewEntity == null)
             {
@@ -3141,10 +3142,32 @@ namespace KyoS.Web.Controllers
                 {
                     if (User.IsInRole("Facilitator"))
                     {
-                        if (mtpReviewEntity.SignIndTherapy == true && mtpReviewViewModel.SignTherapy == true)
+                        if (mtpReviewViewModel.IdIndFacilitator == mtpReviewViewModel.IdFacilitator && mtpReviewViewModel.IdIndFacilitator != 0)
                         {
-                            mtpReviewEntity.Status = AdendumStatus.Pending;
+                            if (mtpReviewViewModel.SignTherapy == true)
+                            {
+                                mtpReviewEntity.Status = AdendumStatus.Pending;
+                            }
                         }
+                        else
+                        {
+                            if (mtpReviewViewModel.IdIndFacilitator == 0)
+                            {
+                                if (mtpReviewEntity.SignTherapy == true)
+                                {
+                                    mtpReviewEntity.Status = AdendumStatus.Pending;
+                                }
+                            }
+                            else
+                            {
+                                if (mtpReviewEntity.SignIndTherapy == true && mtpReviewEntity.SignTherapy == true)
+                                {
+                                    mtpReviewEntity.Status = AdendumStatus.Pending;
+                                }
+                            }
+                           
+                        }
+                        
                     }
                 }
 
@@ -3218,7 +3241,7 @@ namespace KyoS.Web.Controllers
                         }
                         else
                         {
-                            if (User.IsInRole("Documents_Assistant") || (item.MTP.Client.IndividualTherapyFacilitator.LinkedUser == user_logged.UserName))
+                            if (User.IsInRole("Documents_Assistant") || (item.MTP.Client.IndividualTherapyFacilitator != null && item.MTP.Client.IndividualTherapyFacilitator.LinkedUser == user_logged.UserName))
                             {
                                 foreach (var obj in item.Objetives)
                                 {
@@ -3542,9 +3565,12 @@ namespace KyoS.Web.Controllers
                                                   .Include(f => f.Messages.Where(m => m.Notification == false))
 
                                                   .Where(m => (m.Mtp.Client.Clinic.Id == clinic.Id
-                                                            && m.Status == AdendumStatus.Pending) 
-                                                            && (m.CreatedBy == user_logged.UserName
-                                                             || m.IndFacilitator.LinkedUser == user_logged.UserName))
+                                                            && (m.Status == AdendumStatus.Pending || (m.Status == AdendumStatus.Edition && m.SignTherapy == true)) 
+                                                            && (m.CreatedBy == user_logged.UserName))
+                                                             ||
+                                                             (m.Mtp.Client.Clinic.Id == clinic.Id
+                                                             && m.Status == AdendumStatus.Pending 
+                                                             && m.IndFacilitator.LinkedUser == user_logged.UserName))
                                                   .ToListAsync());
                     }
                     else
