@@ -240,7 +240,7 @@ namespace KyoS.Web.Controllers
                                                                         && m.CreatedBy == user_logged.UserName)
                                                                         ||
                                                                           (m.Mtp.Client.Clinic.Id == user_logged.Clinic.Id
-                                                                        && (m.Status == AdendumStatus.Pending || (m.SignIndTherapy == true && m.Status == AdendumStatus.Edition))
+                                                                        && (m.Status == AdendumStatus.Pending)
                                                                         && m.IndFacilitator.LinkedUser == user_logged.UserName));
 
                 ViewBag.ClientWithoutFARS = await _context.Clients                                                    
@@ -682,9 +682,9 @@ namespace KyoS.Web.Controllers
                 ViewBag.BriefPending = BriefPending.Count().ToString();
 
                 List<MTPReviewEntity> MTPrPending = await _context.MTPReviews
-                                                                 .Where(n => (n.Status == AdendumStatus.Pending
-                                                                           && n.CreatedBy == user_logged.UserName))
-                                                                 .ToListAsync();
+                                                                  .Where(n => (n.Status == AdendumStatus.Pending
+                                                                            && n.CreatedBy == user_logged.UserName))
+                                                                  .ToListAsync();
                 ViewBag.MTPrPending = MTPrPending.Count().ToString();
 
                 ViewBag.ExpiredMTPs = await _context.MTPs

@@ -3575,20 +3575,42 @@ namespace KyoS.Web.Controllers
                     }
                     else
                     {
-                        return View(await _context.MTPReviews
+                        if (User.IsInRole("Documents_Assistant"))
+                        {
+                            return View(await _context.MTPReviews
 
-                                                  .Include(m => m.Mtp)
-                                                  .ThenInclude(m => m.Client)
-                                                  .ThenInclude(m => m.Clinic)
+                                                    .Include(m => m.Mtp)
+                                                    .ThenInclude(m => m.Client)
+                                                    .ThenInclude(m => m.Clinic)
 
-                                                  .Include(m => m.Mtp.Goals)
-                                                  .ThenInclude(m => m.Objetives)
+                                                    .Include(m => m.Mtp.Goals)
+                                                    .ThenInclude(m => m.Objetives)
 
-                                                  .Include(f => f.Messages.Where(m => m.Notification == false))
+                                                    .Include(f => f.Messages.Where(m => m.Notification == false))
 
-                                                  .Where(m => (m.Mtp.Client.Clinic.Id == clinic.Id)
-                                                      && m.Status == AdendumStatus.Pending)
-                                                  .ToListAsync());
+                                                    .Where(m => (m.Mtp.Client.Clinic.Id == clinic.Id)
+                                                        && m.Status == AdendumStatus.Pending
+                                                        && m.CreatedBy == user_logged.UserName)
+                                                    .ToListAsync());
+                        }
+                        else
+                        {
+                            return View(await _context.MTPReviews
+
+                                                    .Include(m => m.Mtp)
+                                                    .ThenInclude(m => m.Client)
+                                                    .ThenInclude(m => m.Clinic)
+
+                                                    .Include(m => m.Mtp.Goals)
+                                                    .ThenInclude(m => m.Objetives)
+
+                                                    .Include(f => f.Messages.Where(m => m.Notification == false))
+
+                                                    .Where(m => (m.Mtp.Client.Clinic.Id == clinic.Id)
+                                                        && m.Status == AdendumStatus.Pending)
+                                                    .ToListAsync());
+                        }
+                           
                     }
                 }
             }

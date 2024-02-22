@@ -89,7 +89,7 @@
                                                         <td align="center">@Html.DisplayFor(modelItem => product1.Frequency)</td>
                                                         <td>@Html.DisplayFor(modelItem => product1.Prescriber)</td>
                                                         <td align="center">
-                                                            @if (item.Status == KyoS.Common.Enums.StatusType.Open && (User.IsInRole("Supervisor") || User.IsInRole("Documents_Assistant")))
+                                                            @if (item.Status == KyoS.Common.Enums.StatusType.Open && (User.IsInRole("Supervisor") || User.IsInRole("Documents_Assistant") ))
                                                             {
                                                                 <a asp-action="Edit" asp-route-id="@product1.Id" class="btn btn-warning" title="Edit Medication"><i class="glyphicon glyphicon-pencil"></i></a>
                                                                 <button onclick="ConfirmDelete(@product1.Id)" class="btn btn-danger deleteItem" title="Delete Medications"><i class="glyphicon glyphicon-trash"></i></button>
@@ -141,7 +141,7 @@
                                         @Html.DisplayFor(modelItem => item.Service)
                                     </td>
                                     <td align="right">
-                                        @if (item.Status == KyoS.Common.Enums.StatusType.Open && (User.IsInRole("Supervisor") || User.IsInRole("Documents_Assistant")))
+                                        @if (item.Status == KyoS.Common.Enums.StatusType.Open && (User.IsInRole("Supervisor") || User.IsInRole("Documents_Assistant") || User.IsInRole("Manager")))
                                         {
                                             <a asp-action="Create" asp-route-id="@item.Id" class="btn btn-success" title="Add Medication"><i class="glyphicon glyphicon-plus"></i></a>
                                         }
