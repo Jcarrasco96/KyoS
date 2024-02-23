@@ -1198,23 +1198,13 @@
                                 </a>
                             }
                         </div>
-                        <div class="col-md-2">
-                            @if (ViewBag.AllDocumentsForClient == 0)
-                            {
+                        <div class="col-md-2">                            
+                            <a style="text-decoration: none;" asp-controller="Clients" asp-action="AllDocuments" role="button">
                                 <div class="thumbnail list-group-item list-group-item-success">
                                     <h4 style="align-content:end;"><i class="icon-print" style="padding-right: 10px !important;"></i>All<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Documents</h4>
-                                    <span class="message-counter-success">@ViewBag.AllDocumentsForClient</span>
+                                    <span class="message-counter-success">#</span>
                                 </div>
-                            }
-                            else
-                            {
-                                <a style="text-decoration: none;" asp-controller="Clients" asp-action="AllDocuments" role="button">
-                                    <div class="thumbnail list-group-item list-group-item-success">
-                                        <h4 style="align-content:end;"><i class="icon-print" style="padding-right: 10px !important;"></i>All<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Documents</h4>
-                                        <span class="message-counter-success">@ViewBag.AllDocumentsForClient</span>
-                                    </div>
-                                </a>
-                            }
+                            </a>                            
                         </div>
                         <div class="col-md-2">
                             <a style="text-decoration: none;" asp-controller="Notes" asp-action="BillingReport1" role="button">
