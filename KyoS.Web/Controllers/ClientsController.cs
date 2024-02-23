@@ -232,7 +232,9 @@ namespace KyoS.Web.Controllers
                         IdService = 0,
                         Services = _combosHelper.GetComboServices(),
                         IdFacilitatorIT = 0,
-                        ITFacilitators = _combosHelper.GetComboFacilitators()
+                        ITFacilitators = _combosHelper.GetComboFacilitators(),
+                        IdDocumentsAssistant = 0,
+                        DocumentsAssistants = _combosHelper.GetComboDocumentsAssistantByClinic(user_logged.Clinic.Id,false,false)
 
                     };
                     return View(model);
@@ -562,6 +564,7 @@ namespace KyoS.Web.Controllers
                                                       .Include(c => c.IndividualTherapyFacilitator)
 
                                                       .Include(c => c.Clients_HealthInsurances)
+                                                      .Include(c => c.DocumentsAssistant)
 
                                                       .FirstOrDefaultAsync(c => c.Id == id);
             if (clientEntity == null)
@@ -1068,7 +1071,7 @@ namespace KyoS.Web.Controllers
             }
             else
             {
-                clientViewModel.AdmisionDateTCM = _context.TCMClient.FirstOrDefault(n => n.Client.Id == clientViewModel.Id).DataOpen;
+                clientViewModel.AdmisionDateTCM = _context.Clients.FirstOrDefault(n => n.Id == clientViewModel.Id).AdmisionDate;
             }
             return View(clientViewModel);
         }
@@ -1112,7 +1115,9 @@ namespace KyoS.Web.Controllers
                                                   .Include(c => c.MTPs)
                                                   .Where(c => (c.Clinic.Id == user_logged.Clinic.Id
                                                             && c.MTPs.Count == 0
-                                                            && c.OnlyTCM == false))
+                                                            && c.OnlyTCM == false
+                                                            && ((c.DocumentsAssistant != null && c.DocumentsAssistant.LinkedUser == user_logged.UserName)
+                                                                || c.DocumentsAssistant == null)))
                                                   .ToListAsync());
 
                     }

@@ -4,6 +4,7 @@ using KyoS.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KyoS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20240222194627_documentAssistantInClient")]
+    partial class documentAssistantInClient
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -6024,7 +6027,7 @@ namespace KyoS.Web.Migrations
                     b.Property<DateTime>("EndTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("FacilitatorId")
+                    b.Property<int?>("FacilitatorId")
                         .HasColumnType("int");
 
                     b.Property<string>("Frecuency")
@@ -6103,6 +6106,8 @@ namespace KyoS.Web.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("FacilitatorId");
 
                     b.HasIndex("IndFacilitatorId");
 
@@ -14180,6 +14185,10 @@ namespace KyoS.Web.Migrations
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.MTPReviewEntity", b =>
                 {
+                    b.HasOne("KyoS.Web.Data.Entities.FacilitatorEntity", "Facilitator")
+                        .WithMany()
+                        .HasForeignKey("FacilitatorId");
+
                     b.HasOne("KyoS.Web.Data.Entities.FacilitatorEntity", "IndFacilitator")
                         .WithMany()
                         .HasForeignKey("IndFacilitatorId");
@@ -14188,6 +14197,8 @@ namespace KyoS.Web.Migrations
                         .WithMany("MtpReviewList")
                         .HasForeignKey("MtpId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("Facilitator");
 
                     b.Navigation("IndFacilitator");
 

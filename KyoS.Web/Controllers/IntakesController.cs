@@ -2168,7 +2168,9 @@ namespace KyoS.Web.Controllers
                                                           .Include(n => n.Bio)
                                                           .Where(n => n.IntakeMedicalHistory == null 
                                                             && n.Clinic.Id == user_logged.Clinic.Id
-                                                            && n.OnlyTCM == false)
+                                                            && n.OnlyTCM == false
+                                                            && ((n.DocumentsAssistant != null && n.DocumentsAssistant.LinkedUser == user_logged.UserName)
+                                                                || n.DocumentsAssistant == null))
                                                           .ToListAsync();
 
             return View(ClientList);
@@ -2465,7 +2467,9 @@ namespace KyoS.Web.Controllers
                                                              && n.IntakeConsentPhotograph == null
                                                              && n.IntakeFeeAgreement == null
                                                              && n.IntakeTuberculosis == null
-                                                             && n.OnlyTCM == false)
+                                                             && n.OnlyTCM == false
+                                                             && ((n.DocumentsAssistant != null && n.DocumentsAssistant.LinkedUser == user_logged.UserName)
+                                                               || n.DocumentsAssistant == null))
                                                           .ToListAsync();
 
             return View(ClientList);

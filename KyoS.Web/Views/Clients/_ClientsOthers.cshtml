@@ -115,6 +115,15 @@
 {
     <div class="col-md-push-12">
         <div class="form-group col-md-3">
+            <label asp-for="IdDocumentsAssistant" class="control-label"></label>
+            <select asp-for="IdDocumentsAssistant" asp-items="Model.DocumentsAssistants" class="form-control" id="check110"></select>
+            <span asp-validation-for="IdDocumentsAssistant" class="text-danger"></span>
+        </div>
+        <div class="container-fluid">
+        </div>
+    </div>
+    <div class="col-md-push-12">
+       <div class="form-group col-md-3">
             <label asp-for="IdService" class="control-label"></label>
             <select asp-for="IdService" asp-items="Model.Services" class="form-control" id="check110"></select>
             <span asp-validation-for="IdService" class="text-danger"></span>
@@ -140,6 +149,16 @@ else
 {
     <div class="col-md-push-12">
         <div class="form-group col-md-3">
+            <label asp-for="IdDocumentsAssistant" class="control-label"></label>
+            <select asp-for="IdDocumentsAssistant" asp-items="Model.DocumentsAssistants" class="form-control" id="check110"></select>
+            <span asp-validation-for="IdDocumentsAssistant" class="text-danger"></span>
+        </div>
+        <div class="container-fluid">
+           
+        </div>
+    </div>
+    <div class="col-md-push-12">
+       <div class="form-group col-md-3">
             <label asp-for="IdService" class="control-label"></label>
             <select asp-for="IdService" asp-items="Model.Services" class="form-control" id="check110"></select>
             <span asp-validation-for="IdService" class="text-danger"></span>
