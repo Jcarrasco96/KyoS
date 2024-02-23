@@ -3905,6 +3905,8 @@ namespace KyoS.Web.Controllers
                                              .ThenInclude(c => c.Clients_Diagnostics)
                                              .ThenInclude(cd => cd.Diagnostic)
 
+                                             .Include(m => m.IndFacilitator)
+
                                              .AsSplitQuery()
 
                                              .FirstOrDefault(a => (a.Id == id));
