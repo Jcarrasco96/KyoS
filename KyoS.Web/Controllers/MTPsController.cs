@@ -3072,7 +3072,6 @@ namespace KyoS.Web.Controllers
                                                                        .Include(m => m.Mtp.Goals)
                                                                        .ThenInclude(m => m.Objetives)
                                                                        .Include(m => m.IndFacilitator)
-                                                                       .Include(m => m.Facilitator)
                                                                        .FirstOrDefaultAsync(m => m.Id == id);
             if (mtpReviewEntity == null)
             {
@@ -3743,7 +3742,7 @@ namespace KyoS.Web.Controllers
                     DateIndFacilitator = DateTime.Now,
                     IndFacilitator = (mtp.Client.IndividualTherapyFacilitator != null) ? _context.Facilitators.FirstOrDefault(n => n.Id == mtp.Client.IndividualTherapyFacilitator.Id) : null,
                     IdIndFacilitator = (mtp.Client.IndividualTherapyFacilitator != null) ? mtp.Client.IndividualTherapyFacilitator.Id : 0,
-                    Facilitator = facilitator,
+                    FacilitatorId = facilitator.Id,
                     IdFacilitator = facilitator.Id
                 };
 

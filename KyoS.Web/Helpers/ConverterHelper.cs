@@ -3786,11 +3786,12 @@ namespace KyoS.Web.Helpers
                 Units = model.Units,
                 DateIndFacilitator = model.DateIndFacilitator,
                 IndFacilitator = await _context.Facilitators
-                                               .FirstOrDefaultAsync(c => c.Id == model.IdIndFacilitator),
+                                               .FindAsync(model.IdIndFacilitator),
                 SignIndTherapy = model.SignIndTherapy,
                 SignTherapy = model.SignTherapy,
-                Facilitator = await _context.Facilitators
-                                            .FirstOrDefaultAsync(c => c.Id == model.IdFacilitator)
+                FacilitatorId = _context.Facilitators
+                                        .FirstOrDefault(c => c.Id == model.IdFacilitator).Id
+                                              
 
             };
             
@@ -3844,8 +3845,8 @@ namespace KyoS.Web.Helpers
                 IndFacilitator = model.IndFacilitator,
                 SignIndTherapy = model.SignIndTherapy,
                 SignTherapy = model.SignTherapy,
-                IdFacilitator = (model.Facilitator != null) ? model.Facilitator.Id : 0,
-                Facilitator = model.Facilitator
+                IdFacilitator = model.FacilitatorId,
+                FacilitatorId = model.FacilitatorId
 
             };           
         }
