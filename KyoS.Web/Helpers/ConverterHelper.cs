@@ -3785,11 +3785,11 @@ namespace KyoS.Web.Helpers
                 CodeBill = model.CodeBill,
                 Units = model.Units,
                 DateIndFacilitator = model.DateIndFacilitator,
-                IndFacilitator = await _context.Facilitators
+                IndFacilitator = (model.IdIndFacilitator == 0) ? null : await _context.Facilitators
                                                .FindAsync(model.IdIndFacilitator),
                 SignIndTherapy = model.SignIndTherapy,
                 SignTherapy = model.SignTherapy,
-                FacilitatorId = _context.Facilitators
+                FacilitatorId = (model.IdFacilitator == 0)? 0: _context.Facilitators
                                         .FirstOrDefault(c => c.Id == model.IdFacilitator).Id
                                               
 
