@@ -31930,6 +31930,95 @@ namespace KyoS.Web.Helpers
             return dt;
         }
 
+        private DataTable GetTCMIntakeMiniMentalDS(TCMIntakeMiniMentalEntity miniMental)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "TCMIntakeMiniMental"
+            };
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("TcmClient_FK", typeof(int));
+            dt.Columns.Add("Date", typeof(DateTime));
+            dt.Columns.Add("AdmissionedFor", typeof(string));
+            dt.Columns.Add("OrientationWhat", typeof(int));
+            dt.Columns.Add("OrientationWhere", typeof(int));
+            dt.Columns.Add("RegistrationName", typeof(int));
+            dt.Columns.Add("Attention", typeof(int));
+            dt.Columns.Add("Recall", typeof(int));
+            dt.Columns.Add("LanguageName", typeof(int));
+            dt.Columns.Add("LanguageRepeat", typeof(int));
+            dt.Columns.Add("LanguageFollow", typeof(int));
+            dt.Columns.Add("LanguageRead", typeof(int));
+            dt.Columns.Add("LanguageWrite", typeof(int));
+            dt.Columns.Add("LanguageCopy", typeof(int));
+            dt.Columns.Add("TotalScore", typeof(int));
+            dt.Columns.Add("Trials", typeof(int));
+            dt.Columns.Add("CreatedBy", typeof(string));
+            dt.Columns.Add("CreatedOn", typeof(DateTime));
+            dt.Columns.Add("LastModifiedBy", typeof(string));
+            dt.Columns.Add("LastModifiedOn", typeof(DateTime));
+
+            if (miniMental != null)
+            {
+                dt.Rows.Add(new object[]
+                {
+                    miniMental.Id,
+                    0,
+                    miniMental.Date,
+                    miniMental.AdmissionedFor,
+                    miniMental.OrientationWhat,
+                    miniMental.OrientationWhere,
+                    miniMental.RegistrationName,
+                    miniMental.Attention,
+                    miniMental.Recall,
+                    miniMental.LanguageName,
+                    miniMental.LanguageRepeat,
+                    miniMental.LanguageFollow,
+                    miniMental.LanguageRead,
+                    miniMental.LanguageWrite,
+                    miniMental.LanguageCopy,
+                    miniMental.TotalScore,
+                    miniMental.Trials,
+                    miniMental.CreatedBy,
+                    miniMental.CreatedOn,
+                    miniMental.LastModifiedBy,
+                    miniMental.LastModifiedOn
+                });
+            }
+            else
+            {
+                dt.Rows.Add(new object[]
+                {
+                    0,
+                    0,
+                    new DateTime(),
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    string.Empty,
+                    new DateTime(),
+                    string.Empty,
+                    new DateTime()
+                });
+            }
+
+            return dt;
+        }
+
+
         #endregion
 
         #region Approved TCM Notes reports
@@ -34422,6 +34511,78 @@ namespace KyoS.Web.Helpers
 
         #endregion
 
+        #region TCM Binder Section #3
+        public Stream TCMIntakeMiniMental(TCMIntakeMiniMentalEntity miniMental)
+        {
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\TCMGenerics\\rptTCMIntakeMiniMental.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(GetClinicDS(miniMental.TcmClient.Casemanager.Clinic));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clinics");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMClientDS(miniMental.TcmClient));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMClient");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetClientDS(miniMental.TcmClient.Client));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetCaseManagerDS(miniMental.TcmClient.Casemanager));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "CaseManagers");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMIntakeMiniMentalDS(miniMental));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMIntakeMiniMental");
+
+            //images                      
+            string path = string.Empty;
+            if (!string.IsNullOrEmpty(miniMental.TcmClient.Casemanager.Clinic.LogoPath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(miniMental.TcmClient.Casemanager.Clinic.LogoPath)}");
+            }
+
+            PictureObject pic1 = WebReport.Report.FindObject("Picture1") as PictureObject;
+            pic1.Image = new Bitmap(path);
+
+            //signatures images 
+            byte[] stream1 = null;
+            byte[] stream2 = null;
+
+            if (!string.IsNullOrEmpty(miniMental.TcmClient.Casemanager.SignaturePath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(miniMental.TcmClient.Casemanager.SignaturePath)}");
+                stream2 = _imageHelper.ImageToByteArray(path);
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream1, stream2));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
+
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
+        }                
+        public Stream TCMIntakeHistoryReport(TCMIntakeMedicalHistoryEntity medicalHistory)
+        {
+            throw new NotImplementedException();
+        }
+        public Stream TCMIntakeCoordinationCare(TCMIntakeCoordinationCareEntity coordinationCare) 
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
+
         #region TCM Binder Section #4
         public Stream TCMIntakeAssessment(TCMAssessmentEntity intakeAssessment)
         {
@@ -34940,6 +35101,15 @@ namespace KyoS.Web.Helpers
         }
         #endregion
 
+        #region TCM Binder Section #5
+
+        public Stream TCMIntakeInterventionLog(TCMIntakeInterventionLogEntity interventionLog)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+
         #region Referral Form
         public Stream TCMReferralFormReport(TCMClientEntity tcmClient)
         {
@@ -35101,7 +35271,7 @@ namespace KyoS.Web.Helpers
             stream.Position = 0;
 
             return stream;
-        }
+        }       
         #endregion
     }
 }

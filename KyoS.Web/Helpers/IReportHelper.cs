@@ -288,12 +288,22 @@ namespace KyoS.Web.Helpers
         Stream TCMIntakePainScreen(TCMIntakePainScreenEntity intakePain);
         #endregion
 
+        #region TCM Binder Section #3
+        Stream TCMIntakeMiniMental(TCMIntakeMiniMentalEntity miniMental);
+        Stream TCMIntakeHistoryReport(TCMIntakeMedicalHistoryEntity medicalHistory);
+        Stream TCMIntakeCoordinationCare(TCMIntakeCoordinationCareEntity coordinationCare);
+        #endregion
+
         #region TCM Binder Section #4
         Stream TCMIntakeAssessment(TCMAssessmentEntity intakeAssessment);
         Stream TCMIntakeAppendixJ(TCMIntakeAppendixJEntity intakeAppendixJ);
         Stream TCMDischarge(TCMDischargeEntity intakeDischarge);
         Stream TCMAdendum(TCMAdendumEntity adendum);
         Stream TCMServicePlanReview(TCMServicePlanReviewEntity servicePlanReview);
+        #endregion
+
+        #region TCM Binder Section #5
+        Stream TCMIntakeInterventionLog(TCMIntakeInterventionLogEntity interventionLog);
         #endregion
 
         #region Referral Form

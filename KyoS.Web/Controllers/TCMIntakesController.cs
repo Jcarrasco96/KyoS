@@ -4118,6 +4118,8 @@ namespace KyoS.Web.Controllers
                                                        .Include(t => t.TcmClient)
                                                        .ThenInclude(c => c.Casemanager)
                                                        .ThenInclude(cm => cm.Clinic)
+
+                                                       .AsSplitQuery()
                                                        
                                                        .FirstOrDefaultAsync(t => t.TcmClient.Id == id);
 
@@ -4146,6 +4148,8 @@ namespace KyoS.Web.Controllers
                                                                       .ThenInclude(c => c.Casemanager)
                                                                       .ThenInclude(cm => cm.Clinic)
 
+                                                                      .AsSplitQuery()
+
                                                                       .FirstOrDefaultAsync(t => t.TcmClient.Id == id);
 
             if (entity == null)
@@ -4172,6 +4176,8 @@ namespace KyoS.Web.Controllers
                                                                      .Include(t => t.TcmClient)
                                                                      .ThenInclude(c => c.Casemanager)
                                                                      .ThenInclude(cm => cm.Clinic)
+
+                                                                     .AsSplitQuery()
 
                                                                      .FirstOrDefaultAsync(t => t.Id == id);
 
@@ -4200,6 +4206,8 @@ namespace KyoS.Web.Controllers
                                                                  .ThenInclude(c => c.Casemanager)
                                                                  .ThenInclude(cm => cm.Clinic)
 
+                                                                 .AsSplitQuery()
+
                                                                  .FirstOrDefaultAsync(t => t.TcmClient.Id == id);
 
             if (entity == null)
@@ -4226,6 +4234,8 @@ namespace KyoS.Web.Controllers
                                                                     .Include(t => t.TcmClient)
                                                                     .ThenInclude(c => c.Casemanager)
                                                                     .ThenInclude(cm => cm.Clinic)
+
+                                                                    .AsSplitQuery()
 
                                                                     .FirstOrDefaultAsync(t => t.TcmClient.Id == id);
 
@@ -4254,6 +4264,8 @@ namespace KyoS.Web.Controllers
                                                                         .ThenInclude(c => c.Casemanager)
                                                                         .ThenInclude(cm => cm.Clinic)
 
+                                                                        .AsSplitQuery()
+
                                                                         .FirstOrDefaultAsync(t => t.TcmClient.Id == id);
 
             if (entity == null)
@@ -4276,6 +4288,8 @@ namespace KyoS.Web.Controllers
                                                                        .Include(t => t.TcmClient)
                                                                        .ThenInclude(c => c.Casemanager)
                                                                        .ThenInclude(cm => cm.Clinic)
+
+                                                                       .AsSplitQuery()
 
                                                                        .FirstOrDefaultAsync(t => t.TcmClient.Id == id);
 
@@ -4304,6 +4318,8 @@ namespace KyoS.Web.Controllers
                                                                   .ThenInclude(c => c.Casemanager)
                                                                   .ThenInclude(cm => cm.Clinic)
 
+                                                                  .AsSplitQuery()
+
                                                                   .FirstOrDefaultAsync(t => t.TcmClient.Id == id);
 
             if (entity == null)
@@ -4326,6 +4342,8 @@ namespace KyoS.Web.Controllers
                                                           .Include(t => t.TcmClient)
                                                           .ThenInclude(c => c.Casemanager)
                                                           .ThenInclude(cm => cm.Clinic)
+
+                                                          .AsSplitQuery()
 
                                                           .FirstOrDefaultAsync(t => t.TcmClient.Id == id);
 
@@ -4354,6 +4372,8 @@ namespace KyoS.Web.Controllers
                                                                               .ThenInclude(c => c.Casemanager)
                                                                               .ThenInclude(cm => cm.Clinic)
 
+                                                                              .AsSplitQuery()
+
                                                                               .FirstOrDefaultAsync(t => t.TcmClient.Id == id);
 
             if (entity == null)
@@ -4380,6 +4400,8 @@ namespace KyoS.Web.Controllers
                                                                                .Include(t => t.TcmClient)
                                                                                .ThenInclude(c => c.Casemanager)
                                                                                .ThenInclude(cm => cm.Clinic)
+
+                                                                               .AsSplitQuery()
 
                                                                                .FirstOrDefaultAsync(t => t.TcmClient.Id == id);
 
@@ -4408,6 +4430,8 @@ namespace KyoS.Web.Controllers
                                                                     .ThenInclude(c => c.Casemanager)
                                                                     .ThenInclude(cm => cm.Clinic)
 
+                                                                    .AsSplitQuery()
+
                                                                     .FirstOrDefaultAsync(t => t.TcmClient.Id == id);
 
             if (entity == null)
@@ -4434,6 +4458,8 @@ namespace KyoS.Web.Controllers
                                                                     .Include(t => t.TcmClient)
                                                                     .ThenInclude(c => c.Casemanager)
                                                                     .ThenInclude(cm => cm.Clinic)
+
+                                                                    .AsSplitQuery()
 
                                                                     .FirstOrDefaultAsync(t => t.TcmClient.Id == id);
 
@@ -4462,6 +4488,8 @@ namespace KyoS.Web.Controllers
                                                                   .ThenInclude(c => c.Casemanager)
                                                                   .ThenInclude(cm => cm.Clinic)
 
+                                                                  .AsSplitQuery()
+
                                                                   .FirstOrDefaultAsync(t => t.TcmClient.Id == id);
 
             if (entity == null)
@@ -4480,10 +4508,7 @@ namespace KyoS.Web.Controllers
 
                                                         .Include(t => t.TcmClient)
                                                         .ThenInclude(c => c.Client)
-
-                                                        .Include(t => t.TcmClient)
-                                                        .ThenInclude(c => c.Client)
-                                                        .ThenInclude(cl => cl.LegalGuardian)
+                                                        .ThenInclude(cl => cl.LegalGuardian)                                                                                                              
 
                                                         .Include(t => t.TcmClient)
                                                         .ThenInclude(c => c.Client)
@@ -4525,6 +4550,8 @@ namespace KyoS.Web.Controllers
                                                         .ThenInclude(c => c.Client)
                                                         .ThenInclude(cl => cl.Psychiatrist)
 
+                                                        .AsSplitQuery()
+
                                                         .FirstOrDefaultAsync(t => t.TcmClient.Id == id);
 
             if (entity == null)
@@ -4552,6 +4579,8 @@ namespace KyoS.Web.Controllers
                                                              .ThenInclude(c => c.Casemanager)
                                                              .ThenInclude(cm => cm.Clinic)
 
+                                                             .AsSplitQuery()
+
                                                              .FirstOrDefaultAsync(t => t.TcmClient.Id == id);
 
             if (entity == null)
@@ -4576,6 +4605,8 @@ namespace KyoS.Web.Controllers
                                                             .ThenInclude(cm => cm.Clinic)
 
                                                             .Include(t => t.TcmSupervisor)
+
+                                                            .AsSplitQuery()
 
                                                             .FirstOrDefaultAsync(t => t.TcmClient.Id == id);
 
@@ -4611,6 +4642,8 @@ namespace KyoS.Web.Controllers
 
                                                       .Include(t => t.TcmDischargeServiceStatus)
 
+                                                      .AsSplitQuery()
+
                                                       .FirstOrDefaultAsync(t => t.Id == id);
 
             if (entity == null)
@@ -4620,6 +4653,43 @@ namespace KyoS.Web.Controllers
 
             Stream stream = _reportHelper.TCMDischarge(entity);
             return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+        }
+
+        [Authorize(Roles = "CaseManager, Manager, TCMSupervisor")]
+        public async Task<IActionResult> PrintTCMIntakeMiniMental(int id)
+        {
+            TCMIntakeMiniMentalEntity entity = await _context.TCMIntakeMiniMental
+                                                      
+                                                             .Include(s => s.TcmClient)
+                                                             .ThenInclude(c => c.Client)
+
+                                                             .Include(t => t.TcmClient)
+                                                             .ThenInclude(c => c.Casemanager)
+                                                             .ThenInclude(cm => cm.Clinic)
+
+                                                             .AsSplitQuery()
+
+                                                             .FirstOrDefaultAsync(t => t.TcmClient.Id == id);
+
+            if (entity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            Stream stream = _reportHelper.TCMIntakeMiniMental(entity);
+            return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+        }
+
+        [Authorize(Roles = "CaseManager, Manager, TCMSupervisor")]
+        public async Task<IActionResult> PrintTCMMedicalHistory(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        [Authorize(Roles = "CaseManager, Manager, TCMSupervisor")]
+        public async Task<IActionResult> PrintTCMIntakeCoordinationCare(int id)
+        {
+            throw new NotImplementedException();
         }
 
         [Authorize(Roles = "CaseManager, Manager, TCMSupervisor")]
