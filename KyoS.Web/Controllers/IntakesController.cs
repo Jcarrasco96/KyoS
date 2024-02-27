@@ -2163,17 +2163,48 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("NotAuthorized", "Account");
             }
 
-            List<ClientEntity> ClientList = await _context.Clients
-                                                          .Include(n => n.IntakeMedicalHistory)
-                                                          .Include(n => n.Bio)
-                                                          .Where(n => n.IntakeMedicalHistory == null 
-                                                            && n.Clinic.Id == user_logged.Clinic.Id
-                                                            && n.OnlyTCM == false
-                                                            && ((n.DocumentsAssistant != null && n.DocumentsAssistant.LinkedUser == user_logged.UserName)
-                                                                || n.DocumentsAssistant == null))
-                                                          .ToListAsync();
+            if (User.IsInRole("Facilitator"))
+            {
+                FacilitatorEntity facilitator = await _context.Facilitators.FirstOrDefaultAsync(n => n.LinkedUser == user_logged.UserName);
+                List<ClientEntity> ClientList = await _context.Clients
+                                                              .Include(n => n.IntakeMedicalHistory)
+                                                              .Where(n => n.IntakeMedicalHistory == null
+                                                                       && n.Clinic.Id == user_logged.Clinic.Id
+                                                                       && n.OnlyTCM == false
+                                                                       && (n.IdFacilitatorPSR == facilitator.Id
+                                                                        || n.IdFacilitatorGroup == facilitator.Id
+                                                                        || n.IndividualTherapyFacilitator.Id == facilitator.Id))
+                                                              .ToListAsync();
 
-            return View(ClientList);
+                return View(ClientList);
+            }
+            else
+            {
+                if (User.IsInRole("Documents_Assistant"))
+                {
+                    List<ClientEntity> ClientList = await _context.Clients
+                                                                  .Include(n => n.IntakeMedicalHistory)
+                                                                  .Where(n => n.IntakeMedicalHistory == null
+                                                                           && n.Clinic.Id == user_logged.Clinic.Id
+                                                                           && n.OnlyTCM == false
+                                                                           && ((n.DocumentsAssistant != null && n.DocumentsAssistant.LinkedUser == user_logged.UserName)
+                                                                             || n.DocumentsAssistant == null))
+                                                                  .ToListAsync();
+                    return View(ClientList);
+                }
+                else
+                {
+                    List<ClientEntity> ClientList = await _context.Clients
+                                                                  .Include(n => n.IntakeMedicalHistory)
+                                                                  .Where(n => n.IntakeMedicalHistory == null
+                                                                           && n.Clinic.Id == user_logged.Clinic.Id
+                                                                           && n.OnlyTCM == false)
+                                                                  .ToListAsync();
+                    return View(ClientList);
+                }
+            
+            }
+           
 
         }
 
@@ -2454,25 +2485,51 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("NotAuthorized", "Account");
             }
 
-            List<ClientEntity> ClientList = await _context.Clients
-                                                          .Where(n => n.Clinic.Id == user_logged.Clinic.Id
-                                                             && n.IntakeScreening == null
-                                                             && n.IntakeConsentForTreatment == null
-                                                             && n.IntakeConsentForRelease == null
-                                                             && n.IntakeConsumerRights == null
-                                                             && n.IntakeAcknowledgementHipa == null
-                                                             && n.IntakeAccessToServices == null
-                                                             && n.IntakeOrientationChecklist == null
-                                                             && n.IntakeTransportation == null
-                                                             && n.IntakeConsentPhotograph == null
-                                                             && n.IntakeFeeAgreement == null
-                                                             && n.IntakeTuberculosis == null
-                                                             && n.OnlyTCM == false
-                                                             && ((n.DocumentsAssistant != null && n.DocumentsAssistant.LinkedUser == user_logged.UserName)
-                                                               || n.DocumentsAssistant == null))
-                                                          .ToListAsync();
+            if (User.IsInRole("Documents_Assistant"))
+            {
+                List<ClientEntity> ClientList = await _context.Clients
+                                                              .Where(n => n.Clinic.Id == user_logged.Clinic.Id
+                                                                       && n.IntakeScreening == null
+                                                                       && n.IntakeConsentForTreatment == null
+                                                                       && n.IntakeConsentForRelease == null
+                                                                       && n.IntakeConsumerRights == null
+                                                                       && n.IntakeAcknowledgementHipa == null
+                                                                       && n.IntakeAccessToServices == null
+                                                                       && n.IntakeOrientationChecklist == null
+                                                                       && n.IntakeTransportation == null
+                                                                       && n.IntakeConsentPhotograph == null
+                                                                       && n.IntakeFeeAgreement == null
+                                                                       && n.IntakeTuberculosis == null
+                                                                       && n.OnlyTCM == false
+                                                                       && ((n.DocumentsAssistant != null && n.DocumentsAssistant.LinkedUser == user_logged.UserName)
+                                                                         || n.DocumentsAssistant == null))
+                                                             .ToListAsync();
 
-            return View(ClientList);
+                return View(ClientList);
+
+            }
+            else
+            {
+                List<ClientEntity> ClientList = await _context.Clients
+                                                              .Where(n => n.Clinic.Id == user_logged.Clinic.Id
+                                                                       && n.IntakeScreening == null
+                                                                       && n.IntakeConsentForTreatment == null
+                                                                       && n.IntakeConsentForRelease == null
+                                                                       && n.IntakeConsumerRights == null
+                                                                       && n.IntakeAcknowledgementHipa == null
+                                                                       && n.IntakeAccessToServices == null
+                                                                       && n.IntakeOrientationChecklist == null
+                                                                       && n.IntakeTransportation == null
+                                                                       && n.IntakeConsentPhotograph == null
+                                                                       && n.IntakeFeeAgreement == null
+                                                                       && n.IntakeTuberculosis == null
+                                                                       && n.OnlyTCM == false)
+                                                              .ToListAsync();
+
+                return View(ClientList);
+            }
+            
+            
 
         }
 

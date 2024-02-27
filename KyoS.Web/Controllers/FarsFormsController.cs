@@ -609,20 +609,36 @@ namespace KyoS.Web.Controllers
             }
             else
             {
-                List<ClientEntity> ClientList = await _context.Clients
+                if (User.IsInRole("Documents_Assistant"))
+                {
+                    List<ClientEntity> ClientList = await _context.Clients
+                                                                  .Include(n => n.FarsFormList)
+                                                                  .Include(n => n.Bio)
+                                                                  .Where(n => n.FarsFormList.Where(f => f.Type == FARSType.Initial).Count() == 0
+                                                                           && n.Clinic.Id == user_logged.Clinic.Id
+                                                                           && n.OnlyTCM == false
+                                                                           && ((n.DocumentsAssistant != null && n.DocumentsAssistant.LinkedUser == user_logged.UserName)
+                                                                             || n.DocumentsAssistant == null))
+                                                                  .ToListAsync();
+
+                    return View(ClientList);
+                }
+                else
+                {
+                    List<ClientEntity> ClientList = await _context.Clients
                                                               .Include(n => n.FarsFormList)
                                                               .Include(n => n.Bio)
                                                               .Where(n => n.FarsFormList.Where(f => f.Type == FARSType.Initial).Count() == 0
                                                                        && n.Clinic.Id == user_logged.Clinic.Id
-                                                                       && n.OnlyTCM == false
-                                                                       && ((n.DocumentsAssistant != null && n.DocumentsAssistant.LinkedUser == user_logged.UserName)
-                                                                         || n.DocumentsAssistant == null))
+                                                                       && n.OnlyTCM == false)
                                                               .ToListAsync();
 
-                return View(ClientList);
-            }
-            
+                    return View(ClientList);
 
+                }
+                
+            }
+           
         }
 
         [Authorize(Roles = "Supervisor, Facilitator, Documents_Assistant")]

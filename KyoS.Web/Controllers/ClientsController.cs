@@ -1111,15 +1111,27 @@ namespace KyoS.Web.Controllers
                     }
                     else
                     {
-                        return View(await _context.Clients
-                                                  .Include(c => c.MTPs)
-                                                  .Where(c => (c.Clinic.Id == user_logged.Clinic.Id
-                                                            && c.MTPs.Count == 0
-                                                            && c.OnlyTCM == false
-                                                            && ((c.DocumentsAssistant != null && c.DocumentsAssistant.LinkedUser == user_logged.UserName)
-                                                                || c.DocumentsAssistant == null)))
-                                                  .ToListAsync());
+                        if (User.IsInRole("Documents_Assistant"))
+                        {
+                            return View(await _context.Clients
+                                                      .Include(c => c.MTPs)
+                                                      .Where(c => (c.Clinic.Id == user_logged.Clinic.Id
+                                                                && c.MTPs.Count == 0
+                                                                && c.OnlyTCM == false
+                                                                && ((c.DocumentsAssistant != null && c.DocumentsAssistant.LinkedUser == user_logged.UserName)
+                                                                    || c.DocumentsAssistant == null)))
+                                                      .ToListAsync());
 
+                        }
+                        else
+                        {
+                            return View(await _context.Clients
+                                                          .Include(c => c.MTPs)
+                                                          .Where(c => (c.Clinic.Id == user_logged.Clinic.Id
+                                                                    && c.MTPs.Count == 0
+                                                                    && c.OnlyTCM == false))
+                                                          .ToListAsync());
+                        }
                     }
                 }
             }
