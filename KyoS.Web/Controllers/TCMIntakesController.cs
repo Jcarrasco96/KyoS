@@ -3650,8 +3650,7 @@ namespace KyoS.Web.Controllers
                                                                              .Include(n => n.TcmClient)
                                                                              .ThenInclude(n => n.Casemanager)
                                                                              .Include(n => n.InterventionList)
-                                                                             .FirstOrDefault(n => (n.InterventionList.Count() > 0
-                                                                                        && n.TcmClient.Id == id));
+                                                                             .FirstOrDefault(n => n.TcmClient.Id == id);
                     if(interventionLog == null)
                     {
                         model = new TCMIntakeInterventionLogViewModel
@@ -3703,7 +3702,7 @@ namespace KyoS.Web.Controllers
                     await _context.SaveChangesAsync();
                     if (User.IsInRole("CaseManager"))
                     {
-                        return RedirectToAction("TCMIntakeSectionDashboard", new { id = interventionLogViewModel.IdTCMClient, section = 5 });
+                        return RedirectToAction("CreateTCMInterventionLog", new { id = interventionLogViewModel.IdTCMClient, section = 5 });
                     }
                     else
                     {
