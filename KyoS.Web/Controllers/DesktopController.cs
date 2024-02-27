@@ -413,8 +413,7 @@ namespace KyoS.Web.Controllers
                     Task<int> InProgressNotes = MHInProgressNotes(user_logged.Clinic.Id);
                     Task<int> NotStartedNotes = MHNotStartedNotes(user_logged.Clinic.Id);
                     Task<int> MTPMissing = MHMTPMissing(user_logged.Clinic.Id);
-                    Task<int> NotesWithReview = MHNotesWithReview(user_logged.Clinic.Id);
-                    //Task<int> AllDocumentsForClient = AmountOfDocumentsCMH(user_logged.Clinic.Id);
+                    Task<int> NotesWithReview = MHNotesWithReview(user_logged.Clinic.Id);                    
                     Task<int> ApprovedNotes = MHApprovedNotes(user_logged.Clinic.Id);
                     Task<int> NotPresentNotes = MHNotPresentNotes(user_logged.Clinic.Id);
                     Task<int> ExpiredMTPs = MHExpiredMTPs(user_logged.Clinic.Id);
@@ -429,7 +428,7 @@ namespace KyoS.Web.Controllers
                     Task<int> ClientEligibility = MHClientEligibility(user_logged.Clinic.Id);
                     Task<int> SafetyPlan = MHSafetyPlan(user_logged.Clinic.Id);
 
-                    await Task.WhenAll(PendingNotes, InProgressNotes, NotStartedNotes, MTPMissing, NotesWithReview, /*AllDocumentsForClient,*/
+                    await Task.WhenAll(PendingNotes, InProgressNotes, NotStartedNotes, MTPMissing, NotesWithReview,
                                         ApprovedNotes, NotPresentNotes, ExpiredMTPs, PendingBIO, PendingInitialFars, MedicalHistoryMissing,
                                         IntakeMissing, FarsMissing, ClientDischarge, ClientAuthorization, ClientBirthday, ClientEligibility,
                                         SafetyPlan);
@@ -438,8 +437,7 @@ namespace KyoS.Web.Controllers
                     ViewBag.InProgressNotes = await InProgressNotes;
                     ViewBag.NotStartedNotes = await NotStartedNotes;
                     ViewBag.MTPMissing = await MTPMissing;
-                    ViewBag.NotesWithReview = await NotesWithReview;
-                    //ViewBag.AllDocumentsForClient = await AllDocumentsForClient;
+                    ViewBag.NotesWithReview = await NotesWithReview;                    
                     ViewBag.ApprovedNotes = await ApprovedNotes;
                     ViewBag.NotPresentNotes = await NotPresentNotes;
                     ViewBag.ExpiredMTPs = await ExpiredMTPs;
