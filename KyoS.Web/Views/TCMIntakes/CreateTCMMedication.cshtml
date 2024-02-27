@@ -92,11 +92,21 @@
                                 @Html.DisplayFor(modelItem => item.Prescriber)
                             </td>
                             <td align="center">
-                                <a asp-action="EditTCMMedication" asp-route-id="@item.Id" class="btn btn-warning" title="Edit Medication"><i class="glyphicon glyphicon-pencil"></i></a>
-                                @if (Model.Id == 0)
+                                @if (User.IsInRole("TCMSupervisor") || User.IsInRole("CaseManager"))
                                 {
-                                    <button data-id="@item.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog" title="Delete Medication"><i class="glyphicon glyphicon-trash"></i></button>
+                                    <a asp-action="EditTCMMedication" asp-route-id="@item.Id" class="btn btn-warning" title="Edit Medication"><i class="glyphicon glyphicon-pencil"></i></a>
+                                    @if (Model.Id == 0)
+                                    {
+                                        <button data-id="@item.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog" title="Delete Medication"><i class="glyphicon glyphicon-trash"></i></button>
+                                    }
                                 }
+                                else
+                                {
+                                    <a asp-action="EditTCMMedication" asp-route-id="@item.Id" class="btn btn-warning disabled" title="Edit Medication"><i class="glyphicon glyphicon-pencil"></i></a>
+                                    <button data-id="@item.Id" class="btn btn-danger deleteItem disabled" data-toggle="modal" data-target="#deleteDialog" title="Delete Medication"><i class="glyphicon glyphicon-trash"></i></button>
+
+                                }
+
 
                             </td>
                         </tr>

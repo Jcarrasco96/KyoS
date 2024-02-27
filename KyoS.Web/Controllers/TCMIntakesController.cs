@@ -2013,7 +2013,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateTCMWelcome", IntakeViewModel) });
         }
 
-        [Authorize(Roles = "CaseManager,TCMSupervisor")]
+        [Authorize(Roles = "CaseManager,TCMSupervisor, Manager")]
         public async Task<IActionResult> ClientsDocuments(int id = 0, int idTCMCLient = 0)
         {
            
@@ -2038,7 +2038,7 @@ namespace KyoS.Web.Controllers
             }
         }
 
-        [Authorize(Roles = "CaseManager,TCMSupervisor")]
+        [Authorize(Roles = "CaseManager,TCMSupervisor, Manager")]
         public IActionResult AddDocument(int id = 0)
         {
             DocumentViewModel entity = new DocumentViewModel()
@@ -2052,7 +2052,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "CaseManager,TCMSupervisor")]
+        [Authorize(Roles = "CaseManager,TCMSupervisor, Manager")]
         public async Task<IActionResult> AddDocument(int id, DocumentViewModel documentViewModel)
         {
             UserEntity user_logged = await _context.Users
@@ -2128,7 +2128,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDocument", documentList) });
         }
 
-        [Authorize(Roles = "CaseManager,TCMSupervisor")]
+        [Authorize(Roles = "CaseManager,TCMSupervisor, Manager")]
         public async Task<IActionResult> OpenDocument(int id)
         {
             DocumentEntity document = await _context.Documents
@@ -2256,7 +2256,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateTCMFeeAgreement", IntakeViewModel) });
         }
 
-        [Authorize(Roles = "CaseManager, TCMSupervisor")]
+        [Authorize(Roles = "CaseManager, TCMSupervisor, Manager")]
         public IActionResult CreateTCMNonClinicalLog(int id = 0)
         {
 
@@ -2266,7 +2266,7 @@ namespace KyoS.Web.Controllers
 
             TCMIntakeNonClinicalLogViewModel model;
 
-            if (User.IsInRole("CaseManager") || User.IsInRole("TCMSupervisor"))
+            if (User.IsInRole("CaseManager") || User.IsInRole("TCMSupervisor") || User.IsInRole("Manager"))
             {
                 if (user_logged.Clinic != null)
                 {
@@ -2320,7 +2320,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "CaseManager, TCMSupervisor")]
+        [Authorize(Roles = "CaseManager, TCMSupervisor, Manager")]
         public async Task<IActionResult> CreateTCMNonClinicalLog(TCMIntakeNonClinicalLogViewModel IntakeViewModel)
         {
             UserEntity user_logged = _context.Users
@@ -2504,7 +2504,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateTCMMiniMental", IntakeViewModel) });
         }
 
-        [Authorize(Roles = "CaseManager, TCMSupervisor")]
+        [Authorize(Roles = "CaseManager, TCMSupervisor, Manager")]
         public IActionResult CreateTCMMedicalhistory(int id = 0, int idTCMClient = 0)
         {
 
@@ -2521,7 +2521,7 @@ namespace KyoS.Web.Controllers
                                                 .ThenInclude(n => n.LegalGuardian)
                                                 .FirstOrDefault(n => n.Id == idTCMClient);
 
-            if (User.IsInRole("CaseManager") || User.IsInRole("TCMSupervisor"))
+            if (User.IsInRole("CaseManager") || User.IsInRole("TCMSupervisor") || User.IsInRole("Manager"))
             {
                 if (user_logged.Clinic != null)
                 {
@@ -2718,7 +2718,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "CaseManager, TCMSupervisor")]
+        [Authorize(Roles = "CaseManager, TCMSupervisor, Manager")]
         public async Task<IActionResult> CreateTCMMedicalhistory(TCMIntakeMedicalHistoryViewModel IntakeViewModel)
         {
             UserEntity user_logged = _context.Users
@@ -2778,7 +2778,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateTCMMedicalhistory", IntakeViewModel) });
         }
 
-        [Authorize(Roles = "CaseManager, TCMSupervisor")]
+        [Authorize(Roles = "CaseManager, TCMSupervisor, Manager")]
         public IActionResult CreateTCMMedication(int id = 0, int idTCMClient = 0)
         {
 
@@ -2835,7 +2835,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "CaseManager, TCMSupervisor")]
+        [Authorize(Roles = "CaseManager, TCMSupervisor, Manager")]
         public async Task<IActionResult> CreateTCMMedication(MedicationViewModel MedicationViewModel)
         {
             UserEntity user_logged = _context.Users
