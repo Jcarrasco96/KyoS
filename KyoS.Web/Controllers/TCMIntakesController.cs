@@ -3722,12 +3722,12 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateTCMInterventionLog", interventionLogViewModel) });
         }
 
-        [Authorize(Roles = "CaseManager, TCMSupervisor")]
+        [Authorize(Roles = "CaseManager, TCMSupervisor, Manager")]
         public IActionResult EditTCMInterventionLog(int id = 0)
         {
             TCMIntakeInterventionLogViewModel model;
 
-            if (User.IsInRole("CaseManager") || User.IsInRole("TCMSupervisor")) 
+            if (User.IsInRole("CaseManager") || User.IsInRole("TCMSupervisor") || User.IsInRole("Manager")) 
             {
                 UserEntity user_logged = _context.Users
                                                  .Include(u => u.Clinic)
@@ -3763,7 +3763,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "CaseManager, TCMSupervisor")]
+        [Authorize(Roles = "CaseManager, TCMSupervisor, Manager")]
         public async Task<IActionResult> EditTCMInterventionLog(TCMIntakeInterventionLogViewModel tcmInterLogViewModel)
         {
             UserEntity user_logged = _context.Users
@@ -3796,7 +3796,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditTCMInterventionLog", tcmInterLogViewModel) });
         }
 
-        [Authorize(Roles = "CaseManager")]
+        [Authorize(Roles = "CaseManager, TCMSupervisor, Manager")]
         public IActionResult CreateTCMIntervention(int id = 0)
         {
 
@@ -3806,15 +3806,15 @@ namespace KyoS.Web.Controllers
 
             TCMIntakeInterventionViewModel model;
 
-            if (User.IsInRole("CaseManager"))
+            if (User.IsInRole("CaseManager") || User.IsInRole("TCMSupervisor") || User.IsInRole("Manager"))
             {
                 if (user_logged.Clinic != null)
                 {
                     TCMIntakeInterventionLogEntity interventionLog = _context.TCMIntakeInterventionLog
-                                                                                 .Include(n => n.TcmClient)
-                                                                                 .ThenInclude(n => n.Client)
-                                                                                 .Include(n => n.TcmClient.Casemanager)
-                                                                                 .FirstOrDefault(n => n.Id == id);
+                                                                             .Include(n => n.TcmClient)
+                                                                             .ThenInclude(n => n.Client)
+                                                                             .Include(n => n.TcmClient.Casemanager)
+                                                                             .FirstOrDefault(n => n.Id == id);
                     if (interventionLog != null)
                     {
                         model = new TCMIntakeInterventionViewModel
@@ -3844,7 +3844,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "CaseManager")]
+        [Authorize(Roles = "CaseManager, TCMSupervisor, Manager")]
         public async Task<IActionResult> CreateTCMIntervention(TCMIntakeInterventionViewModel interventionViewModel)
         {
             UserEntity user_logged = _context.Users
@@ -6131,7 +6131,7 @@ namespace KyoS.Web.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "CaseManager")]
+        [Authorize(Roles = "CaseManager, TCMSupervisor, Manager")]
         public IActionResult EditTCMIntervention(int id = 0)
         {
 
@@ -6141,7 +6141,7 @@ namespace KyoS.Web.Controllers
 
             TCMIntakeInterventionViewModel model;
 
-            if (User.IsInRole("CaseManager"))
+            if (User.IsInRole("CaseManager") || User.IsInRole("TCMSupervisor") || User.IsInRole("Manager"))
             {
                 if (user_logged.Clinic != null)
                 {
@@ -6170,7 +6170,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "CaseManager")]
+        [Authorize(Roles = "CaseManager, TCMSupervisor, Manager")]
         public async Task<IActionResult> EditTCMIntervention(TCMIntakeInterventionViewModel interventionViewModel)
         {
             UserEntity user_logged = _context.Users
