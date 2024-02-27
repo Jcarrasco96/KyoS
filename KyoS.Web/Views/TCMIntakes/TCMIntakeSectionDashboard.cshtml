@@ -955,6 +955,7 @@
                     <a style="text-decoration: none;" asp-action="EditTCMInterventionLog" asp-controller="TCMIntakes" asp-route-id="@Model.TcmInterventionLog.Id" role="button">
                         <div class="thumbnail list-group-item list-group-item-success">
                             <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Intervention<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Log</h4>
+                            <span class="message-counter-success">@Model.TcmInterventionLog.InterventionList.Count()</span>
                         </div>
                     </a>
                 }

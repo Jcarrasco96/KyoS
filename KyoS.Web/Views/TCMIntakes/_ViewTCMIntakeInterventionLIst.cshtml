@@ -11,8 +11,11 @@
                     <th class="col-md-2">
                         Date
                     </th>
-                    <th class="col-md-10" style="text-align:left;">
+                    <th class="col-md-9" style="text-align:left;">
                         Activity Description
+                    </th>
+                    <th class="col-md-1">
+                       
                     </th>
                 </tr>
             </thead>
@@ -25,6 +28,10 @@
                         </td>
                         <td align="left">
                             @Html.DisplayFor(modelItem => item.Activity)
+                        </td>
+                        <td align="left">
+                            <a onclick="showInPopup('@Url.Action("EditTCMIntervention", "TCMIntakes", new { id = item.Id}, Context.Request.Scheme)','Edit Intervention Log')" class="btn btn-warning" title="Edit Intervention Log"><i class="glyphicon glyphicon-pencil"></i> </a>
+                            <a onclick="ConfirmDelete(@item.Id)" class="btn btn-danger deleteItem"> <i class="glyphicon glyphicon-trash"></i></a>
                         </td>
                     </tr>
                 }

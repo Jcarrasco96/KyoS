@@ -3307,6 +3307,7 @@ namespace KyoS.Web.Controllers
                                                                                .Include(n => n.Client.Psychiatrist)
                                                                                .Include(n => n.Client.Doctor)
                                                                                .Include(n => n.TcmInterventionLog)
+                                                                               .ThenInclude(n => n.InterventionList)
                                                                                .Include(n => n.TCMFarsFormList)
                                                                                .FirstOrDefaultAsync(c => c.Id == id);
 
@@ -3463,6 +3464,7 @@ namespace KyoS.Web.Controllers
                                 TCMClientEntity TcmClientEntity = await _context.TCMClient
                                                                                 .Include(c => c.Client)
                                                                                 .Include(n => n.TcmInterventionLog)
+                                                                                .ThenInclude(n => n.InterventionList)
                                                                                 .Include(n => n.TCMFarsFormList)
                                                                                 .FirstOrDefaultAsync(c => c.Id == id);
 
@@ -6129,5 +6131,102 @@ namespace KyoS.Web.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = "CaseManager")]
+        public IActionResult EditTCMIntervention(int id = 0)
+        {
+
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            TCMIntakeInterventionViewModel model;
+
+            if (User.IsInRole("CaseManager"))
+            {
+                if (user_logged.Clinic != null)
+                {
+                    TCMIntakeInterventionEntity intervention = _context.TCMIntakeIntervention
+                                                                       .Include(n => n.TcmInterventionLog)
+                                                                       .ThenInclude(n => n.TcmClient)
+                                                                       .ThenInclude(n => n.Client)
+                                                                       .Include(n => n.TcmInterventionLog.TcmClient.Casemanager)
+                                                                       .FirstOrDefault(n => n.Id == id);
+                    if (intervention != null)
+                    {
+                        model = _converterHelper.ToTCMIntakeInterventionViewModel(intervention);
+
+                        return View(model);
+                    }
+                    else
+                    {
+                        return RedirectToAction("NotAuthorized", "Account");
+                    }
+
+                }
+            }
+
+            return RedirectToAction("TCMIntakeSectionDashboard", "Intakes", new { id = id, section = 5 });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "CaseManager")]
+        public async Task<IActionResult> EditTCMIntervention(TCMIntakeInterventionViewModel interventionViewModel)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (ModelState.IsValid)
+            {
+                TCMIntakeInterventionEntity InterventionEntity = await _converterHelper.ToTCMIntakeInterventionEntity(interventionViewModel, false, user_logged.UserName);
+
+                _context.TCMIntakeIntervention.Update(InterventionEntity);
+                try
+                {
+                    await _context.SaveChangesAsync();
+
+                    List<TCMIntakeInterventionEntity> salida = await _context.TCMIntakeIntervention
+                                                                             .Include(n => n.TcmInterventionLog)
+                                                                             .Where(m => m.TcmInterventionLog.Id == interventionViewModel.IdInterventionLog)
+                                                                             .ToListAsync();
+
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewTCMIntakeInterventionLIst", salida) });
+                }
+                catch (System.Exception ex)
+                {
+                    ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                }
+
+            }
+
+            //interventionLogViewModel.TcmClient = _context.TCMClient.Find(interventionLogViewModel.Id);
+
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditTCMInterventionLog", interventionViewModel) });
+        }
+
+        [Authorize(Roles = "Manager, TCMSupervisor, CaseManager")]
+        public async Task<IActionResult> DeleteTCMIntervention(int id = 0)
+        {
+            TCMIntakeInterventionEntity intervention = _context.TCMIntakeIntervention
+                                                               .Include(n => n.TcmInterventionLog)
+                                                               
+                                                               .FirstOrDefault(m => m.Id == id);
+            if (intervention == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            try
+            {
+                _context.TCMIntakeIntervention.Remove(intervention);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+
+            }
+            return RedirectToAction("EditTCMInterventionLog", "TCMIntakes", new { id = intervention.TcmInterventionLog.Id });
+        }
     }
 }
