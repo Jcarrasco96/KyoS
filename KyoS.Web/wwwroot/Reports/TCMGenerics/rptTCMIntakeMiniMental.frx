@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="02/27/2024 16:53:08" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="02/28/2024 12:06:37" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pKiygLNrR2GSkUua6CZa7zWuDzNGOn7cjq7mn0WTOnccDkyyV5BLvtFa1BRlcYFBr20d4NENRW8nvBjS+TMpD2g==">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pKiygLNrR2GSkUua6CZa7zWuDzNGOn7cjq7mn0WTOnccDkyyV5BLvtFa1BRlcYFBrVxpbfGbY9ZOlVTU0x7DTCA==">
       <TableDataSource Name="Clinics" DataType="System.Int32" Enabled="true" TableName="Clinics">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -129,14 +129,14 @@
       <TextObject Name="Textbox12" Left="132.75" Top="23.35" Width="535.1" Height="20" CanGrow="true" Text="[Clinics.Name]" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 12pt, style=Bold"/>
       <TextObject Name="Textbox64" Left="131.75" Top="45.23" Width="535.1" Height="22" CanGrow="true" Text="The Mini Mental State Exam" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 11pt, style=Bold"/>
       <LineObject Name="Line3" Left="132.3" Top="12.45" Height="65.55"/>
-      <PictureObject Name="Picture1" Left="18.9" Top="10.9" Width="103.95" Height="66.15" Image=""/>
+      <PictureObject Name="Picture1" Left="18.9" Top="10.9" Width="103.95" Height="66.15"/>
       <LineObject Name="Line6" Left="131.3" Top="11.45" Height="66.15"/>
     </ReportTitleBand>
-    <DataBand Name="Data1" Top="93.68" Width="778.3" Height="875.72">
+    <DataBand Name="Data1" Top="93.45" Width="778.3" Height="875.72">
       <TextObject Name="Text40" Top="28.35" Width="106.6" Height="18.9" Text="Client Name:" VertAlign="Center" Font="Arial, 10pt"/>
-      <TextObject Name="Text41" Left="462.05" Top="28.35" Width="113.4" Height="18.9" Text="Client Number:" HorzAlign="Right" VertAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text41" Left="462.05" Top="28.35" Width="113.4" Height="18.9" Text="Case Number:" HorzAlign="Right" VertAlign="Center" Font="Arial, 10pt"/>
       <TextObject Name="Text44" Left="86.05" Top="28.35" Width="340.2" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Clients.Name]" VertAlign="Center" Font="Arial, 10pt"/>
-      <TextObject Name="Text45" Left="575.45" Top="28.35" Width="194.67" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Clients.MedicaidID]" VertAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text45" Left="575.45" Top="28.35" Width="194.67" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[TCMClient.CaseNumber]" VertAlign="Center" Font="Arial, 10pt"/>
       <PictureObject Name="Picture3" Left="284.95" Top="795.45" Width="95" Height="63.45" DataColumn="Signatures.facilitatorSignature"/>
       <TextObject Name="Text290" Left="47.25" Top="851.15" Width="228.69" Height="24.57" CanGrow="true" Text="Examiner Name" Padding="2, 2, 2, 2" Font="Arial, 9pt"/>
       <TextObject Name="Text291" Left="532.2" Top="851.05" Width="86.94" Height="24.57" CanGrow="true" Text="Date" Padding="2, 2, 2, 2" Font="Arial, 9pt"/>

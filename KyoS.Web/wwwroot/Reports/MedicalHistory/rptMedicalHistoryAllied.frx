@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="12/21/2023 12:53:54" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="02/28/2024 13:39:59" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u30Km0fFRRyaA/ooBb5W49ag==">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3S49eUNKG8m0PJxFEEV52FA==">
       <TableDataSource Name="Clinics" DataType="System.Int32" Enabled="true" TableName="Clinics">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -428,7 +428,7 @@
             <CheckBoxObject Name="CheckBox147" Left="18.52" Top="3.53" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="IntakeMedicalHistory.WhoopingCough"/>
           </TableCell>
           <TableCell Name="Cell464" Border.Lines="All" Font="Arial, 10pt">
-            <CheckBoxObject Name="CheckBox148" Left="18.52" Top="3.53" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([IntakeTuberculosis.DoYouBring] == true,false,true)"/>
+            <CheckBoxObject Name="CheckBox148" Left="18.52" Top="3.53" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([IntakeMedicalHistory.WhoopingCough] == true,false,true)"/>
           </TableCell>
           <TableCell Name="Cell465" Border.Lines="All" Text="Whooping Cough" Font="Arial, 10pt"/>
           <TableCell Name="Cell466" Border.Lines="All" Font="Arial, 10pt">
@@ -642,7 +642,7 @@
             <CheckBoxObject Name="CheckBox209" Left="16.97" Top="4.82" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="IntakeMedicalHistory.FrequentHeadaches"/>
           </TableCell>
           <TableCell Name="Cell434" Border.Lines="All" Font="Arial, 10pt">
-            <CheckBoxObject Name="CheckBox210" Left="18.02" Top="4.37" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([IntakeTuberculosis.DoYouCurrently] == true,false,true)"/>
+            <CheckBoxObject Name="CheckBox210" Left="18.02" Top="4.37" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([IntakeMedicalHistory.FrequentHeadaches] == true,false,true)"/>
           </TableCell>
           <TableCell Name="Cell429" Border.Lines="All" Text="Frequent Headaches" Font="Arial, 10pt"/>
           <TableCell Name="Cell444" Border.Lines="All" Font="Arial, 10pt">
@@ -695,7 +695,7 @@
             <CheckBoxObject Name="CheckBox255" Left="16.97" Top="3.42" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="IntakeMedicalHistory.HeadInjury"/>
           </TableCell>
           <TableCell Name="Cell560" Border.Lines="All" Font="Arial, 10pt">
-            <CheckBoxObject Name="CheckBox256" Left="18.02" Top="2.97" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([IntakeTuberculosis.DoYouCough] == true,false,true)"/>
+            <CheckBoxObject Name="CheckBox256" Left="18.02" Top="2.97" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([IntakeMedicalHistory.HeadInjury] == true,false,true)"/>
           </TableCell>
           <TableCell Name="Cell561" Border.Lines="All" Text="Head Injury " Font="Arial, 10pt"/>
         </TableRow>
@@ -1397,7 +1397,7 @@
             <CheckBoxObject Name="CheckBox381" Left="18.52" Top="3.53" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="IntakeMedicalHistory.Speaking"/>
           </TableCell>
           <TableCell Name="Cell898" Border.Lines="All" Font="Arial, 10pt">
-            <CheckBoxObject Name="CheckBox382" Left="18.52" Top="3.53" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([IntakeTuberculosis.DoYouBring] == true,false,true)"/>
+            <CheckBoxObject Name="CheckBox382" Left="18.52" Top="3.53" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([IntakeMedicalHistory.Speaking] == true,false,true)"/>
           </TableCell>
           <TableCell Name="Cell899" Border.Lines="All" Text="speaking?" Font="Arial, 10pt"/>
           <TableCell Name="Cell900" Border.Lines="All" Font="Arial, 10pt"/>

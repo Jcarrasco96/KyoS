@@ -290,7 +290,7 @@ namespace KyoS.Web.Helpers
 
         #region TCM Binder Section #3
         Stream TCMIntakeMiniMental(TCMIntakeMiniMentalEntity miniMental);
-        Stream TCMIntakeHistoryReport(TCMIntakeMedicalHistoryEntity medicalHistory);
+        Stream TCMIntakeMedicalHistoryReport(TCMIntakeMedicalHistoryEntity medicalHistory);
         Stream TCMIntakeCoordinationCare(TCMIntakeCoordinationCareEntity coordinationCare);
         #endregion
 

@@ -26555,6 +26555,47 @@ namespace KyoS.Web.Helpers
             return dt;
         }
 
+        private DataTable GetTCMMedicationsListDS(List<TCMAssessmentMedicationEntity> medicationList)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "TCMAssessmentMedication"
+            };
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("TcmAssessmentId", typeof(int));
+            dt.Columns.Add("ReasonPurpose", typeof(string));
+            dt.Columns.Add("Dosage", typeof(string));
+            dt.Columns.Add("Frequency", typeof(string));
+            dt.Columns.Add("Name", typeof(string));
+            dt.Columns.Add("Prescriber", typeof(string));
+            dt.Columns.Add("CreatedBy", typeof(string));
+            dt.Columns.Add("CreatedOn", typeof(DateTime));
+            dt.Columns.Add("LastModifiedBy", typeof(string));
+            dt.Columns.Add("LastModifiedOn", typeof(DateTime));
+
+            foreach (TCMAssessmentMedicationEntity item in medicationList)
+            {
+                dt.Rows.Add(new object[]
+                {
+                    item.Id,
+                    0,
+                    item.ReasonPurpose,
+                    item.Dosage,
+                    item.Frequency,
+                    item.Name,
+                    item.Prescriber,
+                    item.CreatedBy,
+                    item.CreatedOn,
+                    item.LastModifiedBy,
+                    item.LastModifiedOn
+                });
+            }
+
+            return dt;
+        }
+
         private DataTable GetBioBehavioralHistoryListDS(List<Bio_BehavioralHistoryEntity> BehavioralHistoryList)
         {
             DataTable dt = new DataTable
@@ -32018,7 +32059,486 @@ namespace KyoS.Web.Helpers
             return dt;
         }
 
+        private DataTable GetTCMIntakeMedicalHistoryDS(TCMIntakeMedicalHistoryEntity medicalHistory)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "TCMIntakeMedicalHistory"
+            };
 
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("TCMClient_FK", typeof(int));
+            dt.Columns.Add("DateSignatureLegalGuardian", typeof(DateTime));
+            dt.Columns.Add("DateSignaturePerson", typeof(DateTime));
+            dt.Columns.Add("DateSignatureEmployee", typeof(DateTime));
+            dt.Columns.Add("PrimaryCarePhysician", typeof(string));
+            dt.Columns.Add("AddressPhysician", typeof(string));
+            dt.Columns.Add("City", typeof(string));
+            dt.Columns.Add("State", typeof(string));
+            dt.Columns.Add("ZipCode", typeof(string));
+            dt.Columns.Add("Diphtheria", typeof(bool));
+            dt.Columns.Add("Mumps", typeof(bool));
+            dt.Columns.Add("Poliomyelitis", typeof(bool));
+            dt.Columns.Add("RheumaticFever", typeof(bool));
+            dt.Columns.Add("WhoopingCough", typeof(bool));
+            dt.Columns.Add("Tuberculosis", typeof(bool));
+            dt.Columns.Add("ScarletFever", typeof(bool));
+            dt.Columns.Add("Hepatitis", typeof(bool));
+            dt.Columns.Add("HighBloodPressure", typeof(bool));
+            dt.Columns.Add("KidneyTrouble", typeof(bool));
+            dt.Columns.Add("KidneyStones", typeof(bool));
+            dt.Columns.Add("BloodInUrine", typeof(bool));
+            dt.Columns.Add("BurningUrine", typeof(bool));
+            dt.Columns.Add("PainfulUrination", typeof(bool));
+            dt.Columns.Add("EyeTrouble", typeof(bool));
+            dt.Columns.Add("HearingTrouble", typeof(bool));
+            dt.Columns.Add("Fractures", typeof(bool));
+            dt.Columns.Add("EarInfections", typeof(bool));
+            dt.Columns.Add("FrequentNoseBleeds", typeof(bool));
+            dt.Columns.Add("FrequentSoreThroat", typeof(bool));
+            dt.Columns.Add("Hoarseness", typeof(bool));
+            dt.Columns.Add("Allergies", typeof(bool));
+            dt.Columns.Add("Allergies_Describe", typeof(string));
+            dt.Columns.Add("StomachPain", typeof(bool));
+            dt.Columns.Add("BlackStools", typeof(bool));
+            dt.Columns.Add("NightSweats", typeof(bool));
+            dt.Columns.Add("FrequentVomiting", typeof(bool));
+            dt.Columns.Add("SkinTrouble", typeof(bool));
+            dt.Columns.Add("PainfulMuscles", typeof(bool));
+            dt.Columns.Add("PainfulJoints", typeof(bool));
+            dt.Columns.Add("BackPain", typeof(bool));
+            dt.Columns.Add("SeriousInjury", typeof(bool));
+            dt.Columns.Add("Surgery", typeof(bool));
+            dt.Columns.Add("Arthritis", typeof(bool));
+            dt.Columns.Add("Hemorrhoids", typeof(bool));
+            dt.Columns.Add("WeightLoss", typeof(bool));
+            dt.Columns.Add("FrequentHeadaches", typeof(bool));
+            dt.Columns.Add("Fainting", typeof(bool));
+            dt.Columns.Add("ConvulsionsOrFits", typeof(bool));
+            dt.Columns.Add("LossOfMemory", typeof(bool));
+            dt.Columns.Add("Nervousness", typeof(bool));
+            dt.Columns.Add("ChronicCough", typeof(bool));
+            dt.Columns.Add("CoughingOfBlood", typeof(bool));
+            dt.Columns.Add("VenerealDisease", typeof(bool));
+            dt.Columns.Add("FrequentColds", typeof(bool));
+            dt.Columns.Add("HeartPalpitation", typeof(bool));
+            dt.Columns.Add("ChestPain", typeof(bool));
+            dt.Columns.Add("ShortnessOfBreath", typeof(bool));
+            dt.Columns.Add("SwellingOfFeet", typeof(bool));
+            dt.Columns.Add("SwollenAnkles", typeof(bool));
+            dt.Columns.Add("ChronicIndigestion", typeof(bool));
+            dt.Columns.Add("VomitingOfBlood", typeof(bool));
+            dt.Columns.Add("Jaundice", typeof(bool));
+            dt.Columns.Add("Constipation", typeof(bool));
+            dt.Columns.Add("BloodyStools", typeof(bool));
+            dt.Columns.Add("Cancer", typeof(bool));
+            dt.Columns.Add("Diabetes", typeof(bool));
+            dt.Columns.Add("HayFever", typeof(bool));
+            dt.Columns.Add("Hernia", typeof(bool));
+            dt.Columns.Add("HeadInjury", typeof(bool));
+            dt.Columns.Add("Rheumatism", typeof(bool));
+            dt.Columns.Add("Epilepsy", typeof(bool));
+            dt.Columns.Add("VaricoseVeins", typeof(bool));
+            dt.Columns.Add("Anemia", typeof(bool));
+            dt.Columns.Add("InfectiousDisease", typeof(bool));
+            dt.Columns.Add("FamilyDiabetes", typeof(bool));
+            dt.Columns.Add("FamilyDiabetes_", typeof(string));
+            dt.Columns.Add("FamilyCancer", typeof(bool));
+            dt.Columns.Add("FamilyCancer_", typeof(string));
+            dt.Columns.Add("FamilyTuberculosis", typeof(bool));
+            dt.Columns.Add("FamilyTuberculosis_", typeof(string));
+            dt.Columns.Add("FamilyHeartDisease", typeof(bool));
+            dt.Columns.Add("FamilyHeartDisease_", typeof(string));
+            dt.Columns.Add("FamilyKidneyDisease", typeof(bool));
+            dt.Columns.Add("FamilyKidneyDisease_", typeof(string));
+            dt.Columns.Add("FamilyHighBloodPressure", typeof(bool));
+            dt.Columns.Add("FamilyHighBloodPressure_", typeof(string));
+            dt.Columns.Add("FamilyHayFever", typeof(bool));
+            dt.Columns.Add("FamilyHayFever_", typeof(string));
+            dt.Columns.Add("FamilyAsthma", typeof(bool));
+            dt.Columns.Add("FamilyAsthma_", typeof(string));
+            dt.Columns.Add("FamilyEpilepsy", typeof(bool));
+            dt.Columns.Add("FamilyEpilepsy_", typeof(string));
+            dt.Columns.Add("FamilyGlaucoma", typeof(bool));
+            dt.Columns.Add("FamilyGlaucoma_", typeof(string));
+            dt.Columns.Add("FamilySyphilis", typeof(bool));
+            dt.Columns.Add("FamilySyphilis_", typeof(string));
+            dt.Columns.Add("FamilyNervousDisorders", typeof(bool));
+            dt.Columns.Add("FamilyNervousDisorders_", typeof(string));
+            dt.Columns.Add("FamilyOther", typeof(bool));
+            dt.Columns.Add("FamilyOther_", typeof(string));
+            dt.Columns.Add("HaveYouEverBeenPregnant", typeof(bool));
+            dt.Columns.Add("HaveYouEverHadComplications", typeof(bool));
+            dt.Columns.Add("HaveYouEverHadPainful", typeof(bool));
+            dt.Columns.Add("HaveYouEverHadExcessive", typeof(bool));
+            dt.Columns.Add("HaveYouEverHadSpotting", typeof(bool));
+            dt.Columns.Add("AreYouCurrently", typeof(bool));
+            dt.Columns.Add("AreYouPhysician", typeof(bool));
+            dt.Columns.Add("DoYouSmoke", typeof(bool));
+            dt.Columns.Add("DoYouSmoke_PackPerDay", typeof(string));
+            dt.Columns.Add("DoYouSmoke_Year", typeof(string));
+            dt.Columns.Add("ListAllCurrentMedications", typeof(string));
+            dt.Columns.Add("PerformingCertainMotions", typeof(bool));
+            dt.Columns.Add("AssumingCertainPositions", typeof(bool));
+            dt.Columns.Add("Hearing", typeof(bool));
+            dt.Columns.Add("Seeing", typeof(bool));
+            dt.Columns.Add("Speaking", typeof(bool));
+            dt.Columns.Add("Reading", typeof(bool));
+            dt.Columns.Add("Concentrating", typeof(bool));
+            dt.Columns.Add("Comprehending", typeof(bool));
+            dt.Columns.Add("BeingConfused", typeof(bool));
+            dt.Columns.Add("BeingDisorientated", typeof(bool));
+            dt.Columns.Add("Calculating", typeof(bool));
+            dt.Columns.Add("WritingSentence", typeof(bool));
+            dt.Columns.Add("Walking", typeof(bool));
+            dt.Columns.Add("Planned", typeof(bool));
+            dt.Columns.Add("Unplanned", typeof(bool));
+            dt.Columns.Add("Normal", typeof(bool));
+            dt.Columns.Add("Complications", typeof(bool));
+            dt.Columns.Add("Complications_Explain", typeof(string));
+            dt.Columns.Add("BirthWeight", typeof(string));
+            dt.Columns.Add("Length", typeof(string));
+            dt.Columns.Add("BreastFed", typeof(bool));
+            dt.Columns.Add("BottleFedUntilAge", typeof(string));
+            dt.Columns.Add("AgeWeaned", typeof(string));
+            dt.Columns.Add("FirstYearMedical", typeof(string));
+            dt.Columns.Add("AgeFirstWalked", typeof(string));
+            dt.Columns.Add("AgeFirstTalked", typeof(string));
+            dt.Columns.Add("AgeToiletTrained", typeof(string));
+            dt.Columns.Add("DescriptionOfChild", typeof(string));
+            dt.Columns.Add("ProblemWithBedWetting", typeof(bool));
+            dt.Columns.Add("AndOrSoiling", typeof(bool));
+            dt.Columns.Add("Immunizations", typeof(string));
+            dt.Columns.Add("Documents", typeof(bool));
+            dt.Columns.Add("AgeOfFirstMenstruation", typeof(string));
+            dt.Columns.Add("DateOfLastBreastExam", typeof(string));
+            dt.Columns.Add("DateOfLastPelvic", typeof(string));
+            dt.Columns.Add("DateOfLastPeriod", typeof(string));
+            dt.Columns.Add("UsualDurationOfPeriods", typeof(string));
+            dt.Columns.Add("UsualIntervalBetweenPeriods", typeof(string));
+            dt.Columns.Add("InformationProvided", typeof(bool));
+            dt.Columns.Add("AdmissionedFor", typeof(string));
+
+            if (medicalHistory != null)
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            medicalHistory.Id,
+                                            0,
+                                            medicalHistory.DateSignatureLegalGuardian,
+                                            medicalHistory.DateSignaturePerson,
+                                            medicalHistory.DateSignatureEmployee,
+                                            medicalHistory.PrimaryCarePhysician,
+                                            medicalHistory.AddressPhysician,
+                                            medicalHistory.City,
+                                            medicalHistory.State,
+                                            medicalHistory.ZipCode,
+                                            medicalHistory.Diphtheria,
+                                            medicalHistory.Mumps,
+                                            medicalHistory.Poliomyelitis,
+                                            medicalHistory.RheumaticFever,
+                                            medicalHistory.WhoopingCough,
+                                            medicalHistory.Tuberculosis,
+                                            medicalHistory.ScarletFever,
+                                            medicalHistory.Hepatitis,
+                                            medicalHistory.HighBloodPressure,
+                                            medicalHistory.KidneyTrouble,
+                                            medicalHistory.KidneyStones,
+                                            medicalHistory.BloodInUrine,
+                                            medicalHistory.BurningUrine,
+                                            medicalHistory.PainfulUrination,
+                                            medicalHistory.EyeTrouble,
+                                            medicalHistory.HearingTrouble,
+                                            medicalHistory.Fractures,
+                                            medicalHistory.EarInfections,
+                                            medicalHistory.FrequentNoseBleeds,
+                                            medicalHistory.FrequentSoreThroat,
+                                            medicalHistory.Hoarseness,
+                                            medicalHistory.Allergies,
+                                            medicalHistory.Allergies_Describe,
+                                            medicalHistory.StomachPain,
+                                            medicalHistory.BlackStools,
+                                            medicalHistory.NightSweats,
+                                            medicalHistory.FrequentVomiting,
+                                            medicalHistory.SkinTrouble,
+                                            medicalHistory.PainfulMuscles,
+                                            medicalHistory.PainfulJoints,
+                                            medicalHistory.BackPain,
+                                            medicalHistory.SeriousInjury,
+                                            medicalHistory.Surgery,
+                                            medicalHistory.Arthritis,
+                                            medicalHistory.Hemorrhoids,
+                                            medicalHistory.WeightLoss,
+                                            medicalHistory.FrequentHeadaches,
+                                            medicalHistory.Fainting,
+                                            medicalHistory.ConvulsionsOrFits,
+                                            medicalHistory.LossOfMemory,
+                                            medicalHistory.Nervousness,
+                                            medicalHistory.ChronicCough,
+                                            medicalHistory.CoughingOfBlood,
+                                            medicalHistory.VenerealDisease,
+                                            medicalHistory.FrequentColds,
+                                            medicalHistory.HeartPalpitation,
+                                            medicalHistory.ChestPain,
+                                            medicalHistory.ShortnessOfBreath,
+                                            medicalHistory.SwellingOfFeet,
+                                            medicalHistory.SwollenAnkles,
+                                            medicalHistory.ChronicIndigestion,
+                                            medicalHistory.VomitingOfBlood,
+                                            medicalHistory.Jaundice,
+                                            medicalHistory.Constipation,
+                                            medicalHistory.BloodyStools,
+                                            medicalHistory.Cancer,
+                                            medicalHistory.Diabetes,
+                                            medicalHistory.HayFever,
+                                            medicalHistory.Hernia,
+                                            medicalHistory.HeadInjury,
+                                            medicalHistory.Rheumatism,
+                                            medicalHistory.Epilepsy,
+                                            medicalHistory.VaricoseVeins,
+                                            medicalHistory.Anemia,
+                                            medicalHistory.InfectiousDisease,
+                                            medicalHistory.FamilyDiabetes,
+                                            medicalHistory.FamilyDiabetes_,
+                                            medicalHistory.FamilyCancer,
+                                            medicalHistory.FamilyCancer_,
+                                            medicalHistory.FamilyTuberculosis,
+                                            medicalHistory.FamilyTuberculosis_,
+                                            medicalHistory.FamilyHeartDisease,
+                                            medicalHistory.FamilyHeartDisease_,
+                                            medicalHistory.FamilyKidneyDisease,
+                                            medicalHistory.FamilyKidneyDisease_,
+                                            medicalHistory.FamilyHighBloodPressure,
+                                            medicalHistory.FamilyHighBloodPressure_,
+                                            medicalHistory.FamilyHayFever,
+                                            medicalHistory.FamilyHayFever_,
+                                            medicalHistory.FamilyAsthma,
+                                            medicalHistory.FamilyAsthma_,
+                                            medicalHistory.FamilyEpilepsy,
+                                            medicalHistory.FamilyEpilepsy_,
+                                            medicalHistory.FamilyGlaucoma,
+                                            medicalHistory.FamilyGlaucoma_,
+                                            medicalHistory.FamilySyphilis,
+                                            medicalHistory.FamilySyphilis_,
+                                            medicalHistory.FamilyNervousDisorders,
+                                            medicalHistory.FamilyNervousDisorders_,
+                                            medicalHistory.FamilyOther,
+                                            medicalHistory.FamilyOther_,
+                                            medicalHistory.HaveYouEverBeenPregnant,
+                                            medicalHistory.HaveYouEverHadComplications,
+                                            medicalHistory.HaveYouEverHadPainful,
+                                            medicalHistory.HaveYouEverHadExcessive,
+                                            medicalHistory.HaveYouEverHadSpotting,
+                                            medicalHistory.AreYouCurrently,
+                                            medicalHistory.AreYouPhysician,
+                                            medicalHistory.DoYouSmoke,
+                                            medicalHistory.DoYouSmoke_PackPerDay,
+                                            medicalHistory.DoYouSmoke_Year,
+                                            medicalHistory.ListAllCurrentMedications,
+                                            medicalHistory.PerformingCertainMotions,
+                                            medicalHistory.AssumingCertainPositions,
+                                            medicalHistory.Hearing,
+                                            medicalHistory.Seeing,
+                                            medicalHistory.Speaking,
+                                            medicalHistory.Reading,
+                                            medicalHistory.Concentrating,
+                                            medicalHistory.Comprehending,
+                                            medicalHistory.BeingConfused,
+                                            medicalHistory.BeingDisorientated,
+                                            medicalHistory.Calculating,
+                                            medicalHistory.WritingSentence,
+                                            medicalHistory.Walking,
+                                            medicalHistory.Planned,
+                                            medicalHistory.Unplanned,
+                                            medicalHistory.Normal,
+                                            medicalHistory.Complications,
+                                            medicalHistory.Complications_Explain,
+                                            medicalHistory.BirthWeight,
+                                            medicalHistory.Length,
+                                            medicalHistory.BreastFed,
+                                            medicalHistory.BottleFedUntilAge,
+                                            medicalHistory.AgeWeaned,
+                                            medicalHistory.FirstYearMedical,
+                                            medicalHistory.AgeFirstWalked,
+                                            medicalHistory.AgeFirstTalked,
+                                            medicalHistory.AgeToiletTrained,
+                                            medicalHistory.DescriptionOfChild,
+                                            medicalHistory.ProblemWithBedWetting,
+                                            medicalHistory.AndOrSoiling,
+                                            medicalHistory.Immunizations,
+                                            medicalHistory.Documents,
+                                            medicalHistory.AgeOfFirstMenstruation,
+                                            medicalHistory.DateOfLastBreastExam,
+                                            medicalHistory.DateOfLastPelvic,
+                                            medicalHistory.DateOfLastPeriod,
+                                            medicalHistory.UsualDurationOfPeriods,
+                                            medicalHistory.UsualIntervalBetweenPeriods,
+                                            medicalHistory.InformationProvided,
+                                            medicalHistory.AdmissionedFor
+            });
+            }
+            else
+            {
+                dt.Rows.Add(new object[]
+                                        {
+                                            0,
+                                            0,
+                                            new DateTime(),
+                                            new DateTime(),
+                                            new DateTime(),
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            false,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            false,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            false,
+                                            false,
+                                            string.Empty,
+                                            false,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            string.Empty,
+                                            false,
+                                            string.Empty
+                                        });
+            }
+
+            return dt;
+        }
         #endregion
 
         #region Approved TCM Notes reports
@@ -34573,9 +35093,78 @@ namespace KyoS.Web.Helpers
 
             return stream;
         }                
-        public Stream TCMIntakeHistoryReport(TCMIntakeMedicalHistoryEntity medicalHistory)
+        public Stream TCMIntakeMedicalHistoryReport(TCMIntakeMedicalHistoryEntity medicalHistory)
         {
-            throw new NotImplementedException();
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\TCMGenerics\\rptTCMIntakeMedicalHistory.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);            
+
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(GetClientDS(medicalHistory.TCMClient.Client));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMClientDS(medicalHistory.TCMClient));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMClient");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetClinicDS(medicalHistory.TCMClient.Client.Clinic));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clinics");            
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMMedicationsListDS(medicalHistory.TCMClient.TCMAssessment.MedicationList));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMAssessmentMedication");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMIntakeMedicalHistoryDS(medicalHistory));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMIntakeMedicalHistory");
+
+            //images                      
+            string path = string.Empty;
+            if (!string.IsNullOrEmpty(medicalHistory.TCMClient.Casemanager.Clinic.LogoPath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(medicalHistory.TCMClient.Casemanager.Clinic.LogoPath)}");
+            }
+
+            PictureObject pic1 = WebReport.Report.FindObject("Picture1") as PictureObject;
+            pic1.Image = new Bitmap(path);
+            PictureObject pic2 = WebReport.Report.FindObject("Picture4") as PictureObject;
+            pic2.Image = new Bitmap(path);
+            PictureObject pic3 = WebReport.Report.FindObject("Picture5") as PictureObject;
+            pic3.Image = new Bitmap(path);
+            PictureObject pic4 = WebReport.Report.FindObject("Picture6") as PictureObject;
+            pic4.Image = new Bitmap(path);
+
+            //signatures images 
+            byte[] stream1 = null;
+            byte[] stream2 = null;
+
+            if (!string.IsNullOrEmpty(medicalHistory.TCMClient.Client.SignPath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(medicalHistory.TCMClient.Client.SignPath)}");
+                stream1 = _imageHelper.ImageToByteArray(path);
+            }
+
+            if (!string.IsNullOrEmpty(medicalHistory.TCMClient.Casemanager.SignaturePath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(medicalHistory.TCMClient.Casemanager.SignaturePath)}");
+                stream2 = _imageHelper.ImageToByteArray(path);
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream1, stream2));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
+
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
         }
         public Stream TCMIntakeCoordinationCare(TCMIntakeCoordinationCareEntity coordinationCare) 
         {

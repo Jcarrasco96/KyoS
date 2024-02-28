@@ -1,0 +1,1465 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="02/28/2024 16:11:31" ReportInfo.CreatorVersion="2021.1.0.0">
+  <Dictionary>
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pSrjZHqPCSNXKYfct7zavy9myey+m7LlneqXrU/O01HluWX5xN0Wi9iEsLcNk0RAxQTK/vkCbP84JEJ34oyUAuCe90s0WMeOhh9rvDAVmdH4=">
+      <TableDataSource Name="Clinics" DataType="System.Int32" Enabled="true" TableName="Clinics">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Name" DataType="System.String"/>
+        <Column Name="LogoPath" DataType="System.String"/>
+        <Column Name="Schema" DataType="System.Int32"/>
+        <Column Name="Address" DataType="System.String"/>
+        <Column Name="CEO" DataType="System.String"/>
+        <Column Name="City" DataType="System.String"/>
+        <Column Name="FaxNo" DataType="System.String"/>
+        <Column Name="Phone" DataType="System.String"/>
+        <Column Name="State" DataType="System.String"/>
+        <Column Name="ZipCode" DataType="System.String"/>
+      </TableDataSource>
+      <TableDataSource Name="Clients" DataType="System.Int32" Enabled="true" TableName="Clients">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Name" DataType="System.String"/>
+        <Column Name="Gender" DataType="System.Int32"/>
+        <Column Name="Code" DataType="System.String"/>
+        <Column Name="ClinicId" DataType="System.Int32"/>
+        <Column Name="DateOfBirth" DataType="System.DateTime"/>
+        <Column Name="ZipCode" DataType="System.String"/>
+        <Column Name="Status" DataType="System.Int32"/>
+        <Column Name="GroupId" DataType="System.Int32"/>
+        <Column Name="AlternativeAddress" DataType="System.String"/>
+        <Column Name="City" DataType="System.String"/>
+        <Column Name="Country" DataType="System.String"/>
+        <Column Name="CreatedBy" DataType="System.String"/>
+        <Column Name="CreatedOn" DataType="System.DateTime"/>
+        <Column Name="DoctorId" DataType="System.Int32"/>
+        <Column Name="Email" DataType="System.String"/>
+        <Column Name="EmergencyContactId" DataType="System.Int32"/>
+        <Column Name="Ethnicity" DataType="System.Int32"/>
+        <Column Name="FullAddress" DataType="System.String"/>
+        <Column Name="LastModifiedBy" DataType="System.String"/>
+        <Column Name="LastModifiedOn" DataType="System.DateTime"/>
+        <Column Name="LegalGuardianId" DataType="System.Int32"/>
+        <Column Name="MaritalStatus" DataType="System.Int32"/>
+        <Column Name="MedicaidID" DataType="System.String"/>
+        <Column Name="OtherLanguage" DataType="System.String"/>
+        <Column Name="PhotoPath" DataType="System.String"/>
+        <Column Name="PreferredLanguage" DataType="System.Int32"/>
+        <Column Name="PsychiatristId" DataType="System.Int32"/>
+        <Column Name="Race" DataType="System.Int32"/>
+        <Column Name="ReferredId" DataType="System.Int32"/>
+        <Column Name="SSN" DataType="System.String"/>
+        <Column Name="SignPath" DataType="System.String"/>
+        <Column Name="State" DataType="System.String"/>
+        <Column Name="Telephone" DataType="System.String"/>
+        <Column Name="TelephoneSecondary" DataType="System.String"/>
+        <Column Name="RelationShipOfLegalGuardian" DataType="System.Int32"/>
+        <Column Name="Service" DataType="System.Int32"/>
+        <Column Name="IndividualTherapyFacilitatorId" DataType="System.Int32"/>
+        <Column Name="AdmisionDate" DataType="System.DateTime"/>
+        <Column Name="PlaceOfBirth" DataType="System.String"/>
+        <Column Name="RelationShipOfEmergencyContact" DataType="System.Int32"/>
+        <Column Name="MedicareId" DataType="System.String" PropName="Column"/>
+      </TableDataSource>
+      <TableDataSource Name="Classifications" Alias="Signatures" DataType="System.Int32" Enabled="true" TableName="Classifications">
+        <Column Name="supervisorSignature" DataType="System.Byte[]" PropName="Id"/>
+        <Column Name="facilitatorSignature" DataType="System.Byte[]" PropName="Name"/>
+      </TableDataSource>
+      <TableDataSource Name="TCMIntakeMedicalHistory" DataType="System.Int32" PropName="TCMTCMIntakeMedicalHistory" Enabled="true" TableName="TCMIntakeMedicalHistory">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="TCMClient_FK" DataType="System.Int32"/>
+        <Column Name="DateSignatureLegalGuardian" DataType="System.DateTime"/>
+        <Column Name="DateSignaturePerson" DataType="System.DateTime"/>
+        <Column Name="DateSignatureEmployee" DataType="System.DateTime"/>
+        <Column Name="PrimaryCarePhysician" DataType="System.String"/>
+        <Column Name="AddressPhysician" DataType="System.String"/>
+        <Column Name="City" DataType="System.String"/>
+        <Column Name="State" DataType="System.String"/>
+        <Column Name="ZipCode" DataType="System.String"/>
+        <Column Name="Diphtheria" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Mumps" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Poliomyelitis" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="RheumaticFever" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="WhoopingCough" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Tuberculosis" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="ScarletFever" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Hepatitis" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="HighBloodPressure" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="KidneyTrouble" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="KidneyStones" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="BloodInUrine" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="BurningUrine" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="PainfulUrination" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="EyeTrouble" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="HearingTrouble" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Fractures" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="EarInfections" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="FrequentNoseBleeds" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="FrequentSoreThroat" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Hoarseness" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Allergies" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Allergies_Describe" DataType="System.String"/>
+        <Column Name="StomachPain" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="BlackStools" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="NightSweats" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="FrequentVomiting" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="SkinTrouble" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="PainfulMuscles" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="PainfulJoints" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="BackPain" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="SeriousInjury" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Surgery" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Arthritis" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Hemorrhoids" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="WeightLoss" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="FrequentHeadaches" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Fainting" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="ConvulsionsOrFits" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="LossOfMemory" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Nervousness" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="ChronicCough" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="CoughingOfBlood" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="VenerealDisease" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="FrequentColds" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="HeartPalpitation" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="ChestPain" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="ShortnessOfBreath" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="SwellingOfFeet" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="SwollenAnkles" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="ChronicIndigestion" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="VomitingOfBlood" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Jaundice" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Constipation" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="BloodyStools" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Cancer" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Diabetes" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="HayFever" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Hernia" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="HeadInjury" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Rheumatism" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Epilepsy" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="VaricoseVeins" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Anemia" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="InfectiousDisease" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="FamilyDiabetes" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="FamilyDiabetes_" DataType="System.String"/>
+        <Column Name="FamilyCancer" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="FamilyCancer_" DataType="System.String"/>
+        <Column Name="FamilyTuberculosis" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="FamilyTuberculosis_" DataType="System.String"/>
+        <Column Name="FamilyHeartDisease" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="FamilyHeartDisease_" DataType="System.String"/>
+        <Column Name="FamilyKidneyDisease" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="FamilyKidneyDisease_" DataType="System.String"/>
+        <Column Name="FamilyHighBloodPressure" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="FamilyHighBloodPressure_" DataType="System.String"/>
+        <Column Name="FamilyHayFever" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="FamilyHayFever_" DataType="System.String"/>
+        <Column Name="FamilyAsthma" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="FamilyAsthma_" DataType="System.String"/>
+        <Column Name="FamilyEpilepsy" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="FamilyEpilepsy_" DataType="System.String"/>
+        <Column Name="FamilyGlaucoma" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="FamilyGlaucoma_" DataType="System.String"/>
+        <Column Name="FamilySyphilis" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="FamilySyphilis_" DataType="System.String"/>
+        <Column Name="FamilyNervousDisorders" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="FamilyNervousDisorders_" DataType="System.String"/>
+        <Column Name="FamilyOther" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="FamilyOther_" DataType="System.String"/>
+        <Column Name="HaveYouEverBeenPregnant" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="HaveYouEverHadComplications" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="HaveYouEverHadPainful" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="HaveYouEverHadExcessive" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="HaveYouEverHadSpotting" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="AreYouCurrently" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="AgeOfFirstMenstruation" DataType="System.String"/>
+        <Column Name="UsualDurationOfPeriods" DataType="System.String"/>
+        <Column Name="DateOfLastPelvic" DataType="System.String"/>
+        <Column Name="UsualIntervalBetweenPeriods" DataType="System.String"/>
+        <Column Name="DateOfLastPeriod" DataType="System.String"/>
+        <Column Name="DateOfLastBreastExam" DataType="System.String"/>
+        <Column Name="AdmissionedFor" DataType="System.String"/>
+        <Column Name="AreYouPhysician" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="DoYouSmoke" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="DoYouSmoke_PackPerDay" DataType="System.String"/>
+        <Column Name="DoYouSmoke_Year" DataType="System.String"/>
+        <Column Name="ListAllCurrentMedications" DataType="System.String"/>
+        <Column Name="PerformingCertainMotions" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="AssumingCertainPositions" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Hearing" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Seeing" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Speaking" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Reading" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Concentrating" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Comprehending" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="BeingConfused" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="BeingDisorientated" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Calculating" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="WritingSentence" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Walking" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="InformationProvided" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Planned" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Unplanned" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Normal" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Complications" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Complications_Explain" DataType="System.String"/>
+        <Column Name="BirthWeight" DataType="System.String"/>
+        <Column Name="Length" DataType="System.String"/>
+        <Column Name="BreastFed" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="BottleFedUntilAge" DataType="System.String"/>
+        <Column Name="AgeWeaned" DataType="System.String"/>
+        <Column Name="FirstYearMedical" DataType="System.String"/>
+        <Column Name="AgeFirstWalked" DataType="System.String"/>
+        <Column Name="AgeFirstTalked" DataType="System.String"/>
+        <Column Name="AgeToiletTrained" DataType="System.String"/>
+        <Column Name="DescriptionOfChild" DataType="System.String"/>
+        <Column Name="ProblemWithBedWetting" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="AndOrSoiling" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="Immunizations" DataType="System.String"/>
+        <Column Name="Documents" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="StartTime" DataType="System.DateTime"/>
+        <Column Name="EndTime" DataType="System.DateTime"/>
+        <Column Name="CreatedBy" DataType="System.String"/>
+        <Column Name="CreatedOn" DataType="System.DateTime"/>
+        <Column Name="LastModifiedBy" DataType="System.String"/>
+        <Column Name="LastModifiedOn" DataType="System.DateTime"/>
+      </TableDataSource>
+      <TableDataSource Name="TCMClient" DataType="System.Int32" Enabled="true" TableName="TCMClient">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="CasemanagerId" DataType="System.Int32"/>
+        <Column Name="CaseNumber" DataType="System.String"/>
+        <Column Name="ClientId" DataType="System.Int32"/>
+        <Column Name="DataClose" DataType="System.DateTime"/>
+        <Column Name="DataOpen" DataType="System.DateTime"/>
+        <Column Name="Period" DataType="System.Int32"/>
+        <Column Name="Status" DataType="System.Int32"/>
+        <Column Name="CreatedBy" DataType="System.String"/>
+        <Column Name="CreatedOn" DataType="System.DateTime"/>
+        <Column Name="LastModifiedBy" DataType="System.String"/>
+        <Column Name="LastModifiedOn" DataType="System.DateTime"/>
+        <Column Name="Younger" DataType="System.Boolean" BindableControl="CheckBox"/>
+      </TableDataSource>
+      <TableDataSource Name="TCMAssessmentMedication" DataType="System.Int32" Enabled="true" TableName="TCMAssessmentMedication">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="TcmAssessmentId" DataType="System.Int32"/>
+        <Column Name="ReasonPurpose" DataType="System.String"/>
+        <Column Name="Name" DataType="System.String"/>
+        <Column Name="Dosage" DataType="System.String"/>
+        <Column Name="Frequency" DataType="System.String"/>
+        <Column Name="Prescriber" DataType="System.String"/>
+        <Column Name="CreatedBy" DataType="System.String"/>
+        <Column Name="CreatedOn" DataType="System.DateTime"/>
+        <Column Name="LastModifiedBy" DataType="System.String"/>
+        <Column Name="LastModifiedOn" DataType="System.DateTime"/>
+      </TableDataSource>
+    </MsSqlDataConnection>
+  </Dictionary>
+  <ReportPage Name="Page14" PaperWidth="215.9" PaperHeight="279.4" RawPaperSize="1" LeftMargin="5" TopMargin="5" RightMargin="5" BottomMargin="5" Watermark.Enabled="true" Watermark.Font="Arial, 60pt">
+    <PageHeaderBand Name="PageHeader14" Width="778.3" Height="89.59">
+      <TextObject Name="Textbox12" Left="125.75" Top="22.9" Width="525.65" Height="20" CanGrow="true" Text="[Clinics.Name]" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 12pt, style=Bold"/>
+      <TextObject Name="Textbox64" Left="125.75" Top="42.78" Width="525.65" Height="22" CanGrow="true" Text="TCM Medical History" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 11pt, style=Bold"/>
+      <LineObject Name="Line3" Left="124.3" Top="12" Height="65.55"/>
+      <PictureObject Name="Picture1" Left="7.45" Top="10.45" Width="103.95" Height="66.15"/>
+      <LineObject Name="Line9" Left="125.3" Top="11" Height="66.15"/>
+    </PageHeaderBand>
+    <DataBand Name="Data14" Top="93.44" Width="778.3" Height="737.1" DataSource="Clients">
+      <TextObject Name="Text399" Top="19.25" Width="160.65" Height="18.9" Text="Recipient:" HorzAlign="Right" VertAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text400" Top="38.15" Width="160.65" Height="18.9" Text="Primary Care Physician:" HorzAlign="Right" VertAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text401" Left="500.85" Top="19.25" Width="75.6" Height="18.9" Text="Case No:" HorzAlign="Right" VertAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text402" Top="57.05" Width="160.65" Height="18.9" Text="Address Physician:" HorzAlign="Right" VertAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text403" Top="76.95" Width="160.65" Height="18.9" Text="City:" HorzAlign="Right" VertAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text404" Left="396.9" Top="75.95" Width="47.25" Height="18.9" Text="State:" HorzAlign="Right" VertAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text405" Left="633.15" Top="75.95" Width="37.8" Height="18.9" Text="Zip:" HorzAlign="Right" VertAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text406" Left="160.65" Top="19.25" Width="340.2" Height="18.9" Text="[Clients.Name]" VertAlign="Center" Font="Arial, 10pt, style=Underline"/>
+      <TextObject Name="Text407" Left="576.45" Top="19.25" Width="198.45" Height="18.9" Text="[TCMClient.CaseNumber]" VertAlign="Center" Font="Arial, 10pt, style=Underline"/>
+      <TextObject Name="Text408" Left="160.65" Top="38.15" Width="340.2" Height="18.9" Text="[TCMIntakeMedicalHistory.PrimaryCarePhysician]" VertAlign="Center" Font="Arial, 10pt, style=Underline"/>
+      <TextObject Name="Text409" Left="160.65" Top="57.05" Width="614.25" Height="18.9" Text="[TCMIntakeMedicalHistory.AddressPhysician]" VertAlign="Center" Font="Arial, 10pt, style=Underline"/>
+      <TextObject Name="Text410" Left="160.65" Top="75.95" Width="236.25" Height="18.9" Text="[TCMIntakeMedicalHistory.City]" VertAlign="Center" Font="Arial, 10pt, style=Underline"/>
+      <TextObject Name="Text411" Left="444.15" Top="75.95" Width="189" Height="18.9" Text="[TCMIntakeMedicalHistory.State]" VertAlign="Center" Font="Arial, 10pt, style=Underline"/>
+      <TextObject Name="Text412" Left="670.95" Top="75.95" Width="103.95" Height="18.9" Text="[TCMIntakeMedicalHistory.ZipCode]" VertAlign="Center" Font="Arial, 10pt, style=Underline"/>
+      <TableObject Name="Table39" Top="122.85" Width="774.9" Height="538.65" Border.Lines="All">
+        <TableColumn Name="Column119" Width="48.3"/>
+        <TableColumn Name="Column120" Width="48.3"/>
+        <TableColumn Name="Column121" Width="152.25"/>
+        <TableColumn Name="Column122" Width="48.3"/>
+        <TableColumn Name="Column125" Width="48.3"/>
+        <TableColumn Name="Column124" Width="142.8"/>
+        <TableColumn Name="Column127" Width="48.3"/>
+        <TableColumn Name="Column126" Width="48.3"/>
+        <TableColumn Name="Column123" Width="190.05"/>
+        <TableRow Name="Row137" Height="47.25">
+          <TableCell Name="Cell535" Text="&lt;b&gt;SECTION I. &lt;/b&gt;   Select YES or No next to any medical problem that you currently have or have had in the past. If you do not understand an item, please ask for assistance." VertAlign="Center" Font="Arial, 10pt" TextRenderType="HtmlTags" ColSpan="9"/>
+          <TableCell Name="Cell536" Font="Arial, 10pt"/>
+          <TableCell Name="Cell537" Font="Arial, 10pt"/>
+          <TableCell Name="Cell538" Font="Arial, 10pt"/>
+          <TableCell Name="Cell539" Font="Arial, 10pt"/>
+          <TableCell Name="Cell540" Font="Arial, 10pt"/>
+          <TableCell Name="Cell541" Font="Arial, 10pt"/>
+          <TableCell Name="Cell542" Font="Arial, 10pt"/>
+          <TableCell Name="Cell543" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row122" Height="19.53">
+          <TableCell Name="Cell400" Border.Lines="All" Text="YES" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+          <TableCell Name="Cell401" Border.Lines="All" Text="NO" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+          <TableCell Name="Cell402" Border.Lines="All" HorzAlign="Center" Font="Arial, 10pt"/>
+          <TableCell Name="Cell403" Border.Lines="All" Text="YES" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+          <TableCell Name="Cell430" Border.Lines="All" Text="NO" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+          <TableCell Name="Cell425" Border.Lines="All" HorzAlign="Center" Font="Arial, 10pt"/>
+          <TableCell Name="Cell440" Border.Lines="All" Text="YES" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+          <TableCell Name="Cell435" Border.Lines="All" Text="NO" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+          <TableCell Name="Cell404" Border.Lines="All" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row123" Height="19.53">
+          <TableCell Name="Cell405" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox139" Left="18.45" Top="4" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.Diphtheria"/>
+          </TableCell>
+          <TableCell Name="Cell406" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox140" Left="18.35" Top="4" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.Diphtheria] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell407" Border.Lines="All" Text="Diphtheria" Font="Arial, 10pt"/>
+          <TableCell Name="Cell408" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox183" Left="16.9" Top="4" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.StomachPain"/>
+          </TableCell>
+          <TableCell Name="Cell431" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox184" Left="17.85" Top="4" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.StomachPain] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell426" Border.Lines="All" Text="Stomach Pain" Font="Arial, 10pt"/>
+          <TableCell Name="Cell441" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox225" Left="16.9" Top="4" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.FrequentColds"/>
+          </TableCell>
+          <TableCell Name="Cell436" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox226" Left="17.85" Top="4" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.FrequentColds] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell409" Border.Lines="All" Text="Frequent Colds" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row124" Height="19.53">
+          <TableCell Name="Cell410" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox141" Left="18.52" Top="3.45" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.Mumps"/>
+          </TableCell>
+          <TableCell Name="Cell411" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox142" Left="18.52" Top="3.45" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.Mumps] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell412" Border.Lines="All" Text="Mumps" Font="Arial, 10pt"/>
+          <TableCell Name="Cell413" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox185" Left="16.97" Top="4.08" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.BlackStools"/>
+          </TableCell>
+          <TableCell Name="Cell432" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox186" Left="18.02" Top="4.08" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.BlackStools]== true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell427" Border.Lines="All" Text="Black Stools" Font="Arial, 10pt"/>
+          <TableCell Name="Cell442" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox227" Left="16.97" Top="4.08" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.HeartPalpitation"/>
+          </TableCell>
+          <TableCell Name="Cell437" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox228" Left="18.02" Top="4.08" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.HeartPalpitation] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell414" Border.Lines="All" Text="Heart Palpitation" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row125" Height="19.53">
+          <TableCell Name="Cell415" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox143" Left="18.52" Top="3.9" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.Poliomyelitis"/>
+          </TableCell>
+          <TableCell Name="Cell416" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox144" Left="18.52" Top="3.45" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.Poliomyelitis] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell417" Border.Lines="All" Text="Poliomyelitis" Font="Arial, 10pt"/>
+          <TableCell Name="Cell418" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox187" Left="16.97" Top="4.16" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.NightSweats"/>
+          </TableCell>
+          <TableCell Name="Cell433" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox188" Left="18.02" Top="3.71" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.NightSweats] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell428" Border.Lines="All" Text="Night Sweats" Font="Arial, 10pt"/>
+          <TableCell Name="Cell443" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox229" Left="16.97" Top="4.16" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.ChestPain"/>
+          </TableCell>
+          <TableCell Name="Cell438" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox230" Left="18.02" Top="3.71" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.ChestPain] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell419" Border.Lines="All" Text="Chest Pain" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row130" Height="19.53">
+          <TableCell Name="Cell472" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox145" Left="18.52" Top="3.45" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.RheumaticFever"/>
+          </TableCell>
+          <TableCell Name="Cell473" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox146" Left="18.52" Top="3.45" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.RheumaticFever] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell474" Border.Lines="All" Text="Rheumatic Fever " Font="Arial, 10pt"/>
+          <TableCell Name="Cell475" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox189" Left="16.97" Top="4.34" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.FrequentVomiting"/>
+          </TableCell>
+          <TableCell Name="Cell476" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox190" Left="18.02" Top="4.34" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.FrequentVomiting] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell477" Border.Lines="All" Text="Frequent Vomiting" Font="Arial, 10pt"/>
+          <TableCell Name="Cell478" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox231" Left="16.97" Top="4.34" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.ShortnessOfBreath"/>
+          </TableCell>
+          <TableCell Name="Cell479" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox232" Left="18.02" Top="4.34" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.ShortnessOfBreath] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell480" Border.Lines="All" Text="Shortness of Breath" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row129" Height="19.53">
+          <TableCell Name="Cell463" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox147" Left="18.52" Top="3.53" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.WhoopingCough"/>
+          </TableCell>
+          <TableCell Name="Cell464" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox148" Left="18.52" Top="3.53" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.WhoopingCough] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell465" Border.Lines="All" Text="Whooping Cough" Font="Arial, 10pt"/>
+          <TableCell Name="Cell466" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox191" Left="16.97" Top="4.05" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.SkinTrouble"/>
+          </TableCell>
+          <TableCell Name="Cell467" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox192" Left="18.02" Top="4.05" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.SkinTrouble] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell468" Border.Lines="All" Text="Skin Trouble" Font="Arial, 10pt"/>
+          <TableCell Name="Cell469" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox233" Left="16.97" Top="4.05" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.SwellingOfFeet"/>
+          </TableCell>
+          <TableCell Name="Cell470" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox234" Left="18.02" Top="4.05" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.SwellingOfFeet] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell471" Border.Lines="All" Text="Swelling of Feet" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row128" Height="19.53">
+          <TableCell Name="Cell454" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox149" Left="18.52" Top="4.61" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.Tuberculosis"/>
+          </TableCell>
+          <TableCell Name="Cell455" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox150" Left="18.52" Top="4.16" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.Tuberculosis] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell456" Border.Lines="All" Text="Tuberculosis " Font="Arial, 10pt"/>
+          <TableCell Name="Cell457" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox193" Left="16.97" Top="3.76" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.PainfulMuscles"/>
+          </TableCell>
+          <TableCell Name="Cell458" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox194" Left="18.02" Top="4.31" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.PainfulMuscles] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell459" Border.Lines="All" Text="Painful Muscles" Font="Arial, 10pt"/>
+          <TableCell Name="Cell460" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox235" Left="16.97" Top="3.76" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.SwollenAnkles"/>
+          </TableCell>
+          <TableCell Name="Cell461" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox236" Left="18.02" Top="4.31" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.SwollenAnkles] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell462" Border.Lines="All" Text="Swollen Ankles" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row127" Height="19.53">
+          <TableCell Name="Cell445" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox151" Left="18.52" Top="5" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.ScarletFever"/>
+          </TableCell>
+          <TableCell Name="Cell446" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox152" Left="18.52" Top="5" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.ScarletFever] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell447" Border.Lines="All" Text="Scarlet Fever" Font="Arial, 10pt"/>
+          <TableCell Name="Cell448" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox195" Left="16.97" Top="3.78" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.PainfulJoints"/>
+          </TableCell>
+          <TableCell Name="Cell449" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox196" Left="18.02" Top="3.78" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.PainfulJoints] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell450" Border.Lines="All" Text="Painful Joints" Font="Arial, 10pt"/>
+          <TableCell Name="Cell451" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox237" Left="16.97" Top="3.78" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.ChronicIndigestion"/>
+          </TableCell>
+          <TableCell Name="Cell452" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox238" Left="18.02" Top="3.78" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.ChronicIndigestion] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell453" Border.Lines="All" Text="Chronic Indigestion" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row136" Height="19.53">
+          <TableCell Name="Cell526" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox153" Left="18.52" Top="4.53" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.Hepatitis"/>
+          </TableCell>
+          <TableCell Name="Cell527" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox154" Left="18.52" Top="4.53" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.Hepatitis] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell528" Border.Lines="All" Text="Hepatitis" Font="Arial, 10pt"/>
+          <TableCell Name="Cell529" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox197" Left="16.97" Top="3.94" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.BackPain"/>
+          </TableCell>
+          <TableCell Name="Cell530" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox198" Left="18.02" Top="3.94" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.BackPain] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell531" Border.Lines="All" Text="Back Pain" Font="Arial, 10pt"/>
+          <TableCell Name="Cell532" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox239" Left="16.97" Top="3.94" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.VomitingOfBlood"/>
+          </TableCell>
+          <TableCell Name="Cell533" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox240" Left="18.02" Top="3.94" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.VomitingOfBlood] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell534" Border.Lines="All" Text="Vomiting of Blood" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row135" Height="19.53">
+          <TableCell Name="Cell517" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox155" Left="18.52" Top="4.61" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.HighBloodPressure"/>
+          </TableCell>
+          <TableCell Name="Cell518" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox156" Left="18.52" Top="4.71" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.HighBloodPressure] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell519" Border.Lines="All" Text="High Blood Pressure" Font="Arial, 10pt"/>
+          <TableCell Name="Cell520" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox199" Left="16.97" Top="4.65" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.SeriousInjury"/>
+          </TableCell>
+          <TableCell Name="Cell521" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox200" Left="18.02" Top="4.75" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.SeriousInjury] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell522" Border.Lines="All" Text="Serious Injury" Font="Arial, 10pt"/>
+          <TableCell Name="Cell523" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox241" Left="16.97" Top="4.2" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.Jaundice"/>
+          </TableCell>
+          <TableCell Name="Cell524" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox242" Left="18.02" Top="4.3" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.Jaundice] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell525" Border.Lines="All" Text="Jaundice (Yellowing of Skin)" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row134" Height="19.53">
+          <TableCell Name="Cell508" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox157" Left="18.52" Top="4.34" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.KidneyTrouble"/>
+          </TableCell>
+          <TableCell Name="Cell509" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox158" Left="18.52" Top="4.34" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.KidneyTrouble] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell510" Border.Lines="All" Text="Kidney Trouble" Font="Arial, 10pt"/>
+          <TableCell Name="Cell511" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox201" Left="16.97" Top="4.01" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.Surgery"/>
+          </TableCell>
+          <TableCell Name="Cell512" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox202" Left="18.02" Top="4.01" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.Surgery] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell513" Border.Lines="All" Text="Surgery" Font="Arial, 10pt"/>
+          <TableCell Name="Cell514" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox243" Left="16.97" Top="4.56" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.Constipation"/>
+          </TableCell>
+          <TableCell Name="Cell515" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox244" Left="18.02" Top="4.56" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.Constipation] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell516" Border.Lines="All" Text="Constipation" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row133" Height="19.53">
+          <TableCell Name="Cell499" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox159" Left="18.52" Top="4.05" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.KidneyStones"/>
+          </TableCell>
+          <TableCell Name="Cell500" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox160" Left="18.52" Top="4.05" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.KidneyStones] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell501" Border.Lines="All" Text="Kidney Stones" Font="Arial, 10pt"/>
+          <TableCell Name="Cell502" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox203" Left="16.97" Top="4.35" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.Arthritis"/>
+          </TableCell>
+          <TableCell Name="Cell503" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox204" Left="18.02" Top="4.35" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.Arthritis] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell504" Border.Lines="All" Text="Arthritis" Font="Arial, 10pt"/>
+          <TableCell Name="Cell505" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox245" Left="16.97" Top="4.35" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.BloodyStools"/>
+          </TableCell>
+          <TableCell Name="Cell506" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox246" Left="18.02" Top="4.35" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.BloodyStools] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell507" Border.Lines="All" Text="Bloody Stools" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row132" Height="19.53">
+          <TableCell Name="Cell490" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox161" Left="18.52" Top="4.76" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.BloodInUrine"/>
+          </TableCell>
+          <TableCell Name="Cell491" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox162" Left="18.52" Top="4.31" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.BloodInUrine] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell492" Border.Lines="All" Text="Blood in Urine" Font="Arial, 10pt"/>
+          <TableCell Name="Cell493" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox205" Left="16.97" Top="4.69" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.Hemorrhoids"/>
+          </TableCell>
+          <TableCell Name="Cell494" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox206" Left="18.02" Top="4.24" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.Hemorrhoids] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell495" Border.Lines="All" Text="Hemorrhoids" Font="Arial, 10pt"/>
+          <TableCell Name="Cell496" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox247" Left="16.97" Top="4.69" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.Cancer"/>
+          </TableCell>
+          <TableCell Name="Cell497" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox248" Left="18.02" Top="4.24" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.Cancer] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell498" Border.Lines="All" Text="Cancer" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row131" Height="19.53">
+          <TableCell Name="Cell481" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox163" Left="18.52" Top="4.45" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.BurningUrine"/>
+          </TableCell>
+          <TableCell Name="Cell482" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox164" Left="18.52" Top="5" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.BurningUrine] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell483" Border.Lines="All" Text="Burning Urine" Font="Arial, 10pt"/>
+          <TableCell Name="Cell484" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox207" Left="16.97" Top="4.01" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.WeightLoss"/>
+          </TableCell>
+          <TableCell Name="Cell485" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox208" Left="18.02" Top="4.11" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.WeightLoss] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell486" Border.Lines="All" Text="Weight Loss" Font="Arial, 10pt"/>
+          <TableCell Name="Cell487" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox249" Left="16.97" Top="4.56" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.Diabetes"/>
+          </TableCell>
+          <TableCell Name="Cell488" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox250" Left="18.02" Top="4.11" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.Diabetes] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell489" Border.Lines="All" Text="Diabetes" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row126" Height="19.53">
+          <TableCell Name="Cell420" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox165" Left="18.52" Top="5.63" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.PainfulUrination"/>
+          </TableCell>
+          <TableCell Name="Cell421" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox166" Left="18.52" Top="5.63" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.PainfulUrination] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell422" Border.Lines="All" Text="Painful Urination" Font="Arial, 10pt"/>
+          <TableCell Name="Cell423" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox209" Left="16.97" Top="4.82" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.FrequentHeadaches"/>
+          </TableCell>
+          <TableCell Name="Cell434" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox210" Left="18.02" Top="4.37" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.FrequentHeadaches] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell429" Border.Lines="All" Text="Frequent Headaches" Font="Arial, 10pt"/>
+          <TableCell Name="Cell444" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox251" Left="16.97" Top="4.37" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.HayFever"/>
+          </TableCell>
+          <TableCell Name="Cell439" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox252" Left="18.02" Top="4.37" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.HayFever] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell424" Border.Lines="All" Text="Hay Fever" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row138">
+          <TableCell Name="Cell544" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox167" Left="18.52" Top="4.34" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.EyeTrouble"/>
+          </TableCell>
+          <TableCell Name="Cell545" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox168" Left="18.52" Top="4.34" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.EyeTrouble] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell546" Border.Lines="All" Text="Eye Trouble" Font="Arial, 10pt"/>
+          <TableCell Name="Cell547" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox211" Left="16.97" Top="3.61" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.Fainting"/>
+          </TableCell>
+          <TableCell Name="Cell548" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox212" Left="18.02" Top="3.61" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.Fainting] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell549" Border.Lines="All" Text="Fainting" Font="Arial, 10pt"/>
+          <TableCell Name="Cell550" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox253" Left="16.97" Top="3.71" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.Hernia"/>
+          </TableCell>
+          <TableCell Name="Cell551" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox254" Left="18.02" Top="3.71" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.Hernia] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell552" Border.Lines="All" Text="Hernia" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row139">
+          <TableCell Name="Cell553" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox169" Left="18.52" Top="4.05" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.HearingTrouble"/>
+          </TableCell>
+          <TableCell Name="Cell554" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox170" Left="18.52" Top="4.6" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.HearingTrouble] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell555" Border.Lines="All" Text="Hearing Trouble " Font="Arial, 10pt"/>
+          <TableCell Name="Cell556" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox213" Left="16.97" Top="4.32" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.ConvulsionsOrFits"/>
+          </TableCell>
+          <TableCell Name="Cell557" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox214" Left="18.02" Top="3.87" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.ConvulsionsOrFits] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell558" Border.Lines="All" Text="Convulsions or Fits" Font="Arial, 10pt"/>
+          <TableCell Name="Cell559" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox255" Left="16.97" Top="3.42" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.HeadInjury"/>
+          </TableCell>
+          <TableCell Name="Cell560" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox256" Left="18.02" Top="2.97" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.HeadInjury] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell561" Border.Lines="All" Text="Head Injury " Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row140">
+          <TableCell Name="Cell562" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox171" Left="18.52" Top="4.07" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.Fractures"/>
+          </TableCell>
+          <TableCell Name="Cell563" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox172" Left="18.52" Top="4.07" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.Fractures] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell564" Border.Lines="All" Text="Fractures" Font="Arial, 10pt"/>
+          <TableCell Name="Cell565" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox215" Left="16.97" Top="4.44" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.LossOfMemory"/>
+          </TableCell>
+          <TableCell Name="Cell566" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox216" Left="18.02" Top="4.44" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.LossOfMemory] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell567" Border.Lines="All" Text="Loss of Memory" Font="Arial, 10pt"/>
+          <TableCell Name="Cell568" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox257" Left="16.97" Top="3.44" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.Rheumatism"/>
+          </TableCell>
+          <TableCell Name="Cell569" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox258" Left="18.02" Top="3.44" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.Rheumatism] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell570" Border.Lines="All" Text="Rheumatism" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row141">
+          <TableCell Name="Cell571" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox173" Left="18.52" Top="4.23" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.EarInfections"/>
+          </TableCell>
+          <TableCell Name="Cell572" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox174" Left="18.52" Top="4.23" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.EarInfections] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell573" Border.Lines="All" Text="Ear Infections " Font="Arial, 10pt"/>
+          <TableCell Name="Cell574" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox217" Left="16.97" Top="4.05" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.Nervousness"/>
+          </TableCell>
+          <TableCell Name="Cell575" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox218" Left="18.02" Top="4.05" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.Nervousness] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell576" Border.Lines="All" Text="Nervousness" Font="Arial, 10pt"/>
+          <TableCell Name="Cell577" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox259" Left="16.97" Top="3.6" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.Epilepsy"/>
+          </TableCell>
+          <TableCell Name="Cell578" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox260" Left="18.02" Top="3.6" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.Epilepsy] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell579" Border.Lines="All" Text="Epilepsy" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row142">
+          <TableCell Name="Cell580" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox175" Left="18.52" Top="3.94" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.FrequentNoseBleeds"/>
+          </TableCell>
+          <TableCell Name="Cell581" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox176" Left="18.52" Top="4.04" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.FrequentNoseBleeds] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell582" Border.Lines="All" Text="Frequent Nose Bleeds" Font="Arial, 10pt"/>
+          <TableCell Name="Cell583" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox219" Left="16.97" Top="3.76" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.ChronicCough"/>
+          </TableCell>
+          <TableCell Name="Cell584" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox220" Left="18.02" Top="3.86" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.ChronicCough] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell585" Border.Lines="All" Text="Chronic Cough" Font="Arial, 10pt"/>
+          <TableCell Name="Cell586" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox261" Left="16.97" Top="3.31" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.VaricoseVeins"/>
+          </TableCell>
+          <TableCell Name="Cell587" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox262" Left="18.02" Top="3.41" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.VaricoseVeins] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell588" Border.Lines="All" Text="Varicose Veins " Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row143">
+          <TableCell Name="Cell589" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox177" Left="18.52" Top="4.3" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.FrequentSoreThroat"/>
+          </TableCell>
+          <TableCell Name="Cell590" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox178" Left="18.52" Top="4.3" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.FrequentSoreThroat] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell591" Border.Lines="All" Text="Frequent Sore Throat" Font="Arial, 10pt"/>
+          <TableCell Name="Cell592" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox221" Left="16.97" Top="4.12" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.CoughingOfBlood"/>
+          </TableCell>
+          <TableCell Name="Cell593" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox222" Left="18.02" Top="4.12" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.CoughingOfBlood] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell594" Border.Lines="All" Text="Coughing of Blood" Font="Arial, 10pt"/>
+          <TableCell Name="Cell595" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox263" Left="16.97" Top="3.67" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.Anemia"/>
+          </TableCell>
+          <TableCell Name="Cell596" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox264" Left="18.02" Top="3.67" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.Anemia] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell597" Border.Lines="All" Text="Anemia" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row144">
+          <TableCell Name="Cell598" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox179" Left="18.52" Top="4.64" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.Hoarseness"/>
+          </TableCell>
+          <TableCell Name="Cell599" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox180" Left="18.52" Top="4.64" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.Hoarseness] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell600" Border.Lines="All" Text="Hoarseness" Font="Arial, 10pt"/>
+          <TableCell Name="Cell601" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox223" Left="16.97" Top="4.46" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.VenerealDisease"/>
+          </TableCell>
+          <TableCell Name="Cell602" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox224" Left="18.02" Top="4.46" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.VenerealDisease] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell603" Border.Lines="All" Text="Venereal Disease" Font="Arial, 10pt"/>
+          <TableCell Name="Cell604" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox265" Left="16.97" Top="4.01" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.InfectiousDisease"/>
+          </TableCell>
+          <TableCell Name="Cell605" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox266" Left="18.02" Top="4.01" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.InfectiousDisease] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell606" Border.Lines="All" Text="Infectious Disease" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row145" Height="66.15">
+          <TableCell Name="Cell607" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox181" Left="18.52" Top="5.43" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.Allergies"/>
+          </TableCell>
+          <TableCell Name="Cell608" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox182" Left="18.52" Top="4.98" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.Allergies] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell609" Border.Lines="All" Text="Allergies (including medications) If Yes, describe: [TCMIntakeMedicalHistory.Allergies_Describe]" Font="Arial, 10pt" ColSpan="7"/>
+          <TableCell Name="Cell610" Border.Lines="All" Font="Arial, 10pt"/>
+          <TableCell Name="Cell611" Border.Lines="All" Font="Arial, 10pt"/>
+          <TableCell Name="Cell612" Border.Lines="All" Font="Arial, 10pt"/>
+          <TableCell Name="Cell613" Border.Lines="All" Font="Arial, 10pt"/>
+          <TableCell Name="Cell614" Border.Lines="All" Font="Arial, 10pt"/>
+          <TableCell Name="Cell615" Border.Lines="All" Font="Arial, 10pt"/>
+        </TableRow>
+      </TableObject>
+    </DataBand>
+  </ReportPage>
+  <ReportPage Name="Page15" PaperWidth="215.9" PaperHeight="279.4" RawPaperSize="1" LeftMargin="5" TopMargin="5" RightMargin="5" BottomMargin="5" Watermark.Enabled="true" Watermark.Font="Arial, 60pt">
+    <PageHeaderBand Name="PageHeader15" Width="778.3" Height="89.59">
+      <TextObject Name="Text426" Left="125.75" Top="22.9" Width="525.65" Height="20" CanGrow="true" Text="[Clinics.Name]" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 12pt, style=Bold"/>
+      <TextObject Name="Text427" Left="125.75" Top="42.78" Width="525.65" Height="22" CanGrow="true" Text="TCM Medical History" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 11pt, style=Bold"/>
+      <LineObject Name="Line10" Left="124.3" Top="12" Height="65.55"/>
+      <PictureObject Name="Picture4" Left="7.45" Top="10.45" Width="103.95" Height="66.15"/>
+      <LineObject Name="Line11" Left="125.3" Top="11" Height="66.15"/>
+    </PageHeaderBand>
+    <DataBand Name="Data15" Top="93.44" Width="778.3" Height="755.37">
+      <TextObject Name="Text397" Top="14.74" Width="780.8" Height="22" CanGrow="true" Text="Continued..." Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 11pt, style=Bold"/>
+      <TextObject Name="Text413" Left="9.45" Top="57.08" Width="122.85" Height="18.9" Text="Recipient:" HorzAlign="Right" VertAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text414" Left="510.3" Top="57.08" Width="75.6" Height="18.9" Text="Case No:" HorzAlign="Right" VertAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text415" Left="132.3" Top="57.08" Width="378" Height="18.9" Text="[Clients.Name]" VertAlign="Center" Font="Arial, 10pt, style=Underline"/>
+      <TextObject Name="Text416" Left="585.9" Top="57.08" Width="189" Height="18.9" Text="[TCMClient.CaseNumber]" VertAlign="Center" Font="Arial, 10pt, style=Underline"/>
+      <TableObject Name="Table40" Top="113.4" Width="774.89" Height="320.67" Border.Lines="All">
+        <TableColumn Name="Column128" Width="49.61"/>
+        <TableColumn Name="Column129" Width="49.61"/>
+        <TableColumn Name="Column130" Width="181.91"/>
+        <TableColumn Name="Column133" Width="493.76"/>
+        <TableRow Name="Row146" Height="47.25">
+          <TableCell Name="Cell616" Text="&lt;b&gt;SECTION II &lt;/b&gt;   Has anyone in your family had or been treated for:" VertAlign="Center" Font="Arial, 10pt" TextRenderType="HtmlTags" ColSpan="4"/>
+          <TableCell Name="Cell617" Font="Arial, 10pt"/>
+          <TableCell Name="Cell618" Font="Arial, 10pt"/>
+          <TableCell Name="Cell621" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row147" Height="19.53">
+          <TableCell Name="Cell625" Border.Lines="All" Text="YES" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+          <TableCell Name="Cell626" Border.Lines="All" Text="NO" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+          <TableCell Name="Cell627" Border.Lines="All" HorzAlign="Center" Font="Arial, 10pt"/>
+          <TableCell Name="Cell630" Border.Lines="All" Text=" Who? (Father, mother, sibling, grandparent, etc.)" Font="Arial, 10pt, style=Bold"/>
+        </TableRow>
+        <TableRow Name="Row148" Height="19.53">
+          <TableCell Name="Cell634" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox267" Left="18.45" Top="4" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.FamilyDiabetes"/>
+          </TableCell>
+          <TableCell Name="Cell635" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox268" Left="18.35" Top="4" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.FamilyDiabetes] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell636" Border.Lines="All" Text="Diabetes" Font="Arial, 10pt"/>
+          <TableCell Name="Cell639" Border.Lines="All" Text="[TCMIntakeMedicalHistory.FamilyDiabetes_]" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row149" Height="19.53">
+          <TableCell Name="Cell643" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox273" Left="18.52" Top="3.45" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.FamilyCancer"/>
+          </TableCell>
+          <TableCell Name="Cell644" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox274" Left="18.52" Top="3.45" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.FamilyCancer] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell645" Border.Lines="All" Text="Cancer" Font="Arial, 10pt"/>
+          <TableCell Name="Cell648" Border.Lines="All" Text="[TCMIntakeMedicalHistory.FamilyCancer_]" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row150" Height="19.53">
+          <TableCell Name="Cell652" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox279" Left="18.52" Top="3.9" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.FamilyTuberculosis"/>
+          </TableCell>
+          <TableCell Name="Cell653" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox280" Left="18.52" Top="3.45" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.FamilyTuberculosis] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell654" Border.Lines="All" Text="Tuberculosis" Font="Arial, 10pt"/>
+          <TableCell Name="Cell657" Border.Lines="All" Text="[TCMIntakeMedicalHistory.FamilyTuberculosis_]" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row151" Height="19.53">
+          <TableCell Name="Cell661" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox285" Left="18.52" Top="3.45" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.FamilyHeartDisease"/>
+          </TableCell>
+          <TableCell Name="Cell662" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox286" Left="18.52" Top="3.45" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.FamilyHeartDisease] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell663" Border.Lines="All" Text="Heart Disease" Font="Arial, 10pt"/>
+          <TableCell Name="Cell666" Border.Lines="All" Text="[TCMIntakeMedicalHistory.FamilyHeartDisease_]" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row152" Height="19.53">
+          <TableCell Name="Cell670" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox291" Left="18.52" Top="3.53" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.FamilyKidneyDisease"/>
+          </TableCell>
+          <TableCell Name="Cell671" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox292" Left="18.52" Top="3.53" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.FamilyKidneyDisease] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell672" Border.Lines="All" Text="Kidney Disease " Font="Arial, 10pt"/>
+          <TableCell Name="Cell675" Border.Lines="All" Text="[TCMIntakeMedicalHistory.FamilyKidneyDisease_]" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row153" Height="19.53">
+          <TableCell Name="Cell679" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox297" Left="18.52" Top="4.61" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.FamilyHighBloodPressure"/>
+          </TableCell>
+          <TableCell Name="Cell680" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox298" Left="18.52" Top="4.16" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.FamilyHighBloodPressure] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell681" Border.Lines="All" Text="High Blood Pressure " Font="Arial, 10pt"/>
+          <TableCell Name="Cell684" Border.Lines="All" Text="[TCMIntakeMedicalHistory.FamilyHighBloodPressure_]" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row154" Height="19.53">
+          <TableCell Name="Cell688" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox303" Left="18.52" Top="5" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.FamilyHayFever"/>
+          </TableCell>
+          <TableCell Name="Cell689" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox304" Left="18.52" Top="5" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.FamilyHayFever] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell690" Border.Lines="All" Text="Hay Fever" Font="Arial, 10pt"/>
+          <TableCell Name="Cell693" Border.Lines="All" Text="[TCMIntakeMedicalHistory.FamilyHayFever_]" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row155" Height="19.53">
+          <TableCell Name="Cell697" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox309" Left="18.52" Top="4.53" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.FamilyAsthma"/>
+          </TableCell>
+          <TableCell Name="Cell698" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox310" Left="18.52" Top="4.53" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.FamilyAsthma] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell699" Border.Lines="All" Text="Asthma " Font="Arial, 10pt"/>
+          <TableCell Name="Cell702" Border.Lines="All" Text="[TCMIntakeMedicalHistory.FamilyAsthma_]" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row156" Height="19.53">
+          <TableCell Name="Cell706" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox315" Left="18.52" Top="4.61" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.FamilyEpilepsy"/>
+          </TableCell>
+          <TableCell Name="Cell707" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox316" Left="18.52" Top="4.71" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.FamilyEpilepsy] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell708" Border.Lines="All" Text="Epilepsy " Font="Arial, 10pt"/>
+          <TableCell Name="Cell711" Border.Lines="All" Text="[TCMIntakeMedicalHistory.FamilyEpilepsy_]" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row157" Height="19.53">
+          <TableCell Name="Cell715" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox321" Left="18.52" Top="4.34" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.FamilyGlaucoma"/>
+          </TableCell>
+          <TableCell Name="Cell716" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox322" Left="18.52" Top="4.34" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.FamilyGlaucoma] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell717" Border.Lines="All" Text="Glaucoma " Font="Arial, 10pt"/>
+          <TableCell Name="Cell720" Border.Lines="All" Text="[TCMIntakeMedicalHistory.FamilyGlaucoma_]" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row158" Height="19.53">
+          <TableCell Name="Cell724" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox327" Left="18.52" Top="4.05" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.FamilySyphilis"/>
+          </TableCell>
+          <TableCell Name="Cell725" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox328" Left="18.52" Top="4.05" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.FamilySyphilis] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell726" Border.Lines="All" Text="Syphilis " Font="Arial, 10pt"/>
+          <TableCell Name="Cell729" Border.Lines="All" Text="[TCMIntakeMedicalHistory.FamilySyphilis_]" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row159" Height="19.53">
+          <TableCell Name="Cell733" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox333" Left="18.52" Top="4.76" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.FamilyNervousDisorders"/>
+          </TableCell>
+          <TableCell Name="Cell734" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox334" Left="18.52" Top="4.31" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.FamilyNervousDisorders] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell735" Border.Lines="All" Text="Nervous Disorders " Font="Arial, 10pt"/>
+          <TableCell Name="Cell738" Border.Lines="All" Text="[TCMIntakeMedicalHistory.FamilyNervousDisorders_]" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row160" Height="19.53">
+          <TableCell Name="Cell742" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox339" Left="18.52" Top="4.45" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.FamilyOther"/>
+          </TableCell>
+          <TableCell Name="Cell743" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox340" Left="18.52" Top="5" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.FamilyOther] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell744" Border.Lines="All" Text="Other (Explain) " Font="Arial, 10pt"/>
+          <TableCell Name="Cell747" Border.Lines="All" Text="[TCMIntakeMedicalHistory.FamilyOther_]" Font="Arial, 10pt"/>
+        </TableRow>
+      </TableObject>
+      <TableObject Name="Table41" Top="433.7" Width="775.08" Height="242.55" Border.Lines="All">
+        <TableColumn Name="Column134" Width="49.61"/>
+        <TableColumn Name="Column135" Width="49.61"/>
+        <TableColumn Name="Column136" Width="354.56"/>
+        <TableColumn Name="Column137" Width="103.95"/>
+        <TableColumn Name="Column138" Width="217.35"/>
+        <TableRow Name="Row161" Height="47.25">
+          <TableCell Name="Cell748" Text="&lt;b&gt;SECTION III &lt;/b&gt;   FEMALES ONLY" VertAlign="Center" Font="Arial, 10pt" TextRenderType="HtmlTags" ColSpan="5"/>
+          <TableCell Name="Cell749" Font="Arial, 10pt"/>
+          <TableCell Name="Cell750" Font="Arial, 10pt"/>
+          <TableCell Name="Cell791" Font="Arial, 10pt"/>
+          <TableCell Name="Cell802" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row162" Height="19.53">
+          <TableCell Name="Cell752" Border.Lines="All" Text="YES" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+          <TableCell Name="Cell753" Border.Lines="All" Text="NO" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+          <TableCell Name="Cell754" Border.Lines="All" HorzAlign="Center" Font="Arial, 10pt" ColSpan="3"/>
+          <TableCell Name="Cell792" Border.Lines="All" Font="Arial, 10pt"/>
+          <TableCell Name="Cell803" Border.Lines="All" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row163" Height="19.53">
+          <TableCell Name="Cell756" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox341" Left="18.45" Top="4" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.HaveYouEverBeenPregnant"/>
+          </TableCell>
+          <TableCell Name="Cell757" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox342" Left="18.35" Top="4" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.HaveYouEverBeenPregnant] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell758" Border.Lines="All" Text="Have you ever been pregnant?" Font="Arial, 10pt" ColSpan="3"/>
+          <TableCell Name="Cell793" Border.Lines="All" Font="Arial, 10pt"/>
+          <TableCell Name="Cell804" Border.Lines="All" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row164" Height="19.53">
+          <TableCell Name="Cell760" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox343" Left="18.52" Top="3.45" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.HaveYouEverHadComplications"/>
+          </TableCell>
+          <TableCell Name="Cell761" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox344" Left="18.52" Top="3.45" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.HaveYouEverHadComplications] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell762" Border.Lines="All" Text="Have you ever had complications during a pregnancy?" Font="Arial, 10pt" ColSpan="3"/>
+          <TableCell Name="Cell794" Border.Lines="All" Font="Arial, 10pt"/>
+          <TableCell Name="Cell805" Border.Lines="All" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row165" Height="19.53">
+          <TableCell Name="Cell764" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox345" Left="18.52" Top="3.9" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.HaveYouEverHadPainful"/>
+          </TableCell>
+          <TableCell Name="Cell765" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox346" Left="18.52" Top="3.45" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.HaveYouEverHadPainful] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell766" Border.Lines="All" Text="Have you ever had painful menstruation? " Font="Arial, 10pt" ColSpan="3"/>
+          <TableCell Name="Cell795" Border.Lines="All" Font="Arial, 10pt"/>
+          <TableCell Name="Cell806" Border.Lines="All" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row166" Height="19.53">
+          <TableCell Name="Cell768" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox347" Left="18.52" Top="3.45" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.HaveYouEverHadExcessive"/>
+          </TableCell>
+          <TableCell Name="Cell769" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox348" Left="18.52" Top="3.45" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.HaveYouEverHadExcessive] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell770" Border.Lines="All" Text="Have you ever had excessive menstrual bleeding?" Font="Arial, 10pt" ColSpan="3"/>
+          <TableCell Name="Cell796" Border.Lines="All" Font="Arial, 10pt"/>
+          <TableCell Name="Cell807" Border.Lines="All" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row167" Height="19.53">
+          <TableCell Name="Cell772" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox349" Left="18.52" Top="3.53" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.HaveYouEverHadSpotting"/>
+          </TableCell>
+          <TableCell Name="Cell773" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox350" Left="18.52" Top="3.53" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.HaveYouEverHadSpotting] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell774" Border.Lines="All" Text="Have you ever had spotting or bleeding between periods?" Font="Arial, 10pt" ColSpan="3"/>
+          <TableCell Name="Cell797" Border.Lines="All" Font="Arial, 10pt"/>
+          <TableCell Name="Cell808" Border.Lines="All" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row168" Height="19.53">
+          <TableCell Name="Cell776" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox351" Left="18.52" Top="4.61" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.AreYouCurrently"/>
+          </TableCell>
+          <TableCell Name="Cell777" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox352" Left="18.52" Top="4.16" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.AreYouCurrently] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell778" Border.Lines="All" Text="Are you currently on a form of contraceptive?" Font="Arial, 10pt" ColSpan="3"/>
+          <TableCell Name="Cell798" Border.Lines="All" Font="Arial, 10pt"/>
+          <TableCell Name="Cell809" Border.Lines="All" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row169" Height="19.53">
+          <TableCell Name="Cell780" Border.Lines="All" Text="[TCMIntakeMedicalHistory.AgeOfFirstMenstruation]" HorzAlign="Center" Font="Arial, 10pt" ColSpan="2"/>
+          <TableCell Name="Cell781" Border.Lines="All" Font="Arial, 10pt"/>
+          <TableCell Name="Cell782" Border.Lines="All" Text="Age of first menstruation" Font="Arial, 10pt"/>
+          <TableCell Name="Cell799" Border.Lines="All" Text="[TCMIntakeMedicalHistory.UsualIntervalBetweenPeriods]" HorzAlign="Center" Font="Arial, 10pt"/>
+          <TableCell Name="Cell810" Border.Lines="All" Text="Usual interval between periods" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row170" Height="19.53">
+          <TableCell Name="Cell784" Border.Lines="All" Text="[TCMIntakeMedicalHistory.UsualDurationOfPeriods]" HorzAlign="Center" Font="Arial, 10pt" ColSpan="2"/>
+          <TableCell Name="Cell785" Border.Lines="All" Font="Arial, 10pt"/>
+          <TableCell Name="Cell786" Border.Lines="All" Text="Usual duration of periods " Font="Arial, 10pt"/>
+          <TableCell Name="Cell800" Border.Lines="All" Text="[TCMIntakeMedicalHistory.DateOfLastPeriod]" Format="Date" Format.Format="d" HorzAlign="Center" Font="Arial, 10pt"/>
+          <TableCell Name="Cell811" Border.Lines="All" Text="Date of last period " Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row171" Height="19.53">
+          <TableCell Name="Cell788" Border.Lines="All" Text="[TCMIntakeMedicalHistory.DateOfLastPelvic]" Format="Date" Format.Format="d" HorzAlign="Center" Font="Arial, 10pt" ColSpan="2"/>
+          <TableCell Name="Cell789" Border.Lines="All" Font="Arial, 10pt"/>
+          <TableCell Name="Cell790" Border.Lines="All" Text="Date of last pelvic exam (PAP)" Font="Arial, 10pt"/>
+          <TableCell Name="Cell801" Border.Lines="All" Text="[TCMIntakeMedicalHistory.DateOfLastBreastExam]" Format="Date" Format.Format="d" HorzAlign="Center" Font="Arial, 10pt"/>
+          <TableCell Name="Cell812" Border.Lines="All" Text="Date of last breast exam " Font="Arial, 10pt"/>
+        </TableRow>
+      </TableObject>
+    </DataBand>
+  </ReportPage>
+  <ReportPage Name="Page16" PaperWidth="215.9" PaperHeight="279.4" RawPaperSize="1" LeftMargin="5" TopMargin="5" RightMargin="5" BottomMargin="5" Watermark.Enabled="true" Watermark.Font="Arial, 60pt">
+    <PageHeaderBand Name="PageHeader16" Width="778.3" Height="89.59">
+      <TextObject Name="Text428" Left="125.75" Top="22.9" Width="525.65" Height="20" CanGrow="true" Text="[Clinics.Name]" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 12pt, style=Bold"/>
+      <TextObject Name="Text429" Left="125.75" Top="42.78" Width="525.65" Height="22" CanGrow="true" Text="TCM Medical History" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 11pt, style=Bold"/>
+      <LineObject Name="Line12" Left="124.3" Top="12" Height="65.55"/>
+      <PictureObject Name="Picture5" Left="7.45" Top="10.45" Width="103.95" Height="66.15"/>
+      <LineObject Name="Line13" Left="125.3" Top="11" Height="66.15"/>
+    </PageHeaderBand>
+    <DataBand Name="Data16" Top="93.44" Width="778.3" Height="285.5" Guides="519.75">
+      <TextObject Name="Text398" Top="16.29" Width="780.8" Height="22" CanGrow="true" Text="Continued..." Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 11pt, style=Bold"/>
+      <TextObject Name="Text417" Top="58.63" Width="122.85" Height="18.9" Text="Recipient:" HorzAlign="Right" VertAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text418" Left="500.85" Top="58.63" Width="75.6" Height="18.9" Text="Case No:" HorzAlign="Right" VertAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text419" Left="122.85" Top="58.63" Width="378" Height="18.9" Text="[Clients.Name]" VertAlign="Center" Font="Arial, 10pt, style=Underline"/>
+      <TextObject Name="Text420" Left="576.45" Top="58.63" Width="189" Height="18.9" Text="[TCMClient.CaseNumber]" VertAlign="Center" Font="Arial, 10pt, style=Underline"/>
+      <TableObject Name="Table42" Top="113.4" Width="775.08" Height="96.39" Border.Lines="All">
+        <TableColumn Name="Column139" Width="49.61"/>
+        <TableColumn Name="Column140" Width="49.61"/>
+        <TableColumn Name="Column141" Width="354.56"/>
+        <TableColumn Name="Column142" Width="103.95"/>
+        <TableColumn Name="Column143" Width="217.35"/>
+        <TableRow Name="Row172" Height="37.8">
+          <TableCell Name="Cell813" Text="&lt;b&gt;SECTION IV &lt;/b&gt;   " VertAlign="Center" Font="Arial, 10pt" TextRenderType="HtmlTags" ColSpan="5"/>
+          <TableCell Name="Cell814" Font="Arial, 10pt"/>
+          <TableCell Name="Cell815" Font="Arial, 10pt"/>
+          <TableCell Name="Cell816" Font="Arial, 10pt"/>
+          <TableCell Name="Cell817" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row173" Height="19.53">
+          <TableCell Name="Cell818" Border.Lines="All" Text="YES" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+          <TableCell Name="Cell819" Border.Lines="All" Text="NO" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+          <TableCell Name="Cell820" Border.Lines="All" HorzAlign="Center" Font="Arial, 10pt" ColSpan="3"/>
+          <TableCell Name="Cell821" Border.Lines="All" Font="Arial, 10pt"/>
+          <TableCell Name="Cell822" Border.Lines="All" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row174" Height="19.53">
+          <TableCell Name="Cell823" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox353" Left="18.45" Top="4" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.AreYouPhysician"/>
+          </TableCell>
+          <TableCell Name="Cell824" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox354" Left="18.35" Top="4" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.AreYouPhysician] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell825" Border.Lines="All" Text="Are you on a physician ordered special diet? If YES, type:" Font="Arial, 10pt" ColSpan="3"/>
+          <TableCell Name="Cell826" Border.Lines="All" Font="Arial, 10pt"/>
+          <TableCell Name="Cell827" Border.Lines="All" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row175" Height="19.53">
+          <TableCell Name="Cell828" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox355" Left="18.52" Top="3.45" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.DoYouSmoke"/>
+          </TableCell>
+          <TableCell Name="Cell829" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox356" Left="18.52" Top="3.45" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.DoYouSmoke] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell830" Border.Lines="All" Text="Do you smoke? If Yes, [TCMIntakeMedicalHistory.DoYouSmoke_PackPerDay] packs per day for [TCMIntakeMedicalHistory.DoYouSmoke_Year] years" Font="Arial, 10pt" ColSpan="3"/>
+          <TableCell Name="Cell831" Border.Lines="All" Font="Arial, 10pt"/>
+          <TableCell Name="Cell832" Border.Lines="All" Font="Arial, 10pt"/>
+        </TableRow>
+      </TableObject>
+      <TableObject Name="Table43" Top="209.9" Width="775.08" Height="75.6" Border.Lines="All">
+        <TableColumn Name="Column144" Width="49.61"/>
+        <TableColumn Name="Column145" Width="49.61"/>
+        <TableColumn Name="Column146" Width="354.56"/>
+        <TableColumn Name="Column147" Width="103.95"/>
+        <TableColumn Name="Column148" Width="217.35"/>
+        <TableRow Name="Row176" Height="37.8">
+          <TableCell Name="Cell833" Text="&lt;b&gt;SECTION V &lt;/b&gt;   List all current medications (include prescription and non-prescription):" VertAlign="Center" Font="Arial, 10pt" TextRenderType="HtmlTags" ColSpan="5"/>
+          <TableCell Name="Cell834" Font="Arial, 10pt"/>
+          <TableCell Name="Cell835" Font="Arial, 10pt"/>
+          <TableCell Name="Cell836" Font="Arial, 10pt"/>
+          <TableCell Name="Cell837" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row177" Height="37.8">
+          <TableCell Name="Cell838" Border.Lines="All" Text="[TCMIntakeMedicalHistory.ListAllCurrentMedications]" Font="Arial, 10pt" ColSpan="5"/>
+          <TableCell Name="Cell839" Border.Lines="All" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+          <TableCell Name="Cell840" Border.Lines="All" HorzAlign="Center" Font="Arial, 10pt"/>
+          <TableCell Name="Cell841" Border.Lines="All" Font="Arial, 10pt"/>
+          <TableCell Name="Cell842" Border.Lines="All" Font="Arial, 10pt"/>
+        </TableRow>
+      </TableObject>
+    </DataBand>
+    <DataBand Name="Data1" Top="414.98" Width="778.3" Height="18.9" DataSource="TCMAssessmentMedication">
+      <TableObject Name="Table54" Width="774.9" Height="18.9" Border.Lines="All">
+        <TableColumn Name="Column186" Width="233.98"/>
+        <TableColumn Name="Column187" Width="139.48"/>
+        <TableColumn Name="Column188" Width="153.47"/>
+        <TableColumn Name="Column189" Width="247.97"/>
+        <TableRow Name="Row239">
+          <TableCell Name="Cell1065" Border.Lines="All" Text="[TCMAssessmentMedication.Name]" Font="Arial, 10pt"/>
+          <TableCell Name="Cell1066" Border.Lines="All" Text="[TCMAssessmentMedication.Dosage]" HorzAlign="Center" Font="Arial, 10pt"/>
+          <TableCell Name="Cell1067" Border.Lines="All" Text="[TCMAssessmentMedication.Frequency]" HorzAlign="Center" Font="Arial, 10pt"/>
+          <TableCell Name="Cell1068" Border.Lines="All" Text="[TCMAssessmentMedication.Prescriber]" HorzAlign="Center" Font="Arial, 10pt"/>
+        </TableRow>
+      </TableObject>
+      <DataHeaderBand Name="DataHeader1" Top="382.78" Width="778.3" Height="28.35">
+        <TableObject Name="Table53" Width="774.84" Height="28.35">
+          <TableColumn Name="Column182" Width="233.85"/>
+          <TableColumn Name="Column183" Width="139.35"/>
+          <TableColumn Name="Column184" Width="153.57"/>
+          <TableColumn Name="Column185" Width="248.07"/>
+          <TableRow Name="Row238" Height="28.35">
+            <TableCell Name="Cell1061" Border.Lines="All" Text="Medication" VertAlign="Center" Font="Arial, 10pt, style=Bold"/>
+            <TableCell Name="Cell1062" Border.Lines="All" Text="Dose" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt, style=Bold"/>
+            <TableCell Name="Cell1063" Border.Lines="All" Text="Frequency" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt, style=Bold"/>
+            <TableCell Name="Cell1064" Border.Lines="All" Text="Prescriber" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt, style=Bold"/>
+          </TableRow>
+        </TableObject>
+      </DataHeaderBand>
+    </DataBand>
+    <DataBand Name="Data2" Top="437.72" Width="778.3" Height="154.98" CanBreak="true">
+      <TableObject Name="Table44" Width="774.9" Height="154.98" Border.Lines="All">
+        <TableColumn Name="Column149" Width="48.3"/>
+        <TableColumn Name="Column150" Width="48.3"/>
+        <TableColumn Name="Column151" Width="199.5"/>
+        <TableColumn Name="Column152" Width="48.3"/>
+        <TableColumn Name="Column153" Width="48.3"/>
+        <TableColumn Name="Column154" Width="133.35"/>
+        <TableColumn Name="Column155" Width="48.3"/>
+        <TableColumn Name="Column156" Width="48.3"/>
+        <TableColumn Name="Column157" Width="152.25"/>
+        <TableRow Name="Row178" Height="37.8">
+          <TableCell Name="Cell843" Text="&lt;b&gt;SECTION VI &lt;/b&gt;   Have you ever had difficulty:" VertAlign="Center" Font="Arial, 10pt" TextRenderType="HtmlTags" ColSpan="9"/>
+          <TableCell Name="Cell844" Font="Arial, 10pt"/>
+          <TableCell Name="Cell845" Font="Arial, 10pt"/>
+          <TableCell Name="Cell846" Font="Arial, 10pt"/>
+          <TableCell Name="Cell847" Font="Arial, 10pt"/>
+          <TableCell Name="Cell848" Font="Arial, 10pt"/>
+          <TableCell Name="Cell849" Font="Arial, 10pt"/>
+          <TableCell Name="Cell850" Font="Arial, 10pt"/>
+          <TableCell Name="Cell851" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row179" Height="19.53">
+          <TableCell Name="Cell852" Border.Lines="All" Text="YES" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+          <TableCell Name="Cell853" Border.Lines="All" Text="NO" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+          <TableCell Name="Cell854" Border.Lines="All" HorzAlign="Center" Font="Arial, 10pt"/>
+          <TableCell Name="Cell855" Border.Lines="All" Text="YES" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+          <TableCell Name="Cell856" Border.Lines="All" Text="NO" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+          <TableCell Name="Cell857" Border.Lines="All" HorzAlign="Center" Font="Arial, 10pt"/>
+          <TableCell Name="Cell858" Border.Lines="All" Text="YES" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+          <TableCell Name="Cell859" Border.Lines="All" Text="NO" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+          <TableCell Name="Cell860" Border.Lines="All" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row180" Height="19.53">
+          <TableCell Name="Cell861" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox357" Left="18.45" Top="4" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.PerformingCertainMotions"/>
+          </TableCell>
+          <TableCell Name="Cell862" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox358" Left="18.35" Top="4" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.PerformingCertainMotions] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell863" Border.Lines="All" Text="performing certain motions?" Font="Arial, 10pt"/>
+          <TableCell Name="Cell864" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox359" Left="16.9" Top="4" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.Reading"/>
+          </TableCell>
+          <TableCell Name="Cell865" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox360" Left="17.85" Top="4" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.Reading] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell866" Border.Lines="All" Text="reading?" Font="Arial, 10pt"/>
+          <TableCell Name="Cell867" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox361" Left="16.9" Top="4" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.BeingDisorientated"/>
+          </TableCell>
+          <TableCell Name="Cell868" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox362" Left="17.85" Top="4" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.BeingDisorientated] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell869" Border.Lines="All" Text="being disorientated?" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row181" Height="19.53">
+          <TableCell Name="Cell870" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox363" Left="18.52" Top="3.45" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.AssumingCertainPositions"/>
+          </TableCell>
+          <TableCell Name="Cell871" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox364" Left="18.52" Top="3.45" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.AssumingCertainPositions] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell872" Border.Lines="All" Text="assuming certain positions?" Font="Arial, 10pt"/>
+          <TableCell Name="Cell873" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox365" Left="16.97" Top="4.08" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.Concentrating"/>
+          </TableCell>
+          <TableCell Name="Cell874" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox366" Left="18.02" Top="4.08" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.Concentrating]== true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell875" Border.Lines="All" Text="concentrating?" Font="Arial, 10pt"/>
+          <TableCell Name="Cell876" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox367" Left="16.97" Top="4.08" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.Calculating"/>
+          </TableCell>
+          <TableCell Name="Cell877" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox368" Left="18.02" Top="4.08" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.Calculating] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell878" Border.Lines="All" Text="calculating?" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row182" Height="19.53">
+          <TableCell Name="Cell879" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox369" Left="18.52" Top="3.9" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.Hearing"/>
+          </TableCell>
+          <TableCell Name="Cell880" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox370" Left="18.52" Top="3.45" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.Hearing] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell881" Border.Lines="All" Text="hearing?" Font="Arial, 10pt"/>
+          <TableCell Name="Cell882" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox371" Left="16.97" Top="4.16" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.Comprehending"/>
+          </TableCell>
+          <TableCell Name="Cell883" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox372" Left="18.02" Top="3.71" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.Comprehending] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell884" Border.Lines="All" Text="comprehending?" Font="Arial, 10pt"/>
+          <TableCell Name="Cell885" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox373" Left="16.97" Top="4.16" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.WritingSentence"/>
+          </TableCell>
+          <TableCell Name="Cell886" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox374" Left="18.02" Top="3.71" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.WritingSentence] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell887" Border.Lines="All" Text="writing a sentence?" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row183" Height="19.53">
+          <TableCell Name="Cell888" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox375" Left="18.52" Top="3.45" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.Seeing"/>
+          </TableCell>
+          <TableCell Name="Cell889" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox376" Left="18.52" Top="3.45" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.Seeing] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell890" Border.Lines="All" Text="seeing?" Font="Arial, 10pt"/>
+          <TableCell Name="Cell891" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox377" Left="16.97" Top="4.34" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.BeingConfused"/>
+          </TableCell>
+          <TableCell Name="Cell892" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox378" Left="18.02" Top="4.34" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.BeingConfused] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell893" Border.Lines="All" Text="being confused? " Font="Arial, 10pt"/>
+          <TableCell Name="Cell894" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox379" Left="16.97" Top="4.34" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.Walking"/>
+          </TableCell>
+          <TableCell Name="Cell895" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox380" Left="18.02" Top="4.34" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.Walking] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell896" Border.Lines="All" Text="walking?" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row184" Height="19.53">
+          <TableCell Name="Cell897" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox381" Left="18.52" Top="3.53" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.Speaking"/>
+          </TableCell>
+          <TableCell Name="Cell898" Border.Lines="All" Font="Arial, 10pt">
+            <CheckBoxObject Name="CheckBox382" Left="18.52" Top="3.53" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.Speaking] == true,false,true)"/>
+          </TableCell>
+          <TableCell Name="Cell899" Border.Lines="All" Text="speaking?" Font="Arial, 10pt"/>
+          <TableCell Name="Cell900" Border.Lines="All" Font="Arial, 10pt"/>
+          <TableCell Name="Cell901" Border.Lines="All" Font="Arial, 10pt"/>
+          <TableCell Name="Cell902" Border.Lines="All" Font="Arial, 10pt"/>
+          <TableCell Name="Cell903" Border.Lines="All" Font="Arial, 10pt"/>
+          <TableCell Name="Cell904" Border.Lines="All" Font="Arial, 10pt"/>
+          <TableCell Name="Cell905" Border.Lines="All" Font="Arial, 10pt"/>
+        </TableRow>
+      </TableObject>
+    </DataBand>
+  </ReportPage>
+  <ReportPage Name="Page1" PaperWidth="215.9" PaperHeight="279.4" RawPaperSize="1" LeftMargin="5" TopMargin="5" RightMargin="5" BottomMargin="5" Watermark.Enabled="true" Watermark.Font="Arial, 60pt">
+    <PageHeaderBand Name="PageHeader1" Width="778.3" Height="89.59">
+      <TextObject Name="Text430" Left="125.75" Top="22.9" Width="525.65" Height="20" CanGrow="true" Text="[Clinics.Name]" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 12pt, style=Bold"/>
+      <TextObject Name="Text431" Left="125.75" Top="42.78" Width="525.65" Height="22" CanGrow="true" Text="TCM Medical History" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 11pt, style=Bold"/>
+      <LineObject Name="Line14" Left="124.3" Top="12" Height="65.55"/>
+      <PictureObject Name="Picture6" Left="7.45" Top="10.45" Width="103.95" Height="66.15"/>
+      <LineObject Name="Line15" Left="125.3" Top="11" Height="66.15"/>
+    </PageHeaderBand>
+    <DataBand Name="Data5" Top="93.44" Width="778.3" Height="797.17" CanBreak="true" DataSource="Clients">
+      <TableObject Name="Table7" Top="116.85" Width="775.08" Height="236.25" Border.Lines="All">
+        <TableColumn Name="Column31" Width="23.15"/>
+        <TableColumn Name="Column32" Width="212.15"/>
+        <TableColumn Name="Column33" Width="271.4"/>
+        <TableColumn Name="Column34" Width="77.49"/>
+        <TableColumn Name="Column35" Width="190.89"/>
+        <TableRow Name="Row19" Height="37.8">
+          <TableCell Name="Cell111" Text="&lt;b&gt;SECTION VII &lt;/b&gt;   Information provided  by mothers concerning child/adolescent  recipient. " VertAlign="Center" Font="Arial, 10pt" TextRenderType="HtmlTags" ColSpan="5"/>
+          <TableCell Name="Cell112" Font="Arial, 10pt"/>
+          <TableCell Name="Cell113" Font="Arial, 10pt"/>
+          <TableCell Name="Cell114" Font="Arial, 10pt"/>
+          <TableCell Name="Cell115" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row20" Height="20.79">
+          <TableCell Name="Cell116" Border.Lines="All" Font="Arial, 10pt" ColSpan="5">
+            <TextObject Name="Text6" Left="1" Top="1" Width="94.5" Height="18.9" CanGrow="true" Text="PREGNANCY:" Padding="2, 2, 2, 2" Font="Arial, 9pt, style=Bold"/>
+            <CheckBoxObject Name="CheckBox31" Left="94.5" Top="5" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.Planned"/>
+            <CheckBoxObject Name="CheckBox32" Left="163.6" Top="5" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.Planned] == true,false,true)"/>
+            <TextObject Name="Text7" Left="105.95" Top="1.55" Width="62.6" Height="18.9" CanGrow="true" Text="Planned" Padding="2, 2, 2, 2" Font="Arial, 9pt"/>
+            <TextObject Name="Text8" Left="175.1" Top="1.55" Width="81.5" Height="18.9" CanGrow="true" Text="Unplanned" Padding="2, 2, 2, 2" Font="Arial, 9pt"/>
+            <TextObject Name="Text9" Left="246.15" Top="1.13" Width="85.05" Height="18.9" CanGrow="true" Text="DELIVERY:" Padding="2, 2, 2, 2" Font="Arial, 9pt, style=Bold"/>
+            <CheckBoxObject Name="CheckBox33" Left="322.3" Top="4.45" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.Normal"/>
+            <TextObject Name="Text10" Left="333.75" Top="1" Width="62.6" Height="18.9" CanGrow="true" Text="Normal" Padding="2, 2, 2, 2" Font="Arial, 9pt"/>
+            <CheckBoxObject Name="CheckBox34" Left="386.45" Top="4.45" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.Complications"/>
+            <TextObject Name="Text11" Left="397.9" Top="1" Width="232.7" Height="18.9" CanGrow="true" Text="Complications If complications, explain:" Padding="2, 2, 2, 2" Font="Arial, 9pt"/>
+            <TextObject Name="Text12" Left="620.7" Top="1" Width="155.74" Height="18.9" CanGrow="true" Text="[TCMIntakeMedicalHistory.Complications_Explain]" Padding="2, 2, 2, 2" Font="Arial, 9pt"/>
+          </TableCell>
+          <TableCell Name="Cell117" Border.Lines="All" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+          <TableCell Name="Cell118" Border.Lines="All" HorzAlign="Center" Font="Arial, 10pt"/>
+          <TableCell Name="Cell119" Border.Lines="All" Font="Arial, 10pt"/>
+          <TableCell Name="Cell120" Border.Lines="All" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row21" Height="20.79">
+          <TableCell Name="Cell121" Border.Lines="All" Font="Arial, 10pt" ColSpan="5">
+            <TextObject Name="Text13" Top="1" Width="117.94" Height="18.9" CanGrow="true" Text="Birth Weight: [TCMIntakeMedicalHistory.BirthWeight]" Padding="2, 2, 2, 2" Font="Arial, 9pt"/>
+            <TextObject Name="Text14" Left="115.4" Top="1" Width="89.59" Height="18.9" CanGrow="true" Text="Length: [TCMIntakeMedicalHistory.Length]" Padding="2, 2, 2, 2" Font="Arial, 9pt"/>
+            <TextObject Name="Text15" Left="205.9" Top="1" Width="99.04" Height="18.9" CanGrow="true" Text="BREAST FED:" Padding="2, 2, 2, 2" Font="Arial, 9pt, style=Bold"/>
+            <CheckBoxObject Name="CheckBox35" Left="295.95" Top="5.34" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.BreastFed"/>
+            <CheckBoxObject Name="CheckBox36" Left="344.1" Top="5.34" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.BreastFed] == true,false,true)"/>
+            <TextObject Name="Text16" Left="309.3" Top="1.89" Width="32.13" Height="17.01" Text="Yes" HorzAlign="Justify" VertAlign="Center" Font="Arial, 9pt"/>
+            <TextObject Name="Text17" Left="358.1" Top="1.89" Width="26.46" Height="17.01" Text="No" HorzAlign="Justify" VertAlign="Center" Font="Arial, 9pt"/>
+            <TextObject Name="Text18" Left="395.9" Top="1" Width="174.64" Height="18.9" CanGrow="true" Text="Bottle fed until age: [TCMIntakeMedicalHistory.BottleFedUntilAge]" Padding="2, 2, 2, 2" Font="Arial, 9pt"/>
+            <TextObject Name="Text19" Left="571.45" Top="1" Width="202.99" Height="18.9" CanGrow="true" Text="Age Weaned: [TCMIntakeMedicalHistory.AgeWeaned]" Padding="2, 2, 2, 2" Font="Arial, 9pt"/>
+          </TableCell>
+          <TableCell Name="Cell122" Font="Arial, 10pt"/>
+          <TableCell Name="Cell123" Font="Arial, 10pt"/>
+          <TableCell Name="Cell124" Font="Arial, 10pt"/>
+          <TableCell Name="Cell125" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row22" Height="39.69">
+          <TableCell Name="Cell126" Border.Lines="All" Font="Arial, 10pt" ColSpan="5">
+            <TextObject Name="Text20" Top="2" Width="774.9" Height="37.8" CanGrow="true" Text="First year medical complications: [TCMIntakeMedicalHistory.FirstYearMedical]" Padding="2, 2, 2, 2" Font="Arial, 9pt"/>
+          </TableCell>
+          <TableCell Name="Cell127" Border.Lines="All" Font="Arial, 10pt"/>
+          <TableCell Name="Cell128" Border.Lines="All" Font="Arial, 10pt"/>
+          <TableCell Name="Cell129" Border.Lines="All" Font="Arial, 10pt"/>
+          <TableCell Name="Cell130" Border.Lines="All" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row23">
+          <TableCell Name="Cell131" Border.Lines="All" Text="Age first walked: [TCMIntakeMedicalHistory.AgeFirstWalked]" Font="Arial, 9pt" ColSpan="2"/>
+          <TableCell Name="Cell132" Border.Lines="All" Font="Arial, 10pt"/>
+          <TableCell Name="Cell133" Border.Lines="All" Text="Age first talked: [TCMIntakeMedicalHistory.AgeFirstTalked]" Font="Arial, 9pt"/>
+          <TableCell Name="Cell134" Border.Lines="All" Text="Age toilet trained: [TCMIntakeMedicalHistory.AgeToiletTrained]" Font="Arial, 9pt" ColSpan="2"/>
+          <TableCell Name="Cell135" Border.Lines="All" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row24" Height="37.8">
+          <TableCell Name="Cell136" Text="Description of child as an infant: [TCMIntakeMedicalHistory.DescriptionOfChild]" Font="Arial, 9pt" ColSpan="5"/>
+          <TableCell Name="Cell137" Font="Arial, 10pt"/>
+          <TableCell Name="Cell138" Font="Arial, 10pt"/>
+          <TableCell Name="Cell139" Font="Arial, 10pt"/>
+          <TableCell Name="Cell140" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row25" Height="20.79">
+          <TableCell Name="Cell141" Border.Lines="All" Font="Arial, 10pt" ColSpan="5">
+            <TextObject Name="Text21" Top="1" Width="207.9" Height="18.9" CanGrow="true" Text="PROBLEM WITH BED WETTING:" Padding="2, 2, 2, 2" Font="Arial, 9pt, style=Bold"/>
+            <CheckBoxObject Name="CheckBox37" Left="202.35" Top="5.45" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.ProblemWithBedWetting"/>
+            <CheckBoxObject Name="CheckBox38" Left="250.5" Top="5.45" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.ProblemWithBedWetting] == true,false,true)"/>
+            <TextObject Name="Text22" Left="215.7" Top="2" Width="32.13" Height="17.01" Text="Yes" HorzAlign="Justify" VertAlign="Center" Font="Arial, 9pt"/>
+            <TextObject Name="Text23" Left="264.5" Top="2" Width="26.46" Height="17.01" Text="No" HorzAlign="Justify" VertAlign="Center" Font="Arial, 9pt"/>
+            <TextObject Name="Text24" Left="292.95" Top="1" Width="113.4" Height="18.9" CanGrow="true" Text="AND/OR SOILING" Padding="2, 2, 2, 2" Font="Arial, 9pt, style=Bold"/>
+            <CheckBoxObject Name="CheckBox39" Left="404.35" Top="5.45" Width="11.34" Height="11.34" Border.Lines="All" DataColumn="TCMIntakeMedicalHistory.AndOrSoiling"/>
+            <CheckBoxObject Name="CheckBox40" Left="452.5" Top="5.45" Width="11.34" Height="11.34" Border.Lines="All" Expression="IIf([TCMIntakeMedicalHistory.AndOrSoiling] == true,false,true)"/>
+            <TextObject Name="Text25" Left="417.7" Top="2" Width="32.13" Height="17.01" Text="Yes" HorzAlign="Justify" VertAlign="Center" Font="Arial, 9pt"/>
+            <TextObject Name="Text26" Left="466.5" Top="2" Width="26.46" Height="17.01" Text="No" HorzAlign="Justify" VertAlign="Center" Font="Arial, 9pt"/>
+          </TableCell>
+          <TableCell Name="Cell142" Font="Arial, 10pt"/>
+          <TableCell Name="Cell143" Font="Arial, 10pt"/>
+          <TableCell Name="Cell144" Font="Arial, 10pt"/>
+          <TableCell Name="Cell145" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row26" Height="39.69">
+          <TableCell Name="Cell146" Text="Immunizations: [TCMIntakeMedicalHistory.Immunizations]" Font="Arial, 10pt" ColSpan="5">
+            <TextObject Name="Text27" Left="13.9" Top="42.8" Width="440.37" Height="18.9" Text="Documents were translated in my native language (if needed).  " HorzAlign="Justify" VertAlign="Center" Font="Arial, 10pt"/>
+          </TableCell>
+          <TableCell Name="Cell147" Font="Arial, 10pt"/>
+          <TableCell Name="Cell148" Font="Arial, 10pt"/>
+          <TableCell Name="Cell149" Font="Arial, 10pt"/>
+          <TableCell Name="Cell150" Font="Arial, 10pt"/>
+        </TableRow>
+      </TableObject>
+      <CheckBoxObject Name="CheckBox41" Top="360.1" Width="11.34" Height="11.34" Border.Lines="All"/>
+      <LineObject Name="Line1" Left="355.65" Top="767" Width="-230.58"/>
+      <LineObject Name="Line2" Left="585.45" Top="767" Width="-98.28"/>
+      <TextObject Name="Text28" Left="122.85" Top="768.9" Width="232.7" Height="24.57" CanGrow="true" Text="Employee Name / Credentials" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text29" Left="488.4" Top="768.9" Width="94.5" Height="24.57" CanGrow="true" Text="Date" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text30" Left="489.4" Top="748.2" Width="94.5" Height="18.9" Text="[TCMIntakeMedicalHistory.DateSignatureEmployee]" Format="Date" Format.Format="d" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt"/>
+      <PictureObject Name="Picture2" Left="301.95" Top="713.5" Width="95" Height="63.45" DataColumn="Signatures.facilitatorSignature"/>
+      <TextObject Name="Text34" Left="122.85" Top="694.5" Width="232.7" Height="24.57" CanGrow="true" Text="Person Name / Credentials" Padding="2, 2, 2, 2" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text35" Left="488.4" Top="694.5" Width="94.5" Height="24.57" CanGrow="true" Text="Date" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <LineObject Name="Line5" Left="355.65" Top="693.05" Width="-230.58"/>
+      <LineObject Name="Line6" Left="585.45" Top="693.05" Width="-98.28"/>
+      <TextObject Name="Text36" Left="489.4" Top="674.25" Width="94.5" Height="18.9" Text="[TCMIntakeMedicalHistory.DateSignaturePerson]" Format="Date" Format.Format="d" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt"/>
+      <PictureObject Name="Picture3" Left="301.95" Top="639.9" Width="95" Height="63.45" DataColumn="Signatures.supervisorSignature"/>
+      <TextObject Name="Text1" Top="18.9" Width="780.8" Height="22" CanGrow="true" Text="Continued..." Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 11pt, style=Bold"/>
+      <TextObject Name="Text2" Top="60.24" Width="122.85" Height="18.9" Text="Recipient:" HorzAlign="Right" VertAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text3" Left="500.85" Top="60.24" Width="75.6" Height="18.9" Text="Case No:" HorzAlign="Right" VertAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text4" Left="122.85" Top="60.24" Width="378" Height="18.9" Text="[Clients.Name]" VertAlign="Center" Font="Arial, 10pt, style=Underline"/>
+      <TextObject Name="Text5" Left="576.45" Top="60.24" Width="189" Height="18.9" Text="[TCMClient.CaseNumber]" VertAlign="Center" Font="Arial, 10pt, style=Underline"/>
+      <TextObject Name="Text421" Left="122.85" Top="674.09" Width="232.47" Height="18.9" Text="[Clients.Name]" Font="Arial, 10pt"/>
+      <TextObject Name="Text422" Left="122.85" Top="748.18" Width="232.47" Height="18.9" Text="[TCMIntakeMedicalHistory.AdmissionedFor]" Font="Arial, 10pt"/>
+    </DataBand>
+  </ReportPage>
+</Report>
