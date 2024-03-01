@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="01/10/2024 09:36:29" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="03/01/2024 10:18:35" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhDFmP9T+uKfsJXu65Ovrj+A1YfN5dfPvLBg6EY9L3xBgdKTD3jWzkT9igQJx8b038jxUu1HpRfD9igq6XfpM1l">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhDFmP9T+uKfsJXu65Ovrj+A1YfN5dfPvLBg6EY9L3xBgdKTD3jWzkT9igQJx8b039mU/yd8SzGbNkrdOHBP8SG">
       <TableDataSource Name="Clinics" DataType="System.Int32" Enabled="true" TableName="Clinics">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -180,8 +180,8 @@
       <TextObject Name="Text288" Left="447.15" Top="651.05" Width="162.54" Height="24.57" CanGrow="true" Text="Date" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
       <LineObject Name="Line14" Left="640.15" Top="649.6" Width="-191.27"/>
       <TextObject Name="Text289" Left="447.15" Top="630.25" Width="196.56" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[IIf(Year([TCMIntakeConsentForTreatment.DateSignatureLegalGuardian]) == 1,&quot;&quot;,[TCMIntakeConsentForTreatment.DateSignatureLegalGuardian])]&#13;&#10;&#13;&#10;" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
-      <PictureObject Name="Picture3" Left="122.85" Top="699.85" Width="95" Height="63.45" DataColumn="Signatures.facilitatorSignature"/>
-      <TextObject Name="Text290" Left="75.6" Top="554.45" Width="342.09" Height="24.57" CanGrow="true" Text="Recipient's Signature" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
+      <PictureObject Name="Picture3" Left="122.85" Top="703.85" Width="95" Height="63.45" DataColumn="Signatures.facilitatorSignature"/>
+      <TextObject Name="Text290" Left="75.6" Top="554.45" Width="190.89" Height="24.57" CanGrow="true" Text="Recipient's Signature" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
       <LineObject Name="Line15" Left="268.6" Top="553" Width="-192.78"/>
       <TextObject Name="Text291" Left="447.15" Top="554.45" Width="162.54" Height="24.57" CanGrow="true" Text="Date" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
       <LineObject Name="Line16" Left="640.15" Top="553" Width="-192.78"/>
