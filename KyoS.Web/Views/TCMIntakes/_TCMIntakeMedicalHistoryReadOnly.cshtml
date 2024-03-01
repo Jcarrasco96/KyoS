@@ -1,0 +1,194 @@
+﻿@model KyoS.Web.Models.TCMIntakeMedicalHistoryViewModel
+
+<div class="col-md-12">
+    <pre>
+    <strong>MEDICAL HISTORY</strong>
+
+    Recipient: <strong>@Html.DisplayFor(modelItem => Model.TCMClient.Client.Clinic.Name)</strong>                                    Case No: @ViewData["CaseNumber"].ToString()
+            
+    Primary Care Physician: <input asp-for="PrimaryCarePhysician" style="width:20%" disabled>
+            
+    Address Physician:      <input asp-for="AddressPhysician" style="width:20%" disabled>
+            
+    City:                   <input asp-for="City" style="width:20%" disabled>                    State: <input asp-for="State" disabled>                Zip:  <input asp-for="ZipCode" disabled>
+    </pre>
+</div>
+<div class="col-md-12">
+    <pre>
+    <strong>SECTION I.</strong> Select YES or No next to any medical problem that you currently have or have had in the past. If you do not understand an item, please ask for assistance.
+    
+    <strong>YES</strong>                                        <strong>YES</strong>                                          <strong>YES</strong>                                            
+    <input type="checkbox" asp-for="Diphtheria" class="form-check-input" disabled> Diphtheria                               <input type="checkbox" asp-for="StomachPain" class="form-check-input" disabled> Stomach Pain                              <input type="checkbox" asp-for="FrequentColds" class="form-check-input" disabled> Frequent Colds
+    <input type="checkbox" asp-for="Mumps" class="form-check-input" disabled> Mumps                                    <input type="checkbox" asp-for="BlackStools" class="form-check-input" disabled> Black Stools                              <input type="checkbox" asp-for="HeartPalpitation" class="form-check-input" disabled> Heart Palpitation
+    <input type="checkbox" asp-for="Poliomyelitis" class="form-check-input" disabled> Poliomyelitis                            <input type="checkbox" asp-for="NightSweats" class="form-check-input" disabled> Night Sweats                              <input type="checkbox" asp-for="ChestPain" class="form-check-input" disabled> Chest Pain
+    <input type="checkbox" asp-for="RheumaticFever" class="form-check-input" disabled> Rheumatic Fever                          <input type="checkbox" asp-for="FrequentVomiting" class="form-check-input" disabled> Frequent Vomiting                         <input type="checkbox" asp-for="ShortnessOfBreath" class="form-check-input" disabled> Shortness Of Breath
+    <input type="checkbox" asp-for="WhoopingCough" class="form-check-input" disabled> WhoopingCough                            <input type="checkbox" asp-for="SkinTrouble" class="form-check-input" disabled> Skin Trouble                              <input type="checkbox" asp-for="SwellingOfFeet" class="form-check-input" disabled> Swelling Of Feet
+    <input type="checkbox" asp-for="Tuberculosis" class="form-check-input" disabled> Tuberculosis                             <input type="checkbox" asp-for="PainfulMuscles" class="form-check-input" disabled> Painful Muscles                           <input type="checkbox" asp-for="SwollenAnkles" class="form-check-input" disabled> Swollen Ankles
+    <input type="checkbox" asp-for="ScarletFever" class="form-check-input" disabled> Scarlet Fever                            <input type="checkbox" asp-for="PainfulJoints" class="form-check-input" disabled> Painful Joints                            <input type="checkbox" asp-for="ChronicIndigestion" class="form-check-input" disabled> Chronic Indigestion
+    <input type="checkbox" asp-for="Hepatitis" class="form-check-input" disabled> Hepatitis                                <input type="checkbox" asp-for="BackPain" class="form-check-input" disabled> Back Pain                                 <input type="checkbox" asp-for="VomitingOfBlood" class="form-check-input" disabled> Vomiting Of Blood
+    <input type="checkbox" asp-for="HighBloodPressure" class="form-check-input" disabled> High Blood Pressure                      <input type="checkbox" asp-for="SeriousInjury" class="form-check-input" disabled>Serious Injury                             <input type="checkbox" asp-for="Jaundice" class="form-check-input" disabled> Jaundice (Yellowing of Skin)                        
+    <input type="checkbox" asp-for="KidneyTrouble" class="form-check-input" disabled> Kidney Trouble                           <input type="checkbox" asp-for="Surgery" class="form-check-input" disabled> Surgery                                   <input type="checkbox" asp-for="Constipation" class="form-check-input" disabled> Constipation
+    <input type="checkbox" asp-for="KidneyStones" class="form-check-input" disabled> KidneyStones                             <input type="checkbox" asp-for="Arthritis" class="form-check-input" disabled> Arthritis                                 <input type="checkbox" asp-for="BloodyStools" class="form-check-input" disabled> Bloody Stools
+    <input type="checkbox" asp-for="BloodInUrine" class="form-check-input" disabled> Blood in Urine                           <input type="checkbox" asp-for="Hemorrhoids" class="form-check-input" disabled> Hemorrhoids                               <input type="checkbox" asp-for="Cancer" class="form-check-input" disabled> Cancer
+    <input type="checkbox" asp-for="BurningUrine" class="form-check-input" disabled> Burning Urine                            <input type="checkbox" asp-for="WeightLoss" class="form-check-input" disabled> WeightLoss                                <input type="checkbox" asp-for="Diabetes" class="form-check-input" disabled> Diabetes
+    <input type="checkbox" asp-for="PainfulUrination" class="form-check-input" disabled> Painful Urination                        <input type="checkbox" asp-for="FrequentHeadaches" class="form-check-input" disabled> Frequent Headaches                        <input type="checkbox" asp-for="HayFever" class="form-check-input" disabled> HayFever
+    <input type="checkbox" asp-for="EyeTrouble" class="form-check-input" disabled> Eye Trouble                              <input type="checkbox" asp-for="Fainting" class="form-check-input" disabled> Fainting                                  <input type="checkbox" asp-for="Hernia" class="form-check-input" disabled> Hernia
+    <input type="checkbox" asp-for="HearingTrouble" class="form-check-input" disabled> Hearing Trouble                          <input type="checkbox" asp-for="ConvulsionsOrFits" class="form-check-input" disabled> Convulsions Or Fits                       <input type="checkbox" asp-for="HeadInjury" class="form-check-input" disabled> Head Injury
+    <input type="checkbox" asp-for="Fractures" class="form-check-input" disabled> Fractures                                <input type="checkbox" asp-for="LossOfMemory" class="form-check-input" disabled> Loss Of Memory                            <input type="checkbox" asp-for="Rheumatism" class="form-check-input" disabled> Rheumatism
+    <input type="checkbox" asp-for="EarInfections" class="form-check-input" disabled> Ear Infections                           <input type="checkbox" asp-for="Nervousness" class="form-check-input" disabled> Nervousness                               <input type="checkbox" asp-for="Epilepsy" class="form-check-input" disabled> Epilepsy
+    <input type="checkbox" asp-for="FrequentNoseBleeds" class="form-check-input" disabled> Frequent Nose Bleeds                     <input type="checkbox" asp-for="ChronicCough" class="form-check-input" disabled> Chronic Cough                             <input type="checkbox" asp-for="VaricoseVeins" class="form-check-input" disabled> VaricoseVeins
+    <input type="checkbox" asp-for="FrequentSoreThroat" class="form-check-input" disabled> Frequent Sore Throat                     <input type="checkbox" asp-for="CoughingOfBlood" class="form-check-input" disabled> Coughing Of Blood                         <input type="checkbox" asp-for="Anemia" class="form-check-input" disabled> Anemia
+    <input type="checkbox" asp-for="Hoarseness" class="form-check-input" disabled> Hoarseness                               <input type="checkbox" asp-for="VenerealDisease" class="form-check-input" disabled> VenerealDisease                           <input type="checkbox" asp-for="InfectiousDisease" class="form-check-input" disabled> Infectious Disease
+    
+    <input type="checkbox" asp-for="Allergies" class="form-check-input" disabled> Allergies  (including medications) If Yes, describe:   <input asp-for="Allergies_Describe" style="width:40%" disabled>
+    </pre>
+</div>
+<div class="col-md-12">
+    <pre>
+    <strong>SECTION II.</strong> Has anyone in your family had or been treated for:
+
+    <strong>YES</strong>                                                    <strong>Who? (Father, mother, sibling, grandparent, etc.)</strong>                                                                                    
+    <input type="checkbox" asp-for="FamilyDiabetes" class="form-check-input" disabled> Diabetes                               <input asp-for="FamilyDiabetes_" style="width:40%" disabled>
+ 
+    <input type="checkbox" asp-for="FamilyCancer" class="form-check-input" disabled> Cancer                                 <input asp-for="FamilyCancer_" style="width:40%" disabled>
+ 
+    <input type="checkbox" asp-for="FamilyTuberculosis" class="form-check-input" disabled> Tuberculosis                           <input asp-for="FamilyTuberculosis_" style="width:40%" disabled>
+                              
+    <input type="checkbox" asp-for="FamilyHeartDisease" class="form-check-input" disabled> Heart Disease                          <input asp-for="FamilyHeartDisease_" style="width:40%" disabled>
+                 
+    <input type="checkbox" asp-for="FamilyKidneyDisease" class="form-check-input" disabled> Kidney Disease                         <input asp-for="FamilyKidneyDisease_" style="width:40%" disabled>
+                      
+    <input type="checkbox" asp-for="FamilyHighBloodPressure" class="form-check-input" disabled> HighBloodPressure                      <input asp-for="FamilyHighBloodPressure_" style="width:40%" disabled>
+                    
+    <input type="checkbox" asp-for="FamilyHayFever" class="form-check-input" disabled> Hay Fever                              <input asp-for="FamilyHayFever_" style="width:40%" disabled>
+                       
+    <input type="checkbox" asp-for="FamilyAsthma" class="form-check-input" disabled> Asthma                                 <input asp-for="FamilyAsthma_" style="width:40%" disabled>
+                    
+    <input type="checkbox" asp-for="FamilyEpilepsy" class="form-check-input" disabled> Epilepsy                               <input asp-for="FamilyEpilepsy_" style="width:40%" disabled>
+            
+    <input type="checkbox" asp-for="FamilyGlaucoma" class="form-check-input" disabled> Glaucoma                               <input asp-for="FamilyGlaucoma_" style="width:40%" disabled>
+                          
+    <input type="checkbox" asp-for="FamilySyphilis" class="form-check-input" disabled> Syphilis                               <input asp-for="FamilySyphilis_" style="width:40%" disabled>
+                       
+    <input type="checkbox" asp-for="FamilyNervousDisorders" class="form-check-input" disabled> Nervous Disorders                      <input asp-for="FamilyNervousDisorders_" style="width:40%" disabled>
+                       
+    <input type="checkbox" asp-for="FamilyOther" class="form-check-input" disabled> Other                                  <input asp-for="FamilyOther_" style="width:40%" disabled>     
+    </pre>
+</div>
+<div class="col-md-12">
+    <pre>
+    <strong>SECTION III.</strong> FEMALES ONLY:
+
+    <strong>YES</strong>                                                                                                               
+    <input type="checkbox" asp-for="HaveYouEverBeenPregnant" class="form-check-input" disabled> Have you ever been pregnant?                           
+    <input type="checkbox" asp-for="HaveYouEverHadComplications" class="form-check-input" disabled> Have you ever had complications during a pregnancy?
+    <input type="checkbox" asp-for="HaveYouEverHadPainful" class="form-check-input" disabled> Have you ever had painful menstruation?                     
+    <input type="checkbox" asp-for="HaveYouEverHadExcessive" class="form-check-input" disabled> Have you ever had excessive menstrual bleeding?
+    <input type="checkbox" asp-for="HaveYouEverHadSpotting" class="form-check-input" disabled> Have you ever had spotting or bleeding between periods?
+    <input type="checkbox" asp-for="AreYouCurrently" class="form-check-input" disabled> Are you currently on a form of contraceptive? <br />
+  
+    Age of first menstruation               <input asp-for="AgeFirstTalked" disabled>                      Usual interval between periods     <input asp-for="AgeFirstTalked" disabled>
+    
+    Usual duration of periods               <input asp-for="UsualDurationOfPeriods" disabled>                      Date of last period                <input asp-for="DateOfLastPeriod" disabled>
+    
+    Date of last pelvic exam (PAP)          <input asp-for="DateOfLastPelvic" disabled>                      Date of last breast exam           <input asp-for="DateOfLastBreastExam" disabled>
+    </pre>
+</div>
+<div class="col-md-12">
+    <pre>
+    <strong>SECTION IV.</strong> 
+
+    <strong>YES</strong>                                                                                                               
+    <input type="checkbox" asp-for="AreYouPhysician" class="form-check-input" disabled> Are you on a physician ordered special diet? If YES, type:                        
+    <input type="checkbox" asp-for="DoYouSmoke" class="form-check-input" disabled> Do you smoke? If Yes, <input asp-for="DoYouSmoke_PackPerDay" disabled> packs per day for <input asp-for="DoYouSmoke_Year" disabled> years
+    </pre>
+</div>
+<div class="col-md-12">
+    <pre>
+    <strong>SECTION V.</strong> 
+    <label asp-for="ListAllCurrentMedications" class="control-label" disabled>List all current medications (include prescription and non-prescription): </label>
+    <input asp-for="ListAllCurrentMedications" style="width:90%" disabled>            
+    </pre>
+</div>
+<div class="col-md-12">
+    <pre>
+    <strong>SECTION VI.</strong> Have you ever had difficulty:
+
+    <strong>YES</strong>                                             <strong>YES</strong>                                          <strong>YES</strong>                                            
+    <input type="checkbox" asp-for="PerformingCertainMotions" class="form-check-input" disabled> performing certain motions?                  <input type="checkbox" asp-for="Reading" class="form-check-input" disabled> reading?                                  <input type="checkbox" asp-for="BeingDisorientated" class="form-check-input" disabled> being disorientated?
+    <input type="checkbox" asp-for="AssumingCertainPositions" class="form-check-input" disabled> assuming certain positions?                  <input type="checkbox" asp-for="Concentrating" class="form-check-input" disabled> Black Stools                              <input type="checkbox" asp-for="Calculating" class="form-check-input" disabled> calculating?
+    <input type="checkbox" asp-for="Hearing" class="form-check-input" disabled> hearing?                                     <input type="checkbox" asp-for="Comprehending" class="form-check-input" disabled> Night Sweats                              <input type="checkbox" asp-for="WritingSentence" class="form-check-input" disabled> writing a sentence?
+    <input type="checkbox" asp-for="Seeing" class="form-check-input" disabled> seeing?                                      <input type="checkbox" asp-for="BeingConfused" class="form-check-input" disabled> Frequent Vomiting                         <input type="checkbox" asp-for="Walking" class="form-check-input" disabled> walking?
+    <input type="checkbox" asp-for="Speaking" class="form-check-input" disabled> speaking?                                    
+    </pre>
+</div>
+<div class="col-md-12">
+    <pre>
+    <strong>SECTION VII.</strong> Information provided by mothers concerning child/adolescent recipient.  
+
+    Pregnancy: <input type="checkbox" asp-for="Planned" class="form-check-input" disabled> Planned  <input type="checkbox" asp-for="Unplanned" class="form-check-input" disabled> Unplanned     Delivery: <input type="checkbox" asp-for="Normal" disabled /> Normal <input type="checkbox" asp-for="Complications" disabled /> Complications If complications, explain: <input asp-for="Complications_Explain" style="width:40%" disabled>
+ 
+    Birth Weight: <input asp-for="BirthWeight" disabled>   Length: <input asp-for="Length" disabled>  Breast Fed: <input type="checkbox" asp-for="BreastFed" class="form-check-input" disabled> Yes       Bottle fed until age: <input asp-for="BottleFedUntilAge" disabled>  Age Weaned:  <input asp-for="AgeWeaned" disabled>
+
+    First year medical complications:
+    <input asp-for="BirthWeight" style="width:40%" disabled>
+
+    Age first walked: <input asp-for="AgeFirstWalked" disabled>             Age first talked: <input asp-for="AgeFirstTalked" disabled>          Age toilet trained: <input asp-for="AgeToiletTrained" disabled>
+
+    Description of child as an infant:  <input asp-for="DescriptionOfChild" style="width:70%" disabled>
+
+    Problem with bed wetting <input type="checkbox" asp-for="ProblemWithBedWetting" class="form-check-input" disabled> Yes                   and/or soiling <input type="checkbox" asp-for="AndOrSoiling" class="form-check-input" disabled>Yes
+    
+    Immunizations: 
+    <input asp-for="Immunizations" style="width:90%" disabled>
+    </pre>
+</div>
+<div class="col-md-12">
+    <pre>
+@if (Model.AdmissionedFor == User.Identity.Name)
+{
+    @if (Model.TCMClient.Client.LegalGuardian.Name == null)
+    {
+    <strong>Person served signature date</strong>    <input asp-for="DateSignaturePerson" disabled>
+    <strong>(@Html.DisplayFor(modelItem => Model.TCMClient.Client.Name))</strong>     
+    }
+    else
+    {
+    <strong>Legal Guardian signature date</strong>    <input asp-for="DateSignatureLegalGuardian" disabled>
+    <strong>(@Html.DisplayFor(modelItem => Model.TCMClient.Client.LegalGuardian.Name))</strong>     
+
+    }
+    <strong>Employee signature date</strong>         <input asp-for="DateSignatureEmployee" disabled>
+    <strong>(@Html.DisplayFor(modelItem => Model.AdmissionedFor))</strong>                                                                    
+}
+else
+{ 
+    @if (Model.TCMClient.Client.LegalGuardian.Name == null)
+    {
+    <strong>Person served signature date</strong>    <input asp-for="DateSignaturePerson" disabled>
+    <strong>(@Html.DisplayFor(modelItem => Model.TCMClient.Client.Name))</strong>     
+    }
+    else
+    {
+    <strong>Legal Guardian signature date</strong>    <input asp-for="DateSignatureLegalGuardian" disabled>
+    <strong>(@Html.DisplayFor(modelItem => Model.TCMClient.Client.LegalGuardian.Name))</strong>     
+
+    }
+    <strong>Employee signature date</strong>         <input asp-for="DateSignatureEmployee" disabled>
+    <strong>(@Html.DisplayFor(modelItem => Model.AdmissionedFor))</strong>                                                                    
+
+}
+    </pre>
+</div>
+<div class="col-md-12">
+    &nbsp;
+</div>
+<div>
+    <div class="form-group col-md-12">
+        <input type="checkbox" asp-for="Documents" class="form-check-input" id="Documents" disabled> Documents were verbally translated to me in my native language.<br />
+        <label asp-for="Documents" class="forgot">
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>@Html.DisplayFor(modelItem => Model.TCMClient.Client.Clinic.Name)</strong>
+        </label>
+    </div>
+</div>
+<br />

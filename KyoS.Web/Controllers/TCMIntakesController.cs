@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.IO;
 using KyoS.Common.Helpers;
+using KyoS.Web.Migrations;
 
 namespace KyoS.Web.Controllers
 {
@@ -2788,52 +2789,55 @@ namespace KyoS.Web.Controllers
         {
 
             UserEntity user_logged = _context.Users
-                                                 .Include(u => u.Clinic)
-                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
             TCMClientEntity tcmClient = _context.TCMClient
-                                               .Include(n => n.Client)
-                                               .FirstOrDefault(n => n.Id == idTCMClient);
+                                                .Include(n => n.TCMAssessment)
+                                                .ThenInclude(n => n.MedicationList)
+                                                .Include(n => n.Client)
+                                                .FirstOrDefault(n => n.Id == idTCMClient);
 
-            MedicationViewModel model;
+            TCMAssessmentMedicationViewModel model;
 
             if (User.IsInRole("CaseManager") || User.IsInRole("TCMSupervisor"))
             {
                 if (user_logged.Clinic != null)
                 {
 
-                    model = new MedicationViewModel
+                    model = new TCMAssessmentMedicationViewModel
                     {
-                        IdClient = id,
-                        Client = _context.Clients.Include(n => n.MedicationList).FirstOrDefault(n => n.Id == id),
                         Id = 0,
                         Dosage = "",
                         Frequency = "",
                         Name = "",
-                        Prescriber = ""
+                        Prescriber = "",
+                        TcmAssessment = tcmClient.TCMAssessment,
+                        IdTCMAssessment = (tcmClient.TCMAssessment == null)? 0:tcmClient.TCMAssessment.Id,
+                        CreatedBy = user_logged.UserName,
+                        CreatedOn = DateTime.Today
 
                     };
-                    if (model.Client.MedicationList == null)
-                        model.Client.MedicationList = new List<MedicationEntity>();
-                    model.IdTCMClient = idTCMClient;
+                   
                     ViewData["CaseNumber"] = tcmClient.CaseNumber;
                     return View(model);
                 }
             }
 
-            model = new MedicationViewModel
+            model = new TCMAssessmentMedicationViewModel
             {
-                IdClient = id,
-                Client = _context.Clients.Include(n => n.MedicationList).FirstOrDefault(n => n.Id == id),
+                IdTCMAssessment = id,
+                TcmAssessment = _context.TCMAssessment
+                                        .Include(n => n.TcmClient)
+                                        .ThenInclude(n => n.Client)
+                                        .FirstOrDefault(n => n.Id == id),
                 Id = 0,
                 Dosage = "",
                 Frequency = "",
                 Name = "",
                 Prescriber = ""
             };
-            if (model.Client.MedicationList == null)
-                model.Client.MedicationList = new List<MedicationEntity>();
-            model.IdTCMClient = idTCMClient;
+           
             ViewData["CaseNumber"] = tcmClient.CaseNumber;
             return View(model);
         }
@@ -2841,29 +2845,31 @@ namespace KyoS.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "CaseManager, TCMSupervisor, Manager")]
-        public async Task<IActionResult> CreateTCMMedication(MedicationViewModel MedicationViewModel)
+        public async Task<IActionResult> CreateTCMMedication(TCMAssessmentMedicationViewModel MedicationViewModel)
         {
             UserEntity user_logged = _context.Users
                                              .Include(u => u.Clinic)
                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
+            TCMAssessmentEntity assessment = await _context.TCMAssessment.FirstOrDefaultAsync(n => n.Id == MedicationViewModel.IdTCMAssessment);
+
             if (ModelState.IsValid)
             {
-                MedicationEntity medicationEntity = _context.Medication.Find(MedicationViewModel.Id);
+                TCMAssessmentMedicationEntity medicationEntity = _context.TCMAssessmentMedication.Find(MedicationViewModel.Id);
                 if (medicationEntity == null)
                 {
-                    medicationEntity = await _converterHelper.ToMedicationEntity(MedicationViewModel, true);
-                    _context.Medication.Add(medicationEntity);
+                    medicationEntity = await _converterHelper.ToTCMAssessmenMedicationEntity(MedicationViewModel, true, user_logged.UserName);
+                    _context.TCMAssessmentMedication.Add(medicationEntity);
                     try
                     {
                         await _context.SaveChangesAsync();
                         if (User.IsInRole("CaseManager"))
                         {
-                            return RedirectToAction("CreateTCMMedication", new { id = MedicationViewModel.IdClient, IdTCMClient = MedicationViewModel.IdTCMClient });
+                            return RedirectToAction("CreateTCMMedication", new { id = MedicationViewModel.Id, IdTCMClient = assessment.TcmClient_FK });
                         }
                         else
                         {
-                            return RedirectToAction("CreateTCMMedicationReadOnly", new { id = MedicationViewModel.IdClient, IdTCMClient = MedicationViewModel.IdTCMClient });
+                            return RedirectToAction("CreateTCMMedicationReadOnly", new { id = MedicationViewModel.Id, IdTCMClient = assessment.TcmClient_FK });
                         }
                     }
                     catch (System.Exception ex)
@@ -2874,15 +2880,15 @@ namespace KyoS.Web.Controllers
                 else
                 {
                     ModelState.AddModelError(string.Empty, "Already exists the Medication.");
-                    return RedirectToAction("CreateTCMMedication", "MedicationViewModel", new { id = MedicationViewModel.IdClient, IdTCMClient = MedicationViewModel.IdTCMClient });
+                    return RedirectToAction("CreateTCMMedication", "MedicationViewModel", new { id = MedicationViewModel.Id, IdTCMClient = assessment.TcmClient_FK });
                    // return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateTCMMedication", MedicationViewModel, new { id = MedicationViewModel.IdClient, IdTCMClient = MedicationViewModel.IdTCMClient }) });
                 }
             }
-            MedicationViewModel model;
-            model = new MedicationViewModel
+            TCMAssessmentMedicationViewModel model;
+            model = new TCMAssessmentMedicationViewModel
             {
-                IdClient = MedicationViewModel.IdClient,
-                Client = _context.Clients.Find(MedicationViewModel.IdClient),
+                TcmAssessment = _context.TCMAssessment.Find(MedicationViewModel.IdTCMAssessment),
+                IdTCMAssessment = MedicationViewModel.IdTCMAssessment,
                 Id = MedicationViewModel.Id,
                 Dosage = MedicationViewModel.Dosage,
                 Frequency = MedicationViewModel.Frequency,
@@ -2896,13 +2902,9 @@ namespace KyoS.Web.Controllers
         [Authorize(Roles = "CaseManager, TCMSupervisor")]
         public IActionResult EditTCMMedication(int id = 0)
         {
-            MedicationViewModel model;
-            TCMClientEntity tcmClient = _context.TCMClient
-                                                .Include(n => n.Client)
-                                                .ThenInclude(n => n.MedicationList)
-                                                .FirstOrDefault(n => n.Client.MedicationList.Where(m => m.Id == id).Count() > 0);
-
-            if (User.IsInRole("CaseManager") || User.IsInRole("TCMSupervisor"))
+            TCMAssessmentMedicationViewModel model;
+          
+            if (User.IsInRole("Manager") || User.IsInRole("TCMSupervisor"))
             {
                 UserEntity user_logged = _context.Users
                                                  .Include(u => u.Clinic)
@@ -2911,10 +2913,12 @@ namespace KyoS.Web.Controllers
                 if (user_logged.Clinic != null)
                 {
 
-                    MedicationEntity Medication = _context.Medication
-                                                         .Include(m => m.Client)
-                                                         .ThenInclude(m => m.MedicationList)
-                                                         .FirstOrDefault(m => m.Id == id);
+                    TCMAssessmentMedicationEntity Medication = _context.TCMAssessmentMedication
+                                                                       .Include(m => m.TcmAssessment)
+                                                                       .ThenInclude(m => m.MedicationList)
+                                                                       .Include(m => m.TcmAssessment)
+                                                                       .ThenInclude(m => m.TcmClient)
+                                                                       .FirstOrDefault(m => m.Id == id);
                     if (Medication == null)
                     {
                         return RedirectToAction("NotAuthorized", "Account");
@@ -2922,17 +2926,16 @@ namespace KyoS.Web.Controllers
                     else
                     {
 
-                        model = _converterHelper.ToMedicationViewModel(Medication);
-                        model.IdTCMClient = _context.TCMClient.FirstOrDefault(n => n.Client.Id == Medication.Client.Id).Id;
-                        ViewData["CaseNumber"] = tcmClient.CaseNumber;
+                        model = _converterHelper.ToTCMAssessmentMedicationViewModel(Medication);
+                        model.IdTCMAssessment = Medication.TcmAssessment.Id;
                         return View(model);
                     }
 
                 }
             }
 
-            model = new MedicationViewModel();
-            ViewData["CaseNumber"] = tcmClient.CaseNumber;
+            model = new TCMAssessmentMedicationViewModel();
+            
             return View(model);
         }
 
@@ -3261,7 +3264,8 @@ namespace KyoS.Web.Controllers
                                                                        .Include(n => n.Client.Psychiatrist)
                                                                        .Include(n => n.Client.Doctor)
                                                                        .Include(n => n.TCMIntakeMedicalHistory)
-                                                                       .Include(n => n.Client.MedicationList)
+                                                                       .Include(n => n.TCMAssessment)
+                                                                       .ThenInclude(n => n.MedicationList)
                                                                        .Include(n => n.TCMIntakeMiniMental)
                                                                        .Include(n => n.TCMIntakeCoordinationCare)
                                                                        .AsSplitQuery()
@@ -3425,7 +3429,7 @@ namespace KyoS.Web.Controllers
                                                                         .Include(n => n.TCMIntakeMiniMental)
                                                                         .Include(n => n.TCMIntakeCoordinationCare)
                                                                         .Include(n => n.TCMIntakeMedicalHistory)
-                                                                        .Include(n => n.Client.MedicationList)
+                                                                        .Include(n => n.TCMAssessment.MedicationList)
                                                                         .AsSplitQuery()
                                                                         .FirstOrDefaultAsync(c => c.Id == id);
 
@@ -6334,5 +6338,615 @@ namespace KyoS.Web.Controllers
             }
             return RedirectToAction("EditTCMInterventionLog", "TCMIntakes", new { id = intervention.TcmInterventionLog.Id });
         }
+
+        [Authorize(Roles = "Manager, TCMSupervisor")]
+        public IActionResult TCMMiniMentalReadOnly(int id = 0)
+        {
+
+            UserEntity user_logged = _context.Users
+                                                 .Include(u => u.Clinic)
+                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            TCMIntakeMiniMentalViewModel model;
+
+            if (User.IsInRole("Manager") || User.IsInRole("TCMSupervisor"))
+            {
+                if (user_logged.Clinic != null)
+                {
+                    TCMIntakeMiniMentalEntity intakeMiniMental = _context.TCMIntakeMiniMental
+                                                                          .Include(n => n.TcmClient)
+                                                                          .ThenInclude(n => n.Client)
+                                                                          .ThenInclude(n => n.LegalGuardian)
+                                                                          .Include(n => n.TcmClient)
+                                                                          .ThenInclude(n => n.Casemanager)
+                                                                          .ThenInclude(n => n.Clinic)
+                                                                          .FirstOrDefault(n => n.TcmClient.Id == id);
+
+                    if (intakeMiniMental == null)
+                    {
+
+                        model = new TCMIntakeMiniMentalViewModel
+                        {
+                            TcmClient = _context.TCMClient
+                                                .Include(d => d.Client)
+                                                .ThenInclude(d => d.LegalGuardian)
+                                                .Include(d => d.Casemanager)
+                                                .ThenInclude(d => d.Clinic)
+                                                .FirstOrDefault(n => n.Id == id),
+                            Date = DateTime.Now,
+                            Id = 0,
+                            CreatedBy = user_logged.UserName,
+                            CreatedOn = DateTime.Now,
+                            IdTCMClient = id,
+                            TcmClient_FK = id,
+                            AdmissionedFor = user_logged.FullName
+
+                        };
+                        if (model.TcmClient.Client.LegalGuardian == null)
+                            model.TcmClient.Client.LegalGuardian = new LegalGuardianEntity();
+                        return View(model);
+                    }
+                    else
+                    {
+                        if (intakeMiniMental.TcmClient.Client.LegalGuardian == null)
+                            intakeMiniMental.TcmClient.Client.LegalGuardian = new LegalGuardianEntity();
+                        model = _converterHelper.ToTCMIntakeMiniMenatalViewModel(intakeMiniMental);
+
+                        return View(model);
+                    }
+
+                }
+            }
+
+            return RedirectToAction("Index", "TCMIntakes");
+        }
+
+        [Authorize(Roles = "TCMSupervisor, Manager")]
+        public IActionResult TCMMedicalhistoryReadOnly(int id = 0, int idTCMClient = 0)
+        {
+
+            UserEntity user_logged = _context.Users
+                                                 .Include(u => u.Clinic)
+                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            TCMIntakeMedicalHistoryViewModel model;
+
+            TCMClientEntity tcmClient = _context.TCMClient
+                                                .Include(n => n.Client)
+                                                .ThenInclude(n => n.Doctor)
+                                                .Include(n => n.Client)
+                                                .ThenInclude(n => n.LegalGuardian)
+                                                .FirstOrDefault(n => n.Id == idTCMClient);
+
+            if (User.IsInRole("TCMSupervisor") || User.IsInRole("Manager"))
+            {
+                if (user_logged.Clinic != null)
+                {
+                    TCMIntakeMedicalHistoryEntity intakeMedicalHistory = _context.TCMIntakeMedicalHistory
+                                                                                 .Include(n => n.TCMClient)
+                                                                                 .ThenInclude(n => n.Client)
+                                                                                 .ThenInclude(n => n.LegalGuardian)
+                                                                                 .FirstOrDefault(n => n.TCMClient.Id == idTCMClient);
+                    DoctorEntity doctor = _context.Clients.FirstOrDefault(n => n.Id == id).Doctor;
+                    if (doctor == null)
+                    {
+                        doctor = new DoctorEntity();
+                    }
+                    if (intakeMedicalHistory == null)
+                    {
+                        model = new TCMIntakeMedicalHistoryViewModel
+                        {
+                            TCMClient = _context.TCMClient.Include(n => n.Client).ThenInclude(n => n.LegalGuardian).FirstOrDefault(n => n.Id == idTCMClient),
+                            TCMClient_FK = id,
+                            Id = 0,
+                            DateSignatureEmployee = DateTime.Now,
+                            DateSignatureLegalGuardian = DateTime.Now,
+                            DateSignaturePerson = DateTime.Now,
+                            Documents = true,
+
+                            AddressPhysician = doctor.Address,
+                            AgeFirstTalked = "",
+                            AgeFirstWalked = "",
+                            AgeToiletTrained = "",
+                            AgeWeaned = "",
+                            Allergies = false,
+                            Allergies_Describe = "",
+                            AndOrSoiling = false,
+                            Anemia = false,
+                            AreYouCurrently = false,
+                            AreYouPhysician = false,
+                            Arthritis = false,
+                            AssumingCertainPositions = false,
+                            BackPain = false,
+                            BeingConfused = false,
+                            BeingDisorientated = false,
+                            BirthWeight = "",
+                            BlackStools = false,
+                            BloodInUrine = false,
+                            BloodyStools = false,
+                            BottleFedUntilAge = "",
+                            BreastFed = false,
+                            BurningUrine = false,
+                            Calculating = false,
+                            Cancer = false,
+                            ChestPain = false,
+                            ChronicCough = false,
+                            ChronicIndigestion = false,
+                            City = doctor.City,
+                            Complications = false,
+                            Complications_Explain = "",
+                            Comprehending = false,
+                            Concentrating = false,
+                            Constipation = false,
+                            ConvulsionsOrFits = false,
+                            CoughingOfBlood = false,
+                            DescriptionOfChild = "",
+                            Diabetes = false,
+                            Diphtheria = false,
+                            DoYouSmoke = false,
+                            DoYouSmoke_PackPerDay = "",
+                            DoYouSmoke_Year = "",
+                            EarInfections = false,
+                            Epilepsy = false,
+                            EyeTrouble = false,
+                            Fainting = false,
+                            FamilyAsthma = false,
+                            FamilyAsthma_ = "",
+                            FamilyCancer = false,
+                            FamilyCancer_ = "",
+                            FamilyDiabetes = false,
+                            FamilyDiabetes_ = "",
+                            FamilyEpilepsy = false,
+                            FamilyEpilepsy_ = "",
+                            FamilyGlaucoma = false,
+                            FamilyGlaucoma_ = "",
+                            FamilyHayFever = false,
+                            FamilyHayFever_ = "",
+                            FamilyHeartDisease = false,
+                            FamilyHeartDisease_ = "",
+                            FamilyHighBloodPressure = false,
+                            FamilyHighBloodPressure_ = "",
+                            FamilyKidneyDisease = false,
+                            FamilyKidneyDisease_ = "",
+                            FamilyNervousDisorders = false,
+                            FamilyNervousDisorders_ = "",
+                            FamilyOther = false,
+                            FamilyOther_ = "",
+                            FamilySyphilis = false,
+                            FamilySyphilis_ = "",
+                            FamilyTuberculosis = false,
+                            FamilyTuberculosis_ = "",
+                            FirstYearMedical = "",
+                            Fractures = false,
+                            FrequentColds = false,
+                            FrequentHeadaches = false,
+                            FrequentNoseBleeds = false,
+                            FrequentSoreThroat = false,
+                            FrequentVomiting = false,
+                            HaveYouEverBeenPregnant = false,
+                            HaveYouEverHadComplications = false,
+                            HaveYouEverHadExcessive = false,
+                            HaveYouEverHadPainful = false,
+                            HaveYouEverHadSpotting = false,
+                            HayFever = false,
+                            HeadInjury = false,
+                            Hearing = false,
+                            HearingTrouble = false,
+                            HeartPalpitation = false,
+                            Hemorrhoids = false,
+                            Hepatitis = false,
+                            Hernia = false,
+                            HighBloodPressure = false,
+                            Hoarseness = false,
+                            Immunizations = "",
+                            InfectiousDisease = false,
+                            Jaundice = false,
+                            KidneyStones = false,
+                            KidneyTrouble = false,
+                            Length = "",
+                            ListAllCurrentMedications = "",
+                            LossOfMemory = false,
+                            Mumps = false,
+                            Nervousness = false,
+                            NightSweats = false,
+                            Normal = false,
+                            PainfulJoints = false,
+                            PainfulMuscles = false,
+                            PainfulUrination = false,
+                            PerformingCertainMotions = false,
+                            Planned = false,
+                            Poliomyelitis = false,
+                            PrimaryCarePhysician = doctor.Name,
+                            ProblemWithBedWetting = false,
+                            Reading = false,
+                            RheumaticFever = false,
+                            Rheumatism = false,
+                            ScarletFever = false,
+                            Seeing = false,
+                            SeriousInjury = false,
+                            ShortnessOfBreath = false,
+                            SkinTrouble = false,
+                            Speaking = false,
+                            State = doctor.State,
+                            StomachPain = false,
+                            Surgery = false,
+                            SwellingOfFeet = false,
+                            SwollenAnkles = false,
+                            Tuberculosis = false,
+                            Unplanned = false,
+                            VaricoseVeins = false,
+                            VenerealDisease = false,
+                            VomitingOfBlood = false,
+                            Walking = false,
+                            WeightLoss = false,
+                            WhoopingCough = false,
+                            WritingSentence = false,
+                            ZipCode = doctor.ZipCode,
+                            AgeOfFirstMenstruation = "",
+                            DateOfLastBreastExam = "",
+                            DateOfLastPelvic = "",
+                            DateOfLastPeriod = "",
+                            UsualDurationOfPeriods = "",
+                            UsualIntervalBetweenPeriods = "",
+                            AdmissionedFor = user_logged.FullName
+
+                        };
+                        if (model.TCMClient.Client.LegalGuardian == null)
+                            model.TCMClient.Client.LegalGuardian = new LegalGuardianEntity();
+                        model.IdTCMClient = idTCMClient;
+                        ViewData["CaseNumber"] = tcmClient.CaseNumber;
+                        return View(model);
+                    }
+                    else
+                    {
+                        if (intakeMedicalHistory.TCMClient.Client.LegalGuardian == null)
+                            intakeMedicalHistory.TCMClient.Client.LegalGuardian = new LegalGuardianEntity();
+                        model = _converterHelper.ToTCMIntakeMedicalHistoryViewModel(intakeMedicalHistory);
+                        model.IdTCMClient = idTCMClient;
+                        ViewData["CaseNumber"] = tcmClient.CaseNumber;
+                        return View(model);
+                    }
+
+                }
+            }
+
+            return RedirectToAction("Index", "Intakes");
+        }
+
+        [Authorize(Roles = "Manager, TCMSupervisor")]
+        public IActionResult TCMCoordinationCareReadOnly(int id = 0)
+        {
+
+            UserEntity user_logged = _context.Users
+                                                 .Include(u => u.Clinic)
+                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            TCMIntakeCoordinationCareViewModel model;
+
+            if (User.IsInRole("Manager") || User.IsInRole("TCMSupervisor"))
+            {
+                if (user_logged.Clinic != null)
+                {
+                    TCMIntakeCoordinationCareEntity intakeCoordination = _context.TCMIntakeCoordinationCare
+                                                                                 .Include(n => n.TcmClient)
+                                                                                 .ThenInclude(n => n.Client)
+                                                                                 .ThenInclude(n => n.LegalGuardian)
+                                                                                 .Include(n => n.TcmClient)
+                                                                                 .ThenInclude(n => n.Casemanager)
+                                                                                 .ThenInclude(n => n.Clinic)
+                                                                                 .Include(n => n.TcmClient)
+                                                                                 .ThenInclude(n => n.TCMIntakeForm)
+                                                                                 .FirstOrDefault(n => n.TcmClient.Id == id);
+
+                    if (intakeCoordination == null)
+                    {
+                        TCMClientEntity tcmClient = _context.TCMClient
+                                                            .Include(d => d.Client)
+                                                            .ThenInclude(d => d.LegalGuardian)
+                                                            .Include(d => d.Casemanager)
+                                                            .ThenInclude(d => d.Clinic)
+                                                            .Include(n => n.TCMIntakeForm)
+                                                            .FirstOrDefault(n => n.Id == id);
+                        if (tcmClient.TCMIntakeForm == null)
+                            tcmClient.TCMIntakeForm = new TCMIntakeFormEntity();
+
+                        model = new TCMIntakeCoordinationCareViewModel
+                        {
+                            TcmClient = tcmClient,
+                            Date = DateTime.Now,
+                            Id = 0,
+                            CreatedBy = user_logged.UserName,
+                            CreatedOn = DateTime.Now,
+                            IdTCMClient = id,
+                            TcmClient_FK = id,
+                            AdmissionedFor = user_logged.FullName,
+                            DateSignatureEmployee = DateTime.Now,
+                            DateSignatureLegalGuardian = DateTime.Now,
+                            DateSignaturePerson = DateTime.Now,
+                            Documents = true,
+                            IAuthorize = true,
+                            InformationAllBefore = false,
+                            InformationElectronic = false,
+                            InformationFascimile = false,
+                            InformationNonKnown = false,
+                            InformationToRelease = false,
+                            InformationTorequested = false,
+                            InformationVerbal = false,
+                            InformationWrited = false,
+                            IRefuse = true,
+                            PCP = true,
+                            Specialist = false,
+                            SpecialistText = "",
+                            PCP_Name = tcmClient.TCMIntakeForm.PCP_Name,
+                            PCP_Address = tcmClient.TCMIntakeForm.PCP_Address,
+                            PCP_Phone = tcmClient.TCMIntakeForm.PCP_Phone,
+                            PCP_CityStateZip = tcmClient.TCMIntakeForm.PCP_CityStateZip,
+                            PCP_FaxNumber = tcmClient.TCMIntakeForm.PCP_FaxNumber,
+
+                        };
+                        if (model.TcmClient.Client.LegalGuardian == null)
+                            model.TcmClient.Client.LegalGuardian = new LegalGuardianEntity();
+
+                        return View(model);
+                    }
+                    else
+                    {
+                        if (intakeCoordination.TcmClient.Client.LegalGuardian == null)
+                            intakeCoordination.TcmClient.Client.LegalGuardian = new LegalGuardianEntity();
+
+                        model = _converterHelper.ToTCMIntakeCoordinationCareViewModel(intakeCoordination);
+
+                        if (intakeCoordination.TcmClient.TCMIntakeForm != null)
+                        {
+                            model.PCP_Name = intakeCoordination.TcmClient.TCMIntakeForm.PCP_Name;
+                            model.PCP_Address = intakeCoordination.TcmClient.TCMIntakeForm.PCP_Address;
+                            model.PCP_Phone = intakeCoordination.TcmClient.TCMIntakeForm.PCP_Phone;
+                            model.PCP_CityStateZip = intakeCoordination.TcmClient.TCMIntakeForm.PCP_CityStateZip;
+                            model.PCP_FaxNumber = intakeCoordination.TcmClient.TCMIntakeForm.PCP_FaxNumber;
+                        }
+                        return View(model);
+                    }
+
+                }
+            }
+
+            return RedirectToAction("Index", "TCMIntakes");
+        }
+
+        [Authorize(Roles = "Manager, TCMSupervisor, CaseManager")]
+        public async Task<IActionResult> TCMMedicationList(int idError = 0, int id = 0, int idTCMClient = 0)
+        {
+            if (idError == 1) //Imposible to delete
+            {
+                ViewBag.Delete = "N";
+            }
+
+            UserEntity user_logged = await _context.Users
+                                                   .Include(u => u.Clinic)
+                                                   .ThenInclude(c => c.Setting)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.TCMClinic)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+            else
+            {
+                List<TCMAssessmentMedicationEntity> medication = await _context.TCMAssessmentMedication
+                                                                                  .Include(n => n.TcmAssessment)
+                                                                                  .ThenInclude(n => n.TcmClient)
+                                                                                  .AsSplitQuery()
+                                                                                  .Where(n => n.TcmAssessment.TcmClient.Id == idTCMClient)
+                                                                                  .ToListAsync();
+
+                ViewData["idclient"] = idTCMClient;
+                return View(medication);
+            }           
+        }
+
+        [Authorize(Roles = "Manager, TCMSupervisor, CaseManager")]
+        public async Task<IActionResult> DeleteTCMMedicationModal(int id = 0)
+        {
+            TCMAssessmentMedicationEntity medication = _context.TCMAssessmentMedication
+                                                               .Include(n => n.TcmAssessment)
+                                                               .ThenInclude(n => n.TcmClient)
+
+                                                               .FirstOrDefault(m => m.Id == id);
+            if (medication == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            try
+            {
+                _context.TCMAssessmentMedication.Remove(medication);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+
+            }
+            return RedirectToAction("TCMMedicationList", "TCMIntakes", new { idTCMClient = medication.TcmAssessment.TcmClient_FK });
+        }
+
+        [Authorize(Roles = "CaseManager, TCMSupervisor, Manager")]
+        public IActionResult CreateTCMMedicationModal(int id = 0, int idTCMClient = 0)
+        {
+
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            TCMClientEntity tcmClient = _context.TCMClient
+                                                .Include(n => n.TCMAssessment)
+                                                .ThenInclude(n => n.MedicationList)
+                                                .Include(n => n.Client)
+                                                .FirstOrDefault(n => n.Id == idTCMClient);
+
+            TCMAssessmentMedicationViewModel model = new TCMAssessmentMedicationViewModel();
+
+            if (User.IsInRole("CaseManager") || User.IsInRole("TCMSupervisor") || User.IsInRole("Manager"))
+            {
+                if (user_logged.Clinic != null)
+                {
+
+                    model = new TCMAssessmentMedicationViewModel
+                    {
+                        Id = 0,
+                        Dosage = "",
+                        Frequency = "",
+                        Name = "",
+                        Prescriber = "",
+                        TcmAssessment = tcmClient.TCMAssessment,
+                        IdTCMAssessment = (tcmClient.TCMAssessment == null) ? 0 : tcmClient.TCMAssessment.Id,
+                        CreatedBy = user_logged.UserName,
+                        CreatedOn = DateTime.Today
+
+                    };
+
+                    return View(model);
+                }
+                else
+                {
+                    return RedirectToAction("NotAuthorized", "Account");
+                }
+            }
+            else
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+           
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "CaseManager, TCMSupervisor, Manager")]
+        public async Task<IActionResult> CreateTCMMedicationModal(TCMAssessmentMedicationViewModel MedicationViewModel)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            TCMAssessmentEntity assessment = await _context.TCMAssessment.FirstOrDefaultAsync(n => n.Id == MedicationViewModel.IdTCMAssessment);
+            TCMAssessmentMedicationEntity medicationEntity = _context.TCMAssessmentMedication.Find(MedicationViewModel.Id);
+            if (ModelState.IsValid)
+            {
+                
+                if (medicationEntity == null)
+                {
+                    medicationEntity = await _converterHelper.ToTCMAssessmenMedicationEntity(MedicationViewModel, true, user_logged.UserName);
+                    _context.TCMAssessmentMedication.Add(medicationEntity);
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+                        return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewTCMMedicationList", _context.TCMAssessmentMedication.Where(n => n.TcmAssessment.Id == MedicationViewModel.IdTCMAssessment)) });
+                        
+                    }
+                    catch (System.Exception ex)
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Already exists the Medication.");
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewTCMMedicationList", _context.TCMAssessmentMedication.Where(n => n.TcmAssessment.Id == MedicationViewModel.IdTCMAssessment)) });
+                    // return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateTCMMedication", MedicationViewModel, new { id = MedicationViewModel.IdClient, IdTCMClient = MedicationViewModel.IdTCMClient }) });
+                }
+            }
+            TCMAssessmentMedicationViewModel model;
+            model = new TCMAssessmentMedicationViewModel
+            {
+                TcmAssessment = _context.TCMAssessment.Find(MedicationViewModel.IdTCMAssessment),
+                IdTCMAssessment = MedicationViewModel.IdTCMAssessment,
+                Id = MedicationViewModel.Id,
+                Dosage = MedicationViewModel.Dosage,
+                Frequency = MedicationViewModel.Frequency,
+                Name = MedicationViewModel.Name,
+                Prescriber = MedicationViewModel.Prescriber
+
+            };
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "_ViewTCMMedicationList", _context.TCMAssessmentMedication.Where(n => n.TcmAssessment.Id == MedicationViewModel.IdTCMAssessment)) });
+        }
+
+        [Authorize(Roles = "CaseManager, TCMSupervisor, Manager")]
+        public IActionResult EditTCMMedicationModal(int id = 0)
+        {
+
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            TCMAssessmentMedicationEntity medication = _context.TCMAssessmentMedication
+                                                               .Include(n => n.TcmAssessment)
+                                                               .ThenInclude(n => n.TcmClient)
+                                                               .ThenInclude(n => n.Client)
+                                                               .FirstOrDefault(n => n.Id == id);
+
+            TCMAssessmentMedicationViewModel model;
+
+            if (User.IsInRole("CaseManager") || User.IsInRole("TCMSupervisor") || User.IsInRole("Manager"))
+            {
+                model = _converterHelper.ToTCMAssessmentMedicationViewModel(medication);
+                return View(model);
+            }
+            else
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+           
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "CaseManager, TCMSupervisor, Manager")]
+        public async Task<IActionResult> EditTCMMedicationModal(TCMAssessmentMedicationViewModel MedicationViewModel)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            TCMAssessmentMedicationEntity medicationEntity = new TCMAssessmentMedicationEntity();
+            if (ModelState.IsValid)
+            {
+
+                if (MedicationViewModel.Id > 0)
+                {
+                    medicationEntity = await _converterHelper.ToTCMAssessmenMedicationEntity(MedicationViewModel, false, user_logged.UserName);
+                    _context.Update(medicationEntity);
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+                        return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewTCMMedicationList", _context.TCMAssessmentMedication.Where(n => n.TcmAssessment.Id == MedicationViewModel.IdTCMAssessment)) });
+
+                    }
+                    catch (System.Exception ex)
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Already exists the Medication.");
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewTCMMedicationList", _context.TCMAssessmentMedication.Where(n => n.TcmAssessment.Id == MedicationViewModel.IdTCMAssessment)) });
+                    // return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateTCMMedication", MedicationViewModel, new { id = MedicationViewModel.IdClient, IdTCMClient = MedicationViewModel.IdTCMClient }) });
+                }
+            }
+            TCMAssessmentMedicationViewModel model;
+            model = new TCMAssessmentMedicationViewModel
+            {
+                TcmAssessment = _context.TCMAssessment.Find(MedicationViewModel.IdTCMAssessment),
+                IdTCMAssessment = MedicationViewModel.IdTCMAssessment,
+                Id = MedicationViewModel.Id,
+                Dosage = MedicationViewModel.Dosage,
+                Frequency = MedicationViewModel.Frequency,
+                Name = MedicationViewModel.Name,
+                Prescriber = MedicationViewModel.Prescriber
+
+            };
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "_ViewTCMMedicationList", _context.TCMAssessmentMedication.Where(n => n.TcmAssessment.Id == MedicationViewModel.IdTCMAssessment)) });
+        }
+
     }
 }
