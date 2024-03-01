@@ -518,14 +518,13 @@
                 @if (Model.TCMIntakeCoordinationCare != null)
                 {
                     <div class="thumbnail list-group-item list-group-item-success">
-                        <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-action="TCMCoordinationCareReadOnly" role="button">
+                        <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-action="CreateTCMCoordinationCare" role="button">
                             <h4 style="align-content: end; color: #3c763d"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Coordination<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;of Care</h4>
                         </a>
-                        <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-action="PrintCoordinationCare" role="button" title="Print Coordination of care" target="_blank">
+                        <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-action="PrintTCMIntakeCoordinationCare" role="button" title="Print Coordination of Care" target="_blank">
                             <i class="glyphicon glyphicon-print" style="position: absolute; right: 12px; top: 12px; color: #3c763d;"></i>
                         </a>
                     </div>
-                  
                 }
                 else
                 {

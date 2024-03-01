@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="01/10/2024 09:39:52" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="03/01/2024 10:16:15" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3U66Xa9FdgI84V82jxMzgWg==">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3NphECaBSwztOeYZYRu1oHw==">
       <TableDataSource Name="Clinics" DataType="System.Int32" Enabled="true" TableName="Clinics">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -469,7 +469,7 @@
       <TextObject Name="Text285" Left="576.45" Top="721.65" Width="153.09" Height="24.57" CanGrow="true" Text="Date" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 8pt"/>
       <LineObject Name="Line12" Left="731.65" Top="720.2" Width="-154.98"/>
       <TextObject Name="Text286" Left="574.45" Top="699.85" Width="160.65" Height="18.9" Text="[TCMIntakeForms.IntakeDate]" Format="Date" Format.Format="d" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
-      <PictureObject Name="Picture3" Left="425.25" Top="661.5" Width="95" Height="63.45" DataColumn="Signatures.facilitatorSignature"/>
+      <PictureObject Name="Picture3" Left="425.25" Top="666.5" Width="95" Height="63.45" DataColumn="Signatures.facilitatorSignature"/>
     </DataBand>
     <PageFooterBand Name="PageFooter2" Top="853.41" Width="778.3" Height="31.35">
       <TextObject Name="Text201" Left="15.9" Top="7.35" Width="283.5" Height="18.9" Text="Case Management Intake Form © 12.2020" VertAlign="Center" Font="Arial, 8pt, style=Italic"/>
