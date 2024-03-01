@@ -146,9 +146,7 @@
             <input asp-for="LegalGuardianCity" class="form-control">
             <span asp-validation-for="LegalGuardianCity" class="text-danger"></span>
         </div>
-
     </div>
-
     <div class="col-md-push-12">
         <div class="form-group col-md-2">
             <label asp-for="LegalGuardianState" class="control-label">Legal Guardian State</label>
@@ -266,9 +264,8 @@
             <span asp-validation-for="YearEnterUsa" class="text-danger"></span>
         </div>
         <div class="form-group col-md-8">
-            <pre><b>Status</b>
-            <input type="checkbox" asp-for="StausCitizen" class="form-check-input"> Citizen &nbsp;&nbsp; &nbsp;&nbsp;<input type="checkbox" asp-for="StatusResident" class="form-check-input"> Resident&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" asp-for="StatusOther" class="form-check-input">  Other (If Other, please explain): <input asp-for="StatusOther_Explain" style="width:30%"></pre>
-            <br />
+        <pre><b>Status</b><br/><input type="checkbox" asp-for="StausCitizen" class="form-check-input"> Citizen &nbsp;&nbsp; &nbsp;&nbsp;<input type="checkbox" asp-for="StatusResident" class="form-check-input"> Resident&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" asp-for="StatusOther" class="form-check-input">  Other (If Other, please explain): <input asp-for="StatusOther_Explain" style="width:30%"></pre>
+        <br />
         </div>
     </div>
     <div class="col-md-push-12">
@@ -283,7 +280,7 @@
             <span asp-validation-for="EmergencyContacTelephone" class="text-danger"></span>
         </div>
         <div class="form-group col-md-2">
-            <label asp-for="IdRelationshipEC" class="control-label"></label>
+            <label asp-for="IdRelationshipEC" class="control-label">Relationship</label>
             <select asp-for="IdRelationshipEC" asp-items="Model.RelationshipsEC" class="form-control"></select>
             <span asp-validation-for="IdRelationshipEC" class="text-danger"></span>
         </div>
@@ -298,7 +295,7 @@
             <span asp-validation-for="SecondaryContact_Phone" class="text-danger"></span>
         </div>
         <div class="form-group col-md-2">
-            <label asp-for="SecondaryContact_RelationShip" class="control-label">RelationShip</label>
+            <label asp-for="SecondaryContact_RelationShip" class="control-label">Relationship</label>
             <input asp-for="SecondaryContact_RelationShip" class="form-control">
             <span asp-validation-for="SecondaryContact_RelationShip" class="text-danger"></span>
         </div>
@@ -405,16 +402,18 @@
         </div>
     </div>
     <div class="col-md-12">
-        <pre>
-        @if (Model.Id == 0)
-        {
-        <input type="checkbox" class="form-check-input" disabled> <i>Signed</i>
-        }
-        else
-        { 
-        <input type="checkbox" class="form-check-input" checked disabled> <i>Signed</i>
-        }
-        <strong>Staff Signature: </strong> <strong>(@Html.DisplayFor(modelItem => Model.TcmClient.Casemanager.Name))</strong>    <input asp-for="IntakeDate">
+    <pre>
+    @if (Model.Id == 0)
+    {
+    <input type="checkbox" class="form-check-input" disabled> <i>Signed</i>
+    }
+    else
+    { 
+    <input type="checkbox" class="form-check-input" checked disabled> <i>Signed</i>
+    }
+
+    <strong>Staff Signature: </strong>              <input asp-for="IntakeDate">
+    <strong>(@Html.DisplayFor(modelItem => Model.TcmClient.Casemanager.Name))</strong>    
     </pre>
     </div>
 }
