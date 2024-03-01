@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="12/21/2023 18:37:44" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="03/01/2024 12:10:34" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhDFmP9T+uKfsJXu65Ovrj+A1YfN5dfPvLBg6EY9L3xBgdKTD3jWzkT9igQJx8b03+0f0l+WNsrYdrBd/Lm16zW">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhDFmP9T+uKfsJXu65Ovrj+A1YfN5dfPvLBg6EY9L3xBgdKTD3jWzkT9igQJx8b03/9t5sEaoXl2sdsGiftPJpe">
       <TableDataSource Name="Clinics" DataType="System.Int32" Enabled="true" TableName="Clinics">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -131,6 +131,12 @@
         <Column Name="facilitatorSignature" DataType="System.Byte[]" PropName="Name"/>
       </TableDataSource>
     </MsSqlDataConnection>
+    <MsSqlDataConnection Name="Connection1" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pKiygLNrR2GSkUua6CZa7zWuDzNGOn7cjq7mn0WTOnccDkyyV5BLvtFa1BRlcYFBrHCdlm2Bd07+eqt6Q1HR9CQ==">
+      <TableDataSource Name="Classifications1" Alias="Signatures1" DataType="System.Int32" Enabled="true" TableName="Classifications">
+        <Column Name="supervisorSignature" DataType="System.Byte[]" PropName="Id"/>
+        <Column Name="facilitatorSignature" DataType="System.Byte[]" PropName="Name"/>
+      </TableDataSource>
+    </MsSqlDataConnection>
     <Parameter Name="session1" DataType="System.String"/>
   </Dictionary>
   <ReportPage Name="Page1" PaperWidth="215.9" PaperHeight="279.4" RawPaperSize="1" LeftMargin="5" TopMargin="5" RightMargin="5" BottomMargin="5" Watermark.Enabled="true" Watermark.Font="Arial, 60pt">
@@ -160,28 +166,27 @@
       <TextObject Name="Text316" Left="534.75" Top="262.33" Width="179.55" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[IIf([TCMIntakeAdvancedDirective.IHave]==true,Switch([Clients.RelationShipOfEmergencyContact] == 0, &quot;Unknown&quot;,[Clients.RelationShipOfEmergencyContact] == 1, &quot;Brother&quot;,[Clients.RelationShipOfEmergencyContact] == 2, &quot;Child&quot;,[Clients.RelationShipOfEmergencyContact] == 3, &quot;Daugther&quot;,[Clients.RelationShipOfEmergencyContact] == 4, &quot;Father&quot;,[Clients.RelationShipOfEmergencyContact] == 5, &quot;Friend&quot;,[Clients.RelationShipOfEmergencyContact] == 6, &quot;Guardian&quot;,[Clients.RelationShipOfEmergencyContact] == 7, &quot;Mother&quot;, [Clients.RelationShipOfEmergencyContact] == 8, &quot;Psychiatrist&quot;,[Clients.RelationShipOfEmergencyContact] == 9, &quot;Self&quot;,[Clients.RelationShipOfEmergencyContact] == 10, &quot;Sibling&quot;, [Clients.RelationShipOfEmergencyContact] == 11, &quot;Sister&quot;,[Clients.RelationShipOfEmergencyContact] == 12, &quot;Spouse&quot;, [Clients.RelationShipOfEmergencyContact] == 13, &quot;Son&quot;, [Clients.RelationShipOfEmergencyContact] == 14, &quot;Other&quot;),&quot;&quot;)]" VertAlign="Center" Font="Arial, 9pt"/>
       <CheckBoxObject Name="CheckBox28" Left="4" Top="322.75" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMIntakeAdvancedDirective.IHaveNot"/>
       <TextObject Name="Text317" Left="17.9" Top="321.3" Width="756" Height="30.24" Text="&lt;b&gt;I HAVE NOT&lt;/b&gt; executed a &lt;i&gt;Mental Health Advance Directive&lt;/i&gt;, however I have read or been explained, and understand my rights to have a &lt;i&gt;Mental Health Advance Directive&lt;/i&gt;." HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
-      <TextObject Name="Text284" Left="28.35" Top="782.9" Width="153.09" Height="24.57" CanGrow="true" Text="Witness Signature" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
-      <LineObject Name="Line11" Left="221.35" Top="781.45" Width="-192.78"/>
-      <TextObject Name="Text285" Left="532.2" Top="782.9" Width="162.54" Height="24.57" CanGrow="true" Text="Date" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
-      <LineObject Name="Line12" Left="725.2" Top="781.45" Width="-192.78"/>
-      <TextObject Name="Text286" Left="532.2" Top="762.1" Width="196.56" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[TCMIntakeAdvancedDirective.DateSignatureEmployee]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
-      <TextObject Name="Text287" Left="28.35" Top="671.5" Width="190.89" Height="24.57" CanGrow="true" Text="Authorized Representative Signature " Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
-      <LineObject Name="Line13" Left="221.35" Top="670.05" Width="-192.78"/>
-      <TextObject Name="Text288" Left="532.2" Top="671.5" Width="162.54" Height="24.57" CanGrow="true" Text="Date" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
-      <LineObject Name="Line14" Left="725.2" Top="670.05" Width="-191.27"/>
-      <TextObject Name="Text289" Left="532.2" Top="651.7" Width="196.56" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[TCMIntakeAdvancedDirective.DateSignatureLegalGuardian]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
-      <PictureObject Name="Picture3" Left="75.6" Top="720.3" Width="95" Height="63.45" DataColumn="Signatures.facilitatorSignature"/>
-      <TextObject Name="Text290" Left="28.35" Top="574.9" Width="190.89" Height="24.57" CanGrow="true" Text="Client’s Signature " Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
-      <LineObject Name="Line15" Left="221.35" Top="573.45" Width="-192.78"/>
-      <TextObject Name="Text291" Left="532.2" Top="574.9" Width="162.54" Height="24.57" CanGrow="true" Text="Date" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
-      <LineObject Name="Line16" Left="725.2" Top="573.45" Width="-192.78"/>
-      <TextObject Name="Text292" Left="532.2" Top="554.1" Width="196.56" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[TCMIntakeAdvancedDirective.DateSignaturePerson]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
-      <TextObject Name="Text318" Left="256.05" Top="672.95" Width="238.14" Height="24.57" CanGrow="true" Text="Authorized Representative Signature " Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
-      <LineObject Name="Line17" Left="502.75" Top="670.5" Width="-249.48"/>
-      <TextObject Name="Text319" Left="256.15" Top="784.35" Width="238.14" Height="24.57" CanGrow="true" Text="Witness Name" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
-      <LineObject Name="Line18" Left="502.85" Top="781.9" Width="-249.48"/>
-      <TextObject Name="Text320" Left="254.15" Top="762.45" Width="255.15" Height="18.9" Text="[CaseManagers.Name]" Font="Arial, 10pt"/>
-      <TextObject Name="Text321" Left="253.15" Top="651.6" Width="255.15" Height="18.9" Text="[IIf([TCMIntakeAdvancedDirective.IHave]==true,[EmergencyContacts.Name],&quot;&quot;)]" Font="Arial, 10pt"/>
+      <TextObject Name="Text284" Left="61.35" Top="783.9" Width="153.09" Height="24.57" CanGrow="true" Text="Witness Signature" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
+      <LineObject Name="Line11" Left="254.35" Top="781.45" Width="-192.78"/>
+      <TextObject Name="Text285" Left="565.2" Top="782.9" Width="124.74" Height="24.57" CanGrow="true" Text="Date" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
+      <TextObject Name="Text286" Left="565.2" Top="762.1" Width="130.41" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[TCMIntakeAdvancedDirective.DateSignatureEmployee]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text287" Left="61.35" Top="672.5" Width="190.89" Height="24.57" CanGrow="true" Text="Authorized Representative Signature " Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
+      <LineObject Name="Line13" Left="254.35" Top="670.05" Width="-192.78"/>
+      <TextObject Name="Text288" Left="565.2" Top="672.5" Width="124.74" Height="24.57" CanGrow="true" Text="Date" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
+      <TextObject Name="Text289" Left="565.2" Top="651.7" Width="130.41" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[IIf(Year([TCMIntakeAdvancedDirective.DateSignatureLegalGuardian]) == 1,&quot;&quot;,[TCMIntakeAdvancedDirective.DateSignatureLegalGuardian])]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
+      <PictureObject Name="Picture3" Left="108.6" Top="728.3" Width="95" Height="63.45" DataColumn="Signatures.facilitatorSignature"/>
+      <TextObject Name="Text290" Left="61.35" Top="574.9" Width="190.89" Height="24.57" CanGrow="true" Text="Client’s Signature " Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
+      <LineObject Name="Line15" Left="254.35" Top="573.45" Width="-192.78"/>
+      <TextObject Name="Text291" Left="565.2" Top="574.9" Width="124.74" Height="24.57" CanGrow="true" Text="Date" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
+      <TextObject Name="Text292" Left="565.2" Top="554.1" Width="130.41" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[TCMIntakeAdvancedDirective.DateSignaturePerson]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text318" Left="289.05" Top="672.95" Width="238.14" Height="24.57" CanGrow="true" Text="Authorized Representative Signature " Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
+      <LineObject Name="Line17" Left="535.75" Top="670.5" Width="-249.48"/>
+      <TextObject Name="Text319" Left="289.15" Top="784.35" Width="238.14" Height="24.57" CanGrow="true" Text="Witness Name" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
+      <LineObject Name="Line18" Left="535.85" Top="781.9" Width="-249.48"/>
+      <TextObject Name="Text320" Left="287.15" Top="762.45" Width="255.15" Height="18.9" Text="[CaseManagers.Name]" Font="Arial, 10pt"/>
+      <TextObject Name="Text321" Left="286.15" Top="651.6" Width="255.15" Height="18.9" Text="[IIf([TCMIntakeAdvancedDirective.IHave]==true,[EmergencyContacts.Name],&quot;&quot;)]" Font="Arial, 10pt"/>
+      <PictureObject Name="Picture7" Left="108.49" Top="521.2" Width="95" Height="63.45" DataColumn="Signatures.supervisorSignature"/>
+      <PictureObject Name="Picture8" Left="108.49" Top="621.7" Width="95" Height="63.45" DataColumn="Signatures1.supervisorSignature"/>
     </DataBand>
   </ReportPage>
 </Report>

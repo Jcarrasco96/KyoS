@@ -1949,6 +1949,11 @@ namespace KyoS.Web.Controllers
                                                                    .ThenInclude(cl => cl.Clients_Diagnostics)
                                                                    .ThenInclude(d => d.Diagnostic)
 
+                                                                   .Include(n => n.TcmServicePlan)
+                                                                   .ThenInclude(n => n.TcmClient)
+                                                                   .ThenInclude(n => n.Client)
+                                                                   .ThenInclude(c => c.LegalGuardian)
+
                                                                    .Include(sp => sp.TCMSupervisor)
                                                                    .ThenInclude(s => s.Clinic)
 

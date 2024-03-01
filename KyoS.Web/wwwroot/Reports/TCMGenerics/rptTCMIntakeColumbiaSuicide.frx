@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="10/14/2023 13:28:35" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="03/01/2024 11:57:05" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pKiygLNrR2GSkUua6CZa7zWuDzNGOn7cjq7mn0WTOnccDkyyV5BLvtFa1BRlcYFBrDhzdu/yi4K7YY9ecaWmk/A==">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pKiygLNrR2GSkUua6CZa7zWuDzNGOn7cjq7mn0WTOnccDkyyV5BLvtFa1BRlcYFBrRbEZy2kGrOkyMAvT6em7OA==">
       <TableDataSource Name="Clinics" DataType="System.Int32" Enabled="true" TableName="Clinics">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -261,17 +261,16 @@
       <TextObject Name="Text331" Left="27.35" Top="664.5" Width="103.95" Height="22.68" CanGrow="true" Text="Moderate Risk" Padding="2, 2, 2, 2" Font="Arial, 9pt"/>
       <TextObject Name="Text332" Left="27.35" Top="683.85" Width="103.95" Height="22.68" CanGrow="true" Text="High Risk" Padding="2, 2, 2, 2" Font="Arial, 9pt"/>
       <TextObject Name="Text333" Top="884.3" Width="774.9" Height="47.25" CanGrow="true" Text="For inquiries and training information contact: Kelly Posner, Ph.D. &#13;&#10;New York State Psychiatric Institute, 1051 Riverside Drive, New York, New York, 10032; posnerk@nyspi.columbia.edu &#13;&#10;© 2008 The Research Foundation for Mental Hygiene, Inc. " Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 9pt"/>
-      <PictureObject Name="Picture3" Left="175.57" Top="774.8" Width="95" Height="63.45" DataColumn="Signatures.facilitatorSignature"/>
-      <TextObject Name="Text316" Left="85.52" Top="840.3" Width="264.6" Height="22.68" CanGrow="true" Text="Employee / TCM Signature" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
-      <LineObject Name="Line17" Left="354.12" Top="838.85" Width="-268.38"/>
-      <TextObject Name="Text317" Left="85.07" Top="819.95" Width="268.38" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[CaseManagers.Name]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
-      <PictureObject Name="Picture4" Left="178.57" Top="693.4" Width="95" Height="63.45" DataColumn="Signatures.supervisorSignature"/>
-      <TextObject Name="Text324" Left="85.42" Top="768.35" Width="264.6" Height="22.68" CanGrow="true" Text="Client / Parent / Legal Guardian Signature" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
-      <LineObject Name="Line18" Left="355.12" Top="766.9" Width="-268.38"/>
-      <TextObject Name="Text325" Left="85.05" Top="748" Width="268.38" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Clients.Name]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
-      <TextObject Name="Text322" Left="541.67" Top="840.36" Width="153.09" Height="22.68" CanGrow="true" Text="Date" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
-      <LineObject Name="Line19" Left="696.87" Top="838.19" Width="-154.98"/>
-      <TextObject Name="Text323" Left="541.67" Top="819.95" Width="158.76" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[TCMIntakeColumbiaSuicide.DateSignatureEmployee]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
+      <PictureObject Name="Picture3" Left="194.47" Top="776.8" Width="95" Height="63.45" DataColumn="Signatures.facilitatorSignature"/>
+      <TextObject Name="Text316" Left="104.42" Top="851.3" Width="264.6" Height="22.68" CanGrow="true" Text="Employee / TCM Signature" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
+      <LineObject Name="Line17" Left="373.02" Top="849.85" Width="-268.38"/>
+      <TextObject Name="Text317" Left="103.97" Top="830.95" Width="268.38" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[CaseManagers.Name]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
+      <PictureObject Name="Picture4" Left="197.47" Top="693.4" Width="95" Height="63.45" DataColumn="Signatures.supervisorSignature"/>
+      <TextObject Name="Text324" Left="104.32" Top="768.35" Width="264.6" Height="22.68" CanGrow="true" Text="Client / Parent / Legal Guardian Signature" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
+      <LineObject Name="Line18" Left="374.02" Top="766.9" Width="-268.38"/>
+      <TextObject Name="Text325" Left="103.95" Top="748" Width="268.38" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Clients.Name]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text322" Left="475.52" Top="851.36" Width="124.74" Height="22.68" CanGrow="true" Text="Date" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
+      <TextObject Name="Text323" Left="475.52" Top="830.95" Width="130.41" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[TCMIntakeColumbiaSuicide.DateSignatureEmployee]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
     </DataBand>
   </ReportPage>
 </Report>

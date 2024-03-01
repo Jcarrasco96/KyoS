@@ -3001,10 +3001,18 @@ namespace KyoS.Web.Controllers
                                        .ThenInclude(n => n.Client)
                                        .ThenInclude(n => n.Clients_Diagnostics)
                                        .ThenInclude(n => n.Diagnostic)
+
+                                       .Include(n => n.TcmServicePlan)
+                                       .ThenInclude(n => n.TcmClient)
+                                       .ThenInclude(n => n.Client)
+                                       .ThenInclude(c => c.LegalGuardian)
+
                                        .Include(n => n.TCMSupervisor)
                                        .ThenInclude(n => n.Clinic)
+
                                        .Include(n => n.TCMServicePlanRevDomain)
                                        .ThenInclude(n => n.TCMServicePlanRevDomainObjectiive)
+
                                        .AsSplitQuery()
 
                                        .FirstOrDefaultAsync(wc => wc.TcmServicePlan.TcmClient.Id == idTCMClient

@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="12/26/2023 20:30:28" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="03/01/2024 12:32:19" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pKiygLNrR2GSkUua6CZa7zWuDzNGOn7cjq7mn0WTOnccDkyyV5BLvtFa1BRlcYFBrGJ3Qhmpy3p1uGLphZ3zSXQ==">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pKiygLNrR2GSkUua6CZa7zWuDzNGOn7cjq7mn0WTOnccDkyyV5BLvtFa1BRlcYFBrnEr0rgt6bX0smV1QHl2R7g==">
       <TableDataSource Name="Clinics" DataType="System.Int32" Enabled="true" TableName="Clinics">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -182,6 +182,12 @@
         <Column Name="LastModifiedOn" DataType="System.DateTime"/>
       </TableDataSource>
     </MsSqlDataConnection>
+    <MsSqlDataConnection Name="Connection1" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pKiygLNrR2GSkUua6CZa7zWuDzNGOn7cjq7mn0WTOnccDkyyV5BLvtFa1BRlcYFBrobt5dFqptU7NsS2Y8DuU1w==">
+      <TableDataSource Name="Classifications1" Alias="Signatures1" DataType="System.Int32" Enabled="true" TableName="Classifications">
+        <Column Name="supervisorSignature" DataType="System.Byte[]" PropName="Id"/>
+        <Column Name="facilitatorSignature" DataType="System.Byte[]" PropName="Name"/>
+      </TableDataSource>
+    </MsSqlDataConnection>
   </Dictionary>
   <ReportPage Name="Page1" PaperWidth="215.9" PaperHeight="279.4" RawPaperSize="1" LeftMargin="5" TopMargin="1" RightMargin="5" BottomMargin="1" Watermark.Enabled="true" Watermark.Font="Arial, 60pt">
     <ReportTitleBand Name="ReportTitle1" Width="778.3" Height="76.05">
@@ -330,8 +336,8 @@
       <TextObject Name="Text394" Left="272.95" Top="538.67" Width="37.8" Height="18.9" Text="No" VertAlign="Center" Font="Arial, 9pt"/>
       <TextObject Name="Text260" Left="5.45" Top="775.2" Width="170.1" Height="18.9" Text="______________________________________" HorzAlign="Center" Font="Arial, 9pt"/>
       <TextObject Name="Text261" Left="5" Top="794.45" Width="170.1" Height="18.9" Text="Case Manager's Signature" HorzAlign="Center" Font="Arial, 9pt"/>
-      <PictureObject Name="Picture2" Left="42.8" Top="738.75" Width="95" Height="54" DataColumn="Signatures.facilitatorSignature"/>
-      <PictureObject Name="Picture3" Left="42.8" Top="812.8" Width="92.61" Height="57.46" DataColumn="Signatures.supervisorSignature"/>
+      <PictureObject Name="Picture2" Left="42.8" Top="742.75" Width="95" Height="54" DataColumn="Signatures.facilitatorSignature"/>
+      <PictureObject Name="Picture3" Left="42.8" Top="817.8" Width="92.61" Height="57.46" DataColumn="Signatures.supervisorSignature"/>
       <TextObject Name="Text264" Left="227.25" Top="775.55" Width="245.7" Height="18.9" Text="______________________________________" Font="Arial, 9pt"/>
       <TextObject Name="Text265" Left="226.8" Top="794.8" Width="207.9" Height="18.9" Text="Case Manager Name" Font="Arial, 9pt"/>
       <TextObject Name="Text268" Left="226.8" Top="771.1" Width="245.7" Height="18.9" Text="[CaseManagers.Name]" Font="Arial, 9pt"/>
@@ -362,6 +368,8 @@
       <TextObject Name="Text794" Left="226.8" Top="693.3" Width="103.95" Height="18.9" Format="Date" Format.Format="d" Font="Arial, 9pt"/>
       <TextObject Name="Text795" Left="227.25" Top="698.75" Width="103.95" Height="18.9" Text="_____________________________" Font="Arial, 9pt"/>
       <TextObject Name="Text796" Left="227.8" Top="718" Width="103.95" Height="18.9" Text="Date" Font="Arial, 9pt"/>
+      <PictureObject Name="Picture7" Left="42.8" Top="578.9" Width="95" Height="63.45" DataColumn="Signatures1.facilitatorSignature"/>
+      <PictureObject Name="Picture8" Left="42.8" Top="657.05" Width="95" Height="63.45" DataColumn="Signatures1.supervisorSignature"/>
     </DataBand>
     <PageFooterBand Name="PageFooter4" Top="896.38" Width="778.3" Height="22.68">
       <TextObject Name="Text31" Width="283.5" Height="18.9" Text="Service Plan Review (SPR) © 12.2020" VertAlign="Center" Font="Arial, 8pt, style=Italic"/>

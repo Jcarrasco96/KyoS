@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="10/14/2023 13:30:40" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="03/01/2024 12:08:32" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhDFmP9T+uKfsJXu65Ovrj+A1YfN5dfPvLBg6EY9L3xBgdKTD3jWzkT9igQJx8b039YlWhcdczfh3AyeOmeCDjL">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhDFmP9T+uKfsJXu65Ovrj+A1YfN5dfPvLBg6EY9L3xBgdKTD3jWzkT9igQJx8b03+K7hhSJv3hPPehtYaDQ3Fq">
       <TableDataSource Name="Clinics" DataType="System.Int32" Enabled="true" TableName="Clinics">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -129,6 +129,12 @@
         <Column Name="facilitatorSignature" DataType="System.Byte[]" PropName="Name"/>
       </TableDataSource>
     </MsSqlDataConnection>
+    <MsSqlDataConnection Name="Connection1" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pKiygLNrR2GSkUua6CZa7zWuDzNGOn7cjq7mn0WTOnccDkyyV5BLvtFa1BRlcYFBrwCGqxxoVKkslpsr74QOk9Q==">
+      <TableDataSource Name="Classifications1" Alias="Signatures1" DataType="System.Int32" Enabled="true" TableName="Classifications">
+        <Column Name="supervisorSignature" DataType="System.Byte[]" PropName="Id"/>
+        <Column Name="facilitatorSignature" DataType="System.Byte[]" PropName="Name"/>
+      </TableDataSource>
+    </MsSqlDataConnection>
     <Parameter Name="session1" DataType="System.String"/>
   </Dictionary>
   <ReportPage Name="Page1" PaperWidth="215.9" PaperHeight="279.4" RawPaperSize="1" LeftMargin="5" TopMargin="5" RightMargin="5" BottomMargin="5" Watermark.Enabled="true" Watermark.Font="Arial, 60pt">
@@ -141,7 +147,7 @@
       <LineObject Name="Line6" Left="159.65" Top="13.45" Height="37.8"/>
       <LineObject Name="Line7" Left="774.9" Top="78.7" Width="-776"/>
     </ReportTitleBand>
-    <DataBand Name="Data1" Top="91.45" Width="778.3" Height="808.8">
+    <DataBand Name="Data1" Top="91.45" Width="778.3" Height="791.02">
       <TextObject Name="Text42" Top="28.35" Width="17.01" Height="26.46" Text="I," HorzAlign="Justify" VertAlign="Center" Font="Arial, 10pt"/>
       <TextObject Name="Text43" Left="316.3" Top="28.35" Width="378" Height="26.46" Text=", recipient of services," HorzAlign="Justify" VertAlign="Center" Font="Arial, 10pt"/>
       <TextObject Name="Text44" Left="16.9" Top="29.8" Width="302.4" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Clients.Name]" VertAlign="Center" Font="Arial, 9pt"/>
@@ -154,22 +160,21 @@
       <TextObject Name="Text48" Top="152.2" Width="774.9" Height="179.55" Text="hereby acknowledge receipt of &lt;b&gt;&lt;u&gt;[Clinics.Name]&lt;/b&gt;&lt;/u&gt; Notice of Privacy Practices. This Notice of Privacy Practices provides detailed information about how &lt;b&gt;&lt;u&gt;[Clinics.Name]&lt;/b&gt;&lt;/u&gt; may use and disclose my protected health and confidential information. The Notice contains a Client’s Rights section describing your rights under the law. You have the right to review the Notice before signing this form. You have the right to request that we restrict how protected health information about you is used or disclosed for treatment, payment, or healthcare operations. &#13;&#10;&#13;&#10;I understand that &lt;b&gt;&lt;u&gt;[Clinics.Name]&lt;/b&gt;&lt;/u&gt; reserves the right to change the privacy practices that are described in the notice. I also understand that a copy of any revised notice will be made available to me upon request. &#13;&#10;&#13;&#10;&lt;b&gt;&lt;u&gt;[Clinics.Name]&lt;/b&gt;&lt;/u&gt; provides this form to comply with the Health Insurance Portability and Accountability Act (HIPAA). " HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
       <TextObject Name="Text284" Left="122.85" Top="766.45" Width="153.09" Height="24.57" CanGrow="true" Text="Case Manager's Signature" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
       <LineObject Name="Line11" Left="315.85" Top="765" Width="-192.78"/>
-      <TextObject Name="Text285" Left="494.4" Top="766.45" Width="162.54" Height="24.57" CanGrow="true" Text="Date" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
-      <LineObject Name="Line12" Left="687.4" Top="765" Width="-192.78"/>
-      <TextObject Name="Text286" Left="494.4" Top="746.65" Width="196.56" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[TCMIntakeAcknowledgement.DateSignatureEmployee]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
-      <TextObject Name="Text287" Left="122.85" Top="655.05" Width="304.29" Height="43.47" CanGrow="true" Text="Legal Guardian or Authorized Representative's Signature" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
+      <TextObject Name="Text285" Left="456.4" Top="766.45" Width="124.74" Height="24.57" CanGrow="true" Text="Date" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
+      <TextObject Name="Text286" Left="456.4" Top="746.65" Width="130.41" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[TCMIntakeAcknowledgement.DateSignatureEmployee]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text287" Left="122.85" Top="655.05" Width="190.89" Height="43.47" CanGrow="true" Text="Legal Guardian or Authorized Representative's Signature" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
       <LineObject Name="Line13" Left="315.85" Top="654.6" Width="-192.78"/>
-      <TextObject Name="Text288" Left="494.4" Top="656.05" Width="162.54" Height="24.57" CanGrow="true" Text="Date" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
-      <LineObject Name="Line14" Left="687.4" Top="654.6" Width="-191.27"/>
-      <TextObject Name="Text289" Left="494.4" Top="635.25" Width="196.56" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[TCMIntakeAcknowledgement.DateSignatureLegalGuardian]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
-      <PictureObject Name="Picture3" Left="170.1" Top="704.85" Width="95" Height="63.45" DataColumn="Signatures.facilitatorSignature"/>
-      <TextObject Name="Text290" Left="122.85" Top="559.45" Width="342.09" Height="24.57" CanGrow="true" Text="Client's Signature" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
+      <TextObject Name="Text288" Left="456.4" Top="655.05" Width="124.74" Height="24.57" CanGrow="true" Text="Date" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
+      <TextObject Name="Text289" Left="456.4" Top="635.25" Width="130.41" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[IIf(Year([TCMIntakeAcknowledgement.DateSignatureLegalGuardian]) == 1,&quot;&quot;,[TCMIntakeAcknowledgement.DateSignatureLegalGuardian])]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
+      <PictureObject Name="Picture3" Left="170.1" Top="711.85" Width="95" Height="63.45" DataColumn="Signatures.facilitatorSignature"/>
+      <TextObject Name="Text290" Left="122.85" Top="559.45" Width="190.89" Height="24.57" CanGrow="true" Text="Client's Signature" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
       <LineObject Name="Line15" Left="315.85" Top="558" Width="-192.78"/>
-      <TextObject Name="Text291" Left="494.4" Top="559.45" Width="162.54" Height="24.57" CanGrow="true" Text="Date" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
-      <LineObject Name="Line16" Left="687.4" Top="558" Width="-192.78"/>
-      <TextObject Name="Text292" Left="494.4" Top="539.65" Width="196.56" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[TCMIntakeAcknowledgement.DateSignaturePerson]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text291" Left="456.4" Top="559.45" Width="124.74" Height="24.57" CanGrow="true" Text="Date" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
+      <TextObject Name="Text292" Left="456.4" Top="539.65" Width="130.41" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[TCMIntakeAcknowledgement.DateSignaturePerson]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
+      <PictureObject Name="Picture7" Left="170.1" Top="504.3" Width="95" Height="63.45" DataColumn="Signatures.supervisorSignature"/>
+      <PictureObject Name="Picture8" Left="170.1" Top="604.8" Width="95" Height="63.45" DataColumn="Signatures1.supervisorSignature"/>
     </DataBand>
-    <PageFooterBand Name="PageFooter1" Top="904.09" Width="778.3" Height="28.35">
+    <PageFooterBand Name="PageFooter1" Top="886.31" Width="778.3" Height="28.35">
       <TextObject Name="Text302" Left="-1.1" Top="3.55" Width="245.7" Height="18.9" Text="HIPPA © 12.2020" Font="Arial, 10pt, style=Italic" TextRenderType="HtmlTags"/>
     </PageFooterBand>
   </ReportPage>
