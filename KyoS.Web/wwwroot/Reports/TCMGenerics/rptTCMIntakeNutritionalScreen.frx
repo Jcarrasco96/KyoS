@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="10/14/2023 13:30:08" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="03/01/2024 12:13:14" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pKiygLNrR2GSkUua6CZa7zWuDzNGOn7cjq7mn0WTOnccDkyyV5BLvtFa1BRlcYFBr/30ASD49uYzankanNipHrA==">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pKiygLNrR2GSkUua6CZa7zWuDzNGOn7cjq7mn0WTOnccDkyyV5BLvtFa1BRlcYFBrunsb11VZWs3xDjG3BxMvyg==">
       <TableDataSource Name="Clinics" DataType="System.Int32" Enabled="true" TableName="Clinics">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -341,20 +341,18 @@
           </TableCell>
         </TableRow>
       </TableObject>
-      <PictureObject Name="Picture3" Left="166.12" Top="719.3" Width="95" Height="63.45" DataColumn="Signatures.facilitatorSignature"/>
-      <TextObject Name="Text316" Left="76.07" Top="794.25" Width="264.6" Height="22.68" CanGrow="true" Text="Employee / TCM Signature" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
-      <LineObject Name="Line17" Left="344.67" Top="792.8" Width="-268.38"/>
-      <TextObject Name="Text317" Left="75.62" Top="773.9" Width="268.38" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[CaseManagers.Name]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
-      <PictureObject Name="Picture4" Left="169.12" Top="634.35" Width="95" Height="63.45" DataColumn="Signatures.supervisorSignature"/>
-      <TextObject Name="Text324" Left="75.97" Top="709.3" Width="264.6" Height="22.68" CanGrow="true" Text="Client / Parent / Legal Guardian Signature" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
-      <LineObject Name="Line18" Left="345.67" Top="707.85" Width="-268.38"/>
-      <TextObject Name="Text325" Left="75.6" Top="688.95" Width="268.38" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Clients.Name]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
-      <TextObject Name="Text291" Left="532.22" Top="709.47" Width="153.09" Height="22.68" CanGrow="true" Text="Date" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
-      <LineObject Name="Line16" Left="687.42" Top="708.3" Width="-154.98"/>
-      <TextObject Name="Text292" Left="532.22" Top="689.06" Width="158.76" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[TCMIntakeNutritionalScreen.DateOfReferral]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
-      <TextObject Name="Text322" Left="532.22" Top="794.31" Width="153.09" Height="22.68" CanGrow="true" Text="Date" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
-      <LineObject Name="Line19" Left="687.42" Top="792.14" Width="-154.98"/>
-      <TextObject Name="Text323" Left="532.22" Top="773.9" Width="158.76" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[TCMIntakeNutritionalScreen.DateSignatureEmployee]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
+      <PictureObject Name="Picture3" Left="185.02" Top="719.3" Width="95" Height="63.45" DataColumn="Signatures.facilitatorSignature"/>
+      <TextObject Name="Text316" Left="94.97" Top="794.25" Width="264.6" Height="22.68" CanGrow="true" Text="Employee / TCM Signature" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
+      <LineObject Name="Line17" Left="363.57" Top="792.8" Width="-268.38"/>
+      <TextObject Name="Text317" Left="94.52" Top="773.9" Width="268.38" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[CaseManagers.Name]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
+      <PictureObject Name="Picture4" Left="188.02" Top="634.35" Width="95" Height="63.45" DataColumn="Signatures.supervisorSignature"/>
+      <TextObject Name="Text324" Left="94.87" Top="709.3" Width="264.6" Height="22.68" CanGrow="true" Text="Client / Parent / Legal Guardian Signature" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
+      <LineObject Name="Line18" Left="364.57" Top="707.85" Width="-268.38"/>
+      <TextObject Name="Text325" Left="94.5" Top="688.95" Width="268.38" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Clients.Name]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text291" Left="503.87" Top="709.47" Width="124.74" Height="22.68" CanGrow="true" Text="Date" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
+      <TextObject Name="Text292" Left="503.87" Top="689.06" Width="130.41" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[IIf(Year([TCMIntakeNutritionalScreen.DateOfReferral]) == 1,&quot;&quot;,[TCMIntakeNutritionalScreen.DateOfReferral])]&#13;&#10;&#13;&#10;&#13;&#10;" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text322" Left="503.87" Top="794.31" Width="124.74" Height="22.68" CanGrow="true" Text="Date" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
+      <TextObject Name="Text323" Left="503.87" Top="773.9" Width="130.41" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[TCMIntakeNutritionalScreen.DateSignatureEmployee]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
       <TextObject Name="Text326" Left="10.45" Top="31.35" Width="706.86" Height="17.01" Text="Circle the score for each identified area:" VertAlign="Center" Font="Arial, 10pt"/>
       <TableObject Name="Table2" Left="4.54" Top="519.75" Width="768.47" Height="94.5" Border.Lines="All">
         <TableColumn Name="Column3" Width="151.2"/>

@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="10/14/2023 13:31:41" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="03/01/2024 12:07:38" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhDFmP9T+uKfsJXu65Ovrj+A1YfN5dfPvLBg6EY9L3xBgdKTD3jWzkT9igQJx8b039ok7j9UnpQ+2gw4co79khz">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhDFmP9T+uKfsJXu65Ovrj+A1YfN5dfPvLBg6EY9L3xBgdKTD3jWzkT9igQJx8b03/nC7Kd6gNCLY52IZuIqCsd">
       <TableDataSource Name="Clinics" DataType="System.Int32" Enabled="true" TableName="Clinics">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -130,6 +130,12 @@
         <Column Name="facilitatorSignature" DataType="System.Byte[]" PropName="Name"/>
       </TableDataSource>
     </MsSqlDataConnection>
+    <MsSqlDataConnection Name="Connection1" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pKiygLNrR2GSkUua6CZa7zWuDzNGOn7cjq7mn0WTOnccDkyyV5BLvtFa1BRlcYFBrHJMEvCachOJQAKaChKmyQA==">
+      <TableDataSource Name="Classifications1" Alias="Signatures1" DataType="System.Int32" Enabled="true" TableName="Classifications">
+        <Column Name="supervisorSignature" DataType="System.Byte[]" PropName="Id"/>
+        <Column Name="supervisorSignature" DataType="System.Byte[]" PropName="Name"/>
+      </TableDataSource>
+    </MsSqlDataConnection>
     <Parameter Name="session1" DataType="System.String"/>
   </Dictionary>
   <ReportPage Name="Page1" PaperWidth="215.9" PaperHeight="279.4" RawPaperSize="1" LeftMargin="5" TopMargin="5" RightMargin="5" BottomMargin="5" Watermark.Enabled="true" Watermark.Font="Arial, 60pt">
@@ -171,7 +177,7 @@
       <LineObject Name="Line5" Left="159.65" Top="13.45" Height="37.8"/>
       <LineObject Name="Line8" Left="774.9" Top="78.7" Width="-776"/>
     </ReportTitleBand>
-    <DataBand Name="Data2" Top="91.45" Width="778.3" Height="809.37">
+    <DataBand Name="Data2" Top="91.45" Width="778.3" Height="799.92">
       <TextObject Name="Text3" Left="1" Top="9" Width="774.9" Height="28.35" Text="&lt;b&gt;VI.  Rights Pertaining to Medication&lt;/b&gt;&#13;&#10;         &#13;&#10;	" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
       <TextObject Name="Text158" Left="18.9" Top="30.35" Width="757.89" Height="189" Text="&lt;b&gt;YOU HAVE A RIGHT TO:&lt;/b&gt;&#13;&#10;1.  The administration of medication only with the written order of a physician.&#13;&#10;2.  A complete explanation of the purpose of any medication, the possible side effects it may have on you, and possible results of long-term use, in a language you can understand.&#13;&#10;3.  Full consideration of your opinion and reactions to medication.&#13;&#10;4.  A regular review of your medication for the purpose of adjustment, as a check for possible side effects, and for possible reduction or elimination of the medication.&#13;&#10;5.  Have accurate records kept, noting your medication history, which includes any adverse medication reactions or drug allergies.&#13;&#10;6.  Have medication prescribed for you only when necessary and not as a convenience for others.&#13;&#10;7.  Refuse medication, except when it is court ordered, or when it is necessary to prevent serious physical harm to yourself or others.&#13;&#10;&#13;&#10;&#13;&#10;&#13;&#10;&#13;&#10;" HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
       <TextObject Name="Text159" Top="229.8" Width="774.9" Height="28.35" Text="&lt;b&gt;VII.  Right to Grievance Procedure&lt;/b&gt;&#13;&#10;         &#13;&#10;	" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
@@ -191,24 +197,23 @@
       <TextObject Name="Text303" Left="440.7" Top="466.05" Width="113.4" Height="18.9" Text="City, State, Zip:" VertAlign="Center" Font="Arial, 10pt, style=Bold"/>
       <TextObject Name="Text304" Left="543.1" Top="466.05" Width="236.25" Height="18.9" Text="[Clinics.City], [Clinics.State], [Clinics.ZipCode]" VertAlign="Center" Font="Arial, 10pt"/>
       <TextObject Name="Text305" Top="491.4" Width="776.79" Height="75.6" Text="It is the sincere desire of the staff of &lt;b&gt;[Clinics.Name]&lt;/b&gt; to address your grievances with an attitude of open mindedness and without prejudice. Every effort will be made to resolve your grievance at the lowest possible step in the procedure so as not to prolong any difficulty or problem. &#13;&#10;I have read and understood my rights as a recipient of &lt;b&gt;[Clinics.Name]&lt;/b&gt;" HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
-      <TextObject Name="Text287" Left="85.05" Top="699.3" Width="379.89" Height="24.57" CanGrow="true" Text="Legal Guardian or Authorized Representative's Signature" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
-      <LineObject Name="Line13" Left="334.75" Top="697.85" Width="-249.48"/>
-      <TextObject Name="Text288" Left="484.95" Top="699.3" Width="162.54" Height="24.57" CanGrow="true" Text="Date" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
-      <LineObject Name="Line14" Left="640.15" Top="697.85" Width="-153.47"/>
-      <TextObject Name="Text289" Left="484.95" Top="678.5" Width="158.76" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[TCMIntakeConsumerRights.DateSignatureLegalGuardian]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
-      <PictureObject Name="Picture3" Left="160.65" Top="715.2" Width="95" Height="63.45" DataColumn="Signatures.facilitatorSignature"/>
-      <TextObject Name="Text290" Left="85.05" Top="625.6" Width="190.89" Height="24.57" CanGrow="true" Text="Recipient's Signature" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
-      <LineObject Name="Line15" Left="334.75" Top="624.15" Width="-249.48"/>
-      <TextObject Name="Text291" Left="484.95" Top="625.6" Width="162.54" Height="24.57" CanGrow="true" Text="Date" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
-      <LineObject Name="Line16" Left="640.15" Top="624.15" Width="-154.98"/>
-      <TextObject Name="Text292" Left="484.95" Top="604.8" Width="158.76" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[TCMIntakeConsumerRights.DateSignaturePerson]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
-      <TextObject Name="Text286" Left="484.95" Top="754.55" Width="158.76" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[TCMIntakeConsumerRights.DateSignatureEmployee]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
-      <TextObject Name="Text284" Left="85.05" Top="775.35" Width="153.09" Height="24.57" CanGrow="true" Text="Employee Signature" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
-      <TextObject Name="Text285" Left="484.95" Top="775.35" Width="162.54" Height="24.57" CanGrow="true" Text="Date" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
-      <LineObject Name="Line11" Left="334.75" Top="773.9" Width="-249.48"/>
-      <LineObject Name="Line12" Left="640.15" Top="773.9" Width="-154.98"/>
+      <TextObject Name="Text287" Left="132.3" Top="699.3" Width="190.89" Height="34.02" CanGrow="true" Text="Legal Guardian or Authorized Representative's Signature" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
+      <LineObject Name="Line13" Left="325.3" Top="697.85" Width="-192.78"/>
+      <TextObject Name="Text288" Left="484.95" Top="699.3" Width="134.19" Height="24.57" CanGrow="true" Text="Date" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
+      <TextObject Name="Text289" Left="484.95" Top="678.5" Width="130.41" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[IIf(Year([TCMIntakeConsumerRights.DateSignatureLegalGuardian]) == 1,&quot;&quot;,[TCMIntakeConsumerRights.DateSignatureLegalGuardian])]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text290" Left="132.3" Top="624.6" Width="190.89" Height="24.57" CanGrow="true" Text="Recipient's Signature" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
+      <LineObject Name="Line15" Left="325.3" Top="624.15" Width="-192.78"/>
+      <TextObject Name="Text291" Left="484.95" Top="625.6" Width="134.19" Height="24.57" CanGrow="true" Text="Date" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
+      <TextObject Name="Text292" Left="484.95" Top="604.8" Width="130.41" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[TCMIntakeConsumerRights.DateSignaturePerson]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text286" Left="484.95" Top="754.55" Width="130.41" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[TCMIntakeConsumerRights.DateSignatureEmployee]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text284" Left="132.3" Top="775.35" Width="153.09" Height="24.57" CanGrow="true" Text="Employee Signature" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
+      <TextObject Name="Text285" Left="484.95" Top="775.35" Width="134.19" Height="24.57" CanGrow="true" Text="Date" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
+      <LineObject Name="Line11" Left="325.3" Top="773.9" Width="-192.78"/>
+      <PictureObject Name="Picture3" Left="179.55" Top="721.2" Width="95" Height="63.45" DataColumn="Signatures.facilitatorSignature"/>
+      <PictureObject Name="Picture7" Left="179.55" Top="571.45" Width="95" Height="63.45" DataColumn="Signatures.supervisorSignature"/>
+      <PictureObject Name="Picture8" Left="179.55" Top="648.05" Width="95" Height="63.45" DataColumn="Signatures1.supervisorSignature"/>
     </DataBand>
-    <PageFooterBand Name="PageFooter2" Top="904.66" Width="778.3" Height="28.35">
+    <PageFooterBand Name="PageFooter2" Top="895.21" Width="778.3" Height="28.35">
       <TextObject Name="Text306" Top="3.4" Width="245.7" Height="18.9" Text="Consumer Rights © 12.2020" Font="Arial, 10pt, style=Italic" TextRenderType="HtmlTags"/>
     </PageFooterBand>
   </ReportPage>

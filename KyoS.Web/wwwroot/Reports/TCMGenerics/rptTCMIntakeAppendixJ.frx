@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="10/14/2023 13:28:17" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="03/01/2024 12:04:02" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhDFmP9T+uKfsJXu65Ovrj+A1YfN5dfPvLBg6EY9L3xBgdKTD3jWzkT9igQJx8b03/AW8j7dZbXqPCJGW1ksaMD">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhDFmP9T+uKfsJXu65Ovrj+A1YfN5dfPvLBg6EY9L3xBgdKTD3jWzkT9igQJx8b039mCki6UarcMBV7LjBq2FFq">
       <TableDataSource Name="Clinics" DataType="System.Int32" Enabled="true" TableName="Clinics">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -162,17 +162,15 @@
       <TextObject Name="Text304" Top="75.6" Width="774.9" Height="18.9" Text="Is hereby certified as meeting all of the following adult mental health targeted case management criteria." HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
       <CheckBoxObject Name="CheckBox27" Left="70.15" Top="283.5" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMIntakeAppendixJ.IsAwaiting"/>
       <TextObject Name="Text310" Left="82.05" Top="281.05" Width="652.05" Height="20.79" Text="Is awaiting admission to or has been discharged from a state mental health treatment facility;&#13;&#10;&#13;&#10;" HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
-      <TextObject Name="Text287" Left="28.35" Top="718.4" Width="257.04" Height="24.57" CanGrow="true" Text="Case Manager's Supervisor's Name and Signature" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
-      <LineObject Name="Line13" Left="268.6" Top="716.95" Width="-240.03"/>
-      <TextObject Name="Text288" Left="532.2" Top="718.4" Width="162.54" Height="24.57" CanGrow="true" Text="Date" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
-      <LineObject Name="Line14" Left="725.2" Top="716.95" Width="-191.27"/>
-      <TextObject Name="Text289" Left="532.2" Top="698.6" Width="196.56" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[TCMIntakeAppendixJ.SupervisorSignatureDate]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
-      <PictureObject Name="Picture3" Left="274.05" Top="571.1" Width="95" Height="63.45" DataColumn="Signatures.facilitatorSignature"/>
-      <TextObject Name="Text290" Left="28.35" Top="633.8" Width="219.24" Height="24.57" CanGrow="true" Text="Case Manager's Name and Signature" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
-      <LineObject Name="Line15" Left="249.7" Top="632.35" Width="-221.13"/>
-      <TextObject Name="Text291" Left="532.2" Top="633.7" Width="162.54" Height="24.57" CanGrow="true" Text="Date" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
-      <LineObject Name="Line16" Left="725.2" Top="632.25" Width="-192.78"/>
-      <TextObject Name="Text292" Left="532.2" Top="613.9" Width="196.56" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[TCMIntakeAppendixJ.Date]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text287" Left="56.7" Top="718.4" Width="257.04" Height="24.57" CanGrow="true" Text="Case Manager's Supervisor's Name and Signature" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
+      <LineObject Name="Line13" Left="296.95" Top="716.95" Width="-240.03"/>
+      <TextObject Name="Text288" Left="503.85" Top="718.4" Width="124.74" Height="24.57" CanGrow="true" Text="Date" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
+      <TextObject Name="Text289" Left="503.85" Top="698.6" Width="130.41" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[IIf(Year([TCMIntakeAppendixJ.SupervisorSignatureDate]) == 1,&quot;&quot;,[TCMIntakeAppendixJ.SupervisorSignatureDate])]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
+      <PictureObject Name="Picture3" Left="302.4" Top="571.1" Width="95" Height="63.45" DataColumn="Signatures.facilitatorSignature"/>
+      <TextObject Name="Text290" Left="56.7" Top="633.8" Width="219.24" Height="24.57" CanGrow="true" Text="Case Manager's Name and Signature" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
+      <LineObject Name="Line15" Left="278.05" Top="632.35" Width="-221.13"/>
+      <TextObject Name="Text291" Left="503.85" Top="633.7" Width="124.74" Height="24.57" CanGrow="true" Text="Date" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
+      <TextObject Name="Text292" Left="503.85" Top="613.9" Width="130.41" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[IIf(Year([TCMIntakeAppendixJ.Date]) == 1,&quot;&quot;,[TCMIntakeAppendixJ.Date])]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
       <CheckBoxObject Name="CheckBox28" Left="70.15" Top="306.85" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMIntakeAppendixJ.HasBeen"/>
       <TextObject Name="Text311" Left="82.05" Top="304.4" Width="652.05" Height="20.79" Text="Has been discharged from a mental health residential treatment facility;&#13;&#10;" HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
       <CheckBoxObject Name="CheckBox29" Left="70.15" Top="330.2" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMIntakeAppendixJ.HasHad"/>
@@ -188,9 +186,9 @@
       <TextObject Name="Text319" Left="42.8" Top="380" Width="18.9" Height="20.79" Text="d.&#13;&#10;&#13;&#10;" HorzAlign="Justify" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
       <TextObject Name="Text320" Left="43.25" Top="402.35" Width="18.9" Height="20.79" Text="e.&#13;&#10;&#13;&#10;" HorzAlign="Justify" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
       <TextObject Name="Text321" Left="28.35" Top="447.6" Width="727.65" Height="56.7" Text="&lt;b&gt;9.&lt;/b&gt;      Has relocated from a Department of Children and Families district or region where he or she was receiving mental health targeted case management services." HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
-      <TextObject Name="Text324" Left="28.35" Top="613.25" Width="243.81" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[CaseManagers.Name]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
-      <TextObject Name="Text325" Left="28.35" Top="698.85" Width="243.81" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[TCMSupervisors.Name]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
-      <PictureObject Name="Picture4" Left="274.05" Top="656.05" Width="95" Height="63.45" DataColumn="Signatures.supervisorSignature"/>
+      <TextObject Name="Text324" Left="56.7" Top="613.25" Width="243.81" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[CaseManagers.Name]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text325" Left="56.7" Top="698.85" Width="243.81" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[TCMSupervisors.Name]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
+      <PictureObject Name="Picture4" Left="302.4" Top="656.05" Width="95" Height="63.45" DataColumn="Signatures.supervisorSignature"/>
       <TextObject Name="Text326" Left="28.35" Top="803.25" Width="727.65" Height="75.6" Text="Form must be filed in the recipient’s case record. &#10;AHCA-Med Serv Form 030, July 2006 (incorporated by reference in 59G-4.199, F.A.C.)&#13;&#10;&#13;&#10;&#13;&#10;July 2006" HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
       <CheckBoxObject Name="CheckBox32" Left="48.25" Top="102.95" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMIntakeAppendixJ.IsEnrolled"/>
       <CheckBoxObject Name="CheckBox33" Left="48.38" Top="118.4" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMIntakeAppendixJ.HasAMental2"/>

@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="02/29/2024 18:42:15" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="03/01/2024 12:19:22" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
-    <MsSqlDataConnection Name="Connection1" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pKiygLNrR2GSkUua6CZa7zWuDzNGOn7cjq7mn0WTOnccDkyyV5BLvtFa1BRlcYFBrBic1IBUNLhDRoZ0DQpVU9Q==">
+    <MsSqlDataConnection Name="Connection1" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pKiygLNrR2GSkUua6CZa7zWuDzNGOn7cjq7mn0WTOnccDkyyV5BLvtFa1BRlcYFBrz+Nuqjzu0/JClkG0VEW6+A==">
       <TableDataSource Name="Classifications1" Alias="Signatures1" DataType="System.Int32" Enabled="true" TableName="Classifications">
         <Column Name="supervisorSignature" DataType="System.Byte[]" PropName="Id"/>
         <Column Name="facilitatorSignature" DataType="System.Byte[]" PropName="Name"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pKiygLNrR2GSkUua6CZa7zWuDzNGOn7cjq7mn0WTOnccDkyyV5BLvtFa1BRlcYFBr6WtDqXckKStyClR/nPs7+Q==">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pKiygLNrR2GSkUua6CZa7zWuDzNGOn7cjq7mn0WTOnccDkyyV5BLvtFa1BRlcYFBr9Z9nv1QNkx1+nyBINaLcRg==">
       <TableDataSource Name="Clinics" DataType="System.Int32" Enabled="true" TableName="Clinics">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -279,7 +279,7 @@
       <PictureObject Name="Picture5" Left="335.95" Top="685.3" Width="95" Height="63.45" DataColumn="Signatures1.supervisorSignature"/>
       <TextObject Name="Text400" Left="98.25" Top="741" Width="228.69" Height="24.57" CanGrow="true" Text="Legal Guardian Print Name / Signature" Padding="2, 2, 2, 2" Font="Arial, 9pt"/>
       <TextObject Name="Text401" Left="503.85" Top="740.9" Width="86.94" Height="24.57" CanGrow="true" Text="Date" Padding="2, 2, 2, 2" Font="Arial, 9pt"/>
-      <TextObject Name="Text402" Left="503.85" Top="721.1" Width="92.61" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[TCMIntakeCoordinationCare.DateSignatureLegalGuardian]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text402" Left="503.85" Top="721.1" Width="92.61" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[IIf([LegalGuardians.Name] == &quot;&quot;,&quot;&quot;,[TCMIntakeCoordinationCare.DateSignatureLegalGuardian])]&#13;&#10;&#13;&#10;&#13;&#10;" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
       <TextObject Name="Text403" Left="98.25" Top="720.45" Width="243.81" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[LegalGuardians.Name]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
     </DataBand>
   </ReportPage>
