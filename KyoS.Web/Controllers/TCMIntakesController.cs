@@ -3010,8 +3010,8 @@ namespace KyoS.Web.Controllers
         {
 
             UserEntity user_logged = _context.Users
-                                                 .Include(u => u.Clinic)
-                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
             TCMIntakeCoordinationCareViewModel model;
 
@@ -3028,6 +3028,7 @@ namespace KyoS.Web.Controllers
                                                                                  .ThenInclude(n => n.Clinic)
                                                                                  .Include(n => n.TcmClient)
                                                                                  .ThenInclude(n => n.TCMIntakeForm)
+                                                                                 .AsSplitQuery()
                                                                                  .FirstOrDefault(n => n.TcmClient.Id == id);
 
                     if (intakeCoordination == null)
@@ -3038,6 +3039,7 @@ namespace KyoS.Web.Controllers
                                                             .Include(d => d.Casemanager)
                                                             .ThenInclude(d => d.Clinic)
                                                             .Include(n => n.TCMIntakeForm)
+                                                            .AsSplitQuery()
                                                             .FirstOrDefault(n => n.Id == id);
                         if (tcmClient.TCMIntakeForm == null)
                             tcmClient.TCMIntakeForm = new TCMIntakeFormEntity();
@@ -3065,7 +3067,7 @@ namespace KyoS.Web.Controllers
                             InformationTorequested = false,
                             InformationVerbal = false,
                             InformationWrited = false,
-                            IRefuse = true,
+                            IRefuse = false,
                             PCP = true,
                             Specialist = false,
                             SpecialistText = "",
@@ -3098,7 +3100,6 @@ namespace KyoS.Web.Controllers
                         }
                         return View(model);
                     }
-
                 }
             }
 
@@ -4730,7 +4731,30 @@ namespace KyoS.Web.Controllers
         [Authorize(Roles = "CaseManager, Manager, TCMSupervisor")]
         public async Task<IActionResult> PrintTCMIntakeCoordinationCare(int id)
         {
-            throw new NotImplementedException();
+            TCMIntakeCoordinationCareEntity entity = await _context.TCMIntakeCoordinationCare
+
+                                                                   .Include(t => t.TcmClient)
+                                                                      .ThenInclude(i => i.Client)
+                                                                      .ThenInclude(c => c.LegalGuardian)
+
+                                                                   .Include(t => t.TcmClient)
+                                                                      .ThenInclude(c => c.TCMIntakeForm) 
+
+                                                                   .Include(t => t.TcmClient)
+                                                                      .ThenInclude(c => c.Casemanager)
+                                                                      .ThenInclude(cm => cm.Clinic)                                                                   
+
+                                                                   .AsSplitQuery()
+
+                                                                   .FirstOrDefaultAsync(i => (i.TcmClient.Id == id));
+
+            if (entity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            Stream stream = _reportHelper.TCMIntakeCoordinationCare(entity);
+            return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
         }
 
         [Authorize(Roles = "CaseManager, Manager, TCMSupervisor")]

@@ -32059,6 +32059,106 @@ namespace KyoS.Web.Helpers
             return dt;
         }
 
+        private DataTable GetTCMIntakeCoordinationCareDS(TCMIntakeCoordinationCareEntity coordinationCare)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "TCMIntakeCoordinationCare"
+            };
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("TcmClient_FK", typeof(int));
+            dt.Columns.Add("Date", typeof(DateTime));
+            dt.Columns.Add("AdmissionedFor", typeof(string));
+            dt.Columns.Add("DateSignatureLegalGuardian", typeof(DateTime));
+            dt.Columns.Add("DateSignaturePerson", typeof(DateTime));
+            dt.Columns.Add("DateSignatureEmployee", typeof(DateTime));
+            dt.Columns.Add("Documents", typeof(bool));
+            dt.Columns.Add("InformationToRelease", typeof(bool));
+            dt.Columns.Add("InformationTorequested", typeof(bool));
+            dt.Columns.Add("PCP", typeof(bool));
+            dt.Columns.Add("Specialist", typeof(bool));
+            dt.Columns.Add("SpecialistText", typeof(string));
+            dt.Columns.Add("InformationVerbal", typeof(bool));
+            dt.Columns.Add("InformationWrited", typeof(bool));
+            dt.Columns.Add("InformationFascimile", typeof(bool));
+            dt.Columns.Add("InformationElectronic", typeof(bool));
+            dt.Columns.Add("InformationAllBefore", typeof(bool));
+            dt.Columns.Add("InformationNonKnown", typeof(bool));
+            dt.Columns.Add("IAuthorize", typeof(bool));
+            dt.Columns.Add("IRefuse", typeof(bool));
+            dt.Columns.Add("CreatedBy", typeof(string));
+            dt.Columns.Add("CreatedOn", typeof(DateTime));
+            dt.Columns.Add("LastModifiedBy", typeof(string));
+            dt.Columns.Add("LastModifiedOn", typeof(DateTime));   
+
+            if (coordinationCare != null)
+            {
+                dt.Rows.Add(new object[]
+                {
+                    coordinationCare.Id,
+                    0,
+                    coordinationCare.Date,
+                    coordinationCare.AdmissionedFor,
+                    coordinationCare.DateSignatureLegalGuardian,
+                    coordinationCare.DateSignaturePerson,
+                    coordinationCare.DateSignatureEmployee,
+                    coordinationCare.Documents,
+                    coordinationCare.InformationToRelease,
+                    coordinationCare.InformationTorequested,
+                    coordinationCare.PCP,
+                    coordinationCare.Specialist,
+                    coordinationCare.SpecialistText,
+                    coordinationCare.InformationVerbal,
+                    coordinationCare.InformationWrited,
+                    coordinationCare.InformationFascimile,
+                    coordinationCare.InformationElectronic,
+                    coordinationCare.InformationAllBefore,
+                    coordinationCare.InformationNonKnown,
+                    coordinationCare.IAuthorize,
+                    coordinationCare.IRefuse,
+                    coordinationCare.CreatedBy,
+                    coordinationCare.CreatedOn,
+                    coordinationCare.LastModifiedBy,
+                    coordinationCare.LastModifiedOn
+                });
+            }
+            else
+            {
+                dt.Rows.Add(new object[]
+                {
+                    0,
+                    0,
+                    new DateTime(),
+                    0,
+                    new DateTime(),
+                    new DateTime(),
+                    new DateTime(),
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    string.Empty,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,                
+                    string.Empty,
+                    new DateTime(),
+                    string.Empty,
+                    new DateTime()
+                });
+            }
+
+            return dt;
+        }
+
         private DataTable GetTCMIntakeMedicalHistoryDS(TCMIntakeMedicalHistoryEntity medicalHistory)
         {
             DataTable dt = new DataTable
@@ -35168,7 +35268,92 @@ namespace KyoS.Web.Helpers
         }
         public Stream TCMIntakeCoordinationCare(TCMIntakeCoordinationCareEntity coordinationCare) 
         {
-            throw new NotImplementedException();
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\TCMGenerics\\rptTCMIntakeCoordinationCare.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(GetClinicDS(coordinationCare.TcmClient.Casemanager.Clinic));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clinics");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMClientDS(coordinationCare.TcmClient));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMClient");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetClientDS(coordinationCare.TcmClient.Client));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetCaseManagerDS(coordinationCare.TcmClient.Casemanager));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "CaseManagers");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMIntakeFormDS(coordinationCare.TcmClient.TCMIntakeForm));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMIntakeForms");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetLegalGuardianDS(coordinationCare.TcmClient.Client.LegalGuardian));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "LegalGuardians");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMIntakeCoordinationCareDS(coordinationCare));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMIntakeCoordinationCare");
+
+            //images                      
+            string path = string.Empty;
+            if (!string.IsNullOrEmpty(coordinationCare.TcmClient.Casemanager.Clinic.LogoPath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(coordinationCare.TcmClient.Casemanager.Clinic.LogoPath)}");
+            }
+
+            PictureObject pic1 = WebReport.Report.FindObject("Picture1") as PictureObject;
+            pic1.Image = new Bitmap(path);
+
+            //signatures images 
+            byte[] stream1 = null;
+            byte[] stream2 = null;
+
+            if (!string.IsNullOrEmpty(coordinationCare.TcmClient.Client.SignPath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(coordinationCare.TcmClient.Client.SignPath)}");
+                stream1 = _imageHelper.ImageToByteArray(path);
+            }
+            if (!string.IsNullOrEmpty(coordinationCare.TcmClient.Casemanager.SignaturePath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(coordinationCare.TcmClient.Casemanager.SignaturePath)}");
+                stream2 = _imageHelper.ImageToByteArray(path);
+            }
+
+            byte[] stream3 = null;
+            byte[] stream4 = null;
+            if (coordinationCare.TcmClient.Client.LegalGuardian != null)
+            {
+                if (!string.IsNullOrEmpty(coordinationCare.TcmClient.Client.LegalGuardian.SignPath))
+                {
+                    path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(coordinationCare.TcmClient.Client.LegalGuardian.SignPath)}");
+                    stream3 = _imageHelper.ImageToByteArray(path);
+                }
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream1, stream2));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream3, stream4));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures1");
+
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
         }
         #endregion
 
