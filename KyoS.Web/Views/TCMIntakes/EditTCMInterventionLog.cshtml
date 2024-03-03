@@ -1,6 +1,6 @@
 ﻿@model KyoS.Web.Models.TCMIntakeInterventionLogViewModel
 @{
-    ViewData["Title"] = "Crear Intervention Log";
+    ViewData["Title"] = "Intervention Log";
 }
 
 <!DOCTYPE html>
@@ -24,17 +24,17 @@
                     @Html.ActionLink("TCM Intake Section 5", "TCMIntakeSectionDashboardReadOnly", "TCMIntakes", new { id = @Model.TcmClient.Id, section = 5 })
                 }
             </li>
-            <li class="active">Edit</li>
+            <li class="active">Create</li>
         </ul><!--.breadcrumb-->
     </div>
 
-    <h4>Crear Intervention Log</h4>
+    <h4>Create Intervention Log</h4>
     <hr />
 
     <div class="row">
 
         <form asp-action="EditTCMInterventionLog" enctype="multipart/form-data">
-            <div class="row col-md-12">
+            <div class="col-md-push-12">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <input type="hidden" asp-for="Id" />
                 <input type="hidden" asp-for="IdTCMClient" />
@@ -42,14 +42,13 @@
                 <input type="hidden" asp-for="CreatedBy" />
                 <input type="hidden" asp-for="CreatedOn" />
                 <partial name="_TCMInterventionLog" />
-                <div class="col-md-push-12">
-                    <div class="col-md-12 form-group">
-                        <hr />
-                    </div>
+                <div class="col-md-12">                    
+                    <hr />                    
                 </div>
                 <div class="col-md-push-12">
                     <div class="col-md-12 form-group">
                         <a onclick="showInPopup('@Url.Action("CreateTCMIntervention", "TCMIntakes", new { id = @Model.Id}, Context.Request.Scheme)','Create Intervention Log')" class="btn btn-success" title="Create Intervention Log"><i class="glyphicon glyphicon-plus"></i> Create Intervention Log</a>
+                        <a class="btn btn-success" asp-controller="TCMIntakes" asp-action="PrintTCMInterventionLog" asp-route-id="@Model.Id" title="Print Intervention Log" target="_blank"><i class="glyphicon glyphicon-print"></i> Print Intervention Log</a>
                     </div>
                     <div class="col-md-12">
                         <div id="view-tcmServicePlanReview">
@@ -58,8 +57,7 @@
                     </div>
                 </div>
                 <br />
-                <div class="form-group col-md-12">
-                    @*<input type="submit" value="Save" class="btn btn-primary" />*@
+                <div class="form-group col-md-12">                    
                     @if (User.IsInRole("CaseManager"))
                     {
                         <a asp-action="TCMIntakeSectionDashboard" asp-route-id="@Model.TcmClient.Id" asp-route-section="5" asp-controller="TCMIntakes" class="btn btn-success">Back</a>

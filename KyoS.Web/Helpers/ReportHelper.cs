@@ -32639,6 +32639,41 @@ namespace KyoS.Web.Helpers
 
             return dt;
         }
+
+        private DataTable GetTCMIntakeInterventionListDS(List<TCMIntakeInterventionEntity> interventionList)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "TCMIntakeIntervention"
+            };
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("TcmInterventionLogId", typeof(int));
+            dt.Columns.Add("Date", typeof(DateTime));
+            dt.Columns.Add("Activity", typeof(string));           
+            dt.Columns.Add("CreatedBy", typeof(string));
+            dt.Columns.Add("CreatedOn", typeof(DateTime));
+            dt.Columns.Add("LastModifiedBy", typeof(string));
+            dt.Columns.Add("LastModifiedOn", typeof(DateTime));
+
+            foreach (TCMIntakeInterventionEntity item in interventionList)
+            {
+                dt.Rows.Add(new object[]
+                {
+                    item.Id,
+                    0,
+                    item.Date,
+                    item.Activity,                           
+                    item.CreatedBy,
+                    item.CreatedOn,
+                    item.LastModifiedBy,
+                    item.LastModifiedOn
+                });
+            }
+
+            return dt;
+        }
         #endregion
 
         #region Approved TCM Notes reports
@@ -36034,7 +36069,69 @@ namespace KyoS.Web.Helpers
 
         public Stream TCMIntakeInterventionLog(TCMIntakeInterventionLogEntity interventionLog)
         {
-            throw new NotImplementedException();
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\TCMGenerics\\rptTCMIntakeInterventionLog.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(GetClinicDS(interventionLog.TcmClient.Casemanager.Clinic));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clinics");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMClientDS(interventionLog.TcmClient));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMClient");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetClientDS(interventionLog.TcmClient.Client));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetCaseManagerDS(interventionLog.TcmClient.Casemanager));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "CaseManagers");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMIntakeInterventionListDS(interventionLog.InterventionList));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMIntakeIntervention");
+
+            //images                      
+            string path = string.Empty;
+            if (!string.IsNullOrEmpty(interventionLog.TcmClient.Casemanager.Clinic.LogoPath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(interventionLog.TcmClient.Casemanager.Clinic.LogoPath)}");
+            }
+
+            PictureObject pic1 = WebReport.Report.FindObject("Picture1") as PictureObject;
+            pic1.Image = new Bitmap(path);
+
+            //signatures images 
+            byte[] stream1 = null;
+            byte[] stream2 = null;
+
+            if (!string.IsNullOrEmpty(interventionLog.TcmClient.Client.SignPath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(interventionLog.TcmClient.Client.SignPath)}");
+                stream1 = _imageHelper.ImageToByteArray(path);
+            }
+            if (!string.IsNullOrEmpty(interventionLog.TcmClient.Casemanager.SignaturePath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(interventionLog.TcmClient.Casemanager.SignaturePath)}");
+                stream2 = _imageHelper.ImageToByteArray(path);
+            } 
+            
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream1, stream2));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");            
+
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
         }
 
         #endregion
