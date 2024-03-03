@@ -4752,6 +4752,32 @@ namespace KyoS.Web.Controllers
             Stream stream = _reportHelper.TCMIntakeCoordinationCare(entity);
             return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
         }
+        
+        [Authorize(Roles = "CaseManager, Manager, TCMSupervisor")]
+        public async Task<IActionResult> PrintTCMInterventionLog(int id)
+        {
+            TCMIntakeInterventionLogEntity entity = await _context.TCMIntakeInterventionLog
+                                                                  .Include(t => t.TcmClient)
+                                                                      .ThenInclude(i => i.Client)                                                                      
+
+                                                                   .Include(i => i.InterventionList)                                                                      
+
+                                                                   .Include(t => t.TcmClient)
+                                                                      .ThenInclude(c => c.Casemanager)
+                                                                      .ThenInclude(cm => cm.Clinic)
+
+                                                                   .AsSplitQuery()
+
+                                                                   .FirstOrDefaultAsync(i => (i.Id == id));
+
+            if (entity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            Stream stream = _reportHelper.TCMIntakeInterventionLog(entity);
+            return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+        }
 
         [Authorize(Roles = "CaseManager, Manager, TCMSupervisor")]
         public IActionResult CreateTCMIntakeClientSignatureVerification(int id = 0, int origi = 0)

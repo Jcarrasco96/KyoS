@@ -4,7 +4,7 @@
 }
 
 <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-push-12">
         <form asp-action="CreateTCMIntervention" asp-route-id="@Model.Id" onsubmit="return jQueryAjaxPostTCMServicePlanReview(this);">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
@@ -18,7 +18,7 @@
                     <span asp-validation-for="TcmInterventionLog.TcmClient.CaseNumber" class="text-danger"></span>
                 </div>
                 <div class="col-md-6">
-                    <label asp-for="TcmInterventionLog.TcmClient.Client.Name" class="control-label">Client name</label>
+                    <label asp-for="TcmInterventionLog.TcmClient.Client.Name" class="control-label">Client Name</label>
                     <input asp-for="TcmInterventionLog.TcmClient.Client.Name" class="form-control" disabled />
                     <span asp-validation-for="TcmInterventionLog.TcmClient.Client.Name" class="text-danger"></span>
                 </div>
@@ -34,7 +34,7 @@
             <div class="form-group col-md-12">
                 <div class="">
                     <label asp-for="Activity" class="control-label">Activity Description</label>&nbsp;*
-                    <textarea asp-for="Activity" class="form-control" rows="4"/>
+                    <textarea asp-for="Activity" class="form-control" rows="5"/>
                     <span asp-validation-for="Activity" class="text-danger"></span>
                 </div>
             </div>
