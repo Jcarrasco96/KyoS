@@ -20,6 +20,7 @@ using Microsoft.Extensions.Configuration;
 using KyoS.Common.Helpers;
 using KyoS.Web.Migrations;
 using AspNetCore;
+using DocumentFormat.OpenXml.Wordprocessing;
 
 namespace KyoS.Web.Controllers
 {
@@ -33,10 +34,13 @@ namespace KyoS.Web.Controllers
         private readonly IRenderHelper _renderHelper;
         private readonly IImageHelper _imageHelper;
         private readonly IFileHelper _fileHelper;
+        private readonly IMimeType _mimeType;
+        private readonly IWebHostEnvironment _webhostEnvironment;
+
         public IConfiguration Configuration { get; }
 
 
-        public TCMClientsController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper, IReportHelper reportHelper, IRenderHelper renderHelper, IImageHelper imageHelper, IFileHelper fileHelper, IConfiguration configuration)
+        public TCMClientsController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper, IReportHelper reportHelper, IRenderHelper renderHelper, IImageHelper imageHelper, IFileHelper fileHelper, IConfiguration configuration, IWebHostEnvironment webhostEnvironment, IMimeType mimeType)
         {
             _context = context;
             _combosHelper = combosHelper;
@@ -46,6 +50,8 @@ namespace KyoS.Web.Controllers
             _imageHelper = imageHelper;
             _fileHelper = fileHelper;
             Configuration = configuration;
+            _mimeType = mimeType;
+            _webhostEnvironment = webhostEnvironment;
         }
 
         [Authorize(Roles = "Manager, CaseManager, TCMSupervisor")]
@@ -3197,6 +3203,226 @@ namespace KyoS.Web.Controllers
                         fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"Section 4/{name}.pdf"));
                     }
                 }
+            }
+
+            return fileContentList;
+        }
+
+        public async Task<IActionResult> DownloadTCMIntakeSection2Simultaneous(int id)
+        {
+            TCMClientEntity TCMclient = await _context.TCMClient
+                                                      .Include(n => n.Client)
+                                                      .Include(n => n.Casemanager)
+                                                      .ThenInclude(n => n.Clinic)
+                                                      .ThenInclude(n => n.Setting)
+                                                      .Include(n => n.Client)
+                                                      .ThenInclude(n => n.Documents)
+                                                      .Include(n => n.Client)
+                                                      .ThenInclude(n => n.IntakeFeeAgreement)
+                                                      .AsSplitQuery()
+
+                                                      .FirstOrDefaultAsync(c => c.Id == id);
+
+            if (TCMclient == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            Task<List<FileContentResult>> fileContent1Task = TCMDocumentsPrint(id);
+            //Task<List<FileContentResult>> fileContent1Task1 = TCMClientFeeAgreementPrint(id);
+
+            await Task.WhenAll(fileContent1Task/*, fileContent1Task1*/);
+            var fileContent = await fileContent1Task;
+            //var fileContent1 = await fileContent1Task1;
+
+
+            List<FileContentResult> fileContentList = new List<FileContentResult>();
+            fileContentList.AddRange(fileContent);
+            //fileContentList.AddRange(fileContent1);
+
+
+            return File(_fileHelper.Zip(fileContentList), "application/zip", $"{TCMclient.Client.Name}_Documents.zip");
+        }
+
+        private async Task<List<FileContentResult>> TCMDocumentsPrint(int idTCMClient)
+        {
+            List<DocumentEntity> documents = new List<DocumentEntity>();
+            TCMClientEntity tcmClient = new TCMClientEntity();
+
+            var options = new DbContextOptionsBuilder<DataContext>().UseSqlServer(Configuration.GetConnectionString("KyoSConnection")).Options;
+            using (DataContext db = new DataContext(options))
+            {
+                tcmClient = await db.TCMClient
+                                    .Include(n => n.Client)
+                                    .ThenInclude(n => n.Documents)
+                                    .AsSplitQuery()
+
+                                    .FirstOrDefaultAsync(wc => wc.Id == idTCMClient);
+            }
+
+            List<FileContentResult> fileContentList = new List<FileContentResult>();
+            //Stream stream = null;
+
+            if (tcmClient != null)
+            {
+                if (tcmClient.Client.Documents.Count() > 0)
+                {
+                    foreach (var item in tcmClient.Client.Documents)
+                    {
+                        try
+                        {
+                            string path;
+                            path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(item.FileUrl)}");
+                            fileContentList.Add(File(_fileHelper.FileToByteArray(path), _mimeType.GetMimeType(item.FileName), $"Section 4/{item.FileName}.pdf"));
+                        }
+                        finally { }
+                      
+                    }                    
+                }                
+            }
+
+            return fileContentList;
+        }
+
+        public async Task<IActionResult> DownloadTCMIntakeSection3Simultaneous(int id)
+        {
+            TCMClientEntity TCMclient = await _context.TCMClient
+                                                      .Include(n => n.Client)
+                                                      .Include(n => n.Casemanager)
+                                                      .ThenInclude(n => n.Clinic)
+                                                      .Include(n => n.TCMIntakeMiniMental)
+                                                      .Include(n => n.TCMIntakeMedicalHistory)
+                                                      .Include(n => n.TCMIntakeCoordinationCare)
+                                                      .AsSplitQuery()
+                                                      .FirstOrDefaultAsync(c => c.Id == id);
+
+            if (TCMclient == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            Task<List<FileContentResult>> fileContent1Task = TCMMiniMentalPrint(id);
+            Task<List<FileContentResult>> fileContent1Task1 = TCMMedicalHistoryPrint(id);
+            Task<List<FileContentResult>> fileContent1Task2 = TCMCoordinationCarePrint(id);
+            
+            await Task.WhenAll(fileContent1Task, fileContent1Task1, fileContent1Task2);
+            var fileContent = await fileContent1Task;
+            var fileContent1 = await fileContent1Task1;
+            var fileContent2 = await fileContent1Task2;
+
+            List<FileContentResult> fileContentList = new List<FileContentResult>();
+            fileContentList.AddRange(fileContent);
+            fileContentList.AddRange(fileContent1);
+            fileContentList.AddRange(fileContent2);
+
+
+            return File(_fileHelper.Zip(fileContentList), "application/zip", $"{TCMclient.Client.Name}_Documents.zip");
+        }
+
+        private async Task<List<FileContentResult>> TCMMiniMentalPrint(int idTCMClient)
+        {
+            TCMIntakeMiniMentalEntity minimental = new TCMIntakeMiniMentalEntity();
+
+            var options = new DbContextOptionsBuilder<DataContext>().UseSqlServer(Configuration.GetConnectionString("KyoSConnection")).Options;
+            using (DataContext db = new DataContext(options))
+            {
+                minimental = await db.TCMIntakeMiniMental
+                                     .Include(n => n.TcmClient)
+                                     .ThenInclude(n => n.Casemanager)
+                                     .ThenInclude(n => n.Clinic)
+                                     .Include(n => n.TcmClient)
+                                     .ThenInclude(n => n.Client)
+                                                    
+                                     .AsSplitQuery()
+
+                                     .FirstOrDefaultAsync(wc => wc.TcmClient.Id == idTCMClient);
+            }
+
+            List<FileContentResult> fileContentList = new List<FileContentResult>();
+            Stream stream = null;
+
+            if (minimental != null)
+            {
+                stream = _reportHelper.TCMIntakeMiniMental(minimental);
+                //string name = tcmNote.TCMClient.Client.Name + " - " + tcmNote.DateOfService.ToShortDateString() + " - " + tcmNote.TCMNoteActivity.FirstOrDefault().ServiceName;
+                string name = "MINI MENTAL";
+                fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"Section 3/{name}.pdf"));
+            }
+
+            return fileContentList;
+        }
+
+        private async Task<List<FileContentResult>> TCMMedicalHistoryPrint(int idTCMClient)
+        {
+            TCMIntakeMedicalHistoryEntity medical = new TCMIntakeMedicalHistoryEntity();
+
+            var options = new DbContextOptionsBuilder<DataContext>().UseSqlServer(Configuration.GetConnectionString("KyoSConnection")).Options;
+            using (DataContext db = new DataContext(options))
+            {
+                medical = await db.TCMIntakeMedicalHistory
+                                  .Include(n => n.TCMClient)
+                                  .ThenInclude(n => n.Casemanager)
+                                  
+                                  .Include(n => n.TCMClient)
+                                  .ThenInclude(n => n.Client)
+                                  .ThenInclude(n => n.Clinic)
+
+                                  .Include(n => n.TCMClient)
+                                  .ThenInclude(n => n.TCMAssessment)
+                                  .ThenInclude(n => n.MedicationList)
+
+                                  .AsSplitQuery()
+
+                                  .FirstOrDefaultAsync(wc => wc.TCMClient.Id == idTCMClient);
+            }
+
+            List<FileContentResult> fileContentList = new List<FileContentResult>();
+            Stream stream = null;
+
+            if (medical != null)
+            {
+                stream = _reportHelper.TCMIntakeMedicalHistoryReport(medical);
+                //string name = tcmNote.TCMClient.Client.Name + " - " + tcmNote.DateOfService.ToShortDateString() + " - " + tcmNote.TCMNoteActivity.FirstOrDefault().ServiceName;
+                string name = "MEDICAL HISTORY";
+                fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"Section 3/{name}.pdf"));
+            }
+
+            return fileContentList;
+        }
+
+        private async Task<List<FileContentResult>> TCMCoordinationCarePrint(int idTCMClient)
+        {
+            TCMIntakeCoordinationCareEntity coordination = new TCMIntakeCoordinationCareEntity();
+
+            var options = new DbContextOptionsBuilder<DataContext>().UseSqlServer(Configuration.GetConnectionString("KyoSConnection")).Options;
+            using (DataContext db = new DataContext(options))
+            {
+                coordination = await db.TCMIntakeCoordinationCare
+                                       .Include(n => n.TcmClient)
+                                       .ThenInclude(n => n.Casemanager)
+                                       .ThenInclude(n => n.Clinic)
+
+                                       .Include(n => n.TcmClient)
+                                       .ThenInclude(n => n.Client)
+                                       .ThenInclude(n => n.LegalGuardian)
+
+                                       .Include(n => n.TcmClient)
+                                       .ThenInclude(n => n.TCMIntakeForm)
+
+                                       .AsSplitQuery()
+
+                                       .FirstOrDefaultAsync(wc => wc.TcmClient.Id == idTCMClient);
+            }
+
+            List<FileContentResult> fileContentList = new List<FileContentResult>();
+            Stream stream = null;
+
+            if (coordination != null)
+            {
+                stream = _reportHelper.TCMIntakeCoordinationCare(coordination);
+                //string name = tcmNote.TCMClient.Client.Name + " - " + tcmNote.DateOfService.ToShortDateString() + " - " + tcmNote.TCMNoteActivity.FirstOrDefault().ServiceName;
+                string name = "COORDINATION OF CARE";
+                fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"Section 3/{name}.pdf"));
             }
 
             return fileContentList;

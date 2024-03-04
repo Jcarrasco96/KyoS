@@ -1,0 +1,74 @@
+﻿@model KyoS.Web.Models.TCMIntakeMiniMentalViewModel
+
+<div class="col-md-push-12">
+    <div class="form-group col-md-4">
+        <label asp-for="TcmClient.Client.Name" class="control-label">Name of Recipient</label>
+        <input asp-for="TcmClient.Client.Name" class="form-control" readonly>
+        <span asp-validation-for="TcmClient.Client.Name" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="TcmClient.CaseNumber" class="control-label">Case No.</label>
+        <input asp-for="TcmClient.CaseNumber" class="form-control" readonly>
+        <span asp-validation-for="TcmClient.CaseNumber" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="Date" class="control-label"></label>
+        <input asp-for="Date" class="form-control" readonly>
+        <span asp-validation-for="Date" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-4">
+        <label asp-for="TcmClient.Casemanager.Name" class="control-label">Examiner Name</label>
+        <input asp-for="TcmClient.Casemanager.Name" class="form-control" readonly>
+        <span asp-validation-for="TcmClient.Casemanager.Name" class="text-danger"></span>
+    </div>
+</div>
+<div class="col-md-12">
+    <hr />
+</div>
+<div class="form-group col-md-12">
+    <pre>
+    The Mini Mental State Examination (MMSE) is a tool that can be used to systematically and thoroughly assess mental status. It is an 11-question measure that tests five areas 
+    of cognitive function: orientation, registration, attention and calculation, recall, and language. The maximum score is 30. A score of 23 or lower is indicative of cognitive 
+    impairment.
+
+    Maximum         Score 
+    <strong>Orientation</strong>
+        5         <input asp-for="OrientationWhat" style="width: 5%; text-align: center" id="OrientationWhat" onchange="CalculateTotal()" disabled>        What is the (year) (season) (date) (day) (month)?
+        5         <input asp-for="OrientationWhere" style="width: 5%; text-align: center" id="OrientationWhere" onchange="CalculateTotal()" disabled>        Where are we (state) (country) (town) (hospital) (home) (office) (floor)?
+
+    <strong>Registration</strong>
+        3         <input asp-for="RegistrationName" style="width: 5%; text-align: center" id="RegistrationName" onchange="CalculateTotal()" disabled>        Name 3 objects: 1 second to say each. Then ask the patient all 3 after you have said them. Give 1 point for each correct answer. 
+                                   Then repeat them until he/she learns all 3. Count trials and record Trials  <input asp-for="Trials" style="width: 5%; text-align: center" disabled>
+                                   
+    <strong>Attention and Calculation</strong>         
+        5         <input asp-for="Attention" style="width: 5%; text-align: center" id="Attention" onchange="CalculateTotal()" disabled>        Serial 7’s. 1 point for each correct answer. Stop after 5 answers. Alternatively spell “world” backward. Give 1 point for each letter spelled
+                                   correctly.
+
+    <strong>Recall</strong>
+        3         <input asp-for="Recall" style="width: 5%; text-align: center" id="Recall" onchange="CalculateTotal()" disabled>        Ask for the 3 objects repeated above. Give 1 point for each correct answer.
+
+    <strong>Language</strong>
+        2         <input asp-for="LanguageName" style="width: 5%; text-align: center" id="LanguageName" onchange="CalculateTotal()" disabled>        Name a pencil and watch.
+        1         <input asp-for="LanguageRepeat" style="width: 5%; text-align: center" id="LanguageRepeat" onchange="CalculateTotal()" disabled>        Repeat the following: “No ifs, ands, or buts”
+        3         <input asp-for="LanguageFollow" style="width: 5%; text-align: center" id="LanguageFollow" onchange="CalculateTotal()" disabled>        Follow a 3-stage command: “Take a paper in your hand, fold it in half, and put it on the floor.”
+        1         <input asp-for="LanguageRead" style="width: 5%; text-align: center" id="LanguageRead" onchange="CalculateTotal()" disabled>        Read and obey the following: "Close your eyes"
+        1         <input asp-for="LanguageWrite" style="width: 5%; text-align: center" id="LanguageWrite" onchange="CalculateTotal()" disabled>        Write a sentence.
+        1         <input asp-for="LanguageCopy" style="width: 5%; text-align: center" id="LanguageCopy" onchange="CalculateTotal()" disabled>        Copy the design shown.
+                 ___________
+
+                  <input asp-for="TotalScore" style="width:5%; text-align:center; background-color:gainsboro" readonly id="TotalScore">        <strong>Total Score</strong>
+    </pre>
+</div>
+<br />
+
+<script>
+    function CalculateTotal() {
+        var total = parseInt($(OrientationWhat).val()) + parseInt($(OrientationWhere).val()) + parseInt($(RegistrationName).val())
+            + parseInt($(Attention).val()) + parseInt($(Recall).val()) + parseInt($(LanguageName).val()) + parseInt($(LanguageRepeat).val())
+            + parseInt($(LanguageFollow).val()) + parseInt($(LanguageRead).val()) + parseInt($(LanguageWrite).val()) + parseInt($(LanguageCopy).val());
+
+        $(TotalScore).val(total);
+    }
+</script>
+
+

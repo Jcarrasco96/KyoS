@@ -1,0 +1,123 @@
+﻿@model KyoS.Web.Models.TCMIntakeCoordinationCareViewModel
+
+<div class="col-md-push-12">
+    <div class="form-group col-md-4">
+        <label asp-for="TcmClient.Client.Name" class="control-label">Recipient's Full Name</label>
+        <input asp-for="TcmClient.Client.Name" class="form-control" readonly>
+        <span asp-validation-for="TcmClient.Client.Name" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-3">
+        <label asp-for="TcmClient.Client.SSN" class="control-label">Social Security Number</label>
+        <input asp-for="TcmClient.Client.SSN" class="form-control" readonly>
+        <span asp-validation-for="TcmClient.Client.SSN" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="TcmClient.Client.DateOfBirth" class="control-label">DOB</label>
+        <input asp-for="TcmClient.Client.DateOfBirth" class="form-control" readonly>
+        <span asp-validation-for="TcmClient.Client.DateOfBirth" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-3">
+        <label asp-for="TcmClient.CaseNumber" class="control-label">Record Number</label>
+        <input asp-for="TcmClient.CaseNumber" class="form-control" readonly>
+        <span asp-validation-for="TcmClient.CaseNumber" class="text-danger"></span>
+    </div>
+</div>
+<div class="col-md-12">
+    <hr />
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-12">
+        <pre>
+
+        <input type="checkbox" asp-for="InformationToRelease" disabled>  <label asp-for="InformationToRelease" class="control-label">Information to be released to:</label>           <input type="checkbox" asp-for="InformationTorequested" disabled>  <label asp-for="InformationTorequested" class="control-label">Information to be requested from:</label>
+        </pre>
+    </div>
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-3">
+        <label asp-for="PCP_Name" class="control-label">Physician name</label>
+        <input asp-for="PCP_Name" class="form-control" disabled>
+        <span asp-validation-for="PCP_Name" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-3">
+        <label asp-for="PCP_Address" class="control-label">Address</label>
+        <input asp-for="PCP_Address" class="form-control" disabled>
+        <span asp-validation-for="PCP_Address" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="PCP_CityStateZip" class="control-label">City, State, Zip</label>
+        <input asp-for="PCP_CityStateZip" class="form-control" disabled>
+        <span asp-validation-for="PCP_CityStateZip" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="PCP_Phone" class="control-label">Phone number</label>
+        <input asp-for="PCP_Phone" class="form-control" disabled>
+        <span asp-validation-for="PCP_Phone" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="PCP_FaxNumber" class="control-label">Fax number</label>
+        <input asp-for="PCP_FaxNumber" class="form-control" disabled>
+        <span asp-validation-for="PCP_FaxNumber" class="text-danger"></span>
+    </div>
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-12">
+        <pre>
+
+        <input type="checkbox" asp-for="PCP" disabled> PCP           <input type="checkbox" asp-for="Specialist" disabled>  Specialist     <input asp-for="SpecialistText" style="width:30%" disabled />
+        </pre>
+    </div>
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-12">
+        <pre>
+
+        <strong>Information received/sent via: </strong>
+        <input type="checkbox" asp-for="InformationVerbal" disabled> Verbal    <input type="checkbox" asp-for="InformationWrited" disabled> Written Record     <input type="checkbox" asp-for="InformationFascimile" disabled> Facsimile    <input type="checkbox" asp-for="InformationElectronic" disabled> Electronic Record    <input type="checkbox" asp-for="InformationAllBefore" disabled> All before mentioned    <input type="checkbox" asp-for="InformationNonKnown" disabled> Information not known by client/guardian 
+        </pre>
+    </div>
+</div>
+
+<div class="form-group col-md-12">
+    <div>
+        <pre>
+        Dear Physician: 
+        We wish to inform you that the above mentioned client is receiving Targeted Case Management services from our center. Medicaid regulations as well as 
+        <strong>(@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Name))</strong> believe that <u>coordination of care</u> is crucial for our clients. 
+        To that effect, the client/guardian has authorized our mutual sharing of health information at the bottom of this letter. 
+
+        In order to properly and expeditiously coordinate the client’s care, we would appreciate you contacting us at <strong>(@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Phone))</strong> with any pertinent information,
+        concern or question. 
+
+        <strong><u>CLIENT/GUARDIAN AUTORIZATION OR REFUSAL</u></strong>
+        <input type="checkbox" asp-for="IAuthorize" disabled> I authorize on behalf of myself the above mentioned doctor as well as <strong>(@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Name))</strong>
+        to mutually share and exchange health information in order to best coordinate care.
+        <input type="checkbox" asp-for="IRefuse" disabled>  I refuse to authorize sharing information between  <strong>(@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Name))</strong> and the above mentioned doctor.
+        </pre>
+    </div>
+</div>
+<div class="col-md-12">
+    <pre>
+    
+    <strong>Person served signature date</strong>    <input asp-for="DateSignaturePerson" disabled>      <strong>Legal Guardian signature date</strong>    <input asp-for="DateSignatureLegalGuardian" disabled>
+    <strong>(@Html.DisplayFor(modelItem => Model.TcmClient.Client.Name))</strong>     
+    
+    <strong>Employee signature date</strong>         <input asp-for="DateSignatureEmployee" disabled>
+    <strong>(@Html.DisplayFor(modelItem => Model.AdmissionedFor))</strong>                                                                    
+    </pre>
+</div>
+<div class="col-md-12">
+    &nbsp;
+</div>
+<div>
+    <div class="form-group col-md-12">
+        <input type="checkbox" asp-for="Documents" class="form-check-input" id="Documents" disabled> Documents were verbally translated to me in my native language.<br />
+        <label asp-for="Documents" class="forgot">
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Clinic.Name)</strong>
+        </label>
+    </div>
+</div>
+<br />
+<br />
+
+

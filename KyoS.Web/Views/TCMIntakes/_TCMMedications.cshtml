@@ -1,27 +1,27 @@
-﻿@model KyoS.Web.Models.MedicationViewModel
+﻿@model KyoS.Web.Models.TCMAssessmentMedicationViewModel
 <div class="col-md-push-12">
     <div class="col-md-3">
-        <label asp-for="Client.Name" class="control-label">Client Name</label>
-        <input asp-for="Client.Name" class="form-control" readonly />
-        <span asp-validation-for="Client.Name" class="text-danger"></span>
+        <label asp-for="TcmAssessment.TcmClient.Client.Name" class="control-label">Client Name</label>
+        <input asp-for="TcmAssessment.TcmClient.Client.Name" class="form-control" readonly />
+        <span asp-validation-for="TcmAssessment.TcmClient.Client.Name" class="text-danger"></span>
     </div>
     <div class="col-md-3">
-        <label asp-for="Client.AdmisionDate" class="control-label"></label>
-        <input asp-for="Client.AdmisionDate" class="form-control" readonly />
-        <span asp-validation-for="Client.AdmisionDate" class="text-danger"></span>
+        <label asp-for="TcmAssessment.TcmClient.DataOpen" class="control-label"></label>
+        <input asp-for="TcmAssessment.TcmClient.DataOpen" class="form-control" readonly />
+        <span asp-validation-for="TcmAssessment.TcmClient.DataOpen" class="text-danger"></span>
     </div>
     <div class="col-md-3">
-        <label asp-for="Client.DateOfBirth" class="control-label"></label>
-        <input asp-for="Client.DateOfBirth" class="form-control" readonly />
-        <span asp-validation-for="Client.DateOfBirth" class="text-danger"></span>
+        <label asp-for="TcmAssessment.TcmClient.Client.DateOfBirth" class="control-label"></label>
+        <input asp-for="TcmAssessment.TcmClient.Client.DateOfBirth" class="form-control" readonly />
+        <span asp-validation-for="TcmAssessment.TcmClient.Client.DateOfBirth" class="text-danger"></span>
     </div>
     <div class="col-md-3">
         <label class="control-label">Case Number</label>
-        <a class="form-control" readonly>@ViewData["CaseNumber"].ToString()</a>
+        <input asp-for="TcmAssessment.TcmClient.CaseNumber" class="form-control" readonly />
     </div>
 </div>
 <div class="col-md-12">
-    &nbsp;
+    <hr />
 </div>
 <div class="col-md-push-12">
     <div class="col-md-3">

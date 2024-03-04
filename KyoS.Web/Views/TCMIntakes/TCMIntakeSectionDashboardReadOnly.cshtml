@@ -460,7 +460,7 @@
                 @if (Model.TCMIntakeMiniMental != null)
                 {
                     <div class="thumbnail list-group-item list-group-item-success">
-                        <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-action="CreateTCMMiniMental" role="button">
+                        <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-action="TCMMiniMentalReadOnly" role="button">
                             <h4 style="align-content: end; color: #3c763d"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Mini Mental<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;State Exam</h4>
                         </a>
                         <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-action="PrintTCMIntakeMiniMental" role="button" title="Print Mini Mental State Exam" target="_blank">
@@ -479,7 +479,7 @@
                 @if (Model.TCMIntakeMedicalHistory != null)
                 {
                     <div class="thumbnail list-group-item list-group-item-success">
-                        <a style="text-decoration: none;" asp-route-id="@Model.Client.Id" asp-action="CreateTCMMedicalhistory" asp-route-idTCMClient="@Model.Id" role="button">
+                        <a style="text-decoration: none;" asp-route-id="@Model.Client.Id" asp-action="TCMMedicalhistoryReadOnly" asp-route-idTCMClient="@Model.Id" role="button">
                             <h4 style="align-content: end; color: #3c763d"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Medical<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;History</h4>
                         </a>
                         <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-action="PrintTCMMedicalHistory" role="button" title="Print Medical History" target="_blank">
@@ -495,21 +495,23 @@
                 }
             </div>
             <div class="col-sm-3 col-md-2">
-                @if (Model.Client.MedicationList.Count() >= 0)
+                @if (Model.TCMAssessment.MedicationList.Count() > 0)
                 {
-                    <a style="text-decoration: none;" asp-action="CreateTCMMedication" asp-route-id="@Model.Client.Id" asp-route-idTCMClient="@Model.Id" role="button">
+                    <a style="text-decoration: none;" asp-action="TCMMedicationList" asp-route-id="@Model.Id" asp-route-idTCMClient="@Model.Id" role="button">
                         <div class="thumbnail list-group-item list-group-item-success">
                             <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Medication<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
-                            <span class="message-counter-success">@Model.Client.MedicationList.Count()</span>
+                            <span class="message-counter-success">@Model.TCMAssessment.MedicationList.Count()</span>
                         </div>
                     </a>
                 }
                 else
                 {
-                    <div class="thumbnail list-group-item list-group-item-text">
-                        <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Medication<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
-                        <span class="message-counter-cero">@Model.Client.MedicationList.Count()</span>
-                    </div>
+                    <a style="text-decoration: none;" asp-action="TCMMedicationList" asp-route-id="@Model.Client.Id" asp-route-idTCMClient="@Model.Id" role="button">
+                        <div class="thumbnail list-group-item list-group-item-text">
+                            <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Medication<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
+                            <span class="message-counter-cero">@Model.TCMAssessment.MedicationList.Count()</span>
+                        </div>
+                    </a>
                 }
             </div>
             <div class="col-sm-3 col-md-2">

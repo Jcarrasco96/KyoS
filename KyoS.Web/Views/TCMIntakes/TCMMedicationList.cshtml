@@ -1,0 +1,69 @@
+﻿@model IEnumerable<KyoS.Web.Data.Entities.TCMAssessmentMedicationEntity>
+@{
+    ViewData["Title"] = "TCM Medication List";
+}
+<link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
+
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home"></i>
+            @if (User.IsInRole("CaseManager"))
+            {
+                @Html.ActionLink("TCM Intake Section 3", "TCMIntakeSectionDashboard", "TCMIntakes", new { id = ViewData["idclient"], section = 3 })
+            }
+            else
+            {
+                @Html.ActionLink("TCM Intake Section 3", "TCMIntakeSectionDashboardReadOnly", "TCMIntakes", new { id = ViewData["idclient"], section = 3 })
+            }
+        </li>
+        <li class="active"> @ViewData["Title"]</li>
+    </ul><!--.breadcrumb-->
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <a onclick="showInPopup('@Url.Action("CreateTCMMedicationModal","TCMIntakes",new { idTCMClient = ViewData["idclient"]},Context.Request.Scheme)','Add Medication')" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Add Medication</a>
+    </div>
+    <div class="col-md-12">
+        &nbsp;
+    </div>
+    <div id="view-medications">
+        @await Html.PartialAsync("_ViewTCMMedicationList", Model.ToList())
+    </div>
+</div>
+
+<partial name="_ModalPopup" />
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script src="~/js/jquery.dataTables.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#MyTable').DataTable({
+                "order": [[0, "asc"]],
+                "pageLength": 100
+            });
+
+        });
+        function ConfirmDelete(e) {
+            Swal.fire({
+                title: 'Do you want to do this action?',
+                text: "Note: The case will be deleted, this action is irreversible.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, do it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var url = "@Url.Action("DeleteTCMMedicationModal", "TCMIntakes")";
+                    window.location.href = url + '/' + e;
+                }
+            });
+        }
+    </script>
+}
