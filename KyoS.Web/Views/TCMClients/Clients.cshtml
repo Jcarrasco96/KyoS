@@ -125,19 +125,19 @@
                                     <td align="right">
                                         @if (User.IsInRole("CaseManager") )
                                         {
-                                            <a asp-action="EditSignature" asp-route-id="@item.Id" class="btn btn-warning" title="Edit client's signature"><i class="glyphicon glyphicon-cloud-upload"></i></a>
+                                            <a asp-action="EditSignature" asp-route-id="@item.Client.Id" class="btn btn-warning" title="Edit client's signature"><i class="glyphicon glyphicon-cloud-upload"></i></a>
                                             <a asp-action="Edit" asp-controller="Clients" asp-route-id="@item.Client.Id" asp-route-origin="2" class="btn btn-warning" title="Edit client"><i class="glyphicon glyphicon-pencil"></i></a>
                                         }
                                         else
                                         { 
                                             @if (User.IsInRole("TCMSupervisor"))
                                             {
-                                                <a asp-action="EditSignature" asp-route-id="@item.Id" class="btn btn-warning" title="Edit client's signature"><i class="glyphicon glyphicon-cloud-upload disabled" ></i></a>
+                                                <a asp-action="EditSignature" asp-route-id="@item.Client.Id" class="btn btn-warning" title="Edit client's signature"><i class="glyphicon glyphicon-cloud-upload disabled" ></i></a>
                                                 <a asp-action="Details" asp-controller="Clients" asp-route-id="@item.Client.Id" asp-route-origin="1" class="btn btn-info" title="Details"><i class="glyphicon glyphicon-align-justify"></i></a>
                                             }
                                             else
                                             {
-                                                <a asp-action="EditSignature" asp-route-id="@item.Id" class="btn btn-warning" title="Edit client's signature"><i class="glyphicon glyphicon-cloud-upload disabled"></i></a>
+                                                <a asp-action="EditSignature" asp-route-id="@item.Client.Id" class="btn btn-warning" title="Edit client's signature"><i class="glyphicon glyphicon-cloud-upload disabled"></i></a>
                                                 <a asp-action="Details" asp-controller="Clients" asp-route-id="@item.Client.Id" asp-route-origin="1" class="btn btn-info disabled" title="Details"><i class="glyphicon glyphicon-align-justify"></i></a>
                                             }
                                         }
