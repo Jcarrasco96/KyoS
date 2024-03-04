@@ -48,7 +48,14 @@
                 <div class="col-md-push-12">
                     <div class="col-md-12 form-group">
                         <a onclick="showInPopup('@Url.Action("CreateTCMIntervention", "TCMIntakes", new { id = @Model.Id}, Context.Request.Scheme)','Create Intervention Log')" class="btn btn-success" title="Create Intervention Log"><i class="glyphicon glyphicon-plus"></i> Create Intervention Log</a>
-                        <a class="btn btn-success" asp-controller="TCMIntakes" asp-action="PrintTCMInterventionLog" asp-route-id="@Model.Id" title="Print Intervention Log" target="_blank"><i class="glyphicon glyphicon-print"></i> Print Intervention Log</a>
+                        @if (Model.InterventionList.Count == 0)
+                        {
+                            <a class="btn btn-success disabled"><i class="glyphicon glyphicon-print"></i> Print Intervention Log</a>
+                        }
+                        else
+                        {
+                            <a class="btn btn-success" asp-controller="TCMIntakes" asp-action="PrintTCMInterventionLog" asp-route-id="@Model.Id" title="Print Intervention Log" target="_blank"><i class="glyphicon glyphicon-print"></i> Print Intervention Log</a>
+                        }                        
                     </div>
                     <div class="col-md-12">
                         <div id="view-tcmServicePlanReview">
