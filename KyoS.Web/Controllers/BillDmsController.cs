@@ -261,9 +261,11 @@ namespace KyoS.Web.Controllers
                                                                .Where(n => n.BillDms == null
                                                                      && n.DateOfService <= dateBillclose)
                                                                .ToList();
+                int UnitMH = UnitTotal;
                 int minutesTCM = 0;
                 int residuoTCM = 0;
                 int unitTCM = 0;
+                int unitTCMEnd = 0;
                 foreach (var item in tcmNotesUnbilled)
                 {
                     minutesTCM = item.TCMNoteActivity.Sum(n => n.Minutes);
@@ -293,6 +295,7 @@ namespace KyoS.Web.Controllers
 
                     };
                     UnitTotal += Unit;
+                    unitTCMEnd += Unit;
                     billDmsDetailsList.Add(billDmsDetailsTemp);
                 }
                 model = new BillDmsViewModel
@@ -307,7 +310,9 @@ namespace KyoS.Web.Controllers
                     StatusBill = StatusBill.Unbilled,
                     Workday_Clients = workdayClientUnbilled,
                     TCMNotes = tcmNotesUnbilled,
-                    BillDmsDetails = billDmsDetailsList
+                    BillDmsDetails = billDmsDetailsList,
+                    UnitsMH = UnitMH,
+                    UnitsTCM = unitTCMEnd
 
                 };
                 return model;
@@ -861,6 +866,45 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("BillDetails", new { id = billDmsEntity.Id });
             }
             return RedirectToAction("BillDetails", new { id = billDmsEntity.Id });
+        }
+
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> InternalAccount(int idError = 0)
+        {
+            UserEntity user_logged = await _context.Users
+                                                   .Include(u => u.Clinic)
+                                                   .ThenInclude(c => c.Setting)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+            if (User.IsInRole("Admin"))
+            {
+                List<BillDmsEntity> salida = await _context.BillDms
+                                                            .Include(c => c.BillDmsDetails)
+                                                            .Include(c => c.BillDmsPaids)
+                                                            .ToListAsync();
+                return View(salida);
+            }
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || (!user_logged.Clinic.Setting.MentalHealthClinic && !user_logged.Clinic.Setting.TCMClinic))
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+            if (idError == 1) //Imposible to delete
+            {
+                ViewBag.Delete = "N";
+            }
+            if (User.IsInRole("Manager"))
+            {
+                List<BillDmsEntity> salida = await _context.BillDms
+                                                           .Include(c => c.BillDmsDetails)
+                                                           .Include(c => c.BillDmsPaids)
+                                                           .ToListAsync();
+                return View(salida);
+            }
+
+
+
+            return RedirectToAction("NotAuthorized", "Account");
         }
 
     }
