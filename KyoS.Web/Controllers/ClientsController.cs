@@ -1937,7 +1937,7 @@ namespace KyoS.Web.Controllers
                                                 .ThenInclude(w => w.Schedule)
 
                                                 .Include(w => w.IntakeMedicalHistory)
-
+                                                .AsSplitQuery()
                                                 .FirstOrDefaultAsync(w => (w.Clinic.Id == user_logged.Clinic.Id
                                                    && w.Id == idClient));
 
