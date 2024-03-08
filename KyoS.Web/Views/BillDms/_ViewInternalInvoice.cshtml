@@ -11,7 +11,7 @@
                 <table class="table table-hover table-responsive table-striped" id="MyTable">
                     <thead>
                         <tr>
-                            <th class="col-md-2" style="text-align:center;">
+                            <th class="col-md-1" style="text-align:center;">
                                 Close Date
                             </th>
                             <th class="col-md-1" style="text-align:center;">
@@ -41,7 +41,9 @@
                             <th class="col-md-2" style="text-align:center;">
                                 $Total Amount
                             </th>
-                           
+                            <th class="col-md-1" >
+                                
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -115,6 +117,9 @@
                                 </td>
                                 <td align="center">
                                     @Math.Round(amountMH + amountTCM,2)
+                                </td>
+                                <td align="center">
+                                    <a asp-action="UpdateUnits" asp-route-id="@item.Id" class="btn btn-warning"><i class="glyphicon glyphicon-check" title="Update Units"></i></a>
                                 </td>
                             </tr>
                         }

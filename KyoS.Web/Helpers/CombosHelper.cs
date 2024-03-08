@@ -1,4 +1,5 @@
-﻿using KyoS.Common.Enums;
+﻿using AspNetCore.ReportingServices.ReportProcessing.ReportObjectModel;
+using KyoS.Common.Enums;
 using KyoS.Web.Data;
 using KyoS.Web.Data.Entities;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -6,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+
 
 namespace KyoS.Web.Helpers
 {
@@ -346,6 +347,11 @@ namespace KyoS.Web.Helpers
 
         public IEnumerable<SelectListItem> GetComboClientsForIndNotes(int idClinic, int idWeek, int idFacilitator, int idWorkday)
         {
+            FacilitatorEntity facilitator = _context.Facilitators
+                                                    .Include(u => u.Clinic)
+                                                    .ThenInclude(u => u.Setting)
+                                                    .FirstOrDefault(u => u.Id == idFacilitator);
+
             List<ClientEntity> clients = _context.Clients
                                                  .Include(n => n.DischargeList)
                                                  .Include(wc => wc.MTPs)
@@ -416,27 +422,87 @@ namespace KyoS.Web.Helpers
 
             }
 
-            foreach (var item in clients)
+            if (facilitator.Clinic.Setting.TCMClinic == false)
             {
-                temp = _context.Workdays_Clients.Where(n => n.Workday.Date == workday_client.Workday.Date
-                                                               && ((n.Schedule.InitialTime.TimeOfDay >= subScheduleEntity.InitialTime.TimeOfDay
-                                                               && n.Schedule.InitialTime.TimeOfDay <= subScheduleEntity.EndTime.TimeOfDay)
-                                                                   || (n.Schedule.EndTime.TimeOfDay >= subScheduleEntity.InitialTime.TimeOfDay
-                                                                      && n.Schedule.EndTime.TimeOfDay <= subScheduleEntity.EndTime.TimeOfDay)
-                                                                   || (n.Schedule.InitialTime.TimeOfDay <= subScheduleEntity.InitialTime.TimeOfDay
-                                                                      && n.Schedule.EndTime.TimeOfDay >= subScheduleEntity.InitialTime.TimeOfDay)
-                                                                   || (n.Schedule.InitialTime.TimeOfDay <= subScheduleEntity.EndTime.TimeOfDay
-                                                                      && n.Schedule.EndTime.TimeOfDay >= subScheduleEntity.EndTime.TimeOfDay))
-                                                              && n.Id != workday_client.Id
-                                                              && n.Client.Id == item.Id
-                                                              && n.Present == true)
-                                                           .ToList();
-                if (temp.Count() == 0)
+                foreach (var item in clients)
                 {
-                    salida.Add(item);
-                    temp = new List<Workday_Client>();
+                    temp = _context.Workdays_Clients.Where(n => n.Workday.Date == workday_client.Workday.Date
+                                                                   && ((n.Schedule.InitialTime.TimeOfDay >= subScheduleEntity.InitialTime.TimeOfDay
+                                                                   && n.Schedule.InitialTime.TimeOfDay <= subScheduleEntity.EndTime.TimeOfDay)
+                                                                       || (n.Schedule.EndTime.TimeOfDay >= subScheduleEntity.InitialTime.TimeOfDay
+                                                                          && n.Schedule.EndTime.TimeOfDay <= subScheduleEntity.EndTime.TimeOfDay)
+                                                                       || (n.Schedule.InitialTime.TimeOfDay <= subScheduleEntity.InitialTime.TimeOfDay
+                                                                          && n.Schedule.EndTime.TimeOfDay >= subScheduleEntity.InitialTime.TimeOfDay)
+                                                                       || (n.Schedule.InitialTime.TimeOfDay <= subScheduleEntity.EndTime.TimeOfDay
+                                                                          && n.Schedule.EndTime.TimeOfDay >= subScheduleEntity.EndTime.TimeOfDay))
+                                                                  && n.Id != workday_client.Id
+                                                                  && n.Client.Id == item.Id
+                                                                  && n.Present == true)
+                                                               .ToList();
+                    if (temp.Count() == 0)
+                    {
+                        salida.Add(item);
+                        temp = new List<Workday_Client>();
+                    }
                 }
             }
+            else
+            {
+                foreach (var item in clients)
+                {
+                    temp = _context.Workdays_Clients.Where(n => n.Workday.Date == workday_client.Workday.Date
+                                                                   && ((n.Schedule.InitialTime.TimeOfDay >= subScheduleEntity.InitialTime.TimeOfDay
+                                                                   && n.Schedule.InitialTime.TimeOfDay <= subScheduleEntity.EndTime.TimeOfDay)
+                                                                       || (n.Schedule.EndTime.TimeOfDay >= subScheduleEntity.InitialTime.TimeOfDay
+                                                                          && n.Schedule.EndTime.TimeOfDay <= subScheduleEntity.EndTime.TimeOfDay)
+                                                                       || (n.Schedule.InitialTime.TimeOfDay <= subScheduleEntity.InitialTime.TimeOfDay
+                                                                          && n.Schedule.EndTime.TimeOfDay >= subScheduleEntity.InitialTime.TimeOfDay)
+                                                                       || (n.Schedule.InitialTime.TimeOfDay <= subScheduleEntity.EndTime.TimeOfDay
+                                                                          && n.Schedule.EndTime.TimeOfDay >= subScheduleEntity.EndTime.TimeOfDay))
+                                                                  && n.Id != workday_client.Id
+                                                                  && n.Client.Id == item.Id
+                                                                  && n.Present == true)
+                                                               .ToList();
+                    if (temp.Count() == 0)
+                    {
+                        TCMClientEntity tcmclient = _context.TCMClient
+                                                            .Include(n => n.TCMNote)
+                                                            .ThenInclude(n => n.TCMNoteActivity)
+                                                            .Include(n => n.Client)
+                                                            .AsSplitQuery()
+                                                            .FirstOrDefault(c => c.Client.Id == item.Id);
+                        if (tcmclient != null)
+                        {
+                            if (tcmclient.TCMNote.Count() > 0)
+                            {
+                                if (tcmclient.TCMNote.Where(n => (n.DateOfService == workday_client.Workday.Date
+                                                   && n.TCMNoteActivity.Where(m => (m.StartTime.TimeOfDay <= subScheduleEntity.InitialTime.TimeOfDay && m.EndTime.TimeOfDay >= subScheduleEntity.InitialTime.TimeOfDay)
+                                                       || (m.StartTime.TimeOfDay <= subScheduleEntity.EndTime.TimeOfDay && m.EndTime.TimeOfDay >= subScheduleEntity.EndTime.TimeOfDay)
+                                                       || (m.StartTime.TimeOfDay > subScheduleEntity.InitialTime.TimeOfDay && m.EndTime.TimeOfDay > subScheduleEntity.InitialTime.TimeOfDay && m.StartTime.TimeOfDay < subScheduleEntity.EndTime.TimeOfDay && m.EndTime.TimeOfDay < subScheduleEntity.EndTime.TimeOfDay))
+                                                   .Count() == 0))
+                                                 .Count() == 0)
+                                {
+                                    salida.Add(item);
+                                    temp = new List<Workday_Client>();
+                                }
+                            }
+                            else
+                            {
+                                salida.Add(item);
+                                temp = new List<Workday_Client>();
+                            }
+
+                        }
+                        else
+                        {
+                            salida.Add(item);
+                            temp = new List<Workday_Client>();
+                        }
+                       
+                    }
+                }
+            }
+           
 
             List<SelectListItem> list = salida.Select(c => new SelectListItem
                                                 {

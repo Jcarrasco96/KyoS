@@ -229,8 +229,9 @@ namespace KyoS.Web.Controllers
         public async Task<IActionResult> Create(GroupViewModel model, IFormCollection form, int all = 0)
         {
             UserEntity user_logged = _context.Users
-                                                .Include(u => u.Clinic)
-                                                .FirstOrDefault(u => u.UserName == User.Identity.Name);
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(u => u.Setting)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
             if (ModelState.IsValid)
             {
@@ -348,6 +349,15 @@ namespace KyoS.Web.Controllers
                                     if (this.VerifyFreeTimeOfFacilitator(group.Facilitator.Id, ServiceType.PSR, group.Meridian, item.Date))
                                     {
                                         return RedirectToAction(nameof(Create), new { error = 1, idFacilitator = group.Facilitator.Id });
+                                    }
+
+                                    //verifico que el Cliente tenga ese tiempo disponible en el TCM
+                                    if (user_logged.Clinic.Setting.TCMClinic == true)
+                                    {
+                                        if (this.VerifyTCMNotesAtSameTime(client.Id, item.Date, schedule.InitialTime, schedule.EndTime))
+                                        {
+                                            return RedirectToAction(nameof(Create), new { error = 2, idClient = client.Id });
+                                        }
                                     }
 
                                     workday_client.Add(new Workday_Client
@@ -478,6 +488,7 @@ namespace KyoS.Web.Controllers
         {
             UserEntity user_logged = _context.Users
                                              .Include(u => u.Clinic)
+                                             .ThenInclude(u => u.Setting)
                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
             if (ModelState.IsValid)
@@ -611,6 +622,15 @@ namespace KyoS.Web.Controllers
                                     if (this.VerifyFreeTimeOfFacilitator(group.Facilitator.Id, ServiceType.PSR, group.Meridian, item.Date))
                                     {
                                         return RedirectToAction(nameof(Edit), new { id = model.Id, error = 1, idFacilitator = group.Facilitator.Id });
+                                    }
+
+                                    //verifico que el Cliente tenga ese tiempo disponible en el TCM
+                                    if (user_logged.Clinic.Setting.TCMClinic == true)
+                                    {
+                                        if (this.VerifyTCMNotesAtSameTime(client.Id, item.Date, original_group.Schedule.InitialTime, original_group.Schedule.EndTime))
+                                        {
+                                            return RedirectToAction(nameof(Edit), new { id = model.Id, error = 2, idClient = client.Id });
+                                        }
                                     }
 
                                     workday_client.Add(new Workday_Client
@@ -880,6 +900,7 @@ namespace KyoS.Web.Controllers
         {
             UserEntity user_logged = _context.Users
                                              .Include(u => u.Clinic)
+                                             .ThenInclude(u => u.Setting)
                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
             if (ModelState.IsValid)
@@ -990,7 +1011,16 @@ namespace KyoS.Web.Controllers
                                          return RedirectToAction(nameof(CreateGT), new { error = 1, idFacilitator = group.Facilitator.Id });
                                      }
 
-                                     workday_client.Add(new Workday_Client
+                                    //verifico que el Cliente tenga ese tiempo disponible en el TCM
+                                    if (user_logged.Clinic.Setting.TCMClinic == true)
+                                    {
+                                        if (this.VerifyTCMNotesAtSameTime(client.Id, item.Date, schedule.InitialTime, schedule.EndTime))
+                                        {
+                                            return RedirectToAction(nameof(CreateGT), new { error = 1, idFacilitator = group.Facilitator.Id });
+                                        }
+                                    }
+
+                                    workday_client.Add(new Workday_Client
                                      {
                                          Workday = item,
                                          Client = client,
@@ -1145,6 +1175,7 @@ namespace KyoS.Web.Controllers
         {
             UserEntity user_logged = _context.Users
                                              .Include(u => u.Clinic)
+                                             .ThenInclude(u => u.Setting)
                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
             if (ModelState.IsValid)
@@ -1263,7 +1294,16 @@ namespace KyoS.Web.Controllers
                                          return RedirectToAction(nameof(EditGT), new { id = model.Id, error = 1, idFacilitator = group.Facilitator.Id, all });
                                      }
 
-                                     workday_client.Add(new Workday_Client
+                                    //verifico que el Cliente tenga ese tiempo disponible en el TCM
+                                    if (user_logged.Clinic.Setting.TCMClinic == true)
+                                    {
+                                        if (this.VerifyTCMNotesAtSameTime(client.Id, item.Date, original_group.Schedule.InitialTime, original_group.Schedule.EndTime))
+                                        {
+                                            return RedirectToAction(nameof(EditGT), new { id = model.Id, error = 2, idClient = client.Id, all });
+                                        }
+                                    }
+
+                                    workday_client.Add(new Workday_Client
                                      {
                                          Workday = item,
                                          Client = client,
@@ -1951,6 +1991,38 @@ namespace KyoS.Web.Controllers
 
             return true;
         }
+
+        [Authorize(Roles = "Manager")]
+        private bool VerifyTCMNotesAtSameTime(int idClient, DateTime date, DateTime initialTime, DateTime endTime)
+        {
+            TCMClientEntity tcmclient = _context.TCMClient
+                                                .Include(n => n.TCMNote)
+                                                .ThenInclude(n => n.TCMNoteActivity)
+                                                .Include(n => n.Client)
+                                                .AsSplitQuery()
+                                                .FirstOrDefault(c => c.Client.Id == idClient);
+            if (tcmclient != null)
+            {
+                if (tcmclient.TCMNote.Count() > 0)
+                {
+                    if (tcmclient.TCMNote.Where(n => (n.DateOfService == date
+                                       && n.TCMNoteActivity.Where(m => (m.StartTime.TimeOfDay <= initialTime.TimeOfDay && m.EndTime.TimeOfDay >= initialTime.TimeOfDay)
+                                           || (m.StartTime.TimeOfDay <= endTime.TimeOfDay && m.EndTime.TimeOfDay >= endTime.TimeOfDay)
+                                           || (m.StartTime.TimeOfDay > initialTime.TimeOfDay && m.EndTime.TimeOfDay > initialTime.TimeOfDay && m.StartTime.TimeOfDay < endTime.TimeOfDay && m.EndTime.TimeOfDay < endTime.TimeOfDay))
+                                       .Count() > 0))
+                                     .Count() > 0)
+                        return true;
+                    else return false;
+                }
+                else
+                {
+                    return false;
+                }                 
+            }          
+
+            return false;
+        }
+
         #endregion
     }
 }

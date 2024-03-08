@@ -15,12 +15,6 @@
     </ul><!--.breadcrumb-->
 </div>
 
-<p>
-    @if (User.IsInRole("Manager") || User.IsInRole("Admin"))
-    {
-        <a asp-action="Create" asp-route-dateBillclose="@DateTime.Today" class="btn btn-info"><i class="glyphicon glyphicon-search"></i> View Next Invoice</a>
-    }
-</p>
 
 <div class="row">
     <div id="view-billdms">

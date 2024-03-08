@@ -907,5 +907,46 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("NotAuthorized", "Account");
         }
 
+        [Authorize(Roles = "Admin")]
+       
+        public async Task<IActionResult> UpdateUnits(int id = 0)
+        {
+            if (id == 0)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            BillDmsEntity billDmsEntity = await _context.BillDms
+                                                        .Include(n => n.BillDmsDetails)
+                                                        .FirstOrDefaultAsync(f => f.Id == id);
+            if (billDmsEntity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            int unitTcm = 0;
+            int unitMH = 0;
+            if (User.IsInRole("Admin"))
+            {
+                unitTcm = billDmsEntity.BillDmsDetails.Where(n => n.ServiceAgency == ServiceAgency.TCM).Sum(m => m.Unit);
+                unitMH = billDmsEntity.BillDmsDetails.Where(n => n.ServiceAgency == ServiceAgency.CMH).Sum(m => m.Unit);
+            }
+            billDmsEntity.UnitsMH = unitMH;
+            billDmsEntity.UnitsTCM = unitTcm;
+            _context.Update(billDmsEntity);
+
+            try
+            {
+                await _context.SaveChangesAsync();
+                
+            }
+            catch (System.Exception ex)
+            {
+               
+            }
+            return RedirectToAction(nameof(InternalAccount));
+        }
+
+
     }
 }
