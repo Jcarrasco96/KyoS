@@ -718,7 +718,8 @@ namespace KyoS.Web.Controllers
                 {
                    Id = 0,
                    Date = DateTime.Today,
-                   IdSupervisor = _context.Supervisors.FirstOrDefault(n => n.LinkedUser == user_logged.UserName).Id
+                   IdSupervisor = _context.Supervisors.FirstOrDefault(n => n.LinkedUser == user_logged.UserName).Id,
+                   FacilitatorList = new List<MeetingNotes_Facilitator>()
                    
                 };
 
@@ -801,9 +802,10 @@ namespace KyoS.Web.Controllers
         public async Task<IActionResult> EditNote(int id = 0)
         {
             MeetingNoteEntity supervisorNote = _context.MeetingNotes
-                                                          .Include(n => n.FacilitatorList)
-                                                          .ThenInclude(n => n.Facilitator)
-                                                          .FirstOrDefault(n => n.Id == id);
+                                                       .Include(n => n.FacilitatorList)
+                                                       .ThenInclude(n => n.Facilitator)
+                                                       .AsSplitQuery()
+                                                       .FirstOrDefault(n => n.Id == id);
             if (supervisorNote != null)
             {
                 MeetingNotesViewModel model = _converterHelper.ToMeetingNoteViewModel(supervisorNote);
@@ -814,9 +816,9 @@ namespace KyoS.Web.Controllers
                                                        .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
                 facilitators = await _context.Facilitators
-                                                .Where(c => (c.Clinic.Id == user_logged.Clinic.Id
-                                                          && c.Status == Common.Enums.StatusType.Open))
-                                                .OrderBy(c => c.Name).ToListAsync();
+                                             .Where(c => (c.Clinic.Id == user_logged.Clinic.Id
+                                                       && c.Status == Common.Enums.StatusType.Open))
+                                             .OrderBy(c => c.Name).ToListAsync();
 
                 facilitator_list = new MultiSelectList(facilitators, "Id", "Name", model.FacilitatorList.Select(c => c.Facilitator.Id));
                 ViewData["facilitators"] = facilitator_list;
@@ -841,9 +843,9 @@ namespace KyoS.Web.Controllers
             {
                 //delete SuperisorNotes_Facilitators
                 List<MeetingNotes_Facilitator> listFacilitators = _context.MeetingNotes_Facilitators
-                                                                             .Include(n => n.Facilitator)
-                                                                             .Where(n => n.MeetingNoteEntity.Id == model.Id)
-                                                                             .ToList();
+                                                                          .Include(n => n.Facilitator)
+                                                                          .Where(n => n.MeetingNoteEntity.Id == model.Id)
+                                                                          .ToList();
                 //_context.SupervisorNotes_Facilitators.RemoveRange(listFacilitators);
 
                 MeetingNoteEntity supervisorNotes = new MeetingNoteEntity();
