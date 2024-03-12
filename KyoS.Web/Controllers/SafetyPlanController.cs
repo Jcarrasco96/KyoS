@@ -321,7 +321,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Manager, Supervisor, Facilitator, Frontdesk, Documents_Assistant")]
-        public async Task<IActionResult> ClientswithoutSafetyPlan(int idError = 0)
+        public async Task<IActionResult> ClientswithoutSafetyPlan(int idError = 0, int all = 0)
         {
             UserEntity user_logged = await _context.Users
 
@@ -339,38 +339,136 @@ namespace KyoS.Web.Controllers
 
             if (User.IsInRole("Manager") || User.IsInRole("Supervisor") || User.IsInRole("Frontdesk"))
             {
-                clientlist = await _context.Clients
-                                           .Include(n => n.IndividualTherapyFacilitator)
-                                           .Where(n => n.SafetyPlan == null)
-                                           .ToListAsync();
+                if (all == 0)
+                {
+                    clientlist = await _context.Clients
+                                               .Include(n => n.IndividualTherapyFacilitator)
+                                               .Where(n => n.SafetyPlan == null)
+                                               .AsSplitQuery()
+                                               .ToListAsync();
 
-                return View(clientlist);
+                    return View(clientlist);
+                }
+                else
+                {
+                    if (all == 1)
+                    {
+                        clientlist = await _context.Clients
+                                                   .Include(n => n.IndividualTherapyFacilitator)
+                                                   .Where(n => n.SafetyPlan == null
+                                                            && n.Status == StatusType.Open)
+                                                   .AsSplitQuery()
+                                                   .ToListAsync();
+
+                        return View(clientlist);
+                    }
+                    else
+                    {
+                        clientlist = await _context.Clients
+                                                 .Include(n => n.IndividualTherapyFacilitator)
+                                                 .Where(n => n.SafetyPlan == null
+                                                          && n.Status == StatusType.Close)
+                                                 .AsSplitQuery()
+                                                 .ToListAsync();
+
+                        return View(clientlist);
+                    }
+                }
+               
             }
             if (User.IsInRole("Facilitator"))
             {
                 FacilitatorEntity facilitator = _context.Facilitators
                                                         .FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
-                clientlist = await _context.Clients
+                if (all == 0)
+                {
+                    clientlist = await _context.Clients
                                            .Include(n => n.IndividualTherapyFacilitator)
                                            .Where(n => n.SafetyPlan == null
-                                           && n.OnlyTCM == false
-                                           && n.IndividualTherapyFacilitator.Id == facilitator.Id)
+                                                    && n.OnlyTCM == false
+                                                    && n.IndividualTherapyFacilitator.Id == facilitator.Id)
+                                           .AsSplitQuery()
                                            .ToListAsync();
 
-                return View(clientlist);
+                    return View(clientlist);
+                }
+                else
+                {
+                    if (all == 1)
+                    {
+                        clientlist = await _context.Clients
+                                               .Include(n => n.IndividualTherapyFacilitator)
+                                               .Where(n => n.SafetyPlan == null
+                                                        && n.OnlyTCM == false
+                                                        && n.IndividualTherapyFacilitator.Id == facilitator.Id
+                                                        && n.Status == StatusType.Open)
+                                               .AsSplitQuery()
+                                               .ToListAsync();
+
+                        return View(clientlist);
+                    }
+                    else
+                    {
+                        clientlist = await _context.Clients
+                                                   .Include(n => n.IndividualTherapyFacilitator)
+                                                   .Where(n => n.SafetyPlan == null
+                                                            && n.OnlyTCM == false
+                                                            && n.IndividualTherapyFacilitator.Id == facilitator.Id
+                                                            && n.Status == StatusType.Close)
+                                                   .AsSplitQuery()
+                                                   .ToListAsync();
+
+                        return View(clientlist);
+                    }
+                }
+                
             }
             if (User.IsInRole("Documents_Assistant"))
             {
                 DocumentsAssistantEntity documentAssisstant = _context.DocumentsAssistant
                                                                       .FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
-                clientlist = await _context.Clients
-                                           .Include(n => n.IndividualTherapyFacilitator)
-                                           .Where(n => n.SafetyPlan == null
-                                           && n.OnlyTCM == false
-                                           && n.Bio.DocumentsAssistant.Id == documentAssisstant.Id)
-                                           .ToListAsync();
+                if (all == 0)
+                {
+                    clientlist = await _context.Clients
+                                               .Include(n => n.IndividualTherapyFacilitator)
+                                               .Where(n => n.SafetyPlan == null
+                                                        && n.OnlyTCM == false
+                                                        && n.Bio.DocumentsAssistant.Id == documentAssisstant.Id)
+                                               .AsSplitQuery()
+                                               .ToListAsync();
 
-                return View(clientlist);
+                    return View(clientlist);
+                }
+                else
+                {
+                    if (all == 1)
+                    {
+                        clientlist = await _context.Clients
+                                                   .Include(n => n.IndividualTherapyFacilitator)
+                                                   .Where(n => n.SafetyPlan == null
+                                                            && n.OnlyTCM == false
+                                                            && n.Bio.DocumentsAssistant.Id == documentAssisstant.Id
+                                                            && n.Status == StatusType.Open)
+                                                   .AsSplitQuery()
+                                                   .ToListAsync();
+
+                        return View(clientlist);
+                    }
+                    else
+                    {
+                        clientlist = await _context.Clients
+                                                   .Include(n => n.IndividualTherapyFacilitator)
+                                                   .Where(n => n.SafetyPlan == null
+                                                            && n.OnlyTCM == false
+                                                            && n.Bio.DocumentsAssistant.Id == documentAssisstant.Id
+                                                            && n.Status == StatusType.Close)
+                                                   .AsSplitQuery()
+                                                   .ToListAsync();
+
+                        return View(clientlist);
+                    }
+                }
+                
             }
 
             return View(clientlist);
