@@ -111,6 +111,7 @@ namespace KyoS.Web.Data
         public DbSet<TCMIntakeInterventionEntity> TCMIntakeIntervention { get; set; }
         public DbSet<TCMFarsFormEntity> TCMFarsForm { get; set; }
         public DbSet<TCMAssessmentEntity> TCMAssessment { get; set; }
+        public DbSet<TCMAssessmentTempEntity> TCMAssessmentTemp { get; set; }
         public DbSet<TCMAssessmentIndividualAgencyEntity> TCMAssessmentIndividualAgency { get; set; }
         public DbSet<TCMAssessmentHouseCompositionEntity> TCMAssessmentHouseComposition { get; set; }
         public DbSet<TCMAssessmentPastCurrentServiceEntity> TCMAssessmentPastCurrentService { get; set; }

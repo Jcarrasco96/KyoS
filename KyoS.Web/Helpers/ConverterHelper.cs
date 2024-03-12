@@ -5351,7 +5351,7 @@ namespace KyoS.Web.Helpers
                 MedicationList = model.MedicationList,
                 PastCurrentServiceList = model.PastCurrentServiceList,
                 AnyOther = model.AnyOther,
-                DateOfOnSetPresentingProblem = model.DateOfOnSetPresentingProblem,
+                DateOfOnSetPresentingProblem = (model.DateOfOnSetPresentingProblem.Year == 1) ? DateTime.Now : model.DateOfOnSetPresentingProblem,
                 HasTheClient = model.HasTheClient,
                 HouseCompositionList = model.HouseCompositionList,
                 HowDoesByFollowing = model.HowDoesByFollowing,
@@ -5372,7 +5372,6 @@ namespace KyoS.Web.Helpers
                 PharmacyPhone = model.PharmacyPhone,
                 PresentingProblemPrevious = model.PresentingProblemPrevious,
                 WhatPharmacy = model.WhatPharmacy,
-
                 HospitalList = model.HospitalList,
                 AbuseViolence = model.AbuseViolence,
                 Allergy = model.Allergy,
@@ -5458,7 +5457,6 @@ namespace KyoS.Web.Helpers
                 VisionImpairment = model.VisionImpairment,
                 VisionNotDetermined = model.VisionNotDetermined,
                 WhenWas = model.WhenWas,
-
                 AcademicEelementary = model.AcademicEelementary,
                 AcademicHigh = model.AcademicHigh,
                 AcademicMiddle = model.AcademicMiddle,
@@ -5694,15 +5692,14 @@ namespace KyoS.Web.Helpers
                 WhatIsUnknown = model.WhatIsUnknown,
                 WouldLikeObtainJob = model.WouldLikeObtainJob,
                 WouldLikeObtainJobNotAtThisTime = model.WouldLikeObtainJobNotAtThisTime,
-                YearEnteredUsa = model.YearEnteredUsa,
-               
+                YearEnteredUsa = model.YearEnteredUsa,               
                 CantDoItAtAll = model.CantDoItAtAll,
-                DateSignatureCaseManager = model.DateSignatureCaseManager,
-                DateSignatureTCMSupervisor = model.DateSignatureTCMSupervisor,
+                DateSignatureCaseManager = (model.DateSignatureCaseManager.Year == 1) ? DateTime.Now : model.DateSignatureCaseManager,                              
+                DateSignatureTCMSupervisor = (model.DateSignatureTCMSupervisor.Year == 1) ? DateTime.Now : model.DateSignatureTCMSupervisor,                
                 DoesClientTranspotation = model.DoesClientTranspotation,
                 DoesClientTranspotationExplain = model.DoesClientTranspotationExplain,
                 HoweverOn = model.HoweverOn,
-                HoweverVisitScheduler = model.HoweverVisitScheduler,
+                HoweverVisitScheduler = (model.HoweverVisitScheduler.Year == 1) ? DateTime.Now : model.HoweverVisitScheduler,                
                 NeedALot = model.NeedALot,
                 NeedNoHelp = model.NeedNoHelp,
                 NeedSome = model.NeedSome,
@@ -5716,12 +5713,10 @@ namespace KyoS.Web.Helpers
                 Psychiatrist_Address = (model.TcmClient.TCMIntakeForm == null) ? "" : model.TcmClient.TCMIntakeForm.Psychiatrist_Address,
                 Psychiatrist_Phone = (model.TcmClient.TCMIntakeForm == null) ? "" : model.TcmClient.TCMIntakeForm.Psychiatrist_Phone,
                 Psychiatrist_CityStateZip = (model.TcmClient.TCMIntakeForm == null) ? "" : model.TcmClient.TCMIntakeForm.Psychiatrist_CityStateZip,
-
                 PCP_Name = (model.TcmClient.TCMIntakeForm == null) ? "" : model.TcmClient.TCMIntakeForm.PCP_Name,
                 PCP_Address = (model.TcmClient.TCMIntakeForm == null) ? "": model.TcmClient.TCMIntakeForm.PCP_Address,
                 PCP_Phone = (model.TcmClient.TCMIntakeForm == null) ? "" : model.TcmClient.TCMIntakeForm.PCP_Phone,
-                PCP_CityStateZip = (model.TcmClient.TCMIntakeForm == null) ? "" : model.TcmClient.TCMIntakeForm.PCP_CityStateZip
-                
+                PCP_CityStateZip = (model.TcmClient.TCMIntakeForm == null) ? "" : model.TcmClient.TCMIntakeForm.PCP_CityStateZip                
             };
            
             return salida;
