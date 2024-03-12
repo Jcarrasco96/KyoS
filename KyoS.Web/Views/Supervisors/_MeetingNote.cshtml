@@ -61,13 +61,13 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var item in Model.FacilitatorList.OrderBy(n => n.Facilitator.Name))
+                    @foreach (var item in Model.FacilitatorList)
                     {
                         <tr>
                             <td>@Html.DisplayFor(modelItem => item.Facilitator.Name)</td>
-                            <td>@Html.DisplayFor(modelItem => item.Intervention)</td>
-                            <td align="center">@Html.DisplayFor(modelItem => item.Sign)</td>
-                            <td align="center">@Html.DisplayFor(modelItem => item.DateSign)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Facilitator.Name)</td>
+                            <td align="center">@Html.DisplayFor(modelItem => item.Facilitator.Name)</td>
+                            <td align="center">@Html.DisplayFor(modelItem => item.Facilitator.Name)</td>
                         </tr>
                     }
                 </tbody>

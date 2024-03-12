@@ -3082,11 +3082,12 @@ namespace KyoS.Web.Controllers
         public async Task<IActionResult> DownloadTCMIntakeSection5Simultaneous(int id)
         {
             TCMClientEntity TCMclient = await _context.TCMClient
-                                                          .Include(n => n.Client)
-                                                          .Include(n => n.Casemanager)
-                                                          .ThenInclude(n => n.Clinic)
-                                                          .Include(n => n.TCMFarsFormList)
-                                                          .FirstOrDefaultAsync(c => c.Id == id);
+                                                      .Include(n => n.Client)
+                                                      .Include(n => n.Casemanager)
+                                                      .ThenInclude(n => n.Clinic)
+                                                      .Include(n => n.TCMFarsFormList)
+                                                      .AsSplitQuery()
+                                                      .FirstOrDefaultAsync(c => c.Id == id);
 
             if (TCMclient == null)
             {
@@ -3120,7 +3121,11 @@ namespace KyoS.Web.Controllers
             {
                 interventionLog = await db.TCMIntakeInterventionLog
                                           .Include(n => n.TcmClient)
-                                          .ThenInclude(n => n.Client)
+
+                                          .Include(n => n.TcmClient)
+                                          .ThenInclude(n => n.Casemanager)
+                                          .ThenInclude(n => n.Clinic)
+
                                           .AsSplitQuery()
 
                                           .FirstOrDefaultAsync(wc => wc.TcmClient.Id == idTCMClient);
@@ -3131,9 +3136,10 @@ namespace KyoS.Web.Controllers
 
             if (interventionLog != null)
             {
-               // stream = _reportHelper.TCMInterventionLog(interventionLog);
-               // string name = "Discharge";
-                //fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"Section 4/{name}.pdf"));
+                stream = _reportHelper.TCMIntakeInterventionLog(interventionLog);
+                //string name = tcmNote.TCMClient.Client.Name + " - " + tcmNote.DateOfService.ToShortDateString() + " - " + tcmNote.TCMNoteActivity.FirstOrDefault().ServiceName;
+                string name = "INTERVENTION LOG";
+                fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"Section 5/{name}.pdf"));
             }
 
             return fileContentList;

@@ -7445,7 +7445,9 @@ namespace KyoS.Web.Helpers
                TCMNotes = model.TCMNotes,
                Units = model.Units,
                Workday_Clients = model.Workday_Clients,
-               FinishEdition = model.FinishEdition
+               FinishEdition = model.FinishEdition,
+               UnitsMH = model.UnitsMH,
+               UnitsTCM = model.UnitsTCM
             };
         }
 
@@ -7468,7 +7470,9 @@ namespace KyoS.Web.Helpers
                 StatusList = _combosHelper.GetComboBillStatus(),
                 AmountCMHNotes = model.BillDmsDetails.Where(n => n.ServiceAgency == ServiceAgency.CMH).Count(),
                 AmountTCMNotes = model.BillDmsDetails.Where(n => n.ServiceAgency == ServiceAgency.TCM).Count(),
-                FinishEdition = model.FinishEdition
+                FinishEdition = model.FinishEdition,
+                UnitsMH = model.UnitsMH,
+                UnitsTCM = model.UnitsTCM
             };
         }
 

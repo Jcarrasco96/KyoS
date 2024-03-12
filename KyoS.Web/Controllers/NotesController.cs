@@ -98,7 +98,7 @@ namespace KyoS.Web.Controllers
                                       .Include(w => w.Days)
                                       .ThenInclude(d => d.Workdays_Clients)
                                       .ThenInclude(wc => wc.Schedule)
-
+                                      .AsSplitQuery()
                                       .Where(w => (w.Clinic.Id == user_logged.Clinic.Id
                                                 && w.Days.Where(d => (d.Service == ServiceType.PSR && d.Workdays_Clients.Where(wc => wc.Facilitator.LinkedUser == User.Identity.Name).Count() > 0)).Count() > 0))
                                       .ToListAsync());            
@@ -140,7 +140,7 @@ namespace KyoS.Web.Controllers
                                       .Include(w => w.Days)
                                       .ThenInclude(d => d.Workdays_Clients)
                                       .ThenInclude(wc => wc.IndividualNote)
-
+                                      .AsSplitQuery()
                                       .Where(w => (w.Clinic.Id == user_logged.Clinic.Id
                                                 && w.Days.Where(d => (d.Service == ServiceType.Individual && d.Workdays_Clients.Where(wc => wc.Facilitator.LinkedUser == User.Identity.Name).Count() > 0)).Count() > 0))
                                       .ToListAsync());
@@ -190,7 +190,7 @@ namespace KyoS.Web.Controllers
                                       .Include(w => w.Days)
                                       .ThenInclude(d => d.Workdays_Clients)
                                       .ThenInclude(wc => wc.Schedule)
-
+                                      .AsSplitQuery()
                                       .Where(w => (w.Clinic.Id == user_logged.Clinic.Id
                                                 && w.Days.Where(d => (d.Service == ServiceType.Group && d.Workdays_Clients.Where(wc => wc.Facilitator.LinkedUser == User.Identity.Name).Count() > 0)).Count() > 0))                                               
                                             
@@ -4882,7 +4882,7 @@ namespace KyoS.Web.Controllers
                                                                            .Include(wc => wc.Facilitator)
 
                                                                            .Include(wc => wc.NoteP)
-                                                                           
+                                                                           .AsSplitQuery()
                                                                            .FirstOrDefaultAsync(wc => wc.Id == id);
 
             if (workday_Client == null)
@@ -4903,7 +4903,7 @@ namespace KyoS.Web.Controllers
 
                                                   .Include(n => n.Notes_Activities)
                                                   .ThenInclude(na => na.Activity)
-
+                                                  .AsSplitQuery()
                                                   .FirstOrDefaultAsync(n => n.Workday_Cient.Id == id);
 
             NoteViewModel noteViewModel = null;
@@ -5113,7 +5113,7 @@ namespace KyoS.Web.Controllers
                                              .ThenInclude(wc => wc.Client)
                                              .ThenInclude(wc => wc.Clinic)
                                              .ThenInclude(wc => wc.Setting)
-
+                                             .AsSplitQuery()
                                              .FirstOrDefaultAsync(n => n.Id == id);
 
             if (note == null)
@@ -5382,7 +5382,7 @@ namespace KyoS.Web.Controllers
                                                                            .Include(wc => wc.Client)                                                                           
 
                                                                            .Include(wc => wc.Facilitator)
-
+                                                                           
                                                                            .FirstOrDefaultAsync(wc => wc.Id == id);
 
             if (workday_Client == null)
@@ -5406,7 +5406,7 @@ namespace KyoS.Web.Controllers
                                                       .Include(n => n.Objective)
                                                       .ThenInclude(o => o.Goal)
                                                       .ThenInclude(o => o.MTP)
-
+                                                      .AsSplitQuery()
                                                       .FirstOrDefaultAsync(n => n.Workday_Cient.Id == id);
 
             IndividualNoteViewModel individualNoteViewModel = null;
@@ -11325,7 +11325,8 @@ namespace KyoS.Web.Controllers
                                                        
                                       .Include(wc => wc.Workday)                                                       
                                       .ThenInclude(w => w.Week)
-                                                       
+
+                                      .AsSplitQuery()
                                       .Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name
                                                  && (wc.Note.Status == NoteStatus.Approved || wc.NoteP.Status == NoteStatus.Approved)
                                                  && wc.Workday.Service == ServiceType.PSR))
@@ -11346,7 +11347,7 @@ namespace KyoS.Web.Controllers
                                                        
                                       .Include(wc => wc.Workday)                                                       
                                       .ThenInclude(w => w.Week)
-                                                       
+                                      .AsSplitQuery()
                                       .Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name           
                                                  && wc.IndividualNote.Status == NoteStatus.Approved
                                                  && wc.Workday.Service == ServiceType.Individual))
@@ -11366,7 +11367,7 @@ namespace KyoS.Web.Controllers
 
                                       .Include(wc => wc.Workday)
                                       .ThenInclude(w => w.Week)
-
+                                      .AsSplitQuery()
                                       .Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name
                                                  && (wc.GroupNote.Status == NoteStatus.Approved
                                                     || wc.GroupNote2.Status == NoteStatus.Approved)
