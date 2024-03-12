@@ -343,8 +343,7 @@ namespace KyoS.Web.Controllers
                 if (model.Client.Client_Referred == null || model.Client.Client_Referred.Where(n => n.Service == ServiceAgency.CMH).Count() == 0)
                 {
                     Client_Referred client_referred = new Client_Referred();
-                    model.Client.Client_Referred = new List<Client_Referred>();
-                    model.Client.Client_Referred.Add(client_referred);
+                    model.Client.Client_Referred = [client_referred];
                     model.ReferralName = "Not have referred";
                 }
                 else
@@ -587,8 +586,7 @@ namespace KyoS.Web.Controllers
                 if (model.Client.Client_Referred == null || model.Client.Client_Referred.Where(n => n.Service == ServiceAgency.CMH).Count() == 0)
                 {
                     Client_Referred client_referred = new Client_Referred();
-                    model.Client.Client_Referred = new List<Client_Referred>();
-                    model.Client.Client_Referred.Add(client_referred);
+                    model.Client.Client_Referred = [client_referred];
                     model.ReferralName = "Not have referred";
                 }
                 else
@@ -2613,7 +2611,6 @@ namespace KyoS.Web.Controllers
         public async Task<IActionResult> AutoSave(string jsonModel)
         {
             UserEntity user_logged = await _context.Users
-                                                   .Include(u => u.Clinic)
                                                    .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
 
             BioTempEntity model = JsonConvert.DeserializeObject<BioTempEntity>(jsonModel);
