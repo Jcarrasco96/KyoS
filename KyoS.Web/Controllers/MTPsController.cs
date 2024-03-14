@@ -1,4 +1,5 @@
-﻿using KyoS.Common.Enums;
+﻿using DocumentFormat.OpenXml.Drawing;
+using KyoS.Common.Enums;
 using KyoS.Common.Helpers;
 using KyoS.Web.Data;
 using KyoS.Web.Data.Entities;
@@ -138,101 +139,101 @@ namespace KyoS.Web.Controllers
             //this.DeleteGoalsTemp(idClient);    //decide where to delete the temp
 
             MTPViewModel model = new MTPViewModel();
-
-            if (!User.IsInRole("Admin"))
+                        
+            UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                    .FirstOrDefault(u => u.UserName == User.Identity.Name);
+            if (user_logged.Clinic != null)
             {
-                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
-                                                       .FirstOrDefault(u => u.UserName == User.Identity.Name);
-                if (user_logged.Clinic != null)
+                List<SelectListItem> list = _context.Clients.Where(c => c.Id == idClient).Select(c => new SelectListItem
                 {
-                    List<SelectListItem> list = _context.Clients.Where(c => c.Id == idClient).Select(c => new SelectListItem
+                    Text = $"{c.Name}",
+                    Value = $"{c.Id}"
+                }).ToList();
+
+                if (list.Count() > 0)
+                {
+                    model = new MTPViewModel
                     {
-                        Text = $"{c.Name}",
-                        Value = $"{c.Id}"
-                    }).ToList();
+                        IdClient = idClient,
+                        Clients = list,
+                        MTPDevelopedDate = DateTime.Today,
+                        NumberOfMonths = 6,
+                        Modality = "PSR",
+                        Frecuency = "Four times per week",
+                        Setting = "53",
+                        Review = review,
 
-                    if (list.Count() > 0)
-                    {
-                        model = new MTPViewModel
-                        {
-                            IdClient = idClient,
-                            Clients = list,
-                            MTPDevelopedDate = DateTime.Today,
-                            NumberOfMonths = 6,
-                            Modality = "PSR",
-                            Frecuency = "Four times per week",
-                            Setting = "53",
-                            Review = review,
-
-                            AdmissionDateMTP = DateTime.Now,
-                            DateOfUpdate = DateTime.Now,
-                            Psychosocial = true,
-                            MedicationCode = "T1015",
-                            IndividualCode = "H2019 HR",
-                            FamilyCode = "H2019 HR",
-                            GroupCode = "90853",
-                            PsychosocialCode = "H2017",
-                            PsychosocialUnits = 16,
-                            PsychosocialFrecuency = "4 times for week",
-                            PsychosocialDuration = 6,
-                            Substance = false,
-                            Legal = false,
-                            Health = false,
-                            Paint = false,
-                            Other = false,
-                            Client = _context.Clients
-                                             .Include(c => c.Clients_Diagnostics)
-                                             .ThenInclude(cd => cd.Diagnostic)
-                                             .First(n => n.Id == idClient),
-                            AdmissionedFor = user_logged.FullName,
-                            GoalTempList = _context.GoalsTemp.Include(m => m.ObjetiveTempList).Where(m => m.IdClient == idClient && m.UserName == user_logged.UserName).ToList(),
-                            CodeBill = user_logged.Clinic.CodeMTP,
-                            StartTime = DateTime.Now,
-                            EndTime = DateTime.Now.AddMinutes(60)
-                        };
-                    }
-                    else
-                    {
-                        model = new MTPViewModel
-                        {
-                            Clients = _combosHelper.GetComboClientsByClinic(user_logged.Clinic.Id),
-                            MTPDevelopedDate = DateTime.Today,
-                            NumberOfMonths = 6,
-                            Modality = "PSR",
-                            Frecuency = "Four times per week",
-                            Setting = "53",
-                            Review = review,
-
-                            AdmissionDateMTP = DateTime.Now,
-                            DateOfUpdate = DateTime.Now,
-                            Psychosocial = true,
-                            MedicationCode = "T1015",
-                            IndividualCode = "H2019 HR",
-                            FamilyCode = "H2019 HR",
-                            GroupCode = "90853",
-                            PsychosocialCode = "H2017",
-                            PsychosocialUnits = 16,
-                            PsychosocialFrecuency = "4 times for week",
-                            PsychosocialDuration = 6,
-                            Substance = false,
-                            Legal = false,
-                            Health = false,
-                            Paint = false,
-                            Other = false,
-                            Client = new ClientEntity(),
-                            AdmissionedFor = user_logged.FullNameWithDocument,
-                            GoalTempList = new List<GoalsTempEntity>(),
-                            StartTime = DateTime.Now,
-                            EndTime = DateTime.Now.AddMinutes(60)
-
-                        };
-                        model.Client.Clients_Diagnostics = new List<Client_Diagnostic>();
-                        model.Client.Name = "null";
-                    }
-                    ViewData["origin"] = origin;
-                    return View(model);
+                        AdmissionDateMTP = DateTime.Now,
+                        DateOfUpdate = DateTime.Now,
+                        Psychosocial = true,
+                        MedicationCode = "T1015",
+                        IndividualCode = "H2019 HR",
+                        FamilyCode = "H2019 HR",
+                        GroupCode = "90853",
+                        PsychosocialCode = "H2017",
+                        PsychosocialUnits = 16,
+                        PsychosocialFrecuency = "4 times for week",
+                        PsychosocialDuration = 6,
+                        Substance = false,
+                        Legal = false,
+                        Health = false,
+                        Paint = false,
+                        Other = false,
+                        Client = _context.Clients
+                                            .Include(c => c.Clients_Diagnostics)
+                                            .ThenInclude(cd => cd.Diagnostic)
+                                            .First(n => n.Id == idClient),
+                        AdmissionedFor = user_logged.FullName,
+                        GoalTempList = _context.GoalsTemp.Include(m => m.ObjetiveTempList).Where(m => m.IdClient == idClient && m.UserName == user_logged.UserName).ToList(),
+                        CodeBill = user_logged.Clinic.CodeMTP,
+                        StartTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, DateTime.Now.Minute, 0),
+                        EndTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, DateTime.Now.Minute, 0)
+                                                .AddMinutes(60)
+                    };
                 }
+                else
+                {
+                    model = new MTPViewModel
+                    {
+                        Clients = _combosHelper.GetComboClientsByClinic(user_logged.Clinic.Id),
+                        MTPDevelopedDate = DateTime.Today,
+                        NumberOfMonths = 6,
+                        Modality = "PSR",
+                        Frecuency = "Four times per week",
+                        Setting = "53",
+                        Review = review,
+
+                        AdmissionDateMTP = DateTime.Now,
+                        DateOfUpdate = DateTime.Now,
+                        Psychosocial = true,
+                        MedicationCode = "T1015",
+                        IndividualCode = "H2019 HR",
+                        FamilyCode = "H2019 HR",
+                        GroupCode = "90853",
+                        PsychosocialCode = "H2017",
+                        PsychosocialUnits = 16,
+                        PsychosocialFrecuency = "4 times for week",
+                        PsychosocialDuration = 6,
+                        Substance = false,
+                        Legal = false,
+                        Health = false,
+                        Paint = false,
+                        Other = false,
+                        Client = new ClientEntity(),
+                        AdmissionedFor = user_logged.FullNameWithDocument,
+                        GoalTempList = new List<GoalsTempEntity>(),
+                        StartTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, DateTime.Now.Minute, 0),
+                        EndTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, DateTime.Now.Minute, 0)
+                                                .AddMinutes(60)
+
+                    };
+                    model.Client.Clients_Diagnostics = new List<Client_Diagnostic>();
+                    model.Client.Name = "null";
+                }
+                ViewData["origin"] = origin;
+                return View(model);
             }
+            
 
             model = new MTPViewModel
             {
