@@ -12667,35 +12667,36 @@ namespace KyoS.Web.Controllers
             if (billed == 0)
             {
                 List<ClientEntity> clientsEntity = await _context.Clients
-                                                           .Include(c => c.Clinic)
-                                                           .Include(c => c.Clients_Diagnostics)
-                                                           .ThenInclude(cd => cd.Diagnostic)
+                                                                 .Include(c => c.Clinic)
+                                                                 .Include(c => c.Clients_Diagnostics)
+                                                                 .ThenInclude(cd => cd.Diagnostic)
 
-                                                           .Include(c => c.Clients_HealthInsurances)
-                                                           .ThenInclude(c => c.HealthInsurance)
+                                                                 .Include(c => c.Clients_HealthInsurances)
+                                                                 .ThenInclude(c => c.HealthInsurance)
 
-                                                           .Include(wc => wc.MTPs)
-                                                           .ThenInclude(wc => wc.MtpReviewList)
-                                                           .Include(wc => wc.Bio)
-                                                           .Include(wc => wc.FarsFormList)
+                                                                 .Include(wc => wc.MTPs)
+                                                                 .ThenInclude(wc => wc.MtpReviewList)
+                                                                 .Include(wc => wc.Bio)
+                                                                 .Include(wc => wc.FarsFormList)
 
-                                                           .Where(wc => (wc.Clinic.Id == user_logged.Clinic.Id
-                                                              && ((wc.Workdays_Clients.Where(wc => wc.Present == true
-                                                                                          && wc.BilledDate == null
-                                                                                          && wc.Hold == false
-                                                                                          && wc.Workday.Week.Id == id).Count() > 0)
-                                                                ||(wc.MTPs.Where(n => n.AdmissionDateMTP >= week.InitDate 
-                                                                                   && n.AdmissionDateMTP <= week.FinalDate
-                                                                                   && n.BilledDate == null).Count() > 0)
-                                                                ||(wc.Bio.DateBio >= week.InitDate && wc.Bio.DateBio <= week.FinalDate && wc.Bio.BilledDate == null)
-                                                                || (wc.MTPs.Where(n => n.MtpReviewList.Where(m => m.DataOfService >= week.InitDate
-                                                                                                  && m.DataOfService <= week.FinalDate
-                                                                                                  && m.BilledDate == null).Count() > 0).Count() > 0)
-                                                                || (wc.FarsFormList.Where(n => n.EvaluationDate >= week.InitDate
-                                                                                   && n.EvaluationDate <= week.FinalDate
-                                                                                   && n.BilledDate == null).Count() > 0))))
+                                                                 .AsSplitQuery()
+                                                                 .Where(wc => (wc.Clinic.Id == user_logged.Clinic.Id
+                                                                    && ((wc.Workdays_Clients.Where(wc => wc.Present == true
+                                                                                                && wc.BilledDate == null
+                                                                                                && wc.Hold == false
+                                                                                                && wc.Workday.Week.Id == id).Count() > 0)
+                                                                      ||(wc.MTPs.Where(n => n.AdmissionDateMTP >= week.InitDate 
+                                                                                         && n.AdmissionDateMTP <= week.FinalDate
+                                                                                         && n.BilledDate == null).Count() > 0)
+                                                                      ||(wc.Bio.DateBio >= week.InitDate && wc.Bio.DateBio <= week.FinalDate && wc.Bio.BilledDate == null)
+                                                                      || (wc.MTPs.Where(n => n.MtpReviewList.Where(m => m.DataOfService >= week.InitDate
+                                                                                                        && m.DataOfService <= week.FinalDate
+                                                                                                        && m.BilledDate == null).Count() > 0).Count() > 0)
+                                                                      || (wc.FarsFormList.Where(n => n.EvaluationDate >= week.InitDate
+                                                                                         && n.EvaluationDate <= week.FinalDate
+                                                                                         && n.BilledDate == null).Count() > 0))))
 
-                                                           .ToListAsync();
+                                                                 .ToListAsync();
                 
                 ViewData["idWeek"] = id;
                 ViewData["range"] = week.InitDate.ToLongDateString() + " - " + week.FinalDate.ToLongDateString();
@@ -12799,7 +12800,8 @@ namespace KyoS.Web.Controllers
 
                                                           .Include(wc => wc.Schedule)
                                                           .ThenInclude(wc => wc.SubSchedules)
-                                                              
+
+                                                          .AsSplitQuery()
                                                           .Where(wc => wc.Present == true
                                                                     && wc.BilledDate == null
                                                                     && wc.Hold == false
@@ -12876,35 +12878,36 @@ namespace KyoS.Web.Controllers
             else
             {
                 List<ClientEntity> clientsEntity = await _context.Clients
-                                                           .Include(c => c.Clinic)
-                                                           .Include(c => c.Clients_Diagnostics)
-                                                           .ThenInclude(cd => cd.Diagnostic)
+                                                                 .Include(c => c.Clinic)
+                                                                 .Include(c => c.Clients_Diagnostics)
+                                                                 .ThenInclude(cd => cd.Diagnostic)
 
-                                                           .Include(c => c.Clients_HealthInsurances)
-                                                           .ThenInclude(c => c.HealthInsurance)
+                                                                 .Include(c => c.Clients_HealthInsurances)
+                                                                 .ThenInclude(c => c.HealthInsurance)
 
-                                                           .Include(wc => wc.MTPs)
-                                                           .ThenInclude(wc => wc.MtpReviewList)
-                                                           .Include(wc => wc.Bio)
-                                                           .Include(wc => wc.FarsFormList)
+                                                                 .Include(wc => wc.MTPs)
+                                                                 .ThenInclude(wc => wc.MtpReviewList)
+                                                                 .Include(wc => wc.Bio)
+                                                                 .Include(wc => wc.FarsFormList)
 
-                                                           .Where(wc => (wc.Clinic.Id == user_logged.Clinic.Id
-                                                              && ((wc.Workdays_Clients.Where(wc => wc.Present == true
-                                                                                          && wc.BilledDate != null
-                                                                                          && wc.Hold == false
-                                                                                          && wc.Workday.Week.Id == id).Count() > 0)
-                                                                || (wc.MTPs.Where(n => n.AdmissionDateMTP >= week.InitDate
-                                                                                    && n.AdmissionDateMTP <= week.FinalDate
-                                                                                    && n.BilledDate != null).Count() > 0)
-                                                                || (wc.Bio.DateBio >= week.InitDate && wc.Bio.DateBio <= week.FinalDate && wc.Bio.BilledDate != null)
-                                                                || (wc.MTPs.Where(n => n.MtpReviewList.Where(m => m.DataOfService >= week.InitDate
-                                                                                                  && m.DataOfService <= week.FinalDate
-                                                                                                  && m.BilledDate != null).Count() > 0).Count() > 0)
-                                                                || (wc.FarsFormList.Where(n => n.EvaluationDate >= week.InitDate
-                                                                                   && n.EvaluationDate <= week.FinalDate
-                                                                                   && n.BilledDate != null).Count() > 0))))
+                                                                 .AsSplitQuery()
+                                                                 .Where(wc => (wc.Clinic.Id == user_logged.Clinic.Id
+                                                                    && ((wc.Workdays_Clients.Where(wc => wc.Present == true
+                                                                                                && wc.BilledDate != null
+                                                                                                && wc.Hold == false
+                                                                                                && wc.Workday.Week.Id == id).Count() > 0)
+                                                                      || (wc.MTPs.Where(n => n.AdmissionDateMTP >= week.InitDate
+                                                                                          && n.AdmissionDateMTP <= week.FinalDate
+                                                                                          && n.BilledDate != null).Count() > 0)
+                                                                      || (wc.Bio.DateBio >= week.InitDate && wc.Bio.DateBio <= week.FinalDate && wc.Bio.BilledDate != null)
+                                                                      || (wc.MTPs.Where(n => n.MtpReviewList.Where(m => m.DataOfService >= week.InitDate
+                                                                                                        && m.DataOfService <= week.FinalDate
+                                                                                                        && m.BilledDate != null).Count() > 0).Count() > 0)
+                                                                      || (wc.FarsFormList.Where(n => n.EvaluationDate >= week.InitDate
+                                                                                         && n.EvaluationDate <= week.FinalDate
+                                                                                         && n.BilledDate != null).Count() > 0))))
 
-                                                           .ToListAsync();
+                                                                 .ToListAsync();
                
                 ViewData["idWeek"] = id;
                 ViewData["range"] = week.InitDate.ToLongDateString() + " - " + week.FinalDate.ToLongDateString();
@@ -13008,7 +13011,7 @@ namespace KyoS.Web.Controllers
 
                                                           .Include(wc => wc.Schedule)
                                                           .ThenInclude(wc => wc.SubSchedules)
-
+                                                          .AsSplitQuery()
                                                           .Where(wc => wc.Present == true
                                                                     && wc.BilledDate != null
                                                                     && wc.Hold == false
