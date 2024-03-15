@@ -51,12 +51,6 @@ namespace KyoS.Web.Helpers
                     Value = $"{u.Id}"
             }).ToList();            
 
-            //list.Insert(0, new SelectListItem
-            //{
-            //    Text = "[Select user...]",
-            //    Value = "0"
-            //});
-
             return list;
         }
 
@@ -1156,7 +1150,7 @@ namespace KyoS.Web.Helpers
 
             list.Insert(0, new SelectListItem
             {
-                Text = "[Select Casemanager...]",
+                Text = "[Select Case Manager...]",
                 Value = "0"
             });
 
@@ -1683,8 +1677,7 @@ namespace KyoS.Web.Helpers
                 });
 
                 return list;
-            }
-            
+            }            
         }
 
         public IEnumerable<SelectListItem> GetComboServiceAgency()
@@ -2332,7 +2325,7 @@ namespace KyoS.Web.Helpers
 
             list.Insert(0, new SelectListItem
             {
-                Text = "[Select Paid origi...]",
+                Text = "[Select Paid initial...]",
                 Value = "0"
             });
 
@@ -2540,7 +2533,7 @@ namespace KyoS.Web.Helpers
 
             list.Insert(0, new SelectListItem
             {
-                Text = "[All TCM...]",
+                Text = "[All TCMs...]",
                 Value = "0"
             });
 
@@ -2562,7 +2555,7 @@ namespace KyoS.Web.Helpers
             {
                 list.Insert(0, new SelectListItem
                 {
-                    Text = "[All Supervisor...]",
+                    Text = "[All Supervisors...]",
                     Value = "0"
                 });
             }
@@ -2620,7 +2613,7 @@ namespace KyoS.Web.Helpers
                 {
                     list.Insert(0, new SelectListItem
                     {
-                        Text = "[Select documents assistants...]",
+                        Text = "[Select document assistant...]",
                         Value = "0"
                     });
                 }
@@ -2633,8 +2626,6 @@ namespace KyoS.Web.Helpers
                     });
                 }
             }
-
-
 
             return list;
         }

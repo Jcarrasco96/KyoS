@@ -172,85 +172,76 @@ namespace KyoS.Web.Controllers
             this.DeleteHealthInsuranceTemp();
 
             ClientViewModel model = new ClientViewModel();
-
-            if (!User.IsInRole("Admin"))
+            
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+            if (user_logged.Clinic != null)
             {
-                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
-                                                       .FirstOrDefault(u => u.UserName == User.Identity.Name);
-                if (user_logged.Clinic != null)
+                ClinicEntity clinic = _context.Clinics.FirstOrDefault(c => c.Id == user_logged.Clinic.Id);
+                List<SelectListItem> list = new List<SelectListItem>();
+                list.Insert(0, new SelectListItem
                 {
-                    ClinicEntity clinic = _context.Clinics.FirstOrDefault(c => c.Id == user_logged.Clinic.Id);
-                    List<SelectListItem> list = new List<SelectListItem>();
-                    list.Insert(0, new SelectListItem
-                    {
-                        Text = clinic.Name,
-                        Value = $"{clinic.Id}"
-                    });
-                    model = new ClientViewModel
-                    {
-                        DateOfBirth = DateTime.Today.AddYears(-60),
-                        AdmisionDate = DateTime.Today,
-                        Clinics = list,
-                        IdClinic = clinic.Id,
-                        IdGender = 1,
-                        GenderList = _combosHelper.GetComboGender(),
-                        IdStatus = 1,
-                        StatusList = _combosHelper.GetComboClientStatus(),
-                        Country = "United States",
-                        State = "Florida",
-                        City = user_logged.Clinic == null || user_logged.Clinic.City == null || user_logged.Clinic.City == string.Empty ? "Miami" : user_logged.Clinic.City,
-                        IdRace = 0,
-                        Races = _combosHelper.GetComboRaces(),
-                        IdMaritalStatus = 0,
-                        Maritals = _combosHelper.GetComboMaritals(),
-                        IdEthnicity = 0,
-                        Ethnicities = _combosHelper.GetComboEthnicities(),
-                        IdPreferredLanguage = 1,
-                        Languages = _combosHelper.GetComboLanguages(),
-                        IdRelationship = 0,
-                        Relationships = _combosHelper.GetComboRelationships(),
-                        IdRelationshipEC = 0,
-                        RelationshipsEC = _combosHelper.GetComboRelationships(),
-                        IdEmergencyContact = 0,
-                        EmergencyContacts = _combosHelper.GetComboEmergencyContactsByClinic(user_logged.Id),
-                        IdDoctor = 0,
-                        Doctors = _combosHelper.GetComboDoctorsByClinic(user_logged.Id),
-                        IdPsychiatrist = 0,
-                        Psychiatrists = _combosHelper.GetComboPsychiatristsByClinic(user_logged.Id),
-                        IdLegalGuardian = 0,
-                        LegalsGuardians = _combosHelper.GetComboLegalGuardiansByClinic(user_logged.Id),
-                        DiagnosticTemp = _context.DiagnosticsTemp.Where(n => n.UserName == user_logged.UserName && n.IdClient == 0),
-                        ReferredTemp = _context.ReferredsTemp.Where(n => n.CreatedBy == user_logged.UserName && n.IdClient == 0),
-                        DocumentTemp = _context.DocumentsTemp.Where(n => n.UserName == user_logged.UserName && n.IdClient == 0),
-                        OtherLanguage_Read = false,
-                        OtherLanguage_Speak = false,
-                        OtherLanguage_Understand = false,
-                        MedicareId = "",
-                        OnlyTCM = false,
-                        HealthInsuranceTemp = _context.HealthInsuranceTemp.Where(n => n.UserName == user_logged.UserName && n.IdClient == 0),
-                        Annotations = string.Empty,
-                        IdService = 0,
-                        Services = _combosHelper.GetComboServices(),
-                        IdFacilitatorIT = 0,
-                        ITFacilitators = _combosHelper.GetComboFacilitators(),
-                        IdDocumentsAssistant = 0,
-                        DocumentsAssistants = _combosHelper.GetComboDocumentsAssistantByClinic(user_logged.Clinic.Id,false,false)
-
-                    };
-                    return View(model);
-                }
+                    Text = clinic.Name,
+                    Value = $"{clinic.Id}"
+                });
+                model = new ClientViewModel
+                {
+                    DateOfBirth = DateTime.Today.AddYears(-60),
+                    AdmisionDate = DateTime.Today,
+                    Clinics = list,
+                    IdClinic = clinic.Id,
+                    IdGender = 1,
+                    GenderList = _combosHelper.GetComboGender(),
+                    IdStatus = 1,
+                    StatusList = _combosHelper.GetComboClientStatus(),
+                    Country = "United States",
+                    State = "Florida",
+                    City = user_logged.Clinic == null || user_logged.Clinic.City == null || user_logged.Clinic.City == string.Empty ? "Miami" : user_logged.Clinic.City,
+                    IdRace = 0,
+                    Races = _combosHelper.GetComboRaces(),
+                    IdMaritalStatus = 0,
+                    Maritals = _combosHelper.GetComboMaritals(),
+                    IdEthnicity = 0,
+                    Ethnicities = _combosHelper.GetComboEthnicities(),
+                    IdPreferredLanguage = 1,
+                    Languages = _combosHelper.GetComboLanguages(),
+                    IdRelationship = 0,
+                    Relationships = _combosHelper.GetComboRelationships(),
+                    IdRelationshipEC = 0,
+                    RelationshipsEC = _combosHelper.GetComboRelationships(),
+                    IdEmergencyContact = 0,
+                    EmergencyContacts = _combosHelper.GetComboEmergencyContactsByClinic(user_logged.Id),
+                    IdDoctor = 0,
+                    Doctors = _combosHelper.GetComboDoctorsByClinic(user_logged.Id),
+                    IdPsychiatrist = 0,
+                    Psychiatrists = _combosHelper.GetComboPsychiatristsByClinic(user_logged.Id),
+                    IdLegalGuardian = 0,
+                    LegalsGuardians = _combosHelper.GetComboLegalGuardiansByClinic(user_logged.Id),
+                    DiagnosticTemp = _context.DiagnosticsTemp.Where(n => n.UserName == user_logged.UserName && n.IdClient == 0),
+                    ReferredTemp = _context.ReferredsTemp.Where(n => n.CreatedBy == user_logged.UserName && n.IdClient == 0),
+                    DocumentTemp = _context.DocumentsTemp.Where(n => n.UserName == user_logged.UserName && n.IdClient == 0),
+                    OtherLanguage_Read = false,
+                    OtherLanguage_Speak = false,
+                    OtherLanguage_Understand = false,
+                    MedicareId = "",
+                    OnlyTCM = false,
+                    HealthInsuranceTemp = _context.HealthInsuranceTemp.Where(n => n.UserName == user_logged.UserName && n.IdClient == 0),
+                    Annotations = string.Empty,
+                    IdService = 0,
+                    Services = _combosHelper.GetComboServices(),
+                    IdFacilitatorIT = 0,
+                    ITFacilitators = _combosHelper.GetComboFacilitators(),
+                    IdDocumentsAssistant = 0,
+                    DocumentsAssistants = _combosHelper.GetComboDocumentsAssistantByClinic(user_logged.Clinic.Id, false, false),
+                    DateOfClose = DateTime.Today.AddYears(1),
+                };
+                return View(model);
             }
-
-            model = new ClientViewModel
+            else 
             {
-                DateOfBirth = DateTime.Today.AddYears(-60),
-                Clinics = _combosHelper.GetComboClinics(),
-                IdGender = 1,
-                GenderList = _combosHelper.GetComboGender(),
-                IdStatus = 1,
-                StatusList = _combosHelper.GetComboClientStatus()
-            };
-            return View(model);
+                return RedirectToAction("NotAuthorized", "Account");
+            }      
         }
 
         [HttpPost]
@@ -564,7 +555,10 @@ namespace KyoS.Web.Controllers
                                                       .Include(c => c.IndividualTherapyFacilitator)
 
                                                       .Include(c => c.Clients_HealthInsurances)
+
                                                       .Include(c => c.DocumentsAssistant)
+
+                                                      .AsSplitQuery()
 
                                                       .FirstOrDefaultAsync(c => c.Id == id);
             if (clientEntity == null)
@@ -629,26 +623,6 @@ namespace KyoS.Web.Controllers
                 clientViewModel.FacilitatorGroup = _context.Facilitators.FirstOrDefault(n => n.Id == clientViewModel.IdFacilitatorGroup).Name;
             }
 
-            //if (clientEntity.EmergencyContact != null)
-            //{
-            //    clientViewModel.NameEmergencyContact = clientEntity.EmergencyContact.Name;
-            //    clientViewModel.AddressEmergencyContact = clientEntity.EmergencyContact.Address;
-            //    clientViewModel.AddressLine2EmergencyContact = clientEntity.EmergencyContact.Address;
-            //    clientViewModel.CityEmergencyContact = clientEntity.EmergencyContact.City;
-            //    clientViewModel.CountryEmergencyContact = clientEntity.EmergencyContact.Country;
-            //    clientViewModel.EmailEmergencyContact = clientEntity.EmergencyContact.Email;
-            //    clientViewModel.StateEmergencyContact = clientEntity.EmergencyContact.State;
-            //    clientViewModel.PhoneEmergencyContact = clientEntity.EmergencyContact.Telephone;
-            //    clientViewModel.PhoneSecundaryEmergencyContact = clientEntity.EmergencyContact.TelephoneSecondary;
-            //    clientViewModel.ZipCodeEmergencyContact = clientEntity.EmergencyContact.ZipCode;
-            //    clientViewModel.CreateByEmergencyContact = clientEntity.EmergencyContact.CreatedBy;
-            //    clientViewModel.CreateOnEmergencyContact = clientEntity.EmergencyContact.CreatedOn;
-
-            //}
-            //else
-            //{
-            //    clientEntity.EmergencyContact = new EmergencyContactEntity();
-            //}
             if (clientViewModel.IdTCMClient != 0)
             {
                 clientViewModel.AdmisionDateTCM = _context.TCMClient.FirstOrDefault(n => n.Id == clientViewModel.IdTCMClient).DataOpen;
