@@ -107,5 +107,7 @@ namespace KyoS.Web.Helpers
         IEnumerable<SelectListItem> GetComboFiltroTCMPayStubByClinic();
         IEnumerable<SelectListItem> GetComboPaystubStatus();
         IEnumerable<SelectListItem> GetComboDocumentsAssistantByClinic(int idClinic, bool blank = false, bool all = false);
+
+        IEnumerable<SelectListItem> GetComboTCMActivityByService(int idService);
     }
 }

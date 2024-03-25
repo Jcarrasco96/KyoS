@@ -97,6 +97,16 @@
                                 <li>@Html.ActionLink("TCM Supervisors", "Index", "TCMSupervisors")</li>
                             </ul>
                         </li>
+                        <li class="class=" dropdown open"">
+                            <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
+                                Notes <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li>@Html.ActionLink("CMH", "Index", "Notes")</li>
+                                <li role="separator" class="divider"></li>
+                                <li>@Html.ActionLink("TCM", "Search", "TCMNotes", new { id = 0, idService = 0, idActivityService = 0 })</li>
+                            </ul>
+                        </li>
                         <li>
                             @if (counts_of_incidents == 0)
                             {

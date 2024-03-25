@@ -2630,5 +2630,29 @@ namespace KyoS.Web.Helpers
             return list;
         }
 
+        public IEnumerable<SelectListItem> GetComboTCMActivityByService(int idService = 0)
+        {
+            List<TCMServiceActivityEntity> tcmSeriviceActivities = _context.TCMServiceActivity
+                                                                           .Where(g => g.TcmService.Id == idService)
+                                                                           .OrderBy(g => g.Name)
+                                                                           .ToList();
+
+            List<SelectListItem> list = tcmSeriviceActivities.Select(c => new SelectListItem
+            {
+                Text = $"{c.Name}",
+                Value = $"{c.Id}"
+            })
+            .ToList();
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Select Activity...]",
+                Value = "0"
+
+            });
+
+            return list;
+        }
+
     }
 }

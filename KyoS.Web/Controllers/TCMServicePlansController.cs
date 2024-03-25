@@ -1356,9 +1356,9 @@ namespace KyoS.Web.Controllers
 
             if (tcmServicePlan != null)
             {
+                List<TCMAdendumEntity> adendum = new List<TCMAdendumEntity>();
                 if (user_logged.UserType.ToString() == "CaseManager")
-                {
-                    List<TCMAdendumEntity> adendum = new List<TCMAdendumEntity>();
+                {                    
                     if (caseNumber == "")
                     {
                         adendum = await _context.TCMAdendums
@@ -1396,16 +1396,34 @@ namespace KyoS.Web.Controllers
                 }
                 if (user_logged.UserType.ToString() == "Manager" )
                 {
-                    List<TCMAdendumEntity> adendum = await _context.TCMAdendums
-                                                       .Include(h => h.TcmDomain)
-                                                       .ThenInclude(h => h.TCMObjetive)
-                                                       .Include(h => h.TcmServicePlan)
-                                                       .ThenInclude(h => (h.TcmClient))
-                                                       .Include(h => h.TcmServicePlan.TcmClient.Client)
-                                                       .Include(h => h.TcmServicePlan.TcmClient.Casemanager)
-                                                       .Include(h => h.TCMMessages)
-                                                       .Where(h => h.TcmServicePlan.TcmClient.Casemanager.Clinic.Id == clinic.Id)
-                                                       .ToListAsync();
+                    if (caseNumber == "")
+                    {
+                        adendum = await _context.TCMAdendums
+                                                .Include(h => h.TcmDomain)
+                                                .ThenInclude(h => h.TCMObjetive)
+                                                .Include(h => h.TcmServicePlan)
+                                                .ThenInclude(h => (h.TcmClient))
+                                                .Include(h => h.TcmServicePlan.TcmClient.Client)
+                                                .Include(h => h.TcmServicePlan.TcmClient.Casemanager)
+                                                .Include(h => h.TCMMessages)
+                                                .Where(h => h.TcmServicePlan.TcmClient.Casemanager.Clinic.Id == clinic.Id)
+                                                .ToListAsync();
+                    }
+                    else
+                    {
+                        adendum = await _context.TCMAdendums
+                                                .Include(h => h.TcmDomain)
+                                                .ThenInclude(h => h.TCMObjetive)
+                                                .Include(h => h.TcmServicePlan)
+                                                .ThenInclude(h => (h.TcmClient))
+                                                .Include(h => h.TcmServicePlan.TcmClient.Client)
+                                                .Include(h => h.TcmServicePlan.TcmClient.Casemanager)
+                                                .Include(h => h.TCMMessages)
+                                                .Where(h => (h.TcmServicePlan.TcmClient.Casemanager.Clinic.Id == clinic.Id
+                                                          && h.TcmServicePlan.TcmClient.CaseNumber == caseNumber))
+                                                .ToListAsync();
+                    }
+                       
                     ViewData["tcmClientId"] = caseNumber;
                     if (tcmClient != null)
                         ViewData["Id"] = tcmClient.Id;
@@ -1414,16 +1432,34 @@ namespace KyoS.Web.Controllers
                 }
                 if (user_logged.UserType.ToString() == "TCMSupervisor")
                 {
-                    List<TCMAdendumEntity> adendum = await _context.TCMAdendums
-                                                       .Include(h => h.TcmDomain)
-                                                       .ThenInclude(h => h.TCMObjetive)
-                                                       .Include(h => h.TcmServicePlan)
-                                                       .ThenInclude(h => (h.TcmClient))
-                                                       .Include(h => h.TcmServicePlan.TcmClient.Client)
-                                                       .Include(h => h.TcmServicePlan.TcmClient.Casemanager)
-                                                       .Include(h => h.TCMMessages)
-                                                       .Where(h => h.TcmServicePlan.TcmClient.Casemanager.TCMSupervisor.LinkedUser == user_logged.UserName)
-                                                       .ToListAsync();
+                    if (caseNumber == "")
+                    {
+                        adendum = await _context.TCMAdendums
+                                                .Include(h => h.TcmDomain)
+                                                .ThenInclude(h => h.TCMObjetive)
+                                                .Include(h => h.TcmServicePlan)
+                                                .ThenInclude(h => (h.TcmClient))
+                                                .Include(h => h.TcmServicePlan.TcmClient.Client)
+                                                .Include(h => h.TcmServicePlan.TcmClient.Casemanager)
+                                                .Include(h => h.TCMMessages)
+                                                .Where(h => h.TcmServicePlan.TcmClient.Casemanager.TCMSupervisor.LinkedUser == user_logged.UserName)
+                                                .ToListAsync();
+                    }
+                    else
+                    {
+                        adendum = await _context.TCMAdendums
+                                                .Include(h => h.TcmDomain)
+                                                .ThenInclude(h => h.TCMObjetive)
+                                                .Include(h => h.TcmServicePlan)
+                                                .ThenInclude(h => (h.TcmClient))
+                                                .Include(h => h.TcmServicePlan.TcmClient.Client)
+                                                .Include(h => h.TcmServicePlan.TcmClient.Casemanager)
+                                                .Include(h => h.TCMMessages)
+                                                .Where(h => (h.TcmServicePlan.TcmClient.Casemanager.Clinic.Id == clinic.Id
+                                                          && h.TcmServicePlan.TcmClient.CaseNumber == caseNumber))
+                                                .ToListAsync();
+                    }
+                       
                     ViewData["tcmClientId"] = caseNumber;
                     if (tcmClient != null)
                         ViewData["Id"] = tcmClient.Id;

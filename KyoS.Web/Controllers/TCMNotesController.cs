@@ -2574,5 +2574,59 @@ namespace KyoS.Web.Controllers
 
             return RedirectToAction("TCMCaseHistory", "TCMClients", new { id = tcmClientId });
         }
+
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Search(int idService = 0, int idActivityService = 0)
+        {
+           TCMServiceNoteViewModel model = new TCMServiceNoteViewModel();
+            
+            model = new TCMServiceNoteViewModel
+            {
+                TCMServices = _combosHelper.GetComboTCMServices(),
+                IdTCMService = idService,
+                TCMServicesActivity = _combosHelper.GetComboTCMActivityByService(idService),
+                TCMNoteActivities = _context.TCMNoteActivity
+                                            .Include(n => n.TCMNote)
+                                            .ThenInclude(n => n.TCMClient)
+                                            .ThenInclude(n => n.Casemanager)
+                                            .Where(n => n.TCMServiceActivity.Id == idActivityService)
+                                            .ToList(), 
+                IdTCMActivity = idActivityService
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
+        public IActionResult Search(TCMServiceNoteViewModel model)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (ModelState.IsValid)
+            {
+                return RedirectToAction(nameof(Search), new { idService = model.IdTCMService, idActivityService = model.IdTCMActivity });
+            }
+
+            return View(model);
+        }
+
+        [Authorize(Roles = "Admin")]
+        public JsonResult GetActivityByService(int idService)
+        {
+            List<TCMServiceActivityEntity> activity = _context.TCMServiceActivity.Where(o => o.TcmService.Id == idService).ToList();
+            if (activity.Count == 0)
+            {
+                activity.Insert(0, new TCMServiceActivityEntity
+                {
+                    Name = "[Select Activity...]",
+                    Id = 0
+                });
+            }
+            return Json(new SelectList(activity, "Id", "Name"));
+        }
     }
 }
