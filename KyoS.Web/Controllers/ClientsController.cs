@@ -17,6 +17,7 @@ using AspNetCore.Reporting;
 using System.Reflection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using DocumentFormat.OpenXml.Vml.Office;
 
 namespace KyoS.Web.Controllers
 {
@@ -3410,7 +3411,7 @@ namespace KyoS.Web.Controllers
                    stream = _reportHelper.CommunityHTCIntakeReport(client.IntakeScreening);
 
                 if (client.Clinic.Name == "MEDICAL & REHAB OF HILLSBOROUGH INC")
-                    stream = _reportHelper.CommunityHTCIntakeReport(client.IntakeScreening);
+                    stream = _reportHelper.MedicalRehabIntakeReport(client.IntakeScreening);
 
                 fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"Intake.pdf"));
             }
@@ -3428,7 +3429,7 @@ namespace KyoS.Web.Controllers
                     stream = _reportHelper.CommunityHTCBioReport(client.Bio);
 
                 if (client.Clinic.Name == "MEDICAL & REHAB OF HILLSBOROUGH INC")
-                    stream = _reportHelper.CommunityHTCBioReport(client.Bio);
+                    stream = _reportHelper.MedicalRehabBioReport(client.Bio);
 
                 fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"Bio-Psychosocial Assesssment.pdf"));
             }
@@ -3446,7 +3447,7 @@ namespace KyoS.Web.Controllers
                     stream = _reportHelper.CommunityHTCBriefReport(client.Brief);
 
                 if (client.Clinic.Name == "MEDICAL & REHAB OF HILLSBOROUGH INC")
-                    stream = _reportHelper.CommunityHTCBriefReport(client.Brief);
+                    stream = _reportHelper.MedicalRehabBriefReport(client.Brief);
 
                 fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"Brief Behavioral Health Status Examination.pdf"));
             }
@@ -3464,7 +3465,7 @@ namespace KyoS.Web.Controllers
                     stream = _reportHelper.CommunityHTCMedicalHistoryReport(client.IntakeMedicalHistory);
 
                 if (client.Clinic.Name == "MEDICAL & REHAB OF HILLSBOROUGH INC")
-                    stream = _reportHelper.CommunityHTCMedicalHistoryReport(client.IntakeMedicalHistory);
+                    stream = _reportHelper.MedicalRehabMedicalHistoryReport(client.IntakeMedicalHistory);
 
                 fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"Medical History.pdf"));
             }
@@ -3486,7 +3487,7 @@ namespace KyoS.Web.Controllers
                             stream = _reportHelper.CommunityHTCFarsReport(fars);
 
                         if (client.Clinic.Name == "MEDICAL & REHAB OF HILLSBOROUGH INC")
-                            stream = _reportHelper.CommunityHTCFarsReport(fars);
+                            stream = _reportHelper.MedicalRehabFarsReport(fars);
 
                         fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"Fars_{fars.Type.ToString()}_{fars.Id}.pdf"));
                     }                    
@@ -3500,17 +3501,34 @@ namespace KyoS.Web.Controllers
                 {
                     if (discharge.Status == DischargeStatus.Approved)
                     {
-                        if (client.Clinic.Name == "FLORIDA SOCIAL HEALTH SOLUTIONS")                        
-                            stream = _reportHelper.FloridaSocialHSDischargeReport(discharge);
-                        
-                        if (client.Clinic.Name == "DREAMS MENTAL HEALTH INC")                        
-                            stream = _reportHelper.DreamsMentalHealthDischargeReport(discharge);
-                        
-                        if (client.Clinic.Name == "COMMUNITY HEALTH THERAPY CENTER")                        
-                            stream = _reportHelper.CommunityHTCDischargeReport(discharge);
-
+                        if (client.Clinic.Name == "FLORIDA SOCIAL HEALTH SOLUTIONS")
+                        {
+                            if (!discharge.JoinCommission)
+                                stream = _reportHelper.FloridaSocialHSDischargeReport(discharge);
+                            else
+                                stream = _reportHelper.FloridaSocialHSDischargeJCReport(discharge);
+                        }
+                        if (client.Clinic.Name == "DREAMS MENTAL HEALTH INC")
+                        {
+                            if (!discharge.JoinCommission)
+                                stream = _reportHelper.DreamsMentalHealthDischargeReport(discharge);
+                            else
+                                stream = _reportHelper.DreamsMentalHealthDischargeJCReport(discharge);
+                        }
+                        if (client.Clinic.Name == "COMMUNITY HEALTH THERAPY CENTER")
+                        {
+                            if (!discharge.JoinCommission)
+                                stream = _reportHelper.CommunityHTCDischargeReport(discharge);
+                            else
+                                stream = _reportHelper.CommunityHTCDischargeJCReport(discharge);
+                        }
                         if (client.Clinic.Name == "MEDICAL & REHAB OF HILLSBOROUGH INC")
-                            stream = _reportHelper.CommunityHTCDischargeReport(discharge);
+                        {
+                            if (!discharge.JoinCommission)
+                                stream = _reportHelper.MedicalRehabDischargeReport(discharge);
+                            else
+                                stream = _reportHelper.MedicalRehabDischargeJCReport(discharge);                            
+                        }                            
 
                         fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"Discharge_{discharge.TypeService.ToString()}_{discharge.Id}.pdf"));
                     }                    
@@ -3589,13 +3607,13 @@ namespace KyoS.Web.Controllers
                         }
                         if (client.Clinic.Name == "MEDICAL & REHAB OF HILLSBOROUGH INC")
                         {
-                            stream = _reportHelper.CommunityHTCMTPReport(mtp);
+                            stream = _reportHelper.MedicalRehabMTPReport(mtp);
                             fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"Mtp_{mtp.Id}.pdf"));
                             foreach (var review in mtp.MtpReviewList)
                             {
                                 if (review.Status == AdendumStatus.Approved)
                                 {
-                                    stream = _reportHelper.CommunityHTCMTPReviewReport(review);
+                                    stream = _reportHelper.MedicalRehabMTPReviewReport(review);
                                     fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"MtpReview_of_MTP{mtp.Id}_{review.Id}.pdf"));
                                 }
                             }
@@ -3603,7 +3621,7 @@ namespace KyoS.Web.Controllers
                             {
                                 if (adendum.Status == AdendumStatus.Approved)
                                 {
-                                    stream = _reportHelper.CommunityHTCAddendumReport(adendum);
+                                    stream = _reportHelper.MedicalRehabAddendumReport(adendum);
                                     fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"Addendum_of_MTP{mtp.Id}_{adendum.Id}.pdf"));
                                 }
                             }
@@ -3856,9 +3874,9 @@ namespace KyoS.Web.Controllers
                     if (workdayClient.NoteP.Schema == SchemaType.Schema3)
                     {
                         if (!workdayClient.SharedSession)
-                            stream = _reportHelper.CommunityHTCNoteReportSchema3(workdayClient);
+                            stream = _reportHelper.MedicalRehabNoteReportSchema3(workdayClient);
                         else
-                            stream = _reportHelper.CommunityHTCNoteReportSchema3SS(workdayClient);
+                            stream = _reportHelper.MedicalRehabNoteReportSchema3SS(workdayClient);
                         fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"PSR/PSR_{workdayClient.Workday.Date.Month}_{workdayClient.Workday.Date.Day}_{workdayClient.Workday.Date.Year}.pdf"));
                     }
                 }
@@ -3914,9 +3932,6 @@ namespace KyoS.Web.Controllers
                     stream = _reportHelper.FloridaSocialHSGroupNoteReportSchema1(workdayClient);
 
                 if (workdayClient.GroupNote.Supervisor.Clinic.Name == "DREAMS MENTAL HEALTH INC")
-                    stream = _reportHelper.DreamsMentalHealthGroupNoteReportSchema1(workdayClient);
-
-                if (workdayClient.GroupNote.Supervisor.Clinic.Name == "MEDICAL & REHAB OF HILLSBOROUGH INC")
                     stream = _reportHelper.DreamsMentalHealthGroupNoteReportSchema1(workdayClient);
 
                 fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"Group/Group_{workdayClient.Workday.Date.Month}_{workdayClient.Workday.Date.Day}_{workdayClient.Workday.Date.Year}.pdf"));
@@ -3981,7 +3996,7 @@ namespace KyoS.Web.Controllers
                     stream = _reportHelper.CommunityHTCGroupNoteReportSchema3(workdayClient);
 
                 if (workdayClient.GroupNote2.Supervisor.Clinic.Name == "MEDICAL & REHAB OF HILLSBOROUGH INC")
-                    stream = _reportHelper.CommunityHTCGroupNoteReportSchema3(workdayClient);
+                    stream = _reportHelper.MedicalRehabGroupNoteReportSchema3(workdayClient);
 
                 fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"Group/Group_{workdayClient.Workday.Date.Month}_{workdayClient.Workday.Date.Day}_{workdayClient.Workday.Date.Year}.pdf"));
             }
@@ -4036,7 +4051,7 @@ namespace KyoS.Web.Controllers
                     stream = _reportHelper.CommunityHTCIndNoteReportSchema1(workdayClient);
 
                 if (workdayClient.IndividualNote.Supervisor.Clinic.Name == "MEDICAL & REHAB OF HILLSBOROUGH INC")
-                    stream = _reportHelper.CommunityHTCIndNoteReportSchema1(workdayClient);
+                    stream = _reportHelper.MedicalRehabIndNoteReportSchema1(workdayClient);
 
                 fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"Individual/Ind_{workdayClient.Workday.Date.Month}_{workdayClient.Workday.Date.Day}_{workdayClient.Workday.Date.Year}.pdf"));
             }
