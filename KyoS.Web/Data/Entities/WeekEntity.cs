@@ -1,4 +1,5 @@
-﻿using System;
+﻿using KyoS.Web.Data.Contracts;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace KyoS.Web.Data.Entities
 {
-    public class WeekEntity
+    public class WeekEntity : AuditableEntity
     {
         public int Id { get; set; }
         [DataType(DataType.Date)]        

@@ -1,11 +1,12 @@
 ﻿using KyoS.Common.Enums;
+using KyoS.Web.Data.Contracts;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace KyoS.Web.Data.Entities
 {
-    public class WorkdayEntity
+    public class WorkdayEntity : AuditableEntity
     {
         public int Id { get; set; }
         [DataType(DataType.Date)]

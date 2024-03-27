@@ -272,7 +272,9 @@ namespace KyoS.Web.Controllers
                             InitDate = initdate,
                             FinalDate = finaldate,
                             Clinic = _context.Clinics.FirstOrDefault(c => c.Id == entity.IdClinic),
-                            WeekOfYear = item.Key
+                            WeekOfYear = item.Key,
+                            CreatedBy = user_logged.UserName,
+                            CreatedOn = DateTime.Now
                         };
 
                         week_entity = await _context.Weeks
@@ -290,8 +292,8 @@ namespace KyoS.Web.Controllers
                             {
                                 workday_entity = await _context.Workdays
                                                                .FirstOrDefaultAsync(w => (w.Date == item1
-                                                                                                && w.Week.Clinic.Id == entity.IdClinic
-                                                                                                && w.Service == ServiceType.PSR));
+                                                                                       && w.Week.Clinic.Id == entity.IdClinic
+                                                                                       && w.Service == ServiceType.PSR));
                                 if (workday_entity == null)
                                 {
                                     WorkdayEntity workday;
@@ -301,7 +303,9 @@ namespace KyoS.Web.Controllers
                                         {
                                             Date = item1,
                                             Week = week,
-                                            Service = ServiceType.PSR
+                                            Service = ServiceType.PSR,
+                                            CreatedBy = user_logged.UserName,
+                                            CreatedOn = DateTime.Now
                                         };
                                         clinic_entity = week.Clinic;
                                     }
@@ -311,7 +315,9 @@ namespace KyoS.Web.Controllers
                                         {
                                             Date = item1,
                                             Week = week_entity,
-                                            Service = ServiceType.PSR
+                                            Service = ServiceType.PSR,
+                                            LastModifiedBy = user_logged.UserName,
+                                            LastModifiedOn = DateTime.Now
                                         };
                                         clinic_entity = week_entity.Clinic;
                                     }
@@ -545,7 +551,9 @@ namespace KyoS.Web.Controllers
                             InitDate = initdate,
                             FinalDate = finaldate,
                             Clinic = _context.Clinics.FirstOrDefault(c => c.Id == entity.IdClinic),
-                            WeekOfYear = item.Key
+                            WeekOfYear = item.Key,
+                            CreatedOn = DateTime.Now,
+                            CreatedBy = user_logged.UserName
                         };
 
                         week_entity = await _context.Weeks
@@ -574,7 +582,9 @@ namespace KyoS.Web.Controllers
                                         {
                                             Date = item1,
                                             Week = week,
-                                            Service = ServiceType.Individual
+                                            Service = ServiceType.Individual,
+                                            CreatedOn = DateTime.Now,
+                                            CreatedBy = user_logged.UserName
                                         };
                                         clinic_entity = week.Clinic;
                                     }
@@ -584,7 +594,9 @@ namespace KyoS.Web.Controllers
                                         {
                                             Date = item1,
                                             Week = week_entity,
-                                            Service = ServiceType.Individual
+                                            Service = ServiceType.Individual,
+                                            LastModifiedOn = DateTime.Now,
+                                            LastModifiedBy = user_logged.UserName
                                         };
                                         clinic_entity = week_entity.Clinic;
                                     }
@@ -854,7 +866,9 @@ namespace KyoS.Web.Controllers
                             InitDate = initdate,
                             FinalDate = finaldate,
                             Clinic = _context.Clinics.FirstOrDefault(c => c.Id == entity.IdClinic),
-                            WeekOfYear = item.Key
+                            WeekOfYear = item.Key,
+                            CreatedOn = DateTime.Now,
+                            CreatedBy = user_logged.UserName
                         };
 
                         week_entity = await _context.Weeks
@@ -883,7 +897,9 @@ namespace KyoS.Web.Controllers
                                         {
                                             Date = item1,
                                             Week = week,
-                                            Service = ServiceType.Group
+                                            Service = ServiceType.Group,
+                                            CreatedOn = DateTime.Now,
+                                            CreatedBy = user_logged.UserName
                                         };
                                         clinic_entity = week.Clinic;
                                     }
@@ -893,7 +909,9 @@ namespace KyoS.Web.Controllers
                                         {
                                             Date = item1,
                                             Week = week_entity,
-                                            Service = ServiceType.Group
+                                            Service = ServiceType.Group,
+                                            LastModifiedOn = DateTime.Now,
+                                            LastModifiedBy = user_logged.UserName
                                         };
                                         clinic_entity = week_entity.Clinic;
                                     }
@@ -1374,7 +1392,9 @@ namespace KyoS.Web.Controllers
                             InitDate = initdate,
                             FinalDate = finaldate,
                             Clinic = _context.Clinics.FirstOrDefault(c => c.Id == entity.IdClinic),
-                            WeekOfYear = item.Key
+                            WeekOfYear = item.Key,
+                            CreatedOn = DateTime.Now,
+                            CreatedBy = user_logged.UserName
                         };
 
                         week_entity = await _context.Weeks
@@ -1403,7 +1423,9 @@ namespace KyoS.Web.Controllers
                                         {
                                             Date = item1,
                                             Week = week,
-                                            Service = ServiceType.PSR
+                                            Service = ServiceType.PSR,
+                                            CreatedOn = DateTime.Now,
+                                            CreatedBy = user_logged.UserName
                                         };
                                         clinic_entity = week.Clinic;
                                     }
@@ -1413,7 +1435,9 @@ namespace KyoS.Web.Controllers
                                         {
                                             Date = item1,
                                             Week = week_entity,
-                                            Service = ServiceType.PSR
+                                            Service = ServiceType.PSR,
+                                            LastModifiedOn = DateTime.Now,
+                                            LastModifiedBy = user_logged.UserName
                                         };
                                         clinic_entity = week_entity.Clinic;
                                     }
