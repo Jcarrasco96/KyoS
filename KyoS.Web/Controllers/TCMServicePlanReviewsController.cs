@@ -346,6 +346,10 @@ namespace KyoS.Web.Controllers
                                                                           .ThenInclude(f => f.TcmClient)
                                                                           .ThenInclude(f => f.Casemanager)
                                                                           .ThenInclude(f => f.TCMSupervisor)
+                                                                          .Include(f => f.TcmServicePlan)
+                                                                          .ThenInclude(f => f.TCMSupervisor)
+                                                                          .ThenInclude(f => f.Clinic)
+                                                                          .ThenInclude(f => f.Setting)
                                                                           .Include(f => f.TcmServicePlan.TcmClient.Client)
                                                                           .Include(f => f.TcmServicePlan.TCMDomain)
                                                                           .FirstOrDefault(f => (f.TcmServicePlan_FK == IdServicePlan 
