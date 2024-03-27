@@ -5451,7 +5451,7 @@ namespace KyoS.Web.Controllers
         #endregion
 
         #region Bill week MTPR
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public async Task<IActionResult> BillMTPRToday(int id = 0, int week = 0, int origin = 0)
         {
             if (id > 0)
@@ -5479,7 +5479,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("NotAuthorized", "Account");
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public async Task<IActionResult> NotBillMTPR(int id = 0, int week = 0, int origin = 0)
         {
             if (id > 0)
@@ -5507,7 +5507,7 @@ namespace KyoS.Web.Controllers
 
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public async Task<IActionResult> DeniedBillTodayMTPR(int idMtpr = 0, int week = 0, int origin = 0)
         {
             if (idMtpr >= 0)
@@ -5534,7 +5534,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("NotAuthorized", "Account");
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public async Task<IActionResult> NotDeniedBillMTPR(int idMtpr = 0, int client = 0, int week = 0)
         {
             if (idMtpr > 0)
@@ -5563,7 +5563,7 @@ namespace KyoS.Web.Controllers
 
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public async Task<IActionResult> NotPaymentReceivedMTPR(int id = 0, int week = 0, int origin = 0)
         {
             if (id > 0)
@@ -5591,7 +5591,7 @@ namespace KyoS.Web.Controllers
 
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public async Task<IActionResult> PaymentReceivedTodayMTPR(int id = 0, int week = 0, int origin = 0)
         {
             if (id > 0)

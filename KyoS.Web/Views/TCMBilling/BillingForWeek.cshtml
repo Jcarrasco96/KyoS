@@ -26,7 +26,7 @@
                    data-language="en"
                    class="form-control datepicker-here" />
         </div>
-        @if (User.IsInRole("Manager") || User.IsInRole("TCMSupervisor"))
+        @if (User.IsInRole("Manager") || User.IsInRole("TCMSupervisor") || User.IsInRole("Biller"))
         {
             <div class="form-group col-md-3">
                 <label asp-for="IdCaseManager" class="control-label">Select case manager</label>
@@ -51,7 +51,7 @@
     <div class="col-md-12">
         <hr/>
     </div>
-    @if (User.IsInRole("Manager"))
+    @if (User.IsInRole("Manager") || User.IsInRole("Biller"))
     {
         <div class="col-md-12">
             <div class="col-md-3">

@@ -12472,7 +12472,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public IActionResult BillingReport(BillingReportViewModel model)
         {
             UserEntity user_logged = _context.Users
@@ -12487,7 +12487,7 @@ namespace KyoS.Web.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public async Task<IActionResult> BillingReport1(int idWeek = 0)
         {
             UserEntity user_logged = await _context.Users
@@ -12630,7 +12630,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public IActionResult BillingReport1(BillingReport1ViewModel model)
         {
             UserEntity user_logged = _context.Users
@@ -12646,7 +12646,7 @@ namespace KyoS.Web.Controllers
         }
 
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public async Task<IActionResult> BillingWeek(int id, int billed = 0)
         {
             UserEntity user_logged = await _context.Users
@@ -13085,7 +13085,7 @@ namespace KyoS.Web.Controllers
            
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public IActionResult BillNote(int id, int week = 0, int abilled = 0)
         {
             BillViewModel model = new BillViewModel { Id = id, BilledDate = DateTime.Now };
@@ -13096,7 +13096,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public async Task<IActionResult> BillNote(BillViewModel model, int week = 0, int abilled = 0)
         {
             UserEntity user_logged = await _context.Users
@@ -13402,7 +13402,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "BillNote", model) });
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public IActionResult PaymentReceived(int id, int week = 0)
         {
             PaymentReceivedViewModel model = new PaymentReceivedViewModel { Id = id, PaymentDate = DateTime.Now };
@@ -13412,7 +13412,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public async Task<IActionResult> PaymentReceived(PaymentReceivedViewModel model, int week = 0)
         {
             UserEntity user_logged = await _context.Users
@@ -14809,7 +14809,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction(nameof(PendingNotes));
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public async Task<IActionResult> PaymentReceivedToday(int id = 0, int week = 0)
         {
             if (week == 0)
@@ -14856,7 +14856,7 @@ namespace KyoS.Web.Controllers
 
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public async Task<IActionResult> BillNoteToday(int id = 0, int week = 0)
         {
             if (week == 0)
@@ -15619,7 +15619,7 @@ namespace KyoS.Web.Controllers
             return View(auditGoalsObjetive_List);
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public async Task<IActionResult> NotBill(int id = 0, int week = 0)
         {
             if (week == 0)
@@ -16576,7 +16576,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("NotAuthorized", "Account");
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public async Task<IActionResult> NotPaymentReceived(int id = 0, int week = 0)
         {
             if (week == 0)
@@ -16620,7 +16620,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("BillingWeek", "Notes", new { id = week, billed = 1 });
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public IActionResult EXCEL(int idWeek, int all = 0)
         {
             UserEntity user_logged = _context.Users
@@ -16757,7 +16757,7 @@ namespace KyoS.Web.Controllers
             }
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public IActionResult EXCELforClient(int idClient)
         {
             UserEntity user_logged = _context.Users
@@ -16804,7 +16804,7 @@ namespace KyoS.Web.Controllers
             return File(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", ReportName);
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public async Task<IActionResult> DeniedBillClient(int idWorkclient = 0)
         {
             if (idWorkclient != 0)
@@ -16825,7 +16825,7 @@ namespace KyoS.Web.Controllers
 
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public async Task<IActionResult> DeniedBillToday(int id = 0, int week = 0)
         {
             if (week == 0)
@@ -16871,7 +16871,7 @@ namespace KyoS.Web.Controllers
 
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public async Task<IActionResult> NotDeniedBill(int idWorkclient = 0, int client = 0)
         {
             if (idWorkclient != 0)
@@ -16903,7 +16903,7 @@ namespace KyoS.Web.Controllers
 
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public async Task<IActionResult> BillingReportHold(int idWeek = 0)
         {
             UserEntity user_logged = await _context.Users
@@ -17011,7 +17011,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public IActionResult BillingReportHold(BillingReport1ViewModel model)
         {
             UserEntity user_logged = _context.Users
@@ -17026,7 +17026,7 @@ namespace KyoS.Web.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public IActionResult EXCEL_Hold(int idWeek, int all = 0)
         {
             UserEntity user_logged = _context.Users
@@ -17421,7 +17421,7 @@ namespace KyoS.Web.Controllers
         }
 
         #region MTP Bill
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public IActionResult BillMTP(int id, int week = 0, int abilled = 0, int idMtp = 0)
         {
             BillViewModel model = new BillViewModel { Id = id, BilledDate = DateTime.Now };
@@ -17433,7 +17433,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public async Task<IActionResult> BillMTP(BillViewModel model, int idweek = 0, int abilled = 0, int idMtp = 0)
         {
             UserEntity user_logged = await _context.Users
@@ -17672,7 +17672,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "BillNote", model) });
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public IActionResult PaymentReceivedMTP(int id, int week = 0, int idMtp = 0)
         {
             PaymentReceivedViewModel model = new PaymentReceivedViewModel { Id = id, PaymentDate = DateTime.Now };
@@ -17683,7 +17683,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public async Task<IActionResult> PaymentReceivedMTP(PaymentReceivedViewModel model, int idWeek = 0, int idMtp = 0)
         {
             UserEntity user_logged = await _context.Users
@@ -17820,7 +17820,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "PaymentReceived", model) });
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public IActionResult BillMTPClient(int idClient, int abilled = 0, int idMtp = 0)
         {
             BillViewModel model = new BillViewModel { Id = idClient, BilledDate = DateTime.Now };
@@ -17831,7 +17831,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public async Task<IActionResult> BillMTPClient(BillViewModel model, int abilled = 0, int idMtp = 0)
         {
             UserEntity user_logged = await _context.Users
@@ -17991,7 +17991,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "BillNoteClient", model) });
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public IActionResult PaymentReceivedClientMTP(int id)
         {
             PaymentReceivedViewModel model = new PaymentReceivedViewModel { Id = id, PaymentDate = DateTime.Now };
@@ -18000,7 +18000,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public async Task<IActionResult> PaymentReceivedClientMTP(PaymentReceivedViewModel model)
         {
             UserEntity user_logged = await _context.Users
@@ -19434,7 +19434,7 @@ namespace KyoS.Web.Controllers
         #endregion
 
         #region FARS Bill
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public IActionResult BillFARS(int id, int week = 0, int abilled = 0, int idFars = 0)
         {
             BillViewModel model = new BillViewModel { Id = id, BilledDate = DateTime.Now };
@@ -19446,7 +19446,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public async Task<IActionResult> BillFARS(BillViewModel model, int idweek = 0, int abilled = 0, int idFars = 0)
         {
             UserEntity user_logged = await _context.Users
@@ -19703,7 +19703,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "BillNote", model) });
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public IActionResult PaymentReceivedFARS(int id, int week = 0, int idFars = 0)
         {
             PaymentReceivedViewModel model = new PaymentReceivedViewModel { Id = id, PaymentDate = DateTime.Now };
@@ -19714,7 +19714,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public async Task<IActionResult> PaymentReceivedFARS(PaymentReceivedViewModel model, int idWeek = 0, int idFars = 0)
         {
             UserEntity user_logged = await _context.Users
@@ -19855,7 +19855,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "PaymentReceived", model) });
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public IActionResult BillFARSClient(int idClient, int abilled = 0, int idFars = 0)
         {
             BillViewModel model = new BillViewModel { Id = idClient, BilledDate = DateTime.Now };
@@ -19866,7 +19866,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public async Task<IActionResult> BillFARSClient(BillViewModel model, int abilled = 0, int idFars = 0)
         {
             UserEntity user_logged = await _context.Users
@@ -20030,7 +20030,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "BillNoteClient", model) });
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public IActionResult PaymentReceivedClientFARS(int id)
         {
             PaymentReceivedViewModel model = new PaymentReceivedViewModel { Id = id, PaymentDate = DateTime.Now };
@@ -20039,7 +20039,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public async Task<IActionResult> PaymentReceivedClientFARS(PaymentReceivedViewModel model)
         {
             UserEntity user_logged = await _context.Users
@@ -20134,7 +20134,7 @@ namespace KyoS.Web.Controllers
 
         #endregion
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public async Task<IActionResult> ReturnToNotStarted(int? id)
         {
             UserEntity user_logged = await _context.Users
@@ -20228,7 +20228,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("ClientHistory", "Clients", new { idClient = idClient });
         }
 
-        [Authorize(Roles = "Manager, Supervisor, Facilitator, Frontdesk")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Frontdesk, Biller")]
         public IActionResult AuditOverlapin(int idWeek = 0)
         {
             UserEntity user_logged = _context.Users
@@ -20662,7 +20662,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "ClientIndForWeek", list/*, new { weekId = weekId, facilitatorId = facilitatorId }*/) });
         }
 
-        [Authorize(Roles = "Manager, Supervisor, Facilitator, Frontdesk")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Frontdesk, Biller")]
         public async Task<IActionResult> AuditNotes()
         {
             UserEntity user_logged = _context.Users
@@ -20835,7 +20835,7 @@ namespace KyoS.Web.Controllers
             return View(auditNotes_List);
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public IActionResult UpdateBillFullWeek(int idWeek = 0)
         {
             if (idWeek > 0)
@@ -20888,7 +20888,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public async Task<IActionResult> UpdateBillFullWeek(UpdateBillViewModel updateBillWeekViewModel)
         {
             UserEntity user_logged = _context.Users
@@ -20906,7 +20906,7 @@ namespace KyoS.Web.Controllers
             List<Workday_Client> workday_Clients = new List<Workday_Client>();
             List<Workday_Client> salida = new List<Workday_Client>();
            
-            if (User.IsInRole("Manager"))
+            if (User.IsInRole("Manager") || User.IsInRole("Biller"))
             {
                 workday_Clients = _context.Workdays_Clients
                                           .Where(n => n.Client.Clinic.Id == user_logged.Clinic.Id

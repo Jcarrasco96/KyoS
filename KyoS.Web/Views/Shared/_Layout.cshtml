@@ -1129,6 +1129,37 @@
                         <li><a asp-area="" asp-controller="Incidents" asp-action="Index">Incidents</a></li>
                         <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
                     }
+                    else
+                 if (User.Identity.IsAuthenticated && (User.IsInRole("Biller")))
+                    {
+                        <li class="class=" dropdown open"">
+                            <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
+                                Billing Report <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li>@Html.ActionLink("CMH", "BillingReport1", "Notes")</li>
+                                <li role="separator" class="divider"></li>
+                                <li>@Html.ActionLink("TCM", "BillingForWeek", "TCMBilling")</li>
+                               
+                            </ul>
+                        </li>
+                        <li>
+                            @if (counts_of_incidents == 0)
+                            {
+                                <span class="notifications-counter-cero">@counts_of_incidents</span>
+                            }
+                            else
+                            {
+                                <span class="notifications-counter">@counts_of_incidents</span>
+                            }
+
+                            <a asp-area="" style="background-color: transparent;" asp-controller="Incidents" asp-action="Index">
+                                &nbsp;Incidents&nbsp;&nbsp;
+                            </a>
+                        </li>
+                        <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
+                        
+                    }
                 </ul>
                     <ul class="nav navbar-nav navbar-right">
                         @if (User.Identity.IsAuthenticated)
@@ -1661,6 +1692,12 @@
                                             {
                                                 <span class="label label-default">
                                                     Front Desk
+                                                </span>
+                                            }
+                                            @if (User.IsInRole("Biller"))
+                                            {
+                                                <span class="label label-default">
+                                                    Biller
                                                 </span>
                                             }
                                         </a>

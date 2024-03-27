@@ -30,7 +30,8 @@ namespace KyoS.Web.Helpers
                                   new SelectListItem { Text = UserType.TCMSupervisor.ToString(), Value = "5"},
                                   new SelectListItem { Text = UserType.Manager.ToString(), Value = "6"},
                                   new SelectListItem { Text = UserType.Admin.ToString(), Value = "7"},
-                                  new SelectListItem { Text = UserType.Frontdesk.ToString(), Value = "8"}
+                                  new SelectListItem { Text = UserType.Frontdesk.ToString(), Value = "8"},
+                                  new SelectListItem { Text = UserType.Biller.ToString(), Value = "9"}
             };
             
             list.Insert(0, new SelectListItem

@@ -295,7 +295,7 @@ namespace KyoS.Web.Controllers
             }
         }
 
-        [Authorize(Roles = "Manager, CaseManager, TCMSupervisor")]
+        [Authorize(Roles = "Manager, CaseManager, TCMSupervisor, Biller")]
         public IActionResult BillingForWeek(string dateInterval = "", int idCaseManager = 0, int idClient = 0, int billed = 0)
         {
             UserEntity user_logged = _context.Users
@@ -324,7 +324,7 @@ namespace KyoS.Web.Controllers
                 string[] date = dateInterval.Split(" - ");
                 if (billed == 0)
                 {
-                    if (User.IsInRole("Manager"))
+                    if (User.IsInRole("Manager") || User.IsInRole("Biller"))
                     {
                         IQueryable<TCMNoteEntity> query = _context.TCMNote
                                                                   .Include(t => t.TCMClient)
@@ -413,7 +413,7 @@ namespace KyoS.Web.Controllers
                 }
                 if (billed == 1)
                 {
-                    if (User.IsInRole("Manager"))
+                    if (User.IsInRole("Manager") || User.IsInRole("Biller"))
                     {
                         IQueryable<TCMNoteEntity> query = _context.TCMNote
                                                                   .Include(t => t.TCMClient)
@@ -504,7 +504,7 @@ namespace KyoS.Web.Controllers
                 }
                 if (billed == 2)
                 {
-                    if (User.IsInRole("Manager"))
+                    if (User.IsInRole("Manager") || User.IsInRole("Biller"))
                     {
                         IQueryable<TCMNoteEntity> query = _context.TCMNote
                                                                   .Include(t => t.TCMClient)
@@ -596,7 +596,7 @@ namespace KyoS.Web.Controllers
                 }
                 if (billed == 3)
                 {
-                    if (User.IsInRole("Manager"))
+                    if (User.IsInRole("Manager") || User.IsInRole("Biller"))
                     {
                         IQueryable<TCMNoteEntity> query = _context.TCMNote
                                                                   .Include(t => t.TCMClient)
@@ -742,7 +742,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Manager,CaseManager, TCMSupervisor")]
+        [Authorize(Roles = "Manager,CaseManager, TCMSupervisor, Biller")]
         public IActionResult BillingForWeek(TCMBillingReportViewModel model, int billed = 0)
         {
             UserEntity user_logged = _context.Users
@@ -1384,7 +1384,7 @@ namespace KyoS.Web.Controllers
             }
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public async Task<IActionResult> UpdateBill(int billed = 0)
         {
             UserEntity user_logged = _context.Users
@@ -1510,7 +1510,7 @@ namespace KyoS.Web.Controllers
             return View(list);
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public async Task<IActionResult> BillTCMNoteToday(int id = 0)
         {
             if (id != 0)
@@ -1529,7 +1529,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("NotAuthorized", "Account");
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public async Task<IActionResult> NotTMCNoteBill(int id = 0)
         {
             if (id != 0)
@@ -1548,7 +1548,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("NotAuthorized", "Account");
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public async Task<IActionResult> BillTCMClientToday(int id = 0)
         {
             if (id != 0)
@@ -1575,7 +1575,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("NotAuthorized", "Account");
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public async Task<IActionResult> NotTCMClientToday(int id = 0)
         {
             if (id != 0)
@@ -1603,7 +1603,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("NotAuthorized", "Account");
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public async Task<IActionResult> PayTCMNoteToday(int id = 0)
         {
             if (id != 0)
@@ -1622,7 +1622,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("NotAuthorized", "Account");
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public async Task<IActionResult> PayTCMClientToday(int id = 0)
         {
             if (id != 0)
@@ -1650,7 +1650,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("NotAuthorized", "Account");
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public IActionResult BillTCMNote(int id, int week = 0, int abilled = 0)
         {
             BillViewModel model = new BillViewModel { Id = id, BilledDate = DateTime.Now };
@@ -1660,7 +1660,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public IActionResult BillTCMNote(BillViewModel model, int week = 0, int abilled = 0)
         {
 
@@ -1725,7 +1725,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "BillTCMNote", model) });
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public IActionResult BillTCMClient(int id, int abilled = 0)
         {
             BillViewModel model = new BillViewModel { Id = id, BilledDate = DateTime.Now };
@@ -1735,7 +1735,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public IActionResult BillTCMClient(BillViewModel model, int abilled = 0)
         {
 
@@ -1818,7 +1818,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "BillTCMNote", model) });
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public IActionResult PayTCMNote(int id, int week = 0, int abilled = 0)
         {
             BillViewModel model = new BillViewModel { Id = id, BilledDate = DateTime.Now };
@@ -1828,7 +1828,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public IActionResult PayTCMNote(BillViewModel model, int week = 0, int abilled = 0)
         {
             if (abilled == 2)
@@ -1864,7 +1864,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "BillTCMNote", model) });
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public IActionResult PayTCMClient(int id, int abilled = 0)
         {
             BillViewModel model = new BillViewModel { Id = id, BilledDate = DateTime.Now };
@@ -1874,7 +1874,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public IActionResult PayTCMClient(BillViewModel model, int abilled = 0)
         {
             if (abilled == 2)
@@ -1920,7 +1920,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "BillTCMNote", model) });
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public IActionResult EXCEL(string dateInterval = "", int all = 0)
         {
             UserEntity user_logged = _context.Users

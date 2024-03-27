@@ -878,6 +878,10 @@ namespace KyoS.Web.Controllers
             {
                 return RedirectToAction("Schedule", "Calendar");
             }
+            if (User.IsInRole("Biller"))
+            {
+               
+            }
             return View();
         }
 

@@ -2444,7 +2444,7 @@ namespace KyoS.Web.Controllers
         }
 
         #region Bill week
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public async Task<IActionResult> BillBIOToday(int id = 0, int week = 0, int origin = 0)
         {
             if (id > 0)
@@ -2471,7 +2471,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("NotAuthorized", "Account");
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manage, Billerr")]
         public async Task<IActionResult> NotBill(int id = 0, int week = 0, int origin = 0)
         {
             if (id > 0)
@@ -2498,7 +2498,7 @@ namespace KyoS.Web.Controllers
 
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public async Task<IActionResult> DeniedBillToday(int idBio = 0, int week = 0, int origin = 0)
         {
             if (idBio >= 0)
@@ -2524,7 +2524,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("NotAuthorized", "Account");
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public async Task<IActionResult> NotDeniedBill(int idBio = 0, int client = 0, int week = 0)
         {
             if (idBio > 0)
@@ -2553,7 +2553,7 @@ namespace KyoS.Web.Controllers
 
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public async Task<IActionResult> NotPaymentReceivedBIO(int id = 0, int week = 0, int origin = 0)
         {
             if (id > 0)
@@ -2579,7 +2579,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("NotAuthorized", "Account");
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public async Task<IActionResult> PaymentReceivedTodayBIO(int id = 0, int week = 0, int origin = 0)
         {
             if (id > 0)
