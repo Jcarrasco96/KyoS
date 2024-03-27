@@ -51,7 +51,7 @@ namespace KyoS.Web.Controllers
             Configuration = configuration;
         }
         
-        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant, CaseManager, Frontdesk")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant, CaseManager, Frontdesk, Biller")]
         public async Task<IActionResult> Index(int idError = 0)
         {
             UserEntity user_logged = await _context.Users
@@ -68,7 +68,7 @@ namespace KyoS.Web.Controllers
             {
                 ViewBag.Delete = "N";
             }
-            if (User.IsInRole("Manager") || User.IsInRole("Supervisor") || User.IsInRole("Frontdesk"))
+            if (User.IsInRole("Manager") || User.IsInRole("Supervisor") || User.IsInRole("Frontdesk") || User.IsInRole("Biller"))
             {
                 return View(await _context.Clients
                                           .Include(c => c.Clinic)
@@ -954,7 +954,7 @@ namespace KyoS.Web.Controllers
             return View(clientViewModel);
         }
 
-        [Authorize(Roles = "Supervisor, Facilitator, Documents_Assistant, CaseManager, TCMSupervisor")]
+        [Authorize(Roles = "Supervisor, Facilitator, Documents_Assistant, CaseManager, TCMSupervisor, Biller")]
         public async Task<IActionResult> Details(int? id, int origin = 0)
         {
             if (id == null)
@@ -1859,7 +1859,7 @@ namespace KyoS.Web.Controllers
             return Json(text);
         }
 
-        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant, Frontdesk")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant, Frontdesk, Biller")]
         public async Task<IActionResult> ClientHistory(int idClient = 0)
         {
             UserEntity user_logged = _context.Users

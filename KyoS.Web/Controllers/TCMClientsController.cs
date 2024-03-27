@@ -54,7 +54,7 @@ namespace KyoS.Web.Controllers
             _webhostEnvironment = webhostEnvironment;
         }
 
-        [Authorize(Roles = "Manager, CaseManager, TCMSupervisor")]
+        [Authorize(Roles = "Manager, CaseManager, TCMSupervisor, Biller")]
         public async Task<IActionResult> Index()
         {
             UserEntity user_logged = _context.Users
@@ -81,7 +81,7 @@ namespace KyoS.Web.Controllers
                                           .ToListAsync());
             }
 
-            if (user_logged.UserType.ToString() == "Manager" )
+            if (user_logged.UserType.ToString() == "Manager" || user_logged.UserType.ToString() == "Biller")
             {
               
                 List<TCMClientEntity> tcmClient = await _context.TCMClient
@@ -898,7 +898,7 @@ namespace KyoS.Web.Controllers
             return Json(new { redirectToUrl = Url.Action("Clients", "TCMClients") });
         }
 
-        [Authorize(Roles = "Manager, CaseManager, TCMSupervisor")]
+        [Authorize(Roles = "Manager, CaseManager, TCMSupervisor, Biller")]
         public async Task<IActionResult> TCMCaseHistory(int id = 0)
         {
             UserEntity user_logged = _context.Users
@@ -906,7 +906,7 @@ namespace KyoS.Web.Controllers
                                              .ThenInclude(c => c.Setting)
                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
-            if (User.IsInRole("Manager") || User.IsInRole("TCMSupervisor") || User.IsInRole("CaseManager"))
+            if (User.IsInRole("Manager") || User.IsInRole("TCMSupervisor") || User.IsInRole("CaseManager") || User.IsInRole("Biller"))
             {
                 if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || user_logged.Clinic.Setting.MentalHealthClinic == false)
                 {

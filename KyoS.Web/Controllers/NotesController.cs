@@ -15751,7 +15751,7 @@ namespace KyoS.Web.Controllers
             return View(allGoals_List);
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public async Task<IActionResult> BillingClient(int idClient, int billed = 0)
         {
             UserEntity user_logged = await _context.Users
@@ -15844,6 +15844,7 @@ namespace KyoS.Web.Controllers
                                                                         || (wc.Bio.BilledDate == null)
                                                                         || (wc.MTPs.Where(n => n.MtpReviewList.Where(m => m.BilledDate == null).Count() > 0).Count() > 0)
                                                                         || (wc.FarsFormList.Where(n => n.BilledDate == null).Count() > 0))))
+                                                           .AsSplitQuery()
                                                            .FirstOrDefaultAsync();
                 if (client_salida != null)
                 {
@@ -16007,7 +16008,7 @@ namespace KyoS.Web.Controllers
                                                     .ThenInclude(wc => wc.MtpReviewList)
                                                     .Include(wc => wc.Bio)
                                                     .Include(wc => wc.FarsFormList)
-
+                                                    .AsSplitQuery()
                                                     .FirstOrDefaultAsync(wc => (wc.Clinic.Id == user_logged.Clinic.Id
                                                         && wc.Id == idClient
                                                         && ((wc.Workdays_Clients.Where(wc => wc.Present == true
@@ -16142,7 +16143,7 @@ namespace KyoS.Web.Controllers
 
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public async Task<IActionResult> BillNoteTodayClient(int id = 0)
         {
             if (id != 0)
@@ -16163,7 +16164,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("NotAuthorized", "Account");
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public async Task<IActionResult> NotClientBill(int id = 0)
         {
             if (id != 0)
@@ -16183,7 +16184,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("NotAuthorized", "Account");
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public IActionResult BillNoteClient(int idWorkday, int abilled = 0)
         {
             BillViewModel model = new BillViewModel { Id = idWorkday, BilledDate = DateTime.Now };
@@ -16193,7 +16194,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public async Task<IActionResult> BillNoteClient(BillViewModel model, int abilled = 0)
         {
             UserEntity user_logged = await _context.Users
@@ -16406,7 +16407,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "BillNoteClient", model) });
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public async Task<IActionResult> PaymentReceivedTodayClient(int idWorkclient = 0)
         {
             if (idWorkclient != 0)
@@ -16428,7 +16429,7 @@ namespace KyoS.Web.Controllers
 
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public IActionResult PaymentReceivedClient(int id)
         {
             PaymentReceivedViewModel model = new PaymentReceivedViewModel { Id = id, PaymentDate = DateTime.Now };
@@ -16437,7 +16438,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public async Task<IActionResult> PaymentReceivedClient(PaymentReceivedViewModel model)
         {
             UserEntity user_logged = await _context.Users
@@ -16556,7 +16557,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "PaymentReceivedClient", model) });
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public async Task<IActionResult> NotClientPayment(int id = 0)
         {
             if (id != 0)
