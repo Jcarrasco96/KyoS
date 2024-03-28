@@ -1026,7 +1026,7 @@
                 }
                 else
                 {
-                    <li role="presentation" class="disabled"><a href="#">Mental Health</a></li>
+                    <li role="presentation" class="disabled"><a href="#">CMH</a></li>
                 }
 
                 @if (setting != null && setting.TCMClinic)
@@ -1336,22 +1336,12 @@
                             }
                         </div>
                         <div class="col-md-2">
-                            @if (ViewBag.ClientDischarge == "0")
-                            {
-                                <div class="thumbnail list-group-item list-group-item-text">
+                            <a style="text-decoration: none;" asp-controller="Discharge" asp-action="ClientswithoutDischarge" role="button">
+                                <div class="thumbnail list-group-item list-group-item-danger">
                                     <h4 style="align-content:end;"><i class="icon-folder-close" style="padding-right: 10px !important;"></i>Clients without<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Discharge</h4>
-                                    <span class="message-counter-cero">@ViewBag.ClientDischarge</span>
+                                    <span class="message-counter">#</span>
                                 </div>
-                            }
-                            else
-                            {
-                                <a style="text-decoration: none;" asp-controller="Discharge" asp-action="ClientswithoutDischarge" role="button">
-                                    <div class="thumbnail list-group-item list-group-item-danger">
-                                        <h4 style="align-content:end;"><i class="icon-folder-close" style="padding-right: 10px !important;"></i>Clients without<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Discharge</h4>
-                                        <span class="message-counter">@ViewBag.ClientDischarge</span>
-                                    </div>
-                                </a>
-                            }
+                            </a>                            
                         </div>
                         <div class="col-md-12">
                             &nbsp;
@@ -1605,23 +1595,13 @@
                                 </div>
                             </a>
                         </div>
-                        <div class="col-md-2">
-                            @if (ViewBag.AllDocuments == 0)
-                            {
-                                <div class="thumbnail list-group-item list-group-item-text">
+                        <div class="col-md-2">                            
+                            <a style="text-decoration: none;" asp-controller="TCMClients" asp-action="AllDocuments" role="button">
+                                <div class="thumbnail list-group-item list-group-item-success">
                                     <h4 style="align-content:end;"><i class="icon-print" style="padding-right: 10px !important;"></i>All<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Documents</h4>
-                                    <span class="message-counter-cero">@ViewBag.AllDocuments</span>
+                                    <span class="message-counter-success">#</span>
                                 </div>
-                            }
-                            else
-                            {
-                                <a style="text-decoration: none;" asp-controller="TCMClients" asp-action="AllDocuments" role="button">
-                                    <div class="thumbnail list-group-item list-group-item-success">
-                                        <h4 style="align-content:end;"><i class="icon-print" style="padding-right: 10px !important;"></i>All<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Documents</h4>
-                                        <span class="message-counter-success">@ViewBag.AllDocuments</span>
-                                    </div>
-                                </a>
-                            }
+                            </a>                            
                         </div>
                         <div class="col-md-12">
                             &nbsp;

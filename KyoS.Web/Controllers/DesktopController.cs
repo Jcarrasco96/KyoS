@@ -422,7 +422,6 @@ namespace KyoS.Web.Controllers
                     Task<int> MedicalHistoryMissing = MHMedicalHistoryMissing(user_logged.Clinic.Id);
                     Task<int> IntakeMissing = MHIntakeMissing(user_logged.Clinic.Id);
                     Task<int> FarsMissing = MHFarsMissing(user_logged.Clinic.Id);
-                    Task<int> ClientDischarge = MHClientDischarge(user_logged.Clinic.Id);
                     Task<int> ClientAuthorization = MHClientAuthorization(user_logged.Clinic.Id);
                     Task<int> ClientBirthday = MHClientBirthday(user_logged.Clinic.Id);
                     Task<int> ClientEligibility = MHClientEligibility(user_logged.Clinic.Id);
@@ -430,7 +429,7 @@ namespace KyoS.Web.Controllers
 
                     await Task.WhenAll(PendingNotes, InProgressNotes, NotStartedNotes, MTPMissing, NotesWithReview,
                                         ApprovedNotes, NotPresentNotes, ExpiredMTPs, PendingBIO, PendingInitialFars, MedicalHistoryMissing,
-                                        IntakeMissing, FarsMissing, ClientDischarge, ClientAuthorization, ClientBirthday, ClientEligibility,
+                                        IntakeMissing, FarsMissing, ClientAuthorization, ClientBirthday, ClientEligibility,
                                         SafetyPlan);
 
                     ViewBag.PendingNotes = await PendingNotes;
@@ -446,7 +445,6 @@ namespace KyoS.Web.Controllers
                     ViewBag.MedicalHistoryMissing = await MedicalHistoryMissing;
                     ViewBag.IntakeMissing = await IntakeMissing;
                     ViewBag.FarsMissing = await FarsMissing;
-                    ViewBag.ClientDischarge = (await ClientDischarge).ToString();
                     ViewBag.ClientAuthorization = await ClientAuthorization;
                     ViewBag.ClientBirthday = await ClientBirthday;
                     ViewBag.ClientEligibility = await ClientEligibility;
@@ -465,7 +463,6 @@ namespace KyoS.Web.Controllers
                     Task<int> CaseManager = TCMCaseManager(user_logged.Clinic.Id);
                     Task<int> FarsPending = TCMFarsPending(user_logged.Clinic.Id);
                     Task<int> AssesmentPending = TCMAssesmentPending(user_logged.Clinic.Id);
-                    Task<int> AllDocuments = TCMAllDocuments(user_logged.Clinic.Id);
                     Task<int> NotesEdition = TCMNotesEdition(user_logged.Clinic.Id);
                     Task<int> NotesPending = TCMNotesPending(user_logged.Clinic.Id);
                     Task<int> NotesApproved = TCMNotesApproved(user_logged.Clinic.Id);
@@ -474,7 +471,7 @@ namespace KyoS.Web.Controllers
                     Task<int> Billing = TCMBilling(user_logged.Clinic.Id);
 
                     await Task.WhenAll(NotStartedCases, OpenBinder, ServicePlanPending, AdendumPending, ServicePlanReviewPending,
-                                        DischargePending, CaseManager, FarsPending, AssesmentPending, AllDocuments, NotesEdition,
+                                        DischargePending, CaseManager, FarsPending, AssesmentPending, NotesEdition,
                                         NotesPending, NotesApproved, NotesWithReview, Supervisor, Billing);
 
                     ViewBag.NotStartedCases = await NotStartedCases;
@@ -485,8 +482,7 @@ namespace KyoS.Web.Controllers
                     ViewBag.DischargePending = await DischargePending;
                     ViewBag.TCMCaseManager = await CaseManager;
                     ViewBag.TCMFarsPending = await FarsPending;
-                    ViewBag.AssesmentPending = await AssesmentPending;
-                    ViewBag.AllDocuments = await AllDocuments;
+                    ViewBag.AssesmentPending = await AssesmentPending;                   
                     ViewBag.TCMNotesEdition = await NotesEdition;
                     ViewBag.TCMNotesPending = await NotesPending;
                     ViewBag.TCMNotesApproved = await NotesApproved;
