@@ -105,6 +105,10 @@ jQueryAjaxPostTem = form => {
                     $('#form-modal .modal-body').html('');
                     $('#form-modal .modal-title').html('');
                     $('#form-modal').modal('hide');
+
+                    $('#MyTable').DataTable({
+                        "pageLength": 100
+                    });   
                 }
                 else
                     $('#form-modal .modal-body').html(res.html);
@@ -298,17 +302,9 @@ jQueryAjaxPostTCMSupervisor = form => {
                     $('#form-modal').modal('hide');
 
                     $('#MyTable').DataTable({
-                        "order": [[0, "asc"]],
-                        "pageLength": 100
-                    });           
-                    var item_to_delete;
-                    $('.deleteItem').click((e) => {
-                        item_to_delete = e.currentTarget.dataset.id;
-                    });
-                    $("#btnYesDelete").click(function () {
-                        var url = 'TCMSupervisors/Delete';
-                        window.location.href = url + '/' + item_to_delete;
-                    });
+                        "order": [[1, "asc"]],
+                        "pageLength": 50
+                    });                               
                 }
                 else
                     $('#form-modal .modal-body').html(res.html);
@@ -1445,6 +1441,11 @@ jQueryAjaxPostHealthInsurance = form => {
                     $('#form-modal .modal-body').html('');
                     $('#form-modal .modal-title').html('');
                     $('#form-modal').modal('hide');
+
+                    $('#MyTable').DataTable({
+                        "order": [[0, "asc"]],
+                        "pageLength": 100
+                    });  
                 }
                 else
                     $('#form-modal .modal-body').html(res.html);
@@ -1919,21 +1920,9 @@ jQueryAjaxPostReferreds = form => {
                     $('#form-modal').modal('hide');
 
                     $('#MyTable').DataTable({
-                        "order": [[1, "asc"]],
+                        "order": [[0, "asc"]],
                         "pageLength": 100
-                    });
-                    var item_to_delete;
-                    $('.deleteItem').click((e) => {
-                        item_to_delete = e.currentTarget.dataset.id;
-                    });
-                    $("#btnYesDelete").click(function () {
-                        var wwwUrlPath = window.document.location.href;
-                        var pathName = window.document.location.pathname;
-                        var pos = wwwUrlPath.indexOf(pathName);
-                        var localhostPath = wwwUrlPath.substring(0, pos);
-                        var url = 'Referreds/Delete';
-                        window.location.href = localhostPath + '/' + url + '/' + item_to_delete;
-                    });
+                    });                    
                 }
                 else
                     $('#form-modal .modal-body').html(res.html);
@@ -1965,21 +1954,9 @@ jQueryAjaxPostPsychiatrists = form => {
                     $('#form-modal').modal('hide');
 
                     $('#MyTable').DataTable({
-                        "order": [[1, "asc"]],
+                        "order": [[0, "asc"]],
                         "pageLength": 100
-                    });
-                    var item_to_delete;
-                    $('.deleteItem').click((e) => {
-                        item_to_delete = e.currentTarget.dataset.id;
-                    });
-                    $("#btnYesDelete").click(function () {
-                        var wwwUrlPath = window.document.location.href;
-                        var pathName = window.document.location.pathname;
-                        var pos = wwwUrlPath.indexOf(pathName);
-                        var localhostPath = wwwUrlPath.substring(0, pos);
-                        var url = 'Psychiatrists/Delete';
-                        window.location.href = localhostPath + '/' + url + '/' + item_to_delete;
-                    });
+                    });                   
                 }
                 else
                     $('#form-modal .modal-body').html(res.html);
@@ -2103,21 +2080,9 @@ jQueryAjaxPostEmergencyContacts = form => {
                     $('#form-modal').modal('hide');
 
                     $('#MyTable').DataTable({
-                        "order": [[1, "asc"]],
+                        "order": [[0, "asc"]],
                         "pageLength": 100
-                    });
-                    var item_to_delete;
-                    $('.deleteItem').click((e) => {
-                        item_to_delete = e.currentTarget.dataset.id;
-                    });
-                    $("#btnYesDelete").click(function () {
-                        var wwwUrlPath = window.document.location.href;
-                        var pathName = window.document.location.pathname;
-                        var pos = wwwUrlPath.indexOf(pathName);
-                        var localhostPath = wwwUrlPath.substring(0, pos);
-                        var url = 'EmergencyContacts/Delete';
-                        window.location.href = localhostPath + '/' + url + '/' + item_to_delete;
-                    });
+                    });                    
                 }
                 else
                     $('#form-modal .modal-body').html(res.html);
@@ -2328,75 +2293,17 @@ jQueryAjaxPostCaseManagers = form => {
             success: function (res) {
                 if (res.isValid) {
                     $('#view-casemanagers').html(res.html)
-                    $('#form-modal .modal-body').html('');
-                    $('#form-modal .modal-title').html('');
-                    $('#form-modal').modal('hide');
-
+                    $('#form-modal-lg .modal-body').html('');
+                    $('#form-modal-lg .modal-title').html('');
+                    $('#form-modal-lg').modal('hide');
+                    
                     $('#MyTable').DataTable({
                         "order": [[1, "asc"]],
-                        "pageLength": 100
-                    });
-                    var item_to_delete;
-                    $('.deleteItem').click((e) => {
-                        item_to_delete = e.currentTarget.dataset.id;
-                    });
-                    $("#btnYesDelete").click(function () {
-                        var wwwUrlPath = window.document.location.href;
-                        var pathName = window.document.location.pathname;
-                        var pos = wwwUrlPath.indexOf(pathName);
-                        var localhostPath = wwwUrlPath.substring(0, pos);
-                        var url = 'CaseMannager/Delete';
-                        window.location.href = localhostPath + '/' + url + '/' + item_to_delete;
-                    });
+                        "pageLength": 50
+                    });                    
                 }
                 else
-                    $('#form-modal .modal-body').html(res.html);
-            },
-            error: function (err) {
-                console.log(err)
-            }
-        })
-        //to prevent default form submit event
-        return false;
-    } catch (ex) {
-        console.log(ex)
-    }
-}
-
-jQueryAjaxPostHealthInsurance = form => {
-    try {
-        $.ajax({
-            type: 'POST',
-            url: form.action,
-            data: new FormData(form),
-            contentType: false,
-            processData: false,
-            success: function (res) {
-                if (res.isValid) {
-                    $('#view-healthInsurance').html(res.html)
-                    $('#form-modal .modal-body').html('');
-                    $('#form-modal .modal-title').html('');
-                    $('#form-modal').modal('hide');
-
-                    $('#MyTable').DataTable({
-                        "order": [[1, "asc"]],
-                        "pageLength": 100
-                    });
-                    var item_to_delete;
-                    $('.deleteItem').click((e) => {
-                        item_to_delete = e.currentTarget.dataset.id;
-                    });
-                    $("#btnYesDelete").click(function () {
-                        var wwwUrlPath = window.document.location.href;
-                        var pathName = window.document.location.pathname;
-                        var pos = wwwUrlPath.indexOf(pathName);
-                        var localhostPath = wwwUrlPath.substring(0, pos);
-                        var url = 'HealthInsurances/Delete';
-                        window.location.href = localhostPath + '/' + url + '/' + item_to_delete;
-                    });
-                }
-                else
-                    $('#form-modal .modal-body').html(res.html);
+                    $('#form-modal-lg .modal-body').html(res.html);
             },
             error: function (err) {
                 console.log(err)

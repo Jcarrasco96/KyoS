@@ -36,7 +36,7 @@ namespace KyoS.Web.Helpers
             
             list.Insert(0, new SelectListItem
             {
-                Text = "[Select rol...]",
+                Text = "[Select role...]",
                 Value = "0"
             });
 

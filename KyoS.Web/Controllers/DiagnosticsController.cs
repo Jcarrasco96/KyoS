@@ -288,8 +288,7 @@ namespace KyoS.Web.Controllers
                     {
                         await _context.SaveChangesAsync();
                         
-                        List<DiagnosticEntity> diagnostics_List = await _context.Diagnostics
-
+                        List<DiagnosticEntity> diagnostics_List = await _context.Diagnostics                                                                                
                                                                                 .OrderBy(d => d.Code)
                                                                                 .ToListAsync();
 

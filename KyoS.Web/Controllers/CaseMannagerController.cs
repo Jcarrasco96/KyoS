@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System;
+using KyoS.Web.Migrations;
 
 namespace KyoS.Web.Controllers
 {
@@ -439,14 +440,16 @@ namespace KyoS.Web.Controllers
                         await _context.SaveChangesAsync();
                         
                         List<CaseMannagerEntity> caseManager_List = await _context.CaseManagers
+
                                                                                   .Include(n => n.Clinic)
                                                                                   .Include(n => n.TCMSupervisor)
                                                                                   .Include(n => n.TCMClients)
                                                                                   .ThenInclude(n => n.Client)
-                                                                                  .OrderBy(n => n.Name)
+
+                                                                                  .Where(cm => cm.Clinic.Id == user_logged.Clinic.Id)
                                                                                   .ToListAsync();
 
-                        return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewCaseManagers", caseManager_List) });
+                        return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewCaseManagers", caseManager_List) });                        
                     }
                     catch (System.Exception ex)
                     {
@@ -474,8 +477,11 @@ namespace KyoS.Web.Controllers
             caseMannagerViewModel.StatusList = _combosHelper.GetComboClientStatus();
             caseMannagerViewModel.UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.CaseManager, user_logged.Clinic.Id);
             caseMannagerViewModel.TCMsupervisors = _combosHelper.GetComboTCMSupervisorByClinic(user_logged.Clinic.Id);
-            ModelState.AddModelError(string.Empty, "You must select a linked user");
-            
+            if (caseMannagerViewModel.IdUser == "0")
+            {
+                ModelState.AddModelError(string.Empty, "You must select a linked user");
+            }
+
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateModal", caseMannagerViewModel) });
         }
 
@@ -557,11 +563,13 @@ namespace KyoS.Web.Controllers
                 {
                     await _context.SaveChangesAsync();
                     List<CaseMannagerEntity> caseManager_List = await _context.CaseManagers
+
                                                                               .Include(n => n.Clinic)
                                                                               .Include(n => n.TCMSupervisor)
                                                                               .Include(n => n.TCMClients)
                                                                               .ThenInclude(n => n.Client)
-                                                                              .OrderBy(n => n.Name)
+
+                                                                              .Where(cm => cm.Clinic.Id == user_logged.Clinic.Id)
                                                                               .ToListAsync();
 
                     return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewCaseManagers", caseManager_List) });
@@ -570,7 +578,7 @@ namespace KyoS.Web.Controllers
                 {
                     if (ex.InnerException.Message.Contains("duplicate"))
                     {
-                        ModelState.AddModelError(string.Empty, $"Already exists the Case Mannager: {caseMannagerEntity.Name}");
+                        ModelState.AddModelError(string.Empty, $"Already exists the Case Manager: {caseMannagerEntity.Name}");
                     }
                     else
                     {
@@ -582,7 +590,10 @@ namespace KyoS.Web.Controllers
             caseMannagerViewModel.StatusList = _combosHelper.GetComboClientStatus();
             caseMannagerViewModel.UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.CaseManager, user_logged.Clinic.Id);
             caseMannagerViewModel.TCMsupervisors = _combosHelper.GetComboTCMSupervisorByClinic(user_logged.Clinic.Id);
-            ModelState.AddModelError(string.Empty, "You must select a linked user");
+            if (caseMannagerViewModel.IdUser == "0")
+            {
+                ModelState.AddModelError(string.Empty, "You must select a linked user");                
+            }            
 
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditModal", caseMannagerViewModel) });
         }

@@ -17,7 +17,7 @@
                     <span asp-validation-for="Name" class="text-danger"></span>
                 </div>
                 <div class="col-md-3 form-group">
-                    <label asp-for="IdStatus" class="control-label"></label>
+                    <label asp-for="IdStatus" class="control-label"></label>&nbsp;*
                     <select asp-for="IdStatus" asp-items="Model.StatusList" class="form-control"></select>
                     <span asp-validation-for="IdStatus" class="text-danger"></span>
                 </div>
@@ -31,6 +31,9 @@
                     <input asp-for="ProviderNumber" class="form-control" />
                     <span asp-validation-for="ProviderNumber" class="text-danger"></span>
                 </div>
+            </div>
+            <div class="col-md-push-12">
+                &nbsp;
             </div>
             <div>
                 <div class="col-md-3 form-group">
@@ -71,7 +74,7 @@
                     <span asp-validation-for="IdTCMsupervisor" class="text-danger"></span>
                 </div>
                 <div class="col-md-3 form-group">
-                    <label asp-for="IdUser" class="control-label"></label>
+                    <label asp-for="IdUser" class="control-label"></label>&nbsp;*
                     <select asp-for="IdUser" asp-items="Model.UserList" class="form-control"></select>
                     <span asp-validation-for="IdUser" class="text-danger"></span>
                 </div>
@@ -102,7 +105,7 @@
             <div>
                 <div class="col-md-offset-10 form-group">
                     <input type="submit" value="Save" class="btn btn-primary" />
-                    <a asp-action="Index" class="btn btn-success">Back</a>
+                    <button type="button" class="btn btn-success" data-dismiss="modal">Back</button>
                 </div>
             </div>
         </form>
@@ -110,8 +113,7 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    <script src="~/js/jquery.dataTables.min.js"></script>
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}    
 }
 
 

@@ -856,8 +856,7 @@ namespace KyoS.Web.Controllers
                     {
                         await _context.SaveChangesAsync();
                         List<HealthInsuranceEntity> healthInsurance_List = await _context.HealthInsurances
-
-                                                                                         .OrderBy(d => d.Name)
+                                                                                         .Where(hi => (hi.Clinic.Id == user_logged.Clinic.Id))                                                                                         
                                                                                          .ToListAsync();
 
                         return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewHealthInsurances", healthInsurance_List) });
@@ -929,9 +928,8 @@ namespace KyoS.Web.Controllers
                 {
                     await _context.SaveChangesAsync();
                     List<HealthInsuranceEntity> healthInsurance_List = await _context.HealthInsurances
-
-                                                                                        .OrderBy(d => d.Name)
-                                                                                        .ToListAsync();
+                                                                                     .Where(hi => (hi.Clinic.Id == user_logged.Clinic.Id))
+                                                                                     .ToListAsync();
 
                     return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewHealthInsurances", healthInsurance_List) });
                 }

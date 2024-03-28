@@ -430,6 +430,7 @@ namespace KyoS.Web.Controllers
 
                         List<SupervisorEntity> supervisors_List = await _context.Supervisors
                                                                                   .Include(n => n.Clinic)
+                                                                                  .Where(s => s.Clinic.Id == user_logged.Clinic.Id)
                                                                                   .ToListAsync();
 
                         return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewSupervisors", supervisors_List) });
@@ -556,6 +557,7 @@ namespace KyoS.Web.Controllers
 
                     List<SupervisorEntity> supervisors_List = await _context.Supervisors
                                                                                  .Include(n => n.Clinic)
+                                                                                 .Where(s => s.Clinic.Id == user_logged.Clinic.Id)
                                                                                  .ToListAsync();
 
                     return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewSupervisors", supervisors_List) });

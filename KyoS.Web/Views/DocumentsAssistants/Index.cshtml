@@ -53,10 +53,13 @@
     <script src="~/js/jquery.dataTables.min.js"></script>
 
     <script type="text/javascript">
-                        $(document).ready(function () {
-                            $('#MyTable').DataTable();
-                        });
-         function ConfirmDelete(e) {
+        $(document).ready(function () {
+            $('#MyTable').DataTable({
+                "pageLength": 25
+            });
+        });
+
+        function ConfirmDelete(e) {
             Swal.fire({
                 title: 'Do you want to delete?',
                 text: "Note: All data related to this element will be deleted.",

@@ -54,14 +54,12 @@
                     <span asp-validation-for="SignatureFile" class="text-danger"></span>
                 </div>
             </div>
-            <div class="col-md-12">
-                <div form-group">
-                    <hr />
-                </div>
+            <div class="col-md-12">                
+                <hr />                
             </div>
             <div>
                 <div class="col-md-offset-9">
-                    <input type="submit" value="Submit" class="btn btn-primary" />
+                    <input type="submit" value="Create" class="btn btn-primary" />
                     <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
                 </div>
             </div>
@@ -72,37 +70,5 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    <script src="~/js/jquery.dataTables.min.js"></script>
-
-    <script type="text/javascript">
-        //    jQueryAjaxPost = form => {
-        //        try {
-        //            $.ajax({
-        //                type: 'POST',
-        //                url: form.action,
-        //                data: new FormData(form),
-        //                contentType: false,
-        //                processData: false,
-        //                success: function (res) {
-        //                    if (res.isValid) {
-        //                        $('#view-all').html(res.html)
-        //                        $('#form-modal .modal-body').html('');
-        //                        $('#form-modal .modal-title').html('');
-        //                        $('#form-modal').modal('hide');
-        //                    }
-        //                    else
-        //                        $('#form-modal .modal-body').html(res.html);
-        //                },
-        //                error: function (err) {
-        //                    console.log(err)
-        //                }
-        //            })
-        //            //to prevent default form submit event
-        //            return false;
-        //        } catch (ex) {
-        //            console.log(ex)
-        //        }
-        //}
-    </script>
 }
 

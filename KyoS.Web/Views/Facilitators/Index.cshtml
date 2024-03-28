@@ -16,7 +16,6 @@
 </div>
 
 <p>
-    @*<a asp-action="Create" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Create Facilitator</a>*@
     <a onclick="showInPopup('@Url.Action("CreateModal","Facilitators",null,Context.Request.Scheme)','Create Facilitator')" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Create Facilitator</a>
     <a asp-action="Signatures" class="btn btn-default"><i class="glyphicon glyphicon-pencil"></i> Facilitators' Signatures</a>
     <a asp-action="EXCEL" class="btn btn-success"><i class="glyphicon glyphicon-download-alt"></i> Export Facilitators</a>

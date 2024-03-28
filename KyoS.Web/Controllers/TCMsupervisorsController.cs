@@ -201,7 +201,7 @@ namespace KyoS.Web.Controllers
                                                                                 .ThenInclude(f => f.TCMClients)
                                                                                 .ThenInclude(f => f.Client)
 
-                                                                                .OrderBy(t => t.Name)
+                                                                                .Where(s => s.Clinic.Id == user_logged.Clinic.Id)
                                                                                 .ToListAsync();
                         return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewTCMSupervisors", tcmSupervisor) });
                     }
@@ -393,7 +393,8 @@ namespace KyoS.Web.Controllers
                                                                             .Include(f => f.CaseManagerList)
                                                                             .ThenInclude(f => f.TCMClients)
                                                                             .ThenInclude(f => f.Client)
-                                                                            .OrderBy(f => f.Name)
+
+                                                                            .Where(s => s.Clinic.Id == user_logged.Clinic.Id)
                                                                             .ToListAsync();
                     return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewTCMSupervisors", tcmSupervisor) });
                 }

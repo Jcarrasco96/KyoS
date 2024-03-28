@@ -474,6 +474,7 @@ namespace KyoS.Web.Controllers
 
                         List<FacilitatorEntity> facilitators_List = await _context.Facilitators
                                                                                   .Include(n => n.Clinic)
+                                                                                  .Where(f => f.Clinic.Id == user_logged.Clinic.Id)
                                                                                   .ToListAsync();
 
                         return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewFacilitators", facilitators_List) });
@@ -615,6 +616,7 @@ namespace KyoS.Web.Controllers
 
                     List<FacilitatorEntity> facilitators_List = await _context.Facilitators
                                                                                   .Include(n => n.Clinic)
+                                                                                  .Where(f => f.Clinic.Id == user_logged.Clinic.Id)
                                                                                   .ToListAsync();
 
                     return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewFacilitators", facilitators_List) });
