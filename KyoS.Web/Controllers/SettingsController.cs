@@ -214,7 +214,8 @@ namespace KyoS.Web.Controllers
                 CreateTCMNotesWithoutDomain = user_logged.Clinic.Setting.CreateTCMNotesWithoutDomain,
                 IdFiltroPayStub = (user_logged.Clinic.Setting.TCMPayStub_Filtro == TCMPayStubFiltro.Created) ? 0 : (user_logged.Clinic.Setting.TCMPayStub_Filtro == TCMPayStubFiltro.Approved) ? 1 : (user_logged.Clinic.Setting.TCMPayStub_Filtro == TCMPayStubFiltro.Billed) ? 2 : 3,
                 FiltroPayStubs = _combosHelper.GetComboFiltroTCMPayStubByClinic(),
-                MTPmultipleSignatures = user_logged.Clinic.Setting.MTPmultipleSignatures
+                MTPmultipleSignatures = user_logged.Clinic.Setting.MTPmultipleSignatures,
+                TCMLockCreateNote = user_logged.Clinic.Setting.TCMLockCreateNote
             };
 
             return View(model);

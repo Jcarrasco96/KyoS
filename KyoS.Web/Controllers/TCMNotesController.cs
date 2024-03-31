@@ -285,13 +285,18 @@ namespace KyoS.Web.Controllers
             {
                 ViewBag.Delete = "N";
             }
-
+            
             TCMNoteViewModel model;
             
             UserEntity user_logged = _context.Users
-                                                .Include(u => u.Clinic)
-                                                .ThenInclude(u => u.Setting)
-                                                .FirstOrDefault(u => u.UserName == User.Identity.Name);
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(u => u.Setting)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+            DateTime dateservice = _context.TCMNote.FirstOrDefault(n => n.Id == id).DateOfService.Date;
+            if (user_logged.Clinic.Setting.TCMLockCreateNote.Date <= dateservice)
+            {
+                return RedirectToAction("Index", "TCMBilling", new {id = 2, initDate = dateservice.ToString() });
+            }
           
             if (User.IsInRole("CaseManager"))
             {

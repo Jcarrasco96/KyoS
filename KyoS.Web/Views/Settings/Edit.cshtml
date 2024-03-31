@@ -88,6 +88,18 @@
                         <div class="col-md-12">
                             &nbsp;
                         </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <input type="checkbox" asp-for="TCMClinic" /> Enable TCM Clinic
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label asp-for="TCMLockCreateNote" class="control-label">Create notes until</label>
+                                <input asp-for="TCMLockCreateNote" class="form-control" />
+                                <span asp-validation-for="TCMLockCreateNote" class="text-danger"></span>
+                            </div>
+                        </div>
                         <div>
                             <div class=" col-md-6 ">
                                 <label asp-for="TCMInitialTime" class="control-label">Start Time</label>&nbsp;*
@@ -117,11 +129,6 @@
                         </div>
                         <div class="col-md-12">
                             &nbsp;
-                        </div>
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <input type="checkbox" asp-for="TCMClinic" /> Enable TCM Clinic
-                            </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">

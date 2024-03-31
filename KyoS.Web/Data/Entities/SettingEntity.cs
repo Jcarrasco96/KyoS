@@ -39,5 +39,8 @@ namespace KyoS.Web.Data.Entities
         public TCMPayStubFiltro TCMPayStub_Filtro { get; set; }
 
         public bool MTPmultipleSignatures { get; set; }
+
+        [DataType(DataType.Date)]
+        public DateTime TCMLockCreateNote { get; set; }
     }
 }

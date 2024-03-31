@@ -25,6 +25,18 @@
         </strong>
     </div>
 }
+@if (ViewBag.DateBlocked == "E")
+{
+    <div class="alert alert-block alert-danger">
+        <button type="button" class="close" data-dismiss="alert">
+            <i class="icon-remove"></i>
+        </button>
+        <i class="icon-ok red"></i>
+        <strong class="red">
+            Error. The date is disabled for the manager, it is unavailable for edit notes.
+        </strong>
+    </div>
+}
 <div class="row">
     <div class="col-md-4">
         <label asp-for="IdClient" class="control-label"></label>

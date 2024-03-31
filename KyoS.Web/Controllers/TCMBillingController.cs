@@ -38,7 +38,10 @@ namespace KyoS.Web.Controllers
             {
                 ViewBag.DateBlocked = "B";
             }
-
+            if (id == 2)
+            {
+                ViewBag.DateBlocked = "E";
+            } 
             UserEntity user_logged = _context.Users
                                              .Include(u => u.Clinic)
                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
@@ -60,20 +63,33 @@ namespace KyoS.Web.Controllers
         {
             UserEntity user_logged = _context.Users
                                              .Include(u => u.Clinic)
+                                             .ThenInclude(u => u.Setting)
                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
-            AddProgressNoteViewModel model = new AddProgressNoteViewModel();
-            DateTime datetemp = (date != null) ? Convert.ToDateTime(date) : new DateTime();
-            if (User.IsInRole("CaseManager"))
-            {
-                model = new AddProgressNoteViewModel
-                {
-                    Date = datetemp,
-                    IdClient = 0,
-                    Clients = _combosHelper.GetComboTCMClientsByCaseManagerActives(user_logged.UserName,datetemp),
-                    Billable = true
-                };
-            }            
 
+            DateTime datetemp = (date != null) ? Convert.ToDateTime(date) : new DateTime();
+            AddProgressNoteViewModel model = new AddProgressNoteViewModel();
+
+            if (user_logged.Clinic.Setting.TCMLockCreateNote > datetemp)
+            {
+
+
+                if (User.IsInRole("CaseManager"))
+                {
+                    model = new AddProgressNoteViewModel
+                    {
+                        Date = datetemp,
+                        IdClient = 0,
+                        Clients = _combosHelper.GetComboTCMClientsByCaseManagerActives(user_logged.UserName, datetemp),
+                        Billable = true
+                    };
+                }
+                ViewData["permit"] = 0;
+            }
+            else
+            {
+                ViewData["permit"] = 1;
+                ViewData["date"] = datetemp;
+            }
             return View(model);
         }
 

@@ -96,5 +96,8 @@ namespace KyoS.Web.Models
 
         public IEnumerable<SelectListItem> FiltroPayStubs { get; set; }
         public bool MTPmultipleSignatures { get; set; }
+
+        [DataType(DataType.Date)]
+        public DateTime TCMLockCreateNote { get; set; }
     }
 }
