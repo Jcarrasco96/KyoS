@@ -477,7 +477,7 @@ namespace KyoS.Web.Controllers
                                       .Include(w => w.Days)
                                       .ThenInclude(d => d.Workdays_Activities_Facilitators)
                                       .ThenInclude(waf => waf.Facilitator)
-
+                                      .AsSplitQuery()
                                       .Where(w => (w.Clinic.Id == user_logged.Clinic.Id
                                                 && w.Days.Where(d => (d.Service == ServiceType.PSR && d.Workdays_Clients.Where(wc => wc.Facilitator.LinkedUser == User.Identity.Name).Count() > 0)).Count() > 0))
                                       .ToListAsync());
