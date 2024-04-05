@@ -8675,5 +8675,44 @@ namespace KyoS.Web.Helpers
 
         }
 
+        public Workday_Activity_Facilitator ToWorkdayActivityFacilitatorEntity(Workday_Activity_FacilitatorSkillViewModel model)
+        {
+            return new Workday_Activity_Facilitator
+            {
+                Id = model.Id,
+                activityDailyLiving = model.activities,
+                communityResources = model.community,
+                copingSkills = model.coping,
+                diseaseManagement = model.disease,
+                healthyLiving = model.healthy,
+                lifeSkills = model.life,
+                relaxationTraining = model.relaxation,
+                socialSkills = model.social,
+                stressManagement = model.stress,
+                AM = model.am,
+                PM = model.pm
+            };
+        }
+
+        public Workday_Activity_FacilitatorSkillViewModel ToWorkdayActivityFacilitatorViewModel(Workday_Activity_Facilitator model)
+        {
+            return new Workday_Activity_FacilitatorSkillViewModel
+            {
+                Id = model.Id,
+                activities = (bool)model.activityDailyLiving,
+                community = (bool)model.communityResources,
+                disease = (bool)model.diseaseManagement,
+                healthy = (bool)model.healthyLiving,
+                life = (bool)model.lifeSkills,
+                relaxation = (bool)model.relaxationTraining,
+                social = (bool)model.socialSkills,
+                stress = (bool)model.stressManagement,
+                coping = (bool)model.copingSkills,
+                am = model.AM,
+                pm = model.PM
+            };
+        }
     }
+
+   
 }

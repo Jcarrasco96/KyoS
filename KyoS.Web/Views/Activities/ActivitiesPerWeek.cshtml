@@ -92,6 +92,7 @@
                                                                         <th class="col-md-5">Activity</th>
                                                                         <th class="col-md-1" style="text-align:center;">AM</th>
                                                                         <th class="col-md-1" style="text-align:center;">PM</th>
+                                                                        <th class="col-md-1" style="text-align:center;">Skill</th>
                                                                         <th class="col-md-2"></th>
                                                                     </tr>
                                                                     @foreach (var activity in day.Workdays_Activities_Facilitators.Where(waf => waf.Facilitator.LinkedUser == User.Identity.Name))
@@ -110,6 +111,9 @@
                                                                             </td>
                                                                             <td align="center">
                                                                                 @Html.DisplayFor(modelItem => activity.PM)
+                                                                            </td>
+                                                                            <td align="center">
+                                                                                <a onclick="showInPopup('@Url.Action("EditSkill", "Activities", new {id = @activity.Id}, Context.Request.Scheme)','Skill Sets Addressed')" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i></a>
                                                                             </td>
                                                                             <td align="right">
                                                                                 @if (day.Workdays_Activities_Facilitators.Where(waf => waf.Facilitator.LinkedUser == User.Identity.Name).Count() > 4)
@@ -259,6 +263,7 @@
 </div>
 
 <partial name="_DeleteDialog" />
+<partial name="_ModalPopup" />
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

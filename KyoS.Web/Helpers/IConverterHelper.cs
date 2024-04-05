@@ -2,6 +2,7 @@
 using KyoS.Web.Models;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using KyoS.Web.Migrations;
 
 namespace KyoS.Web.Helpers
 {
@@ -188,8 +189,8 @@ namespace KyoS.Web.Helpers
         GoalsTempViewModel ToGoalTempViewModel(GoalsTempEntity model);
         Task<ObjectiveTempEntity> ToObjectiveTempEntity(ObjectiveTempViewModel model, bool isNew);
         ObjectiveTempViewModel ToObjectiveTempViewModel(ObjectiveTempEntity model);
-        Task<BriefEntity> ToBriefEntity(BriefViewModel model, bool isNew, string userId);
-        BriefViewModel ToBriefViewModel(BriefEntity model);
+        Task<Data.Entities.BriefEntity> ToBriefEntity(BriefViewModel model, bool isNew, string userId);
+        BriefViewModel ToBriefViewModel(Data.Entities.BriefEntity model);
         Task<GroupNote2Entity> ToGroupNote2Entity(GroupNote2ViewModel model, bool isNew);
         Task<GroupNote2Entity> ToGroupNote3Entity(GroupNote3ViewModel model, bool isNew);
         ScheduleEntity ToScheduleEntity(ScheduleViewModel model, bool isNew, UserEntity user);
@@ -253,5 +254,7 @@ namespace KyoS.Web.Helpers
         TCMNotePendingByPayStubViewModel ToPayStubViewModel(TCMPayStubEntity model);
         TCMIntakeMedicalHistoryEntity ToTCMIntakeMedicalHistoryEntity(TCMIntakeMedicalHistoryViewModel model, bool isNew, string userId);
         TCMIntakeMedicalHistoryViewModel ToTCMIntakeMedicalHistoryViewModel(TCMIntakeMedicalHistoryEntity model);
+        Workday_Activity_Facilitator ToWorkdayActivityFacilitatorEntity(Workday_Activity_FacilitatorSkillViewModel model);
+        Workday_Activity_FacilitatorSkillViewModel ToWorkdayActivityFacilitatorViewModel(Workday_Activity_Facilitator model);
     }
 }

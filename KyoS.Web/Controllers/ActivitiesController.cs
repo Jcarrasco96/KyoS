@@ -2095,6 +2095,57 @@ namespace KyoS.Web.Controllers
             return View(activityViewModel);
         }
 
+        [Authorize(Roles = "Facilitator")]
+        public async Task<IActionResult> EditSkill(int? id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            Workday_Activity_Facilitator activity = await _context.Workdays_Activities_Facilitators.FirstOrDefaultAsync(a => a.Id == id);
+            if (activity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            Workday_Activity_FacilitatorSkillViewModel activityViewModel = _converterHelper.ToWorkdayActivityFacilitatorViewModel(activity);
+
+            return View(activityViewModel);
+        }
+
+        [Authorize(Roles = "Facilitator")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditSkill(Workday_Activity_FacilitatorSkillViewModel activityViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                            .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                Workday_Activity_Facilitator activityEntity = _converterHelper.ToWorkdayActivityFacilitatorEntity(activityViewModel);
+                _context.Update(activityEntity);
+                try
+                {
+                    await _context.SaveChangesAsync();
+
+                    return RedirectToAction("ActivitiesPerWeek", "Activities");
+                }
+                catch (System.Exception ex)
+                {
+                    if (ex.InnerException.Message.Contains("duplicate"))
+                    {
+                        ModelState.AddModelError(string.Empty, $"Already exists the facilitator's intervention: {activityEntity.Id}");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+            }
+            return View(activityViewModel);
+        }
 
     }
 }
