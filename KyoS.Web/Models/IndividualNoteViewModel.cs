@@ -31,5 +31,8 @@ namespace KyoS.Web.Models
 
         public string CodeBill { get; set; }
         public int IdSubSchedule { get; set; }
+
+        public string Diagnostic { get; set; }
+        
     }
 }

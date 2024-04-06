@@ -2123,12 +2123,16 @@ namespace KyoS.Web.Controllers
                                                                            .ThenInclude(c => c.Clinic)  //es para saber la clinica cuando no existe la nota en individualNote
                                                                            .ThenInclude(c => c.Setting)
 
+                                                                           .Include(wc => wc.Client)
+                                                                           .ThenInclude(c => c.Clients_Diagnostics)  //es para saber la clinica cuando no existe la nota en individualNote
+                                                                           .ThenInclude(c => c.Diagnostic)
+
                                                                            .Include(wc => wc.Workday)
                                                                            .ThenInclude(w => w.Week)
 
                                                                            .Include(wc => wc.Schedule)
                                                                            .ThenInclude(c => c.SubSchedules)
-
+                                                                           .AsSplitQuery()
                                                                            .FirstOrDefaultAsync(wc => wc.Id == id);
 
             if (workday_Client == null)
@@ -2336,7 +2340,17 @@ namespace KyoS.Web.Controllers
                     MTPId = mtp.Id,
                     IdSubSchedule = (note.SubSchedule == null) ? 0: note.SubSchedule.Id,
                     Setting = note.Setting
+                   
                 };
+                DiagnosticEntity dx = workday_Client.Client.Clients_Diagnostics.FirstOrDefault(n => n.Principal == true).Diagnostic;
+                if (dx != null)
+                {
+                    individualNoteViewModel.Diagnostic = dx.Code + ": " + dx.Description;
+                }
+                else
+                {
+                    individualNoteViewModel.Diagnostic = "The client have not Dx";
+                }
             }
 
             return View(individualNoteViewModel);
@@ -15577,44 +15591,48 @@ namespace KyoS.Web.Controllers
             List<AuditGoalsObjective> auditGoalsObjetive_List = new List<AuditGoalsObjective>();
             AuditGoalsObjective auditGoalsObjetive = new AuditGoalsObjective();
 
-            MTPEntity mtp = _context.MTPs
-                                    .Include(n => n.Goals)
-                                    .ThenInclude(n => n.Objetives)
-                                    //.Include(n => n.Client)
-                                    .FirstOrDefault(n => n.Id == idMtp);
-
-            List<IndividualNoteEntity> note = await _context.IndividualNotes
-                                                   .Include(n => n.Objective)
-                                                   .ThenInclude(n => n.Goal)
-
-                                                   .Where(w => (w.Workday_Cient.Workday.Week.Clinic.Id == user_logged.Clinic.Id
-                                                        && w.MTPId == idMtp
-                                                        && w.Status != NoteStatus.Edition))
-                                                   .ToListAsync();
-            int tempCount = 0;
-            foreach (var goal in mtp.Goals.Where(n => n.Service == ServiceType.Individual))
+            if (idMtp != 0)
             {
-                foreach (var objective in goal.Objetives.OrderBy(n => n.Objetive))
-                {
-                    auditGoalsObjetive.NumberGoal = goal.Number;
-                    auditGoalsObjetive.NumberObjective = objective.Objetive;
-                    tempCount = note.Where(n => n.Objective.Id == objective.Id).Count();
-                    auditGoalsObjetive.Count = tempCount;
-                    auditGoalsObjetive.Porciento = Math.Round((tempCount * 100) / Convert.ToDouble(note.Count()), 1);
-                    if (tempCount == 0)
-                    {
-                        auditGoalsObjetive.Active = 0;
-                    }
-                    else
-                    {
-                        auditGoalsObjetive.Active = 2;
-                    }
-                    auditGoalsObjetive_List.Add(auditGoalsObjetive);
-                    tempCount = 0;
-                    auditGoalsObjetive = new AuditGoalsObjective();
-                }
+                MTPEntity mtp = _context.MTPs
+                                   .Include(n => n.Goals)
+                                   .ThenInclude(n => n.Objetives)
+                                   //.Include(n => n.Client)
+                                   .FirstOrDefault(n => n.Id == idMtp);
 
+                List<IndividualNoteEntity> note = await _context.IndividualNotes
+                                                       .Include(n => n.Objective)
+                                                       .ThenInclude(n => n.Goal)
+
+                                                       .Where(w => (w.Workday_Cient.Workday.Week.Clinic.Id == user_logged.Clinic.Id
+                                                            && w.MTPId == idMtp
+                                                            && w.Status != NoteStatus.Edition))
+                                                       .ToListAsync();
+                int tempCount = 0;
+                foreach (var goal in mtp.Goals.Where(n => n.Service == ServiceType.Individual))
+                {
+                    foreach (var objective in goal.Objetives.OrderBy(n => n.Objetive))
+                    {
+                        auditGoalsObjetive.NumberGoal = goal.Number;
+                        auditGoalsObjetive.NumberObjective = objective.Objetive;
+                        tempCount = note.Where(n => n.Objective.Id == objective.Id).Count();
+                        auditGoalsObjetive.Count = tempCount;
+                        auditGoalsObjetive.Porciento = Math.Round((tempCount * 100) / Convert.ToDouble(note.Count()), 1);
+                        if (tempCount == 0)
+                        {
+                            auditGoalsObjetive.Active = 0;
+                        }
+                        else
+                        {
+                            auditGoalsObjetive.Active = 2;
+                        }
+                        auditGoalsObjetive_List.Add(auditGoalsObjetive);
+                        tempCount = 0;
+                        auditGoalsObjetive = new AuditGoalsObjective();
+                    }
+
+                }
             }
+                      
 
             return View(auditGoalsObjetive_List);
         }
@@ -21266,5 +21284,27 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "ChangeFacilitator", null) });
         }
 
+        [Authorize(Roles = "Facilitator")]
+        public JsonResult GetDx(int idClient)
+        {
+            ClientEntity client = _context.Clients
+                                          .Include(n => n.Clients_Diagnostics)
+                                          .ThenInclude(n => n.Diagnostic)
+                                          .FirstOrDefault(o => o.Id == idClient);
+
+            string text = "Select client";
+            if (client != null)
+            {
+                DiagnosticEntity dx = client.Clients_Diagnostics.FirstOrDefault(n => n.Principal == true).Diagnostic;
+                if (dx != null)
+                {
+                    text = dx.Code + ": " + dx.Description;
+                }
+                
+            }
+            return Json(text);
+        }
+
+      
     }
 }
