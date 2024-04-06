@@ -1077,7 +1077,9 @@ namespace KyoS.Web.Controllers
                         ConsentType = ConsentType.HURRICANE,
                         ConsentList = _combosHelper.GetComboConsentType(),
                         OtherPurposeRequest = string.Empty,
-                        OtherAutorizedInformation = string.Empty
+                        OtherAutorizedInformation = string.Empty,
+                        InForm_Electronic = false,
+                        InForm_AllofTheAbove = false
                     };
                    if (model.TcmClient.Client.LegalGuardian == null)
                        model.TcmClient.Client.LegalGuardian = new LegalGuardianEntity();
