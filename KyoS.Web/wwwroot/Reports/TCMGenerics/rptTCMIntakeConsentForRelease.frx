@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="03/01/2024 10:51:56" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="04/07/2024 18:43:51" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhDFmP9T+uKfsJXu65Ovrj+A1YfN5dfPvLBg6EY9L3xBgdKTD3jWzkT9igQJx8b038oI9dNhRBoFFhSA7mPS1U/">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhDFmP9T+uKfsJXu65Ovrj+A1YfN5dfPvLBg6EY9L3xBgdKTD3jWzkT9igQJx8b03+QEYqxQtp+LxpfhJrko7K8">
       <TableDataSource Name="Clinics" DataType="System.Int32" Enabled="true" TableName="Clinics">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -149,13 +149,15 @@
         <Column Name="LastModifiedOn" DataType="System.DateTime"/>
         <Column Name="OtherPurposeRequest" DataType="System.String" PropName="Column"/>
         <Column Name="OtherAutorizedInformation" DataType="System.String" PropName="Column1"/>
+        <Column Name="InForm_Electronic" DataType="System.Boolean" PropName="Column"/>
+        <Column Name="InForm_AllofTheAbove" DataType="System.Boolean" PropName="Column1"/>
       </TableDataSource>
       <TableDataSource Name="Classifications" Alias="Signatures" DataType="System.Int32" Enabled="true" TableName="Classifications">
         <Column Name="supervisorSignature" DataType="System.Byte[]" PropName="Id"/>
         <Column Name="facilitatorSignature" DataType="System.Byte[]" PropName="Name"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection1" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pKiygLNrR2GSkUua6CZa7zWuDzNGOn7cjq7mn0WTOnccDkyyV5BLvtFa1BRlcYFBrwmZOLUqjEDNdsa90M0j9JA==">
+    <MsSqlDataConnection Name="Connection1" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pKiygLNrR2GSkUua6CZa7zWuDzNGOn7cjq7mn0WTOnccDkyyV5BLvtFa1BRlcYFBr20V2NF3y2UK8HF0YinAO+g==">
       <TableDataSource Name="Classifications1" Alias="Signatures1" DataType="System.Int32" Enabled="true" TableName="Classifications">
         <Column Name="supervisorSignature" DataType="System.Byte[]" PropName="Id"/>
         <Column Name="facilitatorSignature" DataType="System.Byte[]" PropName="Name"/>
@@ -241,11 +243,11 @@
       <TextObject Name="Text331" Left="117.85" Top="393.8" Width="122.85" Height="18.9" Text="Verbal Information" VertAlign="Center" Font="Arial, 9pt"/>
       <CheckBoxObject Name="CheckBox29" Left="238.7" Top="397.8" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMIntakeConsentForRelease.InForm_Facsimile"/>
       <TextObject Name="Text332" Left="251.15" Top="394.8" Width="66.15" Height="18.9" Text="Facsimile" VertAlign="Center" Font="Arial, 9pt"/>
-      <CheckBoxObject Name="CheckBox30" Left="327.75" Top="397.8" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue"/>
+      <CheckBoxObject Name="CheckBox30" Left="327.75" Top="397.8" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMIntakeConsentForRelease.InForm_Electronic"/>
       <TextObject Name="Text333" Left="340.2" Top="394.8" Width="122.85" Height="18.9" Text="Electronic Records" VertAlign="Center" Font="Arial, 9pt"/>
       <CheckBoxObject Name="CheckBox31" Left="470.5" Top="398.8" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMIntakeConsentForRelease.InForm_WrittenRecords"/>
       <TextObject Name="Text334" Left="482.95" Top="395.8" Width="122.85" Height="18.9" Text="Written Records" VertAlign="Center" Font="Arial, 9pt"/>
-      <CheckBoxObject Name="CheckBox32" Left="596.35" Top="398.8" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue"/>
+      <CheckBoxObject Name="CheckBox32" Left="596.35" Top="398.8" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMIntakeConsentForRelease.InForm_AllofTheAbove"/>
       <TextObject Name="Text335" Left="608.8" Top="395.8" Width="122.85" Height="18.9" Text="All of the above" VertAlign="Center" Font="Arial, 9pt"/>
       <TextObject Name="Text336" Top="414.7" Width="113.4" Height="18.9" Text="For the purpose of:" VertAlign="Center" Font="Arial, 9pt"/>
       <CheckBoxObject Name="CheckBox33" Left="124.3" Top="417.7" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMIntakeConsentForRelease.ForPurpose_Treatment"/>
@@ -254,7 +256,7 @@
       <TextObject Name="Text338" Left="340.2" Top="415.7" Width="122.85" Height="18.9" Text="Case Management" VertAlign="Center" Font="Arial, 9pt"/>
       <CheckBoxObject Name="CheckBox35" Left="470.5" Top="418.7" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMIntakeConsentForRelease.ForPurpose_Other"/>
       <TextObject Name="Text339" Left="482.95" Top="415.7" Width="47.25" Height="18.9" Text="Other:" VertAlign="Center" Font="Arial, 9pt"/>
-      <TextObject Name="Text340" Left="525.2" Top="414.7" Width="251.37" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[TCMIntakeConsentForRelease.ForPurpose_OtherExplain]" VertAlign="Center" Font="Arial, 9pt"/>
+      <TextObject Name="Text340" Left="525.2" Top="414.7" Width="251.37" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" CanGrow="true" Text="[TCMIntakeConsentForRelease.ForPurpose_OtherExplain]" VertAlign="Center" Font="Arial, 9pt"/>
       <TextObject Name="Text341" Top="436.05" Width="349.65" Height="18.9" Text="I understand that the specific reports disclosed might include:" VertAlign="Center" Font="Arial, 9pt"/>
       <CheckBoxObject Name="CheckBox36" Left="5" Top="461.95" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMIntakeConsentForRelease.Discharge"/>
       <TextObject Name="Text342" Left="17.45" Top="458.95" Width="198.45" Height="18.9" Text="Discharge/Termination summary " VertAlign="Center" Font="Arial, 9pt"/>
@@ -275,7 +277,7 @@
       <CheckBoxObject Name="CheckBox44" Left="4.91" Top="505.75" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMIntakeConsentForRelease.Other"/>
       <TextObject Name="Text350" Left="17.39" Top="502.75" Width="122.85" Height="18.9" Text="Other (explain)" VertAlign="Center" Font="Arial, 9pt"/>
       <TextObject Name="Text351" Left="106.4" Top="502.2" Width="669.82" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" CanGrow="true" Text="[TCMIntakeConsentForRelease.Other_Explain]" VertAlign="Center" Font="Arial, 9pt"/>
-      <TextObject Name="Text48" Top="572.9" Width="780.57" Height="124.74" Text="I understand this consent is revocable upon written notice to &lt;b&gt;&lt;u&gt;[Clinics.Name]&lt;/u&gt;&lt;/b&gt; except to the extent that action by &lt;b&gt;&lt;u&gt;[Clinics.Name]&lt;/u&gt;&lt;/b&gt; has been taken in reliance on this authorization and that this authorization shall remain in force for a twelve month period in order to effect the purpose for which it is given, unless resolved by recipient or legal representative, as above. &#13;&#10;&#13;&#10;Alcohol and drug abuse information if present may be disclosed from records whose confidentiality is protected by Federal regulations (42 CFR, Part II) prohibit making any further disclosure of records without the specific written authorization of the recipient or legal representative, or as otherwise permitted by such regulations. This information may not be used to criminally prosecute the recipient. " HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text48" Top="572.9" Width="780.57" Height="124.74" Text="I understand this consent is revocable upon written notice to &lt;b&gt;&lt;u&gt;[Clients.Name]&lt;/u&gt;&lt;/b&gt; except to the extent that action by &lt;b&gt;&lt;u&gt;[Clinics.Name]&lt;/u&gt;&lt;/b&gt; has been taken in reliance on this authorization and that this authorization shall remain in force for a twelve month period in order to effect the purpose for which it is given, unless resolved by recipient or legal representative, as above. &#13;&#10;&#13;&#10;Alcohol and drug abuse information if present may be disclosed from records whose confidentiality is protected by Federal regulations (42 CFR, Part II) prohibit making any further disclosure of records without the specific written authorization of the recipient or legal representative, or as otherwise permitted by such regulations. This information may not be used to criminally prosecute the recipient. " HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
       <TextObject Name="Text352" Top="524.2" Width="141.75" Height="18.9" Text="Other purpose request:" VertAlign="Center" Font="Arial, 9pt"/>
       <TextObject Name="Text353" Top="545.1" Width="179.55" Height="18.9" Text="Other authorized information:" VertAlign="Center" Font="Arial, 9pt"/>
       <TextObject Name="Text354" Left="135.2" Top="523.75" Width="641.47" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" CanGrow="true" Text="[TCMIntakeConsentForRelease.OtherPurposeRequest]" VertAlign="Center" Font="Arial, 9pt"/>
@@ -362,11 +364,11 @@
       <TextObject Name="Text72" Left="117.85" Top="394.8" Width="122.85" Height="18.9" Text="Información verbal" VertAlign="Center" Font="Arial, 9pt"/>
       <CheckBoxObject Name="CheckBox3" Left="241.7" Top="398.8" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMIntakeConsentForRelease.InForm_Facsimile"/>
       <TextObject Name="Text73" Left="254.15" Top="395.8" Width="66.15" Height="18.9" Text="Facsimil" VertAlign="Center" Font="Arial, 9pt"/>
-      <CheckBoxObject Name="CheckBox4" Left="318.75" Top="398.8" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue"/>
+      <CheckBoxObject Name="CheckBox4" Left="318.75" Top="398.8" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMIntakeConsentForRelease.InForm_Electronic"/>
       <TextObject Name="Text74" Left="331.2" Top="395.8" Width="132.3" Height="18.9" Text="Registros Electrónicos" VertAlign="Center" Font="Arial, 9pt"/>
       <CheckBoxObject Name="CheckBox5" Left="470.5" Top="399.8" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMIntakeConsentForRelease.InForm_WrittenRecords"/>
       <TextObject Name="Text75" Left="482.95" Top="396.8" Width="122.85" Height="18.9" Text="Registros Escritos" VertAlign="Center" Font="Arial, 9pt"/>
-      <CheckBoxObject Name="CheckBox6" Left="596.35" Top="399.8" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue"/>
+      <CheckBoxObject Name="CheckBox6" Left="596.35" Top="399.8" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMIntakeConsentForRelease.InForm_AllofTheAbove"/>
       <TextObject Name="Text76" Left="608.8" Top="396.8" Width="122.85" Height="18.9" Text="Todas las anteriores" VertAlign="Center" Font="Arial, 9pt"/>
       <TextObject Name="Text77" Top="415.7" Width="132.3" Height="18.9" Text="Para el propósito de:" VertAlign="Center" Font="Arial, 9pt"/>
       <CheckBoxObject Name="CheckBox7" Left="133.75" Top="418.7" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMIntakeConsentForRelease.ForPurpose_Treatment"/>
@@ -396,7 +398,7 @@
       <CheckBoxObject Name="CheckBox18" Left="4.91" Top="506.75" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMIntakeConsentForRelease.Other"/>
       <TextObject Name="Text91" Left="17.39" Top="503.75" Width="94.5" Height="18.9" Text="Otro (explicar)" VertAlign="Center" Font="Arial, 9pt"/>
       <TextObject Name="Text92" Left="107.85" Top="503.2" Width="669.06" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" CanGrow="true" Text="[TCMIntakeConsentForRelease.Other_Explain]" VertAlign="Center" Font="Arial, 9pt"/>
-      <TextObject Name="Text93" Top="573.05" Width="780.57" Height="132.3" Text="Entiendo que este consentimiento es revocable mediante notificación por escrito a &lt;b&gt;&lt;u&gt;[Clinics.Name]&lt;/u&gt;&lt;/b&gt; excepto cuando ya la acción ha sido tomada por &lt;b&gt;&lt;u&gt;[Clinics.Name]&lt;/u&gt;&lt;/b&gt; al amparo de esta autorización y que esta autorización permanecerá en vigor por un período de doce meses para efectuar el propósito para el cual ha sido emitida, al menos que sea resuelto por el cliente o representante legal, como lo anterior. &#13;&#10;Información sobre el abuso de alcohol y drogas, si está presente, puede divulgarse de registros cuya confidencialidad está protegida por las regulaciones federales (42 CFR, parte II), que prohíben hacer cualquier divulgación posterior de registros sin la específica autorización por escrito del cliente o representante legal, o de lo contrario, como sea permitido por los reglamentos. Esta información no puede utilizarse para procesar penalmente al cliente. " HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text93" Top="573.05" Width="780.57" Height="132.3" Text="Entiendo que este consentimiento es revocable mediante notificación por escrito a &lt;b&gt;&lt;u&gt;[Clients.Name]&lt;/u&gt;&lt;/b&gt; excepto cuando ya la acción ha sido tomada por &lt;b&gt;&lt;u&gt;[Clinics.Name]&lt;/u&gt;&lt;/b&gt; al amparo de esta autorización y que esta autorización permanecerá en vigor por un período de doce meses para efectuar el propósito para el cual ha sido emitida, al menos que sea resuelto por el cliente o representante legal, como lo anterior. &#13;&#10;Información sobre el abuso de alcohol y drogas, si está presente, puede divulgarse de registros cuya confidencialidad está protegida por las regulaciones federales (42 CFR, parte II), que prohíben hacer cualquier divulgación posterior de registros sin la específica autorización por escrito del cliente o representante legal, o de lo contrario, como sea permitido por los reglamentos. Esta información no puede utilizarse para procesar penalmente al cliente. " HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
       <TextObject Name="Text356" Top="525.2" Width="160.65" Height="18.9" Text="Otro propósito de solicitud:" VertAlign="Center" Font="Arial, 9pt"/>
       <TextObject Name="Text357" Top="546.1" Width="179.55" Height="18.9" Text="Otra información autorizada:" VertAlign="Center" Font="Arial, 9pt"/>
       <TextObject Name="Text358" Left="154.1" Top="524.75" Width="622.57" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" CanGrow="true" Text="[TCMIntakeConsentForRelease.OtherPurposeRequest]" VertAlign="Center" Font="Arial, 9pt"/>

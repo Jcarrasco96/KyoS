@@ -28411,6 +28411,8 @@ namespace KyoS.Web.Helpers
             dt.Columns.Add("InForm_VerbalInformation", typeof(bool));
             dt.Columns.Add("InForm_Facsimile", typeof(bool));
             dt.Columns.Add("InForm_WrittenRecords", typeof(bool));
+            dt.Columns.Add("InForm_Electronic", typeof(bool));
+            dt.Columns.Add("InForm_AllofTheAbove", typeof(bool));            
             dt.Columns.Add("ForPurpose_Treatment", typeof(bool));
             dt.Columns.Add("ForPurpose_CaseManagement", typeof(bool));
             dt.Columns.Add("ForPurpose_Other", typeof(bool));
@@ -28453,6 +28455,8 @@ namespace KyoS.Web.Helpers
                                             intakeConsentForRelease.InForm_VerbalInformation,
                                             intakeConsentForRelease.InForm_Facsimile,
                                             intakeConsentForRelease.InForm_WrittenRecords,
+                                            intakeConsentForRelease.InForm_Electronic,
+                                            intakeConsentForRelease.InForm_AllofTheAbove,
                                             intakeConsentForRelease.ForPurpose_Treatment,
                                             intakeConsentForRelease.ForPurpose_CaseManagement,
                                             intakeConsentForRelease.ForPurpose_Other,
@@ -28492,6 +28496,8 @@ namespace KyoS.Web.Helpers
                                             new DateTime(),
                                             new DateTime(),
                                             string.Empty,
+                                            false,
+                                            false,
                                             false,
                                             false,
                                             false,
