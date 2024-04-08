@@ -83,5 +83,7 @@ namespace KyoS.Web.Data.Entities
 
         [Display(Name = "Bill code of TCM")]
         public string CPTCode_TCM { get; set; }
+
+        public string Initials { get; set; }
     }
 }

@@ -4958,8 +4958,17 @@ namespace KyoS.Web.Controllers
                                                 .ThenInclude(n => n.LegalGuardian)
                                                 .Include(n => n.Client)
                                                 .ThenInclude(n => n.EmergencyContact)
+                                                .Include(n => n.Client)
+                                                .ThenInclude(n => n.Clients_HealthInsurances)
+
                                                 .FirstOrDefault(n => n.Id == id);
 
+            string idHealthInsurance = string.Empty;
+            if(tcmClient.Client.Clients_HealthInsurances.Count() > 0)
+            {
+                idHealthInsurance = tcmClient.Client.Clients_HealthInsurances.FirstOrDefault(n => n.Active == true).MemberId.ToString();
+            }
+            
             if (User.IsInRole("CaseManager"))
             {
                 if (user_logged.Clinic != null)
@@ -4977,14 +4986,14 @@ namespace KyoS.Web.Controllers
                             AdmissionedFor = user_logged.FullName,
                             DateSignatureEmployee = tcmClient.DataOpen,
                             DateSignatureLegalGuardianOrClient = tcmClient.DataOpen,
-                            HealthPlan = string.Empty,
+                            HealthPlan = idHealthInsurance,
                             Id_DriverLicense = string.Empty,
-                            MedicaidId = string.Empty,
-                            MedicareCard = string.Empty,
+                            MedicaidId = tcmClient.Client.MedicaidID,
+                            MedicareCard = tcmClient.Client.MedicareId,
                             Other_Identification = string.Empty,
                             Other_Name = string.Empty,
                             Passport_Resident = string.Empty,
-                            Social = string.Empty
+                            Social = tcmClient.Client.SSN
 
                         };
                         if (model.TcmClient.Client.LegalGuardian == null)
