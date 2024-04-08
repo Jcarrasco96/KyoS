@@ -1025,7 +1025,6 @@ namespace KyoS.Web.Controllers
                         StartDate = tcmdomain.TcmServicePlan.DateServicePlan,
                         TargetDate = tcmdomain.TcmServicePlan.DateServicePlan.AddMonths(tcmdomain.TcmServicePlan.TcmClient.Period),
                         //EndDate = DateTime.Today.Date,
-                        task = "es para que veas el problema del textarea",
                         Origi = Origin,
                         Origin = ""
                     };
@@ -1111,15 +1110,14 @@ namespace KyoS.Web.Controllers
                 }
                 
                 TCMDomainEntity tcmdomain = await _context.TCMDomains
-                                                              
-                                                            .Include(g => g.TCMObjetive)
-                                                              
-                                                            .Include(g => g.TcmServicePlan)
-                                                              
-                                                            .FirstOrDefaultAsync(m => m.Id == tcmObjetiveViewModel.Id_Domain);
+                                                          .Include(g => g.TCMObjetive)
+                                                          .Include(g => g.TcmServicePlan)
+                                                          .FirstOrDefaultAsync(m => m.Id == tcmObjetiveViewModel.Id_Domain);
+
                 tcmObjetiveViewModel.TcmDomain = tcmdomain;
                 tcmObjetiveViewModel.Id_Stage = 0;
                 tcmObjetiveViewModel.Stages = _combosHelper.GetComboStagesNotUsed(tcmdomain);
+                                
                 ViewData["origin"] = Origin;
                 return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateObjetive", tcmObjetiveViewModel) });                
             }
