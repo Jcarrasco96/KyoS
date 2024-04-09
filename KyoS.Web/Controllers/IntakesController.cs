@@ -2138,6 +2138,7 @@ namespace KyoS.Web.Controllers
                                                       .Include(n => n.IntakeAdvancedDirective)
                                                       .Include(n => n.IntakeClientIdDocumentVerification)
                                                       .Include(n => n.IntakeForeignLanguage)
+                                                      .Include(n => n.IntakeNoHarm)
 
                                                       .FirstOrDefaultAsync(c => c.Id == id);
             if (clientEntity == null)
@@ -2271,6 +2272,7 @@ namespace KyoS.Web.Controllers
                                                       .Include(c => c.IntakeTuberculosis)
                                                       .Include(c => c.IntakeMedicalHistory)
                                                       .Include(c => c.Clinic)
+                                                      .Include(c => c.IntakeNoHarm)
 
                                                       .FirstOrDefaultAsync(c => c.Id == id);
             if (clientEntity == null)
@@ -3242,6 +3244,102 @@ namespace KyoS.Web.Controllers
             IntakeViewModel.Client = _context.Clients.Find(IntakeViewModel.Id);
 
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateForeignLanguage", IntakeViewModel) });
+        }
+
+        [Authorize(Roles = "Manager, Frontdesk, Documents_Assistant")]
+        public IActionResult CreateIntakeNoHarm(int id = 0)
+        {
+
+            UserEntity user_logged = _context.Users
+                                                 .Include(u => u.Clinic)
+                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            IntakeNoHarmViewModel model;
+            ClientEntity client = _context.Clients.Include(n => n.LegalGuardian).FirstOrDefault(n => n.Id == id);
+
+            if (User.IsInRole("Manager") || User.IsInRole("Frontdesk") || User.IsInRole("Documents_Assistant"))
+            {
+                if (user_logged.Clinic != null)
+                {
+                    IntakeNoHarmEntity intakeNoHarm = _context.IntakeNoHarm
+                                                              .FirstOrDefault(n => n.Client.Id == id);
+                    if (intakeNoHarm == null)
+                    {
+                        model = new IntakeNoHarmViewModel
+                        {
+                            Client = client,
+                            IdClient = id,
+                            Client_FK = id,
+                            Id = 0,
+                            Documents = true,
+                            DateSignatureEmployee = client.AdmisionDate,
+                            DateSignaturePerson = client.AdmisionDate,
+                            AdmissionedFor = user_logged.FullName,
+
+                        };
+
+                      
+                        return View(model);
+                    }
+                    else
+                    {
+                        model = _converterHelper.ToIntakeNoHarmViewModel(intakeNoHarm);
+
+                        return View(model);
+                    }
+
+                }
+            }
+
+            return RedirectToAction("Index", "Intakes");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Manager, Frontdesk, Documents_Assistant")]
+        public async Task<IActionResult> CreateIntakeNoHarm(IntakeNoHarmViewModel IntakeViewModel)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (ModelState.IsValid)
+            {
+                IntakeNoHarmEntity IntakeNoHarmEntity = _converterHelper.ToIntakeNoHarmEntity(IntakeViewModel, false);
+
+                if (IntakeNoHarmEntity.Id == 0)
+                {
+                    IntakeNoHarmEntity.Client = null;
+                    _context.IntakeNoHarm.Add(IntakeNoHarmEntity);
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+                        return RedirectToAction("IntakeDashboard", new { id = IntakeViewModel.IdClient });
+                    }
+                    catch (System.Exception ex)
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+                else
+                {
+                    IntakeNoHarmEntity.Client = null;
+                    _context.IntakeNoHarm.Update(IntakeNoHarmEntity);
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+                        return RedirectToAction("IntakeDashboard", new { id = IntakeViewModel.IdClient });
+                    }
+                    catch (System.Exception ex)
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+            }
+            //Preparing Data
+            IntakeViewModel.Client = _context.Clients.Find(IntakeViewModel.Id);
+
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateIntakeNoHarm", IntakeViewModel) });
         }
 
     }

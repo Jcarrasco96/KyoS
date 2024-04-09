@@ -226,8 +226,23 @@
                 </a>
             }
         </div>
-        <div class="col-sm-3 col-md-1">
-            &nbsp;
+        <div class="col-sm-3 col-md-2">
+            @if (Model.IntakeNoHarm == null)
+            {
+                <a style="text-decoration: none;" asp-route-id="@Model.Id" role="button">
+                    <div class="thumbnail list-group-item list-group-item-text">
+                        <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>No Harm <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Contract</h4>
+                    </div>
+                </a>
+            }
+            else
+            {
+                <a style="text-decoration: none;" asp-route-id="@Model.Id" role="button">
+                    <div class="thumbnail list-group-item list-group-item-success">
+                        <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>No Harm<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Contract</h4>
+                    </div>
+                </a>
+            }
         </div>
        
     </div>

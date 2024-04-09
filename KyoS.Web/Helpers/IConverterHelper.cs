@@ -256,5 +256,7 @@ namespace KyoS.Web.Helpers
         TCMIntakeMedicalHistoryViewModel ToTCMIntakeMedicalHistoryViewModel(TCMIntakeMedicalHistoryEntity model);
         Workday_Activity_Facilitator ToWorkdayActivityFacilitatorEntity(Workday_Activity_FacilitatorSkillViewModel model);
         Workday_Activity_FacilitatorSkillViewModel ToWorkdayActivityFacilitatorViewModel(Workday_Activity_Facilitator model);
+        IntakeNoHarmEntity ToIntakeNoHarmEntity(IntakeNoHarmViewModel model, bool isNew);
+        IntakeNoHarmViewModel ToIntakeNoHarmViewModel(IntakeNoHarmEntity model);
     }
 }

@@ -231,9 +231,6 @@
         <div class="col-md-12">
             &nbsp;
         </div>
-        <div class="col-sm-3 col-md-1">
-            &nbsp;
-        </div>
         <div class="col-sm-3 col-md-2">
             @if (Model.IntakeClientIdDocumentVerification == null)
             {
@@ -339,8 +336,26 @@
                 </div>
             }
         </div>
-        <div class="col-sm-3 col-md-1">
-            &nbsp;
+        <div class="col-sm-3 col-md-2">
+            @if (Model.IntakeNoHarm == null)
+            {
+                <a style="text-decoration: none;" asp-action="CreateIntakeNoHarm" asp-route-id="@Model.Id" role="button">
+                    <div class="thumbnail list-group-item list-group-item-text">
+                        <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>No <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Harm</h4>
+                    </div>
+                </a>
+            }
+            else
+            {
+                <div class="thumbnail list-group-item list-group-item-success">
+                    <a style="text-decoration: none;" asp-action="CreateIntakeNoHarm" asp-route-id="@Model.Id" role="button">
+                        <h4 style="align-content: end; color: #3c763d"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>No <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Harm</h4>
+                    </a>
+                    <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-action="PrintNoHarm" role="button" title="Print Advanced Directive" target="_blank">
+                        <i class="glyphicon glyphicon-print" style="position: absolute; right: 12px; top: 12px; color: #3c763d;"></i>
+                    </a>
+                </div>
+            }
         </div>
     </div>
 </div>
