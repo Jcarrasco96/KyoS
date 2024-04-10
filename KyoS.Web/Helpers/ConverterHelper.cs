@@ -337,7 +337,8 @@ namespace KyoS.Web.Helpers
             UserEntity user_logged = await _context.Users
                                                    .Include(u => u.Clinic)
                                                    .FirstOrDefaultAsync(u => u.Id == userId);
-
+            TCMClientEntity tcmclient = _context.TCMClient.FirstOrDefault(n => n.Client.Id == clientEntity.Id);
+            
             return new ClientViewModel
             {
                 Id = clientEntity.Id,
@@ -418,7 +419,7 @@ namespace KyoS.Web.Helpers
                 IdDocumentsAssistant = (clientEntity.DocumentsAssistant != null) ? clientEntity.DocumentsAssistant.Id : 0,
                 DocumentsAssistant = clientEntity.DocumentsAssistant,
                 DocumentsAssistants = _combosHelper.GetComboDocumentsAssistantByClinic(user_logged.Clinic.Id,false,false),
-                IdTCMClient = _context.TCMClient.FirstOrDefault(n => n.Client.Id == clientEntity.Id).Id
+                IdTCMClient = (tcmclient != null)? tcmclient.Id : 0 
 
             };
         }
