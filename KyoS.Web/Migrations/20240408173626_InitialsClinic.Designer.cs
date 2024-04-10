@@ -4,6 +4,7 @@ using KyoS.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KyoS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20240408173626_InitialsClinic")]
+    partial class InitialsClinic
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -5394,37 +5397,6 @@ namespace KyoS.Web.Migrations
                         .IsUnique();
 
                     b.ToTable("IntakeNoDuplicateService");
-                });
-
-            modelBuilder.Entity("KyoS.Web.Data.Entities.IntakeNoHarmEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("AdmissionedFor")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Client_FK")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("DateSignatureEmployee")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DateSignaturePerson")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("Documents")
-                        .HasColumnType("bit");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Client_FK")
-                        .IsUnique();
-
-                    b.ToTable("IntakeNoHarm");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.IntakeOrientationChecklistEntity", b =>
@@ -15312,17 +15284,6 @@ namespace KyoS.Web.Migrations
                     b.Navigation("Client");
                 });
 
-            modelBuilder.Entity("KyoS.Web.Data.Entities.IntakeNoHarmEntity", b =>
-                {
-                    b.HasOne("KyoS.Web.Data.Entities.ClientEntity", "Client")
-                        .WithOne("IntakeNoHarm")
-                        .HasForeignKey("KyoS.Web.Data.Entities.IntakeNoHarmEntity", "Client_FK")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Client");
-                });
-
             modelBuilder.Entity("KyoS.Web.Data.Entities.IntakeOrientationChecklistEntity", b =>
                 {
                     b.HasOne("KyoS.Web.Data.Entities.ClientEntity", "Client")
@@ -16754,8 +16715,6 @@ namespace KyoS.Web.Migrations
                     b.Navigation("IntakeMedicalHistory");
 
                     b.Navigation("IntakeNoDuplicateService");
-
-                    b.Navigation("IntakeNoHarm");
 
                     b.Navigation("IntakeOrientationChecklist");
 

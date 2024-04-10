@@ -14,6 +14,10 @@
         <select asp-for="IdRelationship" asp-items="Model.Relationships" class="form-control" id="cbRLG"></select>
         <span asp-validation-for="IdRelationship" class="text-danger"></span>
     </div>
+    <div class="form-group col-md-1">
+        </br>
+        <a onclick="showInPopup('@Url.Action("DetailsLG", "Clients", new {id = Model.IdLegalGuardian}, Context.Request.Scheme)','Details Legal Guardian')" class="btn btn-info" title="Detail Legal Guardian"><i class="glyphicon glyphicon-th-list"></i></a>
+    </div>
 </div>
 <div class="col-md-12">
     <hr />

@@ -1,5 +1,6 @@
 ﻿using DocumentFormat.OpenXml.Drawing.Charts;
 using DocumentFormat.OpenXml.Office2010.Excel;
+using DocumentFormat.OpenXml.Office2016.Excel;
 using KyoS.Common.Enums;
 using KyoS.Web.Data;
 using KyoS.Web.Data.Entities;
@@ -572,7 +573,16 @@ namespace KyoS.Web.Controllers
                     TCMClientEntity tcmclient = _context.TCMClient
                                                         .Include(n => n.Client)
                                                         .ThenInclude(n => n.MedicationList)
+                                                        .Include(n => n.Client)
+                                                        .ThenInclude(n => n.Doctor)
+                                                        .Include(n => n.Client)
+                                                        .ThenInclude(n => n.Psychiatrist)
+                                                        .Include(n => n.Client)
+                                                        .ThenInclude(n => n.EmergencyContact)
+                                                        .Include(n => n.Client)
+                                                        .ThenInclude(n => n.IndividualTherapyFacilitator)
                                                         .FirstOrDefault(n => n.Id == tcmAssessmentViewModel.TcmClient_FK);
+
                     tcmAssessmentEntity.MedicationList = new List<TCMAssessmentMedicationEntity>();
                     foreach (var item in tcmclient.Client.MedicationList)
                     {
@@ -588,6 +598,181 @@ namespace KyoS.Web.Controllers
                             };
                             tcmAssessmentEntity.MedicationList.Add(medicine);
                         }
+                    }
+
+                    //llenar la tabla IndividualAgency
+                    tcmAssessmentEntity.IndividualAgencyList = new List<TCMAssessmentIndividualAgencyEntity>();
+                    if (tcmclient.Client.Doctor != null)
+                    {
+                        TCMAssessmentIndividualAgencyEntity indAgency = new TCMAssessmentIndividualAgencyEntity()
+                        {
+                            Name = tcmclient.Client.Doctor.Name,
+                            Agency = user_logged.Clinic.Initials,
+                            RelationShip = "PCP",
+                            CreatedBy = user_logged.UserName,
+                            CreatedOn = DateTime.Now                            
+                        };
+                        tcmAssessmentEntity.IndividualAgencyList.Add(indAgency);
+                    }
+                   
+                    if (tcmclient.Client.Psychiatrist != null)
+                    {
+                        TCMAssessmentIndividualAgencyEntity indAgency = new TCMAssessmentIndividualAgencyEntity()
+                        {
+                            Name = tcmclient.Client.Psychiatrist.Name,
+                            Agency = user_logged.Clinic.Initials,
+                            RelationShip = "PSY",
+                            CreatedBy = user_logged.UserName,
+                            CreatedOn = DateTime.Now
+                        };
+                        tcmAssessmentEntity.IndividualAgencyList.Add(indAgency);
+                    }
+
+                    if (tcmclient.Client.EmergencyContact != null)
+                    {
+                        TCMAssessmentIndividualAgencyEntity indAgency = new TCMAssessmentIndividualAgencyEntity()
+                        {
+                            Name = tcmclient.Client.EmergencyContact.Name,
+                            Agency = user_logged.Clinic.Initials,
+                            RelationShip = RelationshipUtils.GetRelationshipByIndex(Convert.ToInt32(tcmAssessmentEntity.TcmClient.Client.RelationShipOfEmergencyContact)).ToString(),
+                            CreatedBy = user_logged.UserName,
+                            CreatedOn = DateTime.Now
+                        };
+                        tcmAssessmentEntity.IndividualAgencyList.Add(indAgency);
+                    }
+
+                    if (tcmclient.Client.IndividualTherapyFacilitator != null)
+                    {
+                        TCMAssessmentIndividualAgencyEntity indAgency = new TCMAssessmentIndividualAgencyEntity()
+                        {
+                            Name = tcmclient.Client.IndividualTherapyFacilitator.Name,
+                            Agency = user_logged.Clinic.Initials,
+                            RelationShip = "Indivicual Therapist",
+                            CreatedBy = user_logged.UserName,
+                            CreatedOn = DateTime.Now
+                        };
+                        tcmAssessmentEntity.IndividualAgencyList.Add(indAgency);
+                    }
+
+                    if (tcmclient.Client.IdFacilitatorPSR != 0)
+                    {
+                        TCMAssessmentIndividualAgencyEntity indAgency = new TCMAssessmentIndividualAgencyEntity()
+                        {
+                            Name = _context.Facilitators.Find(tcmclient.Client.IdFacilitatorPSR).Name,
+                            Agency = user_logged.Clinic.Initials,
+                            RelationShip = "PSR Therapist",
+                            CreatedBy = user_logged.UserName,
+                            CreatedOn = DateTime.Now
+                        };
+                        tcmAssessmentEntity.IndividualAgencyList.Add(indAgency);
+                    }
+
+                    if (tcmclient.Client.IdFacilitatorGroup != 0)
+                    {
+                        TCMAssessmentIndividualAgencyEntity indAgency = new TCMAssessmentIndividualAgencyEntity()
+                        {
+                            Name = _context.Facilitators.Find(tcmclient.Client.IdFacilitatorGroup).Name,
+                            Agency = user_logged.Clinic.Name,
+                            RelationShip = "PSR Therapist",
+                            CreatedBy = user_logged.UserName,
+                            CreatedOn = DateTime.Now
+                        };
+                        tcmAssessmentEntity.IndividualAgencyList.Add(indAgency);
+                    }
+
+                    //llenar la tabla Past and current service
+                    tcmAssessmentEntity.PastCurrentServiceList = new List<TCMAssessmentPastCurrentServiceEntity>();
+                    if (tcmclient.Client.MedicareId != null && tcmclient.Client.MedicareId != string.Empty)
+                    {
+                        TCMAssessmentPastCurrentServiceEntity pastCurrent = new TCMAssessmentPastCurrentServiceEntity()
+                        {
+                            TypeService = "MEDICARE",
+                            ProviderAgency = "SSA",
+                            DateReceived = "Update Date",
+                            Efectiveness = EffectivenessType.Effective,
+                            CreatedBy = user_logged.UserName,
+                            CreatedOn = DateTime.Now
+                        };
+                        tcmAssessmentEntity.PastCurrentServiceList.Add(pastCurrent);
+                    }
+                    if (tcmclient.Client.MedicaidID != null && tcmclient.Client.MedicaidID != string.Empty)
+                    {
+                        TCMAssessmentPastCurrentServiceEntity pastCurrent = new TCMAssessmentPastCurrentServiceEntity()
+                        {
+                            TypeService = "MEDICAID",
+                            ProviderAgency = "SSA",
+                            DateReceived = "Update Date",
+                            Efectiveness = EffectivenessType.Effective,
+                            CreatedBy = user_logged.UserName,
+                            CreatedOn = DateTime.Now
+                        };
+                        tcmAssessmentEntity.PastCurrentServiceList.Add(pastCurrent);
+                    }
+                    if (tcmclient.Client.SSN != null && tcmclient.Client.SSN != string.Empty)
+                    {
+                        TCMAssessmentPastCurrentServiceEntity pastCurrent = new TCMAssessmentPastCurrentServiceEntity()
+                        {
+                            TypeService = "SSI",
+                            ProviderAgency = "SSA",
+                            DateReceived = "Update Date",
+                            Efectiveness = EffectivenessType.Effective,
+                            CreatedBy = user_logged.UserName,
+                            CreatedOn = DateTime.Now
+                        };
+                        tcmAssessmentEntity.PastCurrentServiceList.Add(pastCurrent);
+                    }
+                    if (tcmclient != null)
+                    {
+                        TCMAssessmentPastCurrentServiceEntity pastCurrent = new TCMAssessmentPastCurrentServiceEntity()
+                        {
+                            TypeService = "SNAP",
+                            ProviderAgency = "DCF",
+                            DateReceived = "Update Date",
+                            Efectiveness = EffectivenessType.Effective,
+                            CreatedBy = user_logged.UserName,
+                            CreatedOn = DateTime.Now
+                        };
+                        tcmAssessmentEntity.PastCurrentServiceList.Add(pastCurrent);
+                    }
+                    if (tcmclient.Client.Doctor != null)
+                    {
+                        TCMAssessmentPastCurrentServiceEntity pastCurrent = new TCMAssessmentPastCurrentServiceEntity()
+                        {
+                            TypeService = "PCP",
+                            ProviderAgency = user_logged.Clinic.Initials,
+                            DateReceived = "Update Date",
+                            Efectiveness = EffectivenessType.Effective,
+                            CreatedBy = user_logged.UserName,
+                            CreatedOn = DateTime.Now
+                        };
+                        tcmAssessmentEntity.PastCurrentServiceList.Add(pastCurrent);
+                    }
+
+                    if (tcmclient.Client.Psychiatrist != null)
+                    {
+                        TCMAssessmentPastCurrentServiceEntity pastCurrent = new TCMAssessmentPastCurrentServiceEntity()
+                        {
+                            TypeService = "PSY",
+                            ProviderAgency = user_logged.Clinic.Initials,
+                            DateReceived = "Update Date",
+                            Efectiveness = EffectivenessType.Effective,
+                            CreatedBy = user_logged.UserName,
+                            CreatedOn = DateTime.Now
+                        };
+                        tcmAssessmentEntity.PastCurrentServiceList.Add(pastCurrent);
+                    }
+                    if (tcmclient.Client.OnlyTCM == false)
+                    {
+                        TCMAssessmentPastCurrentServiceEntity pastCurrent = new TCMAssessmentPastCurrentServiceEntity()
+                        {
+                            TypeService = "MENTAL HEALTH THERAPY",
+                            ProviderAgency = user_logged.Clinic.Initials,
+                            DateReceived = tcmclient.Client.AdmisionDate.Date.ToShortDateString(),
+                            Efectiveness = EffectivenessType.Effective,
+                            CreatedBy = user_logged.UserName,
+                            CreatedOn = DateTime.Now
+                        };
+                        tcmAssessmentEntity.PastCurrentServiceList.Add(pastCurrent);
                     }
 
                     try
@@ -2648,7 +2833,7 @@ namespace KyoS.Web.Controllers
                         Id = 0,
                         CreatedBy = user_logged.UserName,
                         CreatedOn = DateTime.Now,
-                        Date = DateTime.Now,
+                        Date = string.Empty,
                         Hospital = "",
                         Outcome = "",
                         TypeSurgery = ""
@@ -2670,7 +2855,7 @@ namespace KyoS.Web.Controllers
                 Id = 0,
                 CreatedBy = user_logged.UserName,
                 CreatedOn = DateTime.Now,
-                Date = DateTime.Now,
+                Date = string.Empty,
                 Hospital = "",
                 Outcome = "",
                 TypeSurgery = ""

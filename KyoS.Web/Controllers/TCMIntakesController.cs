@@ -182,7 +182,7 @@ namespace KyoS.Web.Controllers
                         IdEmployedStatus = 0,
                         EmployedStatus = _combosHelper.GetComboEmployed(),
                         Grade = "",
-                        IntakeDate = DateTime.Now,
+                        IntakeDate = tcmClient.DataOpen,
                         IsClientCurrently = false,
                         LTC = false,
                         MMA = false,
@@ -298,7 +298,7 @@ namespace KyoS.Web.Controllers
                 CreatedBy = user_logged.UserName,
                 CreatedOn = DateTime.Now,
                 Grade = "",
-                IntakeDate = DateTime.Now,
+                IntakeDate = tcmClient.DataOpen,
                 IsClientCurrently = false,
                 LTC = false,
                 MMA = false,
@@ -899,10 +899,15 @@ namespace KyoS.Web.Controllers
 
             TCMIntakeConsentForTreatmentViewModel model;
             TCMIntakeConsentForTreatmentEntity intakeConsent = _context.TCMIntakeConsentForTreatment
-                                                                              .Include(n => n.TcmClient)
-                                                                              .ThenInclude(n => n.Client)
-                                                                              .ThenInclude(n => n.LegalGuardian)
-                                                                              .FirstOrDefault(n => n.TcmClient.Id == id);
+                                                                       .Include(n => n.TcmClient)
+                                                                       .ThenInclude(n => n.Client)
+                                                                       .ThenInclude(n => n.LegalGuardian)
+                                                                       .FirstOrDefault(n => n.TcmClient.Id == id);
+
+            TCMClientEntity tcmClient = _context.TCMClient
+                                                .Include(d => d.Client)
+                                                .ThenInclude(d => d.LegalGuardian)
+                                                .FirstOrDefault(n => n.Id == id);
 
             if (User.IsInRole("CaseManager"))
             {
@@ -913,10 +918,7 @@ namespace KyoS.Web.Controllers
                     {
                         model = new TCMIntakeConsentForTreatmentViewModel
                         {
-                            TcmClient = _context.TCMClient
-                                                .Include(d => d.Client)
-                                                .ThenInclude(d => d.LegalGuardian)
-                                                .FirstOrDefault(n => n.Id == id),
+                            TcmClient = tcmClient,
                             CreatedBy = user_logged.UserName,
                             CreatedOn = DateTime.Now,
                             Aggre = true,
@@ -925,9 +927,9 @@ namespace KyoS.Web.Controllers
                             AuthorizeStaff = true,
                             Certify = false,
                             Certify1 = true,
-                            DateSignatureEmployee = DateTime.Now,
-                            DateSignatureLegalGuardian = DateTime.Now,
-                            DateSignaturePerson = DateTime.Now,
+                            DateSignatureEmployee = tcmClient.DataOpen,
+                            DateSignatureLegalGuardian = tcmClient.DataOpen,
+                            DateSignaturePerson = tcmClient.DataOpen,
                             Documents = true,
                             Id = 0,
                             Underestand = true,
@@ -1030,17 +1032,17 @@ namespace KyoS.Web.Controllers
                                                  .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
             TCMIntakeConsentForReleaseViewModel model;
-
+            TCMClientEntity tcmClient = _context.TCMClient
+                                                .Include(n => n.Client)
+                                                .ThenInclude(n => n.LegalGuardian)
+                                                .FirstOrDefault(n => n.Id == id);
             if (User.IsInRole("CaseManager"))
             {
                 if (user_logged.Clinic != null)
                 {
                     model = new TCMIntakeConsentForReleaseViewModel
                     {
-                        TcmClient = _context.TCMClient
-                                            .Include(n => n.Client)
-                                            .ThenInclude(n => n.LegalGuardian)
-                                            .FirstOrDefault(n => n.Id == id),
+                        TcmClient = tcmClient,
                         IdTCMClient = id,
                         CreatedBy = user_logged.UserName,
                         CreatedOn = DateTime.Now,
@@ -1065,9 +1067,9 @@ namespace KyoS.Web.Controllers
                         Other = false,
                         Other_Explain = "",
                         Documents = true,
-                        DateSignatureEmployee = DateTime.Now,
-                        DateSignatureLegalGuardian = DateTime.Now,
-                        DateSignaturePerson = DateTime.Now,
+                        DateSignatureEmployee = tcmClient.DataOpen,
+                        DateSignatureLegalGuardian = tcmClient.DataOpen,
+                        DateSignaturePerson = tcmClient.DataOpen,
                         AdmissionedFor = user_logged.FullName,
                         NameOfFacility = "",
                         Address = "",
@@ -1151,10 +1153,16 @@ namespace KyoS.Web.Controllers
 
             TCMIntakeConsumerRightsViewModel model;
             TCMIntakeConsumerRightsEntity intakeConsent = _context.TCMIntakeConsumerRights
-                                                                          .Include(n => n.TcmClient)
-                                                                          .ThenInclude(n => n.Client)
-                                                                          .ThenInclude(n => n.LegalGuardian)
-                                                                          .FirstOrDefault(n => n.TcmClient.Id == id);
+                                                                  .Include(n => n.TcmClient)
+                                                                  .ThenInclude(n => n.Client)
+                                                                  .ThenInclude(n => n.LegalGuardian)
+                                                                  .FirstOrDefault(n => n.TcmClient.Id == id);
+
+            TCMClientEntity tcmClient = _context.TCMClient
+                                                .Include(n => n.Client)
+                                                .ThenInclude(n => n.LegalGuardian)
+                                                .FirstOrDefault(n => n.Id == id);
+
             if (User.IsInRole("CaseManager"))
             {
                 if (user_logged.Clinic != null)
@@ -1164,10 +1172,7 @@ namespace KyoS.Web.Controllers
                     {
                         model = new TCMIntakeConsumerRightsViewModel
                         {
-                            TcmClient = _context.TCMClient
-                                                .Include(n => n.Client)
-                                                .ThenInclude(n => n.LegalGuardian)
-                                                .FirstOrDefault(n => n.Id == id),
+                            TcmClient = tcmClient,
                             CreatedBy = user_logged.UserName,
                             CreatedOn = DateTime.Now,
                             IdTCMClient = id,
@@ -1175,9 +1180,9 @@ namespace KyoS.Web.Controllers
                             Id = 0,
                             ServedOf = user_logged.FullName,
                             Documents = true,
-                            DateSignatureEmployee = DateTime.Now,
-                            DateSignatureLegalGuardian = DateTime.Now,
-                            DateSignaturePerson = DateTime.Now,
+                            DateSignatureEmployee = tcmClient.DataOpen,
+                            DateSignatureLegalGuardian = tcmClient.DataOpen,
+                            DateSignaturePerson = tcmClient.DataOpen,
                             AdmissionedFor = user_logged.FullName
 
                         };
@@ -1275,6 +1280,12 @@ namespace KyoS.Web.Controllers
                                                                             .ThenInclude(n => n.Client)
                                                                             .ThenInclude(n => n.LegalGuardian)
                                                                             .FirstOrDefault(n => n.TcmClient.Id == id);
+
+            TCMClientEntity tcmClient = _context.TCMClient
+                                                .Include(d => d.Client)
+                                                .ThenInclude(d => d.LegalGuardian)
+                                                .FirstOrDefault(n => n.Id == id);
+
             if (User.IsInRole("CaseManager"))
             {
                 if (user_logged.Clinic != null)
@@ -1284,13 +1295,10 @@ namespace KyoS.Web.Controllers
 
                         model = new TCMIntakeAcknoewledgementHippaViewModel
                         {
-                            TcmClient = _context.TCMClient
-                                                .Include(d => d.Client)
-                                                .ThenInclude(d => d.LegalGuardian)
-                                                .FirstOrDefault(n => n.Id == id),
-                            DateSignatureEmployee = DateTime.Now,
-                            DateSignatureLegalGuardian = DateTime.Now,
-                            DateSignaturePerson = DateTime.Now,
+                            TcmClient = tcmClient,
+                            DateSignatureEmployee = tcmClient.DataOpen,
+                            DateSignatureLegalGuardian = tcmClient.DataOpen,
+                            DateSignaturePerson = tcmClient.DataOpen,
                             Documents = true,
                             Id = 0,
                             CreatedBy = user_logged.UserName,
@@ -1395,6 +1403,12 @@ namespace KyoS.Web.Controllers
                                                                           .ThenInclude(n => n.LegalGuardian)
                                                                           .FirstOrDefault(n => n.TcmClient.Id == id);
 
+            TCMClientEntity tcmClient = _context.TCMClient
+                                                .Include(n => n.Client)
+                                                .ThenInclude(n => n.LegalGuardian)
+                                                .FirstOrDefault(n => n.Id == id);
+
+
             if (User.IsInRole("CaseManager"))
             {
                 if (user_logged.Clinic != null)
@@ -1403,18 +1417,15 @@ namespace KyoS.Web.Controllers
                     {
                         model = new TCMIntakeOrientationCheckListViewModel
                         {
-                            TcmClient = _context.TCMClient
-                                                .Include(n => n.Client)
-                                                .ThenInclude(n => n.LegalGuardian)
-                                                .FirstOrDefault(n => n.Id == id),
+                            TcmClient = tcmClient,
                             IdTcmClient = id,
                             CreatedBy = user_logged.UserName,
                             CreatedOn = DateTime.Now,
                             TcmClient_FK = id,
                             Id = 0,
-                            DateSignatureEmployee = DateTime.Now,
-                            DateSignatureLegalGuardian = DateTime.Now,
-                            DateSignaturePerson = DateTime.Now,
+                            DateSignatureEmployee = tcmClient.DataOpen,
+                            DateSignatureLegalGuardian = tcmClient.DataOpen,
+                            DateSignaturePerson = tcmClient.DataOpen,
                             Access = true,
                             AgencyExpectation = true,
                             AgencyPolice = true,
@@ -1536,6 +1547,13 @@ namespace KyoS.Web.Controllers
                                                                          .Include(n => n.TcmClient.Client.EmergencyContact)
                                                                          .FirstOrDefault(n => n.TcmClient.Id == id);
 
+            TCMClientEntity tcmClient = _context.TCMClient
+                                                .Include(n => n.Client)
+                                                .ThenInclude(n => n.LegalGuardian)
+                                                .Include(n => n.Client)
+                                                .ThenInclude(n => n.EmergencyContact)
+                                                .FirstOrDefault(n => n.Id == id);
+
             if (User.IsInRole("CaseManager"))
             {
                 if (user_logged.Clinic != null)
@@ -1544,21 +1562,16 @@ namespace KyoS.Web.Controllers
                     {
                         model = new TCMIntakeAdvancedDirectiveViewModel
                         {
-                            TcmClient = _context.TCMClient
-                                                .Include(n => n.Client)
-                                                .ThenInclude(n => n.LegalGuardian)
-                                                .Include(n => n.Client)
-                                                .ThenInclude(n => n.EmergencyContact)
-                                                .FirstOrDefault(n => n.Id == id),
+                            TcmClient = tcmClient,
                             IdTCMClient = id,
                             CreatedBy = user_logged.UserName,
                             CreatedOn = DateTime.Now,
                             TcmClient_FK = id,
                             Id = 0,
                             Documents = true,
-                            DateSignatureEmployee = DateTime.Now,
-                            DateSignatureLegalGuardian = DateTime.Now,
-                            DateSignaturePerson = DateTime.Now,
+                            DateSignatureEmployee = tcmClient.DataOpen,
+                            DateSignatureLegalGuardian = tcmClient.DataOpen,
+                            DateSignaturePerson = tcmClient.DataOpen,
                             AdmissionedFor = user_logged.FullName,
                             IHaveNot = true
                         };
@@ -1799,6 +1812,11 @@ namespace KyoS.Web.Controllers
                                                                    .ThenInclude(n => n.LegalGuardian)
                                                                    .FirstOrDefault(n => n.TcmClient.Id == id);
 
+            TCMClientEntity tcmClient = _context.TCMClient
+                                                .Include(d => d.Client)
+                                                .ThenInclude(d => d.LegalGuardian)
+                                                .FirstOrDefault(n => n.Id == id);
+
             if (User.IsInRole("CaseManager"))
             {
                 if (user_logged.Clinic != null)
@@ -1808,13 +1826,10 @@ namespace KyoS.Web.Controllers
 
                         model = new TCMIntakeForeignLanguageViewModel
                         {
-                            TcmClient = _context.TCMClient
-                                                .Include(d => d.Client)
-                                                .ThenInclude(d => d.LegalGuardian)
-                                                .FirstOrDefault(n => n.Id == id),
-                            DateSignatureEmployee = DateTime.Now,
-                            DateSignatureLegalGuardian = DateTime.Now,
-                            DateSignaturePerson = DateTime.Now,
+                            TcmClient = tcmClient,
+                            DateSignatureEmployee = tcmClient.DataOpen,
+                            DateSignatureLegalGuardian = tcmClient.DataOpen,
+                            DateSignaturePerson = tcmClient.DataOpen,
                             Documents = true,
                             Id = 0,
                             CreatedBy = user_logged.UserName,
@@ -1919,6 +1934,14 @@ namespace KyoS.Web.Controllers
                                                            .ThenInclude(n => n.Casemanager)
                                                            .ThenInclude(n => n.Clinic)
                                                            .FirstOrDefault(n => n.TcmClient.Id == id);
+
+            TCMClientEntity tcmClient = _context.TCMClient
+                                                .Include(d => d.Client)
+                                                .ThenInclude(d => d.LegalGuardian)
+                                                .Include(d => d.Casemanager)
+                                                .ThenInclude(d => d.Clinic)
+                                                .FirstOrDefault(n => n.Id == id);
+
             if (User.IsInRole("CaseManager"))
             {
                 if (user_logged.Clinic != null)
@@ -1928,13 +1951,8 @@ namespace KyoS.Web.Controllers
 
                         model = new TCMIntakeWelcomeViewModel
                         {
-                            TcmClient = _context.TCMClient
-                                                .Include(d => d.Client)
-                                                .ThenInclude(d => d.LegalGuardian)
-                                                .Include(d => d.Casemanager)
-                                                .ThenInclude(d => d.Clinic)
-                                                .FirstOrDefault(n => n.Id == id),
-                            Date = DateTime.Now,
+                            TcmClient = tcmClient,
+                            Date = tcmClient.DataOpen,
                             Id = 0,
                             CreatedBy = user_logged.UserName,
                             CreatedOn = DateTime.Now,
@@ -2159,6 +2177,13 @@ namespace KyoS.Web.Controllers
 
             IntakeFeeAgreementViewModel model;
 
+            DateTime date = _context.TCMClient
+                                    .Include(d => d.Client)
+                                    .ThenInclude(d => d.LegalGuardian)
+                                    .Include(d => d.Casemanager)
+                                    .ThenInclude(d => d.Clinic)
+                                    .FirstOrDefault(n => n.Id == idTCMCLient).DataOpen;
+
             if (User.IsInRole("CaseManager") || User.IsInRole("TCMSupervisor"))
             {
                 if (user_logged.Clinic != null)
@@ -2176,9 +2201,9 @@ namespace KyoS.Web.Controllers
                             Client_FK = id,
                             Id = 0,
                             Documents = true,
-                            DateSignatureEmployee = DateTime.Now,
-                            DateSignatureLegalGuardian = DateTime.Now,
-                            DateSignaturePerson = DateTime.Now,
+                            DateSignatureEmployee = date,
+                            DateSignatureLegalGuardian = date,
+                            DateSignaturePerson = date,
                             AdmissionedFor = user_logged.FullName,
                             IdTCMClient = idTCMCLient
                         };
@@ -2279,26 +2304,28 @@ namespace KyoS.Web.Controllers
                 if (user_logged.Clinic != null)
                 {
                     TCMIntakeNonClinicalLogEntity intakeNonClinical = _context.TCMIntakeNonClinicalLog
-                                                                          .Include(n => n.TcmClient)
-                                                                          .ThenInclude(n => n.Client)
-                                                                          .ThenInclude(n => n.LegalGuardian)
-                                                                          .Include(n => n.TcmClient)
-                                                                          .ThenInclude(n => n.Casemanager)
-                                                                          .ThenInclude(n => n.Clinic)
-                                                                          .FirstOrDefault(n => n.TcmClient.Id == id);
+                                                                              .Include(n => n.TcmClient)
+                                                                              .ThenInclude(n => n.Client)
+                                                                              .ThenInclude(n => n.LegalGuardian)
+                                                                              .Include(n => n.TcmClient)
+                                                                              .ThenInclude(n => n.Casemanager)
+                                                                              .ThenInclude(n => n.Clinic)
+                                                                              .FirstOrDefault(n => n.TcmClient.Id == id);
+
+                    TCMClientEntity tcmClient = _context.TCMClient
+                                                        .Include(d => d.Client)
+                                                        .ThenInclude(d => d.LegalGuardian)
+                                                        .Include(d => d.Casemanager)
+                                                        .ThenInclude(d => d.Clinic)
+                                                        .FirstOrDefault(n => n.Id == id);
 
                     if (intakeNonClinical == null)
                     {
 
                         model = new TCMIntakeNonClinicalLogViewModel
                         {
-                            TcmClient = _context.TCMClient
-                                                .Include(d => d.Client)
-                                                .ThenInclude(d => d.LegalGuardian)
-                                                .Include(d => d.Casemanager)
-                                                .ThenInclude(d => d.Clinic)
-                                                .FirstOrDefault(n => n.Id == id),
-                            Date = DateTime.Now,
+                            TcmClient = tcmClient,
+                            Date = tcmClient.DataOpen,
                             Id = 0,
                             CreatedBy = user_logged.UserName,
                             CreatedOn = DateTime.Now,
@@ -2411,18 +2438,20 @@ namespace KyoS.Web.Controllers
                                                                           .ThenInclude(n => n.Clinic)
                                                                           .FirstOrDefault(n => n.TcmClient.Id == id);
 
+                    TCMClientEntity tcmClient = _context.TCMClient
+                                                        .Include(d => d.Client)
+                                                        .ThenInclude(d => d.LegalGuardian)
+                                                        .Include(d => d.Casemanager)
+                                                        .ThenInclude(d => d.Clinic)
+                                                        .FirstOrDefault(n => n.Id == id);
+
                     if (intakeMiniMental == null)
                     {
 
                         model = new TCMIntakeMiniMentalViewModel
                         {
-                            TcmClient = _context.TCMClient
-                                                .Include(d => d.Client)
-                                                .ThenInclude(d => d.LegalGuardian)
-                                                .Include(d => d.Casemanager)
-                                                .ThenInclude(d => d.Clinic)
-                                                .FirstOrDefault(n => n.Id == id),
-                            Date = DateTime.Now,
+                            TcmClient = tcmClient,
+                            Date = tcmClient.DataOpen,
                             Id = 0,
                             CreatedBy = user_logged.UserName,
                             CreatedOn = DateTime.Now,
@@ -2517,8 +2546,8 @@ namespace KyoS.Web.Controllers
         {
 
             UserEntity user_logged = _context.Users
-                                                 .Include(u => u.Clinic)
-                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
             TCMIntakeMedicalHistoryViewModel model;
 
@@ -2550,9 +2579,9 @@ namespace KyoS.Web.Controllers
                             TCMClient = _context.TCMClient.Include(n => n.Client).ThenInclude(n => n.LegalGuardian).FirstOrDefault(n => n.Id == idTCMClient),
                             TCMClient_FK = id,
                             Id = 0,
-                            DateSignatureEmployee = DateTime.Now,
-                            DateSignatureLegalGuardian = DateTime.Now,
-                            DateSignaturePerson = DateTime.Now,
+                            DateSignatureEmployee = tcmClient.DataOpen,
+                            DateSignatureLegalGuardian = tcmClient.DataOpen,
+                            DateSignaturePerson = tcmClient.DataOpen,
                             Documents = true,
 
                             AddressPhysician = doctor.Address,
@@ -3049,16 +3078,16 @@ namespace KyoS.Web.Controllers
                         model = new TCMIntakeCoordinationCareViewModel
                         {
                             TcmClient = tcmClient,
-                            Date = DateTime.Now,
+                            Date = tcmClient.DataOpen,
                             Id = 0,
                             CreatedBy = user_logged.UserName,
                             CreatedOn = DateTime.Now,
                             IdTCMClient = id,
                             TcmClient_FK = id,
                             AdmissionedFor = user_logged.FullName,
-                            DateSignatureEmployee = DateTime.Now,
-                            DateSignatureLegalGuardian = DateTime.Now,
-                            DateSignaturePerson = DateTime.Now,
+                            DateSignatureEmployee = tcmClient.DataOpen,
+                            DateSignatureLegalGuardian = tcmClient.DataOpen,
+                            DateSignaturePerson = tcmClient.DataOpen,
                             Documents = true,
                             IAuthorize = true,
                             InformationAllBefore = false,
@@ -4800,6 +4829,13 @@ namespace KyoS.Web.Controllers
                                                                                              .ThenInclude(n => n.LegalGuardian)
                                                                                              .FirstOrDefault(n => n.TcmClient.Id == id);
 
+            TCMClientEntity tcmCLient = _context.TCMClient
+                                                .Include(n => n.Client)
+                                                .ThenInclude(n => n.LegalGuardian)
+                                                .Include(n => n.Client)
+                                                .ThenInclude(n => n.EmergencyContact)
+                                                .FirstOrDefault(n => n.Id == id);
+
             if (User.IsInRole("CaseManager"))
             {
                 if (user_logged.Clinic != null)
@@ -4808,21 +4844,16 @@ namespace KyoS.Web.Controllers
                     {
                         model = new TCMIntakeClientSignatureVerificationViewModel
                         {
-                            TcmClient = _context.TCMClient
-                                                .Include(n => n.Client)
-                                                .ThenInclude(n => n.LegalGuardian)
-                                                .Include(n => n.Client)
-                                                .ThenInclude(n => n.EmergencyContact)
-                                                .FirstOrDefault(n => n.Id == id),
+                            TcmClient = tcmCLient,
                             IdTCMClient = id,
                             CreatedBy = user_logged.UserName,
                             CreatedOn = DateTime.Now,
                             TcmClient_FK = id,
                             Id = 0,
                             AdmissionedFor = user_logged.FullName,
-                            DateSignatureEmployee = DateTime.Now,
-                            DateSignatureLegalGuardianOrClient = DateTime.Now
-                                                        
+                            DateSignatureEmployee = tcmCLient.DataOpen,
+                            DateSignatureLegalGuardianOrClient = tcmCLient.DataOpen
+
                         };
                         if (model.TcmClient.Client.LegalGuardian == null)
                             model.TcmClient.Client.LegalGuardian = new LegalGuardianEntity();
@@ -4921,6 +4952,23 @@ namespace KyoS.Web.Controllers
                                                                                                     .ThenInclude(n => n.Client)
                                                                                                     .ThenInclude(n => n.LegalGuardian)
                                                                                                     .FirstOrDefault(n => n.TcmClient.Id == id);
+
+            TCMClientEntity tcmClient = _context.TCMClient
+                                                .Include(n => n.Client)
+                                                .ThenInclude(n => n.LegalGuardian)
+                                                .Include(n => n.Client)
+                                                .ThenInclude(n => n.EmergencyContact)
+                                                .Include(n => n.Client)
+                                                .ThenInclude(n => n.Clients_HealthInsurances)
+
+                                                .FirstOrDefault(n => n.Id == id);
+
+            string idHealthInsurance = string.Empty;
+            if(tcmClient.Client.Clients_HealthInsurances.Count() > 0)
+            {
+                idHealthInsurance = tcmClient.Client.Clients_HealthInsurances.FirstOrDefault(n => n.Active == true).MemberId.ToString();
+            }
+            
             if (User.IsInRole("CaseManager"))
             {
                 if (user_logged.Clinic != null)
@@ -4929,28 +4977,23 @@ namespace KyoS.Web.Controllers
                     {
                         model = new TCMIntakeClientIdDocumentVerificationViewModel
                         {
-                            TcmClient = _context.TCMClient
-                                                .Include(n => n.Client)
-                                                .ThenInclude(n => n.LegalGuardian)
-                                                .Include(n => n.Client)
-                                                .ThenInclude(n => n.EmergencyContact)
-                                                .FirstOrDefault(n => n.Id == id),
+                            TcmClient = tcmClient,
                             IdTCMClient = id,
                             CreatedBy = user_logged.UserName,
                             CreatedOn = DateTime.Now,
                             TcmClient_FK = id,
                             Id = 0,
                             AdmissionedFor = user_logged.FullName,
-                            DateSignatureEmployee = DateTime.Now,
-                            DateSignatureLegalGuardianOrClient = DateTime.Now,
-                            HealthPlan = string.Empty,
+                            DateSignatureEmployee = tcmClient.DataOpen,
+                            DateSignatureLegalGuardianOrClient = tcmClient.DataOpen,
+                            HealthPlan = idHealthInsurance,
                             Id_DriverLicense = string.Empty,
-                            MedicaidId = string.Empty,
-                            MedicareCard = string.Empty,
+                            MedicaidId = tcmClient.Client.MedicaidID,
+                            MedicareCard = tcmClient.Client.MedicareId,
                             Other_Identification = string.Empty,
                             Other_Name = string.Empty,
                             Passport_Resident = string.Empty,
-                            Social = string.Empty
+                            Social = tcmClient.Client.SSN
 
                         };
                         if (model.TcmClient.Client.LegalGuardian == null)
@@ -5051,6 +5094,13 @@ namespace KyoS.Web.Controllers
                                                            .ThenInclude(n => n.LegalGuardian)
                                                            .FirstOrDefault(n => n.TcmClient.Id == id);
 
+            TCMClientEntity tcmCLient = _context.TCMClient
+                                                .Include(n => n.Client)
+                                                .ThenInclude(n => n.LegalGuardian)
+                                                .Include(n => n.Client)
+                                                .ThenInclude(n => n.EmergencyContact)
+                                                .FirstOrDefault(n => n.Id == id);
+
             if (User.IsInRole("CaseManager"))
             {
                 if (user_logged.Clinic != null)
@@ -5059,19 +5109,14 @@ namespace KyoS.Web.Controllers
                     {
                         model = new TCMIntakePainScreenViewModel
                         {
-                            TcmClient = _context.TCMClient
-                                                .Include(n => n.Client)
-                                                .ThenInclude(n => n.LegalGuardian)
-                                                .Include(n => n.Client)
-                                                .ThenInclude(n => n.EmergencyContact)
-                                                .FirstOrDefault(n => n.Id == id),
+                            TcmClient = tcmCLient,
                             IdTCMClient = id,
                             CreatedBy = user_logged.UserName,
                             CreatedOn = DateTime.Now,
                             TcmClient_FK = id,
                             Id = 0,
                             AdmissionedFor = user_logged.FullName,
-                            DateSignatureEmployee = DateTime.Now,
+                            DateSignatureEmployee = tcmCLient.DataOpen,
                             AlwayasThere = false,
                             ComesAndGoes = false,
                             CurrentPainScore = 0,
@@ -5175,6 +5220,13 @@ namespace KyoS.Web.Controllers
                                                                      .ThenInclude(n => n.LegalGuardian)
                                                                      .FirstOrDefault(n => n.TcmClient.Id == id);
 
+            TCMClientEntity tcmCLient = _context.TCMClient
+                                                .Include(n => n.Client)
+                                                .ThenInclude(n => n.LegalGuardian)
+                                                .Include(n => n.Client)
+                                                .ThenInclude(n => n.EmergencyContact)
+                                                .FirstOrDefault(n => n.Id == id);
+
             if (User.IsInRole("CaseManager"))
             {
                 if (user_logged.Clinic != null)
@@ -5184,19 +5236,14 @@ namespace KyoS.Web.Controllers
                     {
                         model = new TCMIntakeColumbiaSuicideViewModel
                         {
-                            TcmClient = _context.TCMClient
-                                                .Include(n => n.Client)
-                                                .ThenInclude(n => n.LegalGuardian)
-                                                .Include(n => n.Client)
-                                                .ThenInclude(n => n.EmergencyContact)
-                                                .FirstOrDefault(n => n.Id == id),
+                            TcmClient = tcmCLient,
                             IdTCMClient = id,
                             CreatedBy = user_logged.UserName,
                             CreatedOn = DateTime.Now,
                             TcmClient_FK = id,
                             Id = 0,
                             AdmissionedFor = user_logged.FullName,
-                            DateSignatureEmployee = DateTime.Now,
+                            DateSignatureEmployee = tcmCLient.DataOpen,
                             IdHaveYouWishedPastMonth_Value = 0,
                             IdHaveYouWishedLifeTime_Value = 0,
                             IdHaveYouActuallyPastMonth_Value = 0,
@@ -5302,6 +5349,13 @@ namespace KyoS.Web.Controllers
                                                                          .ThenInclude(n => n.LegalGuardian)
                                                                          .FirstOrDefault(n => n.TcmClient.Id == id);
 
+            TCMClientEntity tcmClient = _context.TCMClient
+                                                .Include(n => n.Client)
+                                                .ThenInclude(n => n.LegalGuardian)
+                                                .Include(n => n.Client)
+                                                .ThenInclude(n => n.EmergencyContact)
+                                                .FirstOrDefault(n => n.Id == id);
+
             if (User.IsInRole("CaseManager"))
             {
                 if (user_logged.Clinic != null)
@@ -5311,19 +5365,14 @@ namespace KyoS.Web.Controllers
                     {
                         model = new TCMIntakePersonalWellbeingViewModel
                         {
-                            TcmClient = _context.TCMClient
-                                                .Include(n => n.Client)
-                                                .ThenInclude(n => n.LegalGuardian)
-                                                .Include(n => n.Client)
-                                                .ThenInclude(n => n.EmergencyContact)
-                                                .FirstOrDefault(n => n.Id == id),
+                            TcmClient = tcmClient,
                             IdTCMClient = id,
                             CreatedBy = user_logged.UserName,
                             CreatedOn = DateTime.Now,
                             TcmClient_FK = id,
                             Id = 0,
                             AdmissionedFor = user_logged.FullName,
-                            DateSignatureEmployee = DateTime.Now,
+                            DateSignatureEmployee = tcmClient.DataOpen,
                            
                         };
 
@@ -5415,6 +5464,12 @@ namespace KyoS.Web.Controllers
                                                                          .ThenInclude(n => n.Client)
                                                                          .ThenInclude(n => n.LegalGuardian)
                                                                          .FirstOrDefault(n => n.TcmClient.Id == id);
+            TCMClientEntity tcmClient = _context.TCMClient
+                                                .Include(n => n.Client)
+                                                .ThenInclude(n => n.LegalGuardian)
+                                                .Include(n => n.Client)
+                                                .ThenInclude(n => n.EmergencyContact)
+                                                .FirstOrDefault(n => n.Id == id);
             if (User.IsInRole("CaseManager"))
             {
                 if (user_logged.Clinic != null)
@@ -5424,19 +5479,14 @@ namespace KyoS.Web.Controllers
                     {
                         model = new TCMIntakeNutritionalScreenViewModel
                         {
-                            TcmClient = _context.TCMClient
-                                                .Include(n => n.Client)
-                                                .ThenInclude(n => n.LegalGuardian)
-                                                .Include(n => n.Client)
-                                                .ThenInclude(n => n.EmergencyContact)
-                                                .FirstOrDefault(n => n.Id == id),
+                            TcmClient = tcmClient,
                             IdTCMClient = id,
                             CreatedBy = user_logged.UserName,
                             CreatedOn = DateTime.Now,
                             TcmClient_FK = id,
                             Id = 0,
                             AdmissionedFor = user_logged.FullName,
-                            DateSignatureEmployee = DateTime.Now,
+                            DateSignatureEmployee = tcmClient.DataOpen,
 
                         };
 

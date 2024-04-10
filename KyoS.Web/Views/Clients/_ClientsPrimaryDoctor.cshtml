@@ -9,6 +9,10 @@
         <select asp-for="IdDoctor" asp-items="Model.Doctors" class="form-control" id="cbPD"></select>
         <span asp-validation-for="IdDoctor" class="text-danger"></span>
     </div>
+    <div class="form-group col-md-1">
+        </br>
+        <a onclick="showInPopup('@Url.Action("DetailsPCP", "Clients", new {id = Model.IdDoctor}, Context.Request.Scheme)','Details PCP')" class="btn btn-info" title="Detail PCP"><i class="glyphicon glyphicon-th-list"></i></a>
+    </div>
 </div>
 <div class="col-md-12">
     <hr />
@@ -64,6 +68,7 @@
         <span asp-validation-for="EmailPrimaryDoctor" class="text-danger"></span>
     </div>
 </div>
+
 
 <script type="text/javascript">
     chkNewPD.addEventListener('change', (e) => {

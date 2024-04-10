@@ -5707,5 +5707,106 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("NotAuthorized", "Account");
         }
 
+        [Authorize(Roles = "Manager, Supervisor, CaseManager, Frontdesk")]
+        public IActionResult DetailsPCP(int id = 0)
+        {
+            if (id != 0)
+            {
+                DoctorEntity doctor = _context.Doctors.FirstOrDefault(u => u.Id == id);
+
+                DoctorEntity model = new DoctorViewModel
+                {
+                    Name = doctor.Name,
+                    Email = doctor.Email,
+                    FaxNumber = doctor.FaxNumber,
+                    Telephone = doctor.Telephone,
+                    ZipCode = doctor.ZipCode,
+                    Address = doctor.Address,
+                    City = doctor.City,
+                    State = doctor.State
+                };
+                return View(model);
+            }
+            else
+            {
+                return View(new DoctorViewModel());
+            }
+        }
+
+        [Authorize(Roles = "Manager, Supervisor, CaseManager, Frontdesk")]
+        public IActionResult DetailsPSY(int id = 0)
+        {
+            if (id != 0)
+            {
+                PsychiatristEntity psy = _context.Psychiatrists.FirstOrDefault(u => u.Id == id);
+
+                PsychiatristViewModel model = new PsychiatristViewModel
+                {
+                    Name = psy.Name,
+                    Email = psy.Email,
+                    FaxNumber = psy.FaxNumber,
+                    Telephone = psy.Telephone,
+                    ZipCode = psy.ZipCode,
+                    Address = psy.Address,
+                    City = psy.City,
+                    State = psy.State
+                };
+                return View(model);
+            }
+            else
+            {
+                return View(new PsychiatristViewModel());
+            }
+        }
+
+        [Authorize(Roles = "Manager, Supervisor, CaseManager, Frontdesk")]
+        public IActionResult DetailsEC(int id = 0)
+        {
+            if (id != 0)
+            {
+                EmergencyContactEntity ec = _context.EmergencyContacts.FirstOrDefault(u => u.Id == id);
+
+                EmergencyContactViewModel model = new EmergencyContactViewModel
+                {
+                    Name = ec.Name,
+                    Email = ec.Email,
+                    Telephone = ec.Telephone,
+                    ZipCode = ec.ZipCode,
+                    Address = ec.Address,
+                    City = ec.City,
+                    State = ec.State
+                };
+                return View(model);
+            }
+            else
+            {
+                return View(new EmergencyContactViewModel());
+            }
+        }
+
+        [Authorize(Roles = "Manager, Supervisor, CaseManager, Frontdesk")]
+        public IActionResult DetailsLG(int id = 0)
+        {
+            if (id != 0)
+            {
+                LegalGuardianEntity lg = _context.LegalGuardians.FirstOrDefault(u => u.Id == id);
+
+                LegalGuardianViewModel model = new LegalGuardianViewModel
+                {
+                    Name = lg.Name,
+                    Email = lg.Email,
+                    Telephone = lg.Telephone,
+                    ZipCode = lg.ZipCode,
+                    Address = lg.Address,
+                    City = lg.City,
+                    State = lg.State
+                };
+                return View(model);
+            }
+            else
+            {
+                return View(new LegalGuardianViewModel());
+            }
+        }
     }
 }

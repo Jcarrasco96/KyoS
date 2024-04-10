@@ -164,11 +164,30 @@ namespace KyoS.Web.Controllers
                             .ToList();
                         string strendths = string.Empty;
                         string weakness = string.Empty;
+                        DateTime dateAssessment = DateTime.Now;
+                        DateTime dateTcmIntake = DateTime.Now;
+                        DateTime dateTcmAppendixJ = DateTime.Now;
+
+                        TCMIntakeFormEntity tcmIntake = _context.TCMIntakeForms.FirstOrDefault(n => n.TcmClient_FK == id);
+
+                        if (tcmIntake != null)
+                        {
+                            dateTcmIntake = tcmIntake.IntakeDate;
+                        }
+
+                        TCMIntakeAppendixJEntity tcmAppendixJ = _context.TCMIntakeAppendixJ.FirstOrDefault(n => n.TcmClient_FK == id);
+
+                        if (tcmAppendixJ != null)
+                        {
+                            dateTcmAppendixJ = tcmAppendixJ.Date;
+                        }
+
                         TCMAssessmentEntity assessment = _context.TCMAssessment.FirstOrDefault(n => n.TcmClient.Id == id);
                         if (assessment != null)
                         {
                             strendths = assessment.ListClientCurrentPotencialStrngths;
                             weakness = assessment.ListClientCurrentPotencialWeakness;
+                            dateAssessment = assessment.DateAssessment;
                         }
                         model = new TCMServicePlanViewModel
                         {
@@ -182,9 +201,9 @@ namespace KyoS.Web.Controllers
                             status = _combosHelper.GetComboClientStatus(),
                             CaseNumber = _context.TCMClient.FirstOrDefault(u => u.Id == id).CaseNumber,
                             DateServicePlan = DateTime.Now.Date,
-                            DateIntake = DateTime.Now.Date,
-                            DateAssessment = DateTime.Now.Date,
-                            DateCertification = DateTime.Now.Date,
+                            DateIntake = dateTcmIntake,
+                            DateAssessment = dateAssessment,
+                            DateCertification = dateTcmAppendixJ,
                             Strengths = strendths,
                             Weakness = weakness
 
@@ -802,7 +821,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "CaseManager")]
-        public IActionResult CreateDomain(int id = 0, int origin = 0, int aview = 0)
+        public IActionResult CreateDomain(DateTime date, int id = 0, int origin = 0, int aview = 0)
         {
             TCMServicePlanEntity tcmServicePlan = _context.TCMServicePlans
                                                           .Include(u => u.TcmClient)
@@ -824,7 +843,7 @@ namespace KyoS.Web.Controllers
 
                         model = new TCMDomainViewModel
                         {
-                            DateIdentified = DateTime.Today,
+                            DateIdentified = date,
                             Services = list_Services,
                             TcmServicePlan = tcmServicePlan,
                             Id_ServicePlan = id,
@@ -1006,7 +1025,6 @@ namespace KyoS.Web.Controllers
                         StartDate = tcmdomain.TcmServicePlan.DateServicePlan,
                         TargetDate = tcmdomain.TcmServicePlan.DateServicePlan.AddMonths(tcmdomain.TcmServicePlan.TcmClient.Period),
                         //EndDate = DateTime.Today.Date,
-                        task = "es para que veas el problema del textarea",
                         Origi = Origin,
                         Origin = ""
                     };
@@ -1092,15 +1110,14 @@ namespace KyoS.Web.Controllers
                 }
                 
                 TCMDomainEntity tcmdomain = await _context.TCMDomains
-                                                              
-                                                            .Include(g => g.TCMObjetive)
-                                                              
-                                                            .Include(g => g.TcmServicePlan)
-                                                              
-                                                            .FirstOrDefaultAsync(m => m.Id == tcmObjetiveViewModel.Id_Domain);
+                                                          .Include(g => g.TCMObjetive)
+                                                          .Include(g => g.TcmServicePlan)
+                                                          .FirstOrDefaultAsync(m => m.Id == tcmObjetiveViewModel.Id_Domain);
+
                 tcmObjetiveViewModel.TcmDomain = tcmdomain;
                 tcmObjetiveViewModel.Id_Stage = 0;
                 tcmObjetiveViewModel.Stages = _combosHelper.GetComboStagesNotUsed(tcmdomain);
+                                
                 ViewData["origin"] = Origin;
                 return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateObjetive", tcmObjetiveViewModel) });                
             }

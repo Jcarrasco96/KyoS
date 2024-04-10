@@ -48,7 +48,8 @@ namespace KyoS.Web.Helpers
                 CodeBIO = model.CodeBIO,
                 CodeMTPR = model.CodeMTPR,
                 CodeFARS = model.CodeFARS,
-                CPTCode_TCM = model.CPTCode_TCM
+                CPTCode_TCM = model.CPTCode_TCM,
+                Initials = model.Initials
 
             };
         }
@@ -78,7 +79,8 @@ namespace KyoS.Web.Helpers
                 CodeBIO = clinicEntity.CodeBIO,
                 CodeMTPR = clinicEntity.CodeMTPR,
                 CodeFARS = clinicEntity.CodeFARS,
-                CPTCode_TCM = clinicEntity.CPTCode_TCM
+                CPTCode_TCM = clinicEntity.CPTCode_TCM,
+                Initials = clinicEntity.Initials
 
             };
         }
@@ -415,7 +417,8 @@ namespace KyoS.Web.Helpers
                 EmergencyContact = clientEntity.EmergencyContact,
                 IdDocumentsAssistant = (clientEntity.DocumentsAssistant != null) ? clientEntity.DocumentsAssistant.Id : 0,
                 DocumentsAssistant = clientEntity.DocumentsAssistant,
-                DocumentsAssistants = _combosHelper.GetComboDocumentsAssistantByClinic(user_logged.Clinic.Id,false,false)
+                DocumentsAssistants = _combosHelper.GetComboDocumentsAssistantByClinic(user_logged.Clinic.Id,false,false),
+                IdTCMClient = _context.TCMClient.FirstOrDefault(n => n.Client.Id == clientEntity.Id).Id
 
             };
         }
@@ -8715,6 +8718,38 @@ namespace KyoS.Web.Helpers
                 am = model.AM,
                 pm = model.PM
             };
+        }
+
+        public IntakeNoHarmEntity ToIntakeNoHarmEntity(IntakeNoHarmViewModel model, bool isNew)
+        {
+            return new IntakeNoHarmEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Client = model.Client,
+                Client_FK = model.Client_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignaturePerson = model.DateSignaturePerson,
+                Documents = model.Documents,
+                AdmissionedFor = model.AdmissionedFor
+
+            };
+        }
+
+        public IntakeNoHarmViewModel ToIntakeNoHarmViewModel(IntakeNoHarmEntity model)
+        {
+            return new IntakeNoHarmViewModel
+            {
+                Id = model.Id,
+                Client = model.Client,
+                IdClient = model.Client.Id,
+                Client_FK = model.Client_FK,
+                DateSignatureEmployee = model.DateSignatureEmployee,
+                DateSignaturePerson = model.DateSignaturePerson,
+                Documents = model.Documents,
+                AdmissionedFor = model.AdmissionedFor
+
+            };
+
         }
     }
 
