@@ -2655,5 +2655,37 @@ namespace KyoS.Web.Helpers
             return list;
         }
 
+        public IEnumerable<SelectListItem> GetComboAccountType()
+        {
+            List<SelectListItem> list = new List<SelectListItem>
+                                { new SelectListItem { Text = AccountType.Personal_Checking.ToString(), Value = "1"},
+                                  new SelectListItem { Text = AccountType.Personal_Saving.ToString(), Value = "2"},
+                                  new SelectListItem { Text = AccountType.Company_Checking.ToString(), Value = "3"},
+                                  new SelectListItem { Text = AccountType.Company_Saving.ToString(), Value = "4"}};
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Select Account type...]",
+                Value = "0"
+            });
+
+            return list;
+        }
+
+        public IEnumerable<SelectListItem> GetComboPaymentMethod()
+        {
+            List<SelectListItem> list = new List<SelectListItem>
+                                { new SelectListItem { Text = PaymentMethod.Check.ToString(), Value = "1"},
+                                  new SelectListItem { Text = PaymentMethod.Direct_Deposit.ToString(), Value = "2"},
+                                  new SelectListItem { Text = PaymentMethod.Zelle.ToString(), Value = "3"}};
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Select payment method...]",
+                Value = "0"
+            });
+
+            return list;
+        }
     }
 }

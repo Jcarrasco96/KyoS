@@ -95,7 +95,8 @@ namespace KyoS.Web.Controllers
             }
             return null;
         }
-        
+
+        [Authorize(Roles = "Manager")]
         public IActionResult Create(int id = 0)
         {
             if (id == 1)
@@ -116,7 +117,7 @@ namespace KyoS.Web.Controllers
 
             CaseMannagerViewModel model;
 
-            if (!User.IsInRole("Admin"))
+            if (User.IsInRole("Manager"))
             {
                 UserEntity user_logged = _context.Users.Include(u => u.Clinic)
                                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
@@ -137,9 +138,12 @@ namespace KyoS.Web.Controllers
                         UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.CaseManager, user_logged.Clinic.Id),
                         Money = 0,
                         IdTCMsupervisor = 0,
-                        TCMsupervisors = _combosHelper.GetComboTCMSupervisorByClinic(user_logged.Clinic.Id)
+                        TCMsupervisors = _combosHelper.GetComboTCMSupervisorByClinic(user_logged.Clinic.Id),
+                        IdGender = 0,
+                        GenderList = _combosHelper.GetComboGender(),
+                        IdAccountType = 0,
+                        AccountTypeList = _combosHelper.GetComboAccountType()
 
-                        
                     };
                     return View(model);
                 }
@@ -160,6 +164,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> Create(CaseMannagerViewModel caseMannagerViewModel)
         {
             if (ModelState.IsValid)
@@ -232,6 +237,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -249,7 +255,7 @@ namespace KyoS.Web.Controllers
             }
 
             CaseMannagerViewModel caseMannagerViewModel;
-            if (!User.IsInRole("Admin"))
+            if (User.IsInRole("Manager"))
             {
                 UserEntity user_logged = _context.Users
                                                  .Include(u => u.Clinic)
@@ -276,6 +282,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> Edit(int id, CaseMannagerViewModel caseMannagerViewModel)
         {
             if (id != caseMannagerViewModel.Id)
@@ -340,6 +347,7 @@ namespace KyoS.Web.Controllers
 
         }
 
+        [Authorize(Roles = "Manager")]
         public IActionResult CreateModal(int id = 0)
         {
             if (id == 1)
@@ -358,9 +366,9 @@ namespace KyoS.Web.Controllers
                 }
             }
 
-            CaseMannagerViewModel model;
+            CaseMannagerViewModel model = new CaseMannagerViewModel();
 
-            if (!User.IsInRole("Admin"))
+            if (User.IsInRole("Manager"))
             {
                 UserEntity user_logged = _context.Users.Include(u => u.Clinic)
                                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
@@ -383,24 +391,20 @@ namespace KyoS.Web.Controllers
                         IdTCMsupervisor = 0,
                         TCMsupervisors = _combosHelper.GetComboTCMSupervisorByClinic(user_logged.Clinic.Id),
                         RaterEducation = string.Empty,
-                        RaterFMHCertification = string.Empty
+                        RaterFMHCertification = string.Empty,
+                        IdGender = 0,
+                        GenderList = _combosHelper.GetComboGender(),
+                        IdAccountType = 0,
+                        AccountTypeList = _combosHelper.GetComboAccountType(),
+                        IdPaymentMethod = 0,
+                        PaymentMethodList = _combosHelper.GetComboPaymentMethod(),
+                        Name = "-"
                     };
                     return View(model);
                 }
             }
 
-            model = new CaseMannagerViewModel
-            {
-                Clinics = _combosHelper.GetComboClinics(),
-                IdStatus = 1,
-                StatusList = _combosHelper.GetComboClientStatus(),
-                UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.CaseManager, 0),
-                Money = 0,
-                IdTCMsupervisor = 0,
-                TCMsupervisors = _combosHelper.GetComboTCMSupervisorByClinic(0),
-                RaterEducation = string.Empty,
-                RaterFMHCertification = string.Empty
-            };
+           
             return View(model);
         }
 
@@ -422,6 +426,10 @@ namespace KyoS.Web.Controllers
                         caseMannagerViewModel.StatusList = _combosHelper.GetComboClientStatus();
                         caseMannagerViewModel.UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.CaseManager, user_logged.Clinic.Id);
                         caseMannagerViewModel.TCMsupervisors = _combosHelper.GetComboTCMSupervisorByClinic(user_logged.Clinic.Id);
+                        caseMannagerViewModel.GenderList = _combosHelper.GetComboGender();
+                        caseMannagerViewModel.PaymentMethodList = _combosHelper.GetComboPaymentMethod();
+                        caseMannagerViewModel.AccountTypeList = _combosHelper.GetComboAccountType();
+                        caseMannagerViewModel.Clinics = _combosHelper.GetComboClinics();
                         ModelState.AddModelError(string.Empty, "You must select a linked user");
 
                         return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateModal", caseMannagerViewModel) });
@@ -468,6 +476,10 @@ namespace KyoS.Web.Controllers
                     caseMannagerViewModel.StatusList = _combosHelper.GetComboClientStatus();
                     caseMannagerViewModel.UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.CaseManager, user_logged.Clinic.Id);
                     caseMannagerViewModel.TCMsupervisors = _combosHelper.GetComboTCMSupervisorByClinic(user_logged.Clinic.Id);
+                    caseMannagerViewModel.GenderList = _combosHelper.GetComboGender();
+                    caseMannagerViewModel.PaymentMethodList = _combosHelper.GetComboPaymentMethod();
+                    caseMannagerViewModel.AccountTypeList = _combosHelper.GetComboAccountType();
+                    caseMannagerViewModel.Clinics = _combosHelper.GetComboClinics();
                     ModelState.AddModelError(string.Empty, "You must select a linked user");
 
                     return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateModal", caseMannagerViewModel) });
@@ -477,6 +489,10 @@ namespace KyoS.Web.Controllers
             caseMannagerViewModel.StatusList = _combosHelper.GetComboClientStatus();
             caseMannagerViewModel.UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.CaseManager, user_logged.Clinic.Id);
             caseMannagerViewModel.TCMsupervisors = _combosHelper.GetComboTCMSupervisorByClinic(user_logged.Clinic.Id);
+            caseMannagerViewModel.GenderList = _combosHelper.GetComboGender();
+            caseMannagerViewModel.PaymentMethodList = _combosHelper.GetComboPaymentMethod();
+            caseMannagerViewModel.AccountTypeList = _combosHelper.GetComboAccountType();
+            caseMannagerViewModel.Clinics = _combosHelper.GetComboClinics();
             if (caseMannagerViewModel.IdUser == "0")
             {
                 ModelState.AddModelError(string.Empty, "You must select a linked user");

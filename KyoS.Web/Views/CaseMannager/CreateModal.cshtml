@@ -6,93 +6,26 @@
 <div class="row">
     <div class="col-md-12">
         <form asp-action="CreateModal" asp-route-id="@Model.Id" onsubmit="return jQueryAjaxPostCaseManagers(this);">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="IdClinic" />
-            <div>
-                <div class="form-group col-md-5">
-                    <label asp-for="Name" class="control-label"></label>&nbsp;*
-                    <input asp-for="Name" class="form-control" />
-                    <span asp-validation-for="Name" class="text-danger"></span>
+            <ul class="nav nav-tabs" role="tablist">
+                <li role="presentation" class="active"><a href="#personal" aria-controls="personal" role="tab" data-toggle="tab">Personal</a></li>
+                <li role="presentation"><a href="#agency" aria-controls="agency" role="tab" data-toggle="tab">Agency</a></li>
+                <li role="presentation"><a href="#private" aria-controls="private" role="tab" data-toggle="tab">Private</a></li>
+            </ul>
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane active" id="personal">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="IdClinic" />
+                    <input type="hidden" asp-for="Name" />
+                    <partial name="_Personal" />
+                    <div class="form-group col-md-12">
+                    </div>
                 </div>
-                <div class="col-md-3 form-group">
-                    <label asp-for="IdStatus" class="control-label"></label>&nbsp;*
-                    <select asp-for="IdStatus" asp-items="Model.StatusList" class="form-control"></select>
-                    <span asp-validation-for="IdStatus" class="text-danger"></span>
+                <div role="tabpanel" class="tab-pane" id="agency">
+                    <partial name="_Agency" />
                 </div>
-                <div class="col-md-2 form-group">
-                    <label asp-for="Credentials" class="control-label"></label>
-                    <input asp-for="Credentials" class="form-control" />
-                    <span asp-validation-for="Credentials" class="text-danger"></span>
-                </div>
-                <div class="col-md-2 form-group">
-                    <label asp-for="ProviderNumber" class="control-label">Number</label>
-                    <input asp-for="ProviderNumber" class="form-control" />
-                    <span asp-validation-for="ProviderNumber" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="col-md-push-12">
-                &nbsp;
-            </div>
-            <div>
-                <div class="col-md-3 form-group">
-                    <label asp-for="RaterEducation" class="control-label">Rater Education</label>
-                    <input asp-for="RaterEducation" class="form-control" />
-                    <span asp-validation-for="RaterEducation" class="text-danger"></span>
-                </div>
-                <div class="col-md-3 form-group">
-                    <label asp-for="RaterFMHCertification" class="control-label">Rater FMH Certification</label>
-                    <input asp-for="RaterFMHCertification" class="form-control" />
-                    <span asp-validation-for="RaterFMHCertification" class="text-danger"></span>
-                </div>
-                <div class="col-md-3 form-group">
-                    <label asp-for="ProviderNumber" class="control-label">Provider</label>
-                    <input asp-for="ProviderNumber" class="form-control" />
-                    <span asp-validation-for="ProviderNumber" class="text-danger"></span>
-                </div>
-                <div class="col-md-3 form-group">
-                    <label asp-for="Phone" class="control-label"></label>
-                    <input asp-for="Phone" class="form-control" />
-                    <span asp-validation-for="Phone" class="text-danger"></span>
-                </div>
-            </div>            
-            <div>
-                <div class="col-md-3 form-group">
-                    <label asp-for="Email" class="control-label"></label>
-                    <input asp-for="Email" class="form-control" />
-                    <span asp-validation-for="Email" class="text-danger"></span>
-                </div>
-                <div class="col-md-2 form-group">
-                    <label asp-for="Money" class="control-label">Salary / Hour</label>
-                    <input asp-for="Money" class="form-control" />
-                    <span asp-validation-for="Money" class="text-danger"></span>
-                </div>
-                <div class="col-md-4 form-group">
-                    <label asp-for="IdTCMsupervisor" class="control-label"></label>
-                    <select asp-for="IdTCMsupervisor" asp-items="Model.TCMsupervisors" class="form-control"></select>
-                    <span asp-validation-for="IdTCMsupervisor" class="text-danger"></span>
-                </div>
-                <div class="col-md-3 form-group">
-                    <label asp-for="IdUser" class="control-label"></label>&nbsp;*
-                    <select asp-for="IdUser" asp-items="Model.UserList" class="form-control"></select>
-                    <span asp-validation-for="IdUser" class="text-danger"></span>
-                </div>
-            </div>            
-            <div>               
-                <div class="col-md-3 form-group">
-                    <label asp-for="SignatureFile" class="control-label"></label>
-                    <input asp-for="SignatureFile" type="file" class="form-control" />
-                    <span asp-validation-for="SignatureFile" class="text-danger"></span>
-                </div>
-                <div class="container-fluid">
-                    &nbsp;
-                </div>
-            </div>
-            <div>
-                <div class="col-md-12 form-group">
-                    @if (!string.IsNullOrEmpty(Model.SignaturePath))
-                    {
-                        <img src="@Url.Content(Model.SignaturePath)" alt="Image" style="width:200px;height:100px;max-width: 100%; height: auto;" />
-                    }
+                <div role="tabpanel" class="tab-pane" id="private">
+                    <partial name="_Private" />
                 </div>
             </div>
             <div class="col-md-12">
@@ -101,7 +34,7 @@
                 </div>
             </div>
             <div>
-                <div class="col-md-offset-10 form-group">
+                <div class="col-md-offset-9 form-group">
                     <input type="submit" value="Create" class="btn btn-primary" />
                     <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
                 </div>
@@ -109,9 +42,5 @@
         </form>
     </div>
 </div>
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
 
 
