@@ -31973,7 +31973,7 @@ namespace KyoS.Web.Helpers
                     item.LastModifiedOn
                 });
             }
-
+            
             return dt;
         }
 
@@ -36004,7 +36004,7 @@ namespace KyoS.Web.Helpers
             WebReport.Report.RegisterData(dataSet.Tables[0], "TCMServicePlanReviews");
 
             dataSet = new DataSet();
-            dataSet.Tables.Add(GetTCMServicePlanReviewDomainListDS(servicePlanReview.TCMServicePlanRevDomain));
+            dataSet.Tables.Add(GetTCMServicePlanReviewDomainListDS(servicePlanReview.TCMServicePlanRevDomain.OrderBy(t => t.CodeDomain).ToList()));
             WebReport.Report.RegisterData(dataSet.Tables[0], "TCMServicePlanReviewDomains");
 
             dataSet = new DataSet();
