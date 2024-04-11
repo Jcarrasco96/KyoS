@@ -563,6 +563,10 @@ namespace KyoS.Web.Controllers
                     caseMannagerViewModel.StatusList = _combosHelper.GetComboClientStatus();
                     caseMannagerViewModel.UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.CaseManager, user_logged.Clinic.Id);
                     caseMannagerViewModel.TCMsupervisors = _combosHelper.GetComboTCMSupervisorByClinic(user_logged.Clinic.Id);
+                    caseMannagerViewModel.GenderList = _combosHelper.GetComboGender();
+                    caseMannagerViewModel.PaymentMethodList = _combosHelper.GetComboPaymentMethod();
+                    caseMannagerViewModel.AccountTypeList = _combosHelper.GetComboAccountType();
+                    caseMannagerViewModel.Clinics = _combosHelper.GetComboClinics();
                     ModelState.AddModelError(string.Empty, "You must select a linked user");
 
                     return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditModal", caseMannagerViewModel) });
@@ -606,6 +610,10 @@ namespace KyoS.Web.Controllers
             caseMannagerViewModel.StatusList = _combosHelper.GetComboClientStatus();
             caseMannagerViewModel.UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.CaseManager, user_logged.Clinic.Id);
             caseMannagerViewModel.TCMsupervisors = _combosHelper.GetComboTCMSupervisorByClinic(user_logged.Clinic.Id);
+            caseMannagerViewModel.GenderList = _combosHelper.GetComboGender();
+            caseMannagerViewModel.PaymentMethodList = _combosHelper.GetComboPaymentMethod();
+            caseMannagerViewModel.AccountTypeList = _combosHelper.GetComboAccountType();
+            caseMannagerViewModel.Clinics = _combosHelper.GetComboClinics();
             if (caseMannagerViewModel.IdUser == "0")
             {
                 ModelState.AddModelError(string.Empty, "You must select a linked user");                

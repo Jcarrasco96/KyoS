@@ -285,7 +285,7 @@ namespace KyoS.Web.Helpers
             return new CaseMannagerViewModel
             {
                 Id = caseMannagerEntity.Id,
-                Name = caseMannagerEntity.FirstName + ' ' + caseMannagerEntity.MiddleName + ' ' + caseMannagerEntity.LastName,
+                Name = caseMannagerEntity.Name,
                 ProviderNumber = caseMannagerEntity.ProviderNumber,
                 Credentials = caseMannagerEntity.Credentials,
                 IdClinic = caseMannagerEntity.Clinic.Id,
