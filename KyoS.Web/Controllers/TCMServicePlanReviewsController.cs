@@ -238,15 +238,17 @@ namespace KyoS.Web.Controllers
                     tcmDomainReview.Status = SPRStatus.Open;
                     tcmDomainReview.CodeDomain = item.Code;
                     tcmDomainReview.TCMServicePlanRevDomainObjectiive = new List<TCMServicePlanReviewDomainObjectiveEntity>();
+                    tcmDomainReview.CreatedBy = user_logged.UserName;
+                    tcmDomainReview.CreatedOn = DateTime.Today;
                     //tcmDomainReview.TcmDomain = _context.TCMDomains.FirstOrDefault(n => n.Id == item.ID);
-                   /* if (item.Status == 0)
-                    {
-                        tcmDomainReview.Status = StatusType.Open;
-                    }
-                    else
-                    {
-                        tcmDomainReview.Status = StatusType.Close;
-                    }*/
+                    /* if (item.Status == 0)
+                     {
+                         tcmDomainReview.Status = StatusType.Open;
+                     }
+                     else
+                     {
+                         tcmDomainReview.Status = StatusType.Close;
+                     }*/
                     //tcmDomainReview.TCMServicePlanRevDomainObjectiive = new List<TCMServicePlanReviewDomainObjectiveEntity>();
                     TCMServicePlanReviewDomainObjectiveEntity tcmDomainObjectives = new TCMServicePlanReviewDomainObjectiveEntity();
                     foreach (var item_Objective in item.TCMObjetive)
@@ -256,6 +258,9 @@ namespace KyoS.Web.Controllers
                         
                         tcmDomainObjectives.Origin = item_Objective.Origin;
                         tcmDomainObjectives.ChangesUpdate = "";
+
+                        tcmDomainObjectives.CreatedBy = user_logged.UserName;
+                        tcmDomainObjectives.CreatedOn = DateTime.Today;
 
                         tcmDomainReview.TCMServicePlanRevDomainObjectiive.Add(tcmDomainObjectives);
                         tcmDomainObjectives = new TCMServicePlanReviewDomainObjectiveEntity();
@@ -1329,7 +1334,22 @@ namespace KyoS.Web.Controllers
                                                    .FirstOrDefaultAsync(m => m.Id == tcmObjetiveViewModel.Id_Domain);
 
                     tcmObjetiveViewModel.TcmDomain = tcmdomain;
-                    tcmObjetiveViewModel.Stages = _combosHelper.GetComboStagesNotUsed(tcmdomain);
+
+                    TCMStageEntity stage = await _context.TCMStages
+                                                         .Include(g => g.tCMservice)
+                                                         .FirstOrDefaultAsync(m => m.Id == tcmObjetiveViewModel.Id_Stage);
+                    List<TCMStageEntity> listStage = new List<TCMStageEntity>();
+                    listStage.Add(stage);
+
+                    List<SelectListItem> list = listStage.Select(c => new SelectListItem
+                    {
+                        Text = $"{c.Name}",
+                        Value = $"{c.Id}"
+                    })
+                    .ToList();
+
+                    tcmObjetiveViewModel.Stages = list;
+                    tcmObjetiveViewModel.StatusList = _combosHelper.GetComboClientStatus();
                     ViewData["origi"] = 0;
                     return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditObjetive", tcmObjetiveViewModel) });
                 }
