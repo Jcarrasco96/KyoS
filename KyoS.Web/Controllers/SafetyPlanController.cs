@@ -188,7 +188,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Facilitator, Documents_Assistant")]
+        [Authorize(Roles = "Facilitator, Supervisor, Documents_Assistant")]
         public async Task<IActionResult> Create(SafetyPlanViewModel safetyViewModel)
         {
             UserEntity user_logged = _context.Users
@@ -280,7 +280,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Facilitator, Supervisor, Documents_Assistant")]
+        [Authorize(Roles = "Facilitator, , Documents_Assistant")]
         public async Task<IActionResult> Edit(SafetyPlanViewModel safetyViewModel)
         {
             UserEntity user_logged = _context.Users

@@ -100,7 +100,7 @@
                                 }
                             </td>
                             <td align="right">
-                                @if (User.IsInRole("Facilitator"))
+                                @if (User.IsInRole("Facilitator") || User.IsInRole("Supervisor") || User.IsInRole("Documents_Assistant"))
                                 {
                                     <a asp-action="Create" asp-controller="SafetyPlan" asp-route-id="@item.Id" class="btn btn-primary" title="Create Safety Plan"><i class="glyphicon glyphicon-plus"></i></a>
                                 }
