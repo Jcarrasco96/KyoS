@@ -143,6 +143,7 @@
                             </a>
                             <ul class="dropdown-menu" role="menu">
                                 <li><a asp-area="" asp-controller="Settings" asp-action="EditSettingManager">My Clinic</a></li>
+                                <li><a asp-area="" asp-controller="Course" asp-action="Index">Courses</a></li>
                                 <li>@Html.ActionLink("Health Insurances", "Index", "HealthInsurances")</li>
                                 <li role="separator" class="divider"></li>
                                 @if (setting != null && (setting.MentalHealthClinic || setting.TCMClinic))

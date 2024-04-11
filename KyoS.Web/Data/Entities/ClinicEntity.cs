@@ -85,5 +85,7 @@ namespace KyoS.Web.Data.Entities
         public string CPTCode_TCM { get; set; }
 
         public string Initials { get; set; }
+
+        public ICollection<CourseEntity> Courses { get; set; }
     }
 }

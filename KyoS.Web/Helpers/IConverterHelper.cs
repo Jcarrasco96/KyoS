@@ -258,5 +258,7 @@ namespace KyoS.Web.Helpers
         Workday_Activity_FacilitatorSkillViewModel ToWorkdayActivityFacilitatorViewModel(Workday_Activity_Facilitator model);
         IntakeNoHarmEntity ToIntakeNoHarmEntity(IntakeNoHarmViewModel model, bool isNew);
         IntakeNoHarmViewModel ToIntakeNoHarmViewModel(IntakeNoHarmEntity model);
+        CourseEntity ToCourseEntity(CourseViewModel model, bool isNew, string userId);
+        CourseViewModel ToCourseViewModel(CourseEntity model);
     }
 }

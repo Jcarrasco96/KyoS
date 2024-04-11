@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Data\Entities\CertificateEntity.cs" />
     <Compile Remove="Models\ClinicViewModel - Copy.cs" />
   </ItemGroup>
 

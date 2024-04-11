@@ -7,6 +7,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using AspNetCore.ReportingServices.ReportProcessing.ReportObjectModel;
 
 namespace KyoS.Web.Helpers
 {
@@ -8812,6 +8813,49 @@ namespace KyoS.Web.Helpers
                 DateSignaturePerson = model.DateSignaturePerson,
                 Documents = model.Documents,
                 AdmissionedFor = model.AdmissionedFor
+
+            };
+
+        }
+
+        public CourseEntity ToCourseEntity(CourseViewModel model, bool isNew, string userId)
+        {
+            return new CourseEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                ValidPeriod = model.ValidPeriod,
+                Name = model.Name,
+                Role = (model.IdRole == 1) ? UserType.Documents_Assistant : (model.IdRole == 2) ? UserType.Facilitator : (model.IdRole == 3) ? UserType.Supervisor : (model.IdRole == 4) ? UserType.CaseManager : (model.IdRole == 5) ? UserType.TCMSupervisor : (model.IdRole == 6) ? UserType.Manager : (model.IdRole == 7) ? UserType.Admin : (model.IdRole == 8) ? UserType.Frontdesk : UserType.Biller,
+                Clinic =  _context.Clinics.Find(model.IdClinic),
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                Description = model.Description
+
+            };
+        }
+
+        public CourseViewModel ToCourseViewModel(CourseEntity model)
+        {
+            return new CourseViewModel
+            {
+                Id = model.Id,
+                ValidPeriod = model.ValidPeriod,
+                Name = model.Name,
+                IdRole = (model.Role == UserType.Documents_Assistant) ? 1 : (model.Role == UserType.Facilitator) ? 2 : (model.Role == UserType.Supervisor) ? 3
+                        : (model.Role == UserType.CaseManager) ? 4 : (model.Role == UserType.TCMSupervisor) ? 5
+                        : (model.Role == UserType.Manager) ? 6 : (model.Role == UserType.Admin) ? 7 : (model.Role == UserType.Frontdesk) ? 8
+                        : (model.Role == UserType.Biller) ? 9 : 0,
+
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn,
+                IdClinic = model.Clinic.Id,
+                Roles = _combosHelper.GetComboRoles(),
+                Clinics = _combosHelper.GetComboClinics(),
+                Description = model.Description
 
             };
 

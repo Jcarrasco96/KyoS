@@ -166,6 +166,8 @@ namespace KyoS.Web.Data
         public DbSet<TCMPayStubDetailsEntity> TCMPayStubDetails { get; set; }
         public DbSet<TCMIntakeMedicalHistoryEntity> TCMIntakeMedicalHistory { get; set; }
         public DbSet<IntakeNoHarmEntity> IntakeNoHarm { get; set; }
+        public DbSet<CourseEntity> Courses { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
