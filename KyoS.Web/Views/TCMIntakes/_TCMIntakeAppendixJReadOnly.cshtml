@@ -1,9 +1,11 @@
 ﻿@model KyoS.Web.Models.TCMIntakeAppendixJViewModel
-@if (ViewData["origi"].ToString() == "1")
+@if (ViewData["edit"].ToString() == "1")
 {
     <div class="col-md-12">
         <pre>
-    Recipient's Name: <strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Name)</strong>                                Medicaid ID: <strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.MedicaidID)</strong>
+    <strong>AppendixJ valid until:  @Html.DisplayFor(modelItem => Model.DateExpired)</strong>              <strong> Clasiffication:</strong> <select asp-for="IdType" asp-items="Model.AppendixJTypes"></select>
+
+    Recipient's Name: <strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Name)</strong>               Medicaid ID: <strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.MedicaidID)</strong>
 
     Is hereby certified as meeting all of the following adult mental health targeted case management criteria. 
         <input type="checkbox" asp-for="IsEnrolled" disabled /> 1. Is enrolled in a Department of Children and Families adult mental health target population
@@ -35,7 +37,7 @@
     <div class="col-md-12">
         <pre>
         <input type="checkbox" class="form-check-input" checked disabled> <i>Signed</i>
-        <strong>Employee signature date</strong>         <input asp-for="Date" disabled>     <strong>Supervisor signature date</strong>    <input asp-for="SupervisorSignatureDate" disabled>
+        <strong>Employee signature date</strong>         <input asp-for="Date" disabled>     <strong>Supervisor signature date</strong>    <input asp-for="SupervisorSignatureDate">
         <strong>(@Html.DisplayFor(modelItem => Model.AdmissionedFor))</strong>      
                         
     </pre>
@@ -45,7 +47,9 @@ else
 {
     <div class="col-md-12">
         <pre>
-    Recipient's Name: <strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Name)</strong>                                Medicaid ID: <strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.MedicaidID)</strong>
+    <strong>AppendixJ valid until:  @Html.DisplayFor(modelItem => Model.DateExpired)</strong>              <strong> Clasiffication:</strong> <select asp-for="IdType" asp-items="Model.AppendixJTypes"></select>
+
+    Recipient's Name: <strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Name)</strong>                Medicaid ID: <strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.MedicaidID)</strong>
 
     Is hereby certified as meeting all of the following adult mental health targeted case management criteria. 
         <input type="checkbox" asp-for="IsEnrolled"  /> 1. Is enrolled in a Department of Children and Families adult mental health target population
@@ -74,14 +78,29 @@ else
            receiving mental health targeted case management services.    
 </pre>
     </div>
-    <div class="col-md-12">
-        <pre>
-        <input type="checkbox" class="form-check-input" checked disabled> <i>Signed</i>
-        <strong>Employee signature date</strong>         <input asp-for="Date" >     <strong>Supervisor signature date</strong>    <input asp-for="SupervisorSignatureDate" >
-        <strong>(@Html.DisplayFor(modelItem => Model.AdmissionedFor))</strong>      
-                        
-    </pre>
-    </div>
+    @if (User.IsInRole("CaseManager"))
+    {
+        <div class="col-md-12">
+            <pre>
+            <input type="checkbox" class="form-check-input" checked disabled> <i>Signed</i>
+            <strong>Employee signature date</strong>         <input asp-for="Date">     <strong>Supervisor signature date</strong>    <input asp-for="SupervisorSignatureDate" disabled>
+            <strong>(@Html.DisplayFor(modelItem => Model.AdmissionedFor))</strong>      
+
+            </pre>
+        </div>
+    }
+    @if (User.IsInRole("TCMSupervisor"))
+    {
+        <div class="col-md-12">
+            <pre>
+            <input type="checkbox" class="form-check-input" checked disabled> <i>Signed</i>
+            <strong>Employee signature date</strong>         <input asp-for="Date">     <strong>Supervisor signature date</strong>    <input asp-for="SupervisorSignatureDate">
+            <strong>(@Html.DisplayFor(modelItem => Model.AdmissionedFor))</strong>      
+
+            </pre>
+        </div>
+    }
+    
 }
 <div class="col-md-12">
     &nbsp;

@@ -1628,20 +1628,20 @@ namespace KyoS.Web.Helpers
             {
                 List<SelectListItem> list = _context.TCMClient
 
-                                                .Include(c => c.Client)
+                                                    .Include(c => c.Client)
 
-                                                .Where(c => (c.TcmServicePlan != null
-                                                          && c.TcmIntakeAppendixJ.Approved == 2
-                                                          && c.Casemanager.LinkedUser == user
-                                                          && c.DataOpen.Date <= dateTCMNote.Date
-                                                          && c.DataClose.Date >= dateTCMNote.Date))
-                                                .OrderBy(c => c.Client.Name)
+                                                    .Where(c => (c.TcmServicePlan != null
+                                                              && c.TcmIntakeAppendixJ.Where(n => n.Approved == 2).Count() > 0
+                                                              && c.Casemanager.LinkedUser == user
+                                                              && c.DataOpen.Date <= dateTCMNote.Date
+                                                              && c.DataClose.Date >= dateTCMNote.Date))
+                                                    .OrderBy(c => c.Client.Name)
 
-                                                .Select(c => new SelectListItem
-                                                {
-                                                    Text = $"{c.Client.Name} | {c.CaseNumber}",
-                                                    Value = $"{c.Id}"
-                                                }).ToList();
+                                                    .Select(c => new SelectListItem
+                                                    {
+                                                        Text = $"{c.Client.Name} | {c.CaseNumber}",
+                                                        Value = $"{c.Id}"
+                                                    }).ToList();
 
                 list.Insert(0, new SelectListItem
                 {
@@ -1659,7 +1659,7 @@ namespace KyoS.Web.Helpers
 
                                                     .Where(c => (c.TCMAssessment.Approved == 2
                                                               && c.TcmServicePlan.Approved == 2
-                                                              && c.TcmIntakeAppendixJ.Approved == 2
+                                                              && c.TcmIntakeAppendixJ.Where(n => n.Approved == 2).Count() > 0
                                                               && c.Casemanager.LinkedUser == user
                                                               && c.DataOpen <= dateTCMNote
                                                               && c.DataClose >= dateTCMNote))
@@ -2502,7 +2502,7 @@ namespace KyoS.Web.Helpers
                                                 .Include(c => c.Client)
 
                                                 .Where(c => (c.TcmServicePlan != null
-                                                          && c.TcmIntakeAppendixJ.Approved == 2
+                                                          && c.TcmIntakeAppendixJ.Where(n => n.Approved == 2).Count() > 0
                                                           && c.Casemanager.LinkedUser == user))
                                                 .OrderBy(c => c.Client.Name)
 
@@ -2684,6 +2684,17 @@ namespace KyoS.Web.Helpers
                 Text = "[Select payment method...]",
                 Value = "0"
             });
+
+            return list;
+        }
+
+        public IEnumerable<SelectListItem> GetComboAppendixJType()
+        {
+            List<SelectListItem> list = new List<SelectListItem>
+                                { new SelectListItem { Text = AppendixJType.Initial.ToString(), Value = "0"},
+                                  new SelectListItem { Text = AppendixJType.Review.ToString(), Value = "1"},
+                                  new SelectListItem { Text = AppendixJType.Discontinuity.ToString(), Value = "2"}};
+
 
             return list;
         }

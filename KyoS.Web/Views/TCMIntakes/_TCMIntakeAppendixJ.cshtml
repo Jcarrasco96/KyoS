@@ -1,7 +1,10 @@
 ﻿@model KyoS.Web.Models.TCMIntakeAppendixJViewModel
 <div class="col-md-12">
     <pre>
-    Recipient's Name: <strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Name)</strong>                                Medicaid ID: <strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.MedicaidID)</strong>
+    <strong>AppendixJ valid until </strong>         <input asp-for="DateExpired" disabled>               <select asp-for="IdType" asp-items="Model.AppendixJTypes"></select>
+
+    <input type="checkbox" asp-for="Active" disabled/>  AppendixJ Active
+    Recipient's Name: <strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Name)</strong>              Medicaid ID: <strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.MedicaidID)</strong>              
 
     Is hereby certified as meeting all of the following adult mental health targeted case management criteria. 
     <input type="checkbox" asp-for="IsEnrolled" /> 1. Is enrolled in a Department of Children and Families adult mental health target population

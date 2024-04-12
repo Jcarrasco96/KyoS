@@ -4753,7 +4753,10 @@ namespace KyoS.Web.Helpers
                 Lacks = model.Lacks,
                 Meets = model.Meets,
                 RequiresOngoing = model.RequiresOngoing,
-                RequiresServices = model.RequiresServices
+                RequiresServices = model.RequiresServices,
+                AppendixType = AppendixJUtils.GetTypeByIndex(model.IdType),
+                Active = model.Active,
+                DateExpired = model.DateExpired
             };
 
             return salida;
@@ -4789,7 +4792,12 @@ namespace KyoS.Web.Helpers
                 Lacks = model.Lacks,
                 Meets = model.Meets,
                 RequiresOngoing = model.RequiresOngoing,
-                RequiresServices = model.RequiresServices
+                RequiresServices = model.RequiresServices,
+                AppendixType = model.AppendixType,
+                Active = model.Active,
+                DateExpired = model.DateExpired,
+                IdType = (model.AppendixType == AppendixJType.Initial) ? 0 : (model.AppendixType == AppendixJType.Review) ? 1 : 2,
+                AppendixJTypes = _combosHelper.GetComboAppendixJType()
             };
 
         }

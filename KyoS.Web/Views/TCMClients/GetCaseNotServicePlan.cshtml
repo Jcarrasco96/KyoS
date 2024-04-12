@@ -219,13 +219,14 @@
                                 <td align="center">
                                     @if (User.IsInRole("CaseManager"))
                                     {
-                                        @if (item.TcmIntakeAppendixJ == null || item.TcmIntakeAppendixJ.Id == 0)
+                                        @if (item.TcmIntakeAppendixJ.Count() == 0)
                                         {
                                             <a asp-action="CreateTCMAppendixJ" asp-route-id="@item.Id" asp-controller="TCMIntakes" asp-route-origi="1" class="btn btn-default " title="Create"><i class="glyphicon glyphicon-plus"></i></a>
                                         }
                                         else
                                         {
-                                            @if (item.TcmIntakeAppendixJ.Approved == 0)
+                                                <a asp-action="CreateTCMAppendixJ" asp-route-id="@item.Id" asp-controller="TCMIntakes" asp-route-origi="1" class="btn btn-default " title="Create"><i class="glyphicon glyphicon-plus"></i></a>
+                                           @* @if (item.TcmIntakeAppendixJ.Approved == 0)
                                             {
                                                 <a asp-action="CreateTCMAppendixJ" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-warning" asp-route-origi="1" title="Edit"><i class="glyphicon glyphicon-pencil"></i></a>
                                             }
@@ -236,18 +237,19 @@
                                             @if (item.TcmIntakeAppendixJ.Approved == 2)
                                             {
                                                 <a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-success" title="Print"><i class="glyphicon glyphicon-print"></i></a>
-                                            }
+                                            }*@
                                         }
                                     }
                                     else
                                     {
-                                        @if (item.TcmIntakeAppendixJ == null || item.TcmIntakeAppendixJ.Id == 0)
+                                        @if (item.TcmIntakeAppendixJ.Count() == 0)
                                         {
                                             <a asp-action="CreateTCMAppendixJ" asp-route-id="@item.Id" asp-controller="TCMIntakes" asp-route-origi="1" class="btn btn-default disabled" title="Create"><i class="glyphicon glyphicon-plus"></i></a>
                                         }
                                         else
                                         {
-                                            @if (item.TcmIntakeAppendixJ.Approved == 0)
+                                                <a asp-action="CreateTCMAppendixJ" asp-route-id="@item.Id" asp-controller="TCMIntakes" asp-route-origi="1" class="btn btn-default disabled" title="Create"><i class="glyphicon glyphicon-plus"></i></a>
+                                            @*@if (item.TcmIntakeAppendixJ.Approved == 0)
                                             {
                                                 <a asp-action="CreateTCMAppendixJ" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-warning disabled" asp-route-origi="1" title="Edit"><i class="glyphicon glyphicon-pencil"></i></a>
                                             }
@@ -258,7 +260,7 @@
                                             @if (item.TcmIntakeAppendixJ.Approved == 2)
                                             {
                                                 <a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-success disabled" title="Print"><i class="glyphicon glyphicon-print"></i></a>
-                                            }
+                                            }*@
                                         }
                                     }
 

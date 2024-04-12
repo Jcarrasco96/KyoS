@@ -523,11 +523,6 @@ namespace KyoS.Web.Data
                         .OnDelete(DeleteBehavior.Cascade)
                         .HasForeignKey<TCMIntakeCoordinationCareEntity>(s => s.TcmClient_FK);
 
-            modelBuilder.Entity<TCMClientEntity>()
-                        .HasOne(c => c.TcmIntakeAppendixJ)
-                        .WithOne(s => s.TcmClient)
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .HasForeignKey<TCMIntakeAppendixJEntity>(s => s.TcmClient_FK);
 
             modelBuilder.Entity<TCMClientEntity>()
                         .HasOne(c => c.TcmInterventionLog)

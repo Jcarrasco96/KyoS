@@ -111,5 +111,6 @@ namespace KyoS.Web.Helpers
         IEnumerable<SelectListItem> GetComboTCMActivityByService(int idService);
         IEnumerable<SelectListItem> GetComboAccountType();
         IEnumerable<SelectListItem> GetComboPaymentMethod();
+        IEnumerable<SelectListItem> GetComboAppendixJType();
     }
 }

@@ -752,8 +752,8 @@ namespace KyoS.Web.Controllers
                         item.TCMFarsFormList = new List<TCMFarsFormEntity>();
                     if (item.TCMAssessment == null)
                         item.TCMAssessment = new TCMAssessmentEntity();
-                    if (item.TcmIntakeAppendixJ == null)
-                        item.TcmIntakeAppendixJ = new TCMIntakeAppendixJEntity();
+                   // if (item.TcmIntakeAppendixJ == null)
+                    //    item.TcmIntakeAppendixJ = new TCMIntakeAppendixJEntity();
                     
                     salida.Add(item);
                 }
@@ -805,8 +805,8 @@ namespace KyoS.Web.Controllers
                         item.TCMFarsFormList = new List<TCMFarsFormEntity>();
                     if (item.TCMAssessment == null)
                         item.TCMAssessment = new TCMAssessmentEntity();
-                    if (item.TcmIntakeAppendixJ == null)
-                        item.TcmIntakeAppendixJ = new TCMIntakeAppendixJEntity();
+                   // if (item.TcmIntakeAppendixJ == null)
+                   //     item.TcmIntakeAppendixJ = new TCMIntakeAppendixJEntity();
 
                     salida.Add(item);
                 }

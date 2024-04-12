@@ -15,6 +15,7 @@ using Microsoft.EntityFrameworkCore;
 using System.IO;
 using KyoS.Common.Helpers;
 using KyoS.Web.Migrations;
+using DocumentFormat.OpenXml.Presentation;
 
 namespace KyoS.Web.Controllers
 {
@@ -3737,48 +3738,45 @@ namespace KyoS.Web.Controllers
                                                                      .Include(n => n.TcmClient)
                                                                      .ThenInclude(n => n.Client)
                                                                      .FirstOrDefault(n => n.TcmClient.Id == id);
-                    if (intakeAppendixJ == null)
+                    TCMClientEntity tcmclient = _context.TCMClient
+                                                        .Include(n => n.Client)
+                                                        .FirstOrDefault(n => n.Id == id);
+                    model = new TCMIntakeAppendixJViewModel
                     {
-                        model = new TCMIntakeAppendixJViewModel
-                        {
-                            TcmClient = _context.TCMClient
-                                                .Include(n => n.Client)
-                                                .FirstOrDefault(n => n.Id == id),
-                            IdTCMClient = id,
-                            TcmClient_FK = id,
-                            Id = 0,
-                            CreatedBy = user_logged.UserName,
-                            CreatedOn = DateTime.Now,
-                            AdmissionedFor = user_logged.FullName,
-                            Approved = 0,
-                            Date = DateTime.Now,
-                            HasBeen = false,
-                            HasHad = false,
-                            IsAt = false,
-                            IsAwaiting = false,
-                            IsExperiencing = true,
-                            SupervisorSignatureDate = DateTime.Now,
-                            TcmSupervisor = new TCMSupervisorEntity(),
-                            HasAMental2 = true,
-                            HasAMental6 = true,
-                            HasRecolated = false,
-                            IsEnrolled = true,
-                            IsNotReceiving = true,
-                            Lacks = true,
-                            Meets = true,
-                            RequiresOngoing = true,
-                            RequiresServices = true
+                        TcmClient = tcmclient,
+                        IdTCMClient = id,
+                        TcmClient_FK = id,
+                        Id = 0,
+                        CreatedBy = user_logged.UserName,
+                        CreatedOn = DateTime.Now,
+                        AdmissionedFor = user_logged.FullName,
+                        Approved = 0,
+                        Date = DateTime.Now,
+                        HasBeen = false,
+                        HasHad = false,
+                        IsAt = false,
+                        IsAwaiting = false,
+                        IsExperiencing = true,
+                        SupervisorSignatureDate = DateTime.Now,
+                        TcmSupervisor = new TCMSupervisorEntity(),
+                        HasAMental2 = true,
+                        HasAMental6 = true,
+                        HasRecolated = false,
+                        IsEnrolled = true,
+                        IsNotReceiving = true,
+                        Lacks = true,
+                        Meets = true,
+                        RequiresOngoing = true,
+                        RequiresServices = true,
+                        Active = false,
+                        DateExpired = tcmclient.DataClose,
+                        AppendixType = AppendixJType.Initial,
+                        IdType = 0,
+                        AppendixJTypes = _combosHelper.GetComboAppendixJType()
 
-                        };
-                        ViewData["origi"] = origi;
-                        return View(model);
-                    }
-                    else
-                    {
-                        model = _converterHelper.ToTCMIntakeAppendixJViewModel(intakeAppendixJ);
-                        ViewData["origi"] = origi;
-                        return View(model);
-                    }
+                    };
+                    ViewData["origi"] = origi;
+                    return View(model);
 
                 }
             }
@@ -3797,11 +3795,22 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
+                List<TCMIntakeAppendixJEntity> appendixJList = await _context.TCMIntakeAppendixJ
+                                                                             .Where(n => n.TcmClient_FK == AppendixJViewModel.TcmClient_FK)
+                                                                             .ToListAsync();
+
+                foreach (var item in appendixJList)
+                {
+                    item.Active = false;
+                    item.DateExpired = AppendixJViewModel.Date;
+                    _context.TCMIntakeAppendixJ.Update(item);
+                }
+
                 TCMIntakeAppendixJEntity AppendixJEntity = await _converterHelper.ToTCMIntakeAppendixJEntity(AppendixJViewModel, false, user_logged.UserName);
 
                 if (AppendixJEntity.Id == 0)
                 {
-                    AppendixJEntity.TcmClient = null;
+                    AppendixJEntity.TcmClient = await _context.TCMClient.FindAsync(AppendixJViewModel.TcmClient_FK);
                     AppendixJEntity.Approved = 1;
                     _context.TCMIntakeAppendixJ.Add(AppendixJEntity);
                     try
@@ -3815,7 +3824,10 @@ namespace KyoS.Web.Controllers
                         {
                             return RedirectToAction("GetCaseNotServicePlan", "TCMClients");
                         }
-
+                        if (origi == 2)
+                        {
+                            return RedirectToAction("ListAppendixJForTCMClient", "TCMIntakes", new { id = AppendixJViewModel.IdTCMClient, origi = 0});
+                        }
                     }
                     catch (System.Exception ex)
                     {
@@ -4167,9 +4179,16 @@ namespace KyoS.Web.Controllers
 
             UserEntity user_logged = _context.Users
                                              .Include(u => u.Clinic)
+                                             .ThenInclude(u => u.Setting)
                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
             TCMIntakeAppendixJViewModel model;
+            int edit = 0;
+
+            if (user_logged.Clinic.Setting.TCMSupervisorEdit == false)
+            {
+                edit = 1;
+            }
 
             if (User.IsInRole("TCMSupervisor"))
             {
@@ -4178,7 +4197,7 @@ namespace KyoS.Web.Controllers
                     TCMIntakeAppendixJEntity intakeAppendixJ = _context.TCMIntakeAppendixJ
                                                                        .Include(n => n.TcmClient)
                                                                        .ThenInclude(n => n.Client)
-                                                                       .FirstOrDefault(n => n.TcmClient.Id == id);
+                                                                       .FirstOrDefault(n => n.Id == id);
                     if (intakeAppendixJ == null)
                     {
                         model = new TCMIntakeAppendixJViewModel
@@ -4200,17 +4219,21 @@ namespace KyoS.Web.Controllers
                             IsAwaiting = false,
                             IsExperiencing = false,
                             SupervisorSignatureDate = DateTime.Now,
-                            TcmSupervisor = new TCMSupervisorEntity()
+                            TcmSupervisor = new TCMSupervisorEntity(),
+                            IdType = 0,
+                            AppendixJTypes = _combosHelper.GetComboAppendixJType()
 
                         };
 
                         ViewData["origi"] = origi;
+                        ViewData["edit"] = edit;
                         return View(model);
                     }
                     else
                     {
                         model = _converterHelper.ToTCMIntakeAppendixJViewModel(intakeAppendixJ);
                         ViewData["origi"] = origi;
+                        ViewData["edit"] = edit;
                         return View(model);
                     }
 
@@ -4233,11 +4256,17 @@ namespace KyoS.Web.Controllers
             {
                 if (User.IsInRole("TCMSupervisor"))
                 {
-                  
+                    List<TCMIntakeAppendixJEntity> list = _context.TCMIntakeAppendixJ.Where(n => n.Active == true).ToList();
+                    foreach (var item in list)
+                    {
+                        item.Active = false;
+                        _context.Update(item);
+                    }
 
                     if (user_logged.Clinic != null)
                     {
                         tcmAppendixJ.Approved = 2;
+                        tcmAppendixJ.Active = true;
                         tcmAppendixJ.TcmSupervisor = tcmAppendixJ.TcmClient.Casemanager.TCMSupervisor;
                         
                         _context.Update(tcmAppendixJ);
@@ -5759,7 +5788,7 @@ namespace KyoS.Web.Controllers
                                               .Include(f => f.Casemanager)
                                               .Where(n => n.Client.Clinic.Id == user_logged.Clinic.Id
                                                        && n.Casemanager.TCMSupervisor.Id == _context.TCMSupervisors.FirstOrDefault(m => m.LinkedUser == user_logged.UserName).Id
-                                                       && n.TcmIntakeAppendixJ.Approved == 2)
+                                                       && n.TcmIntakeAppendixJ.Where(a => a.Approved == 2).Count() > 0)
                                               .OrderBy(f => f.Client.Name)
                                               .ToListAsync());
 
@@ -5767,32 +5796,61 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("NotAuthorized", "Account");
         }
 
-        [Authorize(Roles = "TCMSupervisor")]
-        public async Task<IActionResult> EditAppendixJ(int? id)
+        [Authorize(Roles = "TCMSupervisor, CaseManager")]
+        public async Task<IActionResult> EditAppendixJ(int? id, int origi = 0)
         {
+            UserEntity user_logged = await _context.Users
+                                                   .Include(u => u.Clinic)
+                                                   .ThenInclude(c => c.Setting)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+            int edit = 0;
+
             if (id == null)
             {
                 return RedirectToAction("Home/Error404");
             }
 
-            TCMIntakeAppendixJEntity entity = await _context.TCMIntakeAppendixJ
-                                                            .Include(c => c.TcmClient)
-                                                            .ThenInclude(c => c.Client)
-                                                            .ThenInclude(c => c.Clinic)
-                                                            .FirstOrDefaultAsync(s => s.Id == id);
-            if (entity == null)
+            TCMIntakeAppendixJViewModel model = new TCMIntakeAppendixJViewModel();
+            TCMIntakeAppendixJEntity entity = new TCMIntakeAppendixJEntity();
+
+            if (User.IsInRole("CaseManager"))
+            {
+                entity = await _context.TCMIntakeAppendixJ
+                                       .Include(c => c.TcmClient)
+                                       .ThenInclude(c => c.Client)
+                                       .ThenInclude(c => c.Clinic)
+                                       .FirstOrDefaultAsync(s => s.Id == id 
+                                                              && s.CreatedBy == user_logged.UserName);
+            }
+            if (User.IsInRole("TCMSupervisor"))
+            {
+                entity = await _context.TCMIntakeAppendixJ
+                                       .Include(c => c.TcmClient)
+                                       .ThenInclude(c => c.Client)
+                                       .ThenInclude(c => c.Clinic)
+                                       .FirstOrDefaultAsync(s => s.Id == id);
+                if (user_logged.Clinic.Setting.TCMSupervisorEdit == false)
+                {
+                    edit = 1;
+                }
+            }
+           
+            if (entity.Id == 0)
             {
                 return RedirectToAction("Home/Error404");
             }
-            ViewData["origi"] = 0;
-            TCMIntakeAppendixJViewModel model = _converterHelper.ToTCMIntakeAppendixJViewModel(entity);
+
+            ViewData["edit"] = edit;
+            ViewData["origi"] = origi;
+            model = _converterHelper.ToTCMIntakeAppendixJViewModel(entity);
 
             return View(model);
         }
 
         [HttpPost]
+        [Authorize(Roles = "TCMSupervisor, CaseManager")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditAppendixJ(int id, TCMIntakeAppendixJViewModel model)
+        public async Task<IActionResult> EditAppendixJ(int id, TCMIntakeAppendixJViewModel model, int origi = 0)
         {
             if (id != model.Id)
             {
@@ -5806,11 +5864,25 @@ namespace KyoS.Web.Controllers
                                                  .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
                 TCMIntakeAppendixJEntity appendixJ = await _converterHelper.ToTCMIntakeAppendixJEntity(model, false, user_logged.UserName);
-                appendixJ.Approved = 2;
+                
+                if (User.IsInRole("TCMSupervisor"))
+                {
+                    appendixJ.Approved = 2;
+                }
+                
                 _context.Update(appendixJ);
                 await _context.SaveChangesAsync();
 
-                return RedirectToAction("UpdateAppendixJ");
+                if (origi == 0)
+                {
+                    return RedirectToAction("ListAppendixJForTCMClient", "TCMIntakes", new { id = appendixJ.TcmClient_FK, origi = origi });
+                }
+                else
+                {
+
+                    return RedirectToAction("UpdateAppendixJ");
+                }
+                
             }
 
             return View(model);
@@ -7219,6 +7291,37 @@ namespace KyoS.Web.Controllers
             };
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "_ViewTCMMedicationList", _context.TCMAssessmentMedication.Where(n => n.TcmAssessment.Id == MedicationViewModel.IdTCMAssessment)) });
         }
+
+        [Authorize(Roles = "CaseManager, TCMSupervisor, Manager")]
+        public async Task<IActionResult> ListAppendixJForTCMClient(int id = 0, int origi = 0)
+        {
+
+            UserEntity user_logged = await _context.Users
+                                                   .Include(u => u.Clinic)
+                                                   .ThenInclude(c => c.Setting)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.TCMClinic)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+            else
+            {
+                List<TCMIntakeAppendixJEntity> listAppendixJ = await _context.TCMIntakeAppendixJ
+                                                                             .Include(n => n.TcmClient)
+                                                                             .ThenInclude(n => n.Client)
+                                                                             .Where(m => m.TcmClient_FK == id)
+                                                                             .ToListAsync();
+                if (listAppendixJ.Count == 0)
+                {
+                    return RedirectToAction("TCMIntakeSectionDashboard", new { id = id, section = 4, origin = origi });
+                }
+
+                ViewData["origi"] = origi;
+                return View(listAppendixJ);
+            }
+        }
+
 
     }
 }

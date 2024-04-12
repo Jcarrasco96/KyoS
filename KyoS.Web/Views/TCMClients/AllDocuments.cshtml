@@ -156,25 +156,21 @@
                                          }
                                          else
                                          {
-                                             @if (item.TcmIntakeAppendixJ == null || item.TcmIntakeAppendixJ.Id == 0)
+                                             @if (item.TcmIntakeAppendixJ.Count() == 0)
                                              {
-                                                 <a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-default disabled" title="Print"><i class="glyphicon glyphicon-print"></i></a>
-                                             }
-                                             else
-                                             {
-                                                 @if (item.TcmIntakeAppendixJ.Approved == 0)
-                                                 {
-                                                     <a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-warning disabled" title="Print"><i class="glyphicon glyphicon-print"></i></a>
-                                                 }
-                                                 @if (item.TcmIntakeAppendixJ.Approved == 1)
-                                                 {
-                                                     <a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-info disabled" title="Print"><i class="glyphicon glyphicon-print"></i></a>
-                                                 }
-                                                 @if (item.TcmIntakeAppendixJ.Approved == 2)
-                                                 {
-                                                     <a asp-action="PrintTCMAppendixJ" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-success" title="Print Appendix J" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
-                                                 }
-                                             }
+                                                <a asp-action="Print" asp-route-id="@item.Id" asp-route-origi="1" asp-controller="TCMIntakes" class="btn btn-default disabled" title="Print"><i class="glyphicon glyphicon-share"></i></a>
+                                            }
+                                            else
+                                            {
+                                                @if (item.TcmIntakeAppendixJ.Where(n => n.Active).Count() == 0)
+                                                {
+                                                    <a asp-action="ListAppendixJForTCMClient" asp-route-id="@item.Id" asp-route-origi="1" asp-controller="TCMIntakes" class="btn btn-danger" title="Go to Appendix J"><i class="glyphicon glyphicon-share"></i></a>
+                                                }
+                                                else
+                                                {
+                                                    <a asp-action="ListAppendixJForTCMClient" asp-route-id="@item.Id" asp-route-origi="1" asp-controller="TCMIntakes" class="btn btn-success" title="Go to Appendix J"><i class="glyphicon glyphicon-share"></i></a>
+                                                }
+                                            }
                                          }
                                      </td>
                                     <td align="center">
