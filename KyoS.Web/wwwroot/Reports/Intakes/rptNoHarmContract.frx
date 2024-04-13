@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="04/11/2024 18:44:25" ReportInfo.CreatorVersion="2021.1.0.0">
+  <Dictionary>
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pKiygLNrR2GSkUua6CZa7zWuDzNGOn7cjq7mn0WTOnccDkyyV5BLvtFa1BRlcYFBr5z2iaEQPva16wSIeTrPssA==">
+      <TableDataSource Name="Clinics" DataType="System.Int32" Enabled="true" TableName="Clinics">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Name" DataType="System.String"/>
+        <Column Name="LogoPath" DataType="System.String"/>
+        <Column Name="Schema" DataType="System.Int32"/>
+        <Column Name="Address" DataType="System.String"/>
+        <Column Name="CEO" DataType="System.String"/>
+        <Column Name="City" DataType="System.String"/>
+        <Column Name="FaxNo" DataType="System.String"/>
+        <Column Name="Phone" DataType="System.String"/>
+        <Column Name="State" DataType="System.String"/>
+        <Column Name="ZipCode" DataType="System.String"/>
+        <Column Name="ClinicalDirector" DataType="System.String"/>
+        <Column Name="ProviderTaxId" DataType="System.String"/>
+        <Column Name="ProviderMedicaidId" DataType="System.String"/>
+      </TableDataSource>
+      <TableDataSource Name="Clients" DataType="System.Int32" Enabled="true" TableName="Clients">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Name" DataType="System.String"/>
+        <Column Name="Gender" DataType="System.Int32"/>
+        <Column Name="Code" DataType="System.String"/>
+        <Column Name="ClinicId" DataType="System.Int32"/>
+        <Column Name="DateOfBirth" DataType="System.DateTime"/>
+        <Column Name="ZipCode" DataType="System.String"/>
+        <Column Name="Status" DataType="System.Int32"/>
+        <Column Name="GroupId" DataType="System.Int32"/>
+        <Column Name="AlternativeAddress" DataType="System.String"/>
+        <Column Name="City" DataType="System.String"/>
+        <Column Name="Country" DataType="System.String"/>
+        <Column Name="CreatedBy" DataType="System.String"/>
+        <Column Name="CreatedOn" DataType="System.DateTime"/>
+        <Column Name="DoctorId" DataType="System.Int32"/>
+        <Column Name="Email" DataType="System.String"/>
+        <Column Name="EmergencyContactId" DataType="System.Int32"/>
+        <Column Name="Ethnicity" DataType="System.Int32"/>
+        <Column Name="FullAddress" DataType="System.String"/>
+        <Column Name="LastModifiedBy" DataType="System.String"/>
+        <Column Name="LastModifiedOn" DataType="System.DateTime"/>
+        <Column Name="LegalGuardianId" DataType="System.Int32"/>
+        <Column Name="MaritalStatus" DataType="System.Int32"/>
+        <Column Name="MedicaidID" DataType="System.String"/>
+        <Column Name="OtherLanguage" DataType="System.String"/>
+        <Column Name="PhotoPath" DataType="System.String"/>
+        <Column Name="PreferredLanguage" DataType="System.Int32"/>
+        <Column Name="PsychiatristId" DataType="System.Int32"/>
+        <Column Name="Race" DataType="System.Int32"/>
+        <Column Name="SSN" DataType="System.String"/>
+        <Column Name="SignPath" DataType="System.String"/>
+        <Column Name="State" DataType="System.String"/>
+        <Column Name="Telephone" DataType="System.String"/>
+        <Column Name="TelephoneSecondary" DataType="System.String"/>
+        <Column Name="RelationShipOfLegalGuardian" DataType="System.Int32"/>
+        <Column Name="Service" DataType="System.Int32"/>
+        <Column Name="IndividualTherapyFacilitatorId" DataType="System.Int32"/>
+        <Column Name="AdmisionDate" DataType="System.DateTime"/>
+        <Column Name="PlaceOfBirth" DataType="System.String"/>
+        <Column Name="RelationShipOfEmergencyContact" DataType="System.Int32"/>
+        <Column Name="IdFacilitatorPSR" DataType="System.Int32"/>
+        <Column Name="OtherLanguage_Read" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="OtherLanguage_Speak" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="OtherLanguage_Understand" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="MedicareId" DataType="System.String"/>
+        <Column Name="DateOfClose" DataType="System.DateTime"/>
+        <Column Name="OnlyTCM" DataType="System.Boolean" BindableControl="CheckBox"/>
+      </TableDataSource>
+      <TableDataSource Name="Classifications" Alias="Signatures" DataType="System.Int32" Enabled="true" TableName="Classifications">
+        <Column Name="supervisorSignature" DataType="System.Byte[]" PropName="Id"/>
+        <Column Name="facilitatorSignature" DataType="System.Byte[]" PropName="Name"/>
+      </TableDataSource>
+      <TableDataSource Name="IntakeNoHarm" DataType="System.Int32" Enabled="true" TableName="IntakeNoHarm">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Client_FK" DataType="System.Int32"/>
+        <Column Name="DateSignaturePerson" DataType="System.DateTime"/>
+        <Column Name="DateSignatureEmployee" DataType="System.DateTime"/>
+        <Column Name="AdmissionedFor" DataType="System.String"/>
+        <Column Name="Documents" DataType="System.Boolean" BindableControl="CheckBox"/>
+      </TableDataSource>
+    </MsSqlDataConnection>
+  </Dictionary>
+  <ReportPage Name="Page1" PaperWidth="215.9" PaperHeight="279.4" RawPaperSize="1" LeftMargin="5" TopMargin="5" RightMargin="5" BottomMargin="5" Watermark.Enabled="true" Watermark.Font="Arial, 60pt">
+    <ReportTitleBand Name="ReportTitle1" Width="778.3" Height="78.15">
+      <TextObject Name="Textbox12" Left="121.75" Top="11.45" Width="535.1" Height="20" CanGrow="true" Text="[Clinics.Name]" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 12pt, style=Bold"/>
+      <TextObject Name="Textbox64" Left="120.75" Top="33.33" Width="535.1" Height="22" CanGrow="true" Text="NO HARM CONTRACT" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 12pt, style=Bold"/>
+      <LineObject Name="Line3" Left="121.3" Top="16.45" Height="37.2"/>
+      <LineObject Name="Line4" Left="774.52" Top="75.6" Width="-776"/>
+      <PictureObject Name="Picture1" Left="7.9" Top="0.45" Width="103.95" Height="66.15"/>
+      <LineObject Name="Line6" Left="120.3" Top="15.45" Height="37.8"/>
+      <LineObject Name="Line7" Left="774.9" Top="74.7" Width="-776"/>
+    </ReportTitleBand>
+    <DataBand Name="Data1" Top="82" Width="778.3" Height="809.92">
+      <TextObject Name="Text290" Left="103.95" Top="763.9" Width="190.89" Height="24.57" CanGrow="true" Text="Client’s Signature " Padding="2, 2, 2, 2" Font="Arial, 9pt"/>
+      <LineObject Name="Line15" Left="295.95" Top="762.45" Width="-192.78"/>
+      <TextObject Name="Text291" Left="503.85" Top="763.94" Width="77.49" Height="24.57" CanGrow="true" Text="Date" Padding="2, 2, 2, 2" Font="Arial, 9pt"/>
+      <TextObject Name="Text292" Left="503.85" Top="743.1" Width="91.48" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[IIf(Year([IntakeNoHarm.DateSignatureEmployee]) == 1,&quot;&quot;,[IntakeNoHarm.DateSignatureEmployee])]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 9pt"/>
+      <PictureObject Name="Picture4" Left="151.2" Top="707.3" Width="95" Height="63.45" DataColumn="Signatures.facilitatorSignature"/>
+      <TextObject Name="Text329" Top="69.7" Width="774.9" Height="151.2" Text="I &lt;b&gt;[Clients.Name]&lt;/b&gt;, agree to not harm myself or others in any way, attempt to kill myself or others during the duration of counseling services.&#13;&#10;&#13;&#10;I agree that, for any reason, if the appointment session is postponed, canceled, etc., that this time period is extended until the next direct meeting with my counselor. In this period, I agree to care for myself, to eat well, and to get enough sleep each night.&#13;&#10;&#13;&#10;I agree to rid my presence of all things i could use to harm or kill myself and others. I agree that, if I am having a rough time and come to a point where I may break any of these promises, I will call and make significant contact with any of the following individuals:&#13;&#10;&#13;&#10;&#13;&#10;&#13;&#10;" HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text331" Top="223.35" Width="330.75" Height="66.15" Text="Suicide Crisis Hotline at #&#13;&#10;1 - 800 - SUICIDE    (1 - 800 - 784 - 2433)&#13;&#10;1 - 800 - 273 - TALK  (1 - 800 - 273 - 8255)&#13;&#10;OR  911&#13;&#10;&#13;&#10;&#13;&#10;&#13;&#10;" HorzAlign="Justify" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text332" Top="300.95" Width="774.9" Height="47.25" Text="I agree that these conditions are important, worth doing, and that this is a contract I am willing to make and keep. By my word and honor, I intend to keep this contract.&#13;&#10;&#13;&#10;&#13;&#10;&#13;&#10;" HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+    </DataBand>
+  </ReportPage>
+</Report>

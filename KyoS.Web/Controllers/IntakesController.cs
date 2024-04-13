@@ -1031,7 +1031,26 @@ namespace KyoS.Web.Controllers
 
             Stream stream = _reportHelper.IntakeNoDuplicateService(entity);
             return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
-        }        
+        }
+
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant, Frontdesk")]
+        public async Task<IActionResult> PrintNoHarm(int id)
+        {
+            IntakeNoHarmEntity entity = await _context.IntakeNoHarm
+
+                                                      .Include(c => c.Client)
+                                                      .ThenInclude(cm => cm.Clinic)                                                      
+
+                                                      .FirstOrDefaultAsync(c => c.Client.Id == id);
+
+            if (entity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            Stream stream = _reportHelper.IntakeNoHarmContract(entity);
+            return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+        }
 
         [Authorize(Roles = "Manager, Frontdesk, Documents_Assistant")]
         public IActionResult CreateAcknowledgementHippa(int id = 0)
