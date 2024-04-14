@@ -16,7 +16,10 @@
 </div>
 
 <p>
-    <a onclick="showInPopup('@Url.Action("CreatCaseManagerCertification","CaseMannager",null,Context.Request.Scheme)','Add Certification')" class="btn btn-primary" title="Add Certification"><i class="glyphicon glyphicon-plus"></i> Add Certification</a>
+    @if (User.IsInRole("Manager"))
+    {
+        <a onclick="showInPopup('@Url.Action("CreatCaseManagerCertification","CaseMannager",null,Context.Request.Scheme)','Add Certification')" class="btn btn-primary" title="Add Certification"><i class="glyphicon glyphicon-plus"></i> Add Certification</a>
+    }    
     <a onclick="showInPopupLg('@Url.Action("AuditCertification","CaseMannager",null,Context.Request.Scheme)','Audit TCM Certifications')" class="btn btn-danger" title="Audit TCM Certifications"><i class="glyphicon glyphicon-alert"></i>  Audit TCM Certifications</a>
 </p>
 

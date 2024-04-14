@@ -148,9 +148,28 @@
                                     }
                                 </td>
                                 <td align="right">
-                                    <a onclick="showInPopupLg('@Url.Action("EditModal","CaseMannager",new {id = @item.Id},Context.Request.Scheme)','Edit Case Manager')" class="btn btn-warning" title="Edit CaseManager"><i class="glyphicon glyphicon-pencil"></i></a>
-                                    <a asp-action="CasesForCaseManager" asp-route-idCaseManager="@item.Id" class="btn btn-info"><i class="glyphicon glyphicon-list"></i></a>
-                                    <button onclick="ConfirmDelete(@item.Id)" class="btn btn-danger deleteItem" title="Delete CaseManager"><i class="glyphicon glyphicon-trash"></i></button>                                    
+                                        @if (User.IsInRole("Manager"))
+                                        {
+                                            <a onclick="showInPopupLg('@Url.Action("EditModal","CaseMannager",new {id = @item.Id},Context.Request.Scheme)','Edit Case Manager')" class="btn btn-warning" title="Edit CaseManager"><i class="glyphicon glyphicon-pencil"></i></a>
+                                            <a asp-action="CasesForCaseManager" asp-route-idCaseManager="@item.Id" class="btn btn-info"><i class="glyphicon glyphicon-list"></i></a>
+                                            <button onclick="ConfirmDelete(@item.Id)" class="btn btn-danger deleteItem" title="Delete CaseManager"><i class="glyphicon glyphicon-trash"></i></button>
+                                        }
+                                        else
+                                        {
+                                            @if (User.IsInRole("CaseManager"))
+                                            {
+                                                <a asp-action="CasesForCaseManager" asp-route-idCaseManager="@item.Id" class="btn btn-info"><i class="glyphicon glyphicon-list"></i></a>
+                                            }
+                                            else
+                                            {
+                                                @if (User.IsInRole("TCMSupervisor"))
+                                                {
+                                                    <a onclick="showInPopupLg('@Url.Action("EditModal","CaseMannager",new {id = @item.Id},Context.Request.Scheme)','Edit Case Manager')" class="btn btn-warning disabled" title="Edit CaseManager"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                    <a asp-action="CasesForCaseManager" asp-route-idCaseManager="@item.Id" class="btn btn-info"><i class="glyphicon glyphicon-list"></i></a>
+                                                }
+                                            }
+                                        }
+                                        
                                 </td>
                             </tr>
                         }
@@ -260,9 +279,27 @@
                                     }
                                 </td>
                                 <td align="right">
-                                    <a onclick="showInPopupLg('@Url.Action("EditModal","CaseMannager",new {id = @item.Id},Context.Request.Scheme)','Edit Case Manager')" class="btn btn-warning" title="Edit CaseManager"><i class="glyphicon glyphicon-pencil"></i></a>
-                                    <a asp-action="CasesForCaseManager" asp-route-idCaseManager="@item.Id" class="btn btn-info" title="Cases of case manager"><i class="glyphicon glyphicon-list"></i></a>
-                                    <button onclick="ConfirmDelete(@item.Id)" class="btn btn-danger deleteItem" title="Delete CaseManager"><i class="glyphicon glyphicon-trash"></i></button>
+                                        @if (User.IsInRole("Manager"))
+                                        {
+                                            <a onclick="showInPopupLg('@Url.Action("EditModal","CaseMannager",new {id = @item.Id},Context.Request.Scheme)','Edit Case Manager')" class="btn btn-warning" title="Edit CaseManager"><i class="glyphicon glyphicon-pencil"></i></a>
+                                            <a asp-action="CasesForCaseManager" asp-route-idCaseManager="@item.Id" class="btn btn-info"><i class="glyphicon glyphicon-list"></i></a>
+                                            <button onclick="ConfirmDelete(@item.Id)" class="btn btn-danger deleteItem" title="Delete CaseManager"><i class="glyphicon glyphicon-trash"></i></button>
+                                        }
+                                        else
+                                        {
+                                            @if (User.IsInRole("CaseManager"))
+                                            {
+                                                <a asp-action="CasesForCaseManager" asp-route-idCaseManager="@item.Id" class="btn btn-info"><i class="glyphicon glyphicon-list"></i></a>
+                                            }
+                                            else
+                                            {
+                                                @if (User.IsInRole("TCMSupervisor"))
+                                                {
+                                                    <a onclick="showInPopupLg('@Url.Action("EditModal","CaseMannager",new {id = @item.Id},Context.Request.Scheme)','Edit Case Manager')" class="btn btn-warning disabled" title="Edit CaseManager"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                    <a asp-action="CasesForCaseManager" asp-route-idCaseManager="@item.Id" class="btn btn-info"><i class="glyphicon glyphicon-list"></i></a>
+                                                }
+                                            }
+                                        }
                                 </td>
                             </tr>
                         }

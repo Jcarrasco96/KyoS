@@ -34,7 +34,7 @@ namespace KyoS.Web.Controllers
             _renderHelper = renderHelper;
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, CaseManager")]
         public async Task<IActionResult> Index(int idError = 0)
         {
             if (idError == 1) //Imposible to delete
@@ -42,7 +42,51 @@ namespace KyoS.Web.Controllers
                 ViewBag.Delete = "N";
             }
 
-            return View(await _context.Courses.OrderBy(t => t.Name).ToListAsync());
+            UserEntity user_logged = await _context.Users
+
+                                                 .Include(u => u.Clinic)
+                                                 .ThenInclude(c => c.Setting)
+
+                                                 .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.TCMClinic)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+            if (User.IsInRole("Manager"))
+            {
+                return View(await _context.Courses
+                                          .Where(n => n.Clinic.Id == user_logged.Clinic.Id)
+                                          .OrderBy(t => t.Name)
+                                          .ToListAsync());
+
+            }
+            else
+            {
+                if (User.IsInRole("TCMSupervisor"))
+                {
+                    TCMSupervisorEntity supervisorEntity = _context.TCMSupervisors.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
+
+                    return View(await _context.Courses
+                                              .Where(n => n.Clinic.Id == user_logged.Clinic.Id
+                                                       && (n.Role == UserType.CaseManager)
+                                                        || n.Role == UserType.TCMSupervisor)
+                                              .OrderBy(t => t.Name)
+                                              .ToListAsync());
+                }
+                else
+                {
+                    CaseMannagerEntity casemanagerEntity = _context.CaseManagers.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
+                    return View(await _context.Courses
+                                              .Where(n => n.Clinic.Id == user_logged.Clinic.Id
+                                                       && n.Role == UserType.CaseManager)
+                                                       
+                                              .OrderBy(t => t.Name)
+                                              .ToListAsync());
+                }
+            }
+            return RedirectToAction("NotAuthorized", "Account");
         }
 
         [Authorize(Roles = "Manager")]

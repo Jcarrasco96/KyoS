@@ -15,7 +15,11 @@
 </div>
 
 <p>
-    <a onclick="showInPopup('@Url.Action("Create", "Course", null, Context.Request.Scheme)','Course')" class="btn btn-primary" title="Create Course"><i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;Create Course</a>
+    @if (User.IsInRole("Manager"))
+    {
+        <a onclick="showInPopup('@Url.Action("Create", "Course", null, Context.Request.Scheme)','Course')" class="btn btn-primary" title="Create Course"><i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;Create Course</a>
+    }
+    
 </p>
 
 <div class="row">

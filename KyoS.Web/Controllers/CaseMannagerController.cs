@@ -16,7 +16,6 @@ using KyoS.Common.Helpers;
 
 namespace KyoS.Web.Controllers
 {
-    [Authorize(Roles = "Admin, Manager, TCMSupervisor")]
     public class CaseMannagerController : Controller
     {
         private readonly DataContext _context;
@@ -34,7 +33,7 @@ namespace KyoS.Web.Controllers
             _renderHelper = renderHelper;
         }
 
-        [Authorize(Roles = "Manager, TCMSupervisor")]
+        [Authorize(Roles = "Manager, TCMSupervisor, CaseManager")]
         public async Task<IActionResult> Index(int idError = 0)
         {
             UserEntity user_logged = await _context.Users
@@ -44,19 +43,19 @@ namespace KyoS.Web.Controllers
 
                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
 
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.TCMClinic)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+            if (idError == 1) //Imposible to delete
+            {
+                ViewBag.Delete = "N";
+            }
+
             if (User.IsInRole("Manager"))
             {
-                
-                if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.TCMClinic)
-                {
-                    return RedirectToAction("NotAuthorized", "Account");
-                }
-
-                if (idError == 1) //Imposible to delete
-                {
-                    ViewBag.Delete = "N";
-                }
-
+               
                 ClinicEntity clinic = await _context.Clinics.FirstOrDefaultAsync(c => c.Id == user_logged.Clinic.Id);
                 if (clinic != null)
                     return View(await _context.CaseManagers
@@ -74,16 +73,6 @@ namespace KyoS.Web.Controllers
                 {
                     TCMSupervisorEntity supervisorEntity = _context.TCMSupervisors.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
 
-                    if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.TCMClinic)
-                    {
-                        return RedirectToAction("NotAuthorized", "Account");
-                    }
-
-                    if (idError == 1) //Imposible to delete
-                    {
-                        ViewBag.Delete = "N";
-                    }
-
                     return View(await _context.CaseManagers
                                               .Include(f => f.Clinic)
                                               .Include(f => f.TCMSupervisor)
@@ -93,7 +82,25 @@ namespace KyoS.Web.Controllers
                                               .Where(f => f.Clinic.Id == user_logged.Clinic.Id
                                                        && f.TCMSupervisor.Id == supervisorEntity.Id)
                                               .OrderBy(f => f.Name).ToListAsync());
-                   
+
+                }
+                else
+                {
+                    if (User.IsInRole("CaseManager"))
+                    {
+                        CaseMannagerEntity casemanagerEntity = _context.CaseManagers.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
+
+                        return View(await _context.CaseManagers
+                                                  .Include(f => f.Clinic)
+                                                  .Include(f => f.TCMSupervisor)
+                                                  .Include(f => f.TCMClients)
+                                                  .ThenInclude(f => f.Client)
+                                                  .Include(f => f.TCMCertifications)
+                                                  .Where(f => f.Clinic.Id == user_logged.Clinic.Id
+                                                           && f.Id == casemanagerEntity.Id)
+                                                  .OrderBy(f => f.Name).ToListAsync());
+
+                    }
                 }
             }
             return null;
@@ -413,6 +420,7 @@ namespace KyoS.Web.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Manager")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateModal(CaseMannagerViewModel caseMannagerViewModel)
         {
@@ -1025,7 +1033,7 @@ namespace KyoS.Web.Controllers
                                                   .Include(f => f.TCM)
                                                   .AsSplitQuery()
                                                   .Where(f => f.TCM.Clinic.Id == user_logged.Clinic.Id
-                                                           && f.Id == casemanager.Id)
+                                                           && f.TCM.Id == casemanager.Id)
                                                   .OrderBy(f => f.Name)
                                                   .ToListAsync());
 
@@ -1117,7 +1125,8 @@ namespace KyoS.Web.Controllers
 
             List<CourseEntity> course_List = _context.Courses
                                                      .Include(m => m.TCMCertifications)
-                                                     .Where(n => n.Role == UserType.CaseManager)
+                                                     .Where(n => n.Role == UserType.CaseManager
+                                                              && n.Active == true)
                                                      .ToList();
 
             foreach (var item in course_List)
