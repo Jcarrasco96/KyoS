@@ -13382,6 +13382,125 @@ namespace KyoS.Web.Helpers
 
             return stream;
         }
+        public Stream YourNeighborIntakeReport(IntakeScreeningEntity intake)
+        {
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\Intakes\\rptIntakeYourNeighbor.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(GetClientDS(intake.Client));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetClinicDS(intake.Client.Clinic));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clinics");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetEmergencyContactDS(intake.Client.EmergencyContact));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "EmergencyContacts");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetLegalGuardianDS(intake.Client.LegalGuardian));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "LegalGuardians");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetIntakeScreeningsDS(intake.Client.IntakeScreening));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "IntakeScreenings");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetIntakeConsentForTreatmentDS(intake.Client.IntakeConsentForTreatment));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "IntakeConsentForTreatment");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetIntakeConsentForReleaseDS(intake.Client.IntakeConsentForRelease));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "IntakeConsentForRelease");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetIntakeConsumerRightsDS(intake.Client.IntakeConsumerRights));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "IntakeConsumerRights");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetIntakeAcknowledgementDS(intake.Client.IntakeAcknowledgementHipa));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "IntakeAcknowledgement");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetIntakeAccessToServicesDS(intake.Client.IntakeAccessToServices));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "IntakeAccessToServices");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetIntakeOrientationCheckListDS(intake.Client.IntakeOrientationChecklist));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "IntakeOrientationCheckList");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetIntakeFeeAgreementDS(intake.Client.IntakeFeeAgreement));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "IntakeFeeAgreement");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetIntakeTuberculosisDS(intake.Client.IntakeTuberculosis));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "IntakeTuberculosis");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetIntakeTransportationDS(intake.Client.IntakeTransportation));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "IntakeTransportation");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetIntakeConsentPhotographDS(intake.Client.IntakeConsentPhotograph));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "IntakeConsentPhotograph");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetIntakeMedicalHistoryDS(intake.Client.IntakeMedicalHistory));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "IntakeMedicalHistory");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetDischargeDS(intake.Client.DischargeList.ElementAtOrDefault(0)));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Discharge");
+
+            ManagerEntity manager = _context.Manager
+                                            .FirstOrDefault(s => s.Name == intake.InformationGatheredBy);
+
+            //signatures images 
+            byte[] stream1 = null;
+            byte[] stream2 = null;
+            string path;
+            if ((manager != null) && (!string.IsNullOrEmpty(manager.SignaturePath)))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(manager.SignaturePath)}");
+                stream1 = _imageHelper.ImageToByteArray(path);
+            }
+            else
+            {
+                DocumentsAssistantEntity assistant = _context.DocumentsAssistant
+                                                             .FirstOrDefault(s => s.Name == intake.InformationGatheredBy);
+
+                if ((assistant != null) && (!string.IsNullOrEmpty(assistant.SignaturePath)))
+                {
+                    path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(assistant.SignaturePath)}");
+                    stream1 = _imageHelper.ImageToByteArray(path);
+                }
+            }
+
+            if ((intake.Client != null) && (!string.IsNullOrEmpty(intake.Client.SignPath)))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(intake.Client.SignPath)}");
+                stream2 = _imageHelper.ImageToByteArray(path);
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream1, stream2));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
+
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
+        }
         public Stream IntakeClientDocumentVerification(IntakeClientIdDocumentVerificationEntity intake)
         {
             WebReport WebReport = new WebReport();
@@ -13761,108 +13880,42 @@ namespace KyoS.Web.Helpers
 
             return stream;
         }
-        public Stream YourNeighborIntakeReport(IntakeScreeningEntity intake)
+        public Stream IntakeNoHarmContract(IntakeNoHarmEntity intake)
         {
             WebReport WebReport = new WebReport();
 
-            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\Intakes\\rptIntakeYourNeighbor.frx";
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\Intakes\\rptNoHarmContract.frx";
 
             RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
             WebReport.Report.Load(rdlcFilePath);
 
             DataSet dataSet = new DataSet();
-            dataSet.Tables.Add(GetClientDS(intake.Client));
-            WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
-
-            dataSet = new DataSet();
             dataSet.Tables.Add(GetClinicDS(intake.Client.Clinic));
             WebReport.Report.RegisterData(dataSet.Tables[0], "Clinics");
 
             dataSet = new DataSet();
-            dataSet.Tables.Add(GetEmergencyContactDS(intake.Client.EmergencyContact));
-            WebReport.Report.RegisterData(dataSet.Tables[0], "EmergencyContacts");
+            dataSet.Tables.Add(GetClientDS(intake.Client));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
 
             dataSet = new DataSet();
-            dataSet.Tables.Add(GetLegalGuardianDS(intake.Client.LegalGuardian));
-            WebReport.Report.RegisterData(dataSet.Tables[0], "LegalGuardians");
+            dataSet.Tables.Add(GetIntakeNoHarmDS(intake));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "IntakeNoHarm");
 
-            dataSet = new DataSet();
-            dataSet.Tables.Add(GetIntakeScreeningsDS(intake.Client.IntakeScreening));
-            WebReport.Report.RegisterData(dataSet.Tables[0], "IntakeScreenings");
+            //images                      
+            string path = string.Empty;
+            if (!string.IsNullOrEmpty(intake.Client.Clinic.LogoPath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(intake.Client.Clinic.LogoPath)}");
+            }
 
-            dataSet = new DataSet();
-            dataSet.Tables.Add(GetIntakeConsentForTreatmentDS(intake.Client.IntakeConsentForTreatment));
-            WebReport.Report.RegisterData(dataSet.Tables[0], "IntakeConsentForTreatment");
-
-            dataSet = new DataSet();
-            dataSet.Tables.Add(GetIntakeConsentForReleaseDS(intake.Client.IntakeConsentForRelease));
-            WebReport.Report.RegisterData(dataSet.Tables[0], "IntakeConsentForRelease");
-
-            dataSet = new DataSet();
-            dataSet.Tables.Add(GetIntakeConsumerRightsDS(intake.Client.IntakeConsumerRights));
-            WebReport.Report.RegisterData(dataSet.Tables[0], "IntakeConsumerRights");
-
-            dataSet = new DataSet();
-            dataSet.Tables.Add(GetIntakeAcknowledgementDS(intake.Client.IntakeAcknowledgementHipa));
-            WebReport.Report.RegisterData(dataSet.Tables[0], "IntakeAcknowledgement");
-
-            dataSet = new DataSet();
-            dataSet.Tables.Add(GetIntakeAccessToServicesDS(intake.Client.IntakeAccessToServices));
-            WebReport.Report.RegisterData(dataSet.Tables[0], "IntakeAccessToServices");
-
-            dataSet = new DataSet();
-            dataSet.Tables.Add(GetIntakeOrientationCheckListDS(intake.Client.IntakeOrientationChecklist));
-            WebReport.Report.RegisterData(dataSet.Tables[0], "IntakeOrientationCheckList");
-
-            dataSet = new DataSet();
-            dataSet.Tables.Add(GetIntakeFeeAgreementDS(intake.Client.IntakeFeeAgreement));
-            WebReport.Report.RegisterData(dataSet.Tables[0], "IntakeFeeAgreement");
-
-            dataSet = new DataSet();
-            dataSet.Tables.Add(GetIntakeTuberculosisDS(intake.Client.IntakeTuberculosis));
-            WebReport.Report.RegisterData(dataSet.Tables[0], "IntakeTuberculosis");
-
-            dataSet = new DataSet();
-            dataSet.Tables.Add(GetIntakeTransportationDS(intake.Client.IntakeTransportation));
-            WebReport.Report.RegisterData(dataSet.Tables[0], "IntakeTransportation");
-
-            dataSet = new DataSet();
-            dataSet.Tables.Add(GetIntakeConsentPhotographDS(intake.Client.IntakeConsentPhotograph));
-            WebReport.Report.RegisterData(dataSet.Tables[0], "IntakeConsentPhotograph");
-
-            dataSet = new DataSet();
-            dataSet.Tables.Add(GetIntakeMedicalHistoryDS(intake.Client.IntakeMedicalHistory));
-            WebReport.Report.RegisterData(dataSet.Tables[0], "IntakeMedicalHistory");
-
-            dataSet = new DataSet();
-            dataSet.Tables.Add(GetDischargeDS(intake.Client.DischargeList.ElementAtOrDefault(0)));
-            WebReport.Report.RegisterData(dataSet.Tables[0], "Discharge");
-
-            ManagerEntity manager = _context.Manager
-                                            .FirstOrDefault(s => s.Name == intake.InformationGatheredBy);
+            PictureObject pic1 = WebReport.Report.FindObject("Picture1") as PictureObject;
+            pic1.Image = new Bitmap(path);
 
             //signatures images 
             byte[] stream1 = null;
             byte[] stream2 = null;
-            string path;
-            if ((manager != null) && (!string.IsNullOrEmpty(manager.SignaturePath)))
-            {
-                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(manager.SignaturePath)}");
-                stream1 = _imageHelper.ImageToByteArray(path);
-            }
-            else
-            {
-                DocumentsAssistantEntity assistant = _context.DocumentsAssistant
-                                                             .FirstOrDefault(s => s.Name == intake.InformationGatheredBy);
 
-                if ((assistant != null) && (!string.IsNullOrEmpty(assistant.SignaturePath)))
-                {
-                    path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(assistant.SignaturePath)}");
-                    stream1 = _imageHelper.ImageToByteArray(path);
-                }
-            }
-
-            if ((intake.Client != null) && (!string.IsNullOrEmpty(intake.Client.SignPath)))
+            if (!string.IsNullOrEmpty(intake.Client.SignPath))
             {
                 path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(intake.Client.SignPath)}");
                 stream2 = _imageHelper.ImageToByteArray(path);
@@ -13880,6 +13933,7 @@ namespace KyoS.Web.Helpers
 
             return stream;
         }
+
         #endregion
 
         #region Fars Form reports
@@ -24905,6 +24959,49 @@ namespace KyoS.Web.Helpers
                     new DateTime(),
                     string.Empty,
                     new DateTime()
+                });
+            }
+
+            return dt;
+        }
+
+        private DataTable GetIntakeNoHarmDS(IntakeNoHarmEntity intakeNoHarm)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "IntakeNoHarm"
+            };
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("Client_FK", typeof(int));            
+            dt.Columns.Add("DateSignaturePerson", typeof(DateTime));
+            dt.Columns.Add("DateSignatureEmployee", typeof(DateTime));
+            dt.Columns.Add("AdmissionedFor", typeof(string));           
+            dt.Columns.Add("Documents", typeof(bool));
+
+            if (intakeNoHarm != null)
+            {
+                dt.Rows.Add(new object[]
+                {
+                    intakeNoHarm.Id,
+                    0,
+                    intakeNoHarm.DateSignaturePerson,
+                    intakeNoHarm.DateSignatureEmployee,
+                    intakeNoHarm.AdmissionedFor,                    
+                    intakeNoHarm.Documents
+                });
+            }
+            else
+            {
+                dt.Rows.Add(new object[]
+                {
+                    0,
+                    0,
+                    new DateTime(),
+                    new DateTime(),                    
+                    string.Empty,                    
+                    false
                 });
             }
 

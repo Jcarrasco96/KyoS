@@ -122,12 +122,14 @@ namespace KyoS.Web.Helpers
         Stream MyFloridaIntakeReport(IntakeScreeningEntity intake);
         Stream OrionIntakeReport(IntakeScreeningEntity intake);
         Stream AlliedIntakeReport(IntakeScreeningEntity intake);
+        Stream YourNeighborIntakeReport(IntakeScreeningEntity intake);
         Stream IntakeClientDocumentVerification(IntakeClientIdDocumentVerificationEntity intake);
         Stream IntakeForeignLanguage(IntakeForeignLanguageEntity intake);
         Stream IntakeAdvancedDirective(IntakeAdvancedDirectiveEntity intake);
         Stream IntakeTelehealthConsent(IntakeConsentForTelehealthEntity intake);
         Stream IntakeNoDuplicateService(IntakeNoDuplicateServiceEntity intake);
-        Stream YourNeighborIntakeReport(IntakeScreeningEntity intake);
+        Stream IntakeNoHarmContract(IntakeNoHarmEntity intake);
+        
         #endregion
 
         #region Fars reports
