@@ -10,6 +10,7 @@
                 <li role="presentation" class="active"><a href="#personal" aria-controls="personal" role="tab" data-toggle="tab">Personal</a></li>
                 <li role="presentation"><a href="#agency" aria-controls="agency" role="tab" data-toggle="tab">Agency</a></li>
                 <li role="presentation"><a href="#private" aria-controls="private" role="tab" data-toggle="tab">Private</a></li>
+                <li role="presentation"><a href="#courses" aria-controls="courses" role="tab" data-toggle="tab">Courses</a></li>
             </ul>
             <!-- Tab panes -->
             <div class="tab-content">
@@ -29,6 +30,11 @@
                 </div>
                 <div role="tabpanel" class="tab-pane" id="private">
                     <partial name="_Private" />
+                </div>
+                <div role="tabpanel" class="tab-pane" id="courses">
+                    <div id="view-casemanagers">
+                        @await Html.PartialAsync("_ViewCertificationsByTCM", Model.TCMCertifications)
+                    </div>
                 </div>
             </div>
             <div class="col-md-12">

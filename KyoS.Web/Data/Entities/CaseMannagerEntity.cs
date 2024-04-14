@@ -83,5 +83,7 @@ namespace KyoS.Web.Data.Entities
         [Display(Name = "Assigned Date")]
         [DataType(DataType.Date)]
         public DateTime AssignedDate { get; set; }
+
+        public List<CaseManagerCertificationEntity> TCMCertifications { get; set; }
     }
 }

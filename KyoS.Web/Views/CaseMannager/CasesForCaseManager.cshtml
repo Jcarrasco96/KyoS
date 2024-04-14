@@ -99,7 +99,13 @@
 
                                                                     <tr>
                                                                         <td align="center">@Html.DisplayFor(modelItem => activity.Setting)</td>
-                                                                        <td align="center">@Html.DisplayFor(modelItem => activity.TCMDomain.Code)</td>
+                                                                        <td align="center">
+                                                                            @if (activity.TCMDomain != null)
+                                                                            {
+                                                                                @Html.DisplayFor(modelItem => activity.TCMDomain.Code)
+                                                                            }
+                                                                            
+                                                                        </td>
                                                                         <td align="center">@Html.DisplayFor(modelItem => activity.StartTime)</td>
                                                                         <td align="center">@Html.DisplayFor(modelItem => activity.EndTime)</td>
                                                                         <td align="center">@Html.DisplayFor(modelItem => activity.Minutes)</td>

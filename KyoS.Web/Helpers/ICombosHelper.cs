@@ -112,5 +112,6 @@ namespace KyoS.Web.Helpers
         IEnumerable<SelectListItem> GetComboAccountType();
         IEnumerable<SelectListItem> GetComboPaymentMethod();
         IEnumerable<SelectListItem> GetComboAppendixJType();
+        IEnumerable<SelectListItem> GetComboCourseByRole(UserType userTypr);
     }
 }

@@ -260,5 +260,7 @@ namespace KyoS.Web.Helpers
         IntakeNoHarmViewModel ToIntakeNoHarmViewModel(IntakeNoHarmEntity model);
         CourseEntity ToCourseEntity(CourseViewModel model, bool isNew, string userId);
         CourseViewModel ToCourseViewModel(CourseEntity model);
+        CaseManagerCertificationEntity ToCaseManagerCertificationEntity(CaseMannagerCertificationViewModel model, bool isNew, string userId);
+        CaseMannagerCertificationViewModel ToCaseManagerCertificationViewModel(CaseManagerCertificationEntity model);
     }
 }

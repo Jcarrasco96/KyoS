@@ -2,6 +2,8 @@
 using KyoS.Web.Data.Contracts;
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
+using KyoS.Web.Data.Abstract;
 
 namespace KyoS.Web.Data.Entities
 {
@@ -21,5 +23,8 @@ namespace KyoS.Web.Data.Entities
 
         public ClinicEntity Clinic { get; set; }
         public string Description { get; set; }
+        public bool Active { get; set; }
+
+        public List<CaseManagerCertificationEntity> TCMCertifications { get; set; }
     }
 }

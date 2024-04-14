@@ -337,6 +337,7 @@ namespace KyoS.Web.Helpers
                 AccountTypeList = _combosHelper.GetComboAccountType(),
                 IdPaymentMethod = (caseMannagerEntity.PaymentMethod == PaymentMethod.Check) ? 1 : (caseMannagerEntity.PaymentMethod == PaymentMethod.Direct_Deposit) ? 2 : (caseMannagerEntity.PaymentMethod == PaymentMethod.Zelle) ? 3 :  0,
                 PaymentMethodList = _combosHelper.GetComboPaymentMethod(),
+                TCMCertifications = caseMannagerEntity.TCMCertifications
             };
         }
 
@@ -8834,12 +8835,13 @@ namespace KyoS.Web.Helpers
                 ValidPeriod = model.ValidPeriod,
                 Name = model.Name,
                 Role = (model.IdRole == 1) ? UserType.Documents_Assistant : (model.IdRole == 2) ? UserType.Facilitator : (model.IdRole == 3) ? UserType.Supervisor : (model.IdRole == 4) ? UserType.CaseManager : (model.IdRole == 5) ? UserType.TCMSupervisor : (model.IdRole == 6) ? UserType.Manager : (model.IdRole == 7) ? UserType.Admin : (model.IdRole == 8) ? UserType.Frontdesk : UserType.Biller,
-                Clinic =  _context.Clinics.Find(model.IdClinic),
+               // Clinic =  _context.Clinics.Find(model.IdClinic),
                 CreatedBy = isNew ? userId : model.CreatedBy,
                 CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
                 LastModifiedBy = !isNew ? userId : string.Empty,
                 LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
-                Description = model.Description
+                Description = model.Description,
+                Active = model.Active
 
             };
         }
@@ -8860,11 +8862,54 @@ namespace KyoS.Web.Helpers
                 CreatedOn = model.CreatedOn,
                 LastModifiedBy = model.LastModifiedBy,
                 LastModifiedOn = model.LastModifiedOn,
-                IdClinic = model.Clinic.Id,
                 Roles = _combosHelper.GetComboRoles(),
-                Clinics = _combosHelper.GetComboClinics(),
-                Description = model.Description
+                Description = model.Description,
+                Active = model.Active
 
+            };
+
+        }
+
+        public CaseManagerCertificationEntity ToCaseManagerCertificationEntity(CaseMannagerCertificationViewModel model, bool isNew, string userId)
+        {
+            CourseEntity course = _context.Courses.FirstOrDefault(n => n.Id == model.IdCourse);
+            return new CaseManagerCertificationEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Name = course.Name,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                CertificateDate = model.CertificateDate,
+                CertificationNumber = model.CertificationNumber,
+                ExpirationDate = model.ExpirationDate,
+                Course = course,
+                TCM = _context.CaseManagers.FirstOrDefault(n => n.Id == model.IdTCM)
+                
+            };
+        }
+
+        public CaseMannagerCertificationViewModel ToCaseManagerCertificationViewModel(CaseManagerCertificationEntity model)
+        {
+            return new CaseMannagerCertificationViewModel
+            {
+                Id = model.Id,
+                Name = model.Name,
+                IdCourse = model.Course.Id,
+                IdTCM = model.TCM.Id,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn,
+                TCMs = _combosHelper.GetComboCaseManager(),
+                Courses = _combosHelper.GetComboCourseByRole(UserType.CaseManager),
+                CertificateDate = model.CertificateDate,
+                ExpirationDate= model.ExpirationDate,
+                CertificationNumber = model.CertificationNumber,
+                TCM = model.TCM,
+                Course = model.Course
+                
             };
 
         }

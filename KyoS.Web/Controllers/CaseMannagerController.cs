@@ -12,6 +12,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System;
 using KyoS.Web.Migrations;
+using KyoS.Common.Helpers;
 
 namespace KyoS.Web.Controllers
 {
@@ -63,6 +64,7 @@ namespace KyoS.Web.Controllers
                                               .Include(f => f.TCMSupervisor)
                                               .Include(f => f.TCMClients)
                                               .ThenInclude(f => f.Client)
+                                              .Include(f => f.TCMCertifications)
                                               .Where(f => f.Clinic.Id == clinic.Id).OrderBy(f => f.Name).ToListAsync());
                
             }
@@ -87,6 +89,7 @@ namespace KyoS.Web.Controllers
                                               .Include(f => f.TCMSupervisor)
                                               .Include(f => f.TCMClients)
                                               .ThenInclude(f => f.Client)
+                                              .Include(f => f.TCMCertifications)
                                               .Where(f => f.Clinic.Id == user_logged.Clinic.Id
                                                        && f.TCMSupervisor.Id == supervisorEntity.Id)
                                               .OrderBy(f => f.Name).ToListAsync());
@@ -211,6 +214,7 @@ namespace KyoS.Web.Controllers
             return View(caseMannagerViewModel);
         }
 
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -501,6 +505,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateModal", caseMannagerViewModel) });
         }
 
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> EditModal(int? id)
         {
             if (id == null)
@@ -511,6 +516,7 @@ namespace KyoS.Web.Controllers
             CaseMannagerEntity caseMannagerEntity = await _context.CaseManagers
                                                                   .Include(f => f.Clinic)
                                                                   .Include(f => f.TCMSupervisor)
+                                                                  .Include(f => f.TCMCertifications)
                                                                   .FirstOrDefaultAsync(f => f.Id == id);
             if (caseMannagerEntity == null)
             {
@@ -518,7 +524,7 @@ namespace KyoS.Web.Controllers
             }
 
             CaseMannagerViewModel caseMannagerViewModel;
-            if (!User.IsInRole("Admin"))
+            if (User.IsInRole("Manager"))
             {
                 UserEntity user_logged = _context.Users
                                                  .Include(u => u.Clinic)
@@ -544,6 +550,7 @@ namespace KyoS.Web.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Manager")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditModal(int id, CaseMannagerViewModel caseMannagerViewModel)
         {
@@ -783,6 +790,355 @@ namespace KyoS.Web.Controllers
             return Json(new { redirectToUrl = Url.Action("Signatures", "CaseMannager") });
         }
 
+        [Authorize(Roles = "Manager")]
+        public IActionResult CreatCaseManagerCertification(int id = 0)
+        {
+            if (id == 1)
+            {
+                ViewBag.Creado = "Y";
+            }
+            else
+            {
+                if (id == 2)
+                {
+                    ViewBag.Creado = "E";
+                }
+                else
+                {
+                    ViewBag.Creado = "N";
+                }
+            }
 
+            CaseMannagerCertificationViewModel model = new CaseMannagerCertificationViewModel();
+
+            if (User.IsInRole("Manager"))
+            {
+                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                       .FirstOrDefault(u => u.UserName == User.Identity.Name);
+                if (user_logged.Clinic != null)
+                {
+                    model = new CaseMannagerCertificationViewModel
+                    {
+                        CertificateDate = DateTime.Today,
+                        ExpirationDate = DateTime.Today,
+                        CertificationNumber = string.Empty,
+                        Name = user_logged.Clinic.Name,
+                        IdCourse = 0,
+                        IdTCM = 0,
+                        TCMs = _combosHelper.GetComboCaseManager(),
+                        Courses = _combosHelper.GetComboCourseByRole(UserType.CaseManager)
+                    };
+                    return View(model);
+                }
+            }
+
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Manager")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreatCaseManagerCertification(CaseMannagerCertificationViewModel caseMannagerCertificationViewModel)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (ModelState.IsValid)
+            {
+                CaseManagerCertificationEntity casemannagerCertification = new CaseManagerCertificationEntity();
+                casemannagerCertification = _converterHelper.ToCaseManagerCertificationEntity(caseMannagerCertificationViewModel, true, user_logged.UserName);
+                _context.Add(casemannagerCertification);
+                try
+                {
+                    await _context.SaveChangesAsync();
+
+                    List<CaseManagerCertificationEntity> caseManager_List = await _context.CaseManagerCertifications
+                                                                                          .Include(n => n.Course)
+                                                                                          .Include(n => n.TCM)
+                                                                                          .ToListAsync();
+
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewCaseManagerCertifications", caseManager_List) });
+                }
+                catch (System.Exception ex)
+                {
+                    if (ex.InnerException.Message.Contains("duplicate"))
+                    {
+                        ModelState.AddModelError(string.Empty, $"Already exists the Case Mannager: {casemannagerCertification.Name}");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+
+            }
+
+            caseMannagerCertificationViewModel.Courses = _combosHelper.GetComboCourseByRole(UserType.CaseManager);
+            caseMannagerCertificationViewModel.TCMs = _combosHelper.GetComboCaseManager();
+
+
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreatCaseManagerCertification", caseMannagerCertificationViewModel) });
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> EditCaseManagerCertification(int? id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            CaseManagerCertificationEntity caseMannagerCertification = await _context.CaseManagerCertifications
+                                                                                     .Include(f => f.Course)
+                                                                                     .Include(f => f.TCM)
+                                                                                     .FirstOrDefaultAsync(f => f.Id == id);
+            if (caseMannagerCertification == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            CaseMannagerCertificationViewModel caseMannagerCertificationViewModel;
+            if (User.IsInRole("Manager"))
+            {
+                UserEntity user_logged = _context.Users
+                                                 .Include(u => u.Clinic)
+                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                caseMannagerCertificationViewModel = _converterHelper.ToCaseManagerCertificationViewModel(caseMannagerCertification);
+               
+
+            }
+            else
+                caseMannagerCertificationViewModel = _converterHelper.ToCaseManagerCertificationViewModel(caseMannagerCertification);
+
+            return View(caseMannagerCertificationViewModel);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Manager")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditCaseManagerCertification(int id, CaseMannagerCertificationViewModel caseMannagerCertificationViewModel)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+           if (ModelState.IsValid)
+            {
+               
+                CaseManagerCertificationEntity caseMannagerCertificationEntity = _converterHelper.ToCaseManagerCertificationEntity(caseMannagerCertificationViewModel, false, user_logged.UserName);
+                _context.Update(caseMannagerCertificationEntity);
+                try
+                {
+                    await _context.SaveChangesAsync();
+                    List<CaseManagerCertificationEntity> caseManagerCertification_List = await _context.CaseManagerCertifications
+                                                                                                       .Include(n => n.Course)
+                                                                                                       .Include(n => n.TCM)
+                                                                                                       .ToListAsync();
+
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewCaseManagerCertifications", caseManagerCertification_List) });
+                }
+                catch (System.Exception ex)
+                {
+                    if (ex.InnerException.Message.Contains("duplicate"))
+                    {
+                        ModelState.AddModelError(string.Empty, $"Already exists the Case Manager: {caseMannagerCertificationEntity.Name}");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+            }
+
+            caseMannagerCertificationViewModel.TCMs = _combosHelper.GetComboCaseManager();
+            caseMannagerCertificationViewModel.Courses = _combosHelper.GetComboCourseByRole(UserType.CaseManager);
+
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditCaseManagerCertification", caseMannagerCertificationViewModel) });
+        }
+
+        [Authorize(Roles = "Manager, TCMSupervisor, CaseManager")]
+        public async Task<IActionResult> CaseManagerCertification(int idError = 0)
+        {
+            UserEntity user_logged = await _context.Users
+                                                   .Include(u => u.Clinic)
+                                                   .ThenInclude(c => c.Setting)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.TCMClinic)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+            if (User.IsInRole("Manager"))
+            {
+                if (idError == 1) //Imposible to delete
+                {
+                    ViewBag.Delete = "N";
+                }
+
+                return View(await _context.CaseManagerCertifications
+                                          .Include(f => f.Course)
+                                          .Include(f => f.TCM)
+                                          .AsSplitQuery()
+                                          .Where(f => f.TCM.Clinic.Id == user_logged.Clinic.Id)
+                                          .OrderBy(f => f.TCM.Name)
+                                          .ToListAsync());
+
+            }
+            else
+            {
+                if (User.IsInRole("TCMSupervisor"))
+                {
+                    TCMSupervisorEntity supervisorEntity = _context.TCMSupervisors.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
+
+                    if (idError == 1) //Imposible to delete
+                    {
+                        ViewBag.Delete = "N";
+                    }
+
+                    return View(await _context.CaseManagerCertifications
+                                              .Include(f => f.Course)
+                                              .Include(f => f.TCM)
+                                              .AsSplitQuery()
+                                              .Where(f => f.TCM.Clinic.Id == user_logged.Clinic.Id
+                                                       && f.TCM.TCMSupervisor.Id == supervisorEntity.Id)
+                                              .OrderBy(f => f.TCM.Name)
+                                              .ToListAsync());
+
+                }
+                else
+                {
+                    if (User.IsInRole("CaseManager"))
+                    {
+                        CaseMannagerEntity casemanager = _context.CaseManagers.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
+
+                        if (idError == 1) //Imposible to delete
+                        {
+                            ViewBag.Delete = "N";
+                        }
+
+                        return View(await _context.CaseManagerCertifications
+                                                  .Include(f => f.Course)
+                                                  .Include(f => f.TCM)
+                                                  .AsSplitQuery()
+                                                  .Where(f => f.TCM.Clinic.Id == user_logged.Clinic.Id
+                                                           && f.Id == casemanager.Id)
+                                                  .OrderBy(f => f.Name)
+                                                  .ToListAsync());
+
+                    }
+                }
+            }
+            return RedirectToAction("NotAuthorized", "Account");
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> DeleteCertification(int? id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            CaseManagerCertificationEntity caseMannagerCertificationEntity = await _context.CaseManagerCertifications.FirstOrDefaultAsync(t => t.Id == id);
+            if (caseMannagerCertificationEntity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            try
+            {
+                _context.CaseManagerCertifications.Remove(caseMannagerCertificationEntity);
+                await _context.SaveChangesAsync();
+            }
+            catch (System.Exception)
+            {
+                return RedirectToAction("Index", new { idError = 1 });
+            }
+
+            return RedirectToAction(nameof(CaseManagerCertification));
+        }
+
+        [Authorize(Roles = "Manager, TCMSupervisor, CaseManager")]
+        public IActionResult AuditCertification()
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(c => c.Setting)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic || !user_logged.Clinic.Setting.MHProblems)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+            List<AuditCertification> auditCertification_List = new List<AuditCertification>();
+            AuditCertification auditCertification = new AuditCertification();
+
+            List<CaseMannagerEntity> tcm_List = _context.CaseManagers
+                                                        .Include(m => m.TCMCertifications)
+                                                        .ToList();
+
+            foreach (var item in tcm_List)
+            {
+                foreach (var value in item.TCMCertifications)
+                {
+                    if (value.ExpirationDate.Date < DateTime.Today.Date)
+                    {
+                        auditCertification.TCMName = item.Name;
+                        auditCertification.CourseName = value.Name;
+                        auditCertification.Active = 0;
+                        auditCertification.ExpirationDate = value.ExpirationDate.ToShortDateString();
+                        auditCertification.Description = "Expired";
+
+                        auditCertification_List.Add(auditCertification);
+                        auditCertification = new AuditCertification();
+                    }
+                    else
+                    {
+                        if (value.ExpirationDate.Date.AddDays(-30) < DateTime.Today.Date)
+                        {
+                            auditCertification.TCMName = item.Name;
+                            auditCertification.CourseName = value.Name;
+                            auditCertification.Active = 1;
+                            auditCertification.ExpirationDate = value.ExpirationDate.ToShortDateString();
+                            auditCertification.Description = "Expired soon";
+
+                            auditCertification_List.Add(auditCertification);
+                            auditCertification = new AuditCertification();
+                        }
+                    }
+                }
+                    
+            }
+
+            List<CourseEntity> course_List = _context.Courses
+                                                     .Include(m => m.TCMCertifications)
+                                                     .Where(n => n.Role == UserType.CaseManager)
+                                                     .ToList();
+
+            foreach (var item in course_List)
+            {
+                foreach (var value in tcm_List)
+                {
+                    if (value.TCMCertifications.Where(n => n.Course.Id == item.Id).Count() == 0)
+                    {
+                        auditCertification.TCMName = value.Name;
+                        auditCertification.CourseName = item.Name;
+                        auditCertification.Active = 0;
+                        auditCertification.Description = "Not Exists";
+
+                        auditCertification_List.Add(auditCertification);
+                        auditCertification = new AuditCertification();
+                    }
+                }
+
+            }
+
+            return View(auditCertification_List);
+        }
     }
 }

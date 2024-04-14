@@ -2698,5 +2698,25 @@ namespace KyoS.Web.Helpers
 
             return list;
         }
+
+        public IEnumerable<SelectListItem> GetComboCourseByRole(UserType userType)
+        {
+            List<SelectListItem> list = _context.Courses
+
+                                                 .Where(c => c.Role == userType)
+                                                 .Select(c => new SelectListItem
+                                                 {
+                                                     Text = $"{c.Name} ",
+                                                     Value = $"{c.Id}"
+                                                 }).ToList();
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Select Course...]",
+                Value = "0"
+            });
+
+            return list;
+        }
     }
 }

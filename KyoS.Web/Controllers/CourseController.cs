@@ -66,8 +66,7 @@ namespace KyoS.Web.Controllers
 
             CourseViewModel model = new CourseViewModel
             {
-                Roles = _combosHelper.GetComboRoles(),
-                Clinics = _combosHelper.GetComboClinics()
+                Roles = _combosHelper.GetComboRoles()               
             };
 
             return View(model);
@@ -87,6 +86,7 @@ namespace KyoS.Web.Controllers
                 if (ModelState.IsValid)
                 {
                     CourseEntity course = _converterHelper.ToCourseEntity(model, true, user_logged.UserName);
+                    course.Clinic = user_logged.Clinic;
                     _context.Add(course);
                     try
                     {
@@ -106,8 +106,7 @@ namespace KyoS.Web.Controllers
                 else
                 {
                     model.Roles = _combosHelper.GetComboRoles();
-                    model.Clinics = _combosHelper.GetComboClinics();
-            
+                
                     return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Create", model) });
                 }
             }
@@ -117,8 +116,7 @@ namespace KyoS.Web.Controllers
             }
 
             model.Roles = _combosHelper.GetComboRoles();
-            model.Clinics = _combosHelper.GetComboClinics();
-
+          
             return View(model);
         }
 
@@ -188,6 +186,8 @@ namespace KyoS.Web.Controllers
             if (ModelState.IsValid)
             {
                 CourseEntity course = _converterHelper.ToCourseEntity(model, false, user_logged.UserName);
+                course.Clinic = user_logged.Clinic;
+
                 _context.Courses.Update(course);
                 try
                 {
@@ -208,8 +208,7 @@ namespace KyoS.Web.Controllers
             }
 
             model.Roles = _combosHelper.GetComboRoles();
-            model.Clinics = _combosHelper.GetComboClinics();
-
+          
             return View(model);
         }
 
