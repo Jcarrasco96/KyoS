@@ -775,6 +775,19 @@ namespace KyoS.Web.Controllers
                         tcmAssessmentEntity.PastCurrentServiceList.Add(pastCurrent);
                     }
 
+                    //llenar la tabla House Composition
+                    tcmAssessmentEntity.HouseCompositionList = new List<TCMAssessmentHouseCompositionEntity>();
+                    TCMAssessmentHouseCompositionEntity houseComposition = new TCMAssessmentHouseCompositionEntity()
+                    {
+                        Name = tcmclient.Client.Name,
+                        Age = DateTime.Now.Year - tcmclient.Client.DateOfBirth.Year,
+                        RelationShip = "Self",
+                        Supporting = "Limited",
+                        CreatedBy = user_logged.UserName,
+                        CreatedOn = DateTime.Now
+                    };
+                    tcmAssessmentEntity.HouseCompositionList.Add(houseComposition);
+
                     try
                     {
                         await _context.SaveChangesAsync();

@@ -2633,5 +2633,162 @@ namespace KyoS.Web.Controllers
             }
             return Json(new SelectList(activity, "Id", "Name"));
         }
+
+        [Authorize(Roles = "CaseManager")]
+        public IActionResult Info(int idTCMClient = 0)
+        {
+            UserEntity user_logged = _context.Users
+
+                                             .Include(u => u.Clinic)
+
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            TCMClientInfoViewModel model = new TCMClientInfoViewModel();
+            List<TCMClientInfoViewModel> models = new List<TCMClientInfoViewModel>();
+
+            TCMClientEntity tcmClient = _context.TCMClient
+                                                .Include(n => n.Client)
+                                                .ThenInclude(n => n.Clients_Diagnostics)
+                                                .ThenInclude(n => n.Diagnostic)
+                                                .Include(n => n.TCMIntakeForm)
+                                                .Include(n => n.TCMAssessment)
+                                                .ThenInclude(n => n.MedicationList)
+                                                .Include(n => n.Client)
+                                                .ThenInclude(n => n.EmergencyContact)
+                                                .FirstOrDefault(n => n.Id == idTCMClient);
+
+            string Name = string.Empty;
+            string Address = string.Empty;
+            string Ec = string.Empty;
+            string Dx = string.Empty;
+            string PCP = string.Empty;
+            string PSY = string.Empty;
+            string Medication = string.Empty;
+            FacilitatorEntity PSR = _context.Facilitators.Find(tcmClient.Client.IdFacilitatorPSR);
+            FacilitatorEntity Group = _context.Facilitators.Find(tcmClient.Client.IdFacilitatorGroup);
+            string TherapistPSR = string.Empty;
+            string TherapistGroup = string.Empty;
+            string TherapistInd = string.Empty;
+            string Pharmacy = string.Empty;
+
+            string Therapist = "Admission Date: " + tcmClient.Client.AdmisionDate.ToShortDateString();
+
+            if (PSR != null)
+            {
+                TherapistPSR = PSR.Name;
+            }
+            else
+            {
+                TherapistPSR = "None";
+            }
+            if (Group != null)
+            {
+                TherapistGroup = Group.Name;
+            }
+            else
+            {
+                TherapistGroup = "None";
+            }
+            if (tcmClient.Client.IndividualTherapyFacilitator != null)
+            {
+                TherapistInd = tcmClient.Client.IndividualTherapyFacilitator.Name;
+            }
+            else
+            {
+                TherapistInd = "None";
+            }
+
+            Name = tcmClient.Client.Name;
+            Address = tcmClient.Client.FullAddress + ", " + tcmClient.Client.City + ", " + tcmClient.Client.State + ", " + tcmClient.Client.ZipCode;
+            Dx = (tcmClient.Client.Clients_Diagnostics != null) ? tcmClient.Client.Clients_Diagnostics.FirstOrDefault(n => n.Principal == true).Diagnostic.Code + ": " + tcmClient.Client.Clients_Diagnostics.FirstOrDefault(n => n.Principal == true).Diagnostic.Description : "Not have Dx";
+            PCP = tcmClient.TCMIntakeForm.PCP_Name + ", Address: " + tcmClient.TCMIntakeForm.PCP_Address + ", City-State-ZipCode: " + tcmClient.TCMIntakeForm.PCP_CityStateZip + ", Phone: " + tcmClient.TCMIntakeForm.PCP_Phone + ", Place: " + tcmClient.TCMIntakeForm.PCP_Place;
+            PSY = tcmClient.TCMIntakeForm.Psychiatrist_Name + ", Address: " + tcmClient.TCMIntakeForm.Psychiatrist_Address + ", City-State-ZipCode: " + tcmClient.TCMIntakeForm.Psychiatrist_CityStateZip + ", Phone: " + tcmClient.TCMIntakeForm.PCP_Phone;
+            Ec = (tcmClient.Client.EmergencyContact != null) ? tcmClient.Client.EmergencyContact.Name + ", Address: " + tcmClient.Client.EmergencyContact.Address + ", Phone: " + tcmClient.Client.EmergencyContact.Telephone + ", RelationShip: " + tcmClient.Client.RelationShipOfEmergencyContact : "Not have";
+            Pharmacy = (tcmClient.TCMAssessment != null) ? tcmClient.TCMAssessment.WhatPharmacy + ", Phone: " + tcmClient.TCMAssessment.PharmacyPhone : "None";
+
+            if (tcmClient != null)
+            {
+                model.Info = "Client";
+                model.Description = Name;
+                models.Add(model);
+                model = new TCMClientInfoViewModel();
+
+                model.Info = "Address";
+                model.Description = Address;
+                models.Add(model);
+                model = new TCMClientInfoViewModel();
+
+                model.Info = "Ec";
+                model.Description = Ec;
+                models.Add(model);
+                model = new TCMClientInfoViewModel();
+
+                model.Info = "Dx";
+                model.Description = Dx;
+                models.Add(model);
+                model = new TCMClientInfoViewModel();
+
+                model.Info = "PCP";
+                model.Description = PCP;
+                models.Add(model);
+                model = new TCMClientInfoViewModel();
+
+                model.Info = "PSY";
+                model.Description = PSY;
+                models.Add(model);
+                model = new TCMClientInfoViewModel();
+
+                if (tcmClient.TCMAssessment != null)
+                {
+                    if (tcmClient.TCMAssessment.MedicationList.Count() > 0)
+                    {
+                        int count = 0;
+                        foreach (var item in tcmClient.TCMAssessment.MedicationList)
+                        {
+                            if (count == 0)
+                            {
+                                Medication += item.Name + " " + item.Dosage + " " + item.Frequency;
+                                count++;
+
+                            }
+                            else
+                            {
+                                if ((count+1) == tcmClient.TCMAssessment.MedicationList.Count() )
+                                {
+                                    Medication += " and " + item.Name + " " + item.Dosage + " " + item.Frequency;
+                                    count++;
+                                }
+                                else
+                                {
+                                    Medication += ", " + item.Name + " " + item.Dosage + " " + item.Frequency;
+                                    count++;
+                                    
+                                }
+                            }
+                            
+                        }
+                        model.Info = "Medication";
+                        model.Description = Medication;
+                        models.Add(model);
+                        model = new TCMClientInfoViewModel();
+                    }
+                }
+
+                model.Info = "Therapist";
+                model.Description = Therapist + ", Service PSR: " + TherapistPSR + ", Service Group therapist: " + TherapistGroup + ", Service Individual therapist: " + TherapistInd;
+                models.Add(model);
+                model = new TCMClientInfoViewModel();
+
+                model.Info = "Pharmacy";
+                model.Description = Pharmacy;
+                models.Add(model);
+                model = new TCMClientInfoViewModel();
+
+                return View(models);
+            }
+
+            return View(null);
+        }
+
     }
 }

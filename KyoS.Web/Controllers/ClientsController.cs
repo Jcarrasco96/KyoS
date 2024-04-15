@@ -3127,11 +3127,60 @@ namespace KyoS.Web.Controllers
 
                 auditClient_List.Add(auditClient);
                 auditClient = new AuditClientNotUsed();
+
             }
+
+            //Clients without PCP, PSY, EC
+
+            List<ClientEntity> client_List1 = _context.Clients
+                                                      .Include(m => m.Doctor)
+                                                      .Include(m => m.Psychiatrist)
+                                                      .Include(m => m.EmergencyContact)
+                                                      .OrderBy(n => n.Name)                                         
+                                                      .ToList();
+
+
+            foreach (var item in client_List1)
+            {
+                if (item.Doctor == null)
+                {
+                    auditClient.Name = item.Name;
+                    auditClient.AdmissionDate = item.AdmisionDate.ToShortDateString();
+                    auditClient.Description = "The client have not PCP";
+                    auditClient.Active = 0;
+
+                    auditClient_List.Add(auditClient);
+                    auditClient = new AuditClientNotUsed();
+                }
+
+                if (item.Psychiatrist == null)
+                {
+                    auditClient.Name = item.Name;
+                    auditClient.AdmissionDate = item.AdmisionDate.ToShortDateString();
+                    auditClient.Description = "The client have not PSY";
+                    auditClient.Active = 0;
+
+                    auditClient_List.Add(auditClient);
+                    auditClient = new AuditClientNotUsed();
+                }
+
+                if (item.EmergencyContact == null)
+                {
+                    auditClient.Name = item.Name;
+                    auditClient.AdmissionDate = item.AdmisionDate.ToShortDateString();
+                    auditClient.Description = "The client have not EC";
+                    auditClient.Active = 0;
+
+                    auditClient_List.Add(auditClient);
+                    auditClient = new AuditClientNotUsed();
+                }
+            }
+
 
             List<ClientEntity> client_Diagnostics_List = _context.Clients
                                                                  .Include(m => m.Clients_Diagnostics)
                                                                  .Where(n => (n.Clinic.Id == user_logged.Clinic.Id))
+                                                                 .OrderBy(n => n.Name)
                                                                  .ToList();
 
             foreach (var item in client_Diagnostics_List)

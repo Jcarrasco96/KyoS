@@ -97,6 +97,7 @@
             <div class="col-md-push-12">
                 <div class="col-md-12 form-group">
                     <a onclick="showInPopupLg('@Url.Action("CreateNoteActivity", "TCMNotes", new { idNote = Model.Id, idTCMClient = Model.IdTCMClient, unitsAvaliable = @ViewData["available"], billable = Model.Billable}, Context.Request.Scheme)','Add Service')" class="btn btn-success" title="Add service"><i class="glyphicon glyphicon-plus"></i> Add Service</a>
+                    <a onclick="showInPopupLg('@Url.Action("Info", "TCMNotes", new { idTCMClient = Model.IdTCMClient}, Context.Request.Scheme)','Client Information')" class="btn btn-info" title="Client Information"><i class="glyphicon glyphicon-list"></i> Client Information</a>
                 </div>
                 <div id="view-NoteActivity">
                     @await Html.PartialAsync("_ViewTCMNoteActivity", Model.TCMNoteActivity.ToList(), new ViewDataDictionary(ViewData) { { "Id", @ViewData["available"] } })

@@ -1025,7 +1025,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "CaseManager, TCMSupervisor, Manager")]
-        public IActionResult CreateTCMConsentForRelease(int id = 0, int origi = 0)
+        public IActionResult CreateTCMConsentForRelease(int id = 0, int origi = 0, string Name = " ", string address = " ", string city = " ", string phone = " ", string fax = " ", int idType = 0)
         {
 
             UserEntity user_logged = _context.Users
@@ -1072,12 +1072,12 @@ namespace KyoS.Web.Controllers
                         DateSignatureLegalGuardian = tcmClient.DataOpen,
                         DateSignaturePerson = tcmClient.DataOpen,
                         AdmissionedFor = user_logged.FullName,
-                        NameOfFacility = "",
-                        Address = "",
-                        CityStateZip = "",
-                        PhoneNo = "",
-                        FaxNo = "",
-                        ConsentType = ConsentType.HURRICANE,
+                        NameOfFacility = Name,
+                        Address = address,
+                        CityStateZip = city,
+                        PhoneNo = phone,
+                        FaxNo = fax,
+                        Idtype = idType,
                         ConsentList = _combosHelper.GetComboConsentType(),
                         OtherPurposeRequest = string.Empty,
                         OtherAutorizedInformation = string.Empty,
@@ -7322,6 +7322,117 @@ namespace KyoS.Web.Controllers
             }
         }
 
+        [Authorize(Roles = "CaseManager")]
+        public IActionResult SelectTypeConsentForRelease(int idTcmClient = 0, int origi = 0)
+        {
+            TCMIntakeConsentForReleaseTypeViewModel model = new TCMIntakeConsentForReleaseTypeViewModel()
+            {
+                IdTCMClient = idTcmClient,
+                IdType = 0,
+                origi = origi,
+                Types = _combosHelper.GetComboConsentType()
 
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "CaseManager")]
+        public async Task<IActionResult> SelectTypeConsentForRelease(TCMIntakeConsentForReleaseTypeViewModel ConsentTypeViewModel)
+        {
+            UserEntity user_logged = await _context.Users
+                                                   .Include(u => u.Clinic)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+            
+            TCMClientEntity tcmclient = await _context.TCMClient
+                                                      .Include(n => n.TCMIntakeForm)
+                                                      .Include(n => n.Client)
+                                                      .ThenInclude(n => n.EmergencyContact)
+                                                      .Include(n => n.TCMAssessment)
+                                                      .FirstOrDefaultAsync(n => n.Id == ConsentTypeViewModel.IdTCMClient);
+
+            if (ConsentUtils.GetTypeByIndex(ConsentTypeViewModel.IdType) == ConsentType.PCP)
+            {
+                if (tcmclient.TCMIntakeForm != null)
+                {
+                    return RedirectToAction("CreateTCMConsentForRelease", "TCMIntakes", new { id = ConsentTypeViewModel.IdTCMClient, origi = 0, Name = tcmclient.TCMIntakeForm.PCP_Name, address = tcmclient.TCMIntakeForm.PCP_Address, city = tcmclient.TCMIntakeForm.PCP_CityStateZip, phone = tcmclient.TCMIntakeForm.PCP_Phone, fax = tcmclient.TCMIntakeForm.PCP_FaxNumber, idType = ConsentTypeViewModel.IdType });
+                }
+                else
+                {
+                    return RedirectToAction("CreateTCMConsentForRelease", "TCMIntakes", new { id = ConsentTypeViewModel.IdTCMClient, origi = ConsentTypeViewModel.origi });
+                }
+            } 
+            else
+            {
+                if (ConsentUtils.GetTypeByIndex(ConsentTypeViewModel.IdType) == ConsentType.PSYCHIATRIST)
+                {
+                    if (tcmclient.TCMIntakeForm != null)
+                    {
+                        return RedirectToAction("CreateTCMConsentForRelease", "TCMIntakes", new { id = ConsentTypeViewModel.IdTCMClient, origi = 0, Name = tcmclient.TCMIntakeForm.Psychiatrist_Name, address = tcmclient.TCMIntakeForm.Psychiatrist_Address, city = tcmclient.TCMIntakeForm.Psychiatrist_CityStateZip, phone = tcmclient.TCMIntakeForm.Psychiatrist_Phone, fax = " ", idType = ConsentTypeViewModel.IdType });
+                    }
+                    else
+                    {
+                        return RedirectToAction("CreateTCMConsentForRelease", "TCMIntakes", new { id = ConsentTypeViewModel.IdTCMClient, origi = ConsentTypeViewModel.origi });
+                    }
+                }
+                else
+                {
+                    if (ConsentUtils.GetTypeByIndex(ConsentTypeViewModel.IdType) == ConsentType.EMERGENCY_CONTACT)
+                    {
+                        if (tcmclient.Client.EmergencyContact != null)
+                        {
+                            return RedirectToAction("CreateTCMConsentForRelease", "TCMIntakes", new { id = ConsentTypeViewModel.IdTCMClient, origi = 0, Name = tcmclient.Client.EmergencyContact.Name, address = tcmclient.Client.EmergencyContact.Address, city = tcmclient.Client.EmergencyContact.City, phone = tcmclient.Client.EmergencyContact.Telephone, fax = "", idType = ConsentTypeViewModel.IdType });
+                        }
+                        else
+                        {
+                            return RedirectToAction("CreateTCMConsentForRelease", "TCMIntakes", new { id = ConsentTypeViewModel.IdTCMClient, origi = ConsentTypeViewModel.origi });
+                        }
+                    }
+                    else
+                    {
+                        if (ConsentUtils.GetTypeByIndex(ConsentTypeViewModel.IdType) == ConsentType.DCF)
+                        {
+                            return RedirectToAction("CreateTCMConsentForRelease", "TCMIntakes", new { id = ConsentTypeViewModel.IdTCMClient, origi = 0, Name = "Department of Children and Families", address = " ", city = "", phone = "", fax = "", idType = ConsentTypeViewModel.IdType });
+                        }
+                        else
+                        {
+                            if (ConsentUtils.GetTypeByIndex(ConsentTypeViewModel.IdType) == ConsentType.SSA)
+                            {
+                                return RedirectToAction("CreateTCMConsentForRelease", "TCMIntakes", new { id = ConsentTypeViewModel.IdTCMClient, origi = 0, Name = "Social Security Administration", address = " ", city = "", phone = "", fax = "", idType = ConsentTypeViewModel.IdType });
+                            }
+                            if (ConsentUtils.GetTypeByIndex(ConsentTypeViewModel.IdType) == ConsentType.POLICE_STATION)
+                            {
+                                return RedirectToAction("CreateTCMConsentForRelease", "TCMIntakes", new { id = ConsentTypeViewModel.IdTCMClient, origi = 0, Name = "Miami Dade Police Department", address = " ", city = "", phone = "", fax = "", idType = ConsentTypeViewModel.IdType });
+                            }
+                            else
+                            {
+                                if (ConsentUtils.GetTypeByIndex(ConsentTypeViewModel.IdType) == ConsentType.LIFELINESS_PROVIDERS)
+                                {
+                                    return RedirectToAction("CreateTCMConsentForRelease", "TCMIntakes", new { id = ConsentTypeViewModel.IdTCMClient, origi = 0, Name = "LifeLine Providers", address = " ", city = "", phone = "", fax = "", idType = ConsentTypeViewModel.IdType });
+                                }
+                                else
+                                {
+                                    if (ConsentUtils.GetTypeByIndex(ConsentTypeViewModel.IdType) == ConsentType.PHARMACY)
+                                    {
+                                        if (tcmclient.TCMIntakeForm != null)
+                                        {
+                                            return RedirectToAction("CreateTCMConsentForRelease", "TCMIntakes", new { id = ConsentTypeViewModel.IdTCMClient, origi = 0, Name = tcmclient.TCMAssessment.WhatPharmacy, address = " ", city = "", phone = tcmclient.TCMAssessment.PharmacyPhone, fax = "", idType = ConsentTypeViewModel.IdType });
+                                        }
+                                        else
+                                        {
+                                            return RedirectToAction("CreateTCMConsentForRelease", "TCMIntakes", new { id = ConsentTypeViewModel.IdTCMClient, origi = ConsentTypeViewModel.origi });
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            return RedirectToAction("CreateTCMConsentForRelease", "TCMIntakes", new { id = ConsentTypeViewModel.IdTCMClient, origi = ConsentTypeViewModel.origi });
+        }
     }
 }

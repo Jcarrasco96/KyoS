@@ -27,7 +27,6 @@ namespace KyoS.Web.Models
 
         public int IdServicePlanReview { get; set; }
 
-        [Required(ErrorMessage = "The field {0} is mandatory.")]
         public string ChangesUpdates { get; set; }
 
         //[Required(ErrorMessage = "The field {0} is mandatory.")]

@@ -23,7 +23,6 @@ namespace KyoS.Web.Data.Entities
 
         public string Origin { get; set; }
 
-        [Required(ErrorMessage = "The field {0} is mandatory.")]
         public string ChangesUpdate { get; set; }
 
         public TCMServicePlanReviewDomainEntity tcmServicePlanReviewDomain { get; set; }
