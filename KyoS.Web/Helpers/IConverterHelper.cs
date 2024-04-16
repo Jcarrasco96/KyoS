@@ -262,5 +262,7 @@ namespace KyoS.Web.Helpers
         CourseViewModel ToCourseViewModel(CourseEntity model);
         CaseManagerCertificationEntity ToCaseManagerCertificationEntity(CaseMannagerCertificationViewModel model, bool isNew, string userId);
         CaseMannagerCertificationViewModel ToCaseManagerCertificationViewModel(CaseManagerCertificationEntity model);
+        TCMSupervisorCertificationEntity ToTCMSupervisorCertificationEntity(TCMSupervisorCertificationViewModel model, bool isNew, string userId);
+        TCMSupervisorCertificationViewModel ToTCMSupervisorCertificationViewModel(TCMSupervisorCertificationEntity model, int idClinic);
     }
 }

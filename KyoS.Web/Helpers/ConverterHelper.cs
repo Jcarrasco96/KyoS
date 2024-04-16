@@ -276,7 +276,7 @@ namespace KyoS.Web.Helpers
                 MedicareProviderID = model.MedicareProviderID,
                 NPI = model.NPI,
                 Routing = model.Routing,
-                SSN = model.SSN,
+                SSN = model.SSN
             };
         }
 
@@ -534,11 +534,39 @@ namespace KyoS.Web.Helpers
                 Clinic = await _context.Clinics.FindAsync(model.IdClinic),
                 Code = model.Code,
                 LinkedUser = _userHelper.GetUserNameById(model.IdUser),
-                Name = model.Name,
+                Name = isNew ? model.FirstName + " " + model.MiddleName + " " + model.LastName : model.Name,
                 SignaturePath = signaturePath,
                 Status = StatusUtils.GetStatusByIndex(model.IdStatus),
                 RaterEducation = model.RaterEducation,
-                RaterFMHCertification = model.RaterFMHCertification
+                RaterFMHCertification = model.RaterFMHCertification,
+                Email = model.Email,
+                Phone = model.Phone,
+                Money = model.Money,
+                Address = model.Address,
+                City = model.City,
+                DateOfBirth = model.DateOfBirth,
+                FirstName = model.FirstName,
+                PaymentMethod = PaymentMethodUtils.GetPaymentMethodByIndex(model.IdPaymentMethod),
+                Gender = GenderUtils.GetGenderByIndex(model.IdGender),
+                LastName = model.LastName,
+                MiddleName = model.MiddleName,
+                PH = model.PH,
+                State = model.State,
+                ZipCode = model.ZipCode,
+                AccountNumber = model.AccountNumber,
+                AccountType = AccountTypeUtils.GetAccountTypeByIndex(model.IdAccountType),
+                CAQH = model.CAQH,
+                CompanyEIN = model.CAQH,
+                CompanyName = model.CompanyName,
+                CredentialExpirationDate = model.CredentialExpirationDate,
+                DEALicense = model.DEALicense,
+                FinancialInstitutionsName = model.FinancialInstitutionsName,
+                HiringDate = model.HiringDate,
+                MedicaidProviderID = model.MedicaidProviderID,
+                MedicareProviderID = model.MedicareProviderID,
+                NPI = model.NPI,
+                Routing = model.Routing,
+                SSN = model.SSN
             };
         }
 
@@ -558,7 +586,47 @@ namespace KyoS.Web.Helpers
                 IdStatus = (TCMSupervisorEntity.Status == StatusType.Open) ? 1 : 2,
                 StatusList = _combosHelper.GetComboClientStatus(),
                 RaterEducation = TCMSupervisorEntity.RaterEducation,
-                RaterFMHCertification = TCMSupervisorEntity.RaterFMHCertification
+                RaterFMHCertification = TCMSupervisorEntity.RaterFMHCertification,
+                Email = TCMSupervisorEntity.Email,
+                Phone = TCMSupervisorEntity.Phone,
+                Money = TCMSupervisorEntity.Money,
+               
+                Address = TCMSupervisorEntity.Address,
+                City = TCMSupervisorEntity.City,
+                DateOfBirth = TCMSupervisorEntity.DateOfBirth,
+                FirstName = TCMSupervisorEntity.FirstName,
+                PaymentMethod = TCMSupervisorEntity.PaymentMethod,
+                Gender = TCMSupervisorEntity.Gender,
+                LastName = TCMSupervisorEntity.LastName,
+                MiddleName = TCMSupervisorEntity.MiddleName,
+                PH = TCMSupervisorEntity.PH,
+                State = TCMSupervisorEntity.State,
+                ZipCode = TCMSupervisorEntity.ZipCode,
+                AccountNumber = TCMSupervisorEntity.AccountNumber,
+                AccountType = TCMSupervisorEntity.AccountType,
+                CAQH = TCMSupervisorEntity.CAQH,
+                CompanyEIN = TCMSupervisorEntity.CAQH,
+                CompanyName = TCMSupervisorEntity.CompanyName,
+                CreatedBy = TCMSupervisorEntity.CreatedBy,
+                CreatedOn = TCMSupervisorEntity.CreatedOn,
+                CredentialExpirationDate = TCMSupervisorEntity.CredentialExpirationDate,
+                DEALicense = TCMSupervisorEntity.DEALicense,
+                FinancialInstitutionsName = TCMSupervisorEntity.FinancialInstitutionsName,
+                HiringDate = TCMSupervisorEntity.HiringDate,
+                LastModifiedBy = TCMSupervisorEntity.LastModifiedBy,
+                LastModifiedOn = TCMSupervisorEntity.LastModifiedOn,
+                MedicaidProviderID = TCMSupervisorEntity.MedicaidProviderID,
+                MedicareProviderID = TCMSupervisorEntity.MedicareProviderID,
+                NPI = TCMSupervisorEntity.NPI,
+                Routing = TCMSupervisorEntity.Routing,
+                SSN = TCMSupervisorEntity.SSN,
+                IdGender = (TCMSupervisorEntity.Gender == GenderType.Female) ? 1 : 2,
+                GenderList = _combosHelper.GetComboGender(),
+                IdAccountType = (TCMSupervisorEntity.AccountType == AccountType.Personal_Checking) ? 1 : (TCMSupervisorEntity.AccountType == AccountType.Personal_Saving) ? 2 : (TCMSupervisorEntity.AccountType == AccountType.Company_Checking) ? 3 : (TCMSupervisorEntity.AccountType == AccountType.Company_Saving) ? 4 : 0,
+                AccountTypeList = _combosHelper.GetComboAccountType(),
+                IdPaymentMethod = (TCMSupervisorEntity.PaymentMethod == PaymentMethod.Check) ? 1 : (TCMSupervisorEntity.PaymentMethod == PaymentMethod.Direct_Deposit) ? 2 : (TCMSupervisorEntity.PaymentMethod == PaymentMethod.Zelle) ? 3 : 0,
+                PaymentMethodList = _combosHelper.GetComboPaymentMethod(),
+                TCMCertifications = TCMSupervisorEntity.TCMCertifications
             };
         }
 
@@ -8910,6 +8978,50 @@ namespace KyoS.Web.Helpers
                 TCM = model.TCM,
                 Course = model.Course
                 
+            };
+
+        }
+
+        public TCMSupervisorCertificationEntity ToTCMSupervisorCertificationEntity(TCMSupervisorCertificationViewModel model, bool isNew, string userId)
+        {
+            CourseEntity course = _context.Courses.FirstOrDefault(n => n.Id == model.IdCourse);
+            return new TCMSupervisorCertificationEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Name = course.Name,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                CertificateDate = model.CertificateDate,
+                CertificationNumber = model.CertificationNumber,
+                ExpirationDate = model.ExpirationDate,
+                Course = course,
+                TCMSupervisor = _context.TCMSupervisors.FirstOrDefault(n => n.Id == model.IdTCM)
+
+            };
+        }
+
+        public TCMSupervisorCertificationViewModel ToTCMSupervisorCertificationViewModel(TCMSupervisorCertificationEntity model, int idClinic)
+        {
+            return new TCMSupervisorCertificationViewModel
+            {
+                Id = model.Id,
+                Name = model.Name,
+                IdCourse = model.Course.Id,
+                IdTCM = model.TCMSupervisor.Id,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn,
+                TCMSupervisors = _combosHelper.GetComboTCMSupervisorByClinic(idClinic),
+                Courses = _combosHelper.GetComboCourseByRole(UserType.TCMSupervisor),
+                CertificateDate = model.CertificateDate,
+                ExpirationDate = model.ExpirationDate,
+                CertificationNumber = model.CertificationNumber,
+                TCMSupervisor = model.TCMSupervisor,
+                Course = model.Course
+
             };
 
         }

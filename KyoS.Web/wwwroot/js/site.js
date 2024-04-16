@@ -272,10 +272,10 @@ jQueryAjaxPostTCMSupervisor = form => {
             processData: false,
             success: function (res) {
                 if (res.isValid) {
-                    $('#view-templates').html(res.html)
-                    $('#form-modal .modal-body').html('');
-                    $('#form-modal .modal-title').html('');
-                    $('#form-modal').modal('hide');
+                    $('#view-tcmsupervisor').html(res.html)
+                    $('#form-modal-lg .modal-body').html('');
+                    $('#form-modal-lg .modal-title').html('');
+                    $('#form-modal-lg').modal('hide');
 
                     $('#MyTable').DataTable({
                         "order": [[1, "asc"]],
@@ -283,7 +283,7 @@ jQueryAjaxPostTCMSupervisor = form => {
                     });                               
                 }
                 else
-                    $('#form-modal .modal-body').html(res.html);
+                    $('#form-modal-lg .modal-body').html(res.html);
             },
             error: function (err) {
                 console.log(err)
@@ -2351,6 +2351,40 @@ jQueryAjaxCaseManagerCertificationList = form => {
             success: function (res) {
                 if (res.isValid) {
                     $('#view-casemanagerCertification').html(res.html)
+                    $('#form-modal .modal-body').html('');
+                    $('#form-modal .modal-title').html('');
+                    $('#form-modal').modal('hide');
+
+                    $('#MyTable').DataTable({
+                        "order": [[1, "asc"]],
+                        "pageLength": 100
+                    });
+                }
+                else
+                    $('#form-modal .modal-body').html(res.html);
+            },
+            error: function (err) {
+                console.log(err)
+            }
+        })
+        //to prevent default form submit event
+        return false;
+    } catch (ex) {
+        console.log(ex)
+    }
+}
+
+jQueryAjaxTCMSupervisorCertificationList = form => {
+    try {
+        $.ajax({
+            type: 'POST',
+            url: form.action,
+            data: new FormData(form),
+            contentType: false,
+            processData: false,
+            success: function (res) {
+                if (res.isValid) {
+                    $('#view-tcmSupervisorCertification').html(res.html)
                     $('#form-modal .modal-body').html('');
                     $('#form-modal .modal-title').html('');
                     $('#form-modal').modal('hide');

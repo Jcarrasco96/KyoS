@@ -1,6 +1,6 @@
-﻿@model IEnumerable<KyoS.Web.Data.Entities.CaseMannagerEntity>
+﻿@model IEnumerable<KyoS.Web.Data.Entities.TCMSupervisorCertificationEntity>
 @{
-    ViewData["Title"] = "Case Managers";
+    ViewData["Title"] = "TCM Supervisor Certification";
 }
 
 <link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
@@ -9,20 +9,18 @@
     <ul class="breadcrumb">
         <li>
             <i class="icon-home"></i>
-            @Html.ActionLink("Dashboard", "Index", "Desktop")
+            @Html.ActionLink("TCM Supervisors", "Index", "TCMsupervisors")
         </li>
-        <li class="active">Case Managers</li>
+        <li class="active">TCM Supervisor Certifications</li>
     </ul><!--.breadcrumb-->
 </div>
 
 <p>
     @if (User.IsInRole("Manager"))
     {
-        <a onclick="showInPopupLg('@Url.Action("CreateModal","CaseMannager",null,Context.Request.Scheme)','Create Case Manager')" class="btn btn-primary" title="Create Case Manager"><i class="glyphicon glyphicon-plus"></i> Create Case Manager</a>
-        <a asp-action="Signatures" class="btn btn-default"><i class="glyphicon glyphicon-pencil"></i> Case Manager's Signatures</a>
-    }        
-    <a asp-action="CaseManagerCertification" class="btn btn-default"><i class="glyphicon glyphicon-eye-open"></i> Case Manager's certifications</a>
-    
+        <a onclick="showInPopup('@Url.Action("CreatTCMSupervisorCertification","TCMsupervisors",null,Context.Request.Scheme)','Add Certification')" class="btn btn-primary" title="Add Certification"><i class="glyphicon glyphicon-plus"></i> Add Certification</a>
+    }    
+    <a onclick="showInPopupLg('@Url.Action("AuditCertification","TCMsupervisors",null,Context.Request.Scheme)','Audit Certifications')" class="btn btn-danger" title="Audit Certifications"><i class="glyphicon glyphicon-alert"></i>  Audit Certifications</a>
 </p>
 
 <div class="row">
@@ -42,16 +40,18 @@
 </div>
 
 <div class="row">
-    <div id="view-casemanagers">
-        @await Html.PartialAsync("_ViewCaseManagers", Model.ToList())
+    <div id="view-tcmSupervisorCertification">
+        @await Html.PartialAsync("_ViewTCMSupervisorCertifications", Model)
     </div>
 </div>
-
+<partial name="_ModalPopup" />
 <partial name="_ModalPopupLg" />
 <partial name="_DeleteDialog" />
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
     <script src="~/js/jquery.dataTables.min.js"></script>
 
     <script type="text/javascript">
@@ -59,9 +59,8 @@
             $('#MyTable').DataTable({
                 "order": [[1, "asc"]],
                 "pageLength": 50
-            });            
+            });
         });
-
         function ConfirmDelete(e) {
             Swal.fire({
                 title: 'Do you want to delete?',
@@ -73,24 +72,12 @@
                 confirmButtonText: 'Yes, delete it!'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    var url = "@Url.Action("Delete", "CaseMannager")";
+                    var url = "@Url.Action("DeleteCertification", "TCMsupervisors")";
                     window.location.href = url + '/' + e;
                 }
             });
         }
-        $(function () {
-
-            //Assign Click event to Plus Image.
-            $("body").on("click", "a[class*='icon-plus-sign-alt']", function () {
-                $(this).closest("tr").after("<tr><td></td><td colspan = '999'>" + $(this).next().html() + "</td></tr>");
-                $(this).attr("class", "icon-minus-sign-alt");
-            });
-            //Assign Click event to Minus Image.
-            $("body").on("click", "a[class*='icon-minus-sign-alt']", function () {
-                $(this).attr("class", "icon-plus-sign-alt");
-                $(this).closest("tr").next().remove();
-            });
-        });
+      
     </script>
 }
 

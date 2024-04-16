@@ -4,6 +4,7 @@ using KyoS.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KyoS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20240415234459_TCMSupervisorCertification")]
+    partial class TCMSupervisorCertification
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -14196,17 +14199,11 @@ namespace KyoS.Web.Migrations
                     b.Property<string>("CredentialExpirationDate")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Credentials")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("DEALicense")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FinancialInstitutionsName")
                         .HasColumnType("nvarchar(max)");
@@ -14244,9 +14241,6 @@ namespace KyoS.Web.Migrations
                     b.Property<string>("MiddleName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("Money")
-                        .HasColumnType("decimal(18,2)");
-
                     b.Property<string>("NPI")
                         .HasColumnType("nvarchar(max)");
 
@@ -14260,9 +14254,6 @@ namespace KyoS.Web.Migrations
 
                     b.Property<int>("PaymentMethod")
                         .HasColumnType("int");
-
-                    b.Property<string>("Phone")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("RaterEducation")
                         .HasColumnType("nvarchar(max)");
