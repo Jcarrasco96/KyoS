@@ -699,7 +699,8 @@ namespace KyoS.Web.Controllers
                                                                                .Where(na => (na.CreatedBy == user_logged.UserName
                                                                                  && na.TCMNote.DateOfService.Date == TcmNotesViewModel.DateOfServiceNote.Date
                                                                                  && ((na.StartTime <= TcmNotesViewModel.StartTime && na.EndTime > TcmNotesViewModel.StartTime)
-                                                                                    || (na.StartTime < TcmNotesViewModel.EndTime && na.EndTime >= TcmNotesViewModel.EndTime))))
+                                                                                    || (na.StartTime < TcmNotesViewModel.EndTime && na.EndTime >= TcmNotesViewModel.EndTime)
+                                                                                    || (na.StartTime >= TcmNotesViewModel.StartTime && na.EndTime <= TcmNotesViewModel.EndTime))))
                                                                                .ToListAsync();
 
                     int cantidad = _context.TCMNoteActivity.Where(n => n.TCMNote.TCMClient.Id == TcmNotesViewModel.IdTCMClient && n.TCMNote.DateOfService.Date == TcmNotesViewModel.DateOfServiceNote.Date).Sum(m => m.Minutes);
@@ -984,13 +985,15 @@ namespace KyoS.Web.Controllers
                                                                            .Where(na => (na.CreatedBy == user_logged.UserName
                                                                              && na.TCMNote.DateOfService.Date == TcmNotesViewModel.DateOfServiceNote.Date
                                                                              && ((na.StartTime <= TcmNotesViewModel.StartTime && na.EndTime > TcmNotesViewModel.StartTime)
-                                                                                || (na.StartTime < TcmNotesViewModel.EndTime && na.EndTime >= TcmNotesViewModel.EndTime))))
+                                                                                || (na.StartTime < TcmNotesViewModel.EndTime && na.EndTime >= TcmNotesViewModel.EndTime)
+                                                                                || (na.StartTime >= TcmNotesViewModel.StartTime && na.EndTime <= TcmNotesViewModel.EndTime))))
                                                                            .ToListAsync();
                 List<TCMNoteActivityTempEntity> noteActivitiesTemp = await _context.TCMNoteActivityTemp
                                                                                    .Where(na => (na.UserName == user_logged.UserName
                                                                                         && na.DateOfServiceOfNote.Date == TcmNotesViewModel.DateOfServiceNote.Date
                                                                                         && ((na.StartTime <= TcmNotesViewModel.StartTime && na.EndTime > TcmNotesViewModel.StartTime)
-                                                                                            || (na.StartTime < TcmNotesViewModel.EndTime && na.EndTime >= TcmNotesViewModel.EndTime))))
+                                                                                            || (na.StartTime < TcmNotesViewModel.EndTime && na.EndTime >= TcmNotesViewModel.EndTime)
+                                                                                            || (na.StartTime >= TcmNotesViewModel.StartTime && na.EndTime <= TcmNotesViewModel.EndTime))))
                                                                                    .ToListAsync();
 
                 //Verifico la cantidad de unidades por cliente segun los setting
@@ -1365,7 +1368,8 @@ namespace KyoS.Web.Controllers
                                                                              && na.Id != NoteActivityViewModel.Id
                                                                              && na.TCMNote.DateOfService.Date == NoteActivityViewModel.DateOfServiceNote.Date
                                                                              && ((na.StartTime <= NoteActivityViewModel.StartTime && na.EndTime > NoteActivityViewModel.StartTime)
-                                                                                || (na.StartTime < NoteActivityViewModel.EndTime && na.EndTime >= NoteActivityViewModel.EndTime))))
+                                                                                || (na.StartTime < NoteActivityViewModel.EndTime && na.EndTime >= NoteActivityViewModel.EndTime)
+                                                                                || (na.StartTime >= NoteActivityViewModel.StartTime && na.EndTime <= NoteActivityViewModel.EndTime))))
                                                                            .ToListAsync();
                 //check overlapin
                 if (noteActivities.Count() > 0 )

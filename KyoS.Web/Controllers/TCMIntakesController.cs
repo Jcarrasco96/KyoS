@@ -230,13 +230,13 @@ namespace KyoS.Web.Controllers
                         PCP_Name = tcmClient.Client.Doctor.Name,
                         PCP_Address = tcmClient.Client.Doctor.Address,
                         PCP_Phone = tcmClient.Client.Doctor.Telephone,
-                        PCP_CityStateZip = tcmClient.Client.Doctor.Address,
+                        PCP_CityStateZip = tcmClient.Client.Doctor.City + ", " + tcmClient.Client.Doctor.State + ", " + tcmClient.Client.Doctor.ZipCode,
                         PCP_Place = "",
                         PCP_FaxNumber = tcmClient.Client.Doctor.FaxNumber,
                         Psychiatrist_Name = tcmClient.Client.Psychiatrist.Name,
                         Psychiatrist_Address = tcmClient.Client.Psychiatrist.Address,
                         Psychiatrist_Phone = tcmClient.Client.Psychiatrist.Telephone,
-                        Psychiatrist_CityStateZip = tcmClient.Client.Psychiatrist.Address
+                        Psychiatrist_CityStateZip = tcmClient.Client.Psychiatrist.City + ", "+ tcmClient.Client.Psychiatrist.State + ", " + tcmClient.Client.Psychiatrist.ZipCode
                     };
                     if (tcmClient.Client.LegalGuardian != null)
                     {

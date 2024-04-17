@@ -409,7 +409,9 @@ namespace KyoS.Web.Controllers
                         AccountTypeList = _combosHelper.GetComboAccountType(),
                         IdPaymentMethod = 0,
                         PaymentMethodList = _combosHelper.GetComboPaymentMethod(),
-                        Name = "-"
+                        Name = "-",
+                        DateOfBirth = DateTime.Today,
+                        HiringDate = DateTime.Today
                     };
                     return View(model);
                 }
@@ -525,6 +527,7 @@ namespace KyoS.Web.Controllers
                                                                   .Include(f => f.Clinic)
                                                                   .Include(f => f.TCMSupervisor)
                                                                   .Include(f => f.TCMCertifications)
+                                                                  .ThenInclude(f => f.Course)
                                                                   .FirstOrDefaultAsync(f => f.Id == id);
             if (caseMannagerEntity == null)
             {
@@ -549,7 +552,38 @@ namespace KyoS.Web.Controllers
                     });
                     caseMannagerViewModel.Clinics = list;
                 }
+                List<CaseManagerCertificationEntity> CertificationList = new List<CaseManagerCertificationEntity>();
+                CaseManagerCertificationEntity Certification = new CaseManagerCertificationEntity();
+                List<CourseEntity> coursList = _context.Courses.Where(n => n.Role == UserType.CaseManager).ToList();
 
+                foreach (var item in coursList)
+                {
+                    if (caseMannagerEntity.TCMCertifications.Where(n => n.Course.Id == item.Id).Count() > 0)
+                    {
+                        foreach (var value in caseMannagerEntity.TCMCertifications.Where(n => n.Course.Id == item.Id).ToList().OrderBy(c => c.ExpirationDate))
+                        {
+                            Certification.Name = item.Name;
+                            Certification.CertificationNumber = value.CertificationNumber;
+                            Certification.CertificateDate = value.CertificateDate;
+                            Certification.ExpirationDate = value.ExpirationDate;
+                            Certification.Id = value.Id;
+                            CertificationList.Add(Certification);
+                            Certification = new CaseManagerCertificationEntity();
+                        }
+                    }
+                    else
+                    {
+                        Certification.Name = item.Name;
+                        Certification.CertificationNumber = "-";
+                        Certification.CertificateDate = DateTime.Today;
+                        Certification.ExpirationDate = DateTime.Today;
+                        Certification.Id = 0;
+                        CertificationList.Add(Certification);
+                        Certification = new CaseManagerCertificationEntity();
+                    }
+                   
+                }
+                caseMannagerViewModel.CaseManagerCertificationIdealList = CertificationList;
             }
             else
                 caseMannagerViewModel = _converterHelper.ToCaseMannagerViewModel(caseMannagerEntity, 0);
@@ -1090,63 +1124,56 @@ namespace KyoS.Web.Controllers
                                                         .Include(m => m.TCMCertifications)
                                                         .ToList();
 
-            foreach (var item in tcm_List)
-            {
-                foreach (var value in item.TCMCertifications)
-                {
-                    if (value.ExpirationDate.Date < DateTime.Today.Date)
-                    {
-                        auditCertification.TCMName = item.Name;
-                        auditCertification.CourseName = value.Name;
-                        auditCertification.Active = 0;
-                        auditCertification.ExpirationDate = value.ExpirationDate.ToShortDateString();
-                        auditCertification.Description = "Expired";
-
-                        auditCertification_List.Add(auditCertification);
-                        auditCertification = new AuditCertification();
-                    }
-                    else
-                    {
-                        if (value.ExpirationDate.Date.AddDays(-30) < DateTime.Today.Date)
-                        {
-                            auditCertification.TCMName = item.Name;
-                            auditCertification.CourseName = value.Name;
-                            auditCertification.Active = 1;
-                            auditCertification.ExpirationDate = value.ExpirationDate.ToShortDateString();
-                            auditCertification.Description = "Expired soon";
-
-                            auditCertification_List.Add(auditCertification);
-                            auditCertification = new AuditCertification();
-                        }
-                    }
-                }
-                    
-            }
-
             List<CourseEntity> course_List = _context.Courses
                                                      .Include(m => m.TCMCertifications)
                                                      .Where(n => n.Role == UserType.CaseManager
                                                               && n.Active == true)
                                                      .ToList();
 
-            foreach (var item in course_List)
+            foreach (var item in tcm_List)
             {
-                foreach (var value in tcm_List)
+                foreach (var course in course_List)
                 {
-                    if (value.TCMCertifications.Where(n => n.Course.Id == item.Id).Count() == 0)
+                    if (item.TCMCertifications.Where(n => n.Course.Id == course.Id).Count() > 0)
                     {
-                        auditCertification.TCMName = value.Name;
-                        auditCertification.CourseName = item.Name;
-                        auditCertification.Active = 0;
-                        auditCertification.Description = "Not Exists";
+                        if (item.TCMCertifications.Where(n => n.Course.Id == course.Id && n.ExpirationDate > DateTime.Today).Count() > 0)
+                        {
+                            if (item.TCMCertifications.Where(n => n.Course.Id == course.Id && n.ExpirationDate > DateTime.Today).Max(d => d.ExpirationDate).AddDays(-30) < DateTime.Today)
+                            {
+                                auditCertification.TCMName = item.Name;
+                                auditCertification.CourseName = course.Name;
+                                auditCertification.Description = "Expired soon";
+                                auditCertification.ExpirationDate = item.TCMCertifications.FirstOrDefault(n => n.Course.Id == course.Id && n.ExpirationDate.AddDays(-30) < DateTime.Today).ExpirationDate.ToShortDateString();
+                                auditCertification_List.Add(auditCertification);
+                                auditCertification = new AuditCertification();
+                            }
+                        }
+                        else
+                        {
+                            auditCertification.TCMName = item.Name;
+                            auditCertification.CourseName = course.Name;
+                            auditCertification.Description = "Expired";
+                            auditCertification.ExpirationDate = item.TCMCertifications.Where(n => n.Course.Id == course.Id ).Max(m => m.ExpirationDate).ToShortDateString();
+                            auditCertification_List.Add(auditCertification);
+                            auditCertification = new AuditCertification();
 
+                        }
+                    }
+                    else
+                    {
+                        auditCertification.TCMName = item.Name;
+                        auditCertification.CourseName = course.Name;
+                        auditCertification.Description = "Not Exists";
+                        auditCertification.ExpirationDate = "-";
                         auditCertification_List.Add(auditCertification);
                         auditCertification = new AuditCertification();
                     }
+                   
                 }
-
+                    
             }
 
+            
             return View(auditCertification_List);
         }
     }

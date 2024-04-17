@@ -49,6 +49,6 @@ namespace KyoS.Web.Models
         public int IdAccountType { get; set; }
         public IEnumerable<SelectListItem> AccountTypeList { get; set; }
 
-
+        public List<TCMSupervisorCertificationEntity> TCMSupervisorCertificationIdealList { get; set; }
     }
 }

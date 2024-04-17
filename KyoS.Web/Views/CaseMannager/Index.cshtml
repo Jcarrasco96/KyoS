@@ -22,7 +22,7 @@
         <a asp-action="Signatures" class="btn btn-default"><i class="glyphicon glyphicon-pencil"></i> Case Manager's Signatures</a>
     }        
     <a asp-action="CaseManagerCertification" class="btn btn-default"><i class="glyphicon glyphicon-eye-open"></i> Case Manager's certifications</a>
-    
+    <a onclick="showInPopupLg('@Url.Action("AuditCertification","CaseMannager",null,Context.Request.Scheme)','Audit TCM Certifications')" class="btn btn-danger" title="Audit TCM Certifications"><i class="glyphicon glyphicon-alert"></i>  Audit TCM Certifications</a>
 </p>
 
 <div class="row">

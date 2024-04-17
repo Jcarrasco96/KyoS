@@ -18,20 +18,17 @@
                                     <table class="table table-hover table-responsive table-striped" id="MyTableDiag">
                                         <thead>
                                             <tr>
-                                                <th class="col-md-4" >
+                                                <th class="col-md-4">
                                                     TCM
                                                 </th>
-                                                <th class="col-md-4" >
+                                                <th class="col-md-4">
                                                     Course
                                                 </th>
-                                                <th class="col-md-1" style="text-align:center;">
+                                                <th class="col-md-2" style="text-align:center;">
                                                     Exp.
                                                 </th>
                                                 <th class="col-md-2" style="text-align:center;">
-                                                    Inf.
-                                                </th>
-                                                <th class="col-md-1" style="text-align:center;">
-
+                                                    Status.
                                                 </th>
                                             </tr>
                                         </thead>
@@ -42,34 +39,32 @@
                                                     <td>
                                                         @Html.DisplayFor(modelItem => item.TCMName)
                                                     </td>
-                                                    <td >
+                                                    <td>
                                                         @Html.DisplayFor(modelItem => item.CourseName)
                                                     </td>
                                                     <td align="center">
                                                         @Html.DisplayFor(modelItem => item.ExpirationDate)
                                                     </td>
                                                     <td align="center">
-                                                        @Html.DisplayFor(modelItem => item.Description)
-                                                    </td>
-                                                    <td align="center">
-                                                        @if (item.Active == 0)
+                                                        @if (item.Description == "Not Exists")
                                                         {
                                                             <span class="label label-danger">
-                                                                &nbsp;X&nbsp;
+                                                                Not Exists
                                                             </span>
                                                         }
-                                                        @if (item.Active == 1)
+                                                        @if (item.Description == "Expired soon")
                                                         {
                                                             <span class="label label-warning">
-                                                                &nbsp;X&nbsp;
+                                                                Expired soon
                                                             </span>
                                                         }
-                                                        @if (item.Active == 2)
+                                                        @if (item.Description == "Expired")
                                                         {
-                                                            <span class="label label-success">
-                                                                OK
+                                                            <span class="label label-danger">
+                                                                Expired
                                                             </span>
                                                         }
+
                                                     </td>
                                                 </tr>
                                             }
