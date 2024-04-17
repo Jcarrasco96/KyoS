@@ -1689,12 +1689,9 @@ namespace KyoS.Web.Controllers
                                                                                    .ThenInclude(n => n.Client)
                                                                                    .Where(m => m.TcmClient_FK == id)
                                                                                    .ToListAsync();
-                if (listRelease.Count == 0)
-                {
-                    return RedirectToAction("TCMIntakeSectionDashboard", new { id = id, section = 1, origin = origi });
-                }
-
+             
                 ViewData["origi"] = origi;
+                ViewData["idTCMCliente"] = id;
                 return View(listRelease);
             }
         }
@@ -4256,7 +4253,11 @@ namespace KyoS.Web.Controllers
             {
                 if (User.IsInRole("TCMSupervisor"))
                 {
-                    List<TCMIntakeAppendixJEntity> list = _context.TCMIntakeAppendixJ.Where(n => n.Active == true).ToList();
+                    List<TCMIntakeAppendixJEntity> list = _context.TCMIntakeAppendixJ
+                                                                  .Where(n => n.Active == true 
+                                                                           && n.TcmClient_FK == model.TcmClient_FK
+                                                                           && n.Id != model.Id)
+                                                                  .ToList();
                     foreach (var item in list)
                     {
                         item.Active = false;
@@ -7361,7 +7362,7 @@ namespace KyoS.Web.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("CreateTCMConsentForRelease", "TCMIntakes", new { id = ConsentTypeViewModel.IdTCMClient, origi = ConsentTypeViewModel.origi });
+                    return RedirectToAction("CreateTCMConsentForRelease", "TCMIntakes", new { id = ConsentTypeViewModel.IdTCMClient, origi = ConsentTypeViewModel.origi, idType = ConsentTypeViewModel.IdType });
                 }
             } 
             else
@@ -7374,7 +7375,7 @@ namespace KyoS.Web.Controllers
                     }
                     else
                     {
-                        return RedirectToAction("CreateTCMConsentForRelease", "TCMIntakes", new { id = ConsentTypeViewModel.IdTCMClient, origi = ConsentTypeViewModel.origi });
+                        return RedirectToAction("CreateTCMConsentForRelease", "TCMIntakes", new { id = ConsentTypeViewModel.IdTCMClient, origi = ConsentTypeViewModel.origi, idType = ConsentTypeViewModel.IdType });
                     }
                 }
                 else
@@ -7387,7 +7388,7 @@ namespace KyoS.Web.Controllers
                         }
                         else
                         {
-                            return RedirectToAction("CreateTCMConsentForRelease", "TCMIntakes", new { id = ConsentTypeViewModel.IdTCMClient, origi = ConsentTypeViewModel.origi });
+                            return RedirectToAction("CreateTCMConsentForRelease", "TCMIntakes", new { id = ConsentTypeViewModel.IdTCMClient, origi = ConsentTypeViewModel.origi, idType = ConsentTypeViewModel.IdType });
                         }
                     }
                     else
@@ -7422,7 +7423,7 @@ namespace KyoS.Web.Controllers
                                         }
                                         else
                                         {
-                                            return RedirectToAction("CreateTCMConsentForRelease", "TCMIntakes", new { id = ConsentTypeViewModel.IdTCMClient, origi = ConsentTypeViewModel.origi });
+                                            return RedirectToAction("CreateTCMConsentForRelease", "TCMIntakes", new { id = ConsentTypeViewModel.IdTCMClient, origi = ConsentTypeViewModel.origi, idType = ConsentTypeViewModel.IdType });
                                         }
                                     }
                                 }
@@ -7432,7 +7433,7 @@ namespace KyoS.Web.Controllers
                 }
             }
 
-            return RedirectToAction("CreateTCMConsentForRelease", "TCMIntakes", new { id = ConsentTypeViewModel.IdTCMClient, origi = ConsentTypeViewModel.origi });
+            return RedirectToAction("CreateTCMConsentForRelease", "TCMIntakes", new { id = ConsentTypeViewModel.IdTCMClient, origi = ConsentTypeViewModel.origi, idType = ConsentTypeViewModel.IdType });
         }
     }
 }
