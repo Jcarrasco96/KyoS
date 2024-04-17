@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<KyoS.Web.Data.Entities.CourseEntity>
 @{
-    ViewData["Title"] = "Course";
+    ViewData["Title"] = "Certification Courses";
 }
 <link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
 
@@ -10,14 +10,14 @@
             <i class="icon-home"></i>
             @Html.ActionLink("Dashboard", "Index", "Desktop")
         </li>
-        <li class="active">Course</li>
+        <li class="active">Certification Courses</li>
     </ul><!--.breadcrumb-->
 </div>
 
 <p>
     @if (User.IsInRole("Manager"))
     {
-        <a onclick="showInPopup('@Url.Action("Create", "Course", null, Context.Request.Scheme)','Course')" class="btn btn-primary" title="Create Course"><i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;Create Course</a>
+        <a onclick="showInPopup('@Url.Action("Create", "Course", null, Context.Request.Scheme)','Create Course')" class="btn btn-primary" title="Create Course"><i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;Create Course</a>
     }
     
 </p>
@@ -31,7 +31,7 @@
                     <i class="icon-remove"></i>
                 </button>
                 <strong class="red">
-                    Error. It is not posible delete the clinic
+                    Error. It is not posible delete the course
                 </strong>
             </div>
         }
