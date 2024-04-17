@@ -556,7 +556,7 @@ namespace KyoS.Web.Helpers
                 AccountNumber = model.AccountNumber,
                 AccountType = AccountTypeUtils.GetAccountTypeByIndex(model.IdAccountType),
                 CAQH = model.CAQH,
-                CompanyEIN = model.CAQH,
+                CompanyEIN = model.CompanyEIN,
                 CompanyName = model.CompanyName,
                 CredentialExpirationDate = model.CredentialExpirationDate,
                 DEALicense = model.DEALicense,
@@ -566,7 +566,8 @@ namespace KyoS.Web.Helpers
                 MedicareProviderID = model.MedicareProviderID,
                 NPI = model.NPI,
                 Routing = model.Routing,
-                SSN = model.SSN
+                SSN = model.SSN, 
+                Credentials = model.Credentials
             };
         }
 
@@ -605,7 +606,7 @@ namespace KyoS.Web.Helpers
                 AccountNumber = TCMSupervisorEntity.AccountNumber,
                 AccountType = TCMSupervisorEntity.AccountType,
                 CAQH = TCMSupervisorEntity.CAQH,
-                CompanyEIN = TCMSupervisorEntity.CAQH,
+                CompanyEIN = TCMSupervisorEntity.CompanyEIN,
                 CompanyName = TCMSupervisorEntity.CompanyName,
                 CreatedBy = TCMSupervisorEntity.CreatedBy,
                 CreatedOn = TCMSupervisorEntity.CreatedOn,
@@ -626,7 +627,8 @@ namespace KyoS.Web.Helpers
                 AccountTypeList = _combosHelper.GetComboAccountType(),
                 IdPaymentMethod = (TCMSupervisorEntity.PaymentMethod == PaymentMethod.Check) ? 1 : (TCMSupervisorEntity.PaymentMethod == PaymentMethod.Direct_Deposit) ? 2 : (TCMSupervisorEntity.PaymentMethod == PaymentMethod.Zelle) ? 3 : 0,
                 PaymentMethodList = _combosHelper.GetComboPaymentMethod(),
-                TCMCertifications = TCMSupervisorEntity.TCMCertifications
+                TCMCertifications = TCMSupervisorEntity.TCMCertifications,
+                Credentials = TCMSupervisorEntity.Credentials
             };
         }
 
