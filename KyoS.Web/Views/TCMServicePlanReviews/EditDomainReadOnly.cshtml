@@ -12,13 +12,6 @@
             <input type="hidden" asp-for="Id_ServicePlan" />
             <input type="hidden" asp-for="Id_Service" />
             <div class="form-group">
-                <div class="col-md-6">
-                    <b>Case number:</b>
-                    <i>@Html.DisplayFor(modelItem => Model.TcmServicePlan.TcmClient.CaseNumber)</i>
-                    <br />
-                    <b>Client name:</b>
-                    <i>@Html.DisplayFor(modelItem => Model.TcmServicePlan.TcmClient.Client.Name)</i>
-                </div>
                 @if (User.IsInRole("TCMSupervisor") && Model.TcmServicePlan.TcmClient.Client.Clinic.Setting.TCMSupervisorEdit == true && ViewData["origi"].ToString() != "5" && Model.Origin == "Service Plan Review")
                 {
                     <div class="col-md-6">
@@ -35,24 +28,24 @@
                         <span asp-validation-for="DateIdentified" class="text-danger"></span>
                     </div>
                 }
-            </div>
-            <div class="col-md-12">
-                &nbsp;
-            </div>
-
-            <br />
+                <div class="container-fluid">
+                    &nbsp;
+                </div>                
+            </div>            
             <div class="form-group">
                 <div class="col-md-3">
-                    <label asp-for="Code" class="control-label"></label>&nbsp;*
+                    <label asp-for="Code" class="control-label"></label>
                     <input asp-for="Code" class="form-control" readonly />
                     <span asp-validation-for="Code" class="text-danger"></span>
                 </div>
-
                 <div class="col-md-9">
-                    <label asp-for="Name" class="control-label"></label>&nbsp;*
+                    <label asp-for="Name" class="control-label"></label>
                     <input asp-for="Name" class="form-control" readonly />
                     <span asp-validation-for="Name" class="text-danger"></span>
                 </div>
+            </div>
+            <div class="container-fluid">
+                &nbsp;
             </div>
             @if ((User.IsInRole("TCMSupervisor") && Model.TcmServicePlan.TcmClient.Client.Clinic.Setting.TCMSupervisorEdit == true && ViewData["origi"].ToString() != "5" && Model.Origin == "Service Plan Review")
               || ((User.IsInRole("CaseManager") && ViewData["origi"].ToString() != "5" && Model.Origin == "Service Plan Review")))
@@ -73,7 +66,7 @@
                 </div>
                 <div class="col-md-push-12">
                     <div class="form-group col-md-6">
-                        <input type="checkbox" asp-for="Status" class="form-check-input"> Domain complished<br />
+                        <input type="checkbox" asp-for="Status" class="form-check-input"> Domain complished                        
                     </div>
                     <div class="col-md-6">
                         <label asp-for="DateAccomplished" class="control-label"></label>&nbsp;*
@@ -111,7 +104,7 @@
                 {
                     <div class="col-md-push-12">
                         <div class="form-group col-md-6">
-                            <input type="checkbox" asp-for="Status" class="form-check-input" disabled> Domain complished<br />
+                            <input type="checkbox" asp-for="Status" class="form-check-input" disabled> Domain complished
                         </div>
                         <div class="col-md-6">
                             <label asp-for="DateAccomplished" class="control-label"></label>&nbsp;*

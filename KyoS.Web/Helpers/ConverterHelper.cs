@@ -1823,7 +1823,7 @@ namespace KyoS.Web.Helpers
                 LastModifiedOn = TcmDomainEntity.LastModifiedOn,
                 Id_SubService = TcmDomainEntity.IdSubService,
                 NameSubService = TcmDomainEntity.NameSubService,
-                DateAccomplished = TcmDomainEntity.DateAccomplished
+                DateAccomplished = (TcmDomainEntity.DateAccomplished.Year != 1) ? TcmDomainEntity.DateAccomplished : DateTime.Now.Date
             };
         }
 
@@ -2408,7 +2408,6 @@ namespace KyoS.Web.Helpers
                 Approved = TcmServicePlanReviewEntity.Approved,
                 CreatedBy = TcmServicePlanReviewEntity.CreatedBy,
                 CreatedOn = TcmServicePlanReviewEntity.CreatedOn,
-
                 ClientContinue = TcmServicePlanReviewEntity.ClientContinue,
                 ClientHasBeen1 = TcmServicePlanReviewEntity.ClientHasBeen1,
                 ClientHasBeen2 = TcmServicePlanReviewEntity.ClientHasBeen2,
@@ -2416,12 +2415,12 @@ namespace KyoS.Web.Helpers
                 ClientNoLonger2 = TcmServicePlanReviewEntity.ClientNoLonger2,
                 ClientWillContinue = TcmServicePlanReviewEntity.ClientWillContinue,
                 ClientWillHave = TcmServicePlanReviewEntity.ClientWillHave,
-                DateTCMCaseManagerSignature = TcmServicePlanReviewEntity.DateTCMCaseManagerSignature,
-                DateTCMSupervisorSignature = TcmServicePlanReviewEntity.DateTCMSupervisorSignature,
+                DateTCMCaseManagerSignature = (TcmServicePlanReviewEntity.DateTCMCaseManagerSignature.Year != 1) ? TcmServicePlanReviewEntity.DateTCMCaseManagerSignature 
+                                                                                                                 : DateTime.Today.Date,
+                DateTCMSupervisorSignature = (TcmServicePlanReviewEntity.DateTCMSupervisorSignature.Year != 1) ? TcmServicePlanReviewEntity.DateTCMSupervisorSignature
+                                                                                                                 : DateTime.Today.Date,
                 HasBeenExplained = TcmServicePlanReviewEntity.HasBeenExplained,
                 TheExpertedReviewDate = TcmServicePlanReviewEntity.TheExpertedReviewDate
-                //ID_Status = (TcmServicePlanEntity.Status == StatusType.Open) ? 1 : 2,
-
             };
         }
 
