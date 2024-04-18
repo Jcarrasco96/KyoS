@@ -5853,7 +5853,7 @@ namespace KyoS.Web.Helpers
                 DoesClientTranspotation = model.DoesClientTranspotation,
                 DoesClientTranspotationExplain = model.DoesClientTranspotationExplain,
                 HoweverOn = model.HoweverOn,
-                HoweverVisitScheduler = (model.HoweverVisitScheduler.Year == 1) ? DateTime.Now : model.HoweverVisitScheduler,                
+                HoweverVisitScheduler = model.HoweverVisitScheduler,                
                 NeedALot = model.NeedALot,
                 NeedNoHelp = model.NeedNoHelp,
                 NeedSome = model.NeedSome,
