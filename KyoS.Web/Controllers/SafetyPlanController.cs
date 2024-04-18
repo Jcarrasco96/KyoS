@@ -610,5 +610,120 @@ namespace KyoS.Web.Controllers
             Stream stream = _reportHelper.SafetyPlanReport(entity);
             return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);         
         }
+
+        [Authorize(Roles = "Supervisor, Manager, Facilitator, Documents_Assistant, Frontdesk")]
+        public async Task<IActionResult> PendingSafetyPlan(int idError = 0)
+        {
+            UserEntity user_logged = await _context.Users
+                                                  .Include(u => u.Clinic)
+                                                  .ThenInclude(c => c.Setting)
+                                                  .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+            else
+            {
+                ClinicEntity clinic = await _context.Clinics.FirstOrDefaultAsync(c => c.Id == user_logged.Clinic.Id);
+                if (clinic != null)
+                {
+                    if (User.IsInRole("Manager") || User.IsInRole("Supervisor") || User.IsInRole("Frontdesk"))
+                    {
+                        return View(await _context.SafetyPlan
+                                                  .Include(f => f.Client)
+                                                  .ThenInclude(f => f.Clinic)
+                                                  .Include(f => f.Facilitator)
+                                                  .Include(f => f.Supervisor)
+
+                                                  .Where(f => (f.Client.Clinic.Id == clinic.Id)
+                                                            && f.Status == SafetyPlanStatus.Pending)
+                                                  .ToListAsync());
+                    }
+                    else
+                    {
+                        return View(await _context.SafetyPlan
+                                                  .Include(f => f.Client)
+                                                  .ThenInclude(f => f.Clinic)
+                                                  .Include(f => f.Facilitator)
+                                                  .Include(f => f.Supervisor)
+                                                  .Where(f => (f.Client.Clinic.Id == clinic.Id)
+                                                            && f.Status == SafetyPlanStatus.Pending
+                                                            && f.CreatedBy == user_logged.UserName)
+                                                  .ToListAsync());
+                    }
+
+                }
+            }
+            return RedirectToAction("NotAuthorized", "Account");
+        }
+
+        [Authorize(Roles = "Supervisor")]
+        public IActionResult Approve(int id = 0)
+        {
+            if (id == 0)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(u => u.Setting)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            SafetyPlanEntity safetyPlan = _context.SafetyPlan
+                                                  .Include(n => n.Client)
+                                                  .Include(n => n.Facilitator)
+                                                  .Include(n => n.Supervisor)
+                                                  .FirstOrDefault(n => n.Id == id);
+
+            SafetyPlanViewModel model = _converterHelper.ToSafetyPlanViewModel(safetyPlan);
+
+            
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Supervisor")]
+        public async Task<IActionResult> Approve(SafetyPlanViewModel safetyViewModel)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (ModelState.IsValid)
+            {
+                SafetyPlanEntity safetyPlanEntity = await _converterHelper.ToSafetyPlanEntity(safetyViewModel, false, user_logged.UserName);
+                safetyPlanEntity.Client = null;
+                safetyPlanEntity.Status = SafetyPlanStatus.Approved;
+                _context.SafetyPlan.Update(safetyPlanEntity);
+
+                try
+                {
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction("PendingSafetyPlan");
+                }
+                catch (System.Exception ex)
+                {
+                    ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                }
+            }
+            else
+            {
+                safetyViewModel.Client = _context.Clients
+                                                 .FirstOrDefault(n => n.Id == safetyViewModel.IdClient);
+
+                safetyViewModel.Facilitator = await _context.Facilitators.FirstOrDefaultAsync(n => n.Id == safetyViewModel.IdFacilitator);
+                safetyViewModel.Supervisor = await _context.Supervisors.FirstOrDefaultAsync(n => n.Id == safetyViewModel.IdSupervisor);
+
+
+                return View(safetyViewModel);
+            }
+
+            return RedirectToAction("Approve", "SafetyPlan");
+
+        }
+
     }
 }

@@ -395,6 +395,9 @@ namespace KyoS.Web.Controllers
                                                                       || wc.GroupNote.Status == NoteStatus.Approved
                                                                       || wc.GroupNote2.Status == NoteStatus.Approved
                                                                       || wc.NoteP.Status == NoteStatus.Approved)));
+
+                ViewBag.PendingSafetyPlans = await _context.SafetyPlan
+                                                           .CountAsync(m => (m.Status == SafetyPlanStatus.Pending));
             }
             if (User.IsInRole("Manager"))
             {

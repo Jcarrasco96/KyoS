@@ -817,8 +817,23 @@
             <div class="col-md-12">
                 &nbsp;
             </div>
-            <div class="col-md-1">
-                &nbsp;
+           <div class="col-md-2">
+                @if (ViewBag.PendingSafetyPlans == 0)
+                {
+                    <div class="thumbnail list-group-item list-group-item-text">
+                        <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Safety Plan</h4>
+                        <span class="message-counter-cero">@ViewBag.PendingSafetyPlans</span>
+                    </div>
+                }
+                else
+                {
+                    <a style="text-decoration: none;" asp-controller="SafetyPlan" asp-action="PendingSafetyPlan" asp-route-pending="1" role="button">
+                        <div class="thumbnail list-group-item list-group-item-info">
+                            <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>Pending<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Safety Plan</h4>
+                            <span class="message-counter-info">@ViewBag.PendingSafetyPlans</span>
+                        </div>
+                    </a>
+                }
             </div>
             <div class="col-md-2">
                 @if (ViewBag.PendingActivities == 0)
@@ -909,9 +924,6 @@
                         </div>
                     </a>
                 }
-            </div>
-            <div class="col-md-1">
-                &nbsp;
             </div>
             <div class="col-md-12">
                 &nbsp;

@@ -4859,7 +4859,7 @@ namespace KyoS.Web.Controllers
 
                                                             .AsSplitQuery()
 
-                                                            .FirstOrDefaultAsync(t => t.TcmClient.Id == id);
+                                                            .FirstOrDefaultAsync(t => t.Id == id);
 
             if (entity == null)
             {
