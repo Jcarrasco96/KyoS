@@ -154,56 +154,55 @@ namespace KyoS.Web.Controllers
         [Authorize(Roles = "CaseManager")]
         public IActionResult Create(int id, int IdServicePlan)
         {
-            UserEntity user_logged = _context.Users.Include(u => u.Clinic)
-                                                      .FirstOrDefault(u => u.UserName == User.Identity.Name);
-            if (User.IsInRole("CaseManager"))
-            {
-                TCMServicePlanEntity tcmServicePlan = _context.TCMServicePlans
-                                                              .Include(b => b.TCMDomain)
-                                                              .Include(f => f.TcmClient)
-                                                              .Include(f => f.TcmClient.Casemanager)
-                                                              .Include(f => f.TcmClient.Client)
-                                                              .FirstOrDefault(f => (f.Id == IdServicePlan && f.Approved == 2));
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            
+            TCMServicePlanEntity tcmServicePlan = _context.TCMServicePlans
+                                                            .Include(b => b.TCMDomain)
+                                                            .Include(f => f.TcmClient)
+                                                            .Include(f => f.TcmClient.Casemanager)
+                                                            .Include(f => f.TcmClient.Client)
+                                                            .AsSplitQuery()
+                                                            .FirstOrDefault(f => (f.Id == IdServicePlan && f.Approved == 2));
                
-                if (tcmServicePlan != null)
-                {
+            if (tcmServicePlan != null)
+            {
                   
-                    TCMServicePlanReviewEntity tcmServicePlanReviewEntity = null;
+                TCMServicePlanReviewEntity tcmServicePlanReviewEntity = null;
 
-                    tcmServicePlanReviewEntity = new TCMServicePlanReviewEntity
-                    {
-                        DateServicePlanReview = DateTime.Today.Date,
-                        DateOpending = DateTime.Today.Date,
-                        CreatedBy = user_logged.UserName,
-                        CreatedOn = DateTime.Now,
-                        TcmServicePlan = tcmServicePlan,
-                        Recomendation = "",
-                        SummaryProgress = "",
+                tcmServicePlanReviewEntity = new TCMServicePlanReviewEntity
+                {
+                    DateServicePlanReview = DateTime.Today.Date,
+                    DateOpending = DateTime.Today.Date,
+                    CreatedBy = user_logged.UserName,
+                    CreatedOn = DateTime.Now,
+                    TcmServicePlan = tcmServicePlan,
+                    Recomendation = "",
+                    SummaryProgress = "",
+                    TheExpertedReviewDate = DateTime.Today.Date.AddMonths(6)
+                };
 
-                    };
-
-                    TCMServicePlanReviewViewModel model = _converterHelper.ToTCMServicePlanReviewViewModel(tcmServicePlanReviewEntity);
+                TCMServicePlanReviewViewModel model = _converterHelper.ToTCMServicePlanReviewViewModel(tcmServicePlanReviewEntity);
                 
-                    try
-                    {
-                        ViewData["origin"] = 1;
-                        return View(model);
-                    }
-                    catch (System.Exception ex)
-                    {
-                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
-                    }
-                    
-                    return RedirectToAction("NotAuthorized", "Account");
-                }
-                else
+                try
                 {
                     ViewData["origin"] = 1;
-                    return RedirectToAction("TCMIntakeSectionDashboard", "TCMIntakes", new { id = _context.TCMClient.FirstOrDefault(n => n.TcmServicePlan.Id == IdServicePlan).Id, section = 4 });
+                    return View(model);
                 }
-
+                catch (System.Exception ex)
+                {
+                    ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                }
+                    
+                return RedirectToAction("NotAuthorized", "Account");
             }
-            return RedirectToAction("NotAuthorized", "TCMIntakes");
+            else
+            {
+                ViewData["origin"] = 1;
+                return RedirectToAction("TCMIntakeSectionDashboard", "TCMIntakes", new { id = _context.TCMClient.FirstOrDefault(n => n.TcmServicePlan.Id == IdServicePlan).Id, section = 4 });
+            }           
         }
 
         [HttpPost]
@@ -357,6 +356,7 @@ namespace KyoS.Web.Controllers
                                                                           .ThenInclude(f => f.Setting)
                                                                           .Include(f => f.TcmServicePlan.TcmClient.Client)
                                                                           .Include(f => f.TcmServicePlan.TCMDomain)
+                                                                          .AsSplitQuery()
                                                                           .FirstOrDefault(f => (f.TcmServicePlan_FK == IdServicePlan 
                                                                              && f.TcmServicePlan.Approved == 2
                                                                              && f.Id == Id));
@@ -374,14 +374,11 @@ namespace KyoS.Web.Controllers
                     {
                         ModelState.AddModelError(string.Empty, ex.InnerException.Message);
                     }
-
                 }
                 else
                 {
                     return RedirectToAction("ServicePlanReviewApproved", "TCMServicePlanReviews", new { approved = 0 });
                 }
-                
-
             }
             return RedirectToAction("NotAuthorized", "Account");
         }

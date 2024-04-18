@@ -14,12 +14,12 @@
             <div class="">
                 <div class="form-group col-md-12">
                     <b>Service:</b>
-                    <i>@Html.DisplayFor(modelItem => Model.TcmDomain.Code) - @Html.DisplayFor(modelItem => Model.TcmDomain.Name)</i>
+                    @Html.DisplayFor(modelItem => Model.TcmDomain.Code) - @Html.DisplayFor(modelItem => Model.TcmDomain.Name)
                 </div>
             </div>
             <div class="">
                 <div class="form-group col-md-6">
-                    <label asp-for="IdObjetive" class="control-label">Objetive Number</label>&nbsp;*
+                    <label asp-for="IdObjetive" class="control-label">Objetive Number</label>
                     <input asp-for="IdObjetive" class="form-control" readonly />
                     <span asp-validation-for="IdObjetive" class="text-danger"></span>
                 </div>
@@ -69,11 +69,14 @@
                     <span asp-validation-for="task" class="text-danger"></span>
                 </div>
             </div>
-            <div class="col-md-12">
-                <div class="form-group">
+            <div class="form-group">
+                <div class="col-md-3">
                     <label asp-for="IdStatus" class="control-label">Status</label>
                     <select asp-for="IdStatus" asp-items="Model.StatusList" class="form-control"></select>
                     <span asp-validation-for="IdStatus" class="text-danger"></span>
+                </div>
+                <div class="container-fluid">
+                    &nbsp;
                 </div>
             </div>
             <div class="col-md-12">
@@ -86,7 +89,7 @@
             <div class="col-md-12">
                 &nbsp;
             </div>
-            <div class="col-md-12">
+            <div>
                 <div class="col-md-offset-9">
                     <input type="submit" value="Save" class="btn btn-primary" asp-all-route-id="model.tCMservice.Id" />
                     <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
@@ -96,44 +99,8 @@
     </div>
 </div>
 
-
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-
-    <script src="~/js/jquery.dataTables.min.js"></script>
-
-    <script type="text/javascript">
-
-        //    jQueryAjaxPost = form => {
-        //        try {
-        //            $.ajax({
-        //                type: 'POST',
-        //                url: form.action,
-        //                data: new FormData(form),
-        //                contentType: false,
-        //                processData: false,
-        //                success: function (res) {
-        //                    if (res.isValid) {
-        //                        $('#view-all').html(res.html)
-        //                        $('#form-modal .modal-body').html('');
-        //                        $('#form-modal .modal-title').html('');
-        //                        $('#form-modal').modal('hide');
-        //                    }
-        //                    else
-        //                        $('#form-modal .modal-body').html(res.html);
-        //                },
-        //                error: function (err) {
-        //                    console.log(err)
-        //                }
-        //            })
-        //            //to prevent default form submit event
-        //            return false;
-        //        } catch (ex) {
-        //            console.log(ex)
-        //        }
-        //}
-    </script>
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}    
 }
 
 
