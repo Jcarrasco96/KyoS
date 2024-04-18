@@ -712,12 +712,6 @@ namespace KyoS.Web.Data
                       .OnDelete(DeleteBehavior.Cascade)
                       .HasForeignKey<IntakeClientIdDocumentVerificationEntity>(s => s.Client_FK);
 
-            modelBuilder.Entity<ClientEntity>()
-                     .HasOne(c => c.SafetyPlan)
-                     .WithOne(s => s.Client)
-                     .OnDelete(DeleteBehavior.Cascade)
-                     .HasForeignKey<SafetyPlanEntity>(s => s.Client_FK);
-
             modelBuilder.Entity<IncidentReportEntity>()
                          .HasOne(g => g.Client)
                          .WithMany(m => m.IncidentReport)

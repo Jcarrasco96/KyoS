@@ -8263,7 +8263,7 @@ namespace KyoS.Web.Helpers
             return new SafetyPlanEntity
             {
                 Id = isNew ? 0 : model.Id,
-                Client = model.Client,
+                Client = await _context.Clients.FirstOrDefaultAsync(n => n.Id == model.Client_FK),
                 Client_FK = model.IdClient,
                 AdviceIwould = model.AdviceIwould,
                 DateSignatureClient = model.DateSignatureClient,
@@ -8283,6 +8283,7 @@ namespace KyoS.Web.Helpers
                 LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
                 DateDocument = model.DateDocument,
                 DocumentAssisstant = await _context.DocumentsAssistant.FirstOrDefaultAsync(n => n.Id == model.IdDocumentAssisstant)
+                
             };
         }
 
@@ -8315,6 +8316,7 @@ namespace KyoS.Web.Helpers
                 DateDocument = model.DateDocument,
                 DocumentAssisstant = (model.DocumentAssisstant == null) ? new DocumentsAssistantEntity() : model.DocumentAssisstant,
                 IdDocumentAssisstant = (model.DocumentAssisstant == null) ? 0 : model.DocumentAssisstant.Id,
+                Status = model.Status
 
             };
                         

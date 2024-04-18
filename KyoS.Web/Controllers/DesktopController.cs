@@ -266,7 +266,7 @@ namespace KyoS.Web.Controllers
                                                                        && m.FacilitatorSign == false));
                 ViewBag.SafetyPlan = await _context.Clients
                                                    .CountAsync(c => (c.Clinic.Id == user_logged.Clinic.Id && c.OnlyTCM == false
-                                                                  && c.SafetyPlan == null
+                                                                  && c.SafetyPlanList.Count() == 0
                                                                   && c.IndividualTherapyFacilitator.Id == facilitator.Id));
                 ViewBag.PendingMeetingSign = await _context.MeetingNotes
                                                            .CountAsync(m => (m.Supervisor.Clinic.Id == user_logged.Clinic.Id
@@ -1220,7 +1220,7 @@ namespace KyoS.Web.Controllers
                 return await db.Clients
                                .AsNoTracking()
                                .CountAsync(c => (c.Clinic.Id == clinicId && c.OnlyTCM == false
-                                                && c.SafetyPlan == null));
+                                                && c.SafetyPlanList.Count() == 0));
             }
         }
 

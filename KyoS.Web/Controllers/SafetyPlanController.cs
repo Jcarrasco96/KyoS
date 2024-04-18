@@ -56,12 +56,12 @@ namespace KyoS.Web.Controllers
                 if (User.IsInRole("Manager") || User.IsInRole("Supervisor") || User.IsInRole("Frontdesk"))
                     return View(await _context.Clients
 
-                                              .Include(f => f.SafetyPlan)
+                                              .Include(f => f.SafetyPlanList)
                                               .Include(f => f.Clinic)
                                               .ThenInclude(f => f.Setting)
 
                                               .Where(n => n.Clinic.Id == user_logged.Clinic.Id
-                                                       && n.SafetyPlan != null)
+                                                       && n.SafetyPlanList.Count() > 0)
                                               .OrderBy(f => f.Name)
                                               .ToListAsync());
 
@@ -70,14 +70,14 @@ namespace KyoS.Web.Controllers
                     FacilitatorEntity facilitator = _context.Facilitators.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
 
                     List<ClientEntity> clientList = await _context.Clients
-                                                                  .Include(f => f.SafetyPlan)
+                                                                  .Include(f => f.SafetyPlanList)
                                                                   .Include(f => f.Clinic)
                                                                   .ThenInclude(f => f.Setting)
-                                                                  .Where(n => (n.SafetyPlan.Facilitator.Id == facilitator.Id
+                                                                  .Where(n => (n.SafetyPlanList.Where(m => m.Facilitator.Id == facilitator.Id).Count() > 0
                                                                            || n.IdFacilitatorGroup == facilitator.Id
                                                                            || n.IdFacilitatorPSR == facilitator.Id
                                                                            || n.IndividualTherapyFacilitator.Id == facilitator.Id)
-                                                                           && n.SafetyPlan != null)
+                                                                           && n.SafetyPlanList.Count() > 0)
                                                                   .OrderBy(f => f.Name)
                                                                   .ToListAsync();
 
@@ -89,11 +89,11 @@ namespace KyoS.Web.Controllers
                                                                           .FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
 
                     List<ClientEntity> clientList = await _context.Clients
-                                                                  .Include(f => f.SafetyPlan)
+                                                                  .Include(f => f.SafetyPlanList)
                                                                   .Include(f => f.Clinic)
                                                                   .ThenInclude(f => f.Setting)
                                                                   .Where(n => n.Bio.DocumentsAssistant.Id == documentAssisstant.Id
-                                                                           && n.SafetyPlan != null)
+                                                                           && n.SafetyPlanList.Count() > 0)
                                                                   .OrderBy(f => f.Name)
                                                                   .ToListAsync();
 
@@ -104,7 +104,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Facilitator, Documents_Assistant")]
-        public IActionResult Create(int id = 0)
+        public IActionResult Create(int id = 0, int origin = 0)
         {
 
             UserEntity user_logged = _context.Users
@@ -144,7 +144,7 @@ namespace KyoS.Web.Controllers
                         DateDocument = DateTime.Today
 
                     };
-                   
+                    ViewData["origin"] = origin;
                     return View(model);
                 }
             }
@@ -177,11 +177,11 @@ namespace KyoS.Web.Controllers
                         IdDocumentAssisstant = documentsAssistant.Id
 
                     };
-
+                    ViewData["origin"] = origin;
                     return View(model);
                 }
             }
-
+            ViewData["origin"] = origin;
             return View();
 
         }
@@ -189,7 +189,7 @@ namespace KyoS.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Facilitator, Supervisor, Documents_Assistant")]
-        public async Task<IActionResult> Create(SafetyPlanViewModel safetyViewModel)
+        public async Task<IActionResult> Create(SafetyPlanViewModel safetyViewModel, int origin = 0)
         {
             UserEntity user_logged = _context.Users
                                              .Include(u => u.Clinic)
@@ -201,14 +201,22 @@ namespace KyoS.Web.Controllers
                 if (safetyPlanEntity == null)
                 {
                     safetyPlanEntity = await _converterHelper.ToSafetyPlanEntity(safetyViewModel, true, user_logged.UserName);
-                    safetyPlanEntity.Client = null;
+                   // safetyPlanEntity.Client = null;
                     _context.SafetyPlan.Add(safetyPlanEntity);
 
                     try
                     {
                         await _context.SaveChangesAsync();
 
-                        return RedirectToAction("ClientswithoutSafetyPlan");
+                        if (origin == 0)
+                        {
+                            return RedirectToAction("ClientswithoutSafetyPlan");
+                        }
+                        else
+                        {
+                            return RedirectToAction("Index");
+                        }
+                        
                     }
                     catch (System.Exception ex)
                     {
@@ -246,7 +254,7 @@ namespace KyoS.Web.Controllers
                     WaysToKeepmyselfSafe = safetyViewModel.WaysToKeepmyselfSafe
 
                 };
-
+                ViewData["origin"] = origin;
                 return View(model);
             }
 
@@ -255,7 +263,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Facilitator, Supervisor, Documents_Assistant")]
-        public IActionResult Edit(int id = 0)
+        public IActionResult Edit(int id = 0, int origin = 0)
         {
             if (id == 0)
             {
@@ -273,15 +281,16 @@ namespace KyoS.Web.Controllers
                                                   .Include(n => n.Supervisor)
                                                   .FirstOrDefault(n => n.Id == id);
 
-            SafetyPlanViewModel model = _converterHelper.ToSafetyPlanViewModel(safetyPlan); 
-           
+            SafetyPlanViewModel model = _converterHelper.ToSafetyPlanViewModel(safetyPlan);
+
+            ViewData["origin"] = origin;
             return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Facilitator, , Documents_Assistant")]
-        public async Task<IActionResult> Edit(SafetyPlanViewModel safetyViewModel)
+        public async Task<IActionResult> Edit(SafetyPlanViewModel safetyViewModel, int origin = 0)
         {
             UserEntity user_logged = _context.Users
                                              .Include(u => u.Clinic)
@@ -296,8 +305,14 @@ namespace KyoS.Web.Controllers
                 try
                 {
                     await _context.SaveChangesAsync();
-
-                    return RedirectToAction("EditionSafetyPlan");
+                    if (origin == 0)
+                    {
+                        return RedirectToAction("EditionSafetyPlan");
+                    }
+                    if (origin == 1)
+                    {
+                        return RedirectToAction("Index");
+                    }
                 }
                 catch (System.Exception ex)
                 {
@@ -343,7 +358,9 @@ namespace KyoS.Web.Controllers
                 {
                     clientlist = await _context.Clients
                                                .Include(n => n.IndividualTherapyFacilitator)
-                                               .Where(n => n.SafetyPlan == null)
+                                               .Where(n => n.SafetyPlanList.Count() == 0 
+                                                        && n.OnlyTCM == false
+                                                        && n.Clinic.Id == user_logged.Clinic.Id)
                                                .AsSplitQuery()
                                                .ToListAsync();
 
@@ -355,8 +372,10 @@ namespace KyoS.Web.Controllers
                     {
                         clientlist = await _context.Clients
                                                    .Include(n => n.IndividualTherapyFacilitator)
-                                                   .Where(n => n.SafetyPlan == null
-                                                            && n.Status == StatusType.Open)
+                                                   .Where(n => n.SafetyPlanList.Count() == 0
+                                                            && n.Status == StatusType.Open
+                                                            && n.OnlyTCM == false
+                                                            && n.Clinic.Id == user_logged.Clinic.Id)
                                                    .AsSplitQuery()
                                                    .ToListAsync();
 
@@ -366,8 +385,10 @@ namespace KyoS.Web.Controllers
                     {
                         clientlist = await _context.Clients
                                                  .Include(n => n.IndividualTherapyFacilitator)
-                                                 .Where(n => n.SafetyPlan == null
-                                                          && n.Status == StatusType.Close)
+                                                 .Where(n => n.SafetyPlanList.Count() == 0
+                                                          && n.Status == StatusType.Close
+                                                          && n.OnlyTCM == false
+                                                          && n.Clinic.Id == user_logged.Clinic.Id)
                                                  .AsSplitQuery()
                                                  .ToListAsync();
 
@@ -384,7 +405,7 @@ namespace KyoS.Web.Controllers
                 {
                     clientlist = await _context.Clients
                                            .Include(n => n.IndividualTherapyFacilitator)
-                                           .Where(n => n.SafetyPlan == null
+                                           .Where(n => n.SafetyPlanList.Count() == 0
                                                     && n.OnlyTCM == false
                                                     && n.IndividualTherapyFacilitator.Id == facilitator.Id)
                                            .AsSplitQuery()
@@ -398,7 +419,7 @@ namespace KyoS.Web.Controllers
                     {
                         clientlist = await _context.Clients
                                                .Include(n => n.IndividualTherapyFacilitator)
-                                               .Where(n => n.SafetyPlan == null
+                                               .Where(n => n.SafetyPlanList.Count() == 0
                                                         && n.OnlyTCM == false
                                                         && n.IndividualTherapyFacilitator.Id == facilitator.Id
                                                         && n.Status == StatusType.Open)
@@ -411,7 +432,7 @@ namespace KyoS.Web.Controllers
                     {
                         clientlist = await _context.Clients
                                                    .Include(n => n.IndividualTherapyFacilitator)
-                                                   .Where(n => n.SafetyPlan == null
+                                                   .Where(n => n.SafetyPlanList.Count() == 0
                                                             && n.OnlyTCM == false
                                                             && n.IndividualTherapyFacilitator.Id == facilitator.Id
                                                             && n.Status == StatusType.Close)
@@ -431,7 +452,7 @@ namespace KyoS.Web.Controllers
                 {
                     clientlist = await _context.Clients
                                                .Include(n => n.IndividualTherapyFacilitator)
-                                               .Where(n => n.SafetyPlan == null
+                                               .Where(n => n.SafetyPlanList.Count() == 0
                                                         && n.OnlyTCM == false
                                                         && n.Bio.DocumentsAssistant.Id == documentAssisstant.Id)
                                                .AsSplitQuery()
@@ -445,7 +466,7 @@ namespace KyoS.Web.Controllers
                     {
                         clientlist = await _context.Clients
                                                    .Include(n => n.IndividualTherapyFacilitator)
-                                                   .Where(n => n.SafetyPlan == null
+                                                   .Where(n => n.SafetyPlanList.Count() == 0
                                                             && n.OnlyTCM == false
                                                             && n.Bio.DocumentsAssistant.Id == documentAssisstant.Id
                                                             && n.Status == StatusType.Open)
@@ -458,7 +479,7 @@ namespace KyoS.Web.Controllers
                     {
                         clientlist = await _context.Clients
                                                    .Include(n => n.IndividualTherapyFacilitator)
-                                                   .Where(n => n.SafetyPlan == null
+                                                   .Where(n => n.SafetyPlanList.Count() == 0
                                                             && n.OnlyTCM == false
                                                             && n.Bio.DocumentsAssistant.Id == documentAssisstant.Id
                                                             && n.Status == StatusType.Close)
