@@ -62,7 +62,18 @@
                         <input type="hidden" asp-for="CreateByEmergencyContact" />
                         <input type="hidden" asp-for="CreateOnEmergencyContact" />
                         <input type="hidden" asp-for="IdFacilitatorGroup" />
-                        <partial name="_Clients" />
+                        @if (User.IsInRole("CaseManager"))
+                        {
+                            <input type="hidden" asp-for="IdGender" />
+                            <input type="hidden" asp-for="IdStatus" />
+                            <input type="hidden" asp-for="Name" />
+                            <input type="hidden" asp-for="AdmisionDate" />
+                            <partial name="_ClientsReadOnly" />
+                        }
+                        else
+                        {
+                            <partial name="_Clients" />
+                        }
                         <div class="form-group col-md-12">
                             <input type="submit" value="Save" class="btn btn-primary" />
                             @if (Model.Origin == 0) //viene de la pagina Index de los clientes
@@ -79,9 +90,18 @@
                             }
                         </div>
                     </div>
-                    <div role="tabpanel" class="tab-pane" id="others">
-                        <partial name="_ClientsOthers" />
-                    </div>
+                    @if (User.IsInRole("CaseManager"))
+                    {
+                        <div role="tabpanel" class="tab-pane" id="others">
+                            <partial name="_ClientsOthersReadOnly" />
+                        </div>
+                    }
+                    else
+                    {
+                        <div role="tabpanel" class="tab-pane" id="others">
+                            <partial name="_ClientsOthers" />
+                        </div>
+                    }                    
                     <div role="tabpanel" class="tab-pane" id="primaryDoctor">
                         <partial name="_ClientsPrimaryDoctor" />
                     </div>
@@ -94,21 +114,42 @@
                     <div role="tabpanel" class="tab-pane" id="emergencyContact">
                         <partial name="_ClientsEmergencyContact" />
                     </div>
-                    <div role="tabpanel" class="tab-pane" id="diagnostics">
-                        <partial name="_ClientsDiagnostics" />
-                    </div>
-                    <div role="tabpanel" class="tab-pane" id="documents">
-                        <partial name="_ClientsDocuments" />
-                    </div>
-                    <div role="tabpanel" class="tab-pane" id="referreds">
-                        <partial name="_ClientsReferreds" />
-                    </div>
-                    <div role="tabpanel" class="tab-pane" id="healthInsurance">
-                        <partial name="_ClientsHealthInsurance" />
-                    </div>
-                    <div role="tabpanel" class="tab-pane" id="annotations">
-                        <partial name="_ClientsAnnotations" />
-                    </div>
+                    @if (User.IsInRole("CaseManager"))
+                    {
+                        <div role="tabpanel" class="tab-pane" id="diagnostics">
+                            <partial name="_ClientsDiagnosticsReadOnly" />
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="documents">
+                            <partial name="_ClientsDocumentsReadOnly" />
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="referreds">
+                            <partial name="_ClientsReferredsReadOnly" />
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="healthInsurance">
+                            <partial name="_ClientsHealthInsuranceReadOnly" />
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="annotations">
+                            <partial name="_ClientsAnnotationsReadOnly" />
+                        </div>
+                    }
+                    else
+                    {
+                        <div role="tabpanel" class="tab-pane" id="diagnostics">
+                            <partial name="_ClientsDiagnostics" />
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="documents">
+                            <partial name="_ClientsDocuments" />
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="referreds">
+                            <partial name="_ClientsReferreds" />
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="healthInsurance">
+                            <partial name="_ClientsHealthInsurance" />
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="annotations">
+                            <partial name="_ClientsAnnotations" />
+                        </div>
+                    }                    
                 </div>
             </div>
         </form>
