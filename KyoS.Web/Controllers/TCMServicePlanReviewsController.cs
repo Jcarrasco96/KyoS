@@ -1988,6 +1988,8 @@ namespace KyoS.Web.Controllers
                                                                    .Include(spr => spr.TCMServicePlanRevDomain)
                                                                    .ThenInclude(d => d.TcmDomain)
 
+                                                                   .AsSplitQuery()
+
                                                                    .FirstOrDefault(spr => (spr.Id == id && spr.Approved == 2));
             if (servicePlanReview == null)
             {

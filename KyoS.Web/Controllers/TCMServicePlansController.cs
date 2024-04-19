@@ -2576,6 +2576,8 @@ namespace KyoS.Web.Controllers
                                                        .Include(sp => sp.TCMDomain.Where(d => d.Origin == "Service Plan"))
                                                        .ThenInclude(d => d.TCMObjetive)
 
+                                                       .AsSplitQuery()
+
                                                        .FirstOrDefault(sp => (sp.Id == id && sp.Approved == 2));
             if (servicePlan == null)
             {
