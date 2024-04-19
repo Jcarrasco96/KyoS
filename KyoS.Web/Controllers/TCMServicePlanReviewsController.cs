@@ -634,7 +634,8 @@ namespace KyoS.Web.Controllers
                     TCMServicePlanDomain.ChangesUpdate = "";
                     TCMServicePlanDomain.CodeDomain = tcmDomainEntity.Code;
                     TCMServicePlanDomain.TcmDomain = tcmDomainEntity;
-                    
+                    TCMServicePlanDomain.Status = SPRStatus.Added;
+
 
                     tcmServicePlanReview.TcmServicePlan.TCMDomain.Add(tcmDomainEntity);
                     tcmServicePlanReview.TCMServicePlanRevDomain.Add(TCMServicePlanDomain);
