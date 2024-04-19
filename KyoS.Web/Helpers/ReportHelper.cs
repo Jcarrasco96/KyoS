@@ -36108,6 +36108,54 @@ namespace KyoS.Web.Helpers
             dataSet.Tables.Add(GetDiagnosticsListDS(servicePlanReview.TcmServicePlan.TcmClient.Client.Clients_Diagnostics.ToList()));
             WebReport.Report.RegisterData(dataSet.Tables[0], "Diagnostics");
 
+            List<TCMServicePlanReviewDomainEntity> domains = servicePlanReview.TCMServicePlanRevDomain
+                                                                              .Where(t => t.Status == SPRStatus.Added)
+                                                                              .ToList();
+            int i = 1;
+            TCMDomainEntity domain;
+            foreach (var item in domains)
+            {
+                domain = _context.TCMDomains
+                                 .Include(t => t.TCMObjetive)
+                                 .FirstOrDefault(d => d.Id == item.TcmDomain.Id);
+                if (domain != null)
+                {
+                    dataSet = new DataSet();
+                    dataSet.Tables.Add(GetTCMDomainDS(domain));
+                    WebReport.Report.RegisterData(dataSet.Tables[0], $"TCMDomains{i}");
+
+                    if (domain.TCMObjetive.Count() > 0)
+                    {
+                        dataSet = new DataSet();
+                        dataSet.Tables.Add(GetTCMObjectiveListDS(domain.TCMObjetive));
+                        WebReport.Report.RegisterData(dataSet.Tables[0], $"TCMObjetives{i}");
+                    }
+                    else
+                    {
+                        dataSet = new DataSet();
+                        dataSet.Tables.Add(GetTCMObjectiveListDS(new List<TCMObjetiveEntity>()));
+                        WebReport.Report.RegisterData(dataSet.Tables[0], $"TCMObjetives{i}");
+                    }
+                    i++;
+                }
+            }
+
+            ReportPage pageToDelete;
+            //Create the empty datasets, it must be 5
+            for (int k = i; k < 6; k++)
+            {
+                dataSet = new DataSet();
+                dataSet.Tables.Add(GetTCMDomainDS(null));
+                WebReport.Report.RegisterData(dataSet.Tables[0], $"TCMDomains{k}");
+
+                dataSet = new DataSet();
+                dataSet.Tables.Add(GetTCMObjectiveListDS(new List<TCMObjetiveEntity>()));
+                WebReport.Report.RegisterData(dataSet.Tables[0], $"TCMObjetives{k}");
+
+                pageToDelete = WebReport.Report.FindObject($"Page{k + 2}") as ReportPage;
+                pageToDelete.Visible = false;
+            }
+
             //images                      
             string path = string.Empty;
             if (!string.IsNullOrEmpty(servicePlanReview.TCMSupervisor.Clinic.LogoPath))
@@ -36121,13 +36169,11 @@ namespace KyoS.Web.Helpers
             //signatures images 
             byte[] stream1 = null;
             byte[] stream2 = null;
-
             if (!string.IsNullOrEmpty(servicePlanReview.TCMSupervisor.SignaturePath))
             {
                 path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(servicePlanReview.TCMSupervisor.SignaturePath)}");
                 stream1 = _imageHelper.ImageToByteArray(path);
             }
-
             if (!string.IsNullOrEmpty(servicePlanReview.TcmServicePlan.TcmClient.Casemanager.SignaturePath))
             {
                 path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(servicePlanReview.TcmServicePlan.TcmClient.Casemanager.SignaturePath)}");
