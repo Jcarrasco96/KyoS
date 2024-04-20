@@ -125,7 +125,14 @@
                                     }
                                 </td>
                                 <td align="center">
-                                    @Html.DisplayFor(modelItem => item.Service)
+                                    @if (item.OnlyTCM == true)
+                                    {
+                                        <strong>TCM</strong>
+                                    }
+                                    else
+                                    {
+                                        @Html.DisplayFor(modelItem => item.Service)
+                                    }
                                 </td>
                                 <td align="right">
                                     @if (item.Status == KyoS.Common.Enums.StatusType.Open && (User.IsInRole("Manager")))
