@@ -99,5 +99,10 @@ namespace KyoS.Web.Models
 
         [DataType(DataType.Date)]
         public DateTime TCMLockCreateNote { get; set; }
+
+        [Display(Name = "Dashboard Principal")]
+        public int IdDashboard { get; set; }
+
+        public IEnumerable<SelectListItem> Dashboards { get; set; }
     }
 }

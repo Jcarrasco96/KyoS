@@ -2718,5 +2718,35 @@ namespace KyoS.Web.Helpers
 
             return list;
         }
+
+        public IEnumerable<SelectListItem> GetComboDashboardType()
+        {
+            List<SelectListItem> list = new List<SelectListItem>
+                                { new SelectListItem { Text = DashboardType.MH.ToString(), Value = "0"},
+                                  new SelectListItem { Text = DashboardType.TCM.ToString(), Value = "1"}
+            };
+
+            return list;
+        }
+
+        public IEnumerable<SelectListItem> GetComboInsuranceType()
+        {
+            List<SelectListItem> list = new List<SelectListItem>
+                                { new SelectListItem { Text = InsuranceType.Medicaid.ToString(), Value = "0"},
+                                  new SelectListItem { Text = InsuranceType.Medicare.ToString(), Value = "1"}
+            };
+
+            return list;
+        }
+
+        public IEnumerable<SelectListItem> GetComboInsurancePlanType()
+        {
+            List<SelectListItem> list = new List<SelectListItem>
+                                { new SelectListItem { Text = InsuranceType.Medicare.ToString(), Value = "0"},
+                                  new SelectListItem { Text = InsuranceType.Medicaid.ToString(), Value = "1"}
+            };
+
+            return list;
+        }
     }
 }

@@ -91,7 +91,14 @@
                                         }
                                     </td>
                                     <td align="center">
-                                        @Html.DisplayFor(modelItem => item.Service)
+                                        @if (item.OnlyTCM == true)
+                                        {
+                                            <strong>TCM</strong>
+                                        }
+                                        else
+                                        {
+                                            @Html.DisplayFor(modelItem => item.Service)
+                                        }
                                     </td>
                                     <td align="center">
                                         @if (item.Status == KyoS.Common.Enums.StatusType.Open)
@@ -160,7 +167,14 @@
                                         }
                                     </td>
                                     <td align="center">
-                                        @Html.DisplayFor(modelItem => item.Service)
+                                        @if (item.OnlyTCM == true)
+                                        {
+                                            <strong>TCM</strong>
+                                        }
+                                        else
+                                        {
+                                            @Html.DisplayFor(modelItem => item.Service)
+                                        }
                                     </td>
                                     <td align="center">
                                         @if (item.Status == KyoS.Common.Enums.StatusType.Open)

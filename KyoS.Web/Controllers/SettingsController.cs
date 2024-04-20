@@ -46,7 +46,9 @@ namespace KyoS.Web.Controllers
             SettingViewModel entity = new SettingViewModel()
             {
                 IdClinic = 0,
-                Clinics = _combosHelper.GetComboClinics()
+                Clinics = _combosHelper.GetComboClinics(),
+                IdDashboard = 0,
+                Dashboards = _combosHelper.GetComboDashboardType()
             };
             return View(entity);
         }
@@ -215,7 +217,9 @@ namespace KyoS.Web.Controllers
                 IdFiltroPayStub = (user_logged.Clinic.Setting.TCMPayStub_Filtro == TCMPayStubFiltro.Created) ? 0 : (user_logged.Clinic.Setting.TCMPayStub_Filtro == TCMPayStubFiltro.Approved) ? 1 : (user_logged.Clinic.Setting.TCMPayStub_Filtro == TCMPayStubFiltro.Billed) ? 2 : 3,
                 FiltroPayStubs = _combosHelper.GetComboFiltroTCMPayStubByClinic(),
                 MTPmultipleSignatures = user_logged.Clinic.Setting.MTPmultipleSignatures,
-                TCMLockCreateNote = user_logged.Clinic.Setting.TCMLockCreateNote
+                TCMLockCreateNote = user_logged.Clinic.Setting.TCMLockCreateNote,
+                IdDashboard = (user_logged.Clinic.Setting.DashBoardPrincipal == DashboardType.MH) ? 0 : 1,
+                Dashboards = _combosHelper.GetComboDashboardType()
             };
 
             return View(model);
@@ -276,6 +280,7 @@ namespace KyoS.Web.Controllers
                     setting.CreateTCMNotesWithoutDomain = model.CreateTCMNotesWithoutDomain;
                     setting.TCMPayStub_Filtro = StatusUtils.GetFiltroTCMPayStubByIndex(model.IdFiltroPayStub);
                     setting.MTPmultipleSignatures = model.MTPmultipleSignatures;
+                    setting.DashBoardPrincipal = DashboardUtils.GetDashboardTypeByIndex(model.IdDashboard);
                 }
                 _context.Update(setting);
                 await _context.SaveChangesAsync();

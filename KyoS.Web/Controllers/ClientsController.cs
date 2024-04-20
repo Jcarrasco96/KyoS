@@ -917,7 +917,13 @@ namespace KyoS.Web.Controllers
                         MemberId = item.MemberId,
                         Units = item.Units,
                         AuthorizationNumber = item.AuthorizationNumber,
-                        Agency = item.Agency
+                        Agency = item.Agency,
+                        ExpiredDate = item.ExpiredDate,
+                        EffectiveDate = item.EffectiveDate,
+                        EndCoverageDate = item.EndCoverageDate,
+                        InsuranceType = item.InsuranceType,
+                        InsurancePlan = item.InsurancePlan
+
                     };
                     _context.Add(clientHealthInsurance);
                     //_context.HealthInsuranceTemp.Remove(item);
@@ -2938,7 +2944,12 @@ namespace KyoS.Web.Controllers
                         UserName = user_logged.UserName,
                         IdClient = client.Id,
                         AuthorizationNumber = item.AuthorizationNumber,
-                        Agency = item.Agency
+                        Agency = item.Agency,
+                        ExpiredDate = item.ExpiredDate,
+                        EffectiveDate = item.EffectiveDate,
+                        EndCoverageDate = item.EndCoverageDate,
+                        InsuranceType = item.InsuranceType,
+                        InsurancePlan = item.InsurancePlan                        
 
                     };
                     _context.Add(healthInsuranceTemp);
@@ -2994,7 +3005,14 @@ namespace KyoS.Web.Controllers
                     IdClient = idClient,
                     AuthorizationNumber = "Not Need",
                     IdAgencyService = 0,
-                    AgencyServices = _combosHelper.GetComboServiceAgency()
+                    AgencyServices = _combosHelper.GetComboServiceAgency(),
+                    ExpiredDate = DateTime.Today.AddMonths(3),
+                    EffectiveDate = DateTime.Today,
+                    EndCoverageDate = DateTime.Today.AddMonths(12),
+                    IdInsuranceType = 0,
+                    InsuranceTypes = _combosHelper.GetComboInsuranceType(),
+                    IdInsurancePlanType = 0,
+                    InsurancePlanTypes = _combosHelper.GetComboInsurancePlanType()
                  };
                 return View(entity);
             }
@@ -3012,7 +3030,14 @@ namespace KyoS.Web.Controllers
                     IdClient = idClient,
                     AuthorizationNumber = string.Empty,
                     IdAgencyService = 0,
-                    AgencyServices = _combosHelper.GetComboServiceAgency()
+                    AgencyServices = _combosHelper.GetComboServiceAgency(),
+                    ExpiredDate = DateTime.Today.AddMonths(3),
+                    EffectiveDate = DateTime.Today,
+                    EndCoverageDate = DateTime.Today.AddMonths(12),
+                    IdInsuranceType = 0,
+                    InsuranceTypes = _combosHelper.GetComboInsuranceType(),
+                    IdInsurancePlanType = 0,
+                    InsurancePlanTypes = _combosHelper.GetComboInsurancePlanType()
                 };
                 return View(entity);
             }
@@ -3024,8 +3049,8 @@ namespace KyoS.Web.Controllers
         public async Task<IActionResult> AddHealthInsuranceClient(int id, HealthInsuranceTempViewModel HealthInsuranceModel)
         {
             UserEntity user_logged = _context.Users
-                                                 .Include(u => u.Clinic)
-                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
             if (ModelState.IsValid)
             {
@@ -3062,7 +3087,12 @@ namespace KyoS.Web.Controllers
                         Name = healthInsurance.Name,
                         IdClient = HealthInsuranceModel.IdClient,
                         AuthorizationNumber = HealthInsuranceModel.AuthorizationNumber,
-                        Agency = ServiceAgencyUtils.GetServiceAgencyByIndex(HealthInsuranceModel.IdAgencyService)
+                        Agency = ServiceAgencyUtils.GetServiceAgencyByIndex(HealthInsuranceModel.IdAgencyService),
+                        ExpiredDate = HealthInsuranceModel.ExpiredDate,
+                        EffectiveDate = HealthInsuranceModel.EffectiveDate,
+                        EndCoverageDate = HealthInsuranceModel.EndCoverageDate,
+                        InsuranceType = InsuranceUtils.GetInsuranceTypeByIndex(HealthInsuranceModel.IdInsuranceType),
+                        InsurancePlan = InsurancePlanUtils.GetInsurancePlanTypeByIndex(HealthInsuranceModel.IdInsurancePlanType)
                     };
                     _context.Add(healthInsuranceTemp);
                     await _context.SaveChangesAsync();
@@ -3086,7 +3116,14 @@ namespace KyoS.Web.Controllers
                 MemberId = "",
                 Units = 0,
                 IdClient = HealthInsuranceModel.IdClient,
-                AuthorizationNumber = HealthInsuranceModel.AuthorizationNumber
+                AuthorizationNumber = HealthInsuranceModel.AuthorizationNumber,
+                ExpiredDate = DateTime.Today.AddMonths(3),
+                EffectiveDate = HealthInsuranceModel.EffectiveDate,
+                EndCoverageDate = HealthInsuranceModel.EndCoverageDate,
+                IdInsuranceType = 0,
+                InsuranceTypes = _combosHelper.GetComboInsuranceType(),
+                IdInsurancePlanType = 0,
+                InsurancePlanTypes = _combosHelper.GetComboInsurancePlanType()
             };
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "AddHealthInsuranceClient", model) });
         }
@@ -4945,7 +4982,14 @@ namespace KyoS.Web.Controllers
                     Active = healthInsuranceTempEntity.Active,
                     UserName = user_logged.UserName,
                     IdAgencyService = (healthInsuranceTempEntity.Agency == ServiceAgency.CMH)? 0 : 1,
-                    AgencyServices = _combosHelper.GetComboServiceAgency()
+                    AgencyServices = _combosHelper.GetComboServiceAgency(),
+                    ExpiredDate = healthInsuranceTempEntity.ExpiredDate,
+                    EffectiveDate = healthInsuranceTempEntity.EffectiveDate,
+                    EndCoverageDate = healthInsuranceTempEntity.EndCoverageDate,
+                    IdInsuranceType = (healthInsuranceTempEntity.InsuranceType == InsuranceType.Medicaid)? 0 : 1,
+                    InsuranceTypes = _combosHelper.GetComboInsuranceType(),
+                    IdInsurancePlanType = (healthInsuranceTempEntity.InsurancePlan == InsurancePlanType.Medicare) ? 0 : 1,
+                    InsurancePlanTypes = _combosHelper.GetComboInsurancePlanType(),
                 };
                 return View(entity);
             }
@@ -4978,7 +5022,12 @@ namespace KyoS.Web.Controllers
                         Name = HealthInsuranceModel.Name,
                         IdClient = HealthInsuranceModel.IdClient,
                         AuthorizationNumber = HealthInsuranceModel.AuthorizationNumber,
-                        Agency = ServiceAgencyUtils.GetServiceAgencyByIndex(HealthInsuranceModel.IdAgencyService)
+                        Agency = ServiceAgencyUtils.GetServiceAgencyByIndex(HealthInsuranceModel.IdAgencyService),
+                        ExpiredDate = HealthInsuranceModel.ExpiredDate,
+                        EffectiveDate = HealthInsuranceModel.EffectiveDate,
+                        EndCoverageDate = HealthInsuranceModel.EndCoverageDate,
+                        InsuranceType = InsuranceUtils.GetInsuranceTypeByIndex(HealthInsuranceModel.IdInsuranceType),
+                        InsurancePlan = InsurancePlanUtils.GetInsurancePlanTypeByIndex(HealthInsuranceModel.IdInsurancePlanType)
                     };
                     _context.Update(healthInsuranceTemp);
                     await _context.SaveChangesAsync();
@@ -5130,16 +5179,17 @@ namespace KyoS.Web.Controllers
 
             if (User.IsInRole("Manager"))
             {
-                return View(await _context.Clients
-                                          .Include(n => n.Clients_HealthInsurances)
-                                          .ThenInclude(n => n.HealthInsurance)
-                                          .Where(n => n.Clinic.Id == user_logged.Clinic.Id
-                                                   && n.Service == ServiceType.PSR
-                                                   && n.Status == StatusType.Open
-                                                  && (n.Clients_HealthInsurances == null
-                                                   || n.Clients_HealthInsurances.Where(m => m.Active == true
-                                                             && m.ApprovedDate.AddMonths(m.DurationTime) > DateTime.Today.AddDays(15)).Count() == 0))
-                                          .ToListAsync());
+                List<ClientEntity> list = await _context.Clients
+                                                        .Include(n => n.Clients_HealthInsurances)
+                                                        .ThenInclude(n => n.HealthInsurance)
+                                                        .Where(n => n.Clinic.Id == user_logged.Clinic.Id
+                                                               // && n.Service == ServiceType.PSR
+                                                                 && n.Status == StatusType.Open
+                                                                 && (n.Clients_HealthInsurances == null
+                                                                  || n.Clients_HealthInsurances.Where(m => m.Active == true
+                                                                         && m.ExpiredDate > DateTime.Today.AddDays(15)).Count() == 0))
+                                                        .ToListAsync();
+                return View(list);
             }
 
             return RedirectToAction("NotAuthorized", "Account");

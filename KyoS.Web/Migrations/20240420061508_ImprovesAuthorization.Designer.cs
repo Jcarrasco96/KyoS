@@ -4,6 +4,7 @@ using KyoS.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KyoS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20240420061508_ImprovesAuthorization")]
+    partial class ImprovesAuthorization
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -2397,22 +2400,10 @@ namespace KyoS.Web.Migrations
                     b.Property<int>("DurationTime")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("EffectiveDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("EndCoverageDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<DateTime>("ExpiredDate")
                         .HasColumnType("datetime2");
 
                     b.Property<int?>("HealthInsuranceId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("InsurancePlan")
-                        .HasColumnType("int");
-
-                    b.Property<int>("InsuranceType")
                         .HasColumnType("int");
 
                     b.Property<string>("LastModifiedBy")
@@ -4203,22 +4194,7 @@ namespace KyoS.Web.Migrations
                     b.Property<int>("DurationTime")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("EffectiveDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("EndCoverageDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("ExpiredDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<int>("IdClient")
-                        .HasColumnType("int");
-
-                    b.Property<int>("InsurancePlan")
-                        .HasColumnType("int");
-
-                    b.Property<int>("InsuranceType")
                         .HasColumnType("int");
 
                     b.Property<string>("LastModifiedBy")

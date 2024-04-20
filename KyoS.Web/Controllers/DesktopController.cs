@@ -429,7 +429,7 @@ namespace KyoS.Web.Controllers
                     Task<int> ClientBirthday = MHClientBirthday(user_logged.Clinic.Id);
                     Task<int> ClientEligibility = MHClientEligibility(user_logged.Clinic.Id);
                     Task<int> SafetyPlan = MHSafetyPlan(user_logged.Clinic.Id);
-
+                   
                     await Task.WhenAll(PendingNotes, InProgressNotes, NotStartedNotes, MTPMissing, NotesWithReview,
                                         ApprovedNotes, NotPresentNotes, ExpiredMTPs, PendingBIO, PendingInitialFars, MedicalHistoryMissing,
                                         IntakeMissing, FarsMissing, ClientAuthorization, ClientBirthday, ClientEligibility,
@@ -1182,11 +1182,11 @@ namespace KyoS.Web.Controllers
                 return await db.Clients
                                .AsNoTracking()
                                .CountAsync(n => n.Status == StatusType.Open
-                                               && n.Service == ServiceType.PSR
+                                              // && n.Service == ServiceType.PSR
                                                && n.Clinic.Id == clinicId
                                                && (n.Clients_HealthInsurances == null
                                                || n.Clients_HealthInsurances.Where(m => m.Active == true
-                                               && m.ApprovedDate.AddMonths(m.DurationTime) > DateTime.Today.AddDays(15)).Count() == 0));
+                                               && m.ExpiredDate > DateTime.Today.AddDays(15)).Count() == 0));
             }
         }
 

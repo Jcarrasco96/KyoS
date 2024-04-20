@@ -181,7 +181,7 @@ namespace KyoS.Web.Controllers
 
                     };
                     ViewData["origin"] = origin;
-                    ViewData["available"] = UnitsAvailable(IdTCMClient, true);
+                    ViewData["available"] = UnitsAvailable(dateTime, IdTCMClient, true);
                     return View(model);
                 }
                 else
@@ -327,7 +327,7 @@ namespace KyoS.Web.Controllers
                         model = _converterHelper.ToTCMNoteViewModel(TcmNote);
                         model.TCMClient = TcmNote.TCMClient;
                         ViewData["origin"] = origin;
-                        ViewData["available"] = UnitsAvailable(TcmNote.TCMClient.Id);
+                        ViewData["available"] = UnitsAvailable(dateservice, TcmNote.TCMClient.Id);
                         ViewData["interval"] = interval;
                         if (TcmNote.TCMNoteActivity.Count() > 0)
                         {
@@ -382,7 +382,7 @@ namespace KyoS.Web.Controllers
                             }
                             model.TCMClient = TcmNote.TCMClient;
                             ViewData["origin"] = origin;
-                            ViewData["available"] = UnitsAvailable(TcmNote.TCMClient.Id);
+                            ViewData["available"] = UnitsAvailable(dateservice, TcmNote.TCMClient.Id);
                             ViewData["interval"] = interval;
                             if (TcmNote.TCMNoteActivity.Count() > 0)
                             {
@@ -433,7 +433,7 @@ namespace KyoS.Web.Controllers
             {
                 ViewBag.Delete = "Exists";
                 ViewData["origin"] = origin;
-                ViewData["available"] = UnitsAvailable(tcmNotesViewModel.IdTCMClient);
+                ViewData["available"] = UnitsAvailable(tcmNotesViewModel.DateOfService, tcmNotesViewModel.IdTCMClient);
                 tcmNotesViewModel.TCMNoteActivity = _context.TCMNoteActivity
                                                             .Include(n => n.TCMDomain)
                                                             .Where(n => n.TCMNote.Id == tcmNotesViewModel.IdTCMNote).ToList();
@@ -770,6 +770,28 @@ namespace KyoS.Web.Controllers
 
                     }
 
+                    //Verifico la Authorization
+                    if (user_logged.Clinic.Setting.LockTCMNoteForUnits  == true && VerifyAuthorization(TcmNotesViewModel.IdTCMClient, TcmNotesViewModel.DateOfServiceNote) == false)
+                    {
+                        TCMNoteEntity tcmNote1 = await _context.TCMNote
+                                                               .Include(n => n.TCMClient)
+                                                               .ThenInclude(n => n.Client)
+                                                               .FirstOrDefaultAsync(m => m.Id == TcmNotesViewModel.IdTCMNote);
+
+                        TcmNotesViewModel.TCMNote = tcmNote1;
+                        TcmNotesViewModel.SettingList = _combosHelper.GetComboTCMNoteSetting();
+                        TcmNotesViewModel.DomainList = _combosHelper.GetComboServicesUsed(_context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == TcmNotesViewModel.IdTCMClient).Id, tcmNote1.DateOfService);
+                        if (TcmNotesViewModel.IdTCMDomain != 0)
+                        {
+                            TCMDomainEntity domain = _context.TCMDomains.FirstOrDefault(d => d.Id == TcmNotesViewModel.IdTCMDomain);
+                            TcmNotesViewModel.ActivityList = _combosHelper.GetComboTCMNoteActivity(domain.Code);
+                        }
+
+                        ModelState.AddModelError(string.Empty, $"Error. The client does not have valid authorization for this time");
+                        return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateNoteActivity", TcmNotesViewModel) });
+
+                    }
+
                     //check overlapin
                     if (noteActivities.Count() > 0)
                     {
@@ -864,7 +886,7 @@ namespace KyoS.Web.Controllers
                                                                                       .Include(g => g.TCMDomain)
                                                                                       .Where(g => g.TCMNote.Id == TcmNotesViewModel.IdTCMNote)
                                                                                       .ToListAsync();
-                        ViewData["Id"] = UnitsAvailable(note.TCMClient.Id);
+                        ViewData["Id"] = UnitsAvailable(note.DateOfService, note.TCMClient.Id);
                         return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewTCMNoteActivity", NotesActivityList) });
 
                     }
@@ -1014,7 +1036,7 @@ namespace KyoS.Web.Controllers
                 }
 
                 //Lock tcmnotes for unavaliable units
-                if ((user_logged.Clinic.Setting.LockTCMNoteForUnits == true && (UnitsAvailable(TcmNotesViewModel.IdTCMClient, true) - CalculateUnits(TcmNotesViewModel.Minutes)) < 0))
+                if ((user_logged.Clinic.Setting.LockTCMNoteForUnits == true && (UnitsAvailable(TcmNotesViewModel.DateOfServiceNote, TcmNotesViewModel.IdTCMClient, true) - CalculateUnits(TcmNotesViewModel.Minutes)) < 0))
                 {
                     TcmNotesViewModel.SettingList = _combosHelper.GetComboTCMNoteSetting();
                     TcmNotesViewModel.DomainList = _combosHelper.GetComboServicesUsed(_context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == TcmNotesViewModel.IdTCMClient).Id, TcmNotesViewModel.DateOfServiceNote);
@@ -1026,6 +1048,22 @@ namespace KyoS.Web.Controllers
                     }
 
                     ModelState.AddModelError(string.Empty, $"Error.This note can not be created because the client has no units available");
+                    return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateNoteActivityTemp", TcmNotesViewModel) });
+                }
+
+                //Lock tcmnotes for valid authorization 
+                if ((user_logged.Clinic.Setting.LockTCMNoteForUnits == true && VerifyAuthorization(TcmNotesViewModel.IdTCMClient, TcmNotesViewModel.DateOfServiceNote) == false))
+                {
+                    TcmNotesViewModel.SettingList = _combosHelper.GetComboTCMNoteSetting();
+                    TcmNotesViewModel.DomainList = _combosHelper.GetComboServicesUsed(_context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == TcmNotesViewModel.IdTCMClient).Id, TcmNotesViewModel.DateOfServiceNote);
+
+                    if (TcmNotesViewModel.IdTCMDomain != 0)
+                    {
+                        TCMDomainEntity domain = _context.TCMDomains.FirstOrDefault(d => d.Id == TcmNotesViewModel.IdTCMDomain);
+                        TcmNotesViewModel.ActivityList = _combosHelper.GetComboTCMNoteActivity(domain.Code);
+                    }
+
+                    ModelState.AddModelError(string.Empty, $"Error. The client does not have valid authorization for this time");
                     return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateNoteActivityTemp", TcmNotesViewModel) });
                 }
 
@@ -1115,7 +1153,7 @@ namespace KyoS.Web.Controllers
 
                                                                                              .Where(g => g.UserName == user_logged.UserName)
                                                                                              .ToListAsync();
-                    ViewData["Id"] = UnitsAvailable(TcmNotesViewModel.IdTCMClient, true);
+                    ViewData["Id"] = UnitsAvailable(TcmNotesViewModel.DateOfServiceNote, TcmNotesViewModel.IdTCMClient, true);
                     return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewTCMNoteActivityTemp", NotesActivityList) });
 
                 }
@@ -1338,7 +1376,29 @@ namespace KyoS.Web.Controllers
                     }
                     
                 }
-                
+
+                //Lock tcmnotes for authorization
+                if (user_logged.Clinic.Setting.LockTCMNoteForUnits == true && VerifyAuthorization(NoteActivityViewModel.IdTCMClient, NoteActivityViewModel.DateOfServiceNote) == false)
+                {
+                    TCMNoteEntity tcmNote1 = await _context.TCMNote
+                                                           .Include(n => n.TCMClient)
+                                                           .ThenInclude(n => n.Client)
+                                                           .FirstOrDefaultAsync(m => m.Id == NoteActivityViewModel.IdTCMNote);
+
+                    NoteActivityViewModel.TCMNote = tcmNote1;
+                    NoteActivityViewModel.SettingList = _combosHelper.GetComboTCMNoteSetting();
+                    NoteActivityViewModel.DomainList = _combosHelper.GetComboServicesUsed(_context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == NoteActivityViewModel.IdTCMClient).Id, tcmNote1.DateOfService);
+                    if (NoteActivityViewModel.IdTCMDomain != 0)
+                    {
+                        TCMDomainEntity domain = _context.TCMDomains.FirstOrDefault(d => d.Id == NoteActivityViewModel.IdTCMDomain);
+                        NoteActivityViewModel.ActivityList = _combosHelper.GetComboTCMNoteActivity(domain.Code);
+                    }
+
+                    ModelState.AddModelError(string.Empty, $"Error. The client does not have valid authorization for this time");
+                    ViewData["unitsAvaliable"] = unitsAvaliable;
+                    return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditNoteActivity", NoteActivityViewModel) });
+                }
+
                 //verifica que la nota este en el rango de fecha segun los setting
                 if (CheckTimeRange(NoteActivityViewModel.StartTime, NoteActivityViewModel.EndTime))
                 {
@@ -1471,7 +1531,7 @@ namespace KyoS.Web.Controllers
 
                                                                                   .Where(g => g.TCMNote.Id == NoteActivityViewModel.IdTCMNote)
                                                                                   .ToListAsync();
-                    ViewData["Id"] = UnitsAvailable(note.TCMClient.Id);
+                    ViewData["Id"] = UnitsAvailable(note.DateOfService, note.TCMClient.Id);
                     return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewTCMNoteActivity", NotesActivityList) });
                 }
                 catch (System.Exception ex)
@@ -1645,7 +1705,7 @@ namespace KyoS.Web.Controllers
                 {
 
                 }
-                ViewData["available"] = UnitsAvailable(tcmNotesActivity.TCMNote.TCMClient.Id);
+                ViewData["available"] = UnitsAvailable(tcmNotesActivity.TCMNote.DateOfService, tcmNotesActivity.TCMNote.TCMClient.Id);
                 return RedirectToAction("Edit", new { id = tcmNotesActivity.TCMNote.Id, origin = 2 });
             }
             else
@@ -1679,7 +1739,7 @@ namespace KyoS.Web.Controllers
                 {
 
                 }
-                ViewData["available"] = UnitsAvailable(tcmNotesActivity.IdTCMClient);
+                ViewData["available"] = UnitsAvailable(tcmNotesActivity.DateOfServiceOfNote, tcmNotesActivity.IdTCMClient);
                 return RedirectToAction("Create", new { dateTime = tcmNotesActivity.DateOfServiceOfNote, tcmNotesActivity.IdTCMClient });
             }
             else
@@ -1900,7 +1960,7 @@ namespace KyoS.Web.Controllers
                         model.TCMClient = TcmNote.TCMClient;
                         model.ApprovedDate = DateTime.Today;
                         ViewData["origi"] = origi;
-                        ViewData["available"] = UnitsAvailable(TcmNote.TCMClient.Id);
+                        ViewData["available"] = UnitsAvailable(TcmNote.DateOfService, TcmNote.TCMClient.Id);
                         return View(model);
                     }
 
@@ -2353,7 +2413,7 @@ namespace KyoS.Web.Controllers
             return View(model);
         }
 
-        private int UnitsAvailable(int idTCMClient = 0, bool isNew = false)
+        private int UnitsAvailable(DateTime dateService, int idTCMClient = 0, bool isNew = false)
         {
             UserEntity user_logged = _context.Users
                                                    .Include(u => u.Clinic)
@@ -2371,7 +2431,9 @@ namespace KyoS.Web.Controllers
                                                                   && n.Client.Clients_HealthInsurances
                                                                      .Any( m => m.Active == true 
                                                                              && m.Agency == ServiceAgency.TCM
-                                                                             && m.Units > 0));
+                                                                             && m.Units > 0
+                                                                             && m.ApprovedDate <= dateService
+                                                                             && m.ExpiredDate >= dateService));
 
             if (tcmClient != null)
             {
@@ -2793,6 +2855,24 @@ namespace KyoS.Web.Controllers
 
             return View(null);
         }
+
+        private bool VerifyAuthorization(int idTCMClient, DateTime dateService)
+        {
+            TCMClientEntity tcmclient = _context.TCMClient
+                                                .Include(n => n.Client)
+                                                .ThenInclude(n => n.Clients_HealthInsurances)
+                                                .ThenInclude(n => n.HealthInsurance)
+                                                .FirstOrDefault(n => n.Id == idTCMClient);
+            if (tcmclient != null)
+            {
+                if (tcmclient.Client.Clients_HealthInsurances.Where(n => n.ApprovedDate <= dateService && n.ExpiredDate >= dateService && n.Agency == ServiceAgency.TCM && n.Active == true).Count() > 0)
+                { 
+                    return true;
+                }    
+            }
+            return false;
+        }
+       
 
     }
 }

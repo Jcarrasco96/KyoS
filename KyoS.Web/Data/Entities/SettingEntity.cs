@@ -42,5 +42,7 @@ namespace KyoS.Web.Data.Entities
 
         [DataType(DataType.Date)]
         public DateTime TCMLockCreateNote { get; set; }
+
+        public DashboardType DashBoardPrincipal { get; set; }
     }
 }

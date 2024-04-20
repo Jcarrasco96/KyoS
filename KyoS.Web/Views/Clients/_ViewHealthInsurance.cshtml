@@ -57,9 +57,29 @@
                                         @Html.DisplayFor(modelItem => item.ApprovedDate)
                                     </td>
                                     <td align="center">
-                                        <span class="label label-danger">
-                                            @item.ApprovedDate.Date.AddMonths(Convert.ToInt32(item.DurationTime)).ToShortDateString()
-                                        </span>
+                                        @if (item.ExpiredDate > DateTime.Today)
+                                        {
+                                            @if (item.ExpiredDate.AddDays(-30) < DateTime.Today)
+                                            {
+                                                <span class="label label-warning">
+                                                    @item.ExpiredDate.ToShortDateString()
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span class="label label-success">
+                                                    @item.ExpiredDate.ToShortDateString()
+                                                </span>
+                                            }
+
+                                        }
+                                        else
+                                        {
+                                            <span class="label label-danger">
+                                                @item.ExpiredDate.ToShortDateString()
+                                            </span>
+                                        }
+
                                     </td>
                                     <td align="center">
                                         @Html.DisplayFor(modelItem => item.AuthorizationNumber)
