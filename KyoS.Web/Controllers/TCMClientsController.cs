@@ -171,8 +171,9 @@ namespace KyoS.Web.Controllers
                 {
                     model.Casemanager = _context.CaseManagers.FirstOrDefault(u => u.Id == model.IdCaseMannager);
                     model.Client = _context.Clients.FirstOrDefault(u => u.Id == model.IdClient);
-                    TCMClientEntity tcmClient = await _context.TCMClient.FirstOrDefaultAsync(s => s.Client.Id == model.IdClient
-                                                                                             && s.Status == StatusType.Open);
+                    TCMClientEntity tcmClient = await _context.TCMClient.FirstOrDefaultAsync(s => ((s.Client.Id == model.IdClient
+                                                                                               && s.Status == StatusType.Open)
+                                                                                               || (s.CaseNumber == model.CaseNumber)));
                     if (tcmClient == null)
                     {
                         model.DataClose = model.DataOpen.AddMonths(model.Period);
@@ -182,11 +183,11 @@ namespace KyoS.Web.Controllers
                         {
                             await _context.SaveChangesAsync();
                             List<TCMClientEntity> tcmClients = await _context.TCMClient
-                                                             .Include(g => g.Casemanager)
-                                                             .Include(g => g.Client)
-                                                             .Where(s => s.Client.Clinic.Id == user_logged.Clinic.Id)
-                                                             .OrderBy(g => g.Casemanager.Name)
-                                                             .ToListAsync();
+                                                                             .Include(g => g.Casemanager)
+                                                                             .Include(g => g.Client)
+                                                                             .Where(s => s.Client.Clinic.Id == user_logged.Clinic.Id)
+                                                                             .OrderBy(g => g.Casemanager.Name)
+                                                                             .ToListAsync();
                             return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewTCMClient", tcmClients) });
                         }
                         catch (System.Exception ex)
@@ -197,7 +198,7 @@ namespace KyoS.Web.Controllers
                     }
                     else
                     {
-                        ModelState.AddModelError(string.Empty, "Already exists the TCM Case.");
+                        ModelState.AddModelError(string.Empty, "Already exists the TCM Case or Case Number.");
                         model = new TCMClientViewModel
                         {
                             CaseMannagers = _combosHelper.GetComboCasemannagersByClinic(user_logged.Clinic.Id),
