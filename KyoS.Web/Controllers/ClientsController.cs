@@ -418,7 +418,10 @@ namespace KyoS.Web.Controllers
                     {
                         Client = clientEntity,
                         Diagnostic = await _context.Diagnostics.FirstOrDefaultAsync(d => d.Code == item.Code),
-                        Principal = item.Principal
+                        Principal = item.Principal,
+                        Active = item.Active,
+                        DateIdentify = item.DateIdentify,
+                        Prescriber = item.Prescriber
                     };
                     _context.Add(clientDiagnostic);
                     _context.DiagnosticsTemp.Remove(item);
@@ -832,7 +835,10 @@ namespace KyoS.Web.Controllers
                     {
                         Client = clientEntity,
                         Diagnostic = await _context.Diagnostics.FirstOrDefaultAsync(d => d.Code == item.Code),
-                        Principal = item.Principal
+                        Principal = item.Principal,
+                        Active = item.Active,
+                        DateIdentify = item.DateIdentify,
+                        Prescriber = item.Prescriber
                     };
                     _context.Add(clientDiagnostic);
                     //_context.DiagnosticsTemp.Remove(item);
@@ -1158,6 +1164,7 @@ namespace KyoS.Web.Controllers
         [Authorize(Roles = "Manager, Supervisor, CaseManager, Frontdesk")]
         public IActionResult AddDiagnostic(int id = 0, int idClient = 0)
         {
+            ClientEntity client = _context.Clients.Include(n => n.Psychiatrist).FirstOrDefault(n => n.Id == idClient);
             if (id == 0)
             {
                 UserEntity user_logged = _context.Users.Include(u => u.Clinic)
@@ -1168,7 +1175,10 @@ namespace KyoS.Web.Controllers
                     IdDiagnostic = 0,
                     Diagnostics = _combosHelper.GetComboDiagnosticsByClinic(user_logged.Id),
                     UserName = user_logged.UserName,
-                    IdClient = idClient
+                    IdClient = idClient,
+                    DateIdentify = DateTime.Today,
+                    Prescriber = (client == null)? string.Empty : (client.Psychiatrist == null) ? string.Empty : client.Psychiatrist.Name,
+                    Active = true
                 };
                 return View(model);
             }
@@ -1199,7 +1209,10 @@ namespace KyoS.Web.Controllers
                         Description = diagnostic.Description,
                         Principal = diagnosticTempViewModel.Principal,
                         UserName = diagnosticTempViewModel.UserName,
-                        IdClient = diagnosticTempViewModel.IdClient
+                        IdClient = diagnosticTempViewModel.IdClient,
+                        DateIdentify = diagnosticTempViewModel.DateIdentify,
+                        Prescriber = diagnosticTempViewModel.Prescriber,
+                        Active = diagnosticTempViewModel.Active
                     }; 
                     _context.Add(diagnosticTemp);
                     await _context.SaveChangesAsync();
@@ -1212,7 +1225,10 @@ namespace KyoS.Web.Controllers
                 IdDiagnostic = 0,
                 Diagnostics = _combosHelper.GetComboDiagnosticsByClinic(user_logged.Id),
                 UserName = diagnosticTempViewModel.UserName,
-                IdClient = diagnosticTempViewModel.IdClient
+                IdClient = diagnosticTempViewModel.IdClient,
+                DateIdentify = diagnosticTempViewModel.DateIdentify,
+                Prescriber = diagnosticTempViewModel.Prescriber,
+                Active = diagnosticTempViewModel.Active
             };
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "AddDiagnostic", model) });
         }
@@ -1475,7 +1491,10 @@ namespace KyoS.Web.Controllers
                         Description = item.Diagnostic.Description,
                         Principal = item.Principal,
                         UserName = user_logged.UserName,
-                        IdClient = client.Id
+                        IdClient = client.Id,
+                        DateIdentify = item.DateIdentify,
+                        Prescriber = item.Prescriber,
+                        Active = item.Active
                     };
                     _context.Add(diagnostic);
                 }

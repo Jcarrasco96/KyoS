@@ -11,5 +11,10 @@ namespace KyoS.Web.Data.Entities
         public ClientEntity Client { get; set; }
         public DiagnosticEntity Diagnostic { get; set; }
         public bool Principal { get; set; }
+
+        public string Prescriber { get; set; }
+
+        public DateTime DateIdentify { get; set; }
+        public bool Active { get; set; }
     }
 }

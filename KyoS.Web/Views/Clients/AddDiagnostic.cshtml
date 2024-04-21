@@ -17,12 +17,32 @@
                     <span asp-validation-for="IdDiagnostic" class="text-danger"></span>
                 </div>
             </div>
+            <div>
+                <div class="col-md-8 form-group">
+                    <label asp-for="Prescriber" class="control-label"></label>
+                    <input asp-for="Prescriber" class="form-control" />
+                    <span asp-validation-for="Prescriber" class="text-danger"></span>
+                </div>
+                <div class="col-md-4 form-group">
+                    <label asp-for="DateIdentify" class="control-label"></label>
+                    <input asp-for="DateIdentify" class="form-control" />
+                    <span asp-validation-for="DateIdentify" class="text-danger"></span>
+                </div>
+            </div>
             <div class="col-md-12">
                 <div class="form-group">
-                    <label asp-for="Principal" class="control-label"></label>
-                    <input type="checkbox" asp-for="Principal" class="checkbox" />
+                    <input type="checkbox" asp-for="Active" /> Active
+                    <span asp-validation-for="Active" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <input type="checkbox" asp-for="Principal"  /> Principal
                     <span asp-validation-for="Principal" class="text-danger"></span>
                 </div>
+            </div>
+            <div class ="col-md-12">
+                <hr />
             </div>
             <div>
                 <div class="col-md-offset-9">
