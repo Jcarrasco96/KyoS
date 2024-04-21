@@ -25,14 +25,17 @@
                 <table class="table table-hover table-responsive table-striped" id="MyTable">
                     <thead>
                         <tr>
-                            <th class="col-md-5">
+                            <th class="col-md-3">
                                 @Html.DisplayNameFor(model => model.Name)
                             </th>
                             <th class="col-md-2" style="text-align:center;">
                                 Signed date
                             </th>
-                            <th class="col-md-2" style="text-align:center;">
-                                @Html.DisplayNameFor(model => model.DurationTime)
+                            <th class="col-md-1" style="text-align:center;">
+                                Expired
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Need Auth.
                             </th>
                             <th class="col-md-1" style="text-align:center;">
                                 Active
@@ -54,7 +57,30 @@
                                         @Html.DisplayFor(modelItem => item.SignedDate)
                                     </td>
                                     <td align="center">
-                                        @Html.DisplayFor(modelItem => item.DurationTime)
+                                        @if(item.SignedDate.AddMonths(item.DurationTime.Value).Date > DateTime.Today)
+                                        {
+                                            @if (item.SignedDate.AddMonths(item.DurationTime.Value - 1).Date < DateTime.Today)
+                                            {
+                                                <span class="label label-warning">
+                                                    @item.SignedDate.AddMonths(item.DurationTime.Value).Date.ToShortDateString()
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span class="label label-success">
+                                                    @item.SignedDate.AddMonths(item.DurationTime.Value).Date.ToShortDateString()
+                                                </span>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <span class="label label-danger">
+                                                @item.SignedDate.AddMonths(item.DurationTime.Value).Date.ToShortDateString()
+                                            </span>
+                                        }
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.NeedAuthorization)
                                     </td>
                                     <td align="center">
                                         @Html.DisplayFor(modelItem => item.Active)
@@ -84,7 +110,30 @@
                                         @Html.DisplayFor(modelItem => item.SignedDate)
                                     </td>
                                     <td align="center">
-                                        @Html.DisplayFor(modelItem => item.DurationTime)
+                                        @if(item.SignedDate.AddMonths(item.DurationTime.Value).Date > DateTime.Today)
+                                        {
+                                            @if (item.SignedDate.AddMonths(item.DurationTime.Value - 1).Date < DateTime.Today)
+                                            {
+                                                <span class="label label-warning">
+                                                    @item.SignedDate.AddMonths(item.DurationTime.Value).Date.ToShortDateString()
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span class="label label-success">
+                                                    @item.SignedDate.AddMonths(item.DurationTime.Value).Date.ToShortDateString()
+                                                </span>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <span class="label label-danger">
+                                                @item.SignedDate.AddMonths(item.DurationTime.Value).Date.ToShortDateString()
+                                            </span>
+                                        }
+                                    </td>
+                                     <td align="center">
+                                        @Html.DisplayFor(modelItem => item.NeedAuthorization)
                                     </td>
                                     <td align="center">
                                         @Html.DisplayFor(modelItem => item.Active)

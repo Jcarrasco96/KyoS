@@ -24,5 +24,6 @@ namespace KyoS.Web.Data.Entities
         public bool Active { get; set; }
 
         public ClinicEntity Clinic { get; set; }
+        public bool NeedAuthorization { get; set; }
     }
 }

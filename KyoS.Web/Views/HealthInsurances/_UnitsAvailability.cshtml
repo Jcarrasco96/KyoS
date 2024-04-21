@@ -14,10 +14,11 @@
                             <th class="col-md-3">Health Insurance</th>
                             <th class="col-md-3">Client Name</th>
                             <th class="col-md-1" style="text-align:center;">Agency</th>
+                            <th class="col-md-1" style="text-align:center;">Status</th>
                             <th class="col-md-1" style="text-align:center;">Approved</th>
                             <th class="col-md-1" style="text-align:center;">Expires</th>
                             <th class="col-md-1" style="text-align:center;">Units</th>
-                            <th class="col-md-4" style="text-align:center;">Used Units</th>
+                            <th class="col-md-1" style="text-align:center;">Used</th>
                            
                         </tr>
                     </thead>
@@ -38,6 +39,9 @@
                                     </td>
                                     <td align="center">
                                         @Html.DisplayFor(modelItem => item.Agency)
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.Client.Status)
                                     </td>
                                     <td align="center">
                                         @Html.DisplayFor(modelItem => item.ApprovedDate)
@@ -74,6 +78,9 @@
                                         @Html.DisplayFor(modelItem => item.Agency)
                                     </td>
                                     <td align="center">
+                                        @Html.DisplayFor(modelItem => item.Client.Status)
+                                    </td>
+                                    <td align="center">
                                         @Html.DisplayFor(modelItem => item.ApprovedDate)
                                     </td>
                                     <td align="center">
@@ -106,6 +113,9 @@
                                     </td>
                                     <td align="center">
                                         @Html.DisplayFor(modelItem => item.Agency)
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.Client.Status)
                                     </td>
                                     <td align="center">
                                         @Html.DisplayFor(modelItem => item.ApprovedDate)

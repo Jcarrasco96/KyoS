@@ -429,7 +429,7 @@ namespace KyoS.Web.Controllers
                     Task<int> ClientBirthday = MHClientBirthday(user_logged.Clinic.Id);
                     Task<int> ClientEligibility = MHClientEligibility(user_logged.Clinic.Id);
                     Task<int> SafetyPlan = MHSafetyPlan(user_logged.Clinic.Id);
-                   
+                    
                     await Task.WhenAll(PendingNotes, InProgressNotes, NotStartedNotes, MTPMissing, NotesWithReview,
                                         ApprovedNotes, NotPresentNotes, ExpiredMTPs, PendingBIO, PendingInitialFars, MedicalHistoryMissing,
                                         IntakeMissing, FarsMissing, ClientAuthorization, ClientBirthday, ClientEligibility,
@@ -472,10 +472,12 @@ namespace KyoS.Web.Controllers
                     Task<int> NotesWithReview = TCMNotesWithReview(user_logged.Clinic.Id);
                     Task<int> Supervisor = TCMSupervisor(user_logged.Clinic.Id);
                     Task<int> Billing = TCMBilling(user_logged.Clinic.Id);
+                    Task<int> ClientAuthorizationTCM = TCMClientAuthorization(user_logged.Clinic.Id);
+
 
                     await Task.WhenAll(NotStartedCases, OpenBinder, ServicePlanPending, AdendumPending, ServicePlanReviewPending,
                                         DischargePending, CaseManager, FarsPending, AssesmentPending, NotesEdition,
-                                        NotesPending, NotesApproved, NotesWithReview, Supervisor, Billing);
+                                        NotesPending, NotesApproved, NotesWithReview, Supervisor, Billing, ClientAuthorizationTCM);
 
                     ViewBag.NotStartedCases = await NotStartedCases;
                     ViewBag.OpenBinder = await OpenBinder;
@@ -492,6 +494,7 @@ namespace KyoS.Web.Controllers
                     ViewBag.TCMNotesWithReview = await NotesWithReview;
                     ViewBag.TCMSupervisor = await Supervisor;
                     ViewBag.Billing = await Billing;
+                    ViewBag.TCMClientAuthorization = await ClientAuthorizationTCM;
                 }
             }
             if (User.IsInRole("Admin"))
@@ -1182,11 +1185,14 @@ namespace KyoS.Web.Controllers
                 return await db.Clients
                                .AsNoTracking()
                                .CountAsync(n => n.Status == StatusType.Open
-                                              // && n.Service == ServiceType.PSR
+                                               // && n.Service == ServiceType.PSR
                                                && n.Clinic.Id == clinicId
-                                               && (n.Clients_HealthInsurances == null
-                                               || n.Clients_HealthInsurances.Where(m => m.Active == true
-                                               && m.ExpiredDate > DateTime.Today.AddDays(15)).Count() == 0));
+                                               && n.OnlyTCM == false
+                                               && (n.Clients_HealthInsurances.Where(g => g.Agency == ServiceAgency.CMH).Count() == 0
+                                                || n.Clients_HealthInsurances.Where(m => m.Active == true
+                                                                                      && m.ExpiredDate > DateTime.Today.AddDays(30)
+                                                                                      && m.Agency == ServiceAgency.CMH
+                                                                                      && m.HealthInsurance.NeedAuthorization == true).Count() == 0)) ;
             }
         }
 
@@ -1424,6 +1430,23 @@ namespace KyoS.Web.Controllers
                                .AsNoTracking()
                                .CountAsync(g => (g.Status == StatusType.Open
                                                     && g.Client.Clinic.Id == clinicId));
+            }
+        }
+
+        private async Task<int> TCMClientAuthorization(int clinicId)
+        {
+            var options = new DbContextOptionsBuilder<DataContext>().UseSqlServer(Configuration.GetConnectionString("KyoSConnection")).Options;
+            using (DataContext db = new DataContext(options))
+            {
+                return await db.TCMClient
+                               .AsNoTracking()
+                               .CountAsync(n => n.Status == StatusType.Open
+                                               // && n.Service == ServiceType.PSR
+                                               && n.Client.Clinic.Id == clinicId
+                                               && (n.Client.Clients_HealthInsurances == null
+                                               || n.Client.Clients_HealthInsurances.Where(m => m.Active == true
+                                                                && m.Agency == ServiceAgency.TCM
+                                                                && m.ExpiredDate > DateTime.Today.AddDays(30)).Count() == 0));
             }
         }
     }

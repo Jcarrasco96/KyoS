@@ -85,7 +85,8 @@ namespace KyoS.Web.Controllers
             {
                 SignedDate = DateTime.Now,
                 DurationTime = 12,
-                Active = true
+                Active = true,
+                NeedAuthorization = false
             };
             return View(entity);
         }
@@ -243,7 +244,7 @@ namespace KyoS.Web.Controllers
 
         public async Task<IActionResult> UnitsAvailability(int idError = 0, int agency = 0)
         {
-            if (idError == 1) //Imposible to delete
+            if (idError == 1) //Imposible to delete 
             {
                 ViewBag.Delete = "N";
             }
@@ -265,9 +266,11 @@ namespace KyoS.Web.Controllers
 
                                                               .Include(wc => wc.HealthInsurance)
                                                               .ThenInclude(h => h.Clinic)
-
+                                                              .AsSplitQuery()
                                                               .Where(ch => (ch.HealthInsurance.Clinic.Id == user_logged.Clinic.Id
-                                                                    && ch.Agency == ServiceAgencyUtils.GetServiceAgencyByIndex(agency)))
+                                                                         && ch.Agency == ServiceAgencyUtils.GetServiceAgencyByIndex(agency)
+                                                                         && ch.Active == true
+                                                                         && ch.Client.Status == StatusType.Open))
                                                               .ToListAsync();
                 foreach (var item in list)
                 {
@@ -822,7 +825,8 @@ namespace KyoS.Web.Controllers
             {
                 SignedDate = DateTime.Now,
                 DurationTime = 12,
-                Active = true
+                Active = true,
+                NeedAuthorization = false
             };
             return View(entity);
         }

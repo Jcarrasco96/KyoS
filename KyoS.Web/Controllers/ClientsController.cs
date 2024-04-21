@@ -5125,71 +5125,99 @@ namespace KyoS.Web.Controllers
             {
                 ViewBag.Delete = "N";
             }
-           
-            string mounth = string.Empty;
-            if (DateTime.Today.Month == 1)
-            {
-                mounth = "January";
-            }
-            if (DateTime.Today.Month == 2)
-            {
-                mounth = "February";
-            }
-            if (DateTime.Today.Month == 3)
-            {
-                mounth = "March";
-            }
-            if (DateTime.Today.Month == 4)
-            {
-                mounth = "April";
-            }
-            if (DateTime.Today.Month == 5)
-            {
-                mounth = "May";
-            }
-            if (DateTime.Today.Month == 6)
-            {
-                mounth = "June";
-            }
-            if (DateTime.Today.Month == 7)
-            {
-                mounth = "July";
-            }
-            if (DateTime.Today.Month == 8)
-            {
-                mounth = "August";
-            }
-            if (DateTime.Today.Month == 9)
-            {
-                mounth = "September";
-            }
-            if (DateTime.Today.Month == 10)
-            {
-                mounth = "October";
-            }
-            if (DateTime.Today.Month == 11)
-            {
-                mounth = "November";
-            }
-            if (DateTime.Today.Month == 12)
-            {
-                mounth = "December";
-            }
-            ViewData["mounth"] = mounth;
 
-            if (User.IsInRole("Manager"))
+
+            if (User.IsInRole("Manager") || User.IsInRole("Frontdesk"))
             {
                 List<ClientEntity> list = await _context.Clients
                                                         .Include(n => n.Clients_HealthInsurances)
                                                         .ThenInclude(n => n.HealthInsurance)
                                                         .Where(n => n.Clinic.Id == user_logged.Clinic.Id
-                                                               // && n.Service == ServiceType.PSR
                                                                  && n.Status == StatusType.Open
-                                                                 && (n.Clients_HealthInsurances == null
-                                                                  || n.Clients_HealthInsurances.Where(m => m.Active == true
-                                                                         && m.ExpiredDate > DateTime.Today.AddDays(15)).Count() == 0))
+                                                                 && n.OnlyTCM == false)
                                                         .ToListAsync();
-                return View(list);
+                List<AuthorizationViewModel> authorizations = new List<AuthorizationViewModel>();
+                AuthorizationViewModel authorization = new AuthorizationViewModel();
+
+                foreach (var item in list)
+                {
+                    if (item.Clients_HealthInsurances.Where(n => n.Agency == ServiceAgency.CMH).Count() == 0)
+                    {
+                        authorization.IdClientHealthInsurance = 0;
+                        authorization.IdClient = item.Id;                       
+                        authorization.TCMClientName = item.Name;
+                        authorization.HealthInsurance = "Empty";
+                        authorization.Status = item.Status;
+                        authorization.DateOpen = item.AdmisionDate;
+                        authorization.Agency = "MH";
+                        authorization.Info = 0;
+
+                        authorizations.Add(authorization);
+                        authorization = new AuthorizationViewModel();
+                    }
+                    else
+                    {
+                        if (item.Clients_HealthInsurances.Where(n => n.Agency == ServiceAgency.CMH && n.Active == true).Count() > 0)
+                        {
+                            foreach (var item1 in item.Clients_HealthInsurances.Where(n => n.Agency == ServiceAgency.CMH && n.Active == true && n.HealthInsurance.NeedAuthorization == true))
+                            {
+                                if (item1.ExpiredDate.Date < DateTime.Today.Date)
+                                {
+                                    authorization.IdClientHealthInsurance = 0;
+                                    authorization.IdClient = item.Id;
+                                    authorization.TCMClientName = item.Name;
+                                    authorization.HealthInsurance = item1.HealthInsurance.Name;
+                                    authorization.Status = item.Status;
+                                    authorization.DateOpen = item.AdmisionDate;
+                                    authorization.Agency = "MH";
+                                    authorization.Info = 0;
+                                    authorization.ExpiratedDate = item1.ExpiredDate;
+                                    authorization.EffectiveDate = item1.ApprovedDate;
+
+                                    authorizations.Add(authorization);
+                                    authorization = new AuthorizationViewModel();
+                                }
+                                else
+                                {
+                                    if (item1.ExpiredDate.Date <= DateTime.Today.Date.AddDays(30))
+                                    {
+                                        authorization.IdClientHealthInsurance = 0;
+                                        authorization.IdClient = item.Id;                                        
+                                        authorization.TCMClientName = item.Name;                                        
+                                        authorization.HealthInsurance = item1.HealthInsurance.Name;
+                                        authorization.Status = item.Status;
+                                        authorization.DateOpen = item.AdmisionDate;
+                                        authorization.Agency = "MH";
+                                        authorization.Info = 1;
+                                        authorization.ExpiratedDate = item1.ExpiredDate;
+                                        authorization.EffectiveDate = item1.ApprovedDate;
+
+                                        authorizations.Add(authorization);
+                                        authorization = new AuthorizationViewModel();
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            authorization.IdClientHealthInsurance = 0;
+                            authorization.IdClient = item.Id;                            
+                            authorization.TCMClientName = item.Name;
+                            authorization.HealthInsurance = "Empty";
+                            authorization.Status = item.Status;
+                            authorization.DateOpen = item.AdmisionDate;
+                            authorization.Agency = "MH";
+                            authorization.Info = 0;
+
+                            authorizations.Add(authorization);
+                            authorization = new AuthorizationViewModel();
+                        }
+
+                    }
+
+                }
+
+                return View(authorizations);
             }
 
             return RedirectToAction("NotAuthorized", "Account");

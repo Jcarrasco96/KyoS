@@ -3433,5 +3433,130 @@ namespace KyoS.Web.Controllers
 
             return fileContentList;
         }
+
+        [Authorize(Roles = "Manager, Frontdesk")]
+        public async Task<IActionResult> AuthorizationClients(int idError = 0)
+        {
+            UserEntity user_logged = await _context.Users
+                                                   .Include(u => u.Clinic)
+                                                   .ThenInclude(c => c.Setting)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || (!user_logged.Clinic.Setting.MentalHealthClinic && !user_logged.Clinic.Setting.TCMClinic))
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+            if (idError == 1) //Imposible to delete
+            {
+                ViewBag.Delete = "N";
+            }
+
+            if (User.IsInRole("Manager") || User.IsInRole("Frontdesk"))
+            {
+                List<TCMClientEntity> list = await _context.TCMClient
+                                                           .Include(n => n.Client)
+                                                           .ThenInclude(n => n.Clients_HealthInsurances)
+                                                           .ThenInclude(n => n.HealthInsurance)
+                                                           .Include(n => n.Casemanager)
+                                                           .Where(n => n.Client.Clinic.Id == user_logged.Clinic.Id
+                                                                    && n.Status == StatusType.Open)
+                                                           .ToListAsync();
+                List<AuthorizationViewModel> authorizations = new List<AuthorizationViewModel>();
+                AuthorizationViewModel authorization = new AuthorizationViewModel();
+
+                foreach (var item in list)
+                {
+                    if (item.Client.Clients_HealthInsurances.Where(n => n.Agency == ServiceAgency.TCM).Count() == 0)
+                    {
+                        authorization.IdClientHealthInsurance = 0;
+                        authorization.IdClient = item.Client.Id;
+                        authorization.IdTCMClient = item.Id;
+                        authorization.TCMClientName = item.Client.Name;
+                        authorization.CaseManagerName = item.Casemanager.Name;
+                        authorization.HealthInsurance = "Empty";
+                        authorization.Status = item.Status;
+                        authorization.DateOpen = item.DataOpen;
+                        authorization.Agency = "TCM";
+                        authorization.Info = 0;
+
+                        authorizations.Add(authorization);
+                        authorization = new AuthorizationViewModel();
+                    }
+                    else
+                    {
+                        if (item.Client.Clients_HealthInsurances.Where(n => n.Agency == ServiceAgency.TCM && n.Active == true).Count() > 0)
+                        {
+                            foreach (var item1 in item.Client.Clients_HealthInsurances.Where(n => n.Agency == ServiceAgency.TCM && n.Active == true && n.HealthInsurance.NeedAuthorization == true))
+                            {
+                                if (item1.ExpiredDate.Date < DateTime.Today.Date)
+                                {
+                                    authorization.IdClientHealthInsurance = 0;
+                                    authorization.IdClient = item.Client.Id;
+                                    authorization.IdTCMClient = item.Id;
+                                    authorization.TCMClientName = item.Client.Name;
+                                    authorization.CaseManagerName = item.Casemanager.Name;
+                                    authorization.HealthInsurance = item1.HealthInsurance.Name;
+                                    authorization.Status = item.Status;
+                                    authorization.DateOpen = item.DataOpen;
+                                    authorization.Agency = "TCM";
+                                    authorization.Info = 0;
+                                    authorization.ExpiratedDate = item1.ExpiredDate;
+                                    authorization.EffectiveDate = item1.ApprovedDate;
+
+                                    authorizations.Add(authorization);
+                                    authorization = new AuthorizationViewModel();
+                                }
+                                else
+                                {
+                                    if (item1.ExpiredDate.Date <= DateTime.Today.Date.AddDays(30))
+                                    {
+                                        authorization.IdClientHealthInsurance = 0;
+                                        authorization.IdClient = item.Client.Id;
+                                        authorization.IdTCMClient = item.Id;
+                                        authorization.TCMClientName = item.Client.Name;
+                                        authorization.CaseManagerName = item.Casemanager.Name;
+                                        authorization.HealthInsurance = item1.HealthInsurance.Name;
+                                        authorization.Status = item.Status;
+                                        authorization.DateOpen = item.DataOpen;
+                                        authorization.Agency = "TCM";
+                                        authorization.Info = 1;
+                                        authorization.ExpiratedDate = item1.ExpiredDate;
+                                        authorization.EffectiveDate = item1.ApprovedDate;
+
+                                        authorizations.Add(authorization);
+                                        authorization = new AuthorizationViewModel();
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            authorization.IdClientHealthInsurance = 0;
+                            authorization.IdClient = item.Client.Id;
+                            authorization.IdTCMClient = item.Id;
+                            authorization.TCMClientName = item.Client.Name;
+                            authorization.CaseManagerName = item.Casemanager.Name;
+                            authorization.HealthInsurance = item.Casemanager.Name;
+                            authorization.HealthInsurance = "Empty";
+                            authorization.Status = item.Status;
+                            authorization.DateOpen = item.DataOpen;
+                            authorization.Agency = "TCM";
+                            authorization.Info = 0;
+
+                            authorizations.Add(authorization);
+                            authorization = new AuthorizationViewModel();
+                        }
+
+                    }
+                    
+                }
+
+                return View(authorizations);
+            }
+
+            return RedirectToAction("NotAuthorized", "Account");
+        }
+
     }
 }

@@ -38,10 +38,13 @@
                 <table class="table table-hover table-responsive table-striped" id="MyTable">
                     <thead>
                         <tr>
-                            <th class="col-md-3">
+                            <th class="col-md-2">
                                 Client Name
                             </th>
-                            <th class="col-md-3" style="text-align:left;">
+                            <th class="col-md-2">
+                                Case Manager
+                            </th>
+                            <th class="col-md-2" style="text-align:left;">
                                 Health Insurance
                             </th>
                             <th class="col-md-1" style="text-align:center;">
@@ -66,6 +69,9 @@
                         {
                             <tr>
                                 <td>
+                                    @item.TCMClientName
+                                </td>
+                                <td >
                                     @item.TCMClientName
                                 </td>
                                 <td>
@@ -108,7 +114,7 @@
                                         </span>
                                     }
                                 </td>
-
+                               
                             </tr>
                         }
                     </tbody>
@@ -122,9 +128,7 @@
 <partial name="_DeleteDialog" />
 
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script src="~/js/jquery.dataTables.min.js"></script>
 
     <script type="text/javascript">
@@ -132,7 +136,7 @@
             $('#MyTable').DataTable({
                 "order": [[0, "asc"]],
                 "pageLength": 100
-            });
+            });            
         });
 
         function ConfirmDelete(e) {
@@ -153,7 +157,6 @@
         }
     </script>
 }
-
 
 
 
