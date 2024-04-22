@@ -2748,5 +2748,25 @@ namespace KyoS.Web.Helpers
 
             return list;
         }
+
+        public IEnumerable<SelectListItem> GetComboTCMDomainName()
+        {
+            List<SelectListItem> list = new List<SelectListItem>
+                                { new SelectListItem { Text = "Mental Health Behavioral Substance Abuse", Value = "0"},
+                                  new SelectListItem { Text = "Physical Health Medical/Dental", Value = "1"},
+                                  new SelectListItem { Text = "Vocational Emplymen job Training", Value = "2"},
+                                  new SelectListItem { Text = "School Education", Value = "3"},
+                                  new SelectListItem { Text = "Environmental Recreational Social Support", Value = "4"},
+                                  new SelectListItem { Text = "Activities of Daily Living", Value = "5"},
+                                  new SelectListItem { Text = "Housing Shelter", Value = "6"},
+                                  new SelectListItem { Text = "Economic Financial", Value = "7"},
+                                  new SelectListItem { Text = "Basic Needs(food, clothing, furniture,etc.)", Value = "8"},
+                                  new SelectListItem { Text = "Transportation", Value = "9"},
+                                  new SelectListItem { Text = "Legal Immigration", Value = "10"},
+                                  new SelectListItem { Text = "Other(specify)", Value = "11"}
+            };
+
+           return list;
+        }
     }
 }

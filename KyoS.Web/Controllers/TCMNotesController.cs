@@ -2650,22 +2650,45 @@ namespace KyoS.Web.Controllers
         public async Task<IActionResult> Search(int idService = 0, int idActivityService = 0)
         {
            TCMServiceNoteViewModel model = new TCMServiceNoteViewModel();
-            
-            model = new TCMServiceNoteViewModel
-            {
-                TCMServices = _combosHelper.GetComboTCMServices(),
-                IdTCMService = idService,
-                TCMServicesActivity = _combosHelper.GetComboTCMActivityByService(idService),
-                TCMNoteActivities = _context.TCMNoteActivity
-                                            .Include(n => n.TCMNote)
-                                            .ThenInclude(n => n.TCMClient)
-                                            .ThenInclude(n => n.Casemanager)
-                                            .Where(n => n.TCMServiceActivity.Id == idActivityService)
-                                            .ToList(), 
-                IdTCMActivity = idActivityService
-            };
 
-            return View(model);
+            if (idService == 0 || idActivityService == 0)
+            {
+                model = new TCMServiceNoteViewModel
+                {
+                    TCMServices = _combosHelper.GetComboTCMServices(),
+                    IdTCMService = idService,
+                    TCMServicesActivity = _combosHelper.GetComboTCMActivityByService(idService),
+                    TCMNoteActivities = _context.TCMNoteActivity
+                                                .Include(n => n.TCMNote)
+                                                .ThenInclude(n => n.TCMClient)
+                                                .ThenInclude(n => n.Casemanager)
+                                                .AsSplitQuery()
+                                                .ToList(),
+                    IdTCMActivity = idActivityService
+                };
+
+                return View(model);
+            }
+            else
+            {
+                model = new TCMServiceNoteViewModel
+                {
+                    TCMServices = _combosHelper.GetComboTCMServices(),
+                    IdTCMService = idService,
+                    TCMServicesActivity = _combosHelper.GetComboTCMActivityByService(idService),
+                    TCMNoteActivities = _context.TCMNoteActivity
+                                                .Include(n => n.TCMNote)
+                                                .ThenInclude(n => n.TCMClient)
+                                                .ThenInclude(n => n.Casemanager)
+                                                .AsSplitQuery()
+                                                .Where(n => n.TCMServiceActivity.Id == idActivityService)
+                                                .ToList(),
+                    IdTCMActivity = idActivityService
+                };
+
+                return View(model);
+            }
+            
         }
 
         [HttpPost]
@@ -2872,7 +2895,73 @@ namespace KyoS.Web.Controllers
             }
             return false;
         }
-       
+
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> SearchDomain(string NameDomain = "", int idDomain = 0)
+        {
+            TCMSearchDomainViewModel model = new TCMSearchDomainViewModel();
+
+            if (NameDomain == string.Empty)
+            {
+                model = new TCMSearchDomainViewModel
+                {
+                    TCMDomainNameList = _combosHelper.GetComboTCMDomainName(),
+                    
+                    TCMDomains = _context.TCMDomains
+                                         .Include(n => n.TCMObjetive)
+                                         .Include(n => n.TcmServicePlan)
+                                         .ThenInclude(n => n.TcmClient)
+                                         .ThenInclude(n => n.Casemanager)
+                                         .AsSplitQuery()
+                                         .ToList(),
+                    IdTCMDomain = idDomain
+                };
+
+                return View(model);
+            }
+            else
+            {
+                model = new TCMSearchDomainViewModel
+                {
+                    TCMDomainNameList = _combosHelper.GetComboTCMDomainName(),
+
+                    TCMDomains = _context.TCMDomains
+                                         .Include(n => n.TCMObjetive)
+                                         .Include(n => n.TcmServicePlan)
+                                         .ThenInclude(n => n.TcmClient)
+                                         .ThenInclude(n => n.Casemanager)
+                                         .AsSplitQuery()
+                                         .Where(n => n.Name == NameDomain)
+                                         .ToList(),
+                    IdTCMDomain = idDomain
+                };
+
+                return View(model);
+            }
+
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
+        public IActionResult SearchDomain(TCMSearchDomainViewModel model)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            string nameTCMDomain = string.Empty;
+            nameTCMDomain = (model.IdTCMDomain == 0) ? "Mental Health Behavioral Substance Abuse" : (model.IdTCMDomain == 1) ? "Physical Health Medical/Dental" : (model.IdTCMDomain == 2) ? "Vocational Emplymen job Training" : (model.IdTCMDomain == 3) ? "School Education" : (model.IdTCMDomain == 4) ? "Environmental Recreational Social Support" :
+                            (model.IdTCMDomain == 5) ? "Activities of Daily Living" : (model.IdTCMDomain == 6) ? "Housing Shelter" : (model.IdTCMDomain == 7) ? "Economic Financial" : (model.IdTCMDomain == 8) ? "Basic Needs(food, clothing, furniture,etc.)" : (model.IdTCMDomain == 9) ? "Transportation" :
+                            (model.IdTCMDomain == 10) ? "Legal Immigration" : "Other(specify)";
+
+            if (ModelState.IsValid)
+            {
+                return RedirectToAction(nameof(SearchDomain), new { NameDomain = nameTCMDomain, idDomain = model.IdTCMDomain });
+            }
+
+            return View(model);
+        }
 
     }
 }

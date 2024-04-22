@@ -116,5 +116,6 @@ namespace KyoS.Web.Helpers
         IEnumerable<SelectListItem> GetComboDashboardType();
         IEnumerable<SelectListItem> GetComboInsuranceType();
         IEnumerable<SelectListItem> GetComboInsurancePlanType();
+        IEnumerable<SelectListItem> GetComboTCMDomainName();
     }
 }
