@@ -4403,7 +4403,15 @@ namespace KyoS.Web.Controllers
 
 
             mtp.Status = MTPStatus.Approved;
-            mtp.SupervisorDate = model.SupervisorDate;
+            if (mtp.SupervisorDate < mtp.AdmissionDateMTP)
+            {
+                mtp.SupervisorDate = mtp.AdmissionDateMTP;
+            }
+            else
+            {
+                mtp.SupervisorDate = model.SupervisorDate;
+            }
+            
             mtp.Supervisor = await _context.Supervisors.FirstOrDefaultAsync(s => s.LinkedUser == User.Identity.Name);
             _context.Update(mtp);
 

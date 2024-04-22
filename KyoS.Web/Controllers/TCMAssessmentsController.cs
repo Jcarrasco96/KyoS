@@ -3119,6 +3119,7 @@ namespace KyoS.Web.Controllers
                                                                 .ThenInclude(b => b.TCMSupervisor)
                                                                 .Include(b => b.TcmClient)
                                                                 .ThenInclude(b => b.TCMIntakeForm)
+                                                                .AsSplitQuery()
                                                                 .FirstOrDefault(m => m.Id == id);
                      if (TcmAssessment == null)
                     {
