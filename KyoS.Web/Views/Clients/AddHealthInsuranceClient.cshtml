@@ -22,15 +22,20 @@
                 </div>
             </div>
             <div>
-                <div class="col-md-6 form-group">
+                <div class="col-md-4 form-group">
                     <label asp-for="IdInsuranceType" class="control-label">Insurance Type</label>&nbsp;
                     <select asp-for="IdInsuranceType" class="form-control" asp-items="Model.InsuranceTypes"></select>
                     <span asp-validation-for="IdInsuranceType" class="text-danger"></span>
                 </div>
-                <div class="col-md-6 form-group">
+                <div class="col-md-4 form-group">
                     <label asp-for="IdInsurancePlanType" class="control-label">Insurance Plan</label>&nbsp;
                     <select asp-for="IdInsurancePlanType" class="form-control" asp-items="Model.InsurancePlanTypes"></select>
                     <span asp-validation-for="IdInsurancePlanType" class="text-danger"></span>
+                </div>
+                <div class="col-md-4 form-group">
+                    <label asp-for="IdInsuranceCoverageType" class="control-label"> Coverage</label>&nbsp;
+                    <select asp-for="IdInsuranceCoverageType" class="form-control" asp-items="Model.InsuranceCoverageTypes"></select>
+                    <span asp-validation-for="IdInsuranceCoverageType" class="text-danger"></span>
                 </div>
             </div>
             <div>

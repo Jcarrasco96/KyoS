@@ -483,7 +483,14 @@ namespace KyoS.Web.Controllers
                         MemberId = item.MemberId,
                         Units = item.Units,
                         AuthorizationNumber = item.AuthorizationNumber,
-                        Agency = item.Agency
+                        Agency = item.Agency,
+                        ExpiredDate = item.ExpiredDate,
+                        EffectiveDate = item.EffectiveDate,
+                        EndCoverageDate = item.EndCoverageDate,
+                        InsuranceType = item.InsuranceType,
+                        InsurancePlan = item.InsurancePlan,
+                        InsuranceCoverage = item.InsuranceCoverage
+
                     };
                     _context.Add(clientHealthInsurance);
                     _context.HealthInsuranceTemp.Remove(item);
@@ -928,7 +935,8 @@ namespace KyoS.Web.Controllers
                         EffectiveDate = item.EffectiveDate,
                         EndCoverageDate = item.EndCoverageDate,
                         InsuranceType = item.InsuranceType,
-                        InsurancePlan = item.InsurancePlan
+                        InsurancePlan = item.InsurancePlan,
+                        InsuranceCoverage = item.InsuranceCoverage
 
                     };
                     _context.Add(clientHealthInsurance);
@@ -2968,7 +2976,8 @@ namespace KyoS.Web.Controllers
                         EffectiveDate = item.EffectiveDate,
                         EndCoverageDate = item.EndCoverageDate,
                         InsuranceType = item.InsuranceType,
-                        InsurancePlan = item.InsurancePlan                        
+                        InsurancePlan = item.InsurancePlan,                       
+                        InsuranceCoverage = item.InsuranceCoverage
 
                     };
                     _context.Add(healthInsuranceTemp);
@@ -3031,7 +3040,9 @@ namespace KyoS.Web.Controllers
                     IdInsuranceType = 0,
                     InsuranceTypes = _combosHelper.GetComboInsuranceType(),
                     IdInsurancePlanType = 0,
-                    InsurancePlanTypes = _combosHelper.GetComboInsurancePlanType()
+                    InsurancePlanTypes = _combosHelper.GetComboInsurancePlanType(),
+                    IdInsuranceCoverageType = 0,
+                    InsuranceCoverageTypes = _combosHelper.GetComboInsuranceCoverageType()
                  };
                 return View(entity);
             }
@@ -3056,7 +3067,9 @@ namespace KyoS.Web.Controllers
                     IdInsuranceType = 0,
                     InsuranceTypes = _combosHelper.GetComboInsuranceType(),
                     IdInsurancePlanType = 0,
-                    InsurancePlanTypes = _combosHelper.GetComboInsurancePlanType()
+                    InsurancePlanTypes = _combosHelper.GetComboInsurancePlanType(),
+                    IdInsuranceCoverageType = 0,
+                    InsuranceCoverageTypes = _combosHelper.GetComboInsuranceCoverageType()
                 };
                 return View(entity);
             }
@@ -3111,7 +3124,8 @@ namespace KyoS.Web.Controllers
                         EffectiveDate = HealthInsuranceModel.EffectiveDate,
                         EndCoverageDate = HealthInsuranceModel.EndCoverageDate,
                         InsuranceType = InsuranceUtils.GetInsuranceTypeByIndex(HealthInsuranceModel.IdInsuranceType),
-                        InsurancePlan = InsurancePlanUtils.GetInsurancePlanTypeByIndex(HealthInsuranceModel.IdInsurancePlanType)
+                        InsurancePlan = InsurancePlanUtils.GetInsurancePlanTypeByIndex(HealthInsuranceModel.IdInsurancePlanType),
+                        InsuranceCoverage = InsuranceCoverageUtils.GetInsuranceCoverageTypeByIndex(HealthInsuranceModel.IdInsuranceCoverageType)
                     };
                     _context.Add(healthInsuranceTemp);
                     await _context.SaveChangesAsync();
@@ -3142,7 +3156,9 @@ namespace KyoS.Web.Controllers
                 IdInsuranceType = 0,
                 InsuranceTypes = _combosHelper.GetComboInsuranceType(),
                 IdInsurancePlanType = 0,
-                InsurancePlanTypes = _combosHelper.GetComboInsurancePlanType()
+                InsurancePlanTypes = _combosHelper.GetComboInsurancePlanType(),
+                IdInsuranceCoverageType = 0,
+                InsuranceCoverageTypes = _combosHelper.GetComboInsuranceCoverageType()
             };
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "AddHealthInsuranceClient", model) });
         }
@@ -5007,8 +5023,11 @@ namespace KyoS.Web.Controllers
                     EndCoverageDate = healthInsuranceTempEntity.EndCoverageDate,
                     IdInsuranceType = (healthInsuranceTempEntity.InsuranceType == InsuranceType.Medicaid)? 0 : (healthInsuranceTempEntity.InsuranceType == InsuranceType.Medicare) ? 1 : (healthInsuranceTempEntity.InsuranceType == InsuranceType.Comercial) ? 2 : 3,
                     InsuranceTypes = _combosHelper.GetComboInsuranceType(),
-                    IdInsurancePlanType = (healthInsuranceTempEntity.InsurancePlan == InsurancePlanType.Full_Medicaid) ? 0 : (healthInsuranceTempEntity.InsurancePlan == InsurancePlanType.Madicare_Part_AB) ? 1 : 2,
+                    IdInsurancePlanType = (healthInsuranceTempEntity.InsurancePlan == InsurancePlanType.Full_Medicaid) ? 0 : (healthInsuranceTempEntity.InsurancePlan == InsurancePlanType.Medicare_Part_AB) ? 1 : 2,
                     InsurancePlanTypes = _combosHelper.GetComboInsurancePlanType(),
+                    IdInsuranceCoverageType = (healthInsuranceTempEntity.InsuranceCoverage == InsuranceCoverageType.Full_Medicaid) ? 0 : (healthInsuranceTempEntity.InsuranceCoverage == InsuranceCoverageType.MMA_Capitated) ? 1 : (healthInsuranceTempEntity.InsuranceCoverage == InsuranceCoverageType.Dual_Special_Needs_Plan) ? 2 : (healthInsuranceTempEntity.InsuranceCoverage == InsuranceCoverageType.Medicare_Special_Needs) ? 3 : (healthInsuranceTempEntity.InsuranceCoverage == InsuranceCoverageType.Medicare_Advantage_Plan) ? 4 : (healthInsuranceTempEntity.InsuranceCoverage == InsuranceCoverageType.HMO) ? 5 : (healthInsuranceTempEntity.InsuranceCoverage == InsuranceCoverageType.PPO) ? 6 : (healthInsuranceTempEntity.InsuranceCoverage == InsuranceCoverageType.EPO) ? 7 : 8,
+                    InsuranceCoverageTypes = _combosHelper.GetComboInsuranceCoverageType()
+
                 };
                 return View(entity);
             }
@@ -5046,7 +5065,8 @@ namespace KyoS.Web.Controllers
                         EffectiveDate = HealthInsuranceModel.EffectiveDate,
                         EndCoverageDate = HealthInsuranceModel.EndCoverageDate,
                         InsuranceType = InsuranceUtils.GetInsuranceTypeByIndex(HealthInsuranceModel.IdInsuranceType),
-                        InsurancePlan = InsurancePlanUtils.GetInsurancePlanTypeByIndex(HealthInsuranceModel.IdInsurancePlanType)
+                        InsurancePlan = InsurancePlanUtils.GetInsurancePlanTypeByIndex(HealthInsuranceModel.IdInsurancePlanType),
+                        InsuranceCoverage = InsuranceCoverageUtils.GetInsuranceCoverageTypeByIndex(HealthInsuranceModel.IdInsuranceCoverageType)
                     };
                     _context.Update(healthInsuranceTemp);
                     await _context.SaveChangesAsync();

@@ -2745,8 +2745,8 @@ namespace KyoS.Web.Helpers
         {
             List<SelectListItem> list = new List<SelectListItem>
                                 { new SelectListItem { Text = InsurancePlanType.Full_Medicaid.ToString(), Value = "0"},
-                                  new SelectListItem { Text = InsurancePlanType.Madicare_Part_AB.ToString(), Value = "1"},
-                                  new SelectListItem { Text = InsurancePlanType.Madicare_Part_B.ToString(), Value = "2"}
+                                  new SelectListItem { Text = InsurancePlanType.Medicare_Part_AB.ToString(), Value = "1"},
+                                  new SelectListItem { Text = InsurancePlanType.Medicare_Part_B.ToString(), Value = "2"}
             };
 
             return list;
@@ -2770,6 +2770,23 @@ namespace KyoS.Web.Helpers
             };
 
            return list;
+        }
+
+        public IEnumerable<SelectListItem> GetComboInsuranceCoverageType()
+        {
+            List<SelectListItem> list = new List<SelectListItem>
+                                { new SelectListItem { Text = InsuranceCoverageType.Full_Medicaid.ToString(), Value = "0"},
+                                  new SelectListItem { Text = InsuranceCoverageType.MMA_Capitated.ToString(), Value = "1"},
+                                  new SelectListItem { Text = InsuranceCoverageType.Dual_Special_Needs_Plan.ToString(), Value = "2"},
+                                  new SelectListItem { Text = InsuranceCoverageType.Medicare_Special_Needs.ToString(), Value = "3"},
+                                  new SelectListItem { Text = InsuranceCoverageType.Medicare_Advantage_Plan.ToString(), Value = "4"},
+                                  new SelectListItem { Text = InsuranceCoverageType.HMO.ToString(), Value = "5"},
+                                  new SelectListItem { Text = InsuranceCoverageType.PPO.ToString(), Value = "6"},
+                                  new SelectListItem { Text = InsuranceCoverageType.EPO.ToString(), Value = "7"},
+                                  new SelectListItem { Text = InsuranceCoverageType.POS.ToString(), Value = "8"}
+            };
+
+            return list;
         }
     }
 }

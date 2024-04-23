@@ -14,7 +14,7 @@
             return (index == 0) ? InsuranceType.Medicaid :
                    (index == 1) ? InsuranceType.Medicare :
                    (index == 2) ? InsuranceType.Comercial:
-                   (index == 2 ) ? InsuranceType.Self_Pay : InsuranceType.Medicaid;
+                   (index == 3 ) ? InsuranceType.Self_Pay : InsuranceType.Medicaid;
         }
     }
   

@@ -55,5 +55,8 @@ namespace KyoS.Web.Data.Entities
 
         [Display(Name = "Plan")]
         public InsurancePlanType InsurancePlan { get; set; }
+
+        [Display(Name = "Coverage")]
+        public InsuranceCoverageType InsuranceCoverage { get; set; }
     }
 }
