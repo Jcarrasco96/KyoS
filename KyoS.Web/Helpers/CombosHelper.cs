@@ -2732,8 +2732,10 @@ namespace KyoS.Web.Helpers
         public IEnumerable<SelectListItem> GetComboInsuranceType()
         {
             List<SelectListItem> list = new List<SelectListItem>
-                                { new SelectListItem { Text = InsuranceType.Medicaid.ToString(), Value = "0"},
-                                  new SelectListItem { Text = InsuranceType.Medicare.ToString(), Value = "1"}
+                                { new SelectListItem { Text = InsuranceType.Medicare.ToString(), Value = "0"},
+                                  new SelectListItem { Text = InsuranceType.Medicaid.ToString(), Value = "1"},
+                                  new SelectListItem { Text = InsuranceType.Comercial.ToString(), Value = "2"},
+                                  new SelectListItem { Text = InsuranceType.Self_Pay.ToString(), Value = "3"}
             };
 
             return list;
@@ -2742,8 +2744,9 @@ namespace KyoS.Web.Helpers
         public IEnumerable<SelectListItem> GetComboInsurancePlanType()
         {
             List<SelectListItem> list = new List<SelectListItem>
-                                { new SelectListItem { Text = InsuranceType.Medicare.ToString(), Value = "0"},
-                                  new SelectListItem { Text = InsuranceType.Medicaid.ToString(), Value = "1"}
+                                { new SelectListItem { Text = InsurancePlanType.Full_Medicaid.ToString(), Value = "0"},
+                                  new SelectListItem { Text = InsurancePlanType.Madicare_Part_AB.ToString(), Value = "1"},
+                                  new SelectListItem { Text = InsurancePlanType.Madicare_Part_B.ToString(), Value = "2"}
             };
 
             return list;

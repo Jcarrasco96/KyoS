@@ -2053,11 +2053,19 @@ namespace KyoS.Web.Controllers
             else
             {
                 ClientEntity Client = await _context.Clients
-                                                       .Include(n => n.Clinic)
-                                                       .Include(n => n.Documents)
-                                                       .FirstOrDefaultAsync(n => n.Id == id);
-                ClientViewModel model = await _converterHelper.ToClientViewModel(Client, user_logged.Id);
-                model.IdTCMClient = idTCMCLient;
+                                                    .Include(n => n.Clinic)
+                                                    .Include(n => n.Documents)
+                                                    .AsSplitQuery()
+                                                    .FirstOrDefaultAsync(n => n.Id == id);
+
+                TCMDocumentViewModel model = new TCMDocumentViewModel()
+                {
+                    Id = id,
+                    IdTCMClient = idTCMCLient,
+                    Documents = Client.Documents
+                };
+
+                ViewData["createBy"] = user_logged.Id;
                 return View(model);
             }
         }
@@ -2065,12 +2073,18 @@ namespace KyoS.Web.Controllers
         [Authorize(Roles = "CaseManager,TCMSupervisor, Manager")]
         public IActionResult AddDocument(int id = 0)
         {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
             DocumentViewModel entity = new DocumentViewModel()
             {
                 IdDescription = 0,
                 Descriptions = _combosHelper.GetComboDocumentDescriptions(),
                 Client = _context.Clients.Find(id)
             };
+
+            ViewData["createBy"] = user_logged.Id;
             return View(entity);
         }
 
@@ -2109,7 +2123,7 @@ namespace KyoS.Web.Controllers
                                                                   .Where(c => c.Client.Id == id)
                                                                   .OrderByDescending(n => n.CreatedOn)
                                                                   .ToListAsync();
-
+                ViewData["createBy"] = user_logged.Id;
                 return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDocument", documentList) });
             }
 
@@ -2119,6 +2133,7 @@ namespace KyoS.Web.Controllers
                 Descriptions = _combosHelper.GetComboDocumentDescriptions(),
                 Client = _context.Clients.Find(id)
             };
+
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "AddDocument", salida) });
         }
 
@@ -2129,6 +2144,11 @@ namespace KyoS.Web.Controllers
             {
                 return RedirectToAction("Home/Error404");
             }
+
+            UserEntity user_logged = await _context.Users
+                                                   .Include(u => u.Clinic)
+                                                   .ThenInclude(c => c.Setting)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
 
             DocumentEntity document = await _context.Documents
                                                     .Include(n => n.Client)
@@ -2145,10 +2165,10 @@ namespace KyoS.Web.Controllers
             await _context.SaveChangesAsync();
 
             List<DocumentEntity> documentList = await _context.Documents
-                                                                  .Where(c => c.Client.Id == tempId)
-                                                                  .OrderByDescending(n => n.CreatedOn)
-                                                                  .ToListAsync();
-
+                                                              .Where(c => c.Client.Id == tempId)
+                                                              .OrderByDescending(n => n.CreatedOn)
+                                                              .ToListAsync();
+            ViewData["createBy"] = user_logged.Id;
             return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDocument", documentList) });
         }
 

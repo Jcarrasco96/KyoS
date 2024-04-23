@@ -2,16 +2,18 @@
 {
     public enum InsurancePlanType
     {
-        Medicare,
-        Medicaid
-        
+        Full_Medicaid,
+        Madicare_Part_AB,
+        Madicare_Part_B
+
     }
     public class InsurancePlanUtils
     {
         public static InsurancePlanType GetInsurancePlanTypeByIndex(int index)
         {
-            return (index == 0) ? InsurancePlanType.Medicare :
-                   (index == 1) ? InsurancePlanType.Medicaid : InsurancePlanType.Medicare;
+            return (index == 0) ? InsurancePlanType.Full_Medicaid :
+                   (index == 1) ? InsurancePlanType.Madicare_Part_AB :
+                   (index == 2) ? InsurancePlanType.Madicare_Part_B : InsurancePlanType.Full_Medicaid;
         }
     }
   

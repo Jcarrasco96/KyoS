@@ -5005,9 +5005,9 @@ namespace KyoS.Web.Controllers
                     ExpiredDate = healthInsuranceTempEntity.ExpiredDate,
                     EffectiveDate = healthInsuranceTempEntity.EffectiveDate,
                     EndCoverageDate = healthInsuranceTempEntity.EndCoverageDate,
-                    IdInsuranceType = (healthInsuranceTempEntity.InsuranceType == InsuranceType.Medicaid)? 0 : 1,
+                    IdInsuranceType = (healthInsuranceTempEntity.InsuranceType == InsuranceType.Medicaid)? 0 : (healthInsuranceTempEntity.InsuranceType == InsuranceType.Medicare) ? 1 : (healthInsuranceTempEntity.InsuranceType == InsuranceType.Comercial) ? 2 : 3,
                     InsuranceTypes = _combosHelper.GetComboInsuranceType(),
-                    IdInsurancePlanType = (healthInsuranceTempEntity.InsurancePlan == InsurancePlanType.Medicare) ? 0 : 1,
+                    IdInsurancePlanType = (healthInsuranceTempEntity.InsurancePlan == InsurancePlanType.Full_Medicaid) ? 0 : (healthInsuranceTempEntity.InsurancePlan == InsurancePlanType.Madicare_Part_AB) ? 1 : 2,
                     InsurancePlanTypes = _combosHelper.GetComboInsurancePlanType(),
                 };
                 return View(entity);
