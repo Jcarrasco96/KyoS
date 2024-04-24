@@ -1,0 +1,72 @@
+﻿@model KyoS.Web.Models.PromotionShowViewModel
+
+<!DOCTYPE <html xmlns="http://www.w3.org/1999/xhtml">
+    <head runat="server">
+        <title>
+
+        </title>
+        <style type="text/css">
+            h1
+            {
+            color: forestgreen;
+            }
+        </style>
+        
+</head>
+    <body>
+        <form id="Details" runat="server>">
+        <div class="col-md-push-12">
+            <div>
+                <div class="form-group col-md-3">
+                   &nbsp;
+
+                </div>
+                <div class="form-group col-md-6">
+                    <strong>RESORT </strong><h1>@Html.DisplayFor(modelItem => Model.Name)</h1>
+                    
+                    LOCATION: <strong> @Html.DisplayFor(modelItem => Model.Location)</strong><br />
+                    PROMOTION: <strong style="color:darkgreen "> @Html.DisplayFor(modelItem => Model.Promotion)</strong><br />
+                    ROOM: <strong> @Html.DisplayFor(modelItem => Model.Room)<br /></strong>
+                    DETAILS: <strong>@Html.DisplayFor(modelItem => Model.Description)<br /></strong>
+                    OPEN - CLOSE:<strong style="color: brown"> @Html.DisplayFor(modelItem => Model.OpenDate) - @Html.DisplayFor(modelItem => Model.CloseDate)</strong><br />
+                    
+                    CONTACT: <strong> @Html.DisplayFor(modelItem => Model.Contact)</strong><br />
+                    WEB SITE: <strong> <a href="https://www.exploriaresorts.com/clermont-florida/summer-bay-orlando?utm_source=google&utm_medium=gbp&utm_campaign=local">Enlace</a></strong><br />
+                </div>
+                <div class="form-group col-md-3">
+                    &nbsp;
+
+                </div>
+            </div>
+            <div>
+                <hr />
+            </div>
+            <div class="form-group col-md-12">
+                <div id="imgPreviewPhoto" class="thumbnail">
+                    <img class="img-responsive" id="targetImgPhoto" src="@Url.Content(Model.PhotoPath)" width="1000" />
+                    <div class="caption" id="lbPhoto">
+                        <center>
+                            <span id="descriptionPhoto"></span>
+                        </center>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    </body>
+</html>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script src="~/js/jquery.dataTables.min.js"></script>
+
+    <script type="text/javascript">
+       
+       
+
+       
+
+       
+    </script>
+}

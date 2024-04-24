@@ -264,5 +264,9 @@ namespace KyoS.Web.Helpers
         CaseMannagerCertificationViewModel ToCaseManagerCertificationViewModel(CaseManagerCertificationEntity model);
         TCMSupervisorCertificationEntity ToTCMSupervisorCertificationEntity(TCMSupervisorCertificationViewModel model, bool isNew, string userId);
         TCMSupervisorCertificationViewModel ToTCMSupervisorCertificationViewModel(TCMSupervisorCertificationEntity model, int idClinic);
+        PromotionEntity ToPromotionEntity(PromotionViewModel model, bool isNew);
+        PromotionViewModel ToPromotionViewModel(PromotionEntity model);
+        PromotionPhotosEntity ToPromotionPhotoEntity(PromotionPhotoViewModel model, bool isNew, string photoPath);
+        PromotionPhotoViewModel ToPromotionPhotoViewModel(PromotionPhotosEntity model);
     }
 }

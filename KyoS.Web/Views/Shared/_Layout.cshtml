@@ -127,6 +127,7 @@
                                 <li>@Html.ActionLink("Internal Invoice", "InternalAccount", "BillDms")</li>
                             </ul>
                         </li>
+                        <li><a asp-area="" asp-controller="Promotion" asp-action="Index">Promotions</a></li>
                     }
                     else
                  if (User.Identity.IsAuthenticated && (User.IsInRole("Manager")))

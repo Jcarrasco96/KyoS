@@ -9033,6 +9033,75 @@ namespace KyoS.Web.Helpers
             };
 
         }
+
+        public PromotionEntity ToPromotionEntity(PromotionViewModel model, bool isNew)
+        {
+            return new PromotionEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Name = model.Name,
+                Active = model.Active,
+                CloseDate = model.CloseDate,
+                Contact = model.Contact,
+                Description = model.Description,
+                LinkReferred = model.LinkReferred,
+                OpenDate = model.OpenDate,
+                Precio = model.Precio,
+                Photos = model.Photos,
+                Location = model.Location,
+                Promotion = model.Promotion,
+                Room = model.Room
+               
+            };
+        }
+
+        public PromotionViewModel ToPromotionViewModel(PromotionEntity model)
+        {
+            return new PromotionViewModel
+            {
+                Id = model.Id,
+                Name = model.Name,
+                Active = model.Active,
+                CloseDate = model.CloseDate,
+                Contact = model.Contact,
+                Description = model.Description,
+                LinkReferred = model.LinkReferred,
+                OpenDate = model.OpenDate,
+                Precio = model.Precio,
+                Photos = model.Photos,
+                Location = model.Location,
+                Promotion = model.Promotion,
+                Room = model.Room
+
+            };
+
+        }
+
+        public PromotionPhotosEntity ToPromotionPhotoEntity(PromotionPhotoViewModel model, bool isNew, string photoPath)
+        {
+            return new PromotionPhotosEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Description = model.Description,
+                PhotoPath = photoPath,
+                Promotion = _context.Promotions.FirstOrDefault(n => n.Id == model.IdPromotion)
+
+            };
+        }
+
+        public PromotionPhotoViewModel ToPromotionPhotoViewModel(PromotionPhotosEntity model)
+        {
+            return new PromotionPhotoViewModel
+            {
+                Id = model.Id,
+                PhotoPath = model.PhotoPath,
+                Description = model.Description,
+                Promotion = model.Promotion,
+                IdPromotion = model.Promotion.Id
+            };
+
+        }
+
     }
 
    

@@ -169,6 +169,8 @@ namespace KyoS.Web.Data
         public DbSet<CourseEntity> Courses { get; set; }
         public DbSet<CaseManagerCertificationEntity> CaseManagerCertifications { get; set; }
         public DbSet<TCMSupervisorCertificationEntity> TCMSupervisorCertifications { get; set; }
+        public DbSet<PromotionEntity> Promotions { get; set; }
+        public DbSet<PromotionPhotosEntity> PromotionPhotos { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

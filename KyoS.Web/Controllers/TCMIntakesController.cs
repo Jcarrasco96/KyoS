@@ -5840,8 +5840,7 @@ namespace KyoS.Web.Controllers
                                        .Include(c => c.TcmClient)
                                        .ThenInclude(c => c.Client)
                                        .ThenInclude(c => c.Clinic)
-                                       .FirstOrDefaultAsync(s => s.Id == id 
-                                                              && s.CreatedBy == user_logged.UserName);
+                                       .FirstOrDefaultAsync(s => s.Id == id );
             }
             if (User.IsInRole("TCMSupervisor"))
             {
