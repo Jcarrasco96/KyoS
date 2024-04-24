@@ -468,13 +468,14 @@ namespace KyoS.Web.Helpers
                                                             .FirstOrDefault(c => c.Client.Id == item.Id);
                         if (tcmclient != null)
                         {
-                            if (tcmclient.TCMNote.Count() > 0)
+                            if (tcmclient.TCMNote.Where(n => n.DateOfService == workday_client.Workday.Date).Count() > 0)
                             {
                                 if (tcmclient.TCMNote.Where(n => (n.DateOfService == workday_client.Workday.Date
                                                    && n.TCMNoteActivity.Where(m => (m.StartTime.TimeOfDay <= subScheduleEntity.InitialTime.TimeOfDay && m.EndTime.TimeOfDay >= subScheduleEntity.InitialTime.TimeOfDay)
                                                        || (m.StartTime.TimeOfDay <= subScheduleEntity.EndTime.TimeOfDay && m.EndTime.TimeOfDay >= subScheduleEntity.EndTime.TimeOfDay)
-                                                       || (m.StartTime.TimeOfDay > subScheduleEntity.InitialTime.TimeOfDay && m.EndTime.TimeOfDay > subScheduleEntity.InitialTime.TimeOfDay && m.StartTime.TimeOfDay < subScheduleEntity.EndTime.TimeOfDay && m.EndTime.TimeOfDay < subScheduleEntity.EndTime.TimeOfDay))
-                                                   .Count() == 0))
+                                                       || (m.StartTime.TimeOfDay >= subScheduleEntity.InitialTime.TimeOfDay && m.StartTime.TimeOfDay <= subScheduleEntity.EndTime.TimeOfDay)
+                                                       || (m.EndTime.TimeOfDay >= subScheduleEntity.InitialTime.TimeOfDay && m.EndTime.TimeOfDay <= subScheduleEntity.EndTime.TimeOfDay))
+                                                   .Count() > 0))
                                                  .Count() == 0)
                                 {
                                     salida.Add(item);
