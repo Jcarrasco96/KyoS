@@ -637,6 +637,7 @@ namespace KyoS.Web.Controllers
             if (clientViewModel.IdTCMClient != 0)
             {
                 clientViewModel.AdmisionDateTCM = _context.TCMClient.FirstOrDefault(n => n.Id == clientViewModel.IdTCMClient).DataOpen;
+                clientViewModel.TCMName = _context.TCMClient.Include(n => n.Casemanager).FirstOrDefault(n => n.Id == clientViewModel.IdTCMClient).Casemanager.Name;
             }
            
             return View(clientViewModel);
@@ -669,230 +670,416 @@ namespace KyoS.Web.Controllers
                 UserEntity user_logged = _context.Users.Include(u => u.Clinic)
                                                        .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
-                ClientEntity clientEntity = await _converterHelper.ToClientEntity(clientViewModel, false, photoPath, signPath, user_logged.Id);
-                if (clientViewModel.IdStatus == 2) //the client was closed
+               
+                if (User.IsInRole("CaseManager"))
                 {
-                    _context.Entry(clientEntity).Reference("Group").CurrentValue = null;
-                    _context.Entry(clientEntity).Reference("Group").IsModified = true;
-                }
+                    ClientEntity clientEntity = await _context.Clients.FirstOrDefaultAsync(n => n.Id == clientViewModel.Id);
 
-                //-------Primary Doctor--------------------------//
-                if (clientViewModel.IdDoctor == 0)
-                {
-                    if (clientViewModel.NamePrimaryDoctor != null && clientViewModel.NamePrimaryDoctor != string.Empty)
+                    clientEntity.FullAddress = clientViewModel.FullAddress;
+                    clientEntity.AlternativeAddress = clientViewModel.AlternativeAddress;
+                    clientEntity.TelephoneSecondary = clientViewModel.TelephoneSecondary;
+                    clientEntity.Email = clientViewModel.Email;
+                    clientEntity.Country = clientViewModel.Country;
+                    clientEntity.City = clientViewModel.City;
+                    clientEntity.State = clientViewModel.State;
+                    clientEntity.ZipCode = clientViewModel.ZipCode;
+                    clientEntity.Race = RaceUtils.GetRaceByIndex(clientViewModel.IdRace);
+                    clientEntity.MaritalStatus = MaritalUtils.GetMaritalByIndex(clientViewModel.IdMaritalStatus);
+                    clientEntity.Ethnicity = EthnicityUtils.GetEthnicityByIndex(clientViewModel.IdEthnicity);
+                    clientEntity.PreferredLanguage = PreferredLanguageUtils.GetPreferredLanguageByIndex(clientViewModel.IdPreferredLanguage);
+                    clientEntity.OtherLanguage = clientViewModel.OtherLanguage;
+                    clientEntity.PhotoPath = photoPath;
+
+                    clientEntity.Doctor = await _context.Doctors.FirstOrDefaultAsync(d => d.Id == clientViewModel.IdDoctor);
+                    clientEntity.Psychiatrist = await _context.Psychiatrists.FirstOrDefaultAsync(p => p.Id == clientViewModel.IdPsychiatrist);
+                    //Referred = await _context.Referreds.FirstOrDefaultAsync(r => r.Id == model.IdReferred),
+                    clientEntity.LegalGuardian = await _context.LegalGuardians.FirstOrDefaultAsync(lg => lg.Id == clientViewModel.IdLegalGuardian);
+                    clientEntity.EmergencyContact = await _context.EmergencyContacts.FirstOrDefaultAsync(ec => ec.Id == clientViewModel.IdEmergencyContact);
+                    clientEntity.RelationShipOfEmergencyContact = RelationshipUtils.GetRelationshipByIndex(clientViewModel.IdRelationshipEC);
+                    clientEntity.RelationShipOfLegalGuardian = RelationshipUtils.GetRelationshipByIndex(clientViewModel.IdRelationship);
+
+                    clientEntity.LastModifiedBy = user_logged.Id;
+                    clientEntity.LastModifiedOn = DateTime.Now;
+                    clientEntity.OtherLanguage_Read = clientViewModel.OtherLanguage_Read;
+                    clientEntity.OtherLanguage_Speak = clientViewModel.OtherLanguage_Speak;
+                    clientEntity.OtherLanguage_Understand = clientViewModel.OtherLanguage_Understand;
+
+                    //-------Primary Doctor--------------------------//
+                    if (clientViewModel.IdDoctor == 0)
                     {
-                        DoctorEntity PrimaryDoctor = new DoctorEntity
+                        if (clientViewModel.NamePrimaryDoctor != null && clientViewModel.NamePrimaryDoctor != string.Empty)
                         {
-                            Name = clientViewModel.NamePrimaryDoctor,
-                            Address = clientViewModel.AddressPrimaryDoctor,
-                            City = clientViewModel.CityPrimaryDoctor,
-                            Email = clientViewModel.EmailPrimaryDoctor,
-                            State = clientViewModel.StatePrimaryDoctor,
-                            Telephone = clientViewModel.PhonePrimaryDoctor,
-                            ZipCode = clientViewModel.ZipCodePrimaryDoctor,
-                            CreatedBy = user_logged.Id,
-                            CreatedOn = DateTime.Today,
-                            LastModifiedBy = string.Empty,
-                            LastModifiedOn = new DateTime(),
+                            DoctorEntity PrimaryDoctor = new DoctorEntity
+                            {
+                                Name = clientViewModel.NamePrimaryDoctor,
+                                Address = clientViewModel.AddressPrimaryDoctor,
+                                City = clientViewModel.CityPrimaryDoctor,
+                                Email = clientViewModel.EmailPrimaryDoctor,
+                                State = clientViewModel.StatePrimaryDoctor,
+                                Telephone = clientViewModel.PhonePrimaryDoctor,
+                                ZipCode = clientViewModel.ZipCodePrimaryDoctor,
+                                CreatedBy = user_logged.Id,
+                                CreatedOn = DateTime.Today,
+                                LastModifiedBy = string.Empty,
+                                LastModifiedOn = new DateTime(),
 
-                        };
-                        _context.Add(PrimaryDoctor);
-                        clientEntity.Doctor = PrimaryDoctor;
+                            };
+                            _context.Add(PrimaryDoctor);
+                            clientEntity.Doctor = PrimaryDoctor;
+
+                        }
+                        else
+                        {
+                            clientEntity.Doctor = null;
+                        }
 
                     }
                     else
                     {
-                        clientEntity.Doctor = null;
+                        clientEntity.Doctor = _context.Doctors.FirstOrDefault(n => n.Id == clientViewModel.IdDoctor);
                     }
 
-                }
-                else
-                {
-                    clientEntity.Doctor = _context.Doctors.FirstOrDefault(n => n.Id == clientViewModel.IdDoctor);
-                }
-
-                //-------Psychiatrists--------------------------//
-                if (clientViewModel.IdPsychiatrist == 0)
-                {
-                    if (clientViewModel.NamePsychiatrists != null && clientViewModel.NamePsychiatrists != string.Empty)
+                    //-------Psychiatrists--------------------------//
+                    if (clientViewModel.IdPsychiatrist == 0)
                     {
-                        PsychiatristEntity Psychiatrists = new PsychiatristEntity
+                        if (clientViewModel.NamePsychiatrists != null && clientViewModel.NamePsychiatrists != string.Empty)
                         {
-                            Name = clientViewModel.NamePsychiatrists,
-                            Address = clientViewModel.AddressPsychiatrists,
-                            City = clientViewModel.CityPsychiatrists,
-                            Email = clientViewModel.EmailPsychiatrists,
-                            State = clientViewModel.StatePsychiatrists,
-                            Telephone = clientViewModel.PhonePsychiatrists,
-                            ZipCode = clientViewModel.ZipCodePsychiatrists,
-                            FaxNumber = clientViewModel.FaxNumberPsychiatrists,
-                            CreatedBy = user_logged.Id,
-                            CreatedOn = DateTime.Today,
-                            LastModifiedBy = string.Empty,
-                            LastModifiedOn = new DateTime(),
+                            PsychiatristEntity Psychiatrists = new PsychiatristEntity
+                            {
+                                Name = clientViewModel.NamePsychiatrists,
+                                Address = clientViewModel.AddressPsychiatrists,
+                                City = clientViewModel.CityPsychiatrists,
+                                Email = clientViewModel.EmailPsychiatrists,
+                                State = clientViewModel.StatePsychiatrists,
+                                Telephone = clientViewModel.PhonePsychiatrists,
+                                ZipCode = clientViewModel.ZipCodePsychiatrists,
+                                FaxNumber = clientViewModel.FaxNumberPsychiatrists,
+                                CreatedBy = user_logged.Id,
+                                CreatedOn = DateTime.Today,
+                                LastModifiedBy = string.Empty,
+                                LastModifiedOn = new DateTime(),
 
-                        };
-                        _context.Add(Psychiatrists);
-                        clientEntity.Psychiatrist = Psychiatrists;
+                            };
+                            _context.Add(Psychiatrists);
+                            clientEntity.Psychiatrist = Psychiatrists;
+
+                        }
+                        else
+                        {
+                            clientEntity.Psychiatrist = null;
+                        }
 
                     }
                     else
                     {
-                        clientEntity.Psychiatrist = null;
+                        clientEntity.Psychiatrist = _context.Psychiatrists.FirstOrDefault(n => n.Id == clientViewModel.IdPsychiatrist);
                     }
 
-                }
-                else
-                {
-                    clientEntity.Psychiatrist = _context.Psychiatrists.FirstOrDefault(n => n.Id == clientViewModel.IdPsychiatrist);
-                }
-
-                //-------Legal Guardian--------------------------//
-                if (clientViewModel.IdLegalGuardian == 0)
-                {
-                    if (clientViewModel.NameLegalGuardian != null && clientViewModel.NameLegalGuardian != string.Empty)
+                    //-------Legal Guardian--------------------------//
+                    if (clientViewModel.IdLegalGuardian == 0)
                     {
-                        LegalGuardianEntity legalGuardianContact = new LegalGuardianEntity
+                        if (clientViewModel.NameLegalGuardian != null && clientViewModel.NameLegalGuardian != string.Empty)
                         {
-                            Name = clientViewModel.NameLegalGuardian,
-                            Address = clientViewModel.AddressLegalGuardian,
-                            AdressLine2 = clientViewModel.AddressLine2LegalGuardian,
-                            City = clientViewModel.CityLegalGuardian,
-                            Country = clientViewModel.CountryLegalGuardian,
-                            Email = clientViewModel.EmailLegalGuardian,
-                            State = clientViewModel.StateLegalGuardian,
-                            Telephone = clientViewModel.PhoneLegalGuardian,
-                            TelephoneSecondary = clientViewModel.PhoneLegalGuardian,
-                            ZipCode = clientViewModel.ZipCodeLegalGuardian,
-                            CreatedBy = user_logged.Id,
-                            CreatedOn = DateTime.Today,
-                            LastModifiedBy = string.Empty,
-                            LastModifiedOn = new DateTime(),
+                            LegalGuardianEntity legalGuardianContact = new LegalGuardianEntity
+                            {
+                                Name = clientViewModel.NameLegalGuardian,
+                                Address = clientViewModel.AddressLegalGuardian,
+                                AdressLine2 = clientViewModel.AddressLine2LegalGuardian,
+                                City = clientViewModel.CityLegalGuardian,
+                                Country = clientViewModel.CountryLegalGuardian,
+                                Email = clientViewModel.EmailLegalGuardian,
+                                State = clientViewModel.StateLegalGuardian,
+                                Telephone = clientViewModel.PhoneLegalGuardian,
+                                TelephoneSecondary = clientViewModel.PhoneLegalGuardian,
+                                ZipCode = clientViewModel.ZipCodeLegalGuardian,
+                                CreatedBy = user_logged.Id,
+                                CreatedOn = DateTime.Today,
+                                LastModifiedBy = string.Empty,
+                                LastModifiedOn = new DateTime(),
 
-                        };
-                        _context.Add(legalGuardianContact);
-                        clientEntity.LegalGuardian = legalGuardianContact;
+                            };
+                            _context.Add(legalGuardianContact);
+                            clientEntity.LegalGuardian = legalGuardianContact;
+
+                        }
+                        else
+                        {
+                            clientEntity.LegalGuardian = null;
+                        }
 
                     }
                     else
                     {
-                        clientEntity.LegalGuardian = null;
+                        clientEntity.LegalGuardian = _context.LegalGuardians.FirstOrDefault(n => n.Id == clientViewModel.IdLegalGuardian);
                     }
 
-                }
-                else
-                {
-                    clientEntity.LegalGuardian = _context.LegalGuardians.FirstOrDefault(n => n.Id == clientViewModel.IdLegalGuardian);
-                }
-
-                //-------Emergency Contact--------------------------//
-                if (clientViewModel.IdEmergencyContact == 0)
-                {
-                    if (clientViewModel.NameEmergencyContact != null && clientViewModel.NameEmergencyContact != string.Empty)
+                    //-------Emergency Contact--------------------------//
+                    if (clientViewModel.IdEmergencyContact == 0)
                     {
-                        EmergencyContactEntity emergencyContact = new EmergencyContactEntity
+                        if (clientViewModel.NameEmergencyContact != null && clientViewModel.NameEmergencyContact != string.Empty)
                         {
-                            Name = clientViewModel.NameEmergencyContact,
-                            Address = clientViewModel.AddressEmergencyContact,
-                            AdressLine2 = clientViewModel.AddressLine2EmergencyContact,
-                            City = clientViewModel.CityEmergencyContact,
-                            Country = clientViewModel.CountryEmergencyContact,
-                            Email = clientViewModel.EmailEmergencyContact,
-                            State = clientViewModel.StateEmergencyContact,
-                            Telephone = clientViewModel.PhoneEmergencyContact,
-                            TelephoneSecondary = clientViewModel.PhoneSecundaryEmergencyContact,
-                            ZipCode = clientViewModel.ZipCodeEmergencyContact,
-                            CreatedBy = user_logged.Id,
-                            CreatedOn = DateTime.Today,
-                            LastModifiedBy = string.Empty,
-                            LastModifiedOn = new DateTime(),
+                            EmergencyContactEntity emergencyContact = new EmergencyContactEntity
+                            {
+                                Name = clientViewModel.NameEmergencyContact,
+                                Address = clientViewModel.AddressEmergencyContact,
+                                AdressLine2 = clientViewModel.AddressLine2EmergencyContact,
+                                City = clientViewModel.CityEmergencyContact,
+                                Country = clientViewModel.CountryEmergencyContact,
+                                Email = clientViewModel.EmailEmergencyContact,
+                                State = clientViewModel.StateEmergencyContact,
+                                Telephone = clientViewModel.PhoneEmergencyContact,
+                                TelephoneSecondary = clientViewModel.PhoneSecundaryEmergencyContact,
+                                ZipCode = clientViewModel.ZipCodeEmergencyContact,
+                                CreatedBy = user_logged.Id,
+                                CreatedOn = DateTime.Today,
+                                LastModifiedBy = string.Empty,
+                                LastModifiedOn = new DateTime(),
 
-                        };
-                        _context.Add(emergencyContact);
-                        clientEntity.EmergencyContact = emergencyContact;
-                        
+                            };
+                            _context.Add(emergencyContact);
+                            clientEntity.EmergencyContact = emergencyContact;
+
+                        }
+                        else
+                        {
+                            clientEntity.EmergencyContact = null;
+                        }
+
                     }
                     else
                     {
-                        clientEntity.EmergencyContact = null;
+                        clientEntity.EmergencyContact = _context.EmergencyContacts.FirstOrDefault(n => n.Id == clientViewModel.IdEmergencyContact);
                     }
-                    
+
+                    _context.Update(clientEntity);
                 }
                 else
                 {
-                    clientEntity.EmergencyContact = _context.EmergencyContacts.FirstOrDefault(n => n.Id == clientViewModel.IdEmergencyContact);
-                }
+                    ClientEntity clientEntity = await _converterHelper.ToClientEntity(clientViewModel, false, photoPath, signPath, user_logged.Id);
 
-                _context.Update(clientEntity);
+                    if (clientViewModel.IdStatus == 2) //the client was closed
+                    {
+                        _context.Entry(clientEntity).Reference("Group").CurrentValue = null;
+                        _context.Entry(clientEntity).Reference("Group").IsModified = true;
+                    }
 
-                //delete all client diagnostic of this client
-                IEnumerable<Client_Diagnostic> list_to_delete = await _context.Clients_Diagnostics
-                                                                              .Where(cd => cd.Client.Id == clientViewModel.Id)
-                                                                              .ToListAsync();
-                _context.Clients_Diagnostics.RemoveRange(list_to_delete);
+                    //-------Primary Doctor--------------------------//
+                    if (clientViewModel.IdDoctor == 0)
+                    {
+                        if (clientViewModel.NamePrimaryDoctor != null && clientViewModel.NamePrimaryDoctor != string.Empty)
+                        {
+                            DoctorEntity PrimaryDoctor = new DoctorEntity
+                            {
+                                Name = clientViewModel.NamePrimaryDoctor,
+                                Address = clientViewModel.AddressPrimaryDoctor,
+                                City = clientViewModel.CityPrimaryDoctor,
+                                Email = clientViewModel.EmailPrimaryDoctor,
+                                State = clientViewModel.StatePrimaryDoctor,
+                                Telephone = clientViewModel.PhonePrimaryDoctor,
+                                ZipCode = clientViewModel.ZipCodePrimaryDoctor,
+                                CreatedBy = user_logged.Id,
+                                CreatedOn = DateTime.Today,
+                                LastModifiedBy = string.Empty,
+                                LastModifiedOn = new DateTime(),
 
-                //update Client_Diagnostic table with the news DiagnosticsTemp
-                IQueryable<DiagnosticTempEntity> listDiagnosticTemp = _context.DiagnosticsTemp
-                                                                              .Where(d => d.UserName == user_logged.UserName
+                            };
+                            _context.Add(PrimaryDoctor);
+                            clientEntity.Doctor = PrimaryDoctor;
+
+                        }
+                        else
+                        {
+                            clientEntity.Doctor = null;
+                        }
+
+                    }
+                    else
+                    {
+                        clientEntity.Doctor = _context.Doctors.FirstOrDefault(n => n.Id == clientViewModel.IdDoctor);
+                    }
+
+                    //-------Psychiatrists--------------------------//
+                    if (clientViewModel.IdPsychiatrist == 0)
+                    {
+                        if (clientViewModel.NamePsychiatrists != null && clientViewModel.NamePsychiatrists != string.Empty)
+                        {
+                            PsychiatristEntity Psychiatrists = new PsychiatristEntity
+                            {
+                                Name = clientViewModel.NamePsychiatrists,
+                                Address = clientViewModel.AddressPsychiatrists,
+                                City = clientViewModel.CityPsychiatrists,
+                                Email = clientViewModel.EmailPsychiatrists,
+                                State = clientViewModel.StatePsychiatrists,
+                                Telephone = clientViewModel.PhonePsychiatrists,
+                                ZipCode = clientViewModel.ZipCodePsychiatrists,
+                                FaxNumber = clientViewModel.FaxNumberPsychiatrists,
+                                CreatedBy = user_logged.Id,
+                                CreatedOn = DateTime.Today,
+                                LastModifiedBy = string.Empty,
+                                LastModifiedOn = new DateTime(),
+
+                            };
+                            _context.Add(Psychiatrists);
+                            clientEntity.Psychiatrist = Psychiatrists;
+
+                        }
+                        else
+                        {
+                            clientEntity.Psychiatrist = null;
+                        }
+
+                    }
+                    else
+                    {
+                        clientEntity.Psychiatrist = _context.Psychiatrists.FirstOrDefault(n => n.Id == clientViewModel.IdPsychiatrist);
+                    }
+
+                    //-------Legal Guardian--------------------------//
+                    if (clientViewModel.IdLegalGuardian == 0)
+                    {
+                        if (clientViewModel.NameLegalGuardian != null && clientViewModel.NameLegalGuardian != string.Empty)
+                        {
+                            LegalGuardianEntity legalGuardianContact = new LegalGuardianEntity
+                            {
+                                Name = clientViewModel.NameLegalGuardian,
+                                Address = clientViewModel.AddressLegalGuardian,
+                                AdressLine2 = clientViewModel.AddressLine2LegalGuardian,
+                                City = clientViewModel.CityLegalGuardian,
+                                Country = clientViewModel.CountryLegalGuardian,
+                                Email = clientViewModel.EmailLegalGuardian,
+                                State = clientViewModel.StateLegalGuardian,
+                                Telephone = clientViewModel.PhoneLegalGuardian,
+                                TelephoneSecondary = clientViewModel.PhoneLegalGuardian,
+                                ZipCode = clientViewModel.ZipCodeLegalGuardian,
+                                CreatedBy = user_logged.Id,
+                                CreatedOn = DateTime.Today,
+                                LastModifiedBy = string.Empty,
+                                LastModifiedOn = new DateTime(),
+
+                            };
+                            _context.Add(legalGuardianContact);
+                            clientEntity.LegalGuardian = legalGuardianContact;
+
+                        }
+                        else
+                        {
+                            clientEntity.LegalGuardian = null;
+                        }
+
+                    }
+                    else
+                    {
+                        clientEntity.LegalGuardian = _context.LegalGuardians.FirstOrDefault(n => n.Id == clientViewModel.IdLegalGuardian);
+                    }
+
+                    //-------Emergency Contact--------------------------//
+                    if (clientViewModel.IdEmergencyContact == 0)
+                    {
+                        if (clientViewModel.NameEmergencyContact != null && clientViewModel.NameEmergencyContact != string.Empty)
+                        {
+                            EmergencyContactEntity emergencyContact = new EmergencyContactEntity
+                            {
+                                Name = clientViewModel.NameEmergencyContact,
+                                Address = clientViewModel.AddressEmergencyContact,
+                                AdressLine2 = clientViewModel.AddressLine2EmergencyContact,
+                                City = clientViewModel.CityEmergencyContact,
+                                Country = clientViewModel.CountryEmergencyContact,
+                                Email = clientViewModel.EmailEmergencyContact,
+                                State = clientViewModel.StateEmergencyContact,
+                                Telephone = clientViewModel.PhoneEmergencyContact,
+                                TelephoneSecondary = clientViewModel.PhoneSecundaryEmergencyContact,
+                                ZipCode = clientViewModel.ZipCodeEmergencyContact,
+                                CreatedBy = user_logged.Id,
+                                CreatedOn = DateTime.Today,
+                                LastModifiedBy = string.Empty,
+                                LastModifiedOn = new DateTime(),
+
+                            };
+                            _context.Add(emergencyContact);
+                            clientEntity.EmergencyContact = emergencyContact;
+
+                        }
+                        else
+                        {
+                            clientEntity.EmergencyContact = null;
+                        }
+
+                    }
+                    else
+                    {
+                        clientEntity.EmergencyContact = _context.EmergencyContacts.FirstOrDefault(n => n.Id == clientViewModel.IdEmergencyContact);
+                    }
+
+                    _context.Update(clientEntity);
+
+                    //delete all client diagnostic of this client
+                    IEnumerable<Client_Diagnostic> list_to_delete = await _context.Clients_Diagnostics
+                                                                                  .Where(cd => cd.Client.Id == clientViewModel.Id)
+                                                                                  .ToListAsync();
+                    _context.Clients_Diagnostics.RemoveRange(list_to_delete);
+
+                    //update Client_Diagnostic table with the news DiagnosticsTemp
+                    IQueryable<DiagnosticTempEntity> listDiagnosticTemp = _context.DiagnosticsTemp
+                                                                                  .Where(d => d.UserName == user_logged.UserName
+                                                                                    && d.IdClient == clientEntity.Id);
+                    Client_Diagnostic clientDiagnostic;
+                    foreach (DiagnosticTempEntity item in listDiagnosticTemp)
+                    {
+                        clientDiagnostic = new Client_Diagnostic
+                        {
+                            Client = clientEntity,
+                            Diagnostic = await _context.Diagnostics.FirstOrDefaultAsync(d => d.Code == item.Code),
+                            Principal = item.Principal,
+                            Active = item.Active,
+                            DateIdentify = item.DateIdentify,
+                            Prescriber = item.Prescriber
+                        };
+                        _context.Add(clientDiagnostic);
+                        //_context.DiagnosticsTemp.Remove(item);
+                    }
+
+                    //delete all client referred of this client
+                    IEnumerable<Client_Referred> listReferred_to_delete = await _context.Clients_Referreds
+                                                                                  .Where(cd => cd.Client.Id == clientViewModel.Id)
+                                                                                  .ToListAsync();
+                    _context.Clients_Referreds.RemoveRange(listReferred_to_delete);
+
+                    //update Client_Referred table with the news ReferredTemp
+                    IQueryable<ReferredTempEntity> listReferredTemp = _context.ReferredsTemp
+                                                                              .Where(d => d.CreatedBy == user_logged.UserName
                                                                                 && d.IdClient == clientEntity.Id);
-                Client_Diagnostic clientDiagnostic;
-                foreach (DiagnosticTempEntity item in listDiagnosticTemp)
-                {
-                    clientDiagnostic = new Client_Diagnostic
+                    Client_Referred clientReferred;
+                    foreach (ReferredTempEntity item1 in listReferredTemp)
                     {
-                        Client = clientEntity,
-                        Diagnostic = await _context.Diagnostics.FirstOrDefaultAsync(d => d.Code == item.Code),
-                        Principal = item.Principal,
-                        Active = item.Active,
-                        DateIdentify = item.DateIdentify,
-                        Prescriber = item.Prescriber
-                    };
-                    _context.Add(clientDiagnostic);
-                    //_context.DiagnosticsTemp.Remove(item);
-                }
+                        clientReferred = new Client_Referred
+                        {
+                            Client = clientEntity,
+                            Referred = await _context.Referreds.FirstOrDefaultAsync(d => d.Id == item1.IdReferred),
+                            Service = item1.Service,
+                            ReferredNote = item1.ReferredNote,
+                            type = item1.type
+                        };
+                        _context.Add(clientReferred);
+                        //_context.ReferredsTemp.Remove(item1);
+                    }
 
-                //delete all client referred of this client
-                IEnumerable<Client_Referred> listReferred_to_delete = await _context.Clients_Referreds
-                                                                              .Where(cd => cd.Client.Id == clientViewModel.Id)
-                                                                              .ToListAsync();
-                _context.Clients_Referreds.RemoveRange(listReferred_to_delete);
+                    //delete all client Documents of this client
+                    IEnumerable<DocumentEntity> documents_to_delete = await _context.Documents
+                                                                                    .Where(cd => cd.Client.Id == clientViewModel.Id)
+                                                                                    .ToListAsync();
 
-                //update Client_Referred table with the news ReferredTemp
-                IQueryable<ReferredTempEntity> listReferredTemp = _context.ReferredsTemp
-                                                                          .Where(d => d.CreatedBy == user_logged.UserName
-                                                                            && d.IdClient == clientEntity.Id); 
-                Client_Referred clientReferred;
-                foreach (ReferredTempEntity item1 in listReferredTemp)
-                {
-                    clientReferred = new Client_Referred
+                    _context.Documents.RemoveRange(documents_to_delete);
+
+                    //update Documents table with the news DocumentsTemp
+                    IQueryable<DocumentTempEntity> listDocumentTemp = _context.DocumentsTemp
+                                                                              .Where(d => d.UserName == user_logged.UserName
+                                                                                && d.IdClient == clientViewModel.Id);
+                    DocumentEntity document;
+                    foreach (DocumentTempEntity item in listDocumentTemp)
                     {
-                        Client = clientEntity,
-                        Referred = await _context.Referreds.FirstOrDefaultAsync(d => d.Id == item1.IdReferred),
-                        Service = item1.Service,
-                        ReferredNote = item1.ReferredNote,
-                        type = item1.type
-                    };
-                    _context.Add(clientReferred);
-                    //_context.ReferredsTemp.Remove(item1);
-                }
-
-                //delete all client Documents of this client
-                IEnumerable<DocumentEntity> documents_to_delete = await _context.Documents
-                                                                                .Where(cd => cd.Client.Id == clientViewModel.Id)
-                                                                                .ToListAsync();
-
-                _context.Documents.RemoveRange(documents_to_delete);
-
-                //update Documents table with the news DocumentsTemp
-                IQueryable<DocumentTempEntity> listDocumentTemp = _context.DocumentsTemp
-                                                                          .Where(d => d.UserName == user_logged.UserName
-                                                                            && d.IdClient == clientViewModel.Id);
-                DocumentEntity document;
-                foreach (DocumentTempEntity item in listDocumentTemp)
-                {
-                    //document = await _context.Documents.FirstOrDefaultAsync(d => d.FileUrl == item.DocumentPath);
-                    //if (document == null)
-                   // {
+                        //document = await _context.Documents.FirstOrDefaultAsync(d => d.FileUrl == item.DocumentPath);
+                        //if (document == null)
+                        // {
                         document = new DocumentEntity
                         {
                             Client = clientEntity,
@@ -903,46 +1090,47 @@ namespace KyoS.Web.Controllers
                             CreatedOn = DateTime.Now
                         };
                         _context.Add(document);
-                   // }                    
-                    //_context.DocumentsTemp.Remove(item);
-                }
+                        // }                    
+                        //_context.DocumentsTemp.Remove(item);
+                    }
 
-                //delete all client Health Insurance of this client
-                IEnumerable<Client_HealthInsurance> listHealthInsurance_to_delete = await _context.Clients_HealthInsurances
-                                                                                                  .Where(cd => cd.Client.Id == clientViewModel.Id)
-                                                                                                  .ToListAsync();
-                _context.Clients_HealthInsurances.RemoveRange(listHealthInsurance_to_delete);
+                    //delete all client Health Insurance of this client
+                    IEnumerable<Client_HealthInsurance> listHealthInsurance_to_delete = await _context.Clients_HealthInsurances
+                                                                                                      .Where(cd => cd.Client.Id == clientViewModel.Id)
+                                                                                                      .ToListAsync();
+                    _context.Clients_HealthInsurances.RemoveRange(listHealthInsurance_to_delete);
 
-                //update Client_HealthInsurance table with the news HealthInsuranceTemp
-                IQueryable <HealthInsuranceTempEntity> listHealthInsuranceTemp = _context.HealthInsuranceTemp
-                                                                                         .Where(d => d.UserName == user_logged.UserName
-                                                                                            && d.IdClient == clientEntity.Id);
-                Client_HealthInsurance clientHealthInsurance ;
-                foreach (HealthInsuranceTempEntity item in listHealthInsuranceTemp)
-                {
-                    clientHealthInsurance = new Client_HealthInsurance
+                    //update Client_HealthInsurance table with the news HealthInsuranceTemp
+                    IQueryable<HealthInsuranceTempEntity> listHealthInsuranceTemp = _context.HealthInsuranceTemp
+                                                                                             .Where(d => d.UserName == user_logged.UserName
+                                                                                                && d.IdClient == clientEntity.Id);
+                    Client_HealthInsurance clientHealthInsurance;
+                    foreach (HealthInsuranceTempEntity item in listHealthInsuranceTemp)
                     {
-                        Client = clientEntity,
-                        HealthInsurance = await _context.HealthInsurances.FirstOrDefaultAsync(d => d.Name == item.Name),
-                        Active = item.Active,
-                        ApprovedDate = item.ApprovedDate,
-                        DurationTime = item.DurationTime,
-                        MemberId = item.MemberId,
-                        Units = item.Units,
-                        AuthorizationNumber = item.AuthorizationNumber,
-                        Agency = item.Agency,
-                        ExpiredDate = item.ExpiredDate,
-                        EffectiveDate = item.EffectiveDate,
-                        EndCoverageDate = item.EndCoverageDate,
-                        InsuranceType = item.InsuranceType,
-                        InsurancePlan = item.InsurancePlan,
-                        InsuranceCoverage = item.InsuranceCoverage
+                        clientHealthInsurance = new Client_HealthInsurance
+                        {
+                            Client = clientEntity,
+                            HealthInsurance = await _context.HealthInsurances.FirstOrDefaultAsync(d => d.Name == item.Name),
+                            Active = item.Active,
+                            ApprovedDate = item.ApprovedDate,
+                            DurationTime = item.DurationTime,
+                            MemberId = item.MemberId,
+                            Units = item.Units,
+                            AuthorizationNumber = item.AuthorizationNumber,
+                            Agency = item.Agency,
+                            ExpiredDate = item.ExpiredDate,
+                            EffectiveDate = item.EffectiveDate,
+                            EndCoverageDate = item.EndCoverageDate,
+                            InsuranceType = item.InsuranceType,
+                            InsurancePlan = item.InsurancePlan,
+                            InsuranceCoverage = item.InsuranceCoverage
 
-                    };
-                    _context.Add(clientHealthInsurance);
-                    //_context.HealthInsuranceTemp.Remove(item);
+                        };
+                        _context.Add(clientHealthInsurance);
+                        //_context.HealthInsuranceTemp.Remove(item);
+                    }
                 }
-
+               
                 try
                 {
                     await _context.SaveChangesAsync();
@@ -963,7 +1151,7 @@ namespace KyoS.Web.Controllers
                 {
                     if (ex.InnerException.Message.Contains("duplicate"))
                     {
-                        ModelState.AddModelError(string.Empty, $"Already exists the client: {clientEntity.Name}");
+                        ModelState.AddModelError(string.Empty, $"Already exists the client: {clientViewModel.Name}");
                     }
                     else
                     {
@@ -5974,5 +6162,7 @@ namespace KyoS.Web.Controllers
                 return View(new LegalGuardianViewModel());
             }
         }
+
+       
     }
 }

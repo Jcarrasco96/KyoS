@@ -160,5 +160,6 @@ namespace KyoS.Web.Models
         [Display(Name = "Documents Assistant")]
         public int IdDocumentsAssistant { get; set; }
         public IEnumerable<SelectListItem> DocumentsAssistants { get; set; }
+        public string TCMName { get; set; }
     }
 }

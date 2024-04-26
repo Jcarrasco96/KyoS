@@ -1133,7 +1133,7 @@ namespace KyoS.Web.Controllers
             TCMReferralFormViewModel salida;
             
             Client_Diagnostic client_Diagnostic = new Client_Diagnostic();
-            if (tcmclient.Client.Clients_Diagnostics != null)
+            if (tcmclient.Client.Clients_Diagnostics.Count() > 0)
             {
                 client_Diagnostic = tcmclient.Client
                                              .Clients_Diagnostics
@@ -1206,8 +1206,8 @@ namespace KyoS.Web.Controllers
                         LegalGuardianName = legalGuardian.Name,
                         LegalGuardianPhone = legalGuardian.Telephone,
                         //Diagnostic
-                        Dx = client_Diagnostic.Diagnostic.Code,
-                        Dx_Description = client_Diagnostic.Diagnostic.Description,
+                        Dx = (client_Diagnostic.Diagnostic != null)? client_Diagnostic.Diagnostic.Code : string.Empty,
+                        Dx_Description = (client_Diagnostic.Diagnostic != null) ? client_Diagnostic.Diagnostic.Description : string.Empty,
                         //Referred
                         ReferredBy_Name = Referred.Name,
                         ReferredBy_Phone = Referred.Telephone,

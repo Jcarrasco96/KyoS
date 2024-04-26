@@ -702,7 +702,7 @@ namespace KyoS.Web.Controllers
                     if (entity.TcmClient.Client.Clients_HealthInsurances.Count > 0)
                     {
                         model.HealthMemberId = entity.TcmClient.Client.Clients_HealthInsurances.ElementAtOrDefault(0).MemberId;
-                        model.IdHealthPlan = entity.TcmClient.Client.Clients_HealthInsurances.ElementAtOrDefault(0).HealthInsurance.Id;
+                        model.IdHealthPlan = entity.TcmClient.Client.Clients_HealthInsurances.FirstOrDefault(n => n.Active == true).HealthInsurance.Id;
 
                     }
                     if (model.TcmClient.Client.Clients_Diagnostics.Count() == 0)
@@ -717,11 +717,8 @@ namespace KyoS.Web.Controllers
                     model.IdRelationshipLG = Convert.ToInt32(entity.TcmClient.Client.RelationShipOfLegalGuardian);
                     model.RelationshipsLG = _combosHelper.GetComboRelationships();
 
-                    model.IdRelationshipEC = Convert.ToInt32(entity.TcmClient.Client.RelationShipOfLegalGuardian);
+                    model.IdRelationshipEC = Convert.ToInt32(entity.TcmClient.Client.RelationShipOfEmergencyContact);
                     model.RelationshipsEC = _combosHelper.GetComboRelationships();
-
-                    model.IdRelationshipEC = Convert.ToInt32(entity.TcmClient.Client.RelationShipOfLegalGuardian);
-                    model.HealthPlan = _combosHelper.GetComboRelationships();
 
                     model.HealthPlan = _combosHelper.GetComboActiveInsurancesByClinic(user_logged.Clinic.Id);
 
