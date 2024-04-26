@@ -6163,6 +6163,132 @@ namespace KyoS.Web.Controllers
             }
         }
 
-       
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> ClientWithoutCase(int idError = 0)
+        {
+            UserEntity user_logged = await _context.Users
+                                                   .Include(u => u.Clinic)
+                                                   .ThenInclude(c => c.Setting)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || (!user_logged.Clinic.Setting.MentalHealthClinic && !user_logged.Clinic.Setting.TCMClinic))
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+            if (idError == 1) //Imposible to delete
+            {
+                ViewBag.Delete = "N";
+            }
+            if (User.IsInRole("Manager") )
+            {
+                List<ClientEntity> clients_Total = _context.Clients
+                                                           .Include(n => n.Clients_HealthInsurances)
+                                                           .ThenInclude(n => n.HealthInsurance)
+                                                           .Where(c => (c.Clinic.Id == user_logged.Clinic.Id
+                                                                     && c.Status == StatusType.Open
+                                                                     && c.OnlyTCM == true))
+                                                           .OrderBy(c => c.Name)
+                                                           .ToList();
+
+                List<TCMClientEntity> clients_Open = _context.TCMClient
+                                                             .Include(n => n.Client)
+                                                             .Where(c => (c.Client.Clinic.Id == user_logged.Clinic.Id
+                                                                && c.Status == StatusType.Open))
+                                                             .ToList();
+
+                foreach (var item in clients_Open)
+                {
+                    if (item.Client != null)
+                    {
+                        if (clients_Total.Exists(c => c.Id == item.Client.Id))
+                            clients_Total.Remove(item.Client);
+                    }
+                }
+                return View(clients_Total);
+            }
+            
+
+            return RedirectToAction("NotAuthorized", "Account");
+        }
+
+
+        public async Task<IActionResult> EditDxTempClient(int id = 0)
+        {
+            UserEntity user_logged = await _context.Users
+                                                   .Include(u => u.Clinic)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            if (id != 0)
+            {
+                DiagnosticTempEntity DxTempEntity = await _context.DiagnosticsTemp
+                                                                  .FirstOrDefaultAsync(u => u.Id == id);
+
+                DiagnosticTempViewModel model = new DiagnosticTempViewModel
+                {
+                   Code = DxTempEntity.Code,
+                   DateIdentify = DxTempEntity.DateIdentify,
+                   Description = DxTempEntity.Description,
+                   IdClient = DxTempEntity.IdClient,
+                   IdDiagnostic = _context.Diagnostics.FirstOrDefault(n => n.Code == DxTempEntity.Code && n.Description == DxTempEntity.Description).Id,
+                   Prescriber = (DxTempEntity.Prescriber != null)? DxTempEntity.Prescriber : string.Empty,
+                   Principal = DxTempEntity.Principal,
+                   Diagnostics = _combosHelper.GetComboDiagnosticsByClinic(user_logged.Id),
+                   UserName = DxTempEntity.UserName,
+                   Active = DxTempEntity.Active,
+                   Id = id
+
+                };
+                return View(model);
+            }
+
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditDxTempClient(int id, DiagnosticTempViewModel model)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (ModelState.IsValid)
+            {
+                if (id != 0)
+                {
+                    DiagnosticEntity diagnostic = await _context.Diagnostics.FirstOrDefaultAsync(d => d.Id == model.IdDiagnostic);
+                    DiagnosticTempEntity dxTemp = new DiagnosticTempEntity
+                    {
+                        Id = model.Id,
+                        Active = model.Active,
+                        Code = diagnostic.Code,
+                        Description = diagnostic.Description,
+                        DateIdentify = model.DateIdentify,
+                        Prescriber = model.Prescriber,
+                        Principal = model.Principal,
+                        IdClient = model.IdClient,
+                        UserName = model.UserName
+                        
+                        
+                    };
+                    _context.Update(dxTemp);
+                    await _context.SaveChangesAsync();
+
+                    List<DiagnosticTempEntity> list = await _context.DiagnosticsTemp
+                                                                    .Where(n => n.IdClient == model.IdClient
+                                                                             && n.UserName == model.UserName)
+                                                                    .ToListAsync();
+
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDiagnostic", list) });
+
+                }
+                return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDiagnostic", _context.DiagnosticsTemp.Where(m => m.IdClient == model.IdClient && m.UserName == model.UserName).ToList()) });
+            }
+
+
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditDxTempClient", model) });
+        }
+
     }
 }

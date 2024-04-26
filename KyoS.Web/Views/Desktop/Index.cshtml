@@ -1816,8 +1816,23 @@
                         <div class="col-md-12">
                             &nbsp;
                         </div>
-                        <div class="col-md-1">
-                            &nbsp;
+                        <div class="col-md-2">
+                            @if (ViewBag.ClientWithoutCase == 0)
+                            {
+                                <div class="thumbnail list-group-item list-group-item-text">
+                                    <h4 style="align-content:end;"><i class="icon-exclamation" style="padding-right: 10px !important;"></i>Client without<br>&nbsp;&nbsp;&nbsp;TCM</h4>
+                                        <span class="message-counter-cero">@ViewBag.ClientWithoutCase</span>
+                                </div>
+                            }
+                            else
+                            {
+                                <a style="text-decoration: none;" asp-controller="Clients" asp-action="ClientWithoutCase" role="button">
+                                    <div class="thumbnail list-group-item list-group-item-danger">
+                                        <h4 style="align-content:end;"><i class="icon-exclamation" style="padding-right: 10px !important;"></i>Client without<br>&nbsp;&nbsp;&nbsp;TCM</h4>
+                                            <span class="message-counter">@ViewBag.ClientWithoutCase</span>
+                                    </div>
+                                </a>
+                            }
                         </div>
                         <div class="col-md-2">
                             @if (ViewBag.NotStartedCases == 0)
@@ -1908,9 +1923,6 @@
                                     </div>
                                 </a>
                             }
-                        </div>
-                        <div class="col-md-1">
-                            &nbsp;
                         </div>
                         <div class="col-md-12">
                             &nbsp;
@@ -2187,8 +2199,23 @@
                             <div class="col-md-12">
                                 &nbsp;
                             </div>
-                            <div class="col-md-1">
-                                &nbsp;
+                            <div class="col-md-2">
+                                @if (ViewBag.ClientWithoutCase == 0)
+                                {
+                                    <div class="thumbnail list-group-item list-group-item-text">
+                                        <h4 style="align-content:end;"><i class="icon-exclamation" style="padding-right: 10px !important;"></i>Client without<br>&nbsp;&nbsp;&nbsp;TCM</h4>
+                                        <span class="message-counter-cero">@ViewBag.ClientWithoutCase</span>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <a style="text-decoration: none;" asp-controller="Clients" asp-action="ClientWithoutCase" role="button">
+                                        <div class="thumbnail list-group-item list-group-item-danger">
+                                            <h4 style="align-content:end;"><i class="icon-exclamation" style="padding-right: 10px !important;"></i>Client without<br>&nbsp;&nbsp;&nbsp;TCM</h4>
+                                            <span class="message-counter">@ViewBag.ClientWithoutCase</span>
+                                        </div>
+                                    </a>
+                                }
                             </div>
                             <div class="col-md-2">
                                 @if (ViewBag.NotStartedCases == 0)
@@ -2279,9 +2306,6 @@
                                         </div>
                                     </a>
                                 }
-                            </div>
-                            <div class="col-md-1">
-                                &nbsp;
                             </div>
                             <div class="col-md-12">
                                 &nbsp;

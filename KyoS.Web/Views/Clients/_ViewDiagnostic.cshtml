@@ -59,10 +59,12 @@
                                     <td align="right">
                                         @if (User.IsInRole("Manager"))
                                         {
+                                            <a onclick="showInPopup('@Url.Action("EditDxTempClient", "Clients", new { id = item.Id }, Context.Request.Scheme)','Edit Diagnostics')" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i></a>
                                             <button type="button" onclick="DeleteDiagnosticTemp(@item.Id)" class="btn btn-danger deleteItem" title="Delete diagnostic"><i class="glyphicon glyphicon-trash"></i></button>
                                         }
                                         else
                                         {
+                                            <a onclick="showInPopup('@Url.Action("EditDxTempClient", "Clients", new { id = item.Id }, Context.Request.Scheme)','Edit Diagnostics')" class="btn btn-warning"><i class="glyphicon glyphicon-pencil disabled"></i></a>
                                             <button type="button" onclick="DeleteDiagnosticTemp(@item.Id)" class="btn btn-danger deleteItem disabled" title="Delete diagnostic"><i class="glyphicon glyphicon-trash"></i></button>
                                         }
                                     </td>

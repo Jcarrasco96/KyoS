@@ -7,7 +7,6 @@
     <div class="col-md-12">
         <form asp-action="EditHealthInsuranceClient" asp-route-id="@Model.Id" onsubmit="return jQueryAjaxPostHealthInsurance(this);">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Name" />
             <input type="hidden" asp-for="IdClient" />
             <input type="hidden" asp-for="Id" />
             <input type="hidden" asp-for="Name" />

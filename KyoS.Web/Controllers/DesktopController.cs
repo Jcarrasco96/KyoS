@@ -473,11 +473,12 @@ namespace KyoS.Web.Controllers
                     Task<int> Supervisor = TCMSupervisor(user_logged.Clinic.Id);
                     Task<int> Billing = TCMBilling(user_logged.Clinic.Id);
                     Task<int> ClientAuthorizationTCM = TCMClientAuthorization(user_logged.Clinic.Id);
+                    Task<int> ClientWithoutCase = TCMClientWithoutCase(user_logged.Clinic.Id);
 
 
                     await Task.WhenAll(NotStartedCases, OpenBinder, ServicePlanPending, AdendumPending, ServicePlanReviewPending,
                                         DischargePending, CaseManager, FarsPending, AssesmentPending, NotesEdition,
-                                        NotesPending, NotesApproved, NotesWithReview, Supervisor, Billing, ClientAuthorizationTCM);
+                                        NotesPending, NotesApproved, NotesWithReview, Supervisor, Billing, ClientAuthorizationTCM, ClientWithoutCase);
 
                     ViewBag.NotStartedCases = await NotStartedCases;
                     ViewBag.OpenBinder = await OpenBinder;
@@ -495,6 +496,7 @@ namespace KyoS.Web.Controllers
                     ViewBag.TCMSupervisor = await Supervisor;
                     ViewBag.Billing = await Billing;
                     ViewBag.TCMClientAuthorization = await ClientAuthorizationTCM;
+                    ViewBag.ClientWithoutCase = await ClientWithoutCase;
                 }
             }
             if (User.IsInRole("Admin"))
@@ -1447,6 +1449,36 @@ namespace KyoS.Web.Controllers
                                                || n.Client.Clients_HealthInsurances.Where(m => m.Active == true
                                                                 && m.Agency == ServiceAgency.TCM
                                                                 && m.ExpiredDate > DateTime.Today.AddDays(30)).Count() == 0));
+            }
+        }
+
+        private async Task<int> TCMClientWithoutCase(int clinicId)
+        {
+            var options = new DbContextOptionsBuilder<DataContext>().UseSqlServer(Configuration.GetConnectionString("KyoSConnection")).Options;
+            using (DataContext db = new DataContext(options))
+            {
+                List<ClientEntity> clients_Total = await _context.Clients
+                                                                 .Where(c => (c.Clinic.Id == clinicId
+                                                                           && c.Status == StatusType.Open
+                                                                           && c.OnlyTCM == true))
+                                                                 .OrderBy(c => c.Name)
+                                                                 .ToListAsync();
+                List<TCMClientEntity> clients_Open = await _context.TCMClient
+                                                                   .Include(n => n.Client)
+                                                                   .Where(c => (c.Client.Clinic.Id == clinicId
+                                                                             && c.Status == StatusType.Open))
+                                                                   .ToListAsync();
+
+                foreach (var item in clients_Open)
+                {
+                    if (item.Client != null)
+                    {
+                        if (clients_Total.Exists(c => c.Id == item.Client.Id))
+                            clients_Total.Remove(item.Client);
+                    }
+                }
+               
+                return (clients_Total.Count());
             }
         }
     }
