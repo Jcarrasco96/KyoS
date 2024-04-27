@@ -2832,6 +2832,125 @@ namespace KyoS.Web.Controllers
                     return Json(false);
                 }
             }
-        }        
+        }
+
+
+        [Authorize(Roles = "Supervisor, Documents_Assistant")]
+        public IActionResult DeleteMedicaBehavioral(int id = 0)
+        {
+            if (id > 0)
+            {
+                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                       .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                DeleteViewModel model = new DeleteViewModel
+                {
+                    Id_Element = id,
+                    Desciption = "Do you want to delete this record?"
+
+                };
+                return View(model);
+            }
+            else
+            {
+                //Edit
+                //return View(new Client_DiagnosticViewModel());
+                return null;
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Supervisor, Documents_Assistant")]
+        public async Task<IActionResult> DeleteMedicaBehavioral(DeleteViewModel model)
+        {
+            Bio_BehavioralHistoryEntity entity = await _context.Bio_BehavioralHistory
+                                                               .Include(n => n.Client)
+                                                               .FirstOrDefaultAsync(n => n.Id == model.Id_Element);
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Bio_BehavioralHistory.Remove(entity);
+                    await _context.SaveChangesAsync();
+
+                    List<Bio_BehavioralHistoryEntity> bio = await _context.Bio_BehavioralHistory
+                                                                          .Include(g => g.Client)
+                                                                          .Where(g => g.Client.Id == entity.Client.Id)
+                                                                          .ToListAsync();
+
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewBehavioralHealth", bio) });
+                }
+                catch (Exception)
+                {
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewBehavioralHealth", _context.Bio_BehavioralHistory.Include(n => n.Client).Where(n => n.Client.Id == entity.Client.Id).ToList()) });
+                }
+
+
+            }
+
+            return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewBehavioralHealth", _context.Bio_BehavioralHistory.Include(n => n.Client).Where(n => n.Client.Id == entity.Client.Id).ToList()) });
+        }
+
+        [Authorize(Roles = "Supervisor, Documents_Assistant")]
+        public IActionResult DeleteMedication1(int id = 0)
+        {
+            if (id > 0)
+            {
+                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                       .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                DeleteViewModel model = new DeleteViewModel
+                {
+                    Id_Element = id,
+                    Desciption = "Do you want to delete this record?"
+
+                };
+                return View(model);
+            }
+            else
+            {
+                //Edit
+                //return View(new Client_DiagnosticViewModel());
+                return null;
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Supervisor, Documents_Assistant")]
+        public async Task<IActionResult> DeleteMedication1(DeleteViewModel model)
+        {
+            MedicationEntity entity = await _context.Medication
+                                                    .Include(n => n.Client)
+                                                    .FirstOrDefaultAsync(n => n.Id == model.Id_Element);
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Medication.Remove(entity);
+                    await _context.SaveChangesAsync();
+
+                    List<MedicationEntity> salida = await _context.Medication
+                                                                  .Include(g => g.Client)
+                                                                  .Where(g => g.Client.Id == entity.Client.Id)
+                                                                  .ToListAsync();
+
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewMedication", salida) });
+                }
+                catch (Exception)
+                {
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewMedication", _context.Medication.Include(n => n.Client).Where(n => n.Client.Id == entity.Client.Id).ToList()) });
+                }
+
+
+            }
+
+            return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewMedication", _context.Medication.Include(n => n.Client).Where(n => n.Client.Id == entity.Client.Id).ToList()) });
+        }
+
+
     }
 }
