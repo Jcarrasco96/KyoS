@@ -1,6 +1,7 @@
 ﻿using DocumentFormat.OpenXml.Drawing.Charts;
 using DocumentFormat.OpenXml.Office2010.Excel;
 using DocumentFormat.OpenXml.Office2016.Excel;
+using DocumentFormat.OpenXml.Vml.Office;
 using KyoS.Common.Enums;
 using KyoS.Web.Data;
 using KyoS.Web.Data.Entities;
@@ -3857,5 +3858,530 @@ namespace KyoS.Web.Controllers
                 }
             }
         }
+
+        [Authorize(Roles = "CaseManager")]
+        public IActionResult DeleteIndAgency(int id = 0)
+        {
+            if (id > 0)
+            {
+                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                DeleteViewModel model = new DeleteViewModel
+                {
+                    Id_Element = id,
+                    Desciption = "Do you want to delete this record?"
+
+                };
+                return View(model);
+            }
+            else
+            {
+                //Edit
+                //return View(new Client_DiagnosticViewModel());
+                return null;
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "CaseManager")]
+        public async Task<IActionResult> DeleteIndAgency(DeleteViewModel model)
+        {
+            TCMAssessmentIndividualAgencyEntity entity = await _context.TCMAssessmentIndividualAgency
+                                                                       .Include(n => n.TcmAssessment)
+                                                                       .FirstOrDefaultAsync(n => n.Id == model.Id_Element);
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.TCMAssessmentIndividualAgency.Remove(entity);
+                    await _context.SaveChangesAsync();
+
+                  
+                    List<TCMAssessmentIndividualAgencyEntity> salida = await _context.TCMAssessmentIndividualAgency
+                                                                                .Include(g => g.TcmAssessment)
+                                                                                .Where(g => g.TcmAssessment.Id == entity.TcmAssessment.Id)
+                                                                                .ToListAsync();
+
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewIndividualAgency", salida) });
+                }
+                catch (Exception)
+                {
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewIndividualAgency", _context.TCMAssessmentIndividualAgency.Include(n => n.TcmAssessment).Where(n => n.TcmAssessment.Id == entity.TcmAssessment.Id).ToList()) });
+                }
+
+               
+            }
+
+            return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewIndividualAgency", _context.TCMAssessmentIndividualAgency.Include(n => n.TcmAssessment).Where(n => n.TcmAssessment.Id == entity.TcmAssessment.Id).ToList()) });
+        }
+
+        [Authorize(Roles = "CaseManager")]
+        public IActionResult DeleteHouseComposition(int id = 0)
+        {
+            if (id > 0)
+            {
+                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                DeleteViewModel model = new DeleteViewModel
+                {
+                    Id_Element = id,
+                    Desciption = "Do you want to delete this record?"
+
+                };
+                return View(model);
+            }
+            else
+            {
+                //Edit
+                //return View(new Client_DiagnosticViewModel());
+                return null;
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "CaseManager")]
+        public async Task<IActionResult> DeleteHouseComposition(DeleteViewModel model)
+        {
+            TCMAssessmentHouseCompositionEntity entity = await _context.TCMAssessmentHouseComposition
+                                                                       .Include(n => n.TcmAssessment)
+                                                                       .FirstOrDefaultAsync(n => n.Id == model.Id_Element);
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.TCMAssessmentHouseComposition.Remove(entity);
+                    await _context.SaveChangesAsync();
+
+                    List<TCMAssessmentHouseCompositionEntity> salida = await _context.TCMAssessmentHouseComposition
+                                                                                     .Include(g => g.TcmAssessment)
+                                                                                     .Where(g => g.TcmAssessment.Id == entity.TcmAssessment.Id)
+                                                                                     .ToListAsync();
+
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewHouseComposition", salida) });
+                }
+                catch (Exception)
+                {
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewHouseComposition", _context.TCMAssessmentHouseComposition.Include(n => n.TcmAssessment).Where(n => n.TcmAssessment.Id == entity.TcmAssessment.Id).ToList()) });
+                }
+
+
+            }
+
+            return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewHouseComposition", _context.TCMAssessmentHouseComposition.Include(n => n.TcmAssessment).Where(n => n.TcmAssessment.Id == entity.TcmAssessment.Id).ToList()) });
+        }
+
+        [Authorize(Roles = "CaseManager")]
+        public IActionResult DeletePastCurrentService(int id = 0)
+        {
+            if (id > 0)
+            {
+                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                DeleteViewModel model = new DeleteViewModel
+                {
+                    Id_Element = id,
+                    Desciption = "Do you want to delete this record?"
+
+                };
+                return View(model);
+            }
+            else
+            {
+                //Edit
+                //return View(new Client_DiagnosticViewModel());
+                return null;
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "CaseManager")]
+        public async Task<IActionResult> DeletePastCurrentService(DeleteViewModel model)
+        {
+            TCMAssessmentPastCurrentServiceEntity entity = await _context.TCMAssessmentPastCurrentService
+                                                                         .Include(n => n.TcmAssessment)
+                                                                         .FirstOrDefaultAsync(n => n.Id == model.Id_Element);
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.TCMAssessmentPastCurrentService.Remove(entity);
+                    await _context.SaveChangesAsync();
+
+                    List<TCMAssessmentPastCurrentServiceEntity> salida = await _context.TCMAssessmentPastCurrentService
+                                                                                       .Include(g => g.TcmAssessment)
+                                                                                       .Where(g => g.TcmAssessment.Id == entity.TcmAssessment.Id)
+                                                                                       .ToListAsync();
+
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewPastCurrent", salida) });
+                }
+                catch (Exception)
+                {
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewPastCurrent", _context.TCMAssessmentPastCurrentService.Include(n => n.TcmAssessment).Where(n => n.TcmAssessment.Id == entity.TcmAssessment.Id).ToList()) });
+                }
+
+
+            }
+
+            return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewPastCurrent", _context.TCMAssessmentPastCurrentService.Include(n => n.TcmAssessment).Where(n => n.TcmAssessment.Id == entity.TcmAssessment.Id).ToList()) });
+        }
+
+        [Authorize(Roles = "CaseManager")]
+        public IActionResult DeleteMedication(int id = 0)
+        {
+            if (id > 0)
+            {
+                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                DeleteViewModel model = new DeleteViewModel
+                {
+                    Id_Element = id,
+                    Desciption = "Do you want to delete this record?"
+
+                };
+                return View(model);
+            }
+            else
+            {
+                //Edit
+                //return View(new Client_DiagnosticViewModel());
+                return null;
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "CaseManager")]
+        public async Task<IActionResult> DeleteMedication(DeleteViewModel model)
+        {
+            TCMAssessmentMedicationEntity entity = await _context.TCMAssessmentMedication
+                                                                 .Include(n => n.TcmAssessment)
+                                                                 .FirstOrDefaultAsync(n => n.Id == model.Id_Element);
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.TCMAssessmentMedication.Remove(entity);
+                    await _context.SaveChangesAsync();
+
+                    List<TCMAssessmentMedicationEntity> salida = await _context.TCMAssessmentMedication
+                                                                               .Include(g => g.TcmAssessment)
+                                                                               .Where(g => g.TcmAssessment.Id == entity.TcmAssessment.Id)
+                                                                               .ToListAsync();
+
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewMedication", salida) });
+                }
+                catch (Exception)
+                {
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewMedication", _context.TCMAssessmentMedication.Include(n => n.TcmAssessment).Where(n => n.TcmAssessment.Id == entity.TcmAssessment.Id).ToList()) });
+                }
+
+
+            }
+
+            return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewMedication", _context.TCMAssessmentMedication.Include(n => n.TcmAssessment).Where(n => n.TcmAssessment.Id == entity.TcmAssessment.Id).ToList()) });
+        }
+
+        [Authorize(Roles = "CaseManager")]
+        public IActionResult DeleteHospital(int id = 0)
+        {
+            if (id > 0)
+            {
+                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                       .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                DeleteViewModel model = new DeleteViewModel
+                {
+                    Id_Element = id,
+                    Desciption = "Do you want to delete this record?"
+
+                };
+                return View(model);
+            }
+            else
+            {
+                //Edit
+                //return View(new Client_DiagnosticViewModel());
+                return null;
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "CaseManager")]
+        public async Task<IActionResult> DeleteHospital(DeleteViewModel model)
+        {
+            TCMAssessmentHospitalEntity entity = await _context.TCMAssessmentHospital
+                                                               .Include(n => n.TcmAssessment)
+                                                               .FirstOrDefaultAsync(n => n.Id == model.Id_Element);
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.TCMAssessmentHospital.Remove(entity);
+                    await _context.SaveChangesAsync();
+
+                    List<TCMAssessmentHospitalEntity> salida = await _context.TCMAssessmentHospital
+                                                                             .Include(g => g.TcmAssessment)
+                                                                             .Where(g => g.TcmAssessment.Id == entity.TcmAssessment.Id)
+                                                                             .ToListAsync();
+
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewHospital", salida) });
+                }
+                catch (Exception)
+                {
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewHospital", _context.TCMAssessmentHospital.Include(n => n.TcmAssessment).Where(n => n.TcmAssessment.Id == entity.TcmAssessment.Id).ToList()) });
+                }
+
+
+            }
+
+            return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewHospital", _context.TCMAssessmentHospital.Include(n => n.TcmAssessment).Where(n => n.TcmAssessment.Id == entity.TcmAssessment.Id).ToList()) });
+        }
+
+        [Authorize(Roles = "CaseManager")]
+        public IActionResult DeleteDrug(int id = 0)
+        {
+            if (id > 0)
+            {
+                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                       .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                DeleteViewModel model = new DeleteViewModel
+                {
+                    Id_Element = id,
+                    Desciption = "Do you want to delete this record?"
+
+                };
+                return View(model);
+            }
+            else
+            {
+                //Edit
+                //return View(new Client_DiagnosticViewModel());
+                return null;
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "CaseManager")]
+        public async Task<IActionResult> DeleteDrug(DeleteViewModel model)
+        {
+            TCMAssessmentDrugEntity entity = await _context.TCMAssessmentDrug
+                                                           .Include(n => n.TcmAssessment)
+                                                           .FirstOrDefaultAsync(n => n.Id == model.Id_Element);
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.TCMAssessmentDrug.Remove(entity);
+                    await _context.SaveChangesAsync();
+
+                    List<TCMAssessmentDrugEntity> salida = await _context.TCMAssessmentDrug
+                                                                         .Include(g => g.TcmAssessment)
+                                                                         .Where(g => g.TcmAssessment.Id == entity.TcmAssessment.Id)
+                                                                         .ToListAsync();
+
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDrug", salida) });
+                }
+                catch (Exception)
+                {
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDrug", _context.TCMAssessmentDrug.Include(n => n.TcmAssessment).Where(n => n.TcmAssessment.Id == entity.TcmAssessment.Id).ToList()) });
+                }
+
+
+            }
+
+            return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewDrug", _context.TCMAssessmentDrug.Include(n => n.TcmAssessment).Where(n => n.TcmAssessment.Id == entity.TcmAssessment.Id).ToList()) });
+        }
+
+        [Authorize(Roles = "CaseManager")]
+        public IActionResult DeleteMedicalProblem(int id = 0)
+        {
+            if (id > 0)
+            {
+                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                       .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                DeleteViewModel model = new DeleteViewModel
+                {
+                    Id_Element = id,
+                    Desciption = "Do you want to delete this record?"
+
+                };
+                return View(model);
+            }
+            else
+            {
+                //Edit
+                //return View(new Client_DiagnosticViewModel());
+                return null;
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "CaseManager")]
+        public async Task<IActionResult> DeleteMedicalProblem(DeleteViewModel model)
+        {
+            TCMAssessmentMedicalProblemEntity entity = await _context.TCMAssessmentMedicalProblem
+                                                                     .Include(n => n.TcmAssessment)
+                                                                     .FirstOrDefaultAsync(n => n.Id == model.Id_Element);
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.TCMAssessmentMedicalProblem.Remove(entity);
+                    await _context.SaveChangesAsync();
+
+                    List<TCMAssessmentMedicalProblemEntity> salida = await _context.TCMAssessmentMedicalProblem
+                                                                                   .Include(g => g.TcmAssessment)
+                                                                                   .Where(g => g.TcmAssessment.Id == entity.TcmAssessment.Id)
+                                                                                   .ToListAsync();
+
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewMedicalProblem", salida) });
+                }
+                catch (Exception)
+                {
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewMedicalProblem", _context.TCMAssessmentMedicalProblem.Include(n => n.TcmAssessment).Where(n => n.TcmAssessment.Id == entity.TcmAssessment.Id).ToList()) });
+                }
+
+
+            }
+
+            return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewMedicalProblem", _context.TCMAssessmentMedicalProblem.Include(n => n.TcmAssessment).Where(n => n.TcmAssessment.Id == entity.TcmAssessment.Id).ToList()) });
+        }
+
+        [Authorize(Roles = "CaseManager")]
+        public IActionResult DeleteSurgery(int id = 0)
+        {
+            if (id > 0)
+            {
+                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                       .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                DeleteViewModel model = new DeleteViewModel
+                {
+                    Id_Element = id,
+                    Desciption = "Do you want to delete this record?"
+
+                };
+                return View(model);
+            }
+            else
+            {
+                //Edit
+                //return View(new Client_DiagnosticViewModel());
+                return null;
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "CaseManager")]
+        public async Task<IActionResult> DeleteSurgery(DeleteViewModel model)
+        {
+            TCMAssessmentSurgeryEntity entity = await _context.TCMAssessmentSurgery
+                                                                     .Include(n => n.TcmAssessment)
+                                                                     .FirstOrDefaultAsync(n => n.Id == model.Id_Element);
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.TCMAssessmentSurgery.Remove(entity);
+                    await _context.SaveChangesAsync();
+
+                    List<TCMAssessmentSurgeryEntity> salida = await _context.TCMAssessmentSurgery
+                                                                            .Include(g => g.TcmAssessment)
+                                                                            .Where(g => g.TcmAssessment.Id == entity.TcmAssessment.Id)
+                                                                            .ToListAsync();
+
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewSurgery", salida) });
+                }
+                catch (Exception)
+                {
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewSurgery", _context.TCMAssessmentSurgery.Include(n => n.TcmAssessment).Where(n => n.TcmAssessment.Id == entity.TcmAssessment.Id).ToList()) });
+                }
+
+
+            }
+
+            return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewSurgery", _context.TCMAssessmentSurgery.Include(n => n.TcmAssessment).Where(n => n.TcmAssessment.Id == entity.TcmAssessment.Id).ToList()) });
+        }
+
+        [Authorize(Roles = "CaseManager")]
+        public IActionResult DeleteReferred1(int id = 0)
+        {
+            if (id > 0)
+            {
+                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                       .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                DeleteViewModel model = new DeleteViewModel
+                {
+                    Id_Element = id,
+                    Desciption = "Do you want to delete this record?"
+
+                };
+                return View(model);
+            }
+            else
+            {
+                //Edit
+                //return View(new Client_DiagnosticViewModel());
+                return null;
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "CaseManager")]
+        public async Task<IActionResult> DeleteReferred1(DeleteViewModel model)
+        {
+            Client_Referred entity = await _context.Clients_Referreds
+                                                   .Include(n => n.Client)
+                                                   .Include(n => n.Referred)
+                                                   .FirstOrDefaultAsync(n => n.Id == model.Id_Element);
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Clients_Referreds.Remove(entity);
+                    await _context.SaveChangesAsync();
+
+                    List<Client_Referred> clientList = await _context.Clients_Referreds
+                                                                     .Include(m => m.Referred)
+                                                                     .Where(n => n.Client.Id == entity.Client.Id && n.Service == ServiceAgency.TCM)
+                                                                     .ToListAsync();
+
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewReferred", clientList) });
+                }
+                catch (Exception)
+                {
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewReferred", _context.Clients_Referreds.Include(n => n.Referred).Where(n => n.Client.Id == entity.Client.Id && n.Service == ServiceAgency.TCM).ToList()) });
+                }
+
+
+            }
+
+            return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewReferred", _context.Clients_Referreds.Include(n => n.Referred).Where(n => n.Client.Id == entity.Client.Id && n.Service == ServiceAgency.TCM).ToList()) });
+        }
+
     }
 }
