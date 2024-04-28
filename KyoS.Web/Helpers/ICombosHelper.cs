@@ -119,5 +119,6 @@ namespace KyoS.Web.Helpers
         IEnumerable<SelectListItem> GetComboTCMDomainName();
 
         IEnumerable<SelectListItem> GetComboInsuranceCoverageType();
+        IEnumerable<SelectListItem> GetComboClientsByTCM(string userName, int idClinic, bool blank = false);
     }
 }

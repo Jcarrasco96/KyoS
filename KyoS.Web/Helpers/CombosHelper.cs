@@ -2789,5 +2789,47 @@ namespace KyoS.Web.Helpers
 
             return list;
         }
+
+        public IEnumerable<SelectListItem> GetComboClientsByTCM(string userName, int idClinic, bool blank)
+        {
+            List<TCMClientEntity> TCMClient = _context.TCMClient
+                                                      .Include(n => n.Client)
+                                                      .Where(c => (c.Client.Clinic.Id == idClinic
+                                                                && c.Casemanager.LinkedUser == userName))
+                                                      .OrderBy(c => c.Client.Name)
+                                                      .ToList();
+            List<ClientEntity> clientList = new List<ClientEntity>();
+            foreach (var item in TCMClient)
+            {
+                clientList.Add(item.Client);
+            }
+                                                      
+
+            List<SelectListItem> list = clientList.OrderBy(c => c.Name)
+                                                  .Select(c => new SelectListItem
+                                                  {
+                                                     Text = $"{c.Name}",
+                                                     Value = $"{c.Id}"
+                                                  }).ToList();
+
+            if (!blank)
+            {
+                list.Insert(0, new SelectListItem
+                {
+                    Text = "[Select client...]",
+                    Value = "0"
+                });
+            }
+            else
+            {
+                list.Insert(0, new SelectListItem
+                {
+                    Text = string.Empty,
+                    Value = "0"
+                });
+            }
+
+            return list;
+        }
     }
 }

@@ -29,7 +29,7 @@ namespace KyoS.Web.Controllers
             Configuration = configuration;
         }
 
-        [Authorize(Roles = "Manager, Frontdesk")]
+        [Authorize(Roles = "Manager, Frontdesk, CaseManager")]
         public IActionResult Index()
         {
             UserEntity user_logged = _context.Users
@@ -42,13 +42,27 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("NotAuthorized", "Account");
             }
 
-            CalendarCMH model = new CalendarCMH
+            if (User.IsInRole("CaseManager"))
             {
-                IdClient = 0,
-                Clients = _combosHelper.GetComboClientsByClinic(user_logged.Clinic.Id, false)
-            };
+                CalendarCMH model = new CalendarCMH
+                {
+                    IdClient = 0,
+                    Clients = _combosHelper.GetComboClientsByTCM(user_logged.UserName, user_logged.Clinic.Id, false)
+                };
 
-            return View(model);
+                return View(model);
+            }
+            else
+            {
+                CalendarCMH model = new CalendarCMH
+                {
+                    IdClient = 0,
+                    Clients = _combosHelper.GetComboClientsByClinic(user_logged.Clinic.Id, false)
+                };
+
+                return View(model);
+            }
+            
         }
 
         [Authorize(Roles = "Manager, Facilitator, Frontdesk")]
@@ -136,7 +150,7 @@ namespace KyoS.Web.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "Manager, Frontdesk")]
+        [Authorize(Roles = "Manager, Frontdesk, CaseManager")]
         public async Task<IActionResult> Events(string start, string end, int idClient)
         {
             if (idClient != 0)
@@ -149,14 +163,16 @@ namespace KyoS.Web.Controllers
                 Task<List<object>> biosTask = BIOsByClient(idClient, initDate, finalDate);
                 Task<List<object>> mtpReviewTask = MTPReviewsByClient(idClient, initDate, finalDate);
                 Task<List<object>> farsTask = FarsByClient(idClient, initDate, finalDate);
+                Task<List<object>> tcmNotesTask = TCMNotesByClient(idClient, initDate, finalDate);
 
-                await Task.WhenAll(notesTask, mtpsTask, biosTask, mtpReviewTask, farsTask);
+                await Task.WhenAll(notesTask, mtpsTask, biosTask, mtpReviewTask, farsTask, tcmNotesTask);
                 
                 var notes = await notesTask;
                 var mtps = await mtpsTask;
                 var bios = await biosTask;
                 var reviews = await mtpReviewTask;
                 var fars = await farsTask;
+                var tcmNotes = await tcmNotesTask;
 
                 List<object> events = new List<object>();
                 events.AddRange(notes);
@@ -164,6 +180,7 @@ namespace KyoS.Web.Controllers
                 events.AddRange(bios);
                 events.AddRange(reviews);
                 events.AddRange(fars);
+                events.AddRange(tcmNotes);
 
                 return new JsonResult(events);
             }
@@ -484,6 +501,44 @@ namespace KyoS.Web.Controllers
                                  })
                                  .ToList<object>();
         }
+
+        private async Task<List<object>> TCMNotesByClient(int idClient, DateTime initDate, DateTime finalDate)
+        {
+            var options = new DbContextOptionsBuilder<DataContext>().UseSqlServer(Configuration.GetConnectionString("KyoSConnection")).Options;
+            List<TCMNoteActivityEntity> tcmNoteActivity;
+
+            using (DataContext db = new DataContext(options))
+            {
+                tcmNoteActivity = await db.TCMNoteActivity
+
+                                          .Include(n => n.TCMNote)
+                                          .ThenInclude(n => n.TCMClient)
+                                          .ThenInclude(n => n.Client)
+
+                                          .Where(wc => (wc.StartTime >= initDate 
+                                                     && wc.EndTime <= finalDate 
+                                                     && wc.Billable == true 
+                                                     && wc.TCMNote.TCMClient.Client.Id == idClient))
+                                          .ToListAsync();
+            }
+
+            return tcmNoteActivity.Select(n => new
+            {
+                title = "TCM Service",
+                start = new DateTime(n.TCMNote.DateOfService.Year, n.TCMNote.DateOfService.Month, n.TCMNote.DateOfService.Day,
+                                                                                            n.StartTime.Hour, n.StartTime.Minute, 0)
+                                                                                            .ToString("yyyy-MM-ddTHH:mm:ssK"),
+                end = new DateTime(n.TCMNote.DateOfService.Year, n.TCMNote.DateOfService.Month, n.TCMNote.DateOfService.Day,
+                                                                                            n.EndTime.Hour, n.EndTime.Minute, 0)
+                                                                                            .ToString("yyyy-MM-ddTHH:mm:ssK"),
+                backgroundColor = "#dff0d8",
+                textColor = "#417c49",
+                borderColor = "#417c49"
+            })
+                                    .ToList<object>();
+        }
+
+        //Facilitator
 
         private async Task<List<object>> NotesByFacilitator(int idFacilitator, DateTime initDate, DateTime finalDate)
         {
