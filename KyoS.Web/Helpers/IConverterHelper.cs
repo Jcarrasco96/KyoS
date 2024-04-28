@@ -268,5 +268,8 @@ namespace KyoS.Web.Helpers
         PromotionViewModel ToPromotionViewModel(PromotionEntity model);
         PromotionPhotosEntity ToPromotionPhotoEntity(PromotionPhotoViewModel model, bool isNew, string photoPath);
         PromotionPhotoViewModel ToPromotionPhotoViewModel(PromotionPhotosEntity model);
+
+        Task<TCMSubServiceStepEntity> ToTCMSubServiceStepEntity(TCMSubServiceStepViewModel model, bool isNew, string userId);
+        TCMSubServiceStepViewModel ToTCMSubServiceStepViewModel(TCMSubServiceStepEntity model);
     }
 }

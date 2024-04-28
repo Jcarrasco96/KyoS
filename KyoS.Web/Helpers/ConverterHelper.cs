@@ -7802,7 +7802,9 @@ namespace KyoS.Web.Helpers
                 TcmService = await _context.TCMServices.FindAsync(model.Id_TCMService),
                 Name = model.Name,
                 Description = model.Description,
-                Active = model.Active
+                Active = model.Active,
+                Frecuency = model.Frecuency,
+                Units = model.Units
                 
             };
         }
@@ -7818,7 +7820,9 @@ namespace KyoS.Web.Helpers
                 TcmService = TcmStageEntity.TcmService,
                 CreatedBy = TcmStageEntity.CreatedBy,
                 CreatedOn = TcmStageEntity.CreatedOn,
-                Active = TcmStageEntity.Active
+                Active = TcmStageEntity.Active,
+                Frecuency = TcmStageEntity.Frecuency,
+                Units = TcmStageEntity.Units
 
             };
         }
@@ -9102,7 +9106,46 @@ namespace KyoS.Web.Helpers
 
         }
 
+        public async Task<TCMSubServiceStepEntity> ToTCMSubServiceStepEntity(TCMSubServiceStepViewModel model, bool isNew, string userId)
+        {
+            return new TCMSubServiceStepEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                TcmSubService = await _context.TCMSubServices.FindAsync(model.Id_TCMSubService),
+                Name = model.Name,
+                Description = model.Description,
+                Active = model.Active,
+                Orden = model.Orden,
+                Units = model.Units
+
+            };
+        }
+
+        public TCMSubServiceStepViewModel ToTCMSubServiceStepViewModel(TCMSubServiceStepEntity entity)
+        {
+            return new TCMSubServiceStepViewModel
+            {
+                Id = entity.Id,
+                Name = entity.Name,
+                Id_TCMService = entity.TcmSubService.TcmService.Id,
+                Id_TCMSubService = entity.TcmSubService.Id,
+                Description = entity.Description,
+                TcmSubService = entity.TcmSubService,
+                CreatedBy = entity.CreatedBy,
+                CreatedOn = entity.CreatedOn,
+                Active = entity.Active,
+                Orden = entity.Orden,
+                Units = entity.Units
+
+            };
+        }
+
+
     }
 
-   
+
 }

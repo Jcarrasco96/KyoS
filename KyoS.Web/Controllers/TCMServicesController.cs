@@ -37,20 +37,18 @@ namespace KyoS.Web.Controllers
             if (User.IsInRole("Admin"))
             {
                 List<TCMServiceEntity> tcmservices = await _context.TCMServices
-                                       .Include(m => m.Stages)
-                                       .OrderBy(f => f.Code)
-                                       .ToListAsync();
+                                                                   .Include(m => m.Stages)
+                                                                   .OrderBy(f => f.Code)
+                                                                   .ToListAsync();
 
                 return View(tcmservices);
             }
             else
             {
                 UserEntity user_logged = await _context.Users
-
-                                                   .Include(u => u.Clinic)
-                                                   .ThenInclude(c => c.Setting)
-
-                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+                                                       .Include(u => u.Clinic)
+                                                       .ThenInclude(c => c.Setting)
+                                                       .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
 
                 if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.TCMClinic)
                 {
@@ -610,10 +608,12 @@ namespace KyoS.Web.Controllers
                         await _context.SaveChangesAsync();
 
                         List<TCMServiceEntity> tcmServices = await _context.TCMServices
-                                                                           .Include(m => m.TCMServiceActivity)
+                                                                           .Include(m => m.TCMSubServices)
+                                                                           .ThenInclude(m => m.TCMSubServiceSteps)
                                                                            .OrderBy(f => f.Code)
                                                                            .ToListAsync();
-                        return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewTCMServiceActivity", tcmServices) });
+
+                        return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewTCMSubServices", tcmServices) });
                     }
                     catch (System.Exception ex)
                     {
@@ -678,11 +678,13 @@ namespace KyoS.Web.Controllers
 
                         if (origin == 0)
                         {
-                            List<TCMServiceEntity> tcmService = await _context.TCMServices
-                                                                               .Include(m => m.TCMServiceActivity)
+                            List<TCMServiceEntity> tcmServices = await _context.TCMServices
+                                                                               .Include(m => m.TCMSubServices)
+                                                                               .ThenInclude(m => m.TCMSubServiceSteps)
                                                                                .OrderBy(f => f.Code)
                                                                                .ToListAsync();
-                            return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewTCMServiceActivity", tcmService) });
+
+                            return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewTCMSubServices", tcmServices) });
                         }
                         else
                         {
@@ -823,6 +825,7 @@ namespace KyoS.Web.Controllers
             }
             List<TCMServiceEntity> tcmservices = await _context.TCMServices
                                                                .Include(m => m.TCMSubServices)
+                                                               .ThenInclude(m => m.TCMSubServiceSteps)
                                                                .OrderBy(f => f.Code)
                                                                .ToListAsync();
 
@@ -889,8 +892,10 @@ namespace KyoS.Web.Controllers
 
                     List<TCMServiceEntity> tcmServices = await _context.TCMServices
                                                                        .Include(m => m.TCMSubServices)
+                                                                       .ThenInclude(m => m.TCMSubServiceSteps)
                                                                        .OrderBy(f => f.Code)
                                                                        .ToListAsync();
+
                     return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewTCMSubServices", tcmServices) });
                 }
                 catch (System.Exception ex)
@@ -939,11 +944,14 @@ namespace KyoS.Web.Controllers
                 try
                 {
                     await _context.SaveChangesAsync();
-                    List<TCMServiceEntity> tcmService = await _context.TCMServices
-                                                                       .Include(m => m.TCMSubServices)
-                                                                       .OrderBy(f => f.Code)
-                                                                       .ToListAsync();
-                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewTCMSubServices", tcmService) });
+
+                    List<TCMServiceEntity> tcmServices = await _context.TCMServices
+                                                                        .Include(m => m.TCMSubServices)
+                                                                        .ThenInclude(m => m.TCMSubServiceSteps)
+                                                                        .OrderBy(f => f.Code)
+                                                                        .ToListAsync();
+
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewTCMSubServices", tcmServices) });
                 }
                 catch (System.Exception ex)
                 {
@@ -1184,6 +1192,215 @@ namespace KyoS.Web.Controllers
             tcmCopyActivityViewModel.TCMService = tcmServiceFrom;
 
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "DuplicateService", tcmCopyActivityViewModel) });
+        }
+
+        [Authorize(Roles = "Manager, TCMSupervisor")]
+        public async Task<IActionResult> CreateSubServiceStep(int id = 0)
+        {
+            TCMSubServiceStepViewModel model;
+
+            TCMSubServiceEntity tcmSubservice = await _context.TCMSubServices
+                                                              .Include(g => g.TcmService)
+                                                              .Include(g => g.TCMSubServiceSteps)
+                                                              .FirstOrDefaultAsync(m => m.Id == id);
+
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic != null)
+            {
+                model = new TCMSubServiceStepViewModel
+                {
+                    TcmSubService = tcmSubservice,
+                    Id_TCMService = tcmSubservice.Id,
+                    Id_TCMSubService = id,
+                    CreatedBy = user_logged.UserName,
+                    CreatedOn = DateTime.Now,
+                    Orden = tcmSubservice.TCMSubServiceSteps.Count() + 1,
+                    Active = true,
+                    Units = 1
+
+                };
+
+                return View(model);
+            }
+
+            model = new TCMSubServiceStepViewModel
+            {
+
+                TcmSubService = tcmSubservice,
+                Id_TCMService = tcmSubservice.Id,
+                Id_TCMSubService = id,
+                CreatedBy = user_logged.UserName,
+                CreatedOn = DateTime.Now,
+                Orden = tcmSubservice.TCMSubServiceSteps.Count() + 1,
+                Active = true,
+                Units = 1
+
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Manager, TCMSupervisor")]
+        public async Task<IActionResult> CreateSubServiceStep(TCMSubServiceStepViewModel model)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            TCMSubServiceEntity tcmSubService = await _context.TCMSubServices
+                                                              .Include(g => g.TcmService)
+                                                              .FirstOrDefaultAsync(m => m.Id == model.Id_TCMSubService);
+            if (ModelState.IsValid)
+            {
+                TCMSubServiceStepEntity tcmSubServiceStepEntity = await _converterHelper.ToTCMSubServiceStepEntity(model, true, user_logged.UserName);
+                _context.Add(tcmSubServiceStepEntity);
+                try
+                {
+                    await _context.SaveChangesAsync();
+
+                    List<TCMServiceEntity> tcmServices = await _context.TCMServices
+                                                                       .Include(m => m.TCMSubServices)
+                                                                       .ThenInclude(m => m.TCMSubServiceSteps)
+                                                                       .OrderBy(f => f.Code)
+                                                                       .ToListAsync();
+
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewTCMSubServices", tcmServices) });
+                }
+                catch (System.Exception ex)
+                {
+                    ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                }
+            }
+
+            //recovery data
+
+            model.TcmSubService = tcmSubService;
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateSubServiceStep", model) });
+        }
+
+        [Authorize(Roles = "Manager, TCMSupervisor")]
+        public async Task<IActionResult> EditSubServiceStep(int id = 0)
+        {
+            TCMSubServiceStepEntity tcmSubservicestep = await _context.TCMSubServiceSteps
+                                                                      .Include(g => g.TcmSubService)
+                                                                      .ThenInclude(g => g.TcmService)
+                                                                      .FirstOrDefaultAsync(m => m.Id == id);
+
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (tcmSubservicestep != null)
+            {
+                TCMSubServiceStepViewModel model = _converterHelper.ToTCMSubServiceStepViewModel(tcmSubservicestep);
+
+                return View(model);
+            }
+           
+            return View(null);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Manager, TCMSupervisor")]
+        public async Task<IActionResult> EditSubServiceStep(TCMSubServiceStepViewModel model)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            TCMSubServiceEntity tcmSubService = await _context.TCMSubServices
+                                                              .Include(g => g.TcmService)
+                                                              .FirstOrDefaultAsync(m => m.Id == model.Id_TCMSubService);
+            if (ModelState.IsValid)
+            {
+                TCMSubServiceStepEntity tcmSubServiceStepEntity = await _converterHelper.ToTCMSubServiceStepEntity(model, false, user_logged.UserName);
+                _context.Update(tcmSubServiceStepEntity);
+                try
+                {
+                    await _context.SaveChangesAsync();
+
+                    List<TCMServiceEntity> tcmServices = await _context.TCMServices
+                                                                       .Include(m => m.TCMSubServices)
+                                                                       .ThenInclude(m => m.TCMSubServiceSteps)
+                                                                       .OrderBy(f => f.Code)
+                                                                       .ToListAsync();
+
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewTCMSubServices", tcmServices) });
+                }
+                catch (System.Exception ex)
+                {
+                    ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                }
+            }
+
+            //recovery data
+
+            model.TcmSubService = tcmSubService;
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditSubServiceStep", model) });
+        }
+
+        [Authorize(Roles = "Manager, TCMSupervisor")]
+        public IActionResult DeleteStep(int id = 0)
+        {
+            if (id > 0)
+            {
+                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                       .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                DeleteViewModel model = new DeleteViewModel
+                {
+                    Id_Element = id,
+                    Desciption = "Do you want to delete this record?"
+
+                };
+                return View(model);
+            }
+            else
+            {
+                //Edit
+                //return View(new Client_DiagnosticViewModel());
+                return null;
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Manager, TCMSupervisor")]
+        public async Task<IActionResult> DeleteStep(DeleteViewModel model)
+        {
+            TCMSubServiceStepEntity entity = await _context.TCMSubServiceSteps
+                                                           .FirstOrDefaultAsync(n => n.Id == model.Id_Element);
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.TCMSubServiceSteps.Remove(entity);
+                    await _context.SaveChangesAsync();
+
+                    List<TCMServiceEntity> tcmServices = await _context.TCMServices
+                                                                       .Include(m => m.TCMSubServices)
+                                                                       .ThenInclude(m => m.TCMSubServiceSteps)
+                                                                       .OrderBy(f => f.Code)
+                                                                       .ToListAsync();
+
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewTCMSubServices", tcmServices) });
+                }
+                catch (Exception)
+                {
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewTCMSubServices", _context.TCMSubServiceSteps.Include(n => n.TcmSubService).ThenInclude(m => m.TCMSubServiceSteps).ToList()) });
+                }
+
+
+            }
+
+            return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewTCMSubServices", _context.TCMSubServiceSteps.Include(n => n.TcmSubService).ThenInclude(m => m.TCMSubServiceSteps).ToList()) });
         }
 
     }

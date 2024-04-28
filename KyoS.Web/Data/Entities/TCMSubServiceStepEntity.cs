@@ -7,7 +7,7 @@ using KyoS.Web.Data.Contracts;
 
 namespace KyoS.Web.Data.Entities
 {
-    public class TCMSubServiceEntity : AuditableEntity
+    public class TCMSubServiceStepEntity : AuditableEntity
     {
         public int Id { get; set; }
 
@@ -15,16 +15,13 @@ namespace KyoS.Web.Data.Entities
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         public string Name { get; set; }
 
-        [Display(Name = "Description")]
-        public string Description { get; set; }
-
-        public TCMServiceEntity TcmService { get; set; }
+        public int Orden { get; set; }
+        public TCMSubServiceEntity TcmSubService { get; set; }
 
         public bool Active { get; set; }
-        public int Frecuency { get; set; }
         public int Units { get; set; }
 
-        public List<TCMSubServiceStepEntity> TCMSubServiceSteps { get; set; }
-
+        [Display(Name = "Description")]
+        public string Description { get; set; }
     }
 }

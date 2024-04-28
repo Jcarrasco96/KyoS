@@ -2342,7 +2342,13 @@ namespace KyoS.Web.Controllers
                     Setting = note.Setting
                    
                 };
-                DiagnosticEntity dx = workday_Client.Client.Clients_Diagnostics.FirstOrDefault(n => n.Principal == true).Diagnostic;
+
+                DiagnosticEntity dx = new DiagnosticEntity();
+                if (workday_Client.Client.Clients_Diagnostics.FirstOrDefault(n => n.Principal == true) != null)
+                { 
+                    dx = workday_Client.Client.Clients_Diagnostics.FirstOrDefault(n => n.Principal == true).Diagnostic;
+                }
+
                 if (dx != null)
                 {
                     individualNoteViewModel.Diagnostic = dx.Code + ": " + dx.Description;
