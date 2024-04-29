@@ -73,6 +73,39 @@
                     </strong>
                 </div>
             }
+            @if (ViewBag.Delete == "Interval")
+            {
+                <div class="alert alert-block alert-danger">
+                    <button type="button" class="close" data-dismiss="alert">
+                        <i class="icon-remove"></i>
+                    </button>
+                    <strong class="red">
+                        Error. There are activities created in that time interval
+                    </strong>
+                </div>
+            }
+            @if (ViewBag.Delete == "MH")
+            {
+                <div class="alert alert-block alert-danger">
+                    <button type="button" class="close" data-dismiss="alert">
+                        <i class="icon-remove"></i>
+                    </button>
+                    <strong class="red">
+                        Error. There are activities created in that time interval in other service (Mental Health)
+                    </strong>
+                </div>
+            }
+            @if (ViewBag.Delete == "Supervision")
+            {
+                <div class="alert alert-block alert-danger">
+                    <button type="button" class="close" data-dismiss="alert">
+                        <i class="icon-remove"></i>
+                    </button>
+                    <strong class="red">
+                        Error. This time is scheduled for supervision.
+                    </strong>
+                </div>
+            }
         </div>
         <form asp-action="Edit" asp-route-id="@Model.Id" asp-route-origin="@ViewData["origin"]"  enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -88,6 +121,8 @@
             <input type="hidden" asp-for="PaymentDate" />
             <input type="hidden" asp-for="BillDms" />
             <input type="hidden" asp-for="CodeBill" />
+            <input type="hidden" asp-for="DateOfServiceReference" />
+
             @if (User.IsInRole("TCMSupervisor") && Model.Status == KyoS.Common.Enums.NoteStatus.Approved)
             {
                 <input type="hidden" asp-for="Sign" />

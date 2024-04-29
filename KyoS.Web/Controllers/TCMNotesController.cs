@@ -340,6 +340,7 @@ namespace KyoS.Web.Controllers
                         {
                             model.Billable = true;
                         }
+                        model.DateOfServiceReference = model.DateOfService;
                         return View(model);
                     }
 
@@ -427,22 +428,87 @@ namespace KyoS.Web.Controllers
         {
             UserEntity user_logged = _context.Users
                                              .Include(u => u.Clinic)
+                                             .ThenInclude(u => u.Setting)
                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
+            //si se cambia el dia de la nota, no puede existir una nota de ese cliente ese dia, si existe que le copie las actividades a mano
             if (_context.TCMNote.Where(n => n.DateOfService == tcmNotesViewModel.DateOfService && n.TCMClient.Id == tcmNotesViewModel.IdTCMClient && n.Id != tcmNotesViewModel.IdTCMNote).Count() > 0)
             {
-                ViewBag.Delete = "Exists";
                 ViewData["origin"] = origin;
                 ViewData["available"] = UnitsAvailable(tcmNotesViewModel.DateOfService, tcmNotesViewModel.IdTCMClient);
-                tcmNotesViewModel.TCMNoteActivity = _context.TCMNoteActivity
-                                                            .Include(n => n.TCMDomain)
-                                                            .Where(n => n.TCMNote.Id == tcmNotesViewModel.IdTCMNote).ToList();
-                tcmNotesViewModel.TCMClient = _context.TCMClient.Include(n => n.Casemanager).FirstOrDefault(n => n.Id == tcmNotesViewModel.IdTCMClient);
+                ViewData["interval"] = interval;
+                ViewBag.Delete = "Exists";
+                tcmNotesViewModel.TCMNoteActivity = _context.TCMNoteActivity.Where(n => n.TCMNote.Id == tcmNotesViewModel.Id).ToList();
                 return View(tcmNotesViewModel);
             }
 
             if (ModelState.IsValid)
-            {           
+            {
+                //reviso al cambiar la fecha de la nota, que para el dia que se esta cambiando no exista overlaping
+                if (tcmNotesViewModel.DateOfServiceReference.ToShortDateString() != tcmNotesViewModel.DateOfService.ToShortDateString())
+                {
+                    List<TCMNoteActivityEntity> listActivity = await _context.TCMNoteActivity.Where(n => n.TCMNote.Id == tcmNotesViewModel.IdTCMNote).ToListAsync();
+                    foreach (var item in listActivity)
+                    {
+                        //casemanager overlapping validation
+                        List<TCMNoteActivityEntity> noteActivities = await _context.TCMNoteActivity
+                                                                                   .Where(na => (na.CreatedBy == user_logged.UserName
+                                                                                     && na.Id != item.Id
+                                                                                     && na.TCMNote.DateOfService.Date == tcmNotesViewModel.DateOfService.Date
+                                                                                     && ((na.StartTime <= item.StartTime && na.EndTime > item.StartTime)
+                                                                                        || (na.StartTime < item.EndTime && na.EndTime >= item.EndTime)
+                                                                                        || (na.StartTime >= item.StartTime && na.EndTime <= item.EndTime))))
+                                                                                   .ToListAsync();
+                        if (noteActivities.Count() > 0)
+                        {
+                            ViewData["origin"] = origin;
+                            ViewData["available"] = UnitsAvailable(tcmNotesViewModel.DateOfService, tcmNotesViewModel.IdTCMClient);
+                            ViewData["interval"] = interval;
+                            ViewBag.Delete = "Interval";
+                            tcmNotesViewModel.TCMNoteActivity = _context.TCMNoteActivity.Where(n => n.TCMNote.Id == tcmNotesViewModel.Id).ToList();
+                            return View(tcmNotesViewModel);
+
+                        }
+
+                        //check overlapin Mental Health
+                        if (CheckOverlappingMH(item.StartTime, item.EndTime, _context.TCMClient.Include(n => n.Client).FirstOrDefault(n => n.Id == tcmNotesViewModel.IdTCMClient).Client.Id) == true)
+                        {
+                            ViewData["origin"] = origin;
+                            ViewData["available"] = UnitsAvailable(tcmNotesViewModel.DateOfService, tcmNotesViewModel.IdTCMClient);
+                            ViewData["interval"] = interval;
+                            ViewBag.Delete = "MH";
+                            tcmNotesViewModel.TCMNoteActivity = _context.TCMNoteActivity.Where(n => n.TCMNote.Id == tcmNotesViewModel.Id).ToList();
+                            return View(tcmNotesViewModel);
+
+                        }
+
+                        //check que no tenga ese tiempo en supervision si esta habilitado en los setting el chequeo en presencia del TCM
+                        if (user_logged.Clinic.Setting.TCMSupervisionTimeWithCaseManager == true)
+                        {
+                            TCMSupervisionTimeEntity supervision = _context.TCMSupervisionTimes
+                                                                           .FirstOrDefault(n => n.CaseManager.TCMClients.FirstOrDefault(m => m.Id == tcmNotesViewModel.IdTCMClient) != null
+                                                                           && n.DateSupervision.Date == tcmNotesViewModel.DateOfService.Date
+                                                                           && ((n.StartTime.TimeOfDay <= item.StartTime.TimeOfDay && n.EndTime.TimeOfDay >= item.StartTime.TimeOfDay)
+                                                                            || (n.StartTime.TimeOfDay <= item.EndTime.TimeOfDay && n.EndTime.TimeOfDay >= item.EndTime.TimeOfDay)
+                                                                            || (n.StartTime.TimeOfDay <= item.StartTime.TimeOfDay && n.EndTime.TimeOfDay >= item.EndTime.TimeOfDay)
+                                                                            || (n.StartTime.TimeOfDay >= item.StartTime.TimeOfDay && n.EndTime.TimeOfDay <= item.EndTime.TimeOfDay)));
+
+                            if (supervision != null)
+                            {
+                                ViewData["origin"] = origin;
+                                ViewData["available"] = UnitsAvailable(tcmNotesViewModel.DateOfService, tcmNotesViewModel.IdTCMClient);
+                                ViewData["interval"] = interval;
+                                ViewBag.Delete = "Supervision";
+                                tcmNotesViewModel.TCMNoteActivity = _context.TCMNoteActivity.Where(n => n.TCMNote.Id == tcmNotesViewModel.Id).ToList();
+                                return View(tcmNotesViewModel);
+
+                            }
+
+                        }
+                    }
+
+                }
+
                 TCMNoteEntity tcmNotesEntity = await _converterHelper.ToTCMNoteEntity(tcmNotesViewModel, false, user_logged.UserName);
                 if (tcmNotesEntity.Status == NoteStatus.Pending)
                 {
@@ -549,7 +615,12 @@ namespace KyoS.Web.Controllers
 
             }
 
-            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Edit", tcmNotesViewModel) });
+            ViewData["origin"] = origin;
+            ViewData["available"] = UnitsAvailable(tcmNotesViewModel.DateOfService, tcmNotesViewModel.IdTCMClient);
+            ViewData["interval"] = interval;
+            tcmNotesViewModel.TCMNoteActivity = _context.TCMNoteActivity.Where(n => n.TCMNote.Id == tcmNotesViewModel.Id).ToList();
+            return View(tcmNotesViewModel);
+            
         }
 
         public int GetTotalMinutes(TCMNoteEntity Note)
@@ -721,7 +792,7 @@ namespace KyoS.Web.Controllers
                             TcmNotesViewModel.ActivityList = _combosHelper.GetComboTCMNoteActivity(domain.Code);
                         }
 
-                        ModelState.AddModelError(string.Empty, $"Error.The amount of units exceeds the setting's value");
+                        ModelState.AddModelError(string.Empty, $"Error. The amount of units exceeds the setting's value");
                         return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateNoteActivity", TcmNotesViewModel) });
 
                     }
@@ -743,7 +814,7 @@ namespace KyoS.Web.Controllers
                             TcmNotesViewModel.ActivityList = _combosHelper.GetComboTCMNoteActivity(domain.Code);
                         }
 
-                        ModelState.AddModelError(string.Empty, $"Error.There are activities created in that authorized time");
+                        ModelState.AddModelError(string.Empty, $"Error. There are activities created in that authorized time");
                         return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateNoteActivity", TcmNotesViewModel) });
 
                     }
@@ -765,7 +836,7 @@ namespace KyoS.Web.Controllers
                             TcmNotesViewModel.ActivityList = _combosHelper.GetComboTCMNoteActivity(domain.Code);
                         }
 
-                        ModelState.AddModelError(string.Empty, $"Error.This note can not be created because the client has no units available");
+                        ModelState.AddModelError(string.Empty, $"Error. This note can not be created because the client has no units available");
                         return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateNoteActivity", TcmNotesViewModel) });
 
                     }
@@ -809,7 +880,7 @@ namespace KyoS.Web.Controllers
                             TcmNotesViewModel.ActivityList = _combosHelper.GetComboTCMNoteActivity(domain.Code);
                         }
 
-                        ModelState.AddModelError(string.Empty, $"Error.There are activities created in that time interval");
+                        ModelState.AddModelError(string.Empty, $"Error. There are activities created in that time interval");
                         return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateNoteActivity", TcmNotesViewModel) });
 
                     }
@@ -831,7 +902,7 @@ namespace KyoS.Web.Controllers
                             TcmNotesViewModel.ActivityList = _combosHelper.GetComboTCMNoteActivity(domain.Code);
                         }
 
-                        ModelState.AddModelError(string.Empty, $"Error.There are activities created in that time interval in other service (Mental Health)");
+                        ModelState.AddModelError(string.Empty, $"Error. There are activities created in that time interval in other service (Mental Health)");
                         return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateNoteActivity", TcmNotesViewModel) });
 
                     }
@@ -863,7 +934,7 @@ namespace KyoS.Web.Controllers
                                 TcmNotesViewModel.ActivityList = _combosHelper.GetComboTCMNoteActivity(domain.Code);
                             }
 
-                            ModelState.AddModelError(string.Empty, $"Error.This time is scheduled for supervision.");
+                            ModelState.AddModelError(string.Empty, $"Error. This time is scheduled for supervision.");
                             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateNoteActivity", TcmNotesViewModel) });
                         }
                        
@@ -1030,7 +1101,7 @@ namespace KyoS.Web.Controllers
                         TcmNotesViewModel.ActivityList = _combosHelper.GetComboTCMNoteActivity(domain.Code);
                     }
 
-                    ModelState.AddModelError(string.Empty, $"Error.The amount of units exceeds the setting's value");
+                    ModelState.AddModelError(string.Empty, $"Error. The amount of units exceeds the setting's value");
                     return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateNoteActivityTemp", TcmNotesViewModel) });
 
                 }
@@ -1047,7 +1118,7 @@ namespace KyoS.Web.Controllers
                         TcmNotesViewModel.ActivityList = _combosHelper.GetComboTCMNoteActivity(domain.Code);
                     }
 
-                    ModelState.AddModelError(string.Empty, $"Error.This note can not be created because the client has no units available");
+                    ModelState.AddModelError(string.Empty, $"Error. This note can not be created because the client has no units available");
                     return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateNoteActivityTemp", TcmNotesViewModel) });
                 }
 
@@ -1079,7 +1150,7 @@ namespace KyoS.Web.Controllers
                         TcmNotesViewModel.ActivityList = _combosHelper.GetComboTCMNoteActivity(domain.Code);
                     }
 
-                    ModelState.AddModelError(string.Empty, $"Error.There are activities created in that authorized time");
+                    ModelState.AddModelError(string.Empty, $"Error. There are activities created in that authorized time");
                     return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateNoteActivityTemp", TcmNotesViewModel) });
                 }
 
@@ -1095,7 +1166,7 @@ namespace KyoS.Web.Controllers
                         TcmNotesViewModel.ActivityList = _combosHelper.GetComboTCMNoteActivity(domain.Code);
                     }
 
-                    ModelState.AddModelError(string.Empty, $"Error.There are activities created in that time interval");
+                    ModelState.AddModelError(string.Empty, $"Error. There are activities created in that time interval");
                     return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateNoteActivityTemp", TcmNotesViewModel) });
                 }
 
@@ -1111,7 +1182,7 @@ namespace KyoS.Web.Controllers
                         TcmNotesViewModel.ActivityList = _combosHelper.GetComboTCMNoteActivity(domain.Code);
                     }
 
-                    ModelState.AddModelError(string.Empty, $"Error.There are activities created in that time interval in other service (Mental Helath)");
+                    ModelState.AddModelError(string.Empty, $"Error. There are activities created in that time interval in other service (Mental Helath)");
                     return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateNoteActivityTemp", TcmNotesViewModel) });
                 }
 
@@ -1137,7 +1208,7 @@ namespace KyoS.Web.Controllers
                             TcmNotesViewModel.ActivityList = _combosHelper.GetComboTCMNoteActivity(domain.Code);
                         }
 
-                        ModelState.AddModelError(string.Empty, $"Error.This time is scheduled for supervision.");
+                        ModelState.AddModelError(string.Empty, $"Error. This time is scheduled for supervision.");
                         return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateNoteActivityTemp", TcmNotesViewModel) });
 
                     }
@@ -1345,7 +1416,7 @@ namespace KyoS.Web.Controllers
                         NoteActivityViewModel.ActivityList = _combosHelper.GetComboTCMNoteActivity(domain.Code);
                     }
 
-                    ModelState.AddModelError(string.Empty, $"Error.The amount of units exceeds the setting's value");
+                    ModelState.AddModelError(string.Empty, $"Error. The amount of units exceeds the setting's value");
                     ViewData["unitsAvaliable"] = unitsAvaliable;
                     return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditNoteActivity", NoteActivityViewModel) });
 
@@ -1370,7 +1441,7 @@ namespace KyoS.Web.Controllers
                             NoteActivityViewModel.ActivityList = _combosHelper.GetComboTCMNoteActivity(domain.Code);
                         }
 
-                        ModelState.AddModelError(string.Empty, $"Error.This note can not be created because the client has no units available");
+                        ModelState.AddModelError(string.Empty, $"Error. This note can not be created because the client has no units available");
                         ViewData["unitsAvaliable"] = unitsAvaliable;
                         return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditNoteActivity", NoteActivityViewModel) });
                     }
@@ -1448,7 +1519,7 @@ namespace KyoS.Web.Controllers
                         NoteActivityViewModel.ActivityList = _combosHelper.GetComboTCMNoteActivity(domain.Code);
                     }
 
-                    ModelState.AddModelError(string.Empty, $"Error.There are activities created in that time interval");
+                    ModelState.AddModelError(string.Empty, $"Error. There are activities created in that time interval");
                     ViewData["unitsAvaliable"] = unitsAvaliable;
                     return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditNoteActivity", NoteActivityViewModel) });
                    
@@ -1471,7 +1542,7 @@ namespace KyoS.Web.Controllers
                         NoteActivityViewModel.ActivityList = _combosHelper.GetComboTCMNoteActivity(domain.Code);
                     }
 
-                    ModelState.AddModelError(string.Empty, $"Error.There are activities created in that time interval in other service (Mental Health)");
+                    ModelState.AddModelError(string.Empty, $"Error. There are activities created in that time interval in other service (Mental Health)");
                     ViewData["unitsAvaliable"] = unitsAvaliable;
                     return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditNoteActivity", NoteActivityViewModel) });
 
@@ -1504,7 +1575,7 @@ namespace KyoS.Web.Controllers
                             NoteActivityViewModel.ActivityList = _combosHelper.GetComboTCMNoteActivity(domain.Code);
                         }
 
-                        ModelState.AddModelError(string.Empty, $"Error.This time is scheduled for supervision.");
+                        ModelState.AddModelError(string.Empty, $"Error. This time is scheduled for supervision.");
                         ViewData["unitsAvaliable"] = unitsAvaliable;
                         return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditNoteActivity", NoteActivityViewModel) });
                     }

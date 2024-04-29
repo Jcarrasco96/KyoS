@@ -1,4 +1,5 @@
 ﻿using KyoS.Web.Data.Entities;
+using System;
 using System.Collections.Generic;
 
 namespace KyoS.Web.Models
@@ -18,6 +19,6 @@ namespace KyoS.Web.Models
 
         public bool Billable { get; set; }
 
-
+        public DateTime DateOfServiceReference { get; set; }
     }
 }
