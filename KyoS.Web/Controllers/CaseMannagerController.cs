@@ -1119,17 +1119,56 @@ namespace KyoS.Web.Controllers
 
             List<AuditCertification> auditCertification_List = new List<AuditCertification>();
             AuditCertification auditCertification = new AuditCertification();
+            List<CaseMannagerEntity> tcm_List = new List<CaseMannagerEntity>();
+            List<CourseEntity> course_List = new List<CourseEntity>();
 
-            List<CaseMannagerEntity> tcm_List = _context.CaseManagers
-                                                        .Include(m => m.TCMCertifications)
-                                                        .ToList();
+            if (User.IsInRole("Manager"))
+            {
+                tcm_List = _context.CaseManagers
+                                   .Include(m => m.TCMCertifications)
+                                   .ToList();
 
-            List<CourseEntity> course_List = _context.Courses
-                                                     .Include(m => m.TCMCertifications)
-                                                     .Where(n => n.Role == UserType.CaseManager
-                                                              && n.Active == true)
-                                                     .ToList();
+                course_List = _context.Courses
+                                      .Include(m => m.TCMCertifications)
+                                      .Where(n => n.Role == UserType.CaseManager
+                                               && n.Active == true)
+                                      .ToList();
+            }
+            else
+            {
+                if (User.IsInRole("TCMSupervisor"))
+                {
+                    TCMSupervisorEntity supervisor = _context.TCMSupervisors.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
+                    tcm_List = _context.CaseManagers
+                                       .Include(m => m.TCMCertifications)
+                                       .Where(n => n.TCMSupervisor.Id == supervisor.Id)
+                                       .ToList();
 
+                    course_List = _context.Courses
+                                          .Include(m => m.TCMCertifications)
+                                          .Where(n => n.Role == UserType.CaseManager
+                                                   && n.Active == true)
+                                          .ToList();
+                }
+                else
+                {
+                    if (User.IsInRole("CaseManager"))
+                    {
+                        CaseMannagerEntity tcm = _context.CaseManagers.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
+                        tcm_List = _context.CaseManagers
+                                           .Include(m => m.TCMCertifications)
+                                           .Where(n => n.Id == tcm.Id)
+                                           .ToList();
+
+                        course_List = _context.Courses
+                                              .Include(m => m.TCMCertifications)
+                                              .Where(n => n.Role == UserType.CaseManager
+                                                       && n.Active == true)
+                                              .ToList();
+                    }
+                }
+            }
+            
             foreach (var item in tcm_List)
             {
                 foreach (var course in course_List)

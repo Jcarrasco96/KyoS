@@ -1238,6 +1238,7 @@ namespace KyoS.Web.Controllers
                             _context.Update(client);
                            //verifico que las notas de group se generen a partir de la fecha de los goals y objetivos de group Therapy, sino tiene objetivos se generan a aprtir de hoy
                             List<ObjetiveEntity> listObjetive = _context.Objetives.Where(n => n.Goal.MTP.Client.Id == client.Id
+                                                                                           && n.Goal.MTP.Active == true
                                                                                            && n.Goal.Service == ServiceType.Group)
                                                                                   .ToList();
                             DateTime initialgoal = new DateTime();

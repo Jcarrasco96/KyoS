@@ -1428,10 +1428,12 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("Home/Error404");
             }
 
-            GoalEntity goalEntity = await _context.Goals.Include(g => g.MTP)
-                                                        .ThenInclude(m => m.Client)
-                                                        .Include(g => g.Objetives)
-                                                        .FirstOrDefaultAsync(m => m.Id == id);
+            GoalEntity goalEntity = await _context.Goals
+                                                  .Include(g => g.Adendum)
+                                                  .Include(g => g.MTP)
+                                                  .ThenInclude(m => m.Client)
+                                                  .Include(g => g.Objetives)
+                                                  .FirstOrDefaultAsync(m => m.Id == id);
             if (goalEntity == null)
             {
                 return RedirectToAction("Home/Error404");
@@ -1442,8 +1444,8 @@ namespace KyoS.Web.Controllers
             {
                 Goal = goalEntity,
                 IdGoal = goalEntity.Id,
-                DateOpened = goalEntity.MTP.AdmissionDateMTP,
-                DateResolved = goalEntity.MTP.AdmissionDateMTP.AddMonths(Convert.ToInt32(goalEntity.MTP.NumberOfMonths)),
+                DateOpened = (goalEntity.Adendum != null) ? goalEntity.Adendum.Dateidentified : goalEntity.MTP.AdmissionDateMTP,
+                DateResolved = (goalEntity.Adendum != null) ? goalEntity.Adendum.Dateidentified.AddMonths(Convert.ToInt32(goalEntity.Adendum.Duration)) : goalEntity.MTP.AdmissionDateMTP.AddMonths(Convert.ToInt32(goalEntity.MTP.NumberOfMonths)),
                 DateTarget = goalEntity.MTP.AdmissionDateMTP.AddMonths(Convert.ToInt32(goalEntity.MTP.NumberOfMonths)),
                 Objetive = objetive
             };
