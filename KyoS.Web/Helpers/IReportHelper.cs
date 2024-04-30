@@ -24,6 +24,7 @@ namespace KyoS.Web.Helpers
         Stream OrionAbsenceNoteReport(Workday_Client workdayClient);
         Stream AlliedAbsenceNoteReport(Workday_Client workdayClient);
         Stream YourNeighborAbsenceNoteReport(Workday_Client workdayClient);
+        Stream MedisanaAbsenceNoteReport(Workday_Client workdayClient);
         #endregion
 
         #region Approved PSR Notes reports
@@ -48,6 +49,8 @@ namespace KyoS.Web.Helpers
         Stream AlliedNoteReportSchema3SS(Workday_Client workdayClient);
         Stream YourNeighborNoteReportSchema3(Workday_Client workdayClient);
         Stream YourNeighborNoteReportSchema3SS(Workday_Client workdayClient);
+        Stream MedisanaNoteReportSchema3(Workday_Client workdayClient);
+        Stream MedisanaNoteReportSchema3SS(Workday_Client workdayClient);
         #endregion
 
         #region Approved Individual Notes reports
@@ -61,6 +64,7 @@ namespace KyoS.Web.Helpers
         Stream OrionIndNoteReportSchema1(Workday_Client workdayClient);
         Stream AlliedIndNoteReportSchema1(Workday_Client workdayClient);
         Stream YourNeighborIndNoteReportSchema1(Workday_Client workdayClient);
+        Stream MedisanaIndNoteReportSchema1(Workday_Client workdayClient);
         #endregion
 
         #region Approved Group Notes reports
@@ -87,6 +91,8 @@ namespace KyoS.Web.Helpers
         Stream AlliedGroupNoteReportSchema3(Workday_Client workdayClient);
         Stream YourNeighborGroupNoteReportSchema2(Workday_Client workdayClient);
         Stream YourNeighborGroupNoteReportSchema3(Workday_Client workdayClient);
+        Stream MedisanaGroupNoteReportSchema2(Workday_Client workdayClient);
+        Stream MedisanaGroupNoteReportSchema3(Workday_Client workdayClient);
         #endregion
 
         #region MTP reports
@@ -103,6 +109,7 @@ namespace KyoS.Web.Helpers
         Stream OrionMTPReport(MTPEntity mtp);
         Stream AlliedMTPReport(MTPEntity mtp);
         Stream YourNeighborMTPReport(MTPEntity mtp);
+        Stream MedisanaMTPReport(MTPEntity mtp);
         #endregion
 
         #region PSR Generics reports
@@ -179,6 +186,7 @@ namespace KyoS.Web.Helpers
         Stream OrionBioReport(BioEntity bio);
         Stream AlliedBioReport(BioEntity bio);
         Stream YourNeighborBioReport(BioEntity bio);
+        Stream MedisanaBioReport(BioEntity bio);
         #endregion
 
         #region Addendum reports
