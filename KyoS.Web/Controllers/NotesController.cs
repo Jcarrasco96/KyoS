@@ -6525,6 +6525,8 @@ namespace KyoS.Web.Controllers
                                                    .ThenInclude(o => o.Goal)
 
                                                    .Include(wc => wc.Workday)
+
+                                                   .AsSplitQuery()
                                                     
                                                    .FirstOrDefault(wc => (wc.Id == id && (wc.Note.Status == NoteStatus.Approved || wc.NoteP.Status == NoteStatus.Approved)));
             if (workdayClient == null)
@@ -6769,6 +6771,19 @@ namespace KyoS.Web.Controllers
                 }
             }
 
+            if (workdayClient.NoteP.Supervisor.Clinic.Name == "MEDISANA HEALTH CENTER")
+            {
+                if (workdayClient.NoteP.Schema == Common.Enums.SchemaType.Schema3)
+                {
+                    Stream stream;
+                    if (!workdayClient.SharedSession)
+                        stream = _reportHelper.MedisanaNoteReportSchema3(workdayClient);
+                    else
+                        stream = _reportHelper.MedisanaNoteReportSchema3SS(workdayClient);
+                    return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+                }
+            }
+
             return null;
         }
 
@@ -6853,6 +6868,11 @@ namespace KyoS.Web.Controllers
             if (workdayClient.IndividualNote.Supervisor.Clinic.Name == "YOUR NEIGHBOR MEDICAL GROUP")
             {
                 Stream stream = _reportHelper.YourNeighborIndNoteReportSchema1(workdayClient);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (workdayClient.IndividualNote.Supervisor.Clinic.Name == "MEDISANA HEALTH CENTER")
+            {
+                Stream stream = _reportHelper.MedisanaIndNoteReportSchema1(workdayClient);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
             return null;
@@ -7107,6 +7127,21 @@ namespace KyoS.Web.Controllers
                 if (workdayClient.GroupNote2.Schema == SchemaTypeGroup.Schema3)
                 {
                     stream = _reportHelper.YourNeighborGroupNoteReportSchema3(workdayClient);
+                }
+
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (workdayClient.GroupNote2.Supervisor.Clinic.Name == "MEDISANA HEALTH CENTER")
+            {
+                Stream stream = null;
+
+                if (workdayClient.GroupNote2.Schema == SchemaTypeGroup.Schema2)
+                {
+                    stream = _reportHelper.MedisanaGroupNoteReportSchema2(workdayClient);
+                }
+                if (workdayClient.GroupNote2.Schema == SchemaTypeGroup.Schema3)
+                {
+                    stream = _reportHelper.MedisanaGroupNoteReportSchema3(workdayClient);
                 }
 
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
@@ -12071,6 +12106,8 @@ namespace KyoS.Web.Controllers
 
                                                    .Include(wc => wc.Workday)
 
+                                                   .AsSplitQuery()
+
                                                    .FirstOrDefault(wc => wc.Id == id);
             if (workdayClient == null)
             {
@@ -12137,6 +12174,11 @@ namespace KyoS.Web.Controllers
                 Stream stream = _reportHelper.YourNeighborAbsenceNoteReport(workdayClient);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
+            if (workdayClient.Client.Clinic.Name == "MEDISANA HEALTH CENTER")
+            {
+                Stream stream = _reportHelper.MedisanaAbsenceNoteReport(workdayClient);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
 
             return null;
         }
@@ -12155,6 +12197,8 @@ namespace KyoS.Web.Controllers
                                                    .ThenInclude(c => c.Group)
 
                                                    .Include(wc => wc.Workday)
+
+                                                   .AsSplitQuery()
 
                                                    .FirstOrDefault(wc => wc.Id == id);
             if (workdayClient == null)
@@ -12220,6 +12264,11 @@ namespace KyoS.Web.Controllers
             if (workdayClient.Facilitator.Clinic.Name == "YOUR NEIGHBOR MEDICAL GROUP")
             {
                 Stream stream = _reportHelper.YourNeighborAbsenceNoteReport(workdayClient);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (workdayClient.Facilitator.Clinic.Name == "MEDISANA HEALTH CENTER")
+            {
+                Stream stream = _reportHelper.MedisanaAbsenceNoteReport(workdayClient);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
 
@@ -12241,6 +12290,8 @@ namespace KyoS.Web.Controllers
 
                                                    .Include(wc => wc.Workday)
 
+                                                   .AsSplitQuery()
+
                                                    .FirstOrDefault(wc => wc.Id == id);
             if (workdayClient == null)
             {
@@ -12305,6 +12356,11 @@ namespace KyoS.Web.Controllers
             if (workdayClient.Facilitator.Clinic.Name == "YOUR NEIGHBOR MEDICAL GROUP")
             {
                 Stream stream = _reportHelper.YourNeighborAbsenceNoteReport(workdayClient);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (workdayClient.Facilitator.Clinic.Name == "MEDISANA HEALTH CENTER")
+            {
+                Stream stream = _reportHelper.MedisanaAbsenceNoteReport(workdayClient);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
 

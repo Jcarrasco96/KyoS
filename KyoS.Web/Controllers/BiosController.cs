@@ -1586,6 +1586,11 @@ namespace KyoS.Web.Controllers
                 Stream stream = _reportHelper.YourNeighborBioReport(entity);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
+            if (entity.Client.Clinic.Name == "MEDISANA HEALTH CENTER")
+            {
+                Stream stream = _reportHelper.MedisanaBioReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
             return null;
         }
 

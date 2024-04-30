@@ -2307,6 +2307,11 @@ namespace KyoS.Web.Controllers
                 Stream stream = _reportHelper.YourNeighborMTPReport(mtpEntity);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
+            if (mtpEntity.Client.Clinic.Name == "MEDISANA HEALTH CENTER")
+            {
+                Stream stream = _reportHelper.MedisanaMTPReport(mtpEntity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
             return null;
         }
 
