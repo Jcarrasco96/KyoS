@@ -271,5 +271,8 @@ namespace KyoS.Web.Helpers
 
         Task<TCMSubServiceStepEntity> ToTCMSubServiceStepEntity(TCMSubServiceStepViewModel model, bool isNew, string userId);
         TCMSubServiceStepViewModel ToTCMSubServiceStepViewModel(TCMSubServiceStepEntity model);
+
+        FacilitatorCertificationEntity ToFacilitatorCertificationEntity(FacilitatorCertificationViewModel model, bool isNew, string userId);
+        FacilitatorCertificationViewModel ToFacilitatorCertificationViewModel(FacilitatorCertificationEntity model);
     }
 }

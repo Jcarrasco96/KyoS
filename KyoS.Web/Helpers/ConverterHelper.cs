@@ -202,12 +202,45 @@ namespace KyoS.Web.Helpers
                 Id = isNew ? 0 : model.Id,
                 Clinic = await _context.Clinics.FindAsync(model.IdClinic),
                 Codigo = model.Codigo,
-                Name = model.Name,
                 Status = StatusUtils.GetStatusByIndex(model.IdStatus),
                 LinkedUser = _userHelper.GetUserNameById(model.IdUser),
                 SignaturePath = signaturePath,
                 RaterEducation = model.RaterEducation,
-                RaterFMHCertification = model.RaterFMHCertification
+                RaterFMHCertification = model.RaterFMHCertification,
+                Name = isNew ? model.FirstName + ' ' + model.MiddleName + ' ' + model.LastName : model.Name,
+                Email = model.Email,
+                Phone = model.Phone,
+                Money = model.Money,
+                Address = model.Address,
+                City = model.City,
+                DateOfBirth = model.DateOfBirth,
+                FirstName = model.FirstName,
+                PaymentMethod = PaymentMethodUtils.GetPaymentMethodByIndex(model.IdPaymentMethod),
+                Gender = GenderUtils.GetGenderByIndex(model.IdGender),
+                LastName = model.LastName,
+                MiddleName = model.MiddleName,
+                PH = model.PH,
+                State = model.State,
+                ZipCode = model.ZipCode,
+                AccountNumber = model.AccountNumber,
+                AccountType = AccountTypeUtils.GetAccountTypeByIndex(model.IdAccountType),
+                CAQH = model.CAQH,
+                CompanyEIN = model.CAQH,
+                CompanyName = model.CompanyName,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                CredentialExpirationDate = model.CredentialExpirationDate,
+                DEALicense = model.DEALicense,
+                FinancialInstitutionsName = model.FinancialInstitutionsName,
+                HiringDate = model.HiringDate,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn,
+                MedicaidProviderID = model.MedicaidProviderID,
+                MedicareProviderID = model.MedicareProviderID,
+                NPI = model.NPI,
+                Routing = model.Routing,
+                SSN = model.SSN,
+                Credentials = model.Credentials
             };
         }
 
@@ -226,7 +259,48 @@ namespace KyoS.Web.Helpers
                 UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.Facilitator, idClinic),
                 SignaturePath = facilitatorEntity.SignaturePath,
                 RaterEducation = facilitatorEntity.RaterEducation,
-                RaterFMHCertification = facilitatorEntity.RaterFMHCertification
+                RaterFMHCertification = facilitatorEntity.RaterFMHCertification,
+
+                Email = facilitatorEntity.Email,
+                Phone = facilitatorEntity.Phone,
+                Money = facilitatorEntity.Money,
+                Address = facilitatorEntity.Address,
+                City = facilitatorEntity.City,
+                DateOfBirth = facilitatorEntity.DateOfBirth,
+                FirstName = facilitatorEntity.FirstName,
+                PaymentMethod = facilitatorEntity.PaymentMethod,
+                Gender = facilitatorEntity.Gender,
+                LastName = facilitatorEntity.LastName,
+                MiddleName = facilitatorEntity.MiddleName,
+                PH = facilitatorEntity.PH,
+                State = facilitatorEntity.State,
+                ZipCode = facilitatorEntity.ZipCode,
+                AccountNumber = facilitatorEntity.AccountNumber,
+                AccountType = facilitatorEntity.AccountType,
+                CAQH = facilitatorEntity.CAQH,
+                CompanyEIN = facilitatorEntity.CAQH,
+                CompanyName = facilitatorEntity.CompanyName,
+                CreatedBy = facilitatorEntity.CreatedBy,
+                CreatedOn = facilitatorEntity.CreatedOn,
+                CredentialExpirationDate = facilitatorEntity.CredentialExpirationDate,
+                DEALicense = facilitatorEntity.DEALicense,
+                FinancialInstitutionsName = facilitatorEntity.FinancialInstitutionsName,
+                HiringDate = facilitatorEntity.HiringDate,
+                LastModifiedBy = facilitatorEntity.LastModifiedBy,
+                LastModifiedOn = facilitatorEntity.LastModifiedOn,
+                MedicaidProviderID = facilitatorEntity.MedicaidProviderID,
+                MedicareProviderID = facilitatorEntity.MedicareProviderID,
+                NPI = facilitatorEntity.NPI,
+                Routing = facilitatorEntity.Routing,
+                SSN = facilitatorEntity.SSN,
+                IdGender = (facilitatorEntity.Gender == GenderType.Female) ? 1 : 2,
+                GenderList = _combosHelper.GetComboGender(),
+                IdAccountType = (facilitatorEntity.AccountType == AccountType.Personal_Checking) ? 1 : (facilitatorEntity.AccountType == AccountType.Personal_Saving) ? 2 : (facilitatorEntity.AccountType == AccountType.Company_Checking) ? 3 : (facilitatorEntity.AccountType == AccountType.Company_Saving) ? 4 : 0,
+                AccountTypeList = _combosHelper.GetComboAccountType(),
+                IdPaymentMethod = (facilitatorEntity.PaymentMethod == PaymentMethod.Check) ? 1 : (facilitatorEntity.PaymentMethod == PaymentMethod.Direct_Deposit) ? 2 : (facilitatorEntity.PaymentMethod == PaymentMethod.Zelle) ? 3 : 0,
+                PaymentMethodList = _combosHelper.GetComboPaymentMethod(),
+                FacilitatorCertifications = facilitatorEntity.FacilitatorCertifications,
+                Credentials = facilitatorEntity.Credentials
             };
         }
 
@@ -9144,6 +9218,49 @@ namespace KyoS.Web.Helpers
             };
         }
 
+        public FacilitatorCertificationEntity ToFacilitatorCertificationEntity(FacilitatorCertificationViewModel model, bool isNew, string userId)
+        {
+            CourseEntity course = _context.Courses.FirstOrDefault(n => n.Id == model.IdCourse);
+            return new FacilitatorCertificationEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Name = course.Name,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                CertificateDate = model.CertificateDate,
+                CertificationNumber = model.CertificationNumber,
+                ExpirationDate = model.ExpirationDate,
+                Course = course,
+                Facilitator = _context.Facilitators.FirstOrDefault(n => n.Id == model.IdFacilitator)
+
+            };
+        }
+
+        public FacilitatorCertificationViewModel ToFacilitatorCertificationViewModel(FacilitatorCertificationEntity model)
+        {
+            return new FacilitatorCertificationViewModel
+            {
+                Id = model.Id,
+                Name = model.Name,
+                IdCourse = model.Course.Id,
+                IdFacilitator = model.Facilitator.Id,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn,
+                Facilitators = _combosHelper.GetComboFacilitators(),
+                Courses = _combosHelper.GetComboCourseByRole(UserType.Facilitator),
+                CertificateDate = model.CertificateDate,
+                ExpirationDate = model.ExpirationDate,
+                CertificationNumber = model.CertificationNumber,
+                Facilitator = model.Facilitator,
+                Course = model.Course
+
+            };
+
+        }
 
     }
 

@@ -19,15 +19,15 @@
                     <input type="hidden" asp-for="SignaturePath" />
                     <input type="hidden" asp-for="IdClinic" />
                     <input type="hidden" asp-for="Name" />
-                    <partial name="_Personal" />
+                    <partial name="_PersonalRO" />
                     <div class="form-group col-md-12">
                     </div>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="agency">
-                    <partial name="_Agency" />
+                    <partial name="_AgencyRO" />
                 </div>
                 <div role="tabpanel" class="tab-pane" id="private">
-                    <partial name="_Private" />
+                    <partial name="_PrivateRO" />
                 </div>
                 <div role="tabpanel" class="tab-pane" id="courses">
                     <div id="view-casemanagers">
@@ -39,9 +39,8 @@
                 <hr />
             </div>
             <div class="col-md-12">
-                <div class="col-md-offset-9">
+                <div class="col-md-offset-10">
                     &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <input type="submit" value="Save" class="btn btn-primary" />
                     <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
                 </div>
             </div>
