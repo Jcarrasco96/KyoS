@@ -4375,6 +4375,11 @@ namespace KyoS.Web.Controllers
                 if (mtpViewModel.Goals == null)
                     mtpViewModel.Goals = new List<GoalEntity>();
 
+                if (mtpViewModel.SupervisorDate.ToShortDateString() == "01/01/0001")
+                {
+                    mtpViewModel.SupervisorDate = mtpEntity.AdmissionDateMTP;
+                }
+                
                 ViewData["origi"] = origi;
                 return View(mtpViewModel);
             }
