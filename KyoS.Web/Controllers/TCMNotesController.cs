@@ -1896,7 +1896,7 @@ namespace KyoS.Web.Controllers
                                    .Include(w => w.TCMClient)
                                    .ThenInclude(d => d.Casemanager)
                                    .Include(w => w.TCMNoteActivity)
-                                   .Include(w => w.TCMMessages)
+                                   .Include(m => m.TCMMessages.Where(m => m.Notification == false))
                                    .AsSplitQuery()
                                    .Where(w => (w.TCMClient.Client.Clinic.Id == user_logged.Clinic.Id
                                              && w.Status == status
@@ -1917,7 +1917,7 @@ namespace KyoS.Web.Controllers
                                             .Include(w => w.TCMClient)
                                             .ThenInclude(d => d.Casemanager)
                                             .Include(w => w.TCMNoteActivity)
-                                            .Include(w => w.TCMMessages)
+                                            .Include(m => m.TCMMessages.Where(m => m.Notification == false))
                                             .AsSplitQuery()
                                             .Where(w => (w.TCMClient.Client.Clinic.Id == user_logged.Clinic.Id
                                                       && w.Status == status
@@ -1936,7 +1936,7 @@ namespace KyoS.Web.Controllers
                                                 .Include(w => w.TCMClient)
                                                 .ThenInclude(d => d.Casemanager)
                                                 .Include(w => w.TCMNoteActivity)
-                                                .Include(w => w.TCMMessages)
+                                                .Include(m => m.TCMMessages.Where(m => m.Notification == false))
                                                 .AsSplitQuery()
                                                 .Where(w => (w.TCMClient.Client.Clinic.Id == user_logged.Clinic.Id
                                                    && w.Status == status
@@ -1954,7 +1954,7 @@ namespace KyoS.Web.Controllers
                                                    .Include(w => w.TCMClient)
                                                    .ThenInclude(d => d.Casemanager)
                                                    .Include(w => w.TCMNoteActivity)
-                                                   .Include(w => w.TCMMessages)
+                                                   .Include(m => m.TCMMessages.Where(m => m.Notification == false))
                                                    .AsSplitQuery()
                                                    .Where(w => (w.TCMClient.Client.Clinic.Id == user_logged.Clinic.Id
                                                       && w.Status == status
@@ -1974,7 +1974,7 @@ namespace KyoS.Web.Controllers
                                         .Include(w => w.TCMClient)
                                         .ThenInclude(d => d.Casemanager)
                                         .Include(w => w.TCMNoteActivity)
-                                        .Include(w => w.TCMMessages)
+                                        .Include(m => m.TCMMessages.Where(m => m.Notification == false))
                                         .AsSplitQuery()
                                         .Where(w => (w.TCMClient.Client.Clinic.Id == user_logged.Clinic.Id
                                           && w.Status == status))

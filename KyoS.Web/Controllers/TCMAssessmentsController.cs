@@ -3030,6 +3030,7 @@ namespace KyoS.Web.Controllers
                                                                         .Include(m => m.TcmMessages)
                                                                         .Include(m => m.TcmClient)
                                                                         .ThenInclude(m => m.Casemanager)
+                                                                        .Include(m => m.TcmMessages.Where(m => m.Notification == false))
                                                                         .Where(m => m.Approved == approved
                                                                                  && m.TcmClient.Client.Clinic.Id == user_logged.Clinic.Id)
                                                                         .OrderBy(m => m.TcmClient.CaseNumber)
@@ -3047,6 +3048,7 @@ namespace KyoS.Web.Controllers
                                                                         .Include(m => m.TcmMessages)
                                                                         .Include(m => m.TcmClient)
                                                                         .ThenInclude(m => m.Casemanager)
+                                                                        .Include(m => m.TcmMessages.Where(m => m.Notification == false))
                                                                         .Where(m => m.Approved == approved
                                                                                  && m.TcmClient.Client.Clinic.Id == user_logged.Clinic.Id
                                                                                  && m.TcmClient.Casemanager.TCMSupervisor.LinkedUser == user_logged.UserName)
@@ -3065,6 +3067,7 @@ namespace KyoS.Web.Controllers
                                                                          .Include(m => m.TcmMessages)
                                                                          .Include(m => m.TcmClient)
                                                                          .ThenInclude(m => m.Casemanager)
+                                                                         .Include(m => m.TcmMessages.Where(m => m.Notification == false))
                                                                          .Where(m => m.Approved == approved
                                                                              && m.TcmClient.Client.Clinic.Id == user_logged.Clinic.Id
                                                                              && m.TcmClient.Casemanager.LinkedUser == user_logged.UserName)
