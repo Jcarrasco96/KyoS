@@ -1,0 +1,82 @@
+﻿@model KyoS.Web.Models.DocumentsAssistantViewModel
+<div class="col-md-push-12">
+    &nbsp;
+</div>
+
+<div>
+    <div class="col-md-4 form-group">
+        <label asp-for="HiringDate" class="control-label"> Hiring Date</label>
+        <input asp-for="HiringDate" class="form-control" disabled/>
+        <span asp-validation-for="HiringDate" class="text-danger"></span>
+    </div>
+    <div class="col-md-4 form-group">
+        <label asp-for="Code" class="control-label">Employee Id</label>
+        <input asp-for="Code" class="form-control" disabled />
+        <span asp-validation-for="Code" class="text-danger"></span>
+    </div>
+    <div class="col-md-4 form-group">
+        <label asp-for="Credentials" class="control-label">Credentials</label>
+        <input asp-for="Credentials" class="form-control" disabled />
+        <span asp-validation-for="Credentials" class="text-danger"></span>
+    </div>
+   
+  
+</div>
+<div>
+    <div class="col-md-3 form-group">
+        <label asp-for="MedicaidProviderID" class="control-label">Medicaid Provider ID</label>
+        <input asp-for="MedicaidProviderID" class="form-control" disabled />
+        <span asp-validation-for="MedicaidProviderID" class="text-danger"></span>
+    </div>
+    <div class="col-md-3 form-group">
+        <label asp-for="MedicareProviderID" class="control-label">Medicare Provider ID</label>
+        <input asp-for="MedicareProviderID" class="form-control" disabled />
+        <span asp-validation-for="MedicareProviderID" class="text-danger"></span>
+    </div>
+    <div class="col-md-3 form-group">
+        <label asp-for="DEALicense" class="control-label"> DEA License</label>
+        <input asp-for="DEALicense" class="form-control" disabled />
+        <span asp-validation-for="DEALicense" class="text-danger"></span>
+    </div>
+    <div class="col-md-3 form-group">
+        <label asp-for="CAQH" class="control-label"> CAQH</label>
+        <input asp-for="CAQH" class="form-control" disabled />
+        <span asp-validation-for="CAQH" class="text-danger"></span>
+    </div>
+</div>
+<div>
+    <div class="col-md-6 form-group">
+        <label asp-for="RaterEducation" class="control-label">Rater Education</label>
+        <input asp-for="RaterEducation" class="form-control" disabled />
+        <span asp-validation-for="RaterEducation" class="text-danger"></span>
+    </div>
+    <div class="col-md-6 form-group">
+        <label asp-for="RaterFMHCertification" class="control-label">Rater FMH Certification</label>
+        <input asp-for="RaterFMHCertification" class="form-control" disabled />
+        <span asp-validation-for="RaterFMHCertification" class="text-danger"></span>
+    </div>
+   
+</div>
+<div>
+    <div class="col-md-5 form-group">
+        <label asp-for="IdClinic" class="control-label"></label>
+        <select asp-for="IdClinic" asp-items="Model.Clinics" class="form-control" disabled></select>
+        <span asp-validation-for="IdClinic" class="text-danger"></span>
+    </div>
+    <div class="col-md-4 form-group">
+        <label asp-for="IdPaymentMethod" class="control-label"></label>
+        <select asp-for="IdPaymentMethod" asp-items="Model.PaymentMethodList" class="form-control" disabled></select>
+        <span asp-validation-for="IdPaymentMethod" class="text-danger"></span>
+    </div>
+    <div class="col-md-3 form-group">
+        <label asp-for="Money" class="control-label">Hourly rate</label>
+        <input asp-for="Money" class="form-control" disabled />
+        <span asp-validation-for="Money" class="text-danger"></span>
+    </div>
+</div>
+<div class="col-md-push-12">
+    &nbsp;
+</div>
+
+
+

@@ -173,6 +173,7 @@ namespace KyoS.Web.Data
         public DbSet<PromotionPhotosEntity> PromotionPhotos { get; set; }
         public DbSet<TCMSubServiceStepEntity> TCMSubServiceSteps { get; set; }
         public DbSet<FacilitatorCertificationEntity> FacilitatorCertifications { get; set; }
+        public DbSet<DocumentAssistantCertificationEntity> DocumentAssistantCertifications { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

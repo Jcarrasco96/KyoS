@@ -5,44 +5,43 @@
 
 <div class="row">
     <div class="col-md-12">
-        <form asp-action="CreateModal" asp-route-id="@Model.Id" onsubmit="return jQueryAjaxPostAssistant(this);">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <form asp-action="EditModalReadOnly" asp-route-id="@Model.Id" onsubmit="return jQueryAjaxPostFacilitators(this);">
             <ul class="nav nav-tabs" role="tablist">
                 <li role="presentation" class="active"><a href="#personal" aria-controls="personal" role="tab" data-toggle="tab">Personal</a></li>
                 <li role="presentation"><a href="#agency" aria-controls="agency" role="tab" data-toggle="tab">Agency</a></li>
                 <li role="presentation"><a href="#private" aria-controls="private" role="tab" data-toggle="tab">Private</a></li>
                 <li role="presentation"><a href="#courses" aria-controls="courses" role="tab" data-toggle="tab">Courses</a></li>
             </ul>
-            <!-- Tab panes -->
             <div class="tab-content">
                 <div role="tabpanel" class="tab-pane active" id="personal">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="Id" />
+                    <input type="hidden" asp-for="SignaturePath" />
+                    <input type="hidden" asp-for="IdClinic" />
                     <input type="hidden" asp-for="Name" />
-                    <partial name="_Personal" />
+                    <partial name="_PersonalRO" />
                     <div class="form-group col-md-12">
                     </div>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="agency">
-                    <partial name="_Agency" />
+                    <partial name="_AgencyRO" />
                 </div>
                 <div role="tabpanel" class="tab-pane" id="private">
-                    <partial name="_Private" />
+                    <partial name="_PrivateRO" />
                 </div>
                 <div role="tabpanel" class="tab-pane" id="courses">
-                    <div id="view-facilitators">
+                    <div id="view-casemanagers">
                         @await Html.PartialAsync("_ViewCertificationsByDocumentAssistant", Model.DocumentAssistantCertifications)
                     </div>
                 </div>
             </div>
             <div class="col-md-12">
-                <div form-group">
-                    <hr />
-                </div>
+                <hr />
             </div>
-            <div>
-                <div class="col-md-offset-10 form-group">
-                    <input type="submit" value="Create" class="btn btn-primary" />
-                    <button type="button" class="btn btn-success" data-dismiss="modal">Back</button>
+            <div class="col-md-12">
+                <div class="col-md-offset-10">
+                    &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </form>

@@ -1,6 +1,6 @@
-﻿@model IEnumerable<KyoS.Web.Data.Entities.DocumentsAssistantEntity>
+﻿@model IEnumerable<KyoS.Web.Data.Entities.DocumentAssistantCertificationEntity>
 @{
-    ViewData["Title"] = "Documents Assistants";
+    ViewData["Title"] = "Certifications";
 }
 
 <link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
@@ -9,21 +9,18 @@
     <ul class="breadcrumb">
         <li>
             <i class="icon-home"></i>
-            @Html.ActionLink("Dashboard", "Index", "Desktop")
+            @Html.ActionLink("Documents Assistant", "Index", "DocumentsAssistants")
         </li>
-        <li class="active">Documents Assistants</li>
+        <li class="active">Certifications</li>
     </ul><!--.breadcrumb-->
 </div>
 
 <p>
     @if (User.IsInRole("Manager"))
     {
-        <a onclick="showInPopupLg('@Url.Action("CreateModal","DocumentsAssistants",null,Context.Request.Scheme)','Create Documents Assistant')" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Create Documents Assistant</a>
-        <a asp-action="Signatures" class="btn btn-default"><i class="glyphicon glyphicon-pencil"></i> Assistant's Signatures</a>
-        <a asp-action="DocumentAssistantCertifications" class="btn btn-default"><i class="glyphicon glyphicon-eye-open"></i> Document Assistant's certifications</a>
-    }
-    <a onclick="showInPopupLg('@Url.Action("AuditCertification","DocumentsAssistants",null,Context.Request.Scheme)','Audit TCM Certifications')" class="btn btn-danger" title="Audit Certifications"><i class="glyphicon glyphicon-alert"></i>  Audit Certifications</a>
-
+        <a onclick="showInPopup('@Url.Action("CreateDocumentAssistantCertification","DocumentsAssistants",null,Context.Request.Scheme)','Add Certification')" class="btn btn-primary" title="Add Certification"><i class="glyphicon glyphicon-plus"></i> Add Certification</a>
+    }    
+    <a onclick="showInPopupLg('@Url.Action("AuditCertification","DocumentsAssistants",null,Context.Request.Scheme)','Audit TCM Certifications')" class="btn btn-danger" title="Audit TCM Certifications"><i class="glyphicon glyphicon-alert"></i>  Audit TCM Certifications</a>
 </p>
 
 <div class="row">
@@ -35,36 +32,35 @@
                     <i class="icon-remove"></i>
                 </button>
                 <strong class="red">
-                    Error. It is not posible delete the assistant
+                    Error. It is not posible delete the case manager
                 </strong>
             </div>
         }
     </div>
-
-   
 </div>
 
 <div class="row">
-    <div id="view-assistant">
-        @await Html.PartialAsync("_ViewDocumentAssistant", Model)
+    <div id="view-documentCertification">
+        @await Html.PartialAsync("_ViewDocumentAssistantCertifications", Model)
     </div>
 </div>
-
+<partial name="_ModalPopup" />
 <partial name="_ModalPopupLg" />
-
 <partial name="_DeleteDialog" />
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
     <script src="~/js/jquery.dataTables.min.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
             $('#MyTable').DataTable({
-                "pageLength": 25
+                "order": [[1, "asc"]],
+                "pageLength": 50
             });
         });
-
         function ConfirmDelete(e) {
             Swal.fire({
                 title: 'Do you want to delete?',
@@ -76,12 +72,12 @@
                 confirmButtonText: 'Yes, delete it!'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    var url = "@Url.Action("Delete", "DocumentsAssistants")";
+                    var url = "@Url.Action("DeleteCertification", "DocumentsAssistants")";
                     window.location.href = url + '/' + e;
                 }
             });
         }
+      
     </script>
 }
-
 
