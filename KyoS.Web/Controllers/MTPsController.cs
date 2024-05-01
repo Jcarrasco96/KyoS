@@ -3334,6 +3334,7 @@ namespace KyoS.Web.Controllers
                 SupervisorEntity supervisor = _context.Supervisors.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
                 MtpReview.Status = AdendumStatus.Approved;
                 MtpReview.LicensedPractitioner = supervisor.Name;
+                MtpReview.DateClinicalDirector = MtpReview.DateLicensedPractitioner;
             }
             else
             {
@@ -3458,6 +3459,7 @@ namespace KyoS.Web.Controllers
                 mtpReviewEntity.Status = AdendumStatus.Approved;
                 mtpReviewEntity.LicensedPractitioner = _context.Supervisors.FirstOrDefault(n => n.LinkedUser == user_logged.UserName).Name;
                 mtpReviewEntity.DateLicensedPractitioner = mtpReviewViewModel.DateLicensedPractitioner;
+                mtpReviewEntity.DateClinicalDirector = mtpReviewViewModel.DateLicensedPractitioner;
 
                 _context.Update(mtpReviewEntity);
                 try
@@ -3516,6 +3518,7 @@ namespace KyoS.Web.Controllers
             mtpReview.Status = AdendumStatus.Approved;
             mtpReview.LicensedPractitioner = _context.Supervisors.FirstOrDefault(n => n.LinkedUser == user_logged.UserName).Name;
             mtpReview.DateLicensedPractitioner = DateTime.Today;
+            mtpReview.DateClinicalDirector = DateTime.Today;
 
             _context.Update(mtpReview);
 

@@ -20,14 +20,15 @@ namespace KyoS.Web.Controllers
         private readonly IConverterHelper _converterHelper;
         private readonly ICombosHelper _combosHelper;
         private readonly IRenderHelper _renderHelper;
+        private readonly IImageHelper _imageHelper;
 
-       
         public SettingsController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper, IRenderHelper renderHelper, IImageHelper imageHelper)
         {
             _context = context;
             _combosHelper = combosHelper;
             _converterHelper = converterHelper;
             _renderHelper = renderHelper;
+            _imageHelper = imageHelper;
         }
 
         [Authorize(Roles = "Admin")]
@@ -240,6 +241,14 @@ namespace KyoS.Web.Controllers
                 SettingEntity setting = await _context.Settings.FirstOrDefaultAsync(n => n.Id == user_logged.Clinic.Setting.Id);
                 ClinicEntity clinic = await _context.Clinics.FirstOrDefaultAsync(n => n.Id == user_logged.Clinic.Id);
 
+
+                string pathSignatureClinical = model.SignaturePath;
+
+                if (model.SignatureFile != null)
+                {
+                    pathSignatureClinical = await _imageHelper.UploadImageAsync(model.SignatureFile, "Clinics");
+                }
+
                 if (clinic != null)
                 {
                     clinic.CEO = model.CEO;
@@ -247,7 +256,7 @@ namespace KyoS.Web.Controllers
                     clinic.ProviderMedicaidId = model.ProviderMedicaidId;
                     clinic.ProviderTaxId = model.ProviderTaxId;
                     clinic.ClinicalDirector = model.ClinicalDirector;
-                    clinic.SignaturePath = model.SignaturePath;
+                    clinic.SignaturePath = pathSignatureClinical;
                     clinic.Address = model.Address;
                     clinic.City = model.City;
                     clinic.ZipCode = model.ZipCode;

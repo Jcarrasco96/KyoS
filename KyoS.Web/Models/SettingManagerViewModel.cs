@@ -1,4 +1,5 @@
 ﻿using KyoS.Web.Data.Entities;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
@@ -73,6 +74,9 @@ namespace KyoS.Web.Models
         public bool BillSemanalMH { get; set; }
         public bool IndNoteForAppointment { get; set; }
         public bool DischargeJoinCommission { get; set; }
+
+        [Display(Name = "Signature Clinical Director")]
+        public IFormFile SignatureFile { get; set; }
 
         //TCM
         [DataType(DataType.Time)]

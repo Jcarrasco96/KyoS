@@ -57,6 +57,7 @@
                 <div role="tabpanel" class="tab-pane active" id="mh">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <input type="hidden" asp-for="IdClinic" />
+                    <input type="hidden" asp-for="SignaturePath" />
                     <partial name="_SettingManagerMH" />
                     <div class="form-group col-md-12">
                         <input type="submit" value="Save" class="btn btn-primary" />
