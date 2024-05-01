@@ -49,7 +49,7 @@ namespace KyoS.Web.Controllers
 
                                                  .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
 
-            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.TCMClinic)
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null )
             {
                 return RedirectToAction("NotAuthorized", "Account");
             }
