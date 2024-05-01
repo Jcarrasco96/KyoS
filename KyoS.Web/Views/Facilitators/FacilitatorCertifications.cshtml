@@ -1,6 +1,6 @@
-﻿@model IEnumerable<KyoS.Web.Data.Entities.CaseManagerCertificationEntity>
+﻿@model IEnumerable<KyoS.Web.Data.Entities.FacilitatorCertificationEntity>
 @{
-    ViewData["Title"] = "Case Managers";
+    ViewData["Title"] = "Certifications";
 }
 
 <link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
@@ -9,7 +9,7 @@
     <ul class="breadcrumb">
         <li>
             <i class="icon-home"></i>
-            @Html.ActionLink("Case Managers", "Index", "CaseMannager")
+            @Html.ActionLink("Facilitators", "Index", "Facilitators")
         </li>
         <li class="active">Certifications</li>
     </ul><!--.breadcrumb-->
@@ -18,9 +18,9 @@
 <p>
     @if (User.IsInRole("Manager"))
     {
-        <a onclick="showInPopup('@Url.Action("CreatCaseManagerCertification","CaseMannager",null,Context.Request.Scheme)','Add Certification')" class="btn btn-primary" title="Add Certification"><i class="glyphicon glyphicon-plus"></i> Add Certification</a>
+        <a onclick="showInPopup('@Url.Action("CreateFacilitatorCertification","Facilitators",null,Context.Request.Scheme)','Add Certification')" class="btn btn-primary" title="Add Certification"><i class="glyphicon glyphicon-plus"></i> Add Certification</a>
     }    
-    <a onclick="showInPopupLg('@Url.Action("AuditCertification","CaseMannager",null,Context.Request.Scheme)','Audit TCM Certifications')" class="btn btn-danger" title="Audit TCM Certifications"><i class="glyphicon glyphicon-alert"></i>  Audit TCM Certifications</a>
+    <a onclick="showInPopupLg('@Url.Action("AuditCertification","Facilitators",null,Context.Request.Scheme)','Audit TCM Certifications')" class="btn btn-danger" title="Audit TCM Certifications"><i class="glyphicon glyphicon-alert"></i>  Audit TCM Certifications</a>
 </p>
 
 <div class="row">
@@ -40,8 +40,8 @@
 </div>
 
 <div class="row">
-    <div id="view-casemanagerCertification">
-        @await Html.PartialAsync("_ViewCaseManagerCertifications", Model)
+    <div id="view-facilitatorCertification">
+        @await Html.PartialAsync("_ViewFacilitatorCertifications", Model)
     </div>
 </div>
 <partial name="_ModalPopup" />
@@ -72,7 +72,7 @@
                 confirmButtonText: 'Yes, delete it!'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    var url = "@Url.Action("DeleteCertification", "CaseMannager")";
+                    var url = "@Url.Action("DeleteCertification", "Facilitators")";
                     window.location.href = url + '/' + e;
                 }
             });
