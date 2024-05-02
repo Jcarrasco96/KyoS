@@ -16,7 +16,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace KyoS.Web.Controllers
 {
-    [Authorize(Roles = "Admin, Manager")]
     public class DocumentsAssistantsController : Controller
     {
         private readonly DataContext _context;
@@ -33,7 +32,7 @@ namespace KyoS.Web.Controllers
             _imageHelper = imageHelper;
             _renderHelper = renderHelper;
         }
-        
+        [Authorize(Roles = "Admin, Manager, Documents_Assistant")]
         public async Task<IActionResult> Index(int idError = 0)
         {
             if (idError == 1) //Imposible to delete
@@ -45,23 +44,48 @@ namespace KyoS.Web.Controllers
                 return View(await _context.Supervisors.Include(f => f.Clinic).OrderBy(f => f.Name).ToListAsync());
             else
             {
-                UserEntity user_logged = _context.Users
+                if (User.IsInRole("Manager"))
+                {
+                    UserEntity user_logged = _context.Users
 
                                                  .Include(u => u.Clinic)
                                                  .ThenInclude(c => c.Setting)
 
                                                  .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
-                if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
+                    if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
+                    {
+                        return RedirectToAction("NotAuthorized", "Account");
+                    }
+
+                    return View(await _context.DocumentsAssistant
+                                              .Include(f => f.Clinic)
+                                              .Where(s => s.Clinic.Id == user_logged.Clinic.Id)
+                                              .OrderBy(f => f.Name).ToListAsync());
+                }
+                if (User.IsInRole("Documents_Assistant"))
                 {
-                    return RedirectToAction("NotAuthorized", "Account");
-                }               
-                         
-                return View(await _context.DocumentsAssistant
-                                          .Include(f => f.Clinic)
-                                          .Where(s => s.Clinic.Id == user_logged.Clinic.Id)
-                                          .OrderBy(f => f.Name).ToListAsync());             
+                    UserEntity user_logged = _context.Users
+
+                                                 .Include(u => u.Clinic)
+                                                 .ThenInclude(c => c.Setting)
+
+                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                    if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
+                    {
+                        return RedirectToAction("NotAuthorized", "Account");
+                    }
+
+                    return View(await _context.DocumentsAssistant
+                                              .Include(f => f.Clinic)
+                                              .Where(s => s.Clinic.Id == user_logged.Clinic.Id
+                                                       && s.LinkedUser == user_logged.UserName)
+                                              .OrderBy(f => f.Name).ToListAsync());
+                }
             }
+
+            return RedirectToAction("NotAuthorized", "Account");
         }
 
         public IActionResult Create(int id = 0)
@@ -116,6 +140,7 @@ namespace KyoS.Web.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin, Manager")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(DocumentsAssistantViewModel documentAssistantViewModel)
         {
@@ -163,7 +188,7 @@ namespace KyoS.Web.Controllers
             }
             return View(documentAssistantViewModel);
         }
-
+        [Authorize(Roles = "Admin, Manager")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -189,7 +214,7 @@ namespace KyoS.Web.Controllers
 
             return RedirectToAction(nameof(Index));
         }
-
+        [Authorize(Roles = "Admin, Manager")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -228,6 +253,7 @@ namespace KyoS.Web.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin, Manager")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, DocumentsAssistantViewModel documentsAssistantViewModel)
         {
@@ -516,11 +542,12 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("Home/Error404");
             }
 
-            DocumentsAssistantEntity dosumentAssistantEntity = await _context.DocumentsAssistant
+            DocumentsAssistantEntity documentAssistantEntity = await _context.DocumentsAssistant
                                                                              .Include(s => s.Clinic)
                                                                              .Include(s => s.DocumentAssistantCertifications)
+                                                                             .ThenInclude(f => f.Course)
                                                                              .FirstOrDefaultAsync(s => s.Id == id);
-            if (dosumentAssistantEntity == null)
+            if (documentAssistantEntity == null)
             {
                 return RedirectToAction("Home/Error404");
             }
@@ -532,7 +559,7 @@ namespace KyoS.Web.Controllers
                 UserEntity user_logged = _context.Users.Include(u => u.Clinic)
                                                        .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
-                documentsAssistantViewModel = _converterHelper.ToDocumentsAssistantViewModel(dosumentAssistantEntity, user_logged.Clinic.Id);
+                documentsAssistantViewModel = _converterHelper.ToDocumentsAssistantViewModel(documentAssistantEntity, user_logged.Clinic.Id);
 
                 if (user_logged.Clinic != null)
                 {
@@ -550,9 +577,9 @@ namespace KyoS.Web.Controllers
 
                     foreach (var item in coursList)
                     {
-                        if (dosumentAssistantEntity.DocumentAssistantCertifications.Where(n => n.Course.Id == item.Id).Count() > 0)
+                        if (documentAssistantEntity.DocumentAssistantCertifications.Where(n => n.Course.Id == item.Id).Count() > 0)
                         {
-                            foreach (var value in dosumentAssistantEntity.DocumentAssistantCertifications.Where(n => n.Course.Id == item.Id).ToList().OrderBy(c => c.ExpirationDate))
+                            foreach (var value in documentAssistantEntity.DocumentAssistantCertifications.Where(n => n.Course.Id == item.Id).ToList().OrderBy(c => c.ExpirationDate))
                             {
                                 Certification.Name = item.Name;
                                 Certification.CertificationNumber = value.CertificationNumber;
@@ -586,6 +613,7 @@ namespace KyoS.Web.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin, Manager")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditModal(int id, DocumentsAssistantViewModel documentsAssistantViewModel)
         {
@@ -770,7 +798,7 @@ namespace KyoS.Web.Controllers
             CertificationViewModel.DocumentAssistants = _combosHelper.GetComboDocumentsAssistantByClinic(user_logged.Clinic.Id);
 
 
-            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateFacilitatorCertification", CertificationViewModel) });
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateDocumentAssistantCertification", CertificationViewModel) });
         }
 
         [Authorize(Roles = "Manager")]
@@ -1036,6 +1064,7 @@ namespace KyoS.Web.Controllers
             DocumentsAssistantEntity Doc_AssistantEntity = await _context.DocumentsAssistant
                                                                          .Include(f => f.Clinic)
                                                                          .Include(f => f.DocumentAssistantCertifications)
+                                                                         .ThenInclude(f => f.Course)
                                                                          .FirstOrDefaultAsync(f => f.Id == id);
             if (Doc_AssistantEntity == null)
             {
@@ -1059,6 +1088,40 @@ namespace KyoS.Web.Controllers
                         Value = $"{user_logged.Clinic.Id}"
                     });
                     model.Clinics = list;
+
+                    List<DocumentAssistantCertificationEntity> CertificationList = new List<DocumentAssistantCertificationEntity>();
+                    DocumentAssistantCertificationEntity Certification = new DocumentAssistantCertificationEntity();
+                    List<CourseEntity> coursList = _context.Courses.Where(n => n.Role == UserType.Documents_Assistant).ToList();
+
+                    foreach (var item in coursList)
+                    {
+                        if (Doc_AssistantEntity.DocumentAssistantCertifications.Where(n => n.Course.Id == item.Id).Count() > 0)
+                        {
+                            foreach (var value in Doc_AssistantEntity.DocumentAssistantCertifications.Where(n => n.Course.Id == item.Id).ToList().OrderBy(c => c.ExpirationDate))
+                            {
+                                Certification.Name = item.Name;
+                                Certification.CertificationNumber = value.CertificationNumber;
+                                Certification.CertificateDate = value.CertificateDate;
+                                Certification.ExpirationDate = value.ExpirationDate;
+                                Certification.Id = value.Id;
+                                CertificationList.Add(Certification);
+                                Certification = new DocumentAssistantCertificationEntity();
+                            }
+                        }
+                        else
+                        {
+                            Certification.Name = item.Name;
+                            Certification.CertificationNumber = "-";
+                            Certification.CertificateDate = DateTime.Today;
+                            Certification.ExpirationDate = DateTime.Today;
+                            Certification.Id = 0;
+                            CertificationList.Add(Certification);
+                            Certification = new DocumentAssistantCertificationEntity();
+                        }
+
+                    }
+
+                    model.DocumentAssistantCertificationIdealList = CertificationList;
                 }
 
             }

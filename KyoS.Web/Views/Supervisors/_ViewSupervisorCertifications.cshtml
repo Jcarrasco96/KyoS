@@ -1,4 +1,4 @@
-﻿@model IEnumerable<KyoS.Web.Data.Entities.DocumentAssistantCertificationEntity>
+﻿@model IEnumerable<KyoS.Web.Data.Entities.SupervisorCertificationEntity>
 
 @if (Model != null)
 {
@@ -12,7 +12,7 @@
                 <thead>
                     <tr>
                         <th class="col-md-3">
-                            Document Asistant
+                            Supervisor
                         </th>
                         <th class="col-md-3" style="text-align:center;">
                             Course
@@ -38,7 +38,7 @@
                     {
                             <tr style="color: darkgrey;">
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.DocumentAssistant.Name)
+                                    @Html.DisplayFor(modelItem => item.Supervisor.Name)
                                 </td>
                                 <td align="center">
                                     @Html.DisplayFor(modelItem => item.Name)
@@ -53,13 +53,13 @@
                                     @Html.DisplayFor(modelItem => item.ExpirationDate)
                                 </td>
                                 <td align="center">
-                                    @if (item.DocumentAssistant.Status == KyoS.Common.Enums.StatusType.Open)
+                                    @if (item.Supervisor.Status == KyoS.Common.Enums.StatusType.Open)
                                     {
                                         <span class="label label-success">
                                             Open
                                         </span>
                                     }
-                                    @if (item.DocumentAssistant.Status == KyoS.Common.Enums.StatusType.Close)
+                                    @if (item.Supervisor.Status == KyoS.Common.Enums.StatusType.Close)
                                     {
                                         <span class="label label-default">
                                             Close
@@ -69,12 +69,12 @@
                                 <td align="right">
                                     @if (User.IsInRole("Manager"))
                                     {
-                                        <a onclick="showInPopup('@Url.Action("EditDocumentAssistantCertification","DocumentsAssistants",new {id = @item.Id},Context.Request.Scheme)','Edit Certification')" class="btn btn-warning" title="Edit Certification"><i class="glyphicon glyphicon-pencil"></i></a>
+                                        <a onclick="showInPopup('@Url.Action("EditSupervisorCertification","Supervisors",new {id = @item.Id},Context.Request.Scheme)','Edit Certification')" class="btn btn-warning" title="Edit Certification"><i class="glyphicon glyphicon-pencil"></i></a>
                                         <button onclick="ConfirmDelete(@item.Id)" class="btn btn-danger deleteItem" title="Delete Certification"><i class="glyphicon glyphicon-trash"></i></button>
                                     }
                                     else
                                     {
-                                        <a onclick="showInPopup('@Url.Action("EditDocumentAssistantCertification","DocumentsAssistants",new {id = @item.Id},Context.Request.Scheme)','Edit Certification')" class="btn btn-warning disabled" title="Edit Certification"><i class="glyphicon glyphicon-pencil"></i></a>
+                                        <a onclick="showInPopup('@Url.Action("EditSupervisorCertification","Supervisors",new {id = @item.Id},Context.Request.Scheme)','Edit Certification')" class="btn btn-warning disabled" title="Edit Certification"><i class="glyphicon glyphicon-pencil"></i></a>
                                         <button onclick="ConfirmDelete(@item.Id)" class="btn btn-danger deleteItem disabled" title="Delete Certification"><i class="glyphicon glyphicon-trash"></i></button>
                                     }
 

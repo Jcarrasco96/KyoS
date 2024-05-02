@@ -28,5 +28,6 @@ namespace KyoS.Web.Data.Entities
         public List<CaseManagerCertificationEntity> TCMCertifications { get; set; }
         public List<FacilitatorCertificationEntity> FacilitatorCertifications { get; set; }
         public List<DocumentAssistantCertificationEntity> DocumentAssistantCertifications { get; set; }
+        public List<SupervisorCertificationEntity> SupervisorCertifications { get; set; }
     }
 }

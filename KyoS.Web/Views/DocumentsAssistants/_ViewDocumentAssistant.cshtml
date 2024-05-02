@@ -61,8 +61,15 @@
                                     }
                                 </td>
                                 <td align="right">
-                                    <a onclick="showInPopupLg('@Url.Action("EditModal","DocumentsAssistants",new {id = @item.Id},Context.Request.Scheme)','Edit Documents Assistant')" class="btn btn-warning" title="Edit Documents Assistant"><i class="glyphicon glyphicon-pencil"></i></a>
-                                    <button onclick="ConfirmDelete(@item.Id)" class="btn btn-danger deleteItem" title="Delete documents assistant"><i class="glyphicon glyphicon-trash"></i></button>
+                                    @if (User.IsInRole("Manager"))
+                                    {
+                                        <a onclick="showInPopupLg('@Url.Action("EditModal","DocumentsAssistants",new {id = @item.Id},Context.Request.Scheme)','Edit Documents Assistant')" class="btn btn-warning" title="Edit Documents Assistant"><i class="glyphicon glyphicon-pencil"></i></a>
+                                        <button onclick="ConfirmDelete(@item.Id)" class="btn btn-danger deleteItem" title="Delete documents assistant"><i class="glyphicon glyphicon-trash"></i></button>
+                                    }
+                                    @if (User.IsInRole("Documents_Assistant"))
+                                    {
+                                        <a onclick="showInPopupLg('@Url.Action("EditModalReadOnly","DocumentsAssistants",new {id = @item.Id},Context.Request.Scheme)','View Document Assistant')" class="btn btn-info" title="View Document Assistant"><i class="glyphicon glyphicon-list"></i></a>
+                                    }
                                 </td>
                             </tr>
                         }

@@ -572,10 +572,45 @@ namespace KyoS.Web.Helpers
                 Clinic = await _context.Clinics.FindAsync(model.IdClinic),
                 Code = model.Code,
                 LinkedUser = _userHelper.GetUserNameById(model.IdUser),
-                Name = model.Name,
                 SignaturePath = signaturePath,
                 RaterEducation = model.RaterEducation,
-                RaterFMHCertification = model.RaterFMHCertification
+                RaterFMHCertification = model.RaterFMHCertification,
+
+                Status = StatusUtils.GetStatusByIndex(model.IdStatus),
+                Name = isNew ? model.FirstName + ' ' + model.MiddleName + ' ' + model.LastName : model.Name,
+                Email = model.Email,
+                Phone = model.Phone,
+                Money = model.Money,
+                Address = model.Address,
+                City = model.City,
+                DateOfBirth = model.DateOfBirth,
+                FirstName = model.FirstName,
+                PaymentMethod = PaymentMethodUtils.GetPaymentMethodByIndex(model.IdPaymentMethod),
+                Gender = GenderUtils.GetGenderByIndex(model.IdGender),
+                LastName = model.LastName,
+                MiddleName = model.MiddleName,
+                PH = model.PH,
+                State = model.State,
+                ZipCode = model.ZipCode,
+                AccountNumber = model.AccountNumber,
+                AccountType = AccountTypeUtils.GetAccountTypeByIndex(model.IdAccountType),
+                CAQH = model.CAQH,
+                CompanyEIN = model.CAQH,
+                CompanyName = model.CompanyName,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                CredentialExpirationDate = model.CredentialExpirationDate,
+                DEALicense = model.DEALicense,
+                FinancialInstitutionsName = model.FinancialInstitutionsName,
+                HiringDate = model.HiringDate,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn,
+                MedicaidProviderID = model.MedicaidProviderID,
+                MedicareProviderID = model.MedicareProviderID,
+                NPI = model.NPI,
+                Routing = model.Routing,
+                SSN = model.SSN,
+                Credentials = model.Credentials
             };
         }
 
@@ -592,7 +627,51 @@ namespace KyoS.Web.Helpers
                 UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.Supervisor, idClinic),
                 SignaturePath = supervisorEntity.SignaturePath,
                 RaterEducation = supervisorEntity.RaterEducation,
-                RaterFMHCertification = supervisorEntity.RaterFMHCertification
+                RaterFMHCertification = supervisorEntity.RaterFMHCertification,
+
+                Email = supervisorEntity.Email,
+                Phone = supervisorEntity.Phone,
+                Money = supervisorEntity.Money,
+                Address = supervisorEntity.Address,
+                City = supervisorEntity.City,
+                DateOfBirth = supervisorEntity.DateOfBirth,
+                FirstName = supervisorEntity.FirstName,
+                PaymentMethod = supervisorEntity.PaymentMethod,
+                Gender = supervisorEntity.Gender,
+                LastName = supervisorEntity.LastName,
+                MiddleName = supervisorEntity.MiddleName,
+                PH = supervisorEntity.PH,
+                State = supervisorEntity.State,
+                ZipCode = supervisorEntity.ZipCode,
+                AccountNumber = supervisorEntity.AccountNumber,
+                AccountType = supervisorEntity.AccountType,
+                CAQH = supervisorEntity.CAQH,
+                CompanyEIN = supervisorEntity.CAQH,
+                CompanyName = supervisorEntity.CompanyName,
+                CreatedBy = supervisorEntity.CreatedBy,
+                CreatedOn = supervisorEntity.CreatedOn,
+                CredentialExpirationDate = supervisorEntity.CredentialExpirationDate,
+                DEALicense = supervisorEntity.DEALicense,
+                FinancialInstitutionsName = supervisorEntity.FinancialInstitutionsName,
+                HiringDate = supervisorEntity.HiringDate,
+                LastModifiedBy = supervisorEntity.LastModifiedBy,
+                LastModifiedOn = supervisorEntity.LastModifiedOn,
+                MedicaidProviderID = supervisorEntity.MedicaidProviderID,
+                MedicareProviderID = supervisorEntity.MedicareProviderID,
+                NPI = supervisorEntity.NPI,
+                Routing = supervisorEntity.Routing,
+                SSN = supervisorEntity.SSN,
+                IdGender = (supervisorEntity.Gender == GenderType.Female) ? 1 : 2,
+                GenderList = _combosHelper.GetComboGender(),
+                IdAccountType = (supervisorEntity.AccountType == AccountType.Personal_Checking) ? 1 : (supervisorEntity.AccountType == AccountType.Personal_Saving) ? 2 : (supervisorEntity.AccountType == AccountType.Company_Checking) ? 3 : (supervisorEntity.AccountType == AccountType.Company_Saving) ? 4 : 0,
+                AccountTypeList = _combosHelper.GetComboAccountType(),
+                IdPaymentMethod = (supervisorEntity.PaymentMethod == PaymentMethod.Check) ? 1 : (supervisorEntity.PaymentMethod == PaymentMethod.Direct_Deposit) ? 2 : (supervisorEntity.PaymentMethod == PaymentMethod.Zelle) ? 3 : 0,
+                PaymentMethodList = _combosHelper.GetComboPaymentMethod(),
+                SupervisorCertifications = supervisorEntity.SupervisorCertifications,
+                Credentials = supervisorEntity.Credentials,
+                IdStatus = (supervisorEntity.Status == StatusType.Open) ? 1 : 2,
+                StatusList = _combosHelper.GetComboClientStatus(),
+                Status = supervisorEntity.Status
             };
         }
 
@@ -9374,7 +9453,7 @@ namespace KyoS.Web.Helpers
                 LastModifiedBy = model.LastModifiedBy,
                 LastModifiedOn = model.LastModifiedOn,
                 DocumentAssistants = _combosHelper.GetComboDocumentsAssistantByClinic(idClinic),
-                Courses = _combosHelper.GetComboCourseByRole(UserType.Facilitator),
+                Courses = _combosHelper.GetComboCourseByRole(UserType.Documents_Assistant),
                 CertificateDate = model.CertificateDate,
                 ExpirationDate = model.ExpirationDate,
                 CertificationNumber = model.CertificationNumber,
@@ -9385,6 +9464,49 @@ namespace KyoS.Web.Helpers
 
         }
 
+        public SupervisorCertificationEntity ToSupervisorCertificationEntity(SupervisorCertificationViewModel model, bool isNew, string userId)
+        {
+            CourseEntity course = _context.Courses.FirstOrDefault(n => n.Id == model.IdCourse);
+            return new SupervisorCertificationEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Name = course.Name,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                CertificateDate = model.CertificateDate,
+                CertificationNumber = model.CertificationNumber,
+                ExpirationDate = model.ExpirationDate,
+                Course = course,
+                Supervisor = _context.Supervisors.FirstOrDefault(n => n.Id == model.IdSupervisor)
+
+            };
+        }
+
+        public SupervisorCertificationViewModel ToSupervisorCertificationViewModel(SupervisorCertificationEntity model, int idClinic = 1)
+        {
+            return new SupervisorCertificationViewModel
+            {
+                Id = model.Id,
+                Name = model.Name,
+                IdCourse = model.Course.Id,
+                IdSupervisor = model.Supervisor.Id,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn,
+                Supervisors = _combosHelper.GetComboSupervisorByClinic(idClinic,true),
+                Courses = _combosHelper.GetComboCourseByRole(UserType.Supervisor),
+                CertificateDate = model.CertificateDate,
+                ExpirationDate = model.ExpirationDate,
+                CertificationNumber = model.CertificationNumber,
+                Supervisor = model.Supervisor,
+                Course = model.Course
+
+            };
+
+        }
 
     }
 

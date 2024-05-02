@@ -588,6 +588,15 @@
                                 <li>@Html.ActionLink("Approve Group notes", "GroupNotesSupervision", "Notes")</li>
                             </ul>
                         </li>
+                        <li class="class=" dropdown open"">
+                            <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
+                                Human Resources<span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li>@Html.ActionLink("My Information", "Index", "Supervisors")</li>
+                                <li>@Html.ActionLink("Paystubs", "Index", "TCMPayStub")</li>
+                            </ul>
+                        </li>
                         <li>
                             @if (counts_of_incidents == 0)
                             {
@@ -1090,7 +1099,15 @@
                                 <li>@Html.ActionLink("All Documents", "Alldocuments", "Clients")</li>
                             </ul>
                         </li>
-
+                        <li class="class=" dropdown open"">
+                            <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
+                                Human Resources<span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li>@Html.ActionLink("My Information", "Index", "DocumentsAssistants")</li>
+                                <li>@Html.ActionLink("Paystubs", "Index", "TCMPayStub")</li>
+                            </ul>
+                        </li>
                         <li><a asp-area="" asp-controller="Incidents" asp-action="Index">Incidents</a></li>
                         <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
                     }

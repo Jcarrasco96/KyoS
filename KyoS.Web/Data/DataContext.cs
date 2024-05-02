@@ -174,6 +174,7 @@ namespace KyoS.Web.Data
         public DbSet<TCMSubServiceStepEntity> TCMSubServiceSteps { get; set; }
         public DbSet<FacilitatorCertificationEntity> FacilitatorCertifications { get; set; }
         public DbSet<DocumentAssistantCertificationEntity> DocumentAssistantCertifications { get; set; }
+        public DbSet<SupervisorCertificationEntity> SupervisorCertifications { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -276,5 +276,7 @@ namespace KyoS.Web.Helpers
         FacilitatorCertificationViewModel ToFacilitatorCertificationViewModel(FacilitatorCertificationEntity model);
         DocumentAssistantCertificationEntity ToDocumentAssistantCertificationEntity(DocumentAssistantCertificationViewModel model, bool isNew, string userId);
         DocumentAssistantCertificationViewModel ToDocumentAssistantCertificationViewModel(DocumentAssistantCertificationEntity model, int idClinic);
+        SupervisorCertificationEntity ToSupervisorCertificationEntity(SupervisorCertificationViewModel model, bool isNew, string userId);
+        SupervisorCertificationViewModel ToSupervisorCertificationViewModel(SupervisorCertificationEntity model, int idClinic);
     }
 }
