@@ -91,10 +91,8 @@
                                     @if (item.Clients_HealthInsurances.Where(n => n.Active == true).Count() > 0)
                                     {
                                         @item.Clients_HealthInsurances.FirstOrDefault(n => n.Active == true).HealthInsurance.Name
-                                    }
-                                    else
-                                    {
-
+                                        <a>|</a>
+                                        @item.Clients_HealthInsurances.FirstOrDefault(n => n.Active == true).MemberId
                                     }
                                 </td>
                                 <td align="center">
@@ -168,10 +166,8 @@
                                     @if (item.Clients_HealthInsurances.Where(n => n.Active == true).Count() > 0)
                                     {
                                         @item.Clients_HealthInsurances.FirstOrDefault(n => n.Active == true).HealthInsurance.Name
-                                    }
-                                    else
-                                    {
-
+                                        <a>|</a>
+                                        @item.Clients_HealthInsurances.FirstOrDefault(n => n.Active == true).MemberId
                                     }
                                 </td>
                                 <td align="center">
@@ -202,7 +198,14 @@
                                     }
                                 </td>
                                 <td align="center">
-                                    @Html.DisplayFor(modelItem => item.Service)
+                                    @if (item.OnlyTCM == true)
+                                    {
+                                        <strong>TCM</strong>
+                                    }
+                                    else
+                                    {
+                                        @Html.DisplayFor(modelItem => item.Service)
+                                    }
                                 </td>
                                 <td align="right">
                                     @if (item.Status == KyoS.Common.Enums.StatusType.Open && User.IsInRole("Manager"))

@@ -16,6 +16,7 @@
             <div class="tab-content">
                 <div role="tabpanel" class="tab-pane active" id="personal">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="Name" />
                     <partial name="_Personal" />
                     <div class="form-group col-md-12">
                     </div>

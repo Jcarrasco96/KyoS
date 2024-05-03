@@ -2944,6 +2944,54 @@ namespace KyoS.Web.Migrations
                     b.ToTable("Doctors");
                 });
 
+            modelBuilder.Entity("KyoS.Web.Data.Entities.DocumentAssistantCertificationEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CertificateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CertificationNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("CourseId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("DocumentAssistantId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("ExpirationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("LastModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CourseId");
+
+                    b.HasIndex("DocumentAssistantId");
+
+                    b.ToTable("DocumentAssistantCertifications");
+                });
+
             modelBuilder.Entity("KyoS.Web.Data.Entities.DocumentDiagnosticEntity", b =>
                 {
                     b.Property<int>("Id")
@@ -3058,16 +3106,97 @@ namespace KyoS.Web.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("AccountNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("AccountType")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("AssignedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CAQH")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("City")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int?>("ClinicId")
                         .HasColumnType("int");
 
                     b.Property<string>("Code")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("CompanyEIN")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CompanyName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CredentialExpirationDate")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Credentials")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DEALicense")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DateOfBirth")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FinancialInstitutionsName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Firm")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Gender")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("HiringDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("LastModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("LinkedUser")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MedicaidProviderID")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MedicareProviderID")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MiddleName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Money")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("NPI")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
@@ -3075,13 +3204,37 @@ namespace KyoS.Web.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<string>("PH")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PaymentMethod")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Phone")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("RaterEducation")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("RaterFMHCertification")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Routing")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SSN")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("SignaturePath")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("State")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ZipCode")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -8027,6 +8180,54 @@ namespace KyoS.Web.Migrations
                     b.ToTable("SubSchedule");
                 });
 
+            modelBuilder.Entity("KyoS.Web.Data.Entities.SupervisorCertificationEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CertificateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CertificationNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("CourseId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("ExpirationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("LastModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("SupervisorId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CourseId");
+
+                    b.HasIndex("SupervisorId");
+
+                    b.ToTable("SupervisorCertifications");
+                });
+
             modelBuilder.Entity("KyoS.Web.Data.Entities.SupervisorEntity", b =>
                 {
                     b.Property<int>("Id")
@@ -8035,16 +8236,97 @@ namespace KyoS.Web.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("AccountNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("AccountType")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("AssignedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CAQH")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("City")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int?>("ClinicId")
                         .HasColumnType("int");
 
                     b.Property<string>("Code")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("CompanyEIN")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CompanyName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CredentialExpirationDate")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Credentials")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DEALicense")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DateOfBirth")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FinancialInstitutionsName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Firm")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Gender")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("HiringDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("LastModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("LinkedUser")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MedicaidProviderID")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MedicareProviderID")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MiddleName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Money")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("NPI")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
@@ -8052,17 +8334,38 @@ namespace KyoS.Web.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<string>("PH")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PaymentMethod")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Phone")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("RaterEducation")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("RaterFMHCertification")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Routing")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SSN")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("SignaturePath")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("State")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
+
+                    b.Property<string>("ZipCode")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -15561,6 +15864,21 @@ namespace KyoS.Web.Migrations
                     b.Navigation("Supervisor");
                 });
 
+            modelBuilder.Entity("KyoS.Web.Data.Entities.DocumentAssistantCertificationEntity", b =>
+                {
+                    b.HasOne("KyoS.Web.Data.Entities.CourseEntity", "Course")
+                        .WithMany("DocumentAssistantCertifications")
+                        .HasForeignKey("CourseId");
+
+                    b.HasOne("KyoS.Web.Data.Entities.DocumentsAssistantEntity", "DocumentAssistant")
+                        .WithMany("DocumentAssistantCertifications")
+                        .HasForeignKey("DocumentAssistantId");
+
+                    b.Navigation("Course");
+
+                    b.Navigation("DocumentAssistant");
+                });
+
             modelBuilder.Entity("KyoS.Web.Data.Entities.DocumentDiagnosticEntity", b =>
                 {
                     b.HasOne("KyoS.Web.Data.Entities.DiagnosticEntity", "Diagnostic")
@@ -15601,7 +15919,7 @@ namespace KyoS.Web.Migrations
             modelBuilder.Entity("KyoS.Web.Data.Entities.FacilitatorCertificationEntity", b =>
                 {
                     b.HasOne("KyoS.Web.Data.Entities.CourseEntity", "Course")
-                        .WithMany()
+                        .WithMany("FacilitatorCertifications")
                         .HasForeignKey("CourseId");
 
                     b.HasOne("KyoS.Web.Data.Entities.FacilitatorEntity", "Facilitator")
@@ -16466,6 +16784,21 @@ namespace KyoS.Web.Migrations
                         .HasForeignKey("ScheduleId");
 
                     b.Navigation("Schedule");
+                });
+
+            modelBuilder.Entity("KyoS.Web.Data.Entities.SupervisorCertificationEntity", b =>
+                {
+                    b.HasOne("KyoS.Web.Data.Entities.CourseEntity", "Course")
+                        .WithMany("SupervisorCertifications")
+                        .HasForeignKey("CourseId");
+
+                    b.HasOne("KyoS.Web.Data.Entities.SupervisorEntity", "Supervisor")
+                        .WithMany("SupervisorCertifications")
+                        .HasForeignKey("SupervisorId");
+
+                    b.Navigation("Course");
+
+                    b.Navigation("Supervisor");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.SupervisorEntity", b =>
@@ -17546,6 +17879,12 @@ namespace KyoS.Web.Migrations
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.CourseEntity", b =>
                 {
+                    b.Navigation("DocumentAssistantCertifications");
+
+                    b.Navigation("FacilitatorCertifications");
+
+                    b.Navigation("SupervisorCertifications");
+
                     b.Navigation("TCMCertifications");
                 });
 
@@ -17557,6 +17896,11 @@ namespace KyoS.Web.Migrations
             modelBuilder.Entity("KyoS.Web.Data.Entities.DoctorEntity", b =>
                 {
                     b.Navigation("Clients");
+                });
+
+            modelBuilder.Entity("KyoS.Web.Data.Entities.DocumentsAssistantEntity", b =>
+                {
+                    b.Navigation("DocumentAssistantCertifications");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.EmergencyContactEntity", b =>
@@ -17700,6 +18044,8 @@ namespace KyoS.Web.Migrations
                     b.Navigation("NotesP");
 
                     b.Navigation("ReferralList");
+
+                    b.Navigation("SupervisorCertifications");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.TCMAdendumEntity", b =>

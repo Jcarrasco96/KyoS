@@ -7,56 +7,40 @@
     <div class="col-md-12">
         <form asp-action="CreateModal" asp-route-id="@Model.Id" onsubmit="return jQueryAjaxPostSupervisors(this);">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div>
-                <div class="form-group col-md-9">
-                    <label asp-for="Name" class="control-label"></label>&nbsp;*
-                    <input asp-for="Name" class="form-control" />
-                    <span asp-validation-for="Name" class="text-danger"></span>
+            <ul class="nav nav-tabs" role="tablist">
+                <li role="presentation" class="active"><a href="#personal" aria-controls="personal" role="tab" data-toggle="tab">Personal</a></li>
+                <li role="presentation"><a href="#agency" aria-controls="agency" role="tab" data-toggle="tab">Agency</a></li>
+                <li role="presentation"><a href="#private" aria-controls="private" role="tab" data-toggle="tab">Private</a></li>
+                <li role="presentation"><a href="#courses" aria-controls="courses" role="tab" data-toggle="tab">Courses</a></li>
+            </ul>
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane active" id="personal">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="Name" />
+                    <partial name="_Personal" />
+                    <div class="form-group col-md-12">
+                    </div>
                 </div>
-                <div class="col-md-3 form-group">
-                    <label asp-for="Code" class="control-label"></label>
-                    <input asp-for="Code" class="form-control" />
-                    <span asp-validation-for="Code" class="text-danger"></span>
+                <div role="tabpanel" class="tab-pane" id="agency">
+                    <partial name="_Agency" />
                 </div>
-            </div>
-            <div>
-                <div class="col-md-12 form-group">
-                    <label asp-for="IdClinic" class="control-label"></label>
-                    <select asp-for="IdClinic" asp-items="Model.Clinics" class="form-control"></select>
-                    <span asp-validation-for="IdClinic" class="text-danger"></span>
+                <div role="tabpanel" class="tab-pane" id="private">
+                    <partial name="_Private" />
                 </div>
-            </div>
-            <div>
-                <div class="col-md-6 form-group">
-                    <label asp-for="IdUser" class="control-label"></label>
-                    <select asp-for="IdUser" asp-items="Model.UserList" class="form-control"></select>
-                    <span asp-validation-for="IdUser" class="text-danger"></span>
-                </div>
-                <div class="col-md-6 form-group">
-                    <label asp-for="SignatureFile" class="control-label"></label>
-                    <input asp-for="SignatureFile" type="file" class="form-control" />
-                    <span asp-validation-for="SignatureFile" class="text-danger"></span>
+                <div role="tabpanel" class="tab-pane" id="courses">
+                    <div id="view-facilitators">
+                        @await Html.PartialAsync("_ViewCertificationsBySupervisor", Model.SupervisorCertifications)
+                    </div>
                 </div>
             </div>
-            <div>
-                <div class="form-group col-md-6">
-                    <label asp-for="RaterEducation" class="control-label">Rater Education</label>
-                    <input asp-for="RaterEducation" class="form-control" />
-                    <span asp-validation-for="RaterEducation" class="text-danger"></span>
-                </div>
-                <div class="form-group col-md-6">
-                    <label asp-for="RaterFMHCertification" class="control-label"> Rater FMH Certification</label>
-                    <input asp-for="RaterFMHCertification" class="form-control" />
-                    <span asp-validation-for="RaterFMHCertification" class="text-danger"></span>
-                </div>
-            </div>
-            <div>
-                <div class="form-group col-md-12">
+            <div class="col-md-12">
+                <div form-group">
                     <hr />
                 </div>
             </div>
             <div>
-                <div class="col-md-offset-9 form-group">
+                <div class="col-md-offset-10 form-group">
                     <input type="submit" value="Create" class="btn btn-primary" />
                     <button type="button" class="btn btn-success" data-dismiss="modal">Back</button>
                 </div>

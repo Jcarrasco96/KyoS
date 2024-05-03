@@ -12,14 +12,15 @@
                     <thead>
                         <tr>
                             <th class="col-md-3">Clinic Name</th>
-                            <th class="col-md-2" style="text-align:center;">Disabled Date</th>
+                            <th class="col-md-1" style="text-align:center;">Disabled</th>
+                            <th class="col-md-1" style="text-align:center;">Day</th>
                             <th class="col-md-4" style="text-align:center;">Description</th>
                             <th class="col-md-1" style="text-align:center;">Create On</th>
                             <th class="col-md-2"></th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var item in Model)
+                        @foreach (var item in Model.OrderBy(n => n.DateBlocked))
                         {                            
                             <tr>
                                 <td>
@@ -27,6 +28,9 @@
                                 </td>
                                 <td align="center">
                                     @Html.DisplayFor(modelItem => item.DateBlocked)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.DateBlocked.DayOfWeek)
                                 </td>
                                 <td align="center">
                                     @Html.DisplayFor(modelItem => item.Description)

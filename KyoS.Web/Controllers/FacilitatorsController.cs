@@ -463,6 +463,7 @@ namespace KyoS.Web.Controllers
                         HiringDate = DateTime.Today
 
                     };
+
                     return View(model);
                 }
             }
@@ -623,6 +624,39 @@ namespace KyoS.Web.Controllers
                         Value = $"{user_logged.Clinic.Id}"
                     });
                     facilitatorViewModel.Clinics = list;
+
+                    List<FacilitatorCertificationEntity> CertificationList = new List<FacilitatorCertificationEntity>();
+                    FacilitatorCertificationEntity Certification = new FacilitatorCertificationEntity();
+                    List<CourseEntity> coursList = _context.Courses.Where(n => n.Role == UserType.Facilitator).ToList();
+
+                    foreach (var item in coursList)
+                    {
+                        if (facilitatorEntity.FacilitatorCertifications.Where(n => n.Course.Id == item.Id).Count() > 0)
+                        {
+                            foreach (var value in facilitatorEntity.FacilitatorCertifications.Where(n => n.Course.Id == item.Id).ToList().OrderBy(c => c.ExpirationDate))
+                            {
+                                Certification.Name = item.Name;
+                                Certification.CertificationNumber = value.CertificationNumber;
+                                Certification.CertificateDate = value.CertificateDate;
+                                Certification.ExpirationDate = value.ExpirationDate;
+                                Certification.Id = value.Id;
+                                CertificationList.Add(Certification);
+                                Certification = new FacilitatorCertificationEntity();
+                            }
+                        }
+                        else
+                        {
+                            Certification.Name = item.Name;
+                            Certification.CertificationNumber = "-";
+                            Certification.CertificateDate = DateTime.Today;
+                            Certification.ExpirationDate = DateTime.Today;
+                            Certification.Id = 0;
+                            CertificationList.Add(Certification);
+                            Certification = new FacilitatorCertificationEntity();
+                        }
+
+                    }
+                    facilitatorViewModel.FacilitatorCertificationIdealList = CertificationList;
                 }
 
             }
@@ -898,7 +932,7 @@ namespace KyoS.Web.Controllers
                                                    .ThenInclude(c => c.Setting)
                                                    .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
 
-            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.TCMClinic)
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
             {
                 return RedirectToAction("NotAuthorized", "Account");
             }
@@ -1012,7 +1046,7 @@ namespace KyoS.Web.Controllers
                                                .ToList();
 
                     course_List = _context.Courses
-                                          .Include(m => m.TCMCertifications)
+                                          .Include(m => m.FacilitatorCertifications)
                                           .Where(n => n.Role == UserType.Facilitator
                                                    && n.Active == true)
                                           .ToList();
@@ -1077,6 +1111,7 @@ namespace KyoS.Web.Controllers
             FacilitatorEntity facilitatorEntity = await _context.Facilitators
                                                                 .Include(f => f.Clinic)
                                                                 .Include(f => f.FacilitatorCertifications)
+                                                                .ThenInclude(f => f.Course)
                                                                 .FirstOrDefaultAsync(f => f.Id == id);
             if (facilitatorEntity == null)
             {
@@ -1100,6 +1135,39 @@ namespace KyoS.Web.Controllers
                         Value = $"{user_logged.Clinic.Id}"
                     });
                     facilitatorViewModel.Clinics = list;
+
+                    List<FacilitatorCertificationEntity> CertificationList = new List<FacilitatorCertificationEntity>();
+                    FacilitatorCertificationEntity Certification = new FacilitatorCertificationEntity();
+                    List<CourseEntity> coursList = _context.Courses.Where(n => n.Role == UserType.Facilitator).ToList();
+
+                    foreach (var item in coursList)
+                    {
+                        if (facilitatorEntity.FacilitatorCertifications.Where(n => n.Course.Id == item.Id).Count() > 0)
+                        {
+                            foreach (var value in facilitatorEntity.FacilitatorCertifications.Where(n => n.Course.Id == item.Id).ToList().OrderBy(c => c.ExpirationDate))
+                            {
+                                Certification.Name = item.Name;
+                                Certification.CertificationNumber = value.CertificationNumber;
+                                Certification.CertificateDate = value.CertificateDate;
+                                Certification.ExpirationDate = value.ExpirationDate;
+                                Certification.Id = value.Id;
+                                CertificationList.Add(Certification);
+                                Certification = new FacilitatorCertificationEntity();
+                            }
+                        }
+                        else
+                        {
+                            Certification.Name = item.Name;
+                            Certification.CertificationNumber = "-";
+                            Certification.CertificateDate = DateTime.Today;
+                            Certification.ExpirationDate = DateTime.Today;
+                            Certification.Id = 0;
+                            CertificationList.Add(Certification);
+                            Certification = new FacilitatorCertificationEntity();
+                        }
+
+                    }
+                    facilitatorViewModel.FacilitatorCertificationIdealList = CertificationList;
                 }
 
             }

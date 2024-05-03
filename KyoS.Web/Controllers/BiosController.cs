@@ -1931,7 +1931,12 @@ namespace KyoS.Web.Controllers
                     model.EmergencyContactTelephone = model.Client.EmergencyContact.Telephone;
                     model.RelationShipOfEmergencyContact = model.Client.RelationShipOfEmergencyContact.ToString();
 
-                    ViewData["origi"] = origi;
+                    if (model.DateSignatureSupervisor.ToShortDateString() == "01/01/0001")
+                    {
+                        model.DateSignatureSupervisor = model.DateBio;
+                    }
+
+                ViewData["origi"] = origi;
                     return View(model);
                 }
 

@@ -1,7 +1,7 @@
 ﻿@model KyoS.Web.Models.TCMIntakeAppendixJViewModel
 <div class="col-md-12">
     <pre>
-    <strong>AppendixJ valid until </strong>         <input asp-for="DateExpired" disabled>               <select asp-for="IdType" asp-items="Model.AppendixJTypes"></select>
+                                                <select asp-for="IdType" asp-items="Model.AppendixJTypes"></select>
 
     <input type="checkbox" asp-for="Active" disabled/>  AppendixJ Active
     Recipient's Name: <strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.Name)</strong>              Medicaid ID: <strong>@Html.DisplayFor(modelItem => Model.TcmClient.Client.MedicaidID)</strong>              
@@ -43,7 +43,7 @@
     { 
     <input type="checkbox" class="form-check-input" checked disabled> <i>Signed</i>
     }
-    <strong>Employee signature date</strong>         <input asp-for="Date">     @*<strong>Legal Guardian signature date</strong>    <input asp-for="SupervisorSignatureDate">*@
+    <strong>Employee signature date</strong>         <input asp-for="Date">     <strong>AppendixJ valid until </strong>    <input asp-for="DateExpired" >     
     <strong>(@Html.DisplayFor(modelItem => Model.AdmissionedFor))</strong>                                                                 
     </pre>
 </div>

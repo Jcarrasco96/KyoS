@@ -48,6 +48,6 @@ namespace KyoS.Web.Models
         public int IdAccountType { get; set; }
         public IEnumerable<SelectListItem> AccountTypeList { get; set; }
 
-        public List<CaseManagerCertificationEntity> CaseManagerCertificationIdealList { get; set; }
+        public List<FacilitatorCertificationEntity> FacilitatorCertificationIdealList { get; set; }
     }
 }

@@ -1,0 +1,92 @@
+﻿@model IEnumerable<KyoS.Web.Data.Entities.SupervisorCertificationEntity>
+
+@if (Model != null)
+{
+<div class="col-md-12">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Document Asistant Certifications</h3>
+        </div>
+        <div class="panel-body">
+            <table class="table table-hover table-responsive table-striped" id="MyTable">
+                <thead>
+                    <tr>
+                        <th class="col-md-3">
+                            Supervisor
+                        </th>
+                        <th class="col-md-3" style="text-align:center;">
+                            Course
+                        </th>
+                        <th class="col-md-1" style="text-align:center;">
+                            Number
+                        </th>
+                        <th class="col-md-1" style="text-align:center;">
+                           Date
+                        </th>
+                        <th class="col-md-1" style="text-align:center;">
+                            Expirate
+                        </th>
+                        <th class="col-md-1" style="text-align:center;">
+                            TCM Active
+                        </th>
+                        <th class="col-md-2">
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                            <tr style="color: darkgrey;">
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Supervisor.Name)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.Name)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.CertificationNumber)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.CertificateDate)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.ExpirationDate)
+                                </td>
+                                <td align="center">
+                                    @if (item.Supervisor.Status == KyoS.Common.Enums.StatusType.Open)
+                                    {
+                                        <span class="label label-success">
+                                            Open
+                                        </span>
+                                    }
+                                    @if (item.Supervisor.Status == KyoS.Common.Enums.StatusType.Close)
+                                    {
+                                        <span class="label label-default">
+                                            Close
+                                        </span>
+                                    }
+                                </td>
+                                <td align="right">
+                                    @if (User.IsInRole("Manager"))
+                                    {
+                                        <a onclick="showInPopup('@Url.Action("EditSupervisorCertification","Supervisors",new {id = @item.Id},Context.Request.Scheme)','Edit Certification')" class="btn btn-warning" title="Edit Certification"><i class="glyphicon glyphicon-pencil"></i></a>
+                                        <button onclick="ConfirmDelete(@item.Id)" class="btn btn-danger deleteItem" title="Delete Certification"><i class="glyphicon glyphicon-trash"></i></button>
+                                    }
+                                    else
+                                    {
+                                        <a onclick="showInPopup('@Url.Action("EditSupervisorCertification","Supervisors",new {id = @item.Id},Context.Request.Scheme)','Edit Certification')" class="btn btn-warning disabled" title="Edit Certification"><i class="glyphicon glyphicon-pencil"></i></a>
+                                        <button onclick="ConfirmDelete(@item.Id)" class="btn btn-danger deleteItem disabled" title="Delete Certification"><i class="glyphicon glyphicon-trash"></i></button>
+                                    }
+
+                                </td>
+                            </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+}
+
+
+

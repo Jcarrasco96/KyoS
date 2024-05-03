@@ -16,8 +16,14 @@
 </div>
 
 <p>
-    <a onclick="showInPopup('@Url.Action("CreateModal","DocumentsAssistants",null,Context.Request.Scheme)','Create Documents Assistant')" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Create Documents Assistant</a>
-    <a asp-action="Signatures" class="btn btn-default"><i class="glyphicon glyphicon-pencil"></i> Assistant's Signatures</a>
+    @if (User.IsInRole("Manager"))
+    {
+        <a onclick="showInPopupLg('@Url.Action("CreateModal","DocumentsAssistants",null,Context.Request.Scheme)','Create Documents Assistant')" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Create Documents Assistant</a>
+        <a asp-action="Signatures" class="btn btn-default"><i class="glyphicon glyphicon-pencil"></i> Assistant's Signatures</a>
+        <a asp-action="DocumentAssistantCertifications" class="btn btn-default"><i class="glyphicon glyphicon-eye-open"></i> Document Assistant's certifications</a>
+    }
+    <a onclick="showInPopupLg('@Url.Action("AuditCertification","DocumentsAssistants",null,Context.Request.Scheme)','Audit TCM Certifications')" class="btn btn-danger" title="Audit Certifications"><i class="glyphicon glyphicon-alert"></i>  Audit Certifications</a>
+
 </p>
 
 <div class="row">
@@ -44,7 +50,7 @@
     </div>
 </div>
 
-<partial name="_ModalPopup" />
+<partial name="_ModalPopupLg" />
 
 <partial name="_DeleteDialog" />
 

@@ -2584,10 +2584,14 @@ namespace KyoS.Web.Controllers
                                                                                  .ThenInclude(n => n.Client)
                                                                                  .ThenInclude(n => n.LegalGuardian)
                                                                                  .FirstOrDefault(n => n.TCMClient.Id == idTCMClient);
-                    DoctorEntity doctor = _context.Clients.FirstOrDefault(n => n.Id == id).Doctor;
-                    if (doctor == null)
+
+                    TCMIntakeFormEntity intake = _context.TCMIntakeForms.FirstOrDefault(n => n.TcmClient_FK == tcmClient.Id);
+                    DoctorEntity doctor = new DoctorEntity();
+
+                    if (intake != null)
                     {
-                        doctor = new DoctorEntity();
+                        doctor.Address = intake.PCP_Address;
+                        doctor.City = intake.PCP_CityStateZip;
                     }
                     if (intakeMedicalHistory == null)
                     {
@@ -2595,6 +2599,9 @@ namespace KyoS.Web.Controllers
                         {
                             model = new TCMIntakeMedicalHistoryViewModel
                             {
+                                PrimaryCarePhysician = doctor.Name,
+                                AddressPhysician = doctor.Address + doctor.City + doctor.State + doctor.ZipCode,
+                               
                                 TCMClient = _context.TCMClient.Include(n => n.Client).ThenInclude(n => n.LegalGuardian).FirstOrDefault(n => n.Id == idTCMClient),
                                 TCMClient_FK = id,
                                 Id = 0,
@@ -2602,8 +2609,7 @@ namespace KyoS.Web.Controllers
                                 DateSignatureLegalGuardian = tcmClient.DataOpen,
                                 DateSignaturePerson = tcmClient.DataOpen,
                                 Documents = true,
-
-                                AddressPhysician = doctor.Address,
+                                
                                 AgeFirstTalked = "",
                                 AgeFirstWalked = "",
                                 AgeToiletTrained = "",
@@ -2631,7 +2637,7 @@ namespace KyoS.Web.Controllers
                                 ChestPain = false,
                                 ChronicCough = false,
                                 ChronicIndigestion = false,
-                                City = doctor.City,
+                               
                                 Complications = false,
                                 Complications_Explain = "",
                                 Comprehending = false,
@@ -2715,7 +2721,7 @@ namespace KyoS.Web.Controllers
                                 PerformingCertainMotions = false,
                                 Planned = false,
                                 Poliomyelitis = false,
-                                PrimaryCarePhysician = doctor.Name,
+                               
                                 ProblemWithBedWetting = false,
                                 Reading = false,
                                 RheumaticFever = false,
@@ -2726,7 +2732,7 @@ namespace KyoS.Web.Controllers
                                 ShortnessOfBreath = false,
                                 SkinTrouble = false,
                                 Speaking = false,
-                                State = doctor.State,
+                                
                                 StomachPain = false,
                                 Surgery = false,
                                 SwellingOfFeet = false,
@@ -2740,7 +2746,7 @@ namespace KyoS.Web.Controllers
                                 WeightLoss = false,
                                 WhoopingCough = false,
                                 WritingSentence = false,
-                                ZipCode = doctor.ZipCode,
+                                
                                 AgeOfFirstMenstruation = "",
                                 DateOfLastBreastExam = "",
                                 DateOfLastPelvic = "",
@@ -2760,6 +2766,9 @@ namespace KyoS.Web.Controllers
                         {
                             model = new TCMIntakeMedicalHistoryViewModel
                             {
+                                PrimaryCarePhysician = doctor.Name,
+                                AddressPhysician = doctor.Address + doctor.City + doctor.State + doctor.ZipCode,
+
                                 TCMClient = _context.TCMClient.Include(n => n.Client).ThenInclude(n => n.LegalGuardian).FirstOrDefault(n => n.Id == idTCMClient),
                                 TCMClient_FK = id,
                                 Id = 0,
@@ -2768,7 +2777,6 @@ namespace KyoS.Web.Controllers
                                 DateSignaturePerson = tcmClient.DataOpen,
                                 Documents = true,
 
-                                AddressPhysician = tcmClient.Client.IntakeMedicalHistory.AddressPhysician,
                                 AgeFirstTalked = tcmClient.Client.IntakeMedicalHistory.AgeFirstTalked,
                                 AgeFirstWalked = tcmClient.Client.IntakeMedicalHistory.AgeFirstWalked,
                                 AgeToiletTrained = tcmClient.Client.IntakeMedicalHistory.AgeToiletTrained,
@@ -2880,7 +2888,6 @@ namespace KyoS.Web.Controllers
                                 PerformingCertainMotions = tcmClient.Client.IntakeMedicalHistory.PerformingCertainMotions,
                                 Planned = tcmClient.Client.IntakeMedicalHistory.Planned,
                                 Poliomyelitis = tcmClient.Client.IntakeMedicalHistory.Poliomyelitis,
-                                PrimaryCarePhysician = doctor.Name,
                                 ProblemWithBedWetting = tcmClient.Client.IntakeMedicalHistory.ProblemWithBedWetting,
                                 Reading = tcmClient.Client.IntakeMedicalHistory.Reading,
                                 RheumaticFever = tcmClient.Client.IntakeMedicalHistory.RheumaticFever,
