@@ -264,23 +264,14 @@
                             <th class="col-md-1" style="text-align:center;">
                                 Diagnostic
                             </th>
-                            @if (User.IsInRole("Manager"))
-                            {
-                                <th class="col-md-1" style="text-align:center;">
-                                    Service
-                                </th>
-                            }
-                            else
-                            {
-                                <th class="col-md-1" style="text-align:center;">
-                                    Approved
-                                </th>
-                            }
                             <th class="col-md-1" style="text-align:center;">
-                                Units
+                                Service
                             </th>
                             <th class="col-md-1" style="text-align:center;">
-                                Amount
+                                Approved
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Units <a>|</a> $
                             </th>
                             <th class="col-md-1" style="text-align:center;">
                                 Billed
@@ -336,7 +327,7 @@
                                     }
                                     &nbsp;
                                     @Html.DisplayFor(modelItem => item.TCMClient.Client.Name)
-                                    |
+                                    <a>|</a>
                                     @Html.DisplayFor(modelItem => item.TCMClient.CaseNumber)
                                 </td>
                                 <td align="center">
@@ -360,20 +351,14 @@
                                     }
                                 </td>
                                 <td align="center">
-                                    @if (User.IsInRole("Manager"))
-                                    {
-                                        @Html.DisplayFor(modelItem => item.DateOfService)
-                                    }
-                                    else
-                                    {
-                                        @Html.DisplayFor(modelItem => item.ApprovedDate)
-                                    }
+                                    @Html.DisplayFor(modelItem => item.DateOfService)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.ApprovedDate)
                                 </td>
                                 <td align="center">
                                     @unit
-                                </td>
-                                <td align="center">
-                                    @(unit * 12)
+                                    <a>|</a>@(unit * 12)
                                 </td>
                                 <td align="center">
                                     @if (item.BilledDate == null)

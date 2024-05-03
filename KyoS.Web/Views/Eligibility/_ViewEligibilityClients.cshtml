@@ -17,13 +17,13 @@
                             Health Insurance
                         </th>
                         <th class="col-md-1" style="text-align:center;">
-                            Admission
+                            Birth Day
                         </th>
                         <th class="col-md-1" style="text-align:center;">
-                            Status
+                            Admission
                         </th>
                         <th class="col-md-2" style="text-align:center;">
-                            MH Therapy
+                            Program
                         </th>
                         <th class="col-md-1" align="right">
                         </th>
@@ -44,7 +44,7 @@
                                 }
                                 &nbsp;
                                 @Html.DisplayFor(modelItem => item.Name)
-                                |
+                                <a>|</a>
                                 @Html.DisplayFor(modelItem => item.Code)
                             </td>
                             <td align="left">
@@ -56,21 +56,10 @@
                                 }                               
                             </td>
                             <td align="center">
-                                @Html.DisplayFor(modelItem => item.AdmisionDate)
+                                @Html.DisplayFor(modelItem => item.DateOfBirth)
                             </td>
                             <td align="center">
-                                @if (item.Status == KyoS.Common.Enums.StatusType.Open)
-                                {
-                                    <span class="label label-success">
-                                        Open
-                                    </span>
-                                }
-                                @if (item.Status == KyoS.Common.Enums.StatusType.Close)
-                                {
-                                    <span class="label label-default">
-                                        Close
-                                    </span>
-                                }
+                                @Html.DisplayFor(modelItem => item.AdmisionDate)
                             </td>
                             <td align="center">
                                 @if (item.OnlyTCM == true)

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<KyoS.Web.Data.Entities.ClientEntity>
+﻿@model IEnumerable<KyoS.Web.Models.BirthDayViewModel>
 @{
     ViewData["Title"] = "Clients' Birthday";
 }
@@ -135,82 +135,69 @@
                 <table class="table table-hover table-responsive table-striped" id="MyTable">
                     <thead>
                         <tr>
-                            <th class="col-md-4">
+                            <th class="col-md-3">
                                 @Html.DisplayNameFor(model => model.Name)
+                            </th>
+                            <th class="col-md-2" style="text-align:center;">
+                                Role
                             </th>
                             <th class="col-md-2 bg-warning" style="text-align:center;">
                                 Birth Date
                             </th>
                             <th class="col-md-2" style="text-align:center;">
-                                Admission
+                                Arrived
                             </th>
-                            <th class="col-md-1" style="text-align:center;">
+                            <th class="col-md-2" style="text-align:center;">
                                 Days
                             </th>
                             <th class="col-md-1" style="text-align:center;">
-                                Therapy
+                                Program
                             </th>
-                            <th class="col-md-2" style="text-align:center;">
-                                Status
-                            </th>
-
+                           
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (var item in Model)
                         {
-                            @if (item.Status == KyoS.Common.Enums.StatusType.Open)
-                            {
-                                <tr>
-                                    <td>
-                                        @if (item.Gender == KyoS.Common.Enums.GenderType.Female)
-                                        {
-                                            <i class="glyphicon glyphicon-user btn-danger"></i>
-                                        }
-                                        @if (item.Gender == KyoS.Common.Enums.GenderType.Male)
-                                        {
-                                            <i class="glyphicon glyphicon-user btn-primary"></i>
-                                        }
-                                        &nbsp;
-                                        @Html.DisplayFor(modelItem => item.Name)
-                                        |
-                                        @Html.DisplayFor(modelItem => item.Code)
-                                    </td>
-                                    <td align="center" class="bg-warning">
-                                        @if (DateTime.Today.Day == item.DateOfBirth.Day && DateTime.Today.Month == item.DateOfBirth.Month)
-                                        {
-                                            <b>@Html.DisplayFor(modelItem => item.DateOfBirth)</b> <i class="icon-bell"></i>
-                                        }
-                                        else
-                                        {
-                                            @Html.DisplayFor(modelItem => item.DateOfBirth)
-                                        }
-                                    </td>
-                                    <td align="center">
-                                        @Html.DisplayFor(modelItem => item.AdmisionDate)
-                                    </td>
-                                    <td align="center">
-                                        @Html.DisplayFor(modelItem => (DateTime.Today - item.AdmisionDate).Days)
-                                    </td>
-                                    <td align="center">
-                                        @Html.DisplayFor(modelItem => item.Service)
-                                    </td>
-                                    <td align="center">
-                                        @if (item.Status == KyoS.Common.Enums.StatusType.Open)
-                                        {
-                                            <span class="label label-success">
-                                                Open
-                                            </span>
-                                        }
-                                        @if (item.Status == KyoS.Common.Enums.StatusType.Close)
-                                        {
-                                            <span class="label label-default">
-                                                Close
-                                            </span>
-                                        }
-                                    </td>
-                                </tr>
-                            }
+                            <tr>
+                                <td>
+                                    @if (item.Gender == KyoS.Common.Enums.GenderType.Female)
+                                    {
+                                        <i class="glyphicon glyphicon-user btn-danger"></i>
+                                    }
+                                    @if (item.Gender == KyoS.Common.Enums.GenderType.Male)
+                                    {
+                                        <i class="glyphicon glyphicon-user btn-primary"></i>
+                                    }
+                                    &nbsp;
+                                    @Html.DisplayFor(modelItem => item.Name)
+                                    <a>|</a>
+                                    @Html.DisplayFor(modelItem => item.Code)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.Person)
+                                </td>
+                                <td align="center" class="bg-warning">
+                                    @if (DateTime.Today.Day == item.BirthDay.Day && DateTime.Today.Month == item.BirthDay.Month)
+                                    {
+                                        <b>@Html.DisplayFor(modelItem => item.BirthDay)</b> <i class="icon-bell"></i>
+                                    }
+                                    else
+                                    {
+                                        @Html.DisplayFor(modelItem => item.BirthDay)
+                                    }
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.Arriving)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => (DateTime.Today - item.Arriving).Days)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.Program)
+                                </td>
+                               
+                            </tr>
                         }
                     </tbody>
                 </table>

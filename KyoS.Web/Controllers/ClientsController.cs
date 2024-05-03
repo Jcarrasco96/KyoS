@@ -5482,15 +5482,157 @@ namespace KyoS.Web.Controllers
             }
             
             ViewData["month"] = monthName;
-                        
-            if(month == 0)
-                return View(await _context.Clients
-                                          .Where(c => (c.DateOfBirth.Month == DateTime.Today.Month && c.Status == StatusType.Open))
-                                          .ToListAsync());          
+
+            List<ClientEntity> clients = new List<ClientEntity>();
+            List<FacilitatorEntity> facilitators = new List<FacilitatorEntity>();
+            List<SupervisorEntity> supervisors = new List<SupervisorEntity>();
+            List<CaseMannagerEntity> TCMs = new List<CaseMannagerEntity>();
+            List<DocumentsAssistantEntity> documentAssistants = new List<DocumentsAssistantEntity>();
+            List<TCMSupervisorEntity> supervisorTCMs = new List<TCMSupervisorEntity>();
+
+            if (month == 0)
+            {
+                clients = await _context.Clients
+                                        .Where(c => (c.DateOfBirth.Month == DateTime.Today.Month && c.Status == StatusType.Open))
+                                        .ToListAsync();
+                facilitators = await _context.Facilitators
+                                             .Where(c => (c.DateOfBirth.Month == DateTime.Today.Month && c.Status == StatusType.Open))
+                                             .ToListAsync();
+                supervisors = await _context.Supervisors
+                                            .Where(c => (c.DateOfBirth.Month == DateTime.Today.Month && c.Status == StatusType.Open))
+                                            .ToListAsync();
+                documentAssistants = await _context.DocumentsAssistant
+                                                   .Where(c => (c.DateOfBirth.Month == DateTime.Today.Month && c.Status == StatusType.Open))
+                                                   .ToListAsync();
+                TCMs = await _context.CaseManagers
+                                     .Where(c => (c.DateOfBirth.Month == DateTime.Today.Month && c.Status == StatusType.Open))
+                                     .ToListAsync();
+                supervisorTCMs = await _context.TCMSupervisors
+                                               .Where(c => (c.DateOfBirth.Month == DateTime.Today.Month && c.Status == StatusType.Open))
+                                               .ToListAsync();
+            }
             else
-                return View(await _context.Clients
-                                          .Where(c => (c.DateOfBirth.Month == month && c.Status == StatusType.Open))
-                                          .ToListAsync());
+            {
+                clients = await _context.Clients
+                                        .Where(c => (c.DateOfBirth.Month == month && c.Status == StatusType.Open))
+                                        .ToListAsync();
+                facilitators = await _context.Facilitators
+                                            .Where(c => (c.DateOfBirth.Month == month && c.Status == StatusType.Open))
+                                            .ToListAsync();
+                supervisors = await _context.Supervisors
+                                            .Where(c => (c.DateOfBirth.Month == month && c.Status == StatusType.Open))
+                                            .ToListAsync();
+                documentAssistants = await _context.DocumentsAssistant
+                                                   .Where(c => (c.DateOfBirth.Month == month && c.Status == StatusType.Open))
+                                                   .ToListAsync();
+                TCMs = await _context.CaseManagers
+                                     .Where(c => (c.DateOfBirth.Month == month && c.Status == StatusType.Open))
+                                     .ToListAsync();
+                supervisorTCMs = await _context.TCMSupervisors
+                                               .Where(c => (c.DateOfBirth.Month == month && c.Status == StatusType.Open))
+                                               .ToListAsync();
+            }            
+
+            List<BirthDayViewModel> salida = new List<BirthDayViewModel>();
+            BirthDayViewModel temp = new BirthDayViewModel();
+            
+            // Client
+            foreach (var item in clients)
+            {
+                temp.Name = item.Name;
+                temp.BirthDay = item.DateOfBirth;
+                temp.Arriving = item.AdmisionDate;
+                temp.Program = item.Service.ToString();
+                temp.Arrived = DateTime.Today.Subtract(item.AdmisionDate).Days;
+                temp.Person = "Client";
+                temp.Gender = item.Gender;
+                temp.Code = item.Code;
+
+                salida.Add(temp);
+                temp = new BirthDayViewModel();
+            }
+
+            // facilitator
+            foreach (var item in facilitators)
+            {
+                temp.Name = item.Name;
+                temp.BirthDay = item.DateOfBirth;
+                temp.Arriving = item.HiringDate;
+                temp.Program = "MH";
+                temp.Arrived = DateTime.Today.Subtract(item.HiringDate).Days;
+                temp.Person = "Facilitator";
+                temp.Gender = item.Gender;
+                temp.Code = item.Codigo;
+
+                salida.Add(temp);
+                temp = new BirthDayViewModel();
+            }
+
+            // Supervisor
+            foreach (var item in supervisors)
+            {
+                temp.Name = item.Name;
+                temp.BirthDay = item.DateOfBirth;
+                temp.Arriving = item.HiringDate;
+                temp.Program = "MH";
+                temp.Arrived = DateTime.Today.Subtract(item.HiringDate).Days;
+                temp.Person = "Supervisor";
+                temp.Gender = item.Gender;
+                temp.Code = item.Code;
+
+                salida.Add(temp);
+                temp = new BirthDayViewModel();
+            }
+
+            // Document Assistant
+            foreach (var item in documentAssistants)
+            {
+                temp.Name = item.Name;
+                temp.BirthDay = item.DateOfBirth;
+                temp.Arriving = item.HiringDate;
+                temp.Program = "MH";
+                temp.Arrived = DateTime.Today.Subtract(item.HiringDate).Days;
+                temp.Person = "Doc_Assistant";
+                temp.Gender = item.Gender;
+                temp.Code = item.Code;
+
+                salida.Add(temp);
+                temp = new BirthDayViewModel();
+            }
+
+            // TCMs
+            foreach (var item in TCMs)
+            {
+                temp.Name = item.Name;
+                temp.BirthDay = item.DateOfBirth;
+                temp.Arriving = item.HiringDate;
+                temp.Program = "MH";
+                temp.Arrived = DateTime.Today.Subtract(item.HiringDate).Days;
+                temp.Person = "TCM";
+                temp.Gender = item.Gender;
+                temp.Code = item.ProviderNumber;
+
+                salida.Add(temp);
+                temp = new BirthDayViewModel();
+            }
+
+            // TCM Supervisor
+            foreach (var item in supervisorTCMs)
+            {
+                temp.Name = item.Name;
+                temp.BirthDay = item.DateOfBirth;
+                temp.Arriving = item.HiringDate;
+                temp.Program = "MH";
+                temp.Arrived = DateTime.Today.Subtract(item.HiringDate).Days;
+                temp.Person = "TCM Supervisor";
+                temp.Gender = item.Gender;
+                temp.Code = item.Code;
+
+                salida.Add(temp);
+                temp = new BirthDayViewModel();
+            }
+
+            return View(salida);
         }
 
         [Authorize(Roles = "Manager, Supervisor, Facilitator, Frontdesk, Documents_Assistant")]
