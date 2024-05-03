@@ -13,11 +13,11 @@
                         <th class="col-md-4">
                             Name
                         </th>
-                        <th class="col-md-2" style="text-align:left;">
+                        <th class="col-md-3" style="text-align:left;">
                             Health Insurance
                         </th>
-                        <th class="col-md-2" style="text-align:center;">
-                            Admission Date
+                        <th class="col-md-1" style="text-align:center;">
+                            Admission
                         </th>
                         <th class="col-md-1" style="text-align:center;">
                             Status
@@ -50,7 +50,9 @@
                             <td align="left">
                                 @if (item.Clients_HealthInsurances.Where(n => n.Active == true).Count() > 0)
                                 {
-                                    @item.Clients_HealthInsurances.FirstOrDefault(n => n.Active == true).HealthInsurance.Name
+                                    @Html.DisplayFor(modelItem => item.Clients_HealthInsurances.FirstOrDefault(n => n.Active == true).HealthInsurance.Name)
+                                    <a>|</a>
+                                    @Html.DisplayFor(modelItem => item.Clients_HealthInsurances.FirstOrDefault(n => n.Active == true).MemberId)
                                 }                               
                             </td>
                             <td align="center">

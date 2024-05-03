@@ -47,9 +47,13 @@
             <h4 style="text-align:center; font-weight:bold;">$<label id="lbMoney"></label></h4>
         </div>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-2">
         &nbsp;
     </div>
+    <div class="col-md-1">
+        <a onclick="showInPopupLg('@Url.Action("AuditTCMClientActive", "TCMClients", null, Context.Request.Scheme)','Last Service')" class="btn btn-danger" title="Last Service"><i class="glyphicon glyphicon-alert"></i>&nbsp;&nbsp;Last Service</a>
+    </div>
+  
 </div>
 <div class="row">
     <div class = "col-md-12">
@@ -65,6 +69,7 @@
 </div>
 
 <partial name="_ModalPopup" />
+<partial name="_ModalPopupLg" />
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

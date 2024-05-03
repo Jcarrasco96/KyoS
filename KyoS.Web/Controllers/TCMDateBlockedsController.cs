@@ -54,9 +54,13 @@ namespace KyoS.Web.Controllers
         [Authorize(Roles = "Manager, TCMSupervisor")]
         public IActionResult Create()
         {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
             TCMDateBlockedViewModel dateBlocked = new TCMDateBlockedViewModel()
             {
-                IdClinic = 0,
+                IdClinic = user_logged.Clinic.Id,
                 Clinics = _combosHelper.GetComboClinics(),
                 DateBlocked = DateTime.Today
             };
@@ -189,6 +193,86 @@ namespace KyoS.Web.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+        [Authorize(Roles = "Manager, TCMSupervisor")]
+        public IActionResult DisabledSundayDate()
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            TCMDateBlockedViewModel dateBlocked = new TCMDateBlockedViewModel()
+            {
+                IdClinic = user_logged.Clinic.Id,
+                Clinics = _combosHelper.GetComboClinics(),
+                DateBlocked = DateTime.Today, 
+                year = DateTime.Today.Year,
+                Description = "All sunday"
+            };
+            return View(dateBlocked);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DisabledSundayDate(TCMDateBlockedViewModel model)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (ModelState.IsValid)
+            {
+                DateTime date = new DateTime(model.year,1,1);
+                
+                while (date.DayOfWeek != DayOfWeek.Sunday)
+                {
+                    date = date.AddDays(1.0);
+                }
+                
+                List<DateTime> dates = new List<DateTime>();
+                dates.Add(date);
+
+                while (date.Year == model.year)
+                {
+                    date = date.AddDays(7.0);
+                    dates.Add(date);
+                }
+
+                foreach (var item in dates)
+                {
+                    TCMDateBlockedEntity dateBlocked = await _context.TCMDateBlocked
+                                                                     .FirstOrDefaultAsync(s => s.DateBlocked.Date == item);
+                    if (dateBlocked == null)
+                    {
+                        model.DateBlocked = item;
+                        dateBlocked = await _converterHelper.ToTCMDateBlockedEntity(model, true, user_logged.Id);
+                        _context.Add(dateBlocked);
+                       
+                    }
+                }
+
+                await _context.SaveChangesAsync();
+
+
+                List<TCMDateBlockedEntity> dateBlockedList = await _context.TCMDateBlocked
+                                                                           .Include(s => s.Clinic)
+                                                                           .ToListAsync();
+
+                return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_DateBlockedList", dateBlockedList) });
+            }
+
+            TCMDateBlockedViewModel salida = new TCMDateBlockedViewModel()
+            {
+                IdClinic = model.IdClinic,
+                Clinics = _combosHelper.GetComboClinics(),
+                DateBlocked = DateTime.Today,
+                year = DateTime.Today.Year,
+                Description = "All sunday"
+            };
+
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "DisabledSundayDate", salida) });
+        }
+
 
     }
 }

@@ -1,0 +1,106 @@
+﻿@model IEnumerable<KyoS.Web.Models.TCMClientLastNoteViewModel>
+@{
+    Layout = null;
+}
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="AuditCertification">
+            <div class="col-md-12">
+                @if (Model != null)
+                {
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">Audit (TCM Clients)</h3>
+                                </div>
+                                <div class="panel-body">
+                                    <table class="table table-hover table-responsive table-striped" id="MyTableDiag">
+                                        <thead>
+                                            <tr>
+                                                <th class="col-md-4">
+                                                    Client Name
+                                                </th>
+                                                <th class="col-md-2" style="text-align: center;">
+                                                    Open
+                                                </th>
+                                                <th class="col-md-2" style="text-align: center;">
+                                                    Last Service
+                                                </th>
+                                                <th class="col-md-3">
+                                                    Service Name
+                                                </th>
+                                                <th class="col-md-1" style="text-align: center;">
+                                                    Days
+                                                </th>
+                                               
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var item in Model)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        @if (item.Gender == KyoS.Common.Enums.GenderType.Female)
+                                                        {
+                                                            <i class="glyphicon glyphicon-user btn-danger"></i>
+                                                        }
+                                                        @if (item.Gender == KyoS.Common.Enums.GenderType.Male)
+                                                        {
+                                                            <i class="glyphicon glyphicon-user btn-primary"></i>
+                                                        }
+                                                        &nbsp;
+                                                        @Html.DisplayFor(modelItem => item.ClientName)
+                                                    </td>
+                                                    <td align="center">
+                                                        @Html.DisplayFor(modelItem => item.DateOpen)
+                                                    </td>
+                                                    <td align="center">
+                                                        @Html.DisplayFor(modelItem => item.LastServiceDate)
+                                                    </td>
+                                                    <td>
+                                                        @item.LastServiceName
+                                                    </td>
+                                                    <td align="center">
+                                                        @if (item.Days > 20)
+                                                        {
+                                                            <span class="label label-danger">
+                                                                @Html.DisplayFor(modelItem => item.Days)
+                                                            </span>
+                                                        }
+                                                        else
+                                                        {
+                                                            @if (item.Days > 15)
+                                                            {
+                                                                <span class="label label-warning">
+                                                                    @Html.DisplayFor(modelItem => item.Days)
+                                                                </span>
+                                                            }
+                                                            else
+                                                            {
+                                                                <span class="label label-success">
+                                                                    @Html.DisplayFor(modelItem => item.Days)
+                                                                </span>
+                                                            }
+                                                        }
+
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="col-md-offset-10">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+

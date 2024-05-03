@@ -3559,5 +3559,194 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("NotAuthorized", "Account");
         }
 
+        [Authorize(Roles = "Manager, CaseManager, TCMSupervisor, Biller")]
+        public async Task<IActionResult> TCMClientLastTNote()
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(c => c.Setting)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            List<TCMClientEntity> tcmClients = new List<TCMClientEntity>();
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.TCMClinic)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+            if (user_logged.UserType.ToString() == "CaseManager")
+            {
+                CaseMannagerEntity caseManager = await _context.CaseManagers
+                                                               .FirstOrDefaultAsync(c => c.LinkedUser == user_logged.UserName);
+
+               tcmClients = await _context.TCMClient
+                                          .Include(g => g.Casemanager)
+                                          .Include(g => g.Client)
+                                          .Include(g => g.TCMNote)
+                                          .ThenInclude(g => g.TCMNoteActivity)
+                                          .Where(g => (g.Casemanager.Id == caseManager.Id))
+                                          .OrderBy(g => g.Client.Name)
+                                          .ToListAsync();
+            }
+
+            if (user_logged.UserType.ToString() == "Manager" || user_logged.UserType.ToString() == "Biller")
+            {
+
+                tcmClients = await _context.TCMClient
+                                           .Include(g => g.Casemanager)
+                                           .Include(g => g.Client)
+                                           .Include(g => g.TCMNote)
+                                           .ThenInclude(g => g.TCMNoteActivity)
+                                           .Where(s => s.Client.Clinic.Id == user_logged.Clinic.Id)
+                                           .OrderBy(g => g.Casemanager.Name)
+                                           .ToListAsync();
+               
+            }
+
+            if (user_logged.UserType.ToString() == "TCMSupervisor")
+            {
+
+                tcmClients = await _context.TCMClient
+                                           .Include(g => g.Casemanager)
+                                           .Include(g => g.Client)
+                                           .Include(g => g.TCMNote)
+                                           .ThenInclude(g => g.TCMNoteActivity)
+                                           .Where(s => s.Client.Clinic.Id == user_logged.Clinic.Id
+                                                    && s.Casemanager.TCMSupervisor.LinkedUser == user_logged.UserName)
+                                           .OrderBy(g => g.Casemanager.Name)
+                                           .ToListAsync();
+              
+            }
+
+            TCMClientLastNoteViewModel model = new TCMClientLastNoteViewModel();
+            List<TCMClientLastNoteViewModel> modelList = new List<TCMClientLastNoteViewModel>();
+
+            foreach (var item in tcmClients)
+            {
+                model.CaseManager = item.Casemanager.Name;
+                model.ClientName = item.Client.Name;
+                model.TCMCaseNumber = item.CaseNumber;
+                model.Status = item.Status;
+                model.DateOpen = item.DataOpen.ToShortDateString();
+                model.DateClose = item.DataClose.ToShortDateString();
+                if (item.TCMNote.Count > 0 && item.TCMNote.MaxBy(n => n.DateOfService).TCMNoteActivity.Count() > 0)
+                {
+                    model.LastServiceDate = item.TCMNote.MaxBy(n => n.DateOfService).DateOfService.ToShortDateString();
+                    model.Days = DateTime.Now.Subtract(item.TCMNote.MaxBy(n => n.DateOfService).DateOfService).Days;
+                    model.LastServiceName = item.TCMNote.MaxBy(n => n.DateOfService).TCMNoteActivity.FirstOrDefault().ServiceName;
+                }
+                else
+                {
+                    model.LastServiceDate = "Not services";
+                    model.Days = DateTime.Now.Subtract(item.DataOpen).Days;
+                    model.LastServiceName = string.Empty;
+                }
+               
+                model.Gender = item.Client.Gender;
+
+                modelList.Add(model);
+                model = new TCMClientLastNoteViewModel();
+            }
+
+            return View(modelList);
+          
+        }
+
+        [Authorize(Roles = "Manager, TCMSupervisor, CaseManager")]
+        public IActionResult AuditTCMClientActive()
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(c => c.Setting)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            List<TCMClientEntity> tcmClients = new List<TCMClientEntity>();
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.TCMClinic)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+            if (user_logged.UserType.ToString() == "CaseManager")
+            {
+                CaseMannagerEntity caseManager = _context.CaseManagers
+                                                         .FirstOrDefault(c => c.LinkedUser == user_logged.UserName);
+
+                tcmClients = _context.TCMClient
+                                     .Include(g => g.Casemanager)
+                                     .Include(g => g.Client)
+                                     .Include(g => g.TCMNote)
+                                     .ThenInclude(g => g.TCMNoteActivity)
+                                     .Where(g => (g.Casemanager.Id == caseManager.Id))
+                                     .OrderBy(g => g.Client.Name)
+                                     .ToList();
+            }
+
+            if (user_logged.UserType.ToString() == "Manager" || user_logged.UserType.ToString() == "Biller")
+            {
+
+                tcmClients = _context.TCMClient
+                                     .Include(g => g.Casemanager)
+                                     .Include(g => g.Client)
+                                     .Include(g => g.TCMNote)
+                                     .ThenInclude(g => g.TCMNoteActivity)
+                                     .Where(s => s.Client.Clinic.Id == user_logged.Clinic.Id)
+                                     .OrderBy(g => g.Casemanager.Name)
+                                     .ToList();
+
+            }
+
+            if (user_logged.UserType.ToString() == "TCMSupervisor")
+            {
+
+                tcmClients = _context.TCMClient
+                                     .Include(g => g.Casemanager)
+                                     .Include(g => g.Client)
+                                     .Include(g => g.TCMNote)
+                                     .ThenInclude(g => g.TCMNoteActivity)
+                                     .Where(s => s.Client.Clinic.Id == user_logged.Clinic.Id
+                                              && s.Casemanager.TCMSupervisor.LinkedUser == user_logged.UserName)
+                                     .OrderBy(g => g.Casemanager.Name)
+                                     .ToList();
+
+            }
+
+            TCMClientLastNoteViewModel model = new TCMClientLastNoteViewModel();
+            List<TCMClientLastNoteViewModel> modelList = new List<TCMClientLastNoteViewModel>();
+
+            foreach (var item in tcmClients)
+            {
+                model.CaseManager = item.Casemanager.Name;
+                model.ClientName = item.Client.Name;
+                model.TCMCaseNumber = item.CaseNumber;
+                model.Status = item.Status;
+                model.DateOpen = item.DataOpen.ToShortDateString();
+                model.DateClose = item.DataClose.ToShortDateString();
+                TCMNoteEntity aux = item.TCMNote.MaxBy(n => n.DateOfService);
+                if (item.TCMNote.Count > 0 && aux.TCMNoteActivity.Count() > 0)
+                {
+                    model.LastServiceDate = aux.DateOfService.ToShortDateString();
+                    model.Days = DateTime.Now.Subtract(aux.DateOfService).Days;
+                    model.LastServiceName = aux.TCMNoteActivity.FirstOrDefault().ServiceName;
+                }
+                else
+                {
+                    model.LastServiceDate = "Not services";
+                    model.Days = DateTime.Now.Subtract(item.DataOpen).Days;
+                    model.LastServiceName = string.Empty;
+                }
+
+                model.Gender = item.Client.Gender;
+
+                if (model.Days > 20)
+                {
+                    modelList.Add(model);
+                    model = new TCMClientLastNoteViewModel();
+                }
+                
+            }
+
+            return View(modelList);
+        }
     }
 }
