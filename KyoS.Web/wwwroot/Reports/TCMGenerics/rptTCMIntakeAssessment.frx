@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="04/30/2024 21:49:21" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="05/03/2024 12:51:32" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pSrjZHqPCSNXKYfct7zavy9myey+m7LlneqXrU/O01HluWX5xN0Wi9iEsLcNk0RAxQTK/vkCbP84JEJ34oyUAuO8Nkf92QE8SIlXql/fp09s=">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pSrjZHqPCSNXKYfct7zavy9myey+m7LlneqXrU/O01HluWX5xN0Wi9iEsLcNk0RAxQTK/vkCbP84JEJ34oyUAuLxiRGsZ7mh7O/F3dxf0U68=">
       <TableDataSource Name="Clinics" DataType="System.Int32" Enabled="true" TableName="Clinics">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -139,7 +139,7 @@
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="TcmAssessmentId" DataType="System.Int32"/>
         <Column Name="TypeSurgery" DataType="System.String"/>
-        <Column Name="Date" DataType="System.DateTime"/>
+        <Column Name="Date" DataType="System.Char"/>
         <Column Name="Hospital" DataType="System.String"/>
         <Column Name="Outcome" DataType="System.String"/>
         <Column Name="CreatedBy" DataType="System.String"/>
@@ -652,7 +652,7 @@
       <TextObject Name="Textbox64" Left="160.65" Top="31.33" Width="450.05" Height="22" CanGrow="true" Text="CASE MANAGEMENT ASSESSMENT" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
       <LineObject Name="Line3" Left="151.2" Top="14.45" Height="37.2"/>
       <LineObject Name="Line4" Left="774.52" Top="79.6" Width="-776"/>
-      <PictureObject Name="Picture1" Left="18.9" Top="5.45" Width="103.95" Height="66.15" Image=""/>
+      <PictureObject Name="Picture1" Left="18.9" Top="5.45" Width="103.95" Height="66.15"/>
       <LineObject Name="Line6" Left="150.2" Top="13.45" Height="37.8"/>
       <LineObject Name="Line7" Left="774.9" Top="78.7" Width="-776"/>
     </ReportTitleBand>
@@ -1235,7 +1235,7 @@
       <TextObject Name="Text479" Left="-9.55" Top="116.4" Width="378" Height="18.9" Text="Place of Practice &lt;i&gt;(Hospital, Medical Center, Private Practice, etc.):&lt;/i&gt; " HorzAlign="Right" VertAlign="Center" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
       <TextObject Name="Text480" Left="364.55" Top="114.65" Width="412.02" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" VertAlign="Center" Font="Arial, 9pt"/>
     </DataBand>
-    <DataBand Name="Data17" Top="215.59" Width="778.3" Height="18.9" DataSource="TCMAssessmentMedicalProblem" PrintIfDetailEmpty="true" PrintIfDatasourceEmpty="true">
+    <DataBand Name="Data17" Top="214.57" Width="778.3" Height="18.9" DataSource="TCMAssessmentMedicalProblem" PrintIfDetailEmpty="true" PrintIfDatasourceEmpty="true">
       <TableObject Name="Table21" Left="4.16" Width="773.02" Height="18.9">
         <TableColumn Name="Column80" Width="274.01"/>
         <TableColumn Name="Column81" Width="75.56"/>
@@ -1248,7 +1248,7 @@
           <TableCell Name="Cell83" Border.Lines="All" Text="[TCMAssessmentMedicalProblem.Comments]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
         </TableRow>
       </TableObject>
-      <DataHeaderBand Name="DataHeader7" Top="155.05" Width="778.3" Height="56.7">
+      <DataHeaderBand Name="DataHeader7" Top="154.53" Width="778.3" Height="56.7">
         <TableObject Name="Table9" Left="4.16" Top="37.8" Width="773.02" Height="18.9">
           <TableColumn Name="Column26" Width="274.01"/>
           <TableColumn Name="Column31" Width="75.56"/>
@@ -1264,7 +1264,7 @@
         <TextObject Name="Text490" Top="15.9" Width="585.9" Height="18.9" CanBreak="false" Text="List any medical problems / conditions that client or family currently have or have had in the past  " VertAlign="Center" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
       </DataHeaderBand>
     </DataBand>
-    <DataBand Name="Data18" Top="238.34" Width="778.3" Height="58.7">
+    <DataBand Name="Data18" Top="236.8" Width="778.3" Height="58.7">
       <TextObject Name="Text481" Top="3" Width="56.7" Height="18.9" Text="Allergy" HorzAlign="Justify" VertAlign="Center" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
       <CheckBoxObject Name="CheckBox122" Left="57.25" Top="7.32" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" Expression="IIf([TCMAssessment.Allergy] == false,true,false)"/>
       <CheckBoxObject Name="CheckBox123" Left="103.95" Top="7.27" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" Checked="false" DataColumn="TCMAssessment.Allergy"/>
@@ -1279,7 +1279,7 @@
       <CheckBoxObject Name="CheckBox125" Left="264.6" Top="41.07" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" Checked="false" DataColumn="TCMAssessment.HasClientUndergone"/>
       <TextObject Name="Text489" Left="368.55" Top="37.8" Width="257.04" Height="18.9" Text="If Yes, complete information below:" HorzAlign="Justify" VertAlign="Center" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
     </DataBand>
-    <DataBand Name="Data19" Top="323.63" Width="778.3" Height="18.9" DataSource="TCMAssessmentSurgery" PrintIfDetailEmpty="true" PrintIfDatasourceEmpty="true">
+    <DataBand Name="Data19" Top="321.07" Width="778.3" Height="18.9" DataSource="TCMAssessmentSurgery" PrintIfDetailEmpty="true" PrintIfDatasourceEmpty="true">
       <TableObject Name="Table23" Left="4.16" Width="772.98" Height="18.9">
         <TableColumn Name="Column88" Width="201.55"/>
         <TableColumn Name="Column89" Width="107.05"/>
@@ -1287,12 +1287,12 @@
         <TableColumn Name="Column91" Width="236.24"/>
         <TableRow Name="Row23">
           <TableCell Name="Cell88" Border.Lines="All" Text="[TCMAssessmentSurgery.TypeSurgery]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
-          <TableCell Name="Cell89" Border.Lines="All" Text="[IIf(Year([TCMAssessmentSurgery.Date]) == 1,&quot;&quot;,[TCMAssessmentHospital.Date])]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell89" Border.Lines="All" Text="[TCMAssessmentSurgery.Date]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
           <TableCell Name="Cell90" Border.Lines="All" Text="[TCMAssessmentSurgery.Hospital]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
           <TableCell Name="Cell91" Border.Lines="All" Text="[TCMAssessmentSurgery.Outcome]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
         </TableRow>
       </TableObject>
-      <DataHeaderBand Name="DataHeader8" Top="300.88" Width="778.3" Height="18.9">
+      <DataHeaderBand Name="DataHeader8" Top="298.83" Width="778.3" Height="18.9">
         <TableObject Name="Table22" Left="4.16" Width="772.98" Height="18.9">
           <TableColumn Name="Column84" Width="201.55"/>
           <TableColumn Name="Column85" Width="107.05"/>
@@ -1307,7 +1307,7 @@
         </TableObject>
       </DataHeaderBand>
     </DataBand>
-    <DataBand Name="Data20" Top="346.38" Width="778.3" Height="349.65">
+    <DataBand Name="Data20" Top="343.3" Width="778.3" Height="349.65">
       <TextObject Name="Text491" Top="11.45" Width="85.05" Height="18.9" Text="Hearing" VertAlign="Center" Font="Arial, 9pt, style=Bold" TextRenderType="HtmlTags"/>
       <TextObject Name="Text492" Left="15.9" Top="33.35" Width="207.9" Height="18.9" Text="No hearing impairment.&#13;&#10;" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
       <CheckBoxObject Name="CheckBox126" Left="4.45" Top="34.67" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue" DataColumn="TCMAssessment.NoHearing"/>
@@ -1373,7 +1373,7 @@
       <TextObject Name="Text530" Left="343.2" Top="293.95" Width="433.94" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" CanGrow="true" Text="[Switch([TCMAssessment.HowActive] == 0, &quot;Daily&quot;,[TCMAssessment.HowActive] == 1, &quot;Three time per week or more&quot;,[TCMAssessment.HowActive] == 2, &quot;Three time per week or less&quot;,[TCMAssessment.HowActive] == 3, &quot;Once per week&quot;,[TCMAssessment.HowActive] == 4, &quot;Rarely&quot;,[TCMAssessment.HowActive] == 5, &quot;Never&quot;)]" VertAlign="Center" Font="Arial, 9pt"/>
       <TextObject Name="Text531" Left="368.55" Top="313.85" Width="75.6" Height="18.9" Text="(Frequency)" HorzAlign="Center" VertAlign="Center" Font="Arial, 8pt, style=Italic"/>
     </DataBand>
-    <PageFooterBand Name="PageFooter5" Top="699.87" Width="778.3" Height="19.07">
+    <PageFooterBand Name="PageFooter5" Top="696.28" Width="778.3" Height="19.07">
       <TextObject Name="Text124" Left="5.29" Top="0.17" Width="283.5" Height="18.9" Text="Assessment 07.2021" VertAlign="Center" Font="Arial, 8pt, style=Italic"/>
       <TextObject Name="Text125" Left="689.85" Width="85.05" Height="18.9" Text="Pg. 5 of 11" HorzAlign="Right" VertAlign="Center" Font="Arial, 8pt, style=Italic"/>
     </PageFooterBand>
