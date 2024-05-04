@@ -32317,7 +32317,7 @@ namespace KyoS.Web.Helpers
             dt.Columns.Add("Id", typeof(int));
             dt.Columns.Add("TcmAssessmentId", typeof(int));
             dt.Columns.Add("TypeSurgery", typeof(string));
-            dt.Columns.Add("Date", typeof(DateTime));
+            dt.Columns.Add("Date", typeof(string));
             dt.Columns.Add("Hospital", typeof(string));
             dt.Columns.Add("Outcome", typeof(string));            
             dt.Columns.Add("CreatedBy", typeof(string));
