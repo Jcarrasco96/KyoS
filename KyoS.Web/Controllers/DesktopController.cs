@@ -429,11 +429,12 @@ namespace KyoS.Web.Controllers
                     Task<int> ClientBirthday = MHClientBirthday(user_logged.Clinic.Id);
                     Task<int> ClientEligibility = MHClientEligibility(user_logged.Clinic.Id);
                     Task<int> SafetyPlan = MHSafetyPlan(user_logged.Clinic.Id);
-                    
+                    Task<int> ClientWithoutPSYNotes = TCMClientWithoutPSYNotes(user_logged.Clinic.Id);
+
                     await Task.WhenAll(PendingNotes, InProgressNotes, NotStartedNotes, MTPMissing, NotesWithReview,
                                         ApprovedNotes, NotPresentNotes, ExpiredMTPs, PendingBIO, PendingInitialFars, MedicalHistoryMissing,
                                         IntakeMissing, FarsMissing, ClientAuthorization, ClientBirthday, ClientEligibility,
-                                        SafetyPlan);
+                                        SafetyPlan, ClientWithoutPSYNotes);
 
                     ViewBag.PendingNotes = await PendingNotes;
                     ViewBag.InProgressNotes = await InProgressNotes;
@@ -451,7 +452,8 @@ namespace KyoS.Web.Controllers
                     ViewBag.ClientAuthorization = await ClientAuthorization;
                     ViewBag.ClientBirthday = await ClientBirthday;
                     ViewBag.ClientEligibility = await ClientEligibility;
-                    ViewBag.SafetyPlan = await SafetyPlan;                    
+                    ViewBag.SafetyPlan = await SafetyPlan;
+                    ViewBag.ClientWithoutPSYNote = await ClientWithoutPSYNotes;
                 }          
 
                 //TCM Dashboard
@@ -474,6 +476,7 @@ namespace KyoS.Web.Controllers
                     Task<int> Billing = TCMBilling(user_logged.Clinic.Id);
                     Task<int> ClientAuthorizationTCM = TCMClientAuthorization(user_logged.Clinic.Id);
                     Task<int> ClientWithoutCase = TCMClientWithoutCase(user_logged.Clinic.Id);
+                    
 
 
                     await Task.WhenAll(NotStartedCases, OpenBinder, ServicePlanPending, AdendumPending, ServicePlanReviewPending,
@@ -497,6 +500,7 @@ namespace KyoS.Web.Controllers
                     ViewBag.Billing = await Billing;
                     ViewBag.TCMClientAuthorization = await ClientAuthorizationTCM;
                     ViewBag.ClientWithoutCase = await ClientWithoutCase;
+                    
                 }
             }
             if (User.IsInRole("Admin"))
@@ -1452,12 +1456,52 @@ namespace KyoS.Web.Controllers
             }
         }
 
+        private async Task<int> TCMClientWithoutPSYNotes(int clinicId)
+        {
+            var options = new DbContextOptionsBuilder<DataContext>().UseSqlServer(Configuration.GetConnectionString("KyoSConnection")).Options;
+            using (DataContext db = new DataContext(options))
+            {
+                List<ClientEntity> clients = await _context.Clients
+                                                           .Include(wc => wc.NotePSY)
+                                                           .Include(wc => wc.Psychiatrist)
+                                                           .AsSplitQuery()
+                                                           .Where(n => n.Status == StatusType.Open
+                                                                    && n.Clinic.Id == clinicId)
+                                                           .ToListAsync();
+
+                List<ClientEntity> salida = new List<ClientEntity>();
+                ClientEntity temp = new ClientEntity();
+
+                foreach (var item in clients)
+                {
+                    if (item.NotePSY.Count() == 0)
+                    {
+                        temp = item;
+                        salida.Add(temp);
+                        temp = new ClientEntity();
+                    }
+                    else
+                    {
+                        if (item.NotePSY.MaxBy(n => n.DateService).DateService.AddDays(80.0) < DateTime.Today)
+                        {
+                            temp = item;
+                            salida.Add(temp);
+                            temp = new ClientEntity();
+                        }
+                    }
+                }
+
+                return (salida.Count());
+            }
+        }
+
         private async Task<int> TCMClientWithoutCase(int clinicId)
         {
             var options = new DbContextOptionsBuilder<DataContext>().UseSqlServer(Configuration.GetConnectionString("KyoSConnection")).Options;
             using (DataContext db = new DataContext(options))
             {
                 List<ClientEntity> clients_Total = await _context.Clients
+                                                                 .AsSplitQuery()
                                                                  .Where(c => (c.Clinic.Id == clinicId
                                                                            && c.Status == StatusType.Open
                                                                            && c.OnlyTCM == true))
@@ -1465,6 +1509,7 @@ namespace KyoS.Web.Controllers
                                                                  .ToListAsync();
                 List<TCMClientEntity> clients_Open = await _context.TCMClient
                                                                    .Include(n => n.Client)
+                                                                   .AsSplitQuery()
                                                                    .Where(c => (c.Client.Clinic.Id == clinicId
                                                                              && c.Status == StatusType.Open))
                                                                    .ToListAsync();
@@ -1477,7 +1522,7 @@ namespace KyoS.Web.Controllers
                             clients_Total.Remove(item.Client);
                     }
                 }
-               
+
                 return (clients_Total.Count());
             }
         }

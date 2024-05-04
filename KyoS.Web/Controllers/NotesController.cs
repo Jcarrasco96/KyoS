@@ -1,4 +1,5 @@
 ﻿using AspNetCore.Reporting;
+using DocumentFormat.OpenXml.Presentation;
 using KyoS.Common.Enums;
 using KyoS.Common.Helpers;
 using KyoS.Web.Data;
@@ -21367,6 +21368,293 @@ namespace KyoS.Web.Controllers
             return Json(text);
         }
 
-      
+        [Authorize(Roles = "Manager")]
+        public IActionResult CreateNotePSY(int id = 0, int origin = 0)
+        {
+            if (id == 1)
+            {
+                ViewBag.Creado = "Y";
+            }
+            else
+            {
+                if (id == 2)
+                {
+                    ViewBag.Creado = "E";
+                }
+                else
+                {
+                    ViewBag.Creado = "N";
+                }
+            }
+
+            NotePSYViewModel model = new NotePSYViewModel();
+            ClientEntity client = _context.Clients
+                                          .Include(n => n.NotePSY)
+                                          .Include(n => n.Psychiatrist)
+                                          .FirstOrDefault(n => n.Id == id);
+
+
+            if (User.IsInRole("Manager"))
+            {
+                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                       .FirstOrDefault(u => u.UserName == User.Identity.Name);
+                if (user_logged.Clinic != null)
+                {
+                    model = new NotePSYViewModel
+                    {
+                        Id = 0,
+                        IdClient = id,
+                        Clients = _combosHelper.GetComboActiveClientsByClinic(user_logged.Clinic.Id),
+                        Client = client,
+                        Description = "",
+                        DateService = DateTime.Today,
+                        InitialTime = DateTime.Today,
+                        EndTime = DateTime.Today,
+                        NamePSY = (client.Psychiatrist != null) ? client.Psychiatrist.Name : "Not PSY"
+
+                    };
+                    ViewData["origin"] = origin;
+                    return View(model);
+                }
+            }
+
+            ViewData["origin"] = origin;
+            return View(model);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Manager")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateNotePSY(NotePSYViewModel model, int origin = 0)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (ModelState.IsValid)
+            {
+                NotePSYEntity notePSY = new NotePSYEntity();
+                notePSY = _converterHelper.ToNotePSYEntity(model, true, user_logged.UserName);
+                _context.Add(notePSY);
+                try
+                {
+                    await _context.SaveChangesAsync();
+
+                    if (origin == 0)
+                    {
+                        List<ClientEntity> clients = await _context.Clients
+                                                                   .Include(wc => wc.NotePSY)
+                                                                   .Include(wc => wc.Psychiatrist)
+                                                                   .AsSplitQuery()
+                                                                   .Where(n => n.Status == StatusType.Open)
+                                                                   .ToListAsync();
+
+                        List<ClientEntity> salida = new List<ClientEntity>();
+                        ClientEntity temp = new ClientEntity();
+
+                        foreach (var item in clients)
+                        {
+                            if (item.NotePSY.Count() == 0)
+                            {
+                                temp = item;
+                                salida.Add(temp);
+                                temp = new ClientEntity();
+                            }
+                            else
+                            {
+                                if (item.NotePSY.MaxBy(n => n.DateService).DateService.AddDays(80.0) < DateTime.Today)
+                                {
+                                    temp = item;
+                                    salida.Add(temp);
+                                    temp = new ClientEntity();
+                                }
+                            }
+                        }
+
+
+                        return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewClientWithoutNotesPSY", salida) });
+                    }
+                    else
+                    {
+                        List<ClientEntity> client_List = await _context.Clients
+                                                                       .Include(wc => wc.NotePSY)
+                                                                       .Include(wc => wc.Psychiatrist)
+                                                                       .AsSplitQuery()
+                                                                       .Where(n => n.Status == StatusType.Open
+                                                                                && n.NotePSY.Count() > 0)
+                                                                       .ToListAsync();
+
+
+                        return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewNotesPSY", client_List) });
+                    }
+                }
+                catch (System.Exception ex)
+                {
+                    if (ex.InnerException.Message.Contains("duplicate"))
+                    {
+                        ModelState.AddModelError(string.Empty, $"Already exists the PSY: {model.IdClient}");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+
+            }
+
+            model.Clients = _combosHelper.GetComboActiveClientsByClinic(user_logged.Clinic.Id);
+        
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreatNotePSY", model) });
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> EditNotePSY(int? id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            NotePSYEntity note = await _context.NotesPSYs
+                                               .Include(f => f.Client)
+                                               .FirstOrDefaultAsync(f => f.Id == id);
+
+            if (note == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            NotePSYViewModel model = new NotePSYViewModel();
+            UserEntity user_logged = _context.Users
+                                                .Include(u => u.Clinic)
+                                                .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (User.IsInRole("Manager"))
+            {
+                model = _converterHelper.ToNotePSYViewModel(note, user_logged.Clinic.Id);
+            }
+            else
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Manager")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditNotePSY(int id, NotePSYViewModel model)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (ModelState.IsValid)
+            {
+
+                NotePSYEntity notePSY = _converterHelper.ToNotePSYEntity(model, false, user_logged.UserName);
+                _context.Update(notePSY);
+                try
+                {
+                    await _context.SaveChangesAsync();
+                    List<ClientEntity> client_List = await _context.Clients
+                                                                   .Include(wc => wc.NotePSY)
+                                                                   .Include(wc => wc.Psychiatrist)
+                                                                   .AsSplitQuery()
+                                                                   .Where(n => n.Status == StatusType.Open
+                                                                            && n.NotePSY.Count() > 0)
+                                                                   .ToListAsync();
+
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewNotesPSY", client_List) });
+                }
+                catch (System.Exception ex)
+                {
+                    if (ex.InnerException.Message.Contains("duplicate"))
+                    {
+                        ModelState.AddModelError(string.Empty, $"Already exists the Note PSY: {model.IdClient}");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+            }
+
+            model.Clients = _combosHelper.GetComboActiveClientsByClinic(user_logged.Clinic.Id);
+            
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditNotePSY", model) });
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> IndexNotePSY()
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(c => c.Setting)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+              List<ClientEntity> clients = await _context.Clients
+                                                         .Include(wc => wc.NotePSY)
+                                                         .Include(wc => wc.Psychiatrist)
+                                                         .AsSplitQuery()
+                                                         .Where(n => n.Status == StatusType.Open
+                                                                  && n.NotePSY.Count() > 0)
+                                                         .ToListAsync();
+           
+            return View(clients);
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> ClientWithoutNotePSY()
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(c => c.Setting)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+            List<ClientEntity> clients = await _context.Clients
+                                                       .Include(wc => wc.NotePSY)
+                                                       .Include(wc => wc.Psychiatrist)
+                                                       .AsSplitQuery()
+                                                       .Where(n => n.Status == StatusType.Open)
+                                                       .ToListAsync();
+            List<ClientEntity> salida = new List<ClientEntity>();
+            ClientEntity temp = new ClientEntity();
+
+            foreach (var item in clients)
+            {
+                if (item.NotePSY.Count() == 0)
+                {
+                    temp = item;
+                    salida.Add(temp);
+                    temp = new ClientEntity();
+                }
+                else
+                {
+                    if (item.NotePSY.MaxBy(n => n.DateService).DateService.AddDays(80.0) < DateTime.Today)
+                    {
+                        temp = item;
+                        salida.Add(temp);
+                        temp = new ClientEntity();
+                    }
+                }
+            }
+
+            return View(salida);
+        }
+
     }
 }

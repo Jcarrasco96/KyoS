@@ -224,5 +224,7 @@ namespace KyoS.Web.Data.Entities
         public List<IncidentReportEntity> IncidentReport { get; set; }
         public DocumentsAssistantEntity DocumentsAssistant { get; set; }
         public IntakeNoHarmEntity IntakeNoHarm { get; set; }
+
+        public List<NotePSYEntity> NotePSY { get; set; }
     }
 }

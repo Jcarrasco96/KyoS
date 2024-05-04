@@ -9508,6 +9508,48 @@ namespace KyoS.Web.Helpers
 
         }
 
+        public NotePSYEntity ToNotePSYEntity(NotePSYViewModel model, bool isNew, string userId)
+        {
+            return new NotePSYEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                CreatedBy = isNew ? userId : model.CreatedBy,
+                CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
+                LastModifiedBy = !isNew ? userId : string.Empty,
+                LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
+                Client = _context.Clients.FirstOrDefault(n => n.Id == model.IdClient),
+                Description = model.Description,
+                DateService = model.DateService,
+                InitialTime = model.InitialTime,
+                EndTime = model.EndTime,
+                NamePSY = model.NamePSY
+
+            };
+        }
+
+        public NotePSYViewModel ToNotePSYViewModel(NotePSYEntity model, int idClinic = 1)
+        {
+            return new NotePSYViewModel
+            {
+                Id = model.Id,
+                IdClient = model.Client.Id,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedOn = model.LastModifiedOn,
+                Clients = _combosHelper.GetComboActiveClientsByClinic(idClinic),
+                Client = model.Client,
+                Description = model.Description,
+                DateService = model.DateService,
+                InitialTime = model.InitialTime,
+                EndTime = model.EndTime,
+                NamePSY = model.NamePSY
+
+            };
+
+        }
+
+
     }
 
 
