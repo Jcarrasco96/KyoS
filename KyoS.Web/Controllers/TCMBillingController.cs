@@ -1427,6 +1427,7 @@ namespace KyoS.Web.Controllers
                                      .ThenInclude(cl => cl.HealthInsurance)
 
                                      .Include(t => t.Casemanager)
+                                     .ThenInclude(t => t.TCMSupervisor)
                                      .Include(c => c.TCMNote)
                                      .ThenInclude(t => t.TCMNoteActivity)
 
@@ -1450,6 +1451,7 @@ namespace KyoS.Web.Controllers
                                     .ThenInclude(cl => cl.HealthInsurance)
 
                                     .Include(t => t.Casemanager)
+                                    .ThenInclude(t => t.TCMSupervisor)
                                     .Include(c => c.TCMNote)
                                     .ThenInclude(t => t.TCMNoteActivity)
 
@@ -1474,6 +1476,7 @@ namespace KyoS.Web.Controllers
                                      .ThenInclude(cl => cl.HealthInsurance)
 
                                      .Include(t => t.Casemanager)
+                                     .ThenInclude(t => t.TCMSupervisor)
                                      .Include(c => c.TCMNote)
                                      .ThenInclude(t => t.TCMNoteActivity)
 

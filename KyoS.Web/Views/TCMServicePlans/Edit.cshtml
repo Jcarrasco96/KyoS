@@ -107,12 +107,12 @@
                     @if (User.IsInRole("CaseManager"))
                     {
                         <a onclick="showInPopup('@Url.Action("CreateDomain", "TCMServicePlans", new { id = Model.Id, date = Model.DateAssessment }, Context.Request.Scheme)','Create domain of service plan')" class="btn btn-success" title="Create domain of this service plan"><i class="glyphicon glyphicon-plus"></i> Add Domain</a>
-                        <a onclick="showInPopupLg('@Url.Action("AuditTCMServicePlan", "TCMServicePlans", new { idTCMClient = Model.Id}, Context.Request.Scheme)','Audit Service Plan')" class="btn btn-danger" title="Audit Service Plan"><i class="glyphicon glyphicon-alert"></i>&nbsp;&nbsp;Audit Service Plan</a>
+                        <a onclick="showInPopupLg('@Url.Action("AuditTCMServicePlan", "TCMServicePlans", new { idTCMClient = Model.ID_TcmClient}, Context.Request.Scheme)','Audit Service Plan')" class="btn btn-danger" title="Audit Service Plan"><i class="glyphicon glyphicon-alert"></i>&nbsp;&nbsp;Audit Service Plan</a>
                     }
                     else
                     {
                         <a class="btn btn-success disabled" title="Create domain of this service plan"><i class="glyphicon glyphicon-plus"></i> Add Domain</a>
-                        <a onclick="showInPopupLg('@Url.Action("AuditTCMServicePlan", "TCMServicePlans", new { idTCMClient = Model.Id}, Context.Request.Scheme)','Audit Service Plan')" class="btn btn-danger" title="Audit Service Plan"><i class="glyphicon glyphicon-alert"></i>&nbsp;&nbsp;Audit Service Plan</a>
+                    <a onclick="showInPopupLg('@Url.Action("AuditTCMServicePlan", "TCMServicePlans", new { idTCMClient = Model.ID_TcmClient}, Context.Request.Scheme)','Audit Service Plan')" class="btn btn-danger" title="Audit Service Plan"><i class="glyphicon glyphicon-alert"></i>&nbsp;&nbsp;Audit Service Plan</a>
                     }
                 </div>
                 <div class="col-md-12">

@@ -3352,8 +3352,8 @@ namespace KyoS.Web.Controllers
                     else
                     {
                         auditServicePlan.Name = "01-Mental Health";
-                        auditServicePlan.Description = "Assessment";
-                        auditServicePlan.Date = domain.DateIdentified.ToShortDateString();
+                        auditServicePlan.Description = "Not Exists";
+                        auditServicePlan.Date = null;
                         auditServicePlan.Active = 0;
                     }
                     auditServicePlan_List.Add(auditServicePlan);
@@ -3372,8 +3372,8 @@ namespace KyoS.Web.Controllers
                     else
                     {
                         auditServicePlan.Name = "02-Physical Health";
-                        auditServicePlan.Description = "Assessment";
-                        auditServicePlan.Date = domain.DateIdentified.ToShortDateString();
+                        auditServicePlan.Description = "Not Exists";
+                        auditServicePlan.Date = null;
                         auditServicePlan.Active = 0;
                     }
                     auditServicePlan_List.Add(auditServicePlan);
@@ -3392,8 +3392,8 @@ namespace KyoS.Web.Controllers
                     else
                     {
                         auditServicePlan.Name = "03-Vocational";
-                        auditServicePlan.Description = "Assessment";
-                        auditServicePlan.Date = domain.DateIdentified.ToShortDateString();
+                        auditServicePlan.Description = "Not Exists";
+                        auditServicePlan.Date = null;
                         auditServicePlan.Active = 0;
                     }
                     auditServicePlan_List.Add(auditServicePlan);
@@ -3412,8 +3412,8 @@ namespace KyoS.Web.Controllers
                     else
                     {
                         auditServicePlan.Name = "04-School";
-                        auditServicePlan.Description = "Assessment";
-                        auditServicePlan.Date = domain.DateIdentified.ToShortDateString();
+                        auditServicePlan.Description = "Not Exists";
+                        auditServicePlan.Date = null;
                         auditServicePlan.Active = 0;
                     }
                     auditServicePlan_List.Add(auditServicePlan);
@@ -3432,8 +3432,8 @@ namespace KyoS.Web.Controllers
                     else
                     {
                         auditServicePlan.Name = "05-Recreational ";
-                        auditServicePlan.Description = "Assessment";
-                        auditServicePlan.Date = domain.DateIdentified.ToShortDateString();
+                        auditServicePlan.Description = "Not Exists";
+                        auditServicePlan.Date = null;
                         auditServicePlan.Active = 0;
                     }
                     auditServicePlan_List.Add(auditServicePlan);
@@ -3452,8 +3452,8 @@ namespace KyoS.Web.Controllers
                     else
                     {
                         auditServicePlan.Name = "06-Activities of Daily Living ";
-                        auditServicePlan.Description = "Assessment";
-                        auditServicePlan.Date = domain.DateIdentified.ToShortDateString();
+                        auditServicePlan.Description = "Not Exists";
+                        auditServicePlan.Date = null;
                         auditServicePlan.Active = 0;
                     }
                     auditServicePlan_List.Add(auditServicePlan);
@@ -3472,8 +3472,8 @@ namespace KyoS.Web.Controllers
                     else
                     {
                         auditServicePlan.Name = "07-Housing";
-                        auditServicePlan.Description = "Assessment";
-                        auditServicePlan.Date = domain.DateIdentified.ToShortDateString();
+                        auditServicePlan.Description = "Not Exists";
+                        auditServicePlan.Date = null;
                         auditServicePlan.Active = 0;
                     }
                     auditServicePlan_List.Add(auditServicePlan);
@@ -3492,8 +3492,8 @@ namespace KyoS.Web.Controllers
                     else
                     {
                         auditServicePlan.Name = "08-Economic";
-                        auditServicePlan.Description = "Assessment";
-                        auditServicePlan.Date = domain.DateIdentified.ToShortDateString();
+                        auditServicePlan.Description = "Not Exists";
+                        auditServicePlan.Date = null;
                         auditServicePlan.Active = 0;
                     }
                     auditServicePlan_List.Add(auditServicePlan);
@@ -3512,8 +3512,8 @@ namespace KyoS.Web.Controllers
                     else
                     {
                         auditServicePlan.Name = "09-Basic Needs";
-                        auditServicePlan.Description = "Assessment";
-                        auditServicePlan.Date = domain.DateIdentified.ToShortDateString();
+                        auditServicePlan.Description = "Not Exists";
+                        auditServicePlan.Date = null;
                         auditServicePlan.Active = 0;
                     }
                     auditServicePlan_List.Add(auditServicePlan);
@@ -3532,8 +3532,8 @@ namespace KyoS.Web.Controllers
                     else
                     {
                         auditServicePlan.Name = "10-Transportation";
-                        auditServicePlan.Description = "Assessment";
-                        auditServicePlan.Date = domain.DateIdentified.ToShortDateString();
+                        auditServicePlan.Description = "Not Exists";
+                        auditServicePlan.Date = null;
                         auditServicePlan.Active = 0;
                     }
                     auditServicePlan_List.Add(auditServicePlan);
@@ -3552,8 +3552,8 @@ namespace KyoS.Web.Controllers
                     else
                     {
                         auditServicePlan.Name = "11-Legal";
-                        auditServicePlan.Description = "Assessment";
-                        auditServicePlan.Date = domain.DateIdentified.ToShortDateString();
+                        auditServicePlan.Description = "Not Exists";
+                        auditServicePlan.Date = null;
                         auditServicePlan.Active = 0;
                     }
                     auditServicePlan_List.Add(auditServicePlan);
@@ -3572,8 +3572,8 @@ namespace KyoS.Web.Controllers
                     else
                     {
                         auditServicePlan.Name = "12-Other";
-                        auditServicePlan.Description = "Assessment";
-                        auditServicePlan.Date = domain.DateIdentified.ToShortDateString();
+                        auditServicePlan.Description = "Not Exists";
+                        auditServicePlan.Date = null;
                         auditServicePlan.Active = 0;
                     }
                     auditServicePlan_List.Add(auditServicePlan);
