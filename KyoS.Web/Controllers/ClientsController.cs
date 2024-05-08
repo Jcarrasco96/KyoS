@@ -181,6 +181,16 @@ namespace KyoS.Web.Controllers
             {
                 ClinicEntity clinic = _context.Clinics.FirstOrDefault(c => c.Id == user_logged.Clinic.Id);
                 List<SelectListItem> list = new List<SelectListItem>();
+
+                List<ClientEntity> clients = _context.Clients.ToList();
+                string maxNumber = clients.MaxBy(n => n.Code).Code;
+                int temp = 0;
+                string maxNumberInc = string.Empty;
+                if (Int32.TryParse(maxNumber, out temp) == true)
+                {
+                    maxNumberInc = (Convert.ToInt32(temp) + 1).ToString();
+                }
+
                 list.Insert(0, new SelectListItem
                 {
                     Text = clinic.Name,
@@ -236,6 +246,7 @@ namespace KyoS.Web.Controllers
                     IdDocumentsAssistant = 0,
                     DocumentsAssistants = _combosHelper.GetComboDocumentsAssistantByClinic(user_logged.Clinic.Id, false, false),
                     DateOfClose = DateTime.Today.AddYears(1),
+                    Code = maxNumberInc
                 };
                 return View(model);
             }

@@ -131,7 +131,15 @@ namespace KyoS.Web.Controllers
             }
 
             TCMClientViewModel model;
-
+            List<TCMClientEntity> clients = _context.TCMClient.ToList();
+            string maxNumber = clients.MaxBy(n => n.CaseNumber).CaseNumber;
+            int temp = 0;
+            string maxNumberInc = string.Empty;
+            if (Int32.TryParse(maxNumber, out temp) == true)
+            {
+                maxNumberInc = (Convert.ToInt32(temp) + 1).ToString();
+            }
+            
             if (User.IsInRole("Manager") || User.IsInRole("TCMSupervisor"))
             {
                 UserEntity user_logged = _context.Users.Include(u => u.Clinic)
@@ -148,6 +156,7 @@ namespace KyoS.Web.Controllers
                         StatusList = _combosHelper.GetComboClientStatus(),
                         DataOpen = DateTime.Today.Date,
                         Period = 6,
+                        CaseNumber = maxNumberInc
                     };
 
                     return View(model);
@@ -198,7 +207,15 @@ namespace KyoS.Web.Controllers
                     }
                     else
                     {
-                        ModelState.AddModelError(string.Empty, "Already exists the TCM Case or Case Number.");
+                        if (tcmClient.CaseNumber == model.CaseNumber)
+                        {
+                            ModelState.AddModelError(string.Empty, "Already exists the Case Number.");
+                        }
+                        else
+                        {
+                            ModelState.AddModelError(string.Empty, "Already exists the TCM Case.");
+                        }
+                       
                         model = new TCMClientViewModel
                         {
                             CaseMannagers = _combosHelper.GetComboCasemannagersByClinic(user_logged.Clinic.Id),
