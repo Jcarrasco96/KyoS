@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="04/18/2024 11:44:21" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="05/08/2024 14:50:14" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pKiygLNrR2GSkUua6CZa7zWuDzNGOn7cjq7mn0WTOnccDkyyV5BLvtFa1BRlcYFBrNfjUqin1t7sk/Cs8DEMJjw==">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pKiygLNrR2GSkUua6CZa7zWuDzNGOn7cjq7mn0WTOnccDkyyV5BLvtFa1BRlcYFBrH/i6v6IgKXN6qUnUxbQuDg==">
       <TableDataSource Name="Clinics" DataType="System.Int32" Enabled="true" TableName="Clinics">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -182,7 +182,7 @@
         <Column Name="LastModifiedOn" DataType="System.DateTime"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection1" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pKiygLNrR2GSkUua6CZa7zWuDzNGOn7cjq7mn0WTOnccDkyyV5BLvtFa1BRlcYFBrO+MsApRrbxOznH4ab/eSNw==">
+    <MsSqlDataConnection Name="Connection1" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pKiygLNrR2GSkUua6CZa7zWuDzNGOn7cjq7mn0WTOnccDkyyV5BLvtFa1BRlcYFBrobQ9PUCegx/sxcy1TsZD/g==">
       <TableDataSource Name="Classifications1" Alias="Signatures1" DataType="System.Int32" Enabled="true" TableName="Classifications">
         <Column Name="supervisorSignature" DataType="System.Byte[]" PropName="Id"/>
         <Column Name="facilitatorSignature" DataType="System.Byte[]" PropName="Name"/>
@@ -225,7 +225,7 @@
         <Column Name="LastModifiedOn" DataType="System.DateTime"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection2" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pKiygLNrR2GSkUua6CZa7zWuDzNGOn7cjq7mn0WTOnccDkyyV5BLvtFa1BRlcYFBrmSzKibBLbUHy5zYfXAv+Bw==">
+    <MsSqlDataConnection Name="Connection2" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pKiygLNrR2GSkUua6CZa7zWuDzNGOn7cjq7mn0WTOnccDkyyV5BLvtFa1BRlcYFBrta05E2Rs9fvCWEskzLKNLA==">
       <TableDataSource Name="TCMDomains2" DataType="System.Int32" PropName="TCMDomains" Enabled="true" TableName="TCMDomains">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -264,7 +264,7 @@
         <Column Name="LastModifiedOn" DataType="System.DateTime"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection3" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pKiygLNrR2GSkUua6CZa7zWuDzNGOn7cjq7mn0WTOnccDkyyV5BLvtFa1BRlcYFBrFh21s8TzEO4Kcdp0VqYZYQ==">
+    <MsSqlDataConnection Name="Connection3" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pKiygLNrR2GSkUua6CZa7zWuDzNGOn7cjq7mn0WTOnccDkyyV5BLvtFa1BRlcYFBrCb6glwwxV25wUZ6LmOe2qw==">
       <TableDataSource Name="TCMDomains3" DataType="System.Int32" PropName="TCMDomains" Enabled="true" TableName="TCMDomains">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -303,7 +303,7 @@
         <Column Name="LastModifiedOn" DataType="System.DateTime"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection4" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pKiygLNrR2GSkUua6CZa7zWuDzNGOn7cjq7mn0WTOnccDkyyV5BLvtFa1BRlcYFBrJDBFxBNLGL9U3+pYLY6GDg==">
+    <MsSqlDataConnection Name="Connection4" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pKiygLNrR2GSkUua6CZa7zWuDzNGOn7cjq7mn0WTOnccDkyyV5BLvtFa1BRlcYFBrU3trJ9EHko37CvAJ2J1QgA==">
       <TableDataSource Name="TCMDomains4" DataType="System.Int32" PropName="TCMDomains" Enabled="true" TableName="TCMDomains">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -342,7 +342,7 @@
         <Column Name="LastModifiedOn" DataType="System.DateTime"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection5" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pKiygLNrR2GSkUua6CZa7zWuDzNGOn7cjq7mn0WTOnccDkyyV5BLvtFa1BRlcYFBrqnDvWEuNizOrUt90/EEqUg==">
+    <MsSqlDataConnection Name="Connection5" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pKiygLNrR2GSkUua6CZa7zWuDzNGOn7cjq7mn0WTOnccDkyyV5BLvtFa1BRlcYFBrf4MVTq8CYdRBmI5QzcNebw==">
       <TableDataSource Name="TCMDomains5" DataType="System.Int32" PropName="TCMDomains4" Enabled="true" TableName="TCMDomains">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -387,10 +387,10 @@
       <TextObject Name="Textbox12" Left="129.75" Top="18.9" Width="516.2" Height="20.79" CanGrow="true" Text="[Clinics.Name]" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 12pt, style=Bold"/>
       <TextObject Name="Textbox64" Left="129.75" Top="40.78" Width="516.2" Height="22" CanGrow="true" Text="CASE MANAGEMENT SERVICE PLAN REVIEW (SPR)" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
       <LineObject Name="Line3" Left="128.3" Top="10.45" Height="65.55"/>
-      <PictureObject Name="Picture1" Left="9.45" Top="9.9" Width="103.95" Height="66.15" Image=""/>
+      <PictureObject Name="Picture1" Left="9.45" Top="9.9" Width="103.95" Height="66.15"/>
       <LineObject Name="Line6" Left="127.3" Top="9.45" Height="66.15"/>
     </ReportTitleBand>
-    <DataBand Name="Data1" Top="79.9" Width="778.3" Height="798.03" CanGrow="true" Guides="548.1,538.65,548.1,529.2,548.1,529.2,529.2,529.2">
+    <DataBand Name="Data1" Top="79.38" Width="778.3" Height="798.03" CanGrow="true" Guides="548.1,538.65,548.1,529.2,548.1,529.2,529.2,529.2">
       <TextObject Name="Text40" Left="6" Top="64.15" Width="116.05" Height="18.9" Text="Recipient's Name:" VertAlign="Center" Font="Arial, 9pt"/>
       <TextObject Name="Text41" Left="481.95" Top="63.97" Width="94.5" Height="18.9" Text="Case Number:" HorzAlign="Right" VertAlign="Center" Font="Arial, 9pt"/>
       <TextObject Name="Text44" Left="110.4" Top="64.15" Width="368.55" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Clients.Name]" VertAlign="Center" Font="Arial, 9pt"/>
@@ -422,7 +422,7 @@
       <TextObject Name="Text372" Top="505.63" Width="774.9" Height="20.79" Text="SECTION III" VertAlign="Center" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
       <TextObject Name="Text373" Top="527.53" Width="774.9" Height="34.02" Border.Lines="All" Fill.Color="WhiteSmoke" Text="&lt;b&gt;Recommendations / Changes / Updates to Service Plan&lt;/b&gt;&#13;&#10;Describe recipient’s continued need for TCM services as related to Service Plan" VertAlign="Center" Font="Arial, 9pt, style=Italic" TextRenderType="HtmlTags"/>
     </DataBand>
-    <PageFooterBand Name="PageFooter1" Top="881.77" Width="778.3" Height="22.68">
+    <PageFooterBand Name="PageFooter1" Top="880.75" Width="778.3" Height="22.68">
       <TextObject Name="Text28" Width="283.5" Height="18.9" Text="Service Plan Review (SPR) © 12.2020" VertAlign="Center" Font="Arial, 8pt, style=Italic"/>
     </PageFooterBand>
   </ReportPage>
@@ -438,7 +438,7 @@
       <CheckBoxObject Name="CheckBox19" Left="5" Top="130.85" Width="11.34" Height="11.34" Border.Lines="All" Fill.Color="LightBlue"/>
       <TextObject Name="Text375" Left="17.45" Top="127.85" Width="756" Height="18.9" Text="Changes/additions to the Service Plan are not warranted at this time." VertAlign="Center" Font="Arial, 9pt, style=Bold, Italic"/>
     </DataBand>
-    <DataBand Name="Data3" Top="185.8" Width="778.3" Height="18.9" CanGrow="true" CanShrink="true" DataSource="TCMServicePlanReviewDomains">
+    <DataBand Name="Data3" Top="184.78" Width="778.3" Height="18.9" CanGrow="true" CanShrink="true" DataSource="TCMServicePlanReviewDomains">
       <TableObject Name="Table9" Left="1" Width="774.83" Height="18.9">
         <TableColumn Name="Column31" Width="42.52"/>
         <TableColumn Name="Column32" Width="222.07"/>
@@ -451,7 +451,7 @@
           <TableCell Name="Cell34" Border.Lines="All" Fill.Color="White" Text="[TCMServicePlanReviewDomains.ChangesUpdate]" Font="Arial, 9pt"/>
         </TableRow>
       </TableObject>
-      <DataHeaderBand Name="DataHeader1" Top="159.28" Width="778.3" Height="22.68">
+      <DataHeaderBand Name="DataHeader1" Top="158.76" Width="778.3" Height="22.68">
         <TableObject Name="Table8" Left="1" Width="774.83" Height="22.68">
           <TableColumn Name="Column27" Width="42.52"/>
           <TableColumn Name="Column28" Width="222.07"/>
@@ -466,7 +466,7 @@
         </TableObject>
       </DataHeaderBand>
     </DataBand>
-    <PageFooterBand Name="PageFooter2" Top="208.55" Width="778.3" Height="18.9">
+    <PageFooterBand Name="PageFooter2" Top="207.01" Width="778.3" Height="18.9">
       <TextObject Name="Text34" Width="283.5" Height="18.9" Text="Service Plan Review (SPR) © 12.2020" VertAlign="Center" Font="Arial, 8pt, style=Italic"/>
     </PageFooterBand>
   </ReportPage>
@@ -480,9 +480,8 @@
       <TextObject Name="Text245" Left="1" Top="125.85" Width="774.9" Height="37.8" CanGrow="true" Text="[TCMDomains1.NeedsIdentified]" HorzAlign="Justify" Font="Arial, 9pt"/>
       <TextObject Name="Text246" Left="1" Top="171.65" Width="425.25" Height="18.9" Text="&lt;b&gt;Long Term Goal:&lt;/b&gt; (include recipient's own words) " VertAlign="Center" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
       <TextObject Name="Text247" Left="1" Top="191.45" Width="774.9" Height="37.8" CanGrow="true" Text="[TCMDomains1.LongTerm]" HorzAlign="Justify" Font="Arial, 9pt"/>
-      <TextObject Name="Text812" Left="715.75" Top="7.9" Width="62.37" Height="18.9" Fill.Color="WhiteSmoke" Text="Added" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt, style=Bold"/>
     </DataBand>
-    <DataBand Name="Data7" Top="241.99" Width="778.3" Height="224.91" CanGrow="true" CanShrink="true" DataSource="TCMObjetives1">
+    <DataBand Name="Data7" Top="241.47" Width="778.3" Height="224.91" CanGrow="true" CanShrink="true" DataSource="TCMObjetives1">
       <TableObject Name="Table3" Left="2.27" Width="773.01" Height="224.91" Border.Lines="All" Fill.Color="White">
         <TableColumn Name="Column5" Width="75.6"/>
         <TableColumn Name="Column6" Width="415.8"/>
@@ -519,7 +518,7 @@
         </TableRow>
       </TableObject>
     </DataBand>
-    <PageFooterBand Name="PageFooter5" Top="470.74" Width="778.3" Height="18.9">
+    <PageFooterBand Name="PageFooter5" Top="469.72" Width="778.3" Height="18.9">
       <TextObject Name="Text46" Width="283.5" Height="18.9" Text="Service Plan Review (SPR) © 12.2020" VertAlign="Center" Font="Arial, 8pt, style=Italic"/>
     </PageFooterBand>
   </ReportPage>
@@ -533,9 +532,8 @@
       <TextObject Name="Text802" Left="1" Top="125.85" Width="774.9" Height="37.8" CanGrow="true" Text="[TCMDomains2.NeedsIdentified]" HorzAlign="Justify" Font="Arial, 9pt"/>
       <TextObject Name="Text803" Left="1" Top="171.65" Width="425.25" Height="18.9" Text="&lt;b&gt;Long Term Goal:&lt;/b&gt; (include recipient's own words) " VertAlign="Center" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
       <TextObject Name="Text23" Left="1" Top="191.45" Width="774.9" Height="37.8" CanGrow="true" Text="[TCMDomains2.LongTerm]" HorzAlign="Justify" Font="Arial, 9pt"/>
-      <TextObject Name="Text813" Left="715.66" Top="7.94" Width="62.37" Height="18.9" Fill.Color="WhiteSmoke" Text="Added" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt, style=Bold"/>
     </DataBand>
-    <DataBand Name="Data9" Top="241.99" Width="778.3" Height="224.91" CanGrow="true" CanShrink="true" DataSource="TCMObjetives2">
+    <DataBand Name="Data9" Top="241.47" Width="778.3" Height="224.91" CanGrow="true" CanShrink="true" DataSource="TCMObjetives2">
       <TableObject Name="Table4" Left="2.27" Width="773.01" Height="224.91" Border.Lines="All" Fill.Color="White">
         <TableColumn Name="Column7" Width="75.6"/>
         <TableColumn Name="Column9" Width="415.8"/>
@@ -572,7 +570,7 @@
         </TableRow>
       </TableObject>
     </DataBand>
-    <PageFooterBand Name="PageFooter6" Top="470.74" Width="778.3" Height="18.9">
+    <PageFooterBand Name="PageFooter6" Top="469.72" Width="778.3" Height="18.9">
       <TextObject Name="Text60" Width="283.5" Height="18.9" Text="Service Plan Review (SPR) © 12.2020" VertAlign="Center" Font="Arial, 8pt, style=Italic"/>
     </PageFooterBand>
   </ReportPage>
@@ -586,9 +584,8 @@
       <TextObject Name="Text35" Left="1" Top="125.85" Width="774.9" Height="37.8" CanGrow="true" Text="[TCMDomains3.NeedsIdentified]" HorzAlign="Justify" Font="Arial, 9pt"/>
       <TextObject Name="Text36" Left="1" Top="171.65" Width="425.25" Height="18.9" Text="&lt;b&gt;Long Term Goal:&lt;/b&gt; (include recipient's own words) " VertAlign="Center" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
       <TextObject Name="Text37" Left="1" Top="191.45" Width="774.9" Height="37.8" CanGrow="true" Text="[TCMDomains3.LongTerm]" HorzAlign="Justify" Font="Arial, 9pt"/>
-      <TextObject Name="Text814" Left="715.66" Top="7.94" Width="62.37" Height="18.9" Fill.Color="WhiteSmoke" Text="Added" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt, style=Bold"/>
     </DataBand>
-    <DataBand Name="Data11" Top="241.99" Width="778.3" Height="224.91" CanGrow="true" CanShrink="true" DataSource="TCMObjetives3">
+    <DataBand Name="Data11" Top="241.47" Width="778.3" Height="224.91" CanGrow="true" CanShrink="true" DataSource="TCMObjetives3">
       <TableObject Name="Table5" Left="2.27" Width="773.01" Height="224.91" Border.Lines="All" Fill.Color="White">
         <TableColumn Name="Column13" Width="75.6"/>
         <TableColumn Name="Column14" Width="415.8"/>
@@ -625,7 +622,7 @@
         </TableRow>
       </TableObject>
     </DataBand>
-    <PageFooterBand Name="PageFooter7" Top="470.74" Width="778.3" Height="18.9">
+    <PageFooterBand Name="PageFooter7" Top="469.72" Width="778.3" Height="18.9">
       <TextObject Name="Text71" Width="283.5" Height="18.9" Text="Service Plan Review (SPR) © 12.2020" VertAlign="Center" Font="Arial, 8pt, style=Italic"/>
     </PageFooterBand>
   </ReportPage>
@@ -639,9 +636,8 @@
       <TextObject Name="Text50" Left="1" Top="125.85" Width="774.9" Height="37.8" CanGrow="true" Text="[TCMDomains4.NeedsIdentified]" HorzAlign="Justify" Font="Arial, 9pt"/>
       <TextObject Name="Text51" Left="1" Top="171.65" Width="425.25" Height="18.9" Text="&lt;b&gt;Long Term Goal:&lt;/b&gt; (include recipient's own words) " VertAlign="Center" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
       <TextObject Name="Text52" Left="1" Top="191.45" Width="774.9" Height="37.8" CanGrow="true" Text="[TCMDomains4.LongTerm]" HorzAlign="Justify" Font="Arial, 9pt"/>
-      <TextObject Name="Text815" Left="715.66" Top="7.94" Width="62.37" Height="18.9" Fill.Color="WhiteSmoke" Text="Added" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt, style=Bold"/>
     </DataBand>
-    <DataBand Name="Data13" Top="241.99" Width="778.3" Height="224.91" CanGrow="true" CanShrink="true" DataSource="TCMObjetives4">
+    <DataBand Name="Data13" Top="241.47" Width="778.3" Height="224.91" CanGrow="true" CanShrink="true" DataSource="TCMObjetives4">
       <TableObject Name="Table6" Left="2.27" Width="773.01" Height="224.91" Border.Lines="All" Fill.Color="White">
         <TableColumn Name="Column18" Width="75.6"/>
         <TableColumn Name="Column19" Width="415.8"/>
@@ -678,7 +674,7 @@
         </TableRow>
       </TableObject>
     </DataBand>
-    <PageFooterBand Name="PageFooter8" Top="470.74" Width="778.3" Height="18.9">
+    <PageFooterBand Name="PageFooter8" Top="469.72" Width="778.3" Height="18.9">
       <TextObject Name="Text81" Width="283.5" Height="18.9" Text="Service Plan Review (SPR) © 12.2020" VertAlign="Center" Font="Arial, 8pt, style=Italic"/>
     </PageFooterBand>
   </ReportPage>
@@ -692,9 +688,8 @@
       <TextObject Name="Text63" Left="1" Top="125.85" Width="774.9" Height="37.8" CanGrow="true" Text="[TCMDomains5.NeedsIdentified]" HorzAlign="Justify" Font="Arial, 9pt"/>
       <TextObject Name="Text64" Left="1" Top="171.65" Width="425.25" Height="18.9" Text="&lt;b&gt;Long Term Goal:&lt;/b&gt; (include recipient's own words) " VertAlign="Center" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
       <TextObject Name="Text65" Left="1" Top="191.45" Width="774.9" Height="37.8" CanGrow="true" Text="[TCMDomains5.LongTerm]" HorzAlign="Justify" Font="Arial, 9pt"/>
-      <TextObject Name="Text816" Left="715.66" Top="7.94" Width="62.37" Height="18.9" Fill.Color="WhiteSmoke" Text="Added" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt, style=Bold"/>
     </DataBand>
-    <DataBand Name="Data15" Top="242.55" Width="778.3" Height="224.91" CanGrow="true" CanShrink="true" DataSource="TCMObjetives5">
+    <DataBand Name="Data15" Top="242.03" Width="778.3" Height="224.91" CanGrow="true" CanShrink="true" DataSource="TCMObjetives5">
       <TableObject Name="Table7" Left="2.27" Width="773.01" Height="224.91" Border.Lines="All" Fill.Color="White">
         <TableColumn Name="Column23" Width="75.6"/>
         <TableColumn Name="Column24" Width="415.8"/>
@@ -731,11 +726,791 @@
         </TableRow>
       </TableObject>
     </DataBand>
-    <PageFooterBand Name="PageFooter9" Top="471.3" Width="778.3" Height="18.9">
+    <PageFooterBand Name="PageFooter9" Top="470.28" Width="778.3" Height="18.9">
       <TextObject Name="Text91" Width="283.5" Height="18.9" Text="Service Plan Review (SPR) © 12.2020" VertAlign="Center" Font="Arial, 8pt, style=Italic"/>
     </PageFooterBand>
   </ReportPage>
   <ReportPage Name="Page8" PaperWidth="215.9" PaperHeight="279.4" RawPaperSize="1" LeftMargin="5" TopMargin="1" RightMargin="5" BottomMargin="1" Watermark.Enabled="true" Watermark.Font="Arial, 60pt">
+    <DataBand Name="Data16" Width="778.3" Height="238.7" CanGrow="true" Guides="548.1,538.65,548.1,529.2,548.1,529.2,529.2,529.2">
+      <TextObject Name="Text27" Left="1" Top="19.9" Width="100.17" Height="18.9" Text="SECTION V" VertAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text38" Left="104.68" Top="19.9" Width="330.75" Height="18.9" Text="LONG TERM GOALS / SHORT TERM OBJECTIVES" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text42" Left="1" Top="36.25" Width="774.9" Height="37.8" Text="(Expectations of the individual, where does the individual see himself/herself in the future, what would he/she like to accomplish. It must be realistic and attainable and must be written in conjunction with the individual and family members when applicable)" VertAlign="Center" Font="Arial, 9pt, style=Italic"/>
+      <TextObject Name="Text43" Left="1" Top="76.6" Width="774.9" Height="18.9" Text="DOMAIN # [TCMDomains6.Code] [TCMDomains6.Name]" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text53" Left="1" Top="105.95" Width="425.25" Height="18.9" Text="Identified service needs from SECTION II:" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text54" Left="1" Top="125.85" Width="774.9" Height="37.8" CanGrow="true" Text="[TCMDomains6.NeedsIdentified]" HorzAlign="Justify" Font="Arial, 9pt"/>
+      <TextObject Name="Text55" Left="1" Top="171.65" Width="425.25" Height="18.9" Text="&lt;b&gt;Long Term Goal:&lt;/b&gt; (include recipient's own words) " VertAlign="Center" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text66" Left="1" Top="191.45" Width="774.9" Height="37.8" CanGrow="true" Text="[TCMDomains6.LongTerm]" HorzAlign="Justify" Font="Arial, 9pt"/>
+    </DataBand>
+    <DataBand Name="Data17" Top="242.03" Width="778.3" Height="224.91" CanGrow="true" CanShrink="true" DataSource="TCMObjetives5">
+      <TableObject Name="Table1" Left="2.27" Width="773.01" Height="224.91" Border.Lines="All" Fill.Color="White">
+        <TableColumn Name="Column1" Width="75.6"/>
+        <TableColumn Name="Column2" Width="415.8"/>
+        <TableColumn Name="Column3" Width="92.61"/>
+        <TableColumn Name="Column4" Width="92.61"/>
+        <TableColumn Name="Column35" Width="96.39"/>
+        <TableRow Name="Row1" Height="41.58">
+          <TableCell Name="Cell1" Border.Lines="All" Fill.Color="LightSlateGray" Text="Objective&#13;&#10;[IIf([TCMObjetives6.Id] &gt; 0,[TCMObjetives6.IdObjetive],&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold" TextFill.Color="White"/>
+          <TableCell Name="Cell2" Border.Lines="All" Fill.Color="LightGray" Text="&lt;b&gt;Task/Case Management Strategy&lt;/b&gt; (Who Will Do What, When and How)" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold" TextRenderType="HtmlTags"/>
+          <TableCell Name="Cell3" Border.Lines="All" Fill.Color="LightGray" Text="Start&#13;&#10;Date" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+          <TableCell Name="Cell4" Border.Lines="All" Fill.Color="LightGray" Text="Target&#13;&#10;Date" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+          <TableCell Name="Cell91" Border.Lines="All" Fill.Color="LightGray" Text="End&#13;&#10;Date" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+        </TableRow>
+        <TableRow Name="Row2" Height="41.58" AutoSize="true">
+          <TableCell Name="Cell92" Border.Lines="All" Fill.Color="AliceBlue" Text="[TCMObjetives6.Task]" Padding="2, 4, 2, 1" HorzAlign="Justify" Font="Arial, 9pt" ColSpan="2" RowSpan="3"/>
+          <TableCell Name="Cell93" Border.Lines="All" Fill.Color="AliceBlue" VertAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell94" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives6.Id] &gt; 0,FormatDateTime([TCMObjetives6.StartDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" Padding="2, 4, 2, 2" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell95" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives6.Id] &gt; 0,FormatDateTime([TCMObjetives6.TargetDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell96" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives6.Id] &gt; 0 &amp;&amp; Year([TCMObjetives6.EndDate]) &gt; 1,FormatDateTime([TCMObjetives6.EndDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+        </TableRow>
+        <TableRow Name="Row21">
+          <TableCell Name="Cell97" Font="Arial, 10pt"/>
+          <TableCell Name="Cell98" Font="Arial, 10pt"/>
+          <TableCell Name="Cell99" Border.Lines="All" Fill.Color="LightGray" Text="Responsible Provider and Resources" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold" ColSpan="3"/>
+          <TableCell Name="Cell100" Font="Arial, 10pt"/>
+          <TableCell Name="Cell101" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row22" Height="122.85" AutoSize="true">
+          <TableCell Name="Cell102" Font="Arial, 10pt"/>
+          <TableCell Name="Cell103" Font="Arial, 10pt"/>
+          <TableCell Name="Cell104" Fill.Color="AliceBlue" Text="[TCMObjetives6.Responsible]" Padding="2, 4, 2, 1" Font="Arial, 9pt" ColSpan="3"/>
+          <TableCell Name="Cell105" Font="Arial, 10pt"/>
+          <TableCell Name="Cell106" Font="Arial, 10pt"/>
+        </TableRow>
+      </TableObject>
+    </DataBand>
+    <PageFooterBand Name="PageFooter10" Top="470.28" Width="778.3" Height="18.9">
+      <TextObject Name="Text67" Width="283.5" Height="18.9" Text="Service Plan Review (SPR) © 12.2020" VertAlign="Center" Font="Arial, 8pt, style=Italic"/>
+    </PageFooterBand>
+  </ReportPage>
+  <ReportPage Name="Page9" PaperWidth="215.9" PaperHeight="279.4" RawPaperSize="1" LeftMargin="5" TopMargin="1" RightMargin="5" BottomMargin="1" Watermark.Enabled="true" Watermark.Font="Arial, 60pt">
+    <DataBand Name="Data18" Width="778.3" Height="238.7" CanGrow="true" Guides="548.1,538.65,548.1,529.2,548.1,529.2,529.2,529.2">
+      <TextObject Name="Text68" Left="1" Top="19.9" Width="100.17" Height="18.9" Text="SECTION V" VertAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text69" Left="104.68" Top="19.9" Width="330.75" Height="18.9" Text="LONG TERM GOALS / SHORT TERM OBJECTIVES" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text70" Left="1" Top="36.25" Width="774.9" Height="37.8" Text="(Expectations of the individual, where does the individual see himself/herself in the future, what would he/she like to accomplish. It must be realistic and attainable and must be written in conjunction with the individual and family members when applicable)" VertAlign="Center" Font="Arial, 9pt, style=Italic"/>
+      <TextObject Name="Text72" Left="1" Top="76.6" Width="774.9" Height="18.9" Text="DOMAIN # [TCMDomains7.Code] [TCMDomains7.Name]" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text73" Left="1" Top="105.95" Width="425.25" Height="18.9" Text="Identified service needs from SECTION II:" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text74" Left="1" Top="125.85" Width="774.9" Height="37.8" CanGrow="true" Text="[TCMDomains7.NeedsIdentified]" HorzAlign="Justify" Font="Arial, 9pt"/>
+      <TextObject Name="Text75" Left="1" Top="171.65" Width="425.25" Height="18.9" Text="&lt;b&gt;Long Term Goal:&lt;/b&gt; (include recipient's own words) " VertAlign="Center" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text76" Left="1" Top="191.45" Width="774.9" Height="37.8" CanGrow="true" Text="[TCMDomains7.LongTerm]" HorzAlign="Justify" Font="Arial, 9pt"/>
+    </DataBand>
+    <DataBand Name="Data19" Top="242.03" Width="778.3" Height="224.91" CanGrow="true" CanShrink="true" DataSource="TCMObjetives5">
+      <TableObject Name="Table2" Left="2.27" Width="773.01" Height="224.91" Border.Lines="All" Fill.Color="White">
+        <TableColumn Name="Column36" Width="75.6"/>
+        <TableColumn Name="Column37" Width="415.8"/>
+        <TableColumn Name="Column38" Width="92.61"/>
+        <TableColumn Name="Column39" Width="92.61"/>
+        <TableColumn Name="Column40" Width="96.39"/>
+        <TableRow Name="Row23" Height="41.58">
+          <TableCell Name="Cell107" Border.Lines="All" Fill.Color="LightSlateGray" Text="Objective&#13;&#10;[IIf([TCMObjetives7.Id] &gt; 0,[TCMObjetives7.IdObjetive],&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold" TextFill.Color="White"/>
+          <TableCell Name="Cell108" Border.Lines="All" Fill.Color="LightGray" Text="&lt;b&gt;Task/Case Management Strategy&lt;/b&gt; (Who Will Do What, When and How)" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold" TextRenderType="HtmlTags"/>
+          <TableCell Name="Cell109" Border.Lines="All" Fill.Color="LightGray" Text="Start&#13;&#10;Date" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+          <TableCell Name="Cell110" Border.Lines="All" Fill.Color="LightGray" Text="Target&#13;&#10;Date" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+          <TableCell Name="Cell111" Border.Lines="All" Fill.Color="LightGray" Text="End&#13;&#10;Date" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+        </TableRow>
+        <TableRow Name="Row24" Height="41.58" AutoSize="true">
+          <TableCell Name="Cell112" Border.Lines="All" Fill.Color="AliceBlue" Text="[TCMObjetives7.Task]" Padding="2, 4, 2, 1" HorzAlign="Justify" Font="Arial, 9pt" ColSpan="2" RowSpan="3"/>
+          <TableCell Name="Cell113" Border.Lines="All" Fill.Color="AliceBlue" VertAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell114" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives7.Id] &gt; 0,FormatDateTime([TCMObjetives7.StartDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" Padding="2, 4, 2, 2" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell115" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives7.Id] &gt; 0,FormatDateTime([TCMObjetives7.TargetDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell116" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives7.Id] &gt; 0 &amp;&amp; Year([TCMObjetives7.EndDate]) &gt; 1,FormatDateTime([TCMObjetives7.EndDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+        </TableRow>
+        <TableRow Name="Row25">
+          <TableCell Name="Cell117" Font="Arial, 10pt"/>
+          <TableCell Name="Cell118" Font="Arial, 10pt"/>
+          <TableCell Name="Cell119" Border.Lines="All" Fill.Color="LightGray" Text="Responsible Provider and Resources" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold" ColSpan="3"/>
+          <TableCell Name="Cell120" Font="Arial, 10pt"/>
+          <TableCell Name="Cell121" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row26" Height="122.85" AutoSize="true">
+          <TableCell Name="Cell122" Font="Arial, 10pt"/>
+          <TableCell Name="Cell123" Font="Arial, 10pt"/>
+          <TableCell Name="Cell124" Fill.Color="AliceBlue" Text="[TCMObjetives7.Responsible]" Padding="2, 4, 2, 1" Font="Arial, 9pt" ColSpan="3"/>
+          <TableCell Name="Cell125" Font="Arial, 10pt"/>
+          <TableCell Name="Cell126" Font="Arial, 10pt"/>
+        </TableRow>
+      </TableObject>
+    </DataBand>
+    <PageFooterBand Name="PageFooter11" Top="470.28" Width="778.3" Height="18.9">
+      <TextObject Name="Text77" Width="283.5" Height="18.9" Text="Service Plan Review (SPR) © 12.2020" VertAlign="Center" Font="Arial, 8pt, style=Italic"/>
+    </PageFooterBand>
+  </ReportPage>
+  <ReportPage Name="Page10" PaperWidth="215.9" PaperHeight="279.4" RawPaperSize="1" LeftMargin="5" TopMargin="1" RightMargin="5" BottomMargin="1" Watermark.Enabled="true" Watermark.Font="Arial, 60pt">
+    <DataBand Name="Data20" Width="778.3" Height="238.7" CanGrow="true" Guides="548.1,538.65,548.1,529.2,548.1,529.2,529.2,529.2">
+      <TextObject Name="Text78" Left="1" Top="19.9" Width="100.17" Height="18.9" Text="SECTION V" VertAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text79" Left="104.68" Top="19.9" Width="330.75" Height="18.9" Text="LONG TERM GOALS / SHORT TERM OBJECTIVES" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text80" Left="1" Top="36.25" Width="774.9" Height="37.8" Text="(Expectations of the individual, where does the individual see himself/herself in the future, what would he/she like to accomplish. It must be realistic and attainable and must be written in conjunction with the individual and family members when applicable)" VertAlign="Center" Font="Arial, 9pt, style=Italic"/>
+      <TextObject Name="Text82" Left="1" Top="76.6" Width="774.9" Height="18.9" Text="DOMAIN # [TCMDomains8.Code] [TCMDomains8.Name]" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text83" Left="1" Top="105.95" Width="425.25" Height="18.9" Text="Identified service needs from SECTION II:" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text84" Left="1" Top="125.85" Width="774.9" Height="37.8" CanGrow="true" Text="[TCMDomains8.NeedsIdentified]" HorzAlign="Justify" Font="Arial, 9pt"/>
+      <TextObject Name="Text85" Left="1" Top="171.65" Width="425.25" Height="18.9" Text="&lt;b&gt;Long Term Goal:&lt;/b&gt; (include recipient's own words) " VertAlign="Center" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text86" Left="1" Top="191.45" Width="774.9" Height="37.8" CanGrow="true" Text="[TCMDomains8.LongTerm]" HorzAlign="Justify" Font="Arial, 9pt"/>
+    </DataBand>
+    <DataBand Name="Data21" Top="242.03" Width="778.3" Height="224.91" CanGrow="true" CanShrink="true" DataSource="TCMObjetives5">
+      <TableObject Name="Table10" Left="2.27" Width="773.01" Height="224.91" Border.Lines="All" Fill.Color="White">
+        <TableColumn Name="Column41" Width="75.6"/>
+        <TableColumn Name="Column42" Width="415.8"/>
+        <TableColumn Name="Column43" Width="92.61"/>
+        <TableColumn Name="Column44" Width="92.61"/>
+        <TableColumn Name="Column45" Width="96.39"/>
+        <TableRow Name="Row27" Height="41.58">
+          <TableCell Name="Cell127" Border.Lines="All" Fill.Color="LightSlateGray" Text="Objective&#13;&#10;[IIf([TCMObjetives8.Id] &gt; 0,[TCMObjetives8.IdObjetive],&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold" TextFill.Color="White"/>
+          <TableCell Name="Cell128" Border.Lines="All" Fill.Color="LightGray" Text="&lt;b&gt;Task/Case Management Strategy&lt;/b&gt; (Who Will Do What, When and How)" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold" TextRenderType="HtmlTags"/>
+          <TableCell Name="Cell129" Border.Lines="All" Fill.Color="LightGray" Text="Start&#13;&#10;Date" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+          <TableCell Name="Cell130" Border.Lines="All" Fill.Color="LightGray" Text="Target&#13;&#10;Date" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+          <TableCell Name="Cell131" Border.Lines="All" Fill.Color="LightGray" Text="End&#13;&#10;Date" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+        </TableRow>
+        <TableRow Name="Row28" Height="41.58" AutoSize="true">
+          <TableCell Name="Cell132" Border.Lines="All" Fill.Color="AliceBlue" Text="[TCMObjetives8.Task]" Padding="2, 4, 2, 1" HorzAlign="Justify" Font="Arial, 9pt" ColSpan="2" RowSpan="3"/>
+          <TableCell Name="Cell133" Border.Lines="All" Fill.Color="AliceBlue" VertAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell134" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives8.Id] &gt; 0,FormatDateTime([TCMObjetives8.StartDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" Padding="2, 4, 2, 2" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell135" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives8.Id] &gt; 0,FormatDateTime([TCMObjetives8.TargetDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell136" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives8.Id] &gt; 0 &amp;&amp; Year([TCMObjetives8.EndDate]) &gt; 1,FormatDateTime([TCMObjetives8.EndDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+        </TableRow>
+        <TableRow Name="Row29">
+          <TableCell Name="Cell137" Font="Arial, 10pt"/>
+          <TableCell Name="Cell138" Font="Arial, 10pt"/>
+          <TableCell Name="Cell139" Border.Lines="All" Fill.Color="LightGray" Text="Responsible Provider and Resources" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold" ColSpan="3"/>
+          <TableCell Name="Cell140" Font="Arial, 10pt"/>
+          <TableCell Name="Cell141" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row30" Height="122.85" AutoSize="true">
+          <TableCell Name="Cell142" Font="Arial, 10pt"/>
+          <TableCell Name="Cell143" Font="Arial, 10pt"/>
+          <TableCell Name="Cell144" Fill.Color="AliceBlue" Text="[TCMObjetives8.Responsible]" Padding="2, 4, 2, 1" Font="Arial, 9pt" ColSpan="3"/>
+          <TableCell Name="Cell145" Font="Arial, 10pt"/>
+          <TableCell Name="Cell146" Font="Arial, 10pt"/>
+        </TableRow>
+      </TableObject>
+    </DataBand>
+    <PageFooterBand Name="PageFooter12" Top="470.28" Width="778.3" Height="18.9">
+      <TextObject Name="Text87" Width="283.5" Height="18.9" Text="Service Plan Review (SPR) © 12.2020" VertAlign="Center" Font="Arial, 8pt, style=Italic"/>
+    </PageFooterBand>
+  </ReportPage>
+  <ReportPage Name="Page11" PaperWidth="215.9" PaperHeight="279.4" RawPaperSize="1" LeftMargin="5" TopMargin="1" RightMargin="5" BottomMargin="1" Watermark.Enabled="true" Watermark.Font="Arial, 60pt">
+    <DataBand Name="Data22" Width="778.3" Height="238.7" CanGrow="true" Guides="548.1,538.65,548.1,529.2,548.1,529.2,529.2,529.2">
+      <TextObject Name="Text88" Left="1" Top="19.9" Width="100.17" Height="18.9" Text="SECTION V" VertAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text89" Left="104.68" Top="19.9" Width="330.75" Height="18.9" Text="LONG TERM GOALS / SHORT TERM OBJECTIVES" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text90" Left="1" Top="36.25" Width="774.9" Height="37.8" Text="(Expectations of the individual, where does the individual see himself/herself in the future, what would he/she like to accomplish. It must be realistic and attainable and must be written in conjunction with the individual and family members when applicable)" VertAlign="Center" Font="Arial, 9pt, style=Italic"/>
+      <TextObject Name="Text92" Left="1" Top="76.6" Width="774.9" Height="18.9" Text="DOMAIN # [TCMDomains9.Code] [TCMDomains9.Name]" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text93" Left="1" Top="105.95" Width="425.25" Height="18.9" Text="Identified service needs from SECTION II:" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text94" Left="1" Top="125.85" Width="774.9" Height="37.8" CanGrow="true" Text="[TCMDomains9.NeedsIdentified]" HorzAlign="Justify" Font="Arial, 9pt"/>
+      <TextObject Name="Text95" Left="1" Top="171.65" Width="425.25" Height="18.9" Text="&lt;b&gt;Long Term Goal:&lt;/b&gt; (include recipient's own words) " VertAlign="Center" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text96" Left="1" Top="191.45" Width="774.9" Height="37.8" CanGrow="true" Text="[TCMDomains9.LongTerm]" HorzAlign="Justify" Font="Arial, 9pt"/>
+    </DataBand>
+    <DataBand Name="Data23" Top="242.03" Width="778.3" Height="224.91" CanGrow="true" CanShrink="true" DataSource="TCMObjetives5">
+      <TableObject Name="Table11" Left="2.27" Width="773.01" Height="224.91" Border.Lines="All" Fill.Color="White">
+        <TableColumn Name="Column46" Width="75.6"/>
+        <TableColumn Name="Column47" Width="415.8"/>
+        <TableColumn Name="Column48" Width="92.61"/>
+        <TableColumn Name="Column49" Width="92.61"/>
+        <TableColumn Name="Column50" Width="96.39"/>
+        <TableRow Name="Row31" Height="41.58">
+          <TableCell Name="Cell147" Border.Lines="All" Fill.Color="LightSlateGray" Text="Objective&#13;&#10;[IIf([TCMObjetives9.Id] &gt; 0,[TCMObjetives9.IdObjetive],&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold" TextFill.Color="White"/>
+          <TableCell Name="Cell148" Border.Lines="All" Fill.Color="LightGray" Text="&lt;b&gt;Task/Case Management Strategy&lt;/b&gt; (Who Will Do What, When and How)" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold" TextRenderType="HtmlTags"/>
+          <TableCell Name="Cell149" Border.Lines="All" Fill.Color="LightGray" Text="Start&#13;&#10;Date" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+          <TableCell Name="Cell150" Border.Lines="All" Fill.Color="LightGray" Text="Target&#13;&#10;Date" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+          <TableCell Name="Cell151" Border.Lines="All" Fill.Color="LightGray" Text="End&#13;&#10;Date" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+        </TableRow>
+        <TableRow Name="Row32" Height="41.58" AutoSize="true">
+          <TableCell Name="Cell152" Border.Lines="All" Fill.Color="AliceBlue" Text="[TCMObjetives9.Task]" Padding="2, 4, 2, 1" HorzAlign="Justify" Font="Arial, 9pt" ColSpan="2" RowSpan="3"/>
+          <TableCell Name="Cell153" Border.Lines="All" Fill.Color="AliceBlue" VertAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell154" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives9.Id] &gt; 0,FormatDateTime([TCMObjetives9.StartDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" Padding="2, 4, 2, 2" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell155" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives9.Id] &gt; 0,FormatDateTime([TCMObjetives9.TargetDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell156" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives9.Id] &gt; 0 &amp;&amp; Year([TCMObjetives9.EndDate]) &gt; 1,FormatDateTime([TCMObjetives9.EndDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+        </TableRow>
+        <TableRow Name="Row33">
+          <TableCell Name="Cell157" Font="Arial, 10pt"/>
+          <TableCell Name="Cell158" Font="Arial, 10pt"/>
+          <TableCell Name="Cell159" Border.Lines="All" Fill.Color="LightGray" Text="Responsible Provider and Resources" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold" ColSpan="3"/>
+          <TableCell Name="Cell160" Font="Arial, 10pt"/>
+          <TableCell Name="Cell161" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row34" Height="122.85" AutoSize="true">
+          <TableCell Name="Cell162" Font="Arial, 10pt"/>
+          <TableCell Name="Cell163" Font="Arial, 10pt"/>
+          <TableCell Name="Cell164" Fill.Color="AliceBlue" Text="[TCMObjetives9.Responsible]" Padding="2, 4, 2, 1" Font="Arial, 9pt" ColSpan="3"/>
+          <TableCell Name="Cell165" Font="Arial, 10pt"/>
+          <TableCell Name="Cell166" Font="Arial, 10pt"/>
+        </TableRow>
+      </TableObject>
+    </DataBand>
+    <PageFooterBand Name="PageFooter13" Top="470.28" Width="778.3" Height="18.9">
+      <TextObject Name="Text97" Width="283.5" Height="18.9" Text="Service Plan Review (SPR) © 12.2020" VertAlign="Center" Font="Arial, 8pt, style=Italic"/>
+    </PageFooterBand>
+  </ReportPage>
+  <ReportPage Name="Page12" PaperWidth="215.9" PaperHeight="279.4" RawPaperSize="1" LeftMargin="5" TopMargin="1" RightMargin="5" BottomMargin="1" Watermark.Enabled="true" Watermark.Font="Arial, 60pt">
+    <DataBand Name="Data24" Width="778.3" Height="238.7" CanGrow="true" Guides="548.1,538.65,548.1,529.2,548.1,529.2,529.2,529.2">
+      <TextObject Name="Text98" Left="1" Top="19.9" Width="100.17" Height="18.9" Text="SECTION V" VertAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text99" Left="104.68" Top="19.9" Width="330.75" Height="18.9" Text="LONG TERM GOALS / SHORT TERM OBJECTIVES" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text100" Left="1" Top="36.25" Width="774.9" Height="37.8" Text="(Expectations of the individual, where does the individual see himself/herself in the future, what would he/she like to accomplish. It must be realistic and attainable and must be written in conjunction with the individual and family members when applicable)" VertAlign="Center" Font="Arial, 9pt, style=Italic"/>
+      <TextObject Name="Text101" Left="1" Top="76.6" Width="774.9" Height="18.9" Text="DOMAIN # [TCMDomains10.Code] [TCMDomains10.Name]" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text102" Left="1" Top="105.95" Width="425.25" Height="18.9" Text="Identified service needs from SECTION II:" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text103" Left="1" Top="125.85" Width="774.9" Height="37.8" CanGrow="true" Text="[TCMDomains10.NeedsIdentified]" HorzAlign="Justify" Font="Arial, 9pt"/>
+      <TextObject Name="Text104" Left="1" Top="171.65" Width="425.25" Height="18.9" Text="&lt;b&gt;Long Term Goal:&lt;/b&gt; (include recipient's own words) " VertAlign="Center" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text105" Left="1" Top="191.45" Width="774.9" Height="37.8" CanGrow="true" Text="[TCMDomains10.LongTerm]" HorzAlign="Justify" Font="Arial, 9pt"/>
+    </DataBand>
+    <DataBand Name="Data25" Top="242.03" Width="778.3" Height="224.91" CanGrow="true" CanShrink="true" DataSource="TCMObjetives5">
+      <TableObject Name="Table12" Left="2.27" Width="773.01" Height="224.91" Border.Lines="All" Fill.Color="White">
+        <TableColumn Name="Column51" Width="75.6"/>
+        <TableColumn Name="Column52" Width="415.8"/>
+        <TableColumn Name="Column53" Width="92.61"/>
+        <TableColumn Name="Column54" Width="92.61"/>
+        <TableColumn Name="Column55" Width="96.39"/>
+        <TableRow Name="Row35" Height="41.58">
+          <TableCell Name="Cell167" Border.Lines="All" Fill.Color="LightSlateGray" Text="Objective&#13;&#10;[IIf([TCMObjetives10.Id] &gt; 0,[TCMObjetives10.IdObjetive],&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold" TextFill.Color="White"/>
+          <TableCell Name="Cell168" Border.Lines="All" Fill.Color="LightGray" Text="&lt;b&gt;Task/Case Management Strategy&lt;/b&gt; (Who Will Do What, When and How)" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold" TextRenderType="HtmlTags"/>
+          <TableCell Name="Cell169" Border.Lines="All" Fill.Color="LightGray" Text="Start&#13;&#10;Date" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+          <TableCell Name="Cell170" Border.Lines="All" Fill.Color="LightGray" Text="Target&#13;&#10;Date" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+          <TableCell Name="Cell171" Border.Lines="All" Fill.Color="LightGray" Text="End&#13;&#10;Date" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+        </TableRow>
+        <TableRow Name="Row36" Height="41.58" AutoSize="true">
+          <TableCell Name="Cell172" Border.Lines="All" Fill.Color="AliceBlue" Text="[TCMObjetives10.Task]" Padding="2, 4, 2, 1" HorzAlign="Justify" Font="Arial, 9pt" ColSpan="2" RowSpan="3"/>
+          <TableCell Name="Cell173" Border.Lines="All" Fill.Color="AliceBlue" VertAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell174" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives10.Id] &gt; 0,FormatDateTime([TCMObjetives10.StartDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" Padding="2, 4, 2, 2" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell175" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives10.Id] &gt; 0,FormatDateTime([TCMObjetives10.TargetDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell176" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives10.Id] &gt; 0 &amp;&amp; Year([TCMObjetives10.EndDate]) &gt; 1,FormatDateTime([TCMObjetives10.EndDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+        </TableRow>
+        <TableRow Name="Row37">
+          <TableCell Name="Cell177" Font="Arial, 10pt"/>
+          <TableCell Name="Cell178" Font="Arial, 10pt"/>
+          <TableCell Name="Cell179" Border.Lines="All" Fill.Color="LightGray" Text="Responsible Provider and Resources" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold" ColSpan="3"/>
+          <TableCell Name="Cell180" Font="Arial, 10pt"/>
+          <TableCell Name="Cell181" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row38" Height="122.85" AutoSize="true">
+          <TableCell Name="Cell182" Font="Arial, 10pt"/>
+          <TableCell Name="Cell183" Font="Arial, 10pt"/>
+          <TableCell Name="Cell184" Fill.Color="AliceBlue" Text="[TCMObjetives10.Responsible]" Padding="2, 4, 2, 1" Font="Arial, 9pt" ColSpan="3"/>
+          <TableCell Name="Cell185" Font="Arial, 10pt"/>
+          <TableCell Name="Cell186" Font="Arial, 10pt"/>
+        </TableRow>
+      </TableObject>
+    </DataBand>
+    <PageFooterBand Name="PageFooter14" Top="470.28" Width="778.3" Height="18.9">
+      <TextObject Name="Text106" Width="283.5" Height="18.9" Text="Service Plan Review (SPR) © 12.2020" VertAlign="Center" Font="Arial, 8pt, style=Italic"/>
+    </PageFooterBand>
+  </ReportPage>
+  <ReportPage Name="Page13" PaperWidth="215.9" PaperHeight="279.4" RawPaperSize="1" LeftMargin="5" TopMargin="1" RightMargin="5" BottomMargin="1" Watermark.Enabled="true" Watermark.Font="Arial, 60pt">
+    <DataBand Name="Data26" Width="778.3" Height="238.7" CanGrow="true" Guides="548.1,538.65,548.1,529.2,548.1,529.2,529.2,529.2">
+      <TextObject Name="Text107" Left="1" Top="19.9" Width="100.17" Height="18.9" Text="SECTION V" VertAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text108" Left="104.68" Top="19.9" Width="330.75" Height="18.9" Text="LONG TERM GOALS / SHORT TERM OBJECTIVES" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text109" Left="1" Top="36.25" Width="774.9" Height="37.8" Text="(Expectations of the individual, where does the individual see himself/herself in the future, what would he/she like to accomplish. It must be realistic and attainable and must be written in conjunction with the individual and family members when applicable)" VertAlign="Center" Font="Arial, 9pt, style=Italic"/>
+      <TextObject Name="Text110" Left="1" Top="76.6" Width="774.9" Height="18.9" Text="DOMAIN # [TCMDomains11.Code] [TCMDomains11.Name]" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text111" Left="1" Top="105.95" Width="425.25" Height="18.9" Text="Identified service needs from SECTION II:" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text117" Left="1" Top="125.85" Width="774.9" Height="37.8" CanGrow="true" Text="[TCMDomains11.NeedsIdentified]" HorzAlign="Justify" Font="Arial, 9pt"/>
+      <TextObject Name="Text118" Left="1" Top="171.65" Width="425.25" Height="18.9" Text="&lt;b&gt;Long Term Goal:&lt;/b&gt; (include recipient's own words) " VertAlign="Center" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text119" Left="1" Top="191.45" Width="774.9" Height="37.8" CanGrow="true" Text="[TCMDomains11.LongTerm]" HorzAlign="Justify" Font="Arial, 9pt"/>
+    </DataBand>
+    <DataBand Name="Data27" Top="242.03" Width="778.3" Height="224.91" CanGrow="true" CanShrink="true" DataSource="TCMObjetives5">
+      <TableObject Name="Table13" Left="2.27" Width="773.01" Height="224.91" Border.Lines="All" Fill.Color="White">
+        <TableColumn Name="Column56" Width="75.6"/>
+        <TableColumn Name="Column57" Width="415.8"/>
+        <TableColumn Name="Column58" Width="92.61"/>
+        <TableColumn Name="Column59" Width="92.61"/>
+        <TableColumn Name="Column60" Width="96.39"/>
+        <TableRow Name="Row39" Height="41.58">
+          <TableCell Name="Cell187" Border.Lines="All" Fill.Color="LightSlateGray" Text="Objective&#13;&#10;[IIf([TCMObjetives11.Id] &gt; 0,[TCMObjetives11.IdObjetive],&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold" TextFill.Color="White"/>
+          <TableCell Name="Cell188" Border.Lines="All" Fill.Color="LightGray" Text="&lt;b&gt;Task/Case Management Strategy&lt;/b&gt; (Who Will Do What, When and How)" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold" TextRenderType="HtmlTags"/>
+          <TableCell Name="Cell189" Border.Lines="All" Fill.Color="LightGray" Text="Start&#13;&#10;Date" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+          <TableCell Name="Cell190" Border.Lines="All" Fill.Color="LightGray" Text="Target&#13;&#10;Date" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+          <TableCell Name="Cell191" Border.Lines="All" Fill.Color="LightGray" Text="End&#13;&#10;Date" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+        </TableRow>
+        <TableRow Name="Row40" Height="41.58" AutoSize="true">
+          <TableCell Name="Cell192" Border.Lines="All" Fill.Color="AliceBlue" Text="[TCMObjetives11.Task]" Padding="2, 4, 2, 1" HorzAlign="Justify" Font="Arial, 9pt" ColSpan="2" RowSpan="3"/>
+          <TableCell Name="Cell193" Border.Lines="All" Fill.Color="AliceBlue" VertAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell194" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives11.Id] &gt; 0,FormatDateTime([TCMObjetives11.StartDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" Padding="2, 4, 2, 2" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell195" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives11.Id] &gt; 0,FormatDateTime([TCMObjetives11.TargetDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell196" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives11.Id] &gt; 0 &amp;&amp; Year([TCMObjetives11.EndDate]) &gt; 1,FormatDateTime([TCMObjetives11.EndDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+        </TableRow>
+        <TableRow Name="Row41">
+          <TableCell Name="Cell197" Font="Arial, 10pt"/>
+          <TableCell Name="Cell198" Font="Arial, 10pt"/>
+          <TableCell Name="Cell199" Border.Lines="All" Fill.Color="LightGray" Text="Responsible Provider and Resources" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold" ColSpan="3"/>
+          <TableCell Name="Cell200" Font="Arial, 10pt"/>
+          <TableCell Name="Cell201" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row42" Height="122.85" AutoSize="true">
+          <TableCell Name="Cell202" Font="Arial, 10pt"/>
+          <TableCell Name="Cell203" Font="Arial, 10pt"/>
+          <TableCell Name="Cell204" Fill.Color="AliceBlue" Text="[TCMObjetives11.Responsible]" Padding="2, 4, 2, 1" Font="Arial, 9pt" ColSpan="3"/>
+          <TableCell Name="Cell205" Font="Arial, 10pt"/>
+          <TableCell Name="Cell206" Font="Arial, 10pt"/>
+        </TableRow>
+      </TableObject>
+    </DataBand>
+    <PageFooterBand Name="PageFooter15" Top="470.28" Width="778.3" Height="18.9">
+      <TextObject Name="Text120" Width="283.5" Height="18.9" Text="Service Plan Review (SPR) © 12.2020" VertAlign="Center" Font="Arial, 8pt, style=Italic"/>
+    </PageFooterBand>
+  </ReportPage>
+  <ReportPage Name="Page14" PaperWidth="215.9" PaperHeight="279.4" RawPaperSize="1" LeftMargin="5" TopMargin="1" RightMargin="5" BottomMargin="1" Watermark.Enabled="true" Watermark.Font="Arial, 60pt">
+    <DataBand Name="Data28" Width="778.3" Height="238.7" CanGrow="true" Guides="548.1,538.65,548.1,529.2,548.1,529.2,529.2,529.2">
+      <TextObject Name="Text121" Left="1" Top="19.9" Width="100.17" Height="18.9" Text="SECTION V" VertAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text122" Left="104.68" Top="19.9" Width="330.75" Height="18.9" Text="LONG TERM GOALS / SHORT TERM OBJECTIVES" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text123" Left="1" Top="36.25" Width="774.9" Height="37.8" Text="(Expectations of the individual, where does the individual see himself/herself in the future, what would he/she like to accomplish. It must be realistic and attainable and must be written in conjunction with the individual and family members when applicable)" VertAlign="Center" Font="Arial, 9pt, style=Italic"/>
+      <TextObject Name="Text124" Left="1" Top="76.6" Width="774.9" Height="18.9" Text="DOMAIN # [TCMDomains12.Code] [TCMDomains12.Name]" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text125" Left="1" Top="105.95" Width="425.25" Height="18.9" Text="Identified service needs from SECTION II:" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text126" Left="1" Top="125.85" Width="774.9" Height="37.8" CanGrow="true" Text="[TCMDomains12.NeedsIdentified]" HorzAlign="Justify" Font="Arial, 9pt"/>
+      <TextObject Name="Text127" Left="1" Top="171.65" Width="425.25" Height="18.9" Text="&lt;b&gt;Long Term Goal:&lt;/b&gt; (include recipient's own words) " VertAlign="Center" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text128" Left="1" Top="191.45" Width="774.9" Height="37.8" CanGrow="true" Text="[TCMDomains12.LongTerm]" HorzAlign="Justify" Font="Arial, 9pt"/>
+    </DataBand>
+    <DataBand Name="Data29" Top="242.03" Width="778.3" Height="224.91" CanGrow="true" CanShrink="true" DataSource="TCMObjetives5">
+      <TableObject Name="Table14" Left="2.27" Width="773.01" Height="224.91" Border.Lines="All" Fill.Color="White">
+        <TableColumn Name="Column61" Width="75.6"/>
+        <TableColumn Name="Column62" Width="415.8"/>
+        <TableColumn Name="Column63" Width="92.61"/>
+        <TableColumn Name="Column64" Width="92.61"/>
+        <TableColumn Name="Column65" Width="96.39"/>
+        <TableRow Name="Row43" Height="41.58">
+          <TableCell Name="Cell207" Border.Lines="All" Fill.Color="LightSlateGray" Text="Objective&#13;&#10;[IIf([TCMObjetives12.Id] &gt; 0,[TCMObjetives12.IdObjetive],&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold" TextFill.Color="White"/>
+          <TableCell Name="Cell208" Border.Lines="All" Fill.Color="LightGray" Text="&lt;b&gt;Task/Case Management Strategy&lt;/b&gt; (Who Will Do What, When and How)" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold" TextRenderType="HtmlTags"/>
+          <TableCell Name="Cell209" Border.Lines="All" Fill.Color="LightGray" Text="Start&#13;&#10;Date" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+          <TableCell Name="Cell210" Border.Lines="All" Fill.Color="LightGray" Text="Target&#13;&#10;Date" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+          <TableCell Name="Cell211" Border.Lines="All" Fill.Color="LightGray" Text="End&#13;&#10;Date" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+        </TableRow>
+        <TableRow Name="Row44" Height="41.58" AutoSize="true">
+          <TableCell Name="Cell212" Border.Lines="All" Fill.Color="AliceBlue" Text="[TCMObjetives12.Task]" Padding="2, 4, 2, 1" HorzAlign="Justify" Font="Arial, 9pt" ColSpan="2" RowSpan="3"/>
+          <TableCell Name="Cell213" Border.Lines="All" Fill.Color="AliceBlue" VertAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell214" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives12.Id] &gt; 0,FormatDateTime([TCMObjetives12.StartDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" Padding="2, 4, 2, 2" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell215" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives12.Id] &gt; 0,FormatDateTime([TCMObjetives12.TargetDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell216" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives12.Id] &gt; 0 &amp;&amp; Year([TCMObjetives12.EndDate]) &gt; 1,FormatDateTime([TCMObjetives12.EndDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+        </TableRow>
+        <TableRow Name="Row45">
+          <TableCell Name="Cell217" Font="Arial, 10pt"/>
+          <TableCell Name="Cell218" Font="Arial, 10pt"/>
+          <TableCell Name="Cell219" Border.Lines="All" Fill.Color="LightGray" Text="Responsible Provider and Resources" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold" ColSpan="3"/>
+          <TableCell Name="Cell220" Font="Arial, 10pt"/>
+          <TableCell Name="Cell221" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row46" Height="122.85" AutoSize="true">
+          <TableCell Name="Cell222" Font="Arial, 10pt"/>
+          <TableCell Name="Cell223" Font="Arial, 10pt"/>
+          <TableCell Name="Cell224" Fill.Color="AliceBlue" Text="[TCMObjetives12.Responsible]" Padding="2, 4, 2, 1" Font="Arial, 9pt" ColSpan="3"/>
+          <TableCell Name="Cell225" Font="Arial, 10pt"/>
+          <TableCell Name="Cell226" Font="Arial, 10pt"/>
+        </TableRow>
+      </TableObject>
+    </DataBand>
+    <PageFooterBand Name="PageFooter16" Top="470.28" Width="778.3" Height="18.9">
+      <TextObject Name="Text129" Width="283.5" Height="18.9" Text="Service Plan Review (SPR) © 12.2020" VertAlign="Center" Font="Arial, 8pt, style=Italic"/>
+    </PageFooterBand>
+  </ReportPage>
+  <ReportPage Name="Page15" PaperWidth="215.9" PaperHeight="279.4" RawPaperSize="1" LeftMargin="5" TopMargin="1" RightMargin="5" BottomMargin="1" Watermark.Enabled="true" Watermark.Font="Arial, 60pt">
+    <DataBand Name="Data30" Width="778.3" Height="238.7" CanGrow="true" Guides="548.1,538.65,548.1,529.2,548.1,529.2,529.2,529.2">
+      <TextObject Name="Text130" Left="1" Top="19.9" Width="100.17" Height="18.9" Text="SECTION V" VertAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text131" Left="104.68" Top="19.9" Width="330.75" Height="18.9" Text="LONG TERM GOALS / SHORT TERM OBJECTIVES" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text132" Left="1" Top="36.25" Width="774.9" Height="37.8" Text="(Expectations of the individual, where does the individual see himself/herself in the future, what would he/she like to accomplish. It must be realistic and attainable and must be written in conjunction with the individual and family members when applicable)" VertAlign="Center" Font="Arial, 9pt, style=Italic"/>
+      <TextObject Name="Text133" Left="1" Top="76.6" Width="774.9" Height="18.9" Text="DOMAIN # [TCMDomains13.Code] [TCMDomains13.Name]" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text134" Left="1" Top="105.95" Width="425.25" Height="18.9" Text="Identified service needs from SECTION II:" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text135" Left="1" Top="125.85" Width="774.9" Height="37.8" CanGrow="true" Text="[TCMDomains13.NeedsIdentified]" HorzAlign="Justify" Font="Arial, 9pt"/>
+      <TextObject Name="Text136" Left="1" Top="171.65" Width="425.25" Height="18.9" Text="&lt;b&gt;Long Term Goal:&lt;/b&gt; (include recipient's own words) " VertAlign="Center" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text137" Left="1" Top="191.45" Width="774.9" Height="37.8" CanGrow="true" Text="[TCMDomains13.LongTerm]" HorzAlign="Justify" Font="Arial, 9pt"/>
+    </DataBand>
+    <DataBand Name="Data31" Top="242.03" Width="778.3" Height="224.91" CanGrow="true" CanShrink="true" DataSource="TCMObjetives5">
+      <TableObject Name="Table15" Left="2.27" Width="773.01" Height="224.91" Border.Lines="All" Fill.Color="White">
+        <TableColumn Name="Column66" Width="75.6"/>
+        <TableColumn Name="Column67" Width="415.8"/>
+        <TableColumn Name="Column68" Width="92.61"/>
+        <TableColumn Name="Column69" Width="92.61"/>
+        <TableColumn Name="Column70" Width="96.39"/>
+        <TableRow Name="Row47" Height="41.58">
+          <TableCell Name="Cell227" Border.Lines="All" Fill.Color="LightSlateGray" Text="Objective&#13;&#10;[IIf([TCMObjetives13.Id] &gt; 0,[TCMObjetives13.IdObjetive],&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold" TextFill.Color="White"/>
+          <TableCell Name="Cell228" Border.Lines="All" Fill.Color="LightGray" Text="&lt;b&gt;Task/Case Management Strategy&lt;/b&gt; (Who Will Do What, When and How)" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold" TextRenderType="HtmlTags"/>
+          <TableCell Name="Cell229" Border.Lines="All" Fill.Color="LightGray" Text="Start&#13;&#10;Date" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+          <TableCell Name="Cell230" Border.Lines="All" Fill.Color="LightGray" Text="Target&#13;&#10;Date" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+          <TableCell Name="Cell231" Border.Lines="All" Fill.Color="LightGray" Text="End&#13;&#10;Date" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+        </TableRow>
+        <TableRow Name="Row48" Height="41.58" AutoSize="true">
+          <TableCell Name="Cell232" Border.Lines="All" Fill.Color="AliceBlue" Text="[TCMObjetives13.Task]" Padding="2, 4, 2, 1" HorzAlign="Justify" Font="Arial, 9pt" ColSpan="2" RowSpan="3"/>
+          <TableCell Name="Cell233" Border.Lines="All" Fill.Color="AliceBlue" VertAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell234" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives13.Id] &gt; 0,FormatDateTime([TCMObjetives13.StartDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" Padding="2, 4, 2, 2" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell235" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives13.Id] &gt; 0,FormatDateTime([TCMObjetives13.TargetDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell236" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives13.Id] &gt; 0 &amp;&amp; Year([TCMObjetives13.EndDate]) &gt; 1,FormatDateTime([TCMObjetives13.EndDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+        </TableRow>
+        <TableRow Name="Row49">
+          <TableCell Name="Cell237" Font="Arial, 10pt"/>
+          <TableCell Name="Cell238" Font="Arial, 10pt"/>
+          <TableCell Name="Cell239" Border.Lines="All" Fill.Color="LightGray" Text="Responsible Provider and Resources" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold" ColSpan="3"/>
+          <TableCell Name="Cell240" Font="Arial, 10pt"/>
+          <TableCell Name="Cell241" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row50" Height="122.85" AutoSize="true">
+          <TableCell Name="Cell242" Font="Arial, 10pt"/>
+          <TableCell Name="Cell243" Font="Arial, 10pt"/>
+          <TableCell Name="Cell244" Fill.Color="AliceBlue" Text="[TCMObjetives13.Responsible]" Padding="2, 4, 2, 1" Font="Arial, 9pt" ColSpan="3"/>
+          <TableCell Name="Cell245" Font="Arial, 10pt"/>
+          <TableCell Name="Cell246" Font="Arial, 10pt"/>
+        </TableRow>
+      </TableObject>
+    </DataBand>
+    <PageFooterBand Name="PageFooter17" Top="470.28" Width="778.3" Height="18.9">
+      <TextObject Name="Text138" Width="283.5" Height="18.9" Text="Service Plan Review (SPR) © 12.2020" VertAlign="Center" Font="Arial, 8pt, style=Italic"/>
+    </PageFooterBand>
+  </ReportPage>
+  <ReportPage Name="Page16" PaperWidth="215.9" PaperHeight="279.4" RawPaperSize="1" LeftMargin="5" TopMargin="1" RightMargin="5" BottomMargin="1" Watermark.Enabled="true" Watermark.Font="Arial, 60pt">
+    <DataBand Name="Data32" Width="778.3" Height="238.7" CanGrow="true" Guides="548.1,538.65,548.1,529.2,548.1,529.2,529.2,529.2">
+      <TextObject Name="Text139" Left="1" Top="19.9" Width="100.17" Height="18.9" Text="SECTION V" VertAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text140" Left="104.68" Top="19.9" Width="330.75" Height="18.9" Text="LONG TERM GOALS / SHORT TERM OBJECTIVES" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text141" Left="1" Top="36.25" Width="774.9" Height="37.8" Text="(Expectations of the individual, where does the individual see himself/herself in the future, what would he/she like to accomplish. It must be realistic and attainable and must be written in conjunction with the individual and family members when applicable)" VertAlign="Center" Font="Arial, 9pt, style=Italic"/>
+      <TextObject Name="Text142" Left="1" Top="76.6" Width="774.9" Height="18.9" Text="DOMAIN # [TCMDomains14.Code] [TCMDomains14.Name]" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text143" Left="1" Top="105.95" Width="425.25" Height="18.9" Text="Identified service needs from SECTION II:" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text144" Left="1" Top="125.85" Width="774.9" Height="37.8" CanGrow="true" Text="[TCMDomains14.NeedsIdentified]" HorzAlign="Justify" Font="Arial, 9pt"/>
+      <TextObject Name="Text145" Left="1" Top="171.65" Width="425.25" Height="18.9" Text="&lt;b&gt;Long Term Goal:&lt;/b&gt; (include recipient's own words) " VertAlign="Center" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text146" Left="1" Top="191.45" Width="774.9" Height="37.8" CanGrow="true" Text="[TCMDomains14.LongTerm]" HorzAlign="Justify" Font="Arial, 9pt"/>
+    </DataBand>
+    <DataBand Name="Data33" Top="242.03" Width="778.3" Height="224.91" CanGrow="true" CanShrink="true" DataSource="TCMObjetives5">
+      <TableObject Name="Table16" Left="2.27" Width="773.01" Height="224.91" Border.Lines="All" Fill.Color="White">
+        <TableColumn Name="Column71" Width="75.6"/>
+        <TableColumn Name="Column72" Width="415.8"/>
+        <TableColumn Name="Column73" Width="92.61"/>
+        <TableColumn Name="Column74" Width="92.61"/>
+        <TableColumn Name="Column75" Width="96.39"/>
+        <TableRow Name="Row51" Height="41.58">
+          <TableCell Name="Cell247" Border.Lines="All" Fill.Color="LightSlateGray" Text="Objective&#13;&#10;[IIf([TCMObjetives14.Id] &gt; 0,[TCMObjetives14.IdObjetive],&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold" TextFill.Color="White"/>
+          <TableCell Name="Cell248" Border.Lines="All" Fill.Color="LightGray" Text="&lt;b&gt;Task/Case Management Strategy&lt;/b&gt; (Who Will Do What, When and How)" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold" TextRenderType="HtmlTags"/>
+          <TableCell Name="Cell249" Border.Lines="All" Fill.Color="LightGray" Text="Start&#13;&#10;Date" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+          <TableCell Name="Cell250" Border.Lines="All" Fill.Color="LightGray" Text="Target&#13;&#10;Date" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+          <TableCell Name="Cell251" Border.Lines="All" Fill.Color="LightGray" Text="End&#13;&#10;Date" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+        </TableRow>
+        <TableRow Name="Row52" Height="41.58" AutoSize="true">
+          <TableCell Name="Cell252" Border.Lines="All" Fill.Color="AliceBlue" Text="[TCMObjetives14.Task]" Padding="2, 4, 2, 1" HorzAlign="Justify" Font="Arial, 9pt" ColSpan="2" RowSpan="3"/>
+          <TableCell Name="Cell253" Border.Lines="All" Fill.Color="AliceBlue" VertAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell254" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives14.Id] &gt; 0,FormatDateTime([TCMObjetives14.StartDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" Padding="2, 4, 2, 2" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell255" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives14.Id] &gt; 0,FormatDateTime([TCMObjetives14.TargetDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell256" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives14.Id] &gt; 0 &amp;&amp; Year([TCMObjetives14.EndDate]) &gt; 1,FormatDateTime([TCMObjetives14.EndDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+        </TableRow>
+        <TableRow Name="Row53">
+          <TableCell Name="Cell257" Font="Arial, 10pt"/>
+          <TableCell Name="Cell258" Font="Arial, 10pt"/>
+          <TableCell Name="Cell259" Border.Lines="All" Fill.Color="LightGray" Text="Responsible Provider and Resources" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold" ColSpan="3"/>
+          <TableCell Name="Cell260" Font="Arial, 10pt"/>
+          <TableCell Name="Cell261" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row54" Height="122.85" AutoSize="true">
+          <TableCell Name="Cell262" Font="Arial, 10pt"/>
+          <TableCell Name="Cell263" Font="Arial, 10pt"/>
+          <TableCell Name="Cell264" Fill.Color="AliceBlue" Text="[TCMObjetives14.Responsible]" Padding="2, 4, 2, 1" Font="Arial, 9pt" ColSpan="3"/>
+          <TableCell Name="Cell265" Font="Arial, 10pt"/>
+          <TableCell Name="Cell266" Font="Arial, 10pt"/>
+        </TableRow>
+      </TableObject>
+    </DataBand>
+    <PageFooterBand Name="PageFooter18" Top="470.28" Width="778.3" Height="18.9">
+      <TextObject Name="Text147" Width="283.5" Height="18.9" Text="Service Plan Review (SPR) © 12.2020" VertAlign="Center" Font="Arial, 8pt, style=Italic"/>
+    </PageFooterBand>
+  </ReportPage>
+  <ReportPage Name="Page17" PaperWidth="215.9" PaperHeight="279.4" RawPaperSize="1" LeftMargin="5" TopMargin="1" RightMargin="5" BottomMargin="1" Watermark.Enabled="true" Watermark.Font="Arial, 60pt">
+    <DataBand Name="Data34" Width="778.3" Height="238.7" CanGrow="true" Guides="548.1,538.65,548.1,529.2,548.1,529.2,529.2,529.2">
+      <TextObject Name="Text148" Left="1" Top="19.9" Width="100.17" Height="18.9" Text="SECTION V" VertAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text149" Left="104.68" Top="19.9" Width="330.75" Height="18.9" Text="LONG TERM GOALS / SHORT TERM OBJECTIVES" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text150" Left="1" Top="36.25" Width="774.9" Height="37.8" Text="(Expectations of the individual, where does the individual see himself/herself in the future, what would he/she like to accomplish. It must be realistic and attainable and must be written in conjunction with the individual and family members when applicable)" VertAlign="Center" Font="Arial, 9pt, style=Italic"/>
+      <TextObject Name="Text151" Left="1" Top="76.6" Width="774.9" Height="18.9" Text="DOMAIN # [TCMDomains15.Code] [TCMDomains15.Name]" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text152" Left="1" Top="105.95" Width="425.25" Height="18.9" Text="Identified service needs from SECTION II:" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text153" Left="1" Top="125.85" Width="774.9" Height="37.8" CanGrow="true" Text="[TCMDomains15.NeedsIdentified]" HorzAlign="Justify" Font="Arial, 9pt"/>
+      <TextObject Name="Text154" Left="1" Top="171.65" Width="425.25" Height="18.9" Text="&lt;b&gt;Long Term Goal:&lt;/b&gt; (include recipient's own words) " VertAlign="Center" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text155" Left="1" Top="191.45" Width="774.9" Height="37.8" CanGrow="true" Text="[TCMDomains15.LongTerm]" HorzAlign="Justify" Font="Arial, 9pt"/>
+    </DataBand>
+    <DataBand Name="Data35" Top="242.03" Width="778.3" Height="224.91" CanGrow="true" CanShrink="true" DataSource="TCMObjetives5">
+      <TableObject Name="Table17" Left="2.27" Width="773.01" Height="224.91" Border.Lines="All" Fill.Color="White">
+        <TableColumn Name="Column76" Width="75.6"/>
+        <TableColumn Name="Column77" Width="415.8"/>
+        <TableColumn Name="Column78" Width="92.61"/>
+        <TableColumn Name="Column79" Width="92.61"/>
+        <TableColumn Name="Column80" Width="96.39"/>
+        <TableRow Name="Row55" Height="41.58">
+          <TableCell Name="Cell267" Border.Lines="All" Fill.Color="LightSlateGray" Text="Objective&#13;&#10;[IIf([TCMObjetives15.Id] &gt; 0,[TCMObjetives15.IdObjetive],&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold" TextFill.Color="White"/>
+          <TableCell Name="Cell268" Border.Lines="All" Fill.Color="LightGray" Text="&lt;b&gt;Task/Case Management Strategy&lt;/b&gt; (Who Will Do What, When and How)" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold" TextRenderType="HtmlTags"/>
+          <TableCell Name="Cell269" Border.Lines="All" Fill.Color="LightGray" Text="Start&#13;&#10;Date" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+          <TableCell Name="Cell270" Border.Lines="All" Fill.Color="LightGray" Text="Target&#13;&#10;Date" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+          <TableCell Name="Cell271" Border.Lines="All" Fill.Color="LightGray" Text="End&#13;&#10;Date" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+        </TableRow>
+        <TableRow Name="Row56" Height="41.58" AutoSize="true">
+          <TableCell Name="Cell272" Border.Lines="All" Fill.Color="AliceBlue" Text="[TCMObjetives15.Task]" Padding="2, 4, 2, 1" HorzAlign="Justify" Font="Arial, 9pt" ColSpan="2" RowSpan="3"/>
+          <TableCell Name="Cell273" Border.Lines="All" Fill.Color="AliceBlue" VertAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell274" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives15.Id] &gt; 0,FormatDateTime([TCMObjetives15.StartDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" Padding="2, 4, 2, 2" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell275" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives15.Id] &gt; 0,FormatDateTime([TCMObjetives15.TargetDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell276" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives15.Id] &gt; 0 &amp;&amp; Year([TCMObjetives15.EndDate]) &gt; 1,FormatDateTime([TCMObjetives15.EndDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+        </TableRow>
+        <TableRow Name="Row57">
+          <TableCell Name="Cell277" Font="Arial, 10pt"/>
+          <TableCell Name="Cell278" Font="Arial, 10pt"/>
+          <TableCell Name="Cell279" Border.Lines="All" Fill.Color="LightGray" Text="Responsible Provider and Resources" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold" ColSpan="3"/>
+          <TableCell Name="Cell280" Font="Arial, 10pt"/>
+          <TableCell Name="Cell281" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row58" Height="122.85" AutoSize="true">
+          <TableCell Name="Cell282" Font="Arial, 10pt"/>
+          <TableCell Name="Cell283" Font="Arial, 10pt"/>
+          <TableCell Name="Cell284" Fill.Color="AliceBlue" Text="[TCMObjetives15.Responsible]" Padding="2, 4, 2, 1" Font="Arial, 9pt" ColSpan="3"/>
+          <TableCell Name="Cell285" Font="Arial, 10pt"/>
+          <TableCell Name="Cell286" Font="Arial, 10pt"/>
+        </TableRow>
+      </TableObject>
+    </DataBand>
+    <PageFooterBand Name="PageFooter19" Top="470.28" Width="778.3" Height="18.9">
+      <TextObject Name="Text156" Width="283.5" Height="18.9" Text="Service Plan Review (SPR) © 12.2020" VertAlign="Center" Font="Arial, 8pt, style=Italic"/>
+    </PageFooterBand>
+  </ReportPage>
+  <ReportPage Name="Page18" PaperWidth="215.9" PaperHeight="279.4" RawPaperSize="1" LeftMargin="5" TopMargin="1" RightMargin="5" BottomMargin="1" Watermark.Enabled="true" Watermark.Font="Arial, 60pt">
+    <DataBand Name="Data36" Width="778.3" Height="238.7" CanGrow="true" Guides="548.1,538.65,548.1,529.2,548.1,529.2,529.2,529.2">
+      <TextObject Name="Text157" Left="1" Top="19.9" Width="100.17" Height="18.9" Text="SECTION V" VertAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text158" Left="104.68" Top="19.9" Width="330.75" Height="18.9" Text="LONG TERM GOALS / SHORT TERM OBJECTIVES" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text159" Left="1" Top="36.25" Width="774.9" Height="37.8" Text="(Expectations of the individual, where does the individual see himself/herself in the future, what would he/she like to accomplish. It must be realistic and attainable and must be written in conjunction with the individual and family members when applicable)" VertAlign="Center" Font="Arial, 9pt, style=Italic"/>
+      <TextObject Name="Text160" Left="1" Top="76.6" Width="774.9" Height="18.9" Text="DOMAIN # [TCMDomains16.Code] [TCMDomains16.Name]" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text161" Left="1" Top="105.95" Width="425.25" Height="18.9" Text="Identified service needs from SECTION II:" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text162" Left="1" Top="125.85" Width="774.9" Height="37.8" CanGrow="true" Text="[TCMDomains16.NeedsIdentified]" HorzAlign="Justify" Font="Arial, 9pt"/>
+      <TextObject Name="Text163" Left="1" Top="171.65" Width="425.25" Height="18.9" Text="&lt;b&gt;Long Term Goal:&lt;/b&gt; (include recipient's own words) " VertAlign="Center" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text164" Left="1" Top="191.45" Width="774.9" Height="37.8" CanGrow="true" Text="[TCMDomains16.LongTerm]" HorzAlign="Justify" Font="Arial, 9pt"/>
+    </DataBand>
+    <DataBand Name="Data37" Top="242.03" Width="778.3" Height="224.91" CanGrow="true" CanShrink="true" DataSource="TCMObjetives5">
+      <TableObject Name="Table18" Left="2.27" Width="773.01" Height="224.91" Border.Lines="All" Fill.Color="White">
+        <TableColumn Name="Column81" Width="75.6"/>
+        <TableColumn Name="Column82" Width="415.8"/>
+        <TableColumn Name="Column83" Width="92.61"/>
+        <TableColumn Name="Column84" Width="92.61"/>
+        <TableColumn Name="Column85" Width="96.39"/>
+        <TableRow Name="Row59" Height="41.58">
+          <TableCell Name="Cell287" Border.Lines="All" Fill.Color="LightSlateGray" Text="Objective&#13;&#10;[IIf([TCMObjetives16.Id] &gt; 0,[TCMObjetives16.IdObjetive],&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold" TextFill.Color="White"/>
+          <TableCell Name="Cell288" Border.Lines="All" Fill.Color="LightGray" Text="&lt;b&gt;Task/Case Management Strategy&lt;/b&gt; (Who Will Do What, When and How)" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold" TextRenderType="HtmlTags"/>
+          <TableCell Name="Cell289" Border.Lines="All" Fill.Color="LightGray" Text="Start&#13;&#10;Date" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+          <TableCell Name="Cell290" Border.Lines="All" Fill.Color="LightGray" Text="Target&#13;&#10;Date" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+          <TableCell Name="Cell291" Border.Lines="All" Fill.Color="LightGray" Text="End&#13;&#10;Date" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+        </TableRow>
+        <TableRow Name="Row60" Height="41.58" AutoSize="true">
+          <TableCell Name="Cell292" Border.Lines="All" Fill.Color="AliceBlue" Text="[TCMObjetives16.Task]" Padding="2, 4, 2, 1" HorzAlign="Justify" Font="Arial, 9pt" ColSpan="2" RowSpan="3"/>
+          <TableCell Name="Cell293" Border.Lines="All" Fill.Color="AliceBlue" VertAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell294" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives16.Id] &gt; 0,FormatDateTime([TCMObjetives16.StartDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" Padding="2, 4, 2, 2" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell295" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives16.Id] &gt; 0,FormatDateTime([TCMObjetives16.TargetDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell296" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives16.Id] &gt; 0 &amp;&amp; Year([TCMObjetives16.EndDate]) &gt; 1,FormatDateTime([TCMObjetives16.EndDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+        </TableRow>
+        <TableRow Name="Row61">
+          <TableCell Name="Cell297" Font="Arial, 10pt"/>
+          <TableCell Name="Cell298" Font="Arial, 10pt"/>
+          <TableCell Name="Cell299" Border.Lines="All" Fill.Color="LightGray" Text="Responsible Provider and Resources" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold" ColSpan="3"/>
+          <TableCell Name="Cell300" Font="Arial, 10pt"/>
+          <TableCell Name="Cell301" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row62" Height="122.85" AutoSize="true">
+          <TableCell Name="Cell302" Font="Arial, 10pt"/>
+          <TableCell Name="Cell303" Font="Arial, 10pt"/>
+          <TableCell Name="Cell304" Fill.Color="AliceBlue" Text="[TCMObjetives16.Responsible]" Padding="2, 4, 2, 1" Font="Arial, 9pt" ColSpan="3"/>
+          <TableCell Name="Cell305" Font="Arial, 10pt"/>
+          <TableCell Name="Cell306" Font="Arial, 10pt"/>
+        </TableRow>
+      </TableObject>
+    </DataBand>
+    <PageFooterBand Name="PageFooter20" Top="470.28" Width="778.3" Height="18.9">
+      <TextObject Name="Text165" Width="283.5" Height="18.9" Text="Service Plan Review (SPR) © 12.2020" VertAlign="Center" Font="Arial, 8pt, style=Italic"/>
+    </PageFooterBand>
+  </ReportPage>
+  <ReportPage Name="Page19" PaperWidth="215.9" PaperHeight="279.4" RawPaperSize="1" LeftMargin="5" TopMargin="1" RightMargin="5" BottomMargin="1" Watermark.Enabled="true" Watermark.Font="Arial, 60pt">
+    <DataBand Name="Data38" Width="778.3" Height="238.7" CanGrow="true" Guides="548.1,538.65,548.1,529.2,548.1,529.2,529.2,529.2">
+      <TextObject Name="Text166" Left="1" Top="19.9" Width="100.17" Height="18.9" Text="SECTION V" VertAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text167" Left="104.68" Top="19.9" Width="330.75" Height="18.9" Text="LONG TERM GOALS / SHORT TERM OBJECTIVES" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text168" Left="1" Top="36.25" Width="774.9" Height="37.8" Text="(Expectations of the individual, where does the individual see himself/herself in the future, what would he/she like to accomplish. It must be realistic and attainable and must be written in conjunction with the individual and family members when applicable)" VertAlign="Center" Font="Arial, 9pt, style=Italic"/>
+      <TextObject Name="Text169" Left="1" Top="76.6" Width="774.9" Height="18.9" Text="DOMAIN # [TCMDomains17.Code] [TCMDomains17.Name]" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text170" Left="1" Top="105.95" Width="425.25" Height="18.9" Text="Identified service needs from SECTION II:" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text171" Left="1" Top="125.85" Width="774.9" Height="37.8" CanGrow="true" Text="[TCMDomains17.NeedsIdentified]" HorzAlign="Justify" Font="Arial, 9pt"/>
+      <TextObject Name="Text172" Left="1" Top="171.65" Width="425.25" Height="18.9" Text="&lt;b&gt;Long Term Goal:&lt;/b&gt; (include recipient's own words) " VertAlign="Center" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text173" Left="1" Top="191.45" Width="774.9" Height="37.8" CanGrow="true" Text="[TCMDomains17.LongTerm]" HorzAlign="Justify" Font="Arial, 9pt"/>
+    </DataBand>
+    <DataBand Name="Data39" Top="242.03" Width="778.3" Height="224.91" CanGrow="true" CanShrink="true" DataSource="TCMObjetives5">
+      <TableObject Name="Table19" Left="2.27" Width="773.01" Height="224.91" Border.Lines="All" Fill.Color="White">
+        <TableColumn Name="Column86" Width="75.6"/>
+        <TableColumn Name="Column87" Width="415.8"/>
+        <TableColumn Name="Column88" Width="92.61"/>
+        <TableColumn Name="Column89" Width="92.61"/>
+        <TableColumn Name="Column90" Width="96.39"/>
+        <TableRow Name="Row63" Height="41.58">
+          <TableCell Name="Cell307" Border.Lines="All" Fill.Color="LightSlateGray" Text="Objective&#13;&#10;[IIf([TCMObjetives17.Id] &gt; 0,[TCMObjetives17.IdObjetive],&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold" TextFill.Color="White"/>
+          <TableCell Name="Cell308" Border.Lines="All" Fill.Color="LightGray" Text="&lt;b&gt;Task/Case Management Strategy&lt;/b&gt; (Who Will Do What, When and How)" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold" TextRenderType="HtmlTags"/>
+          <TableCell Name="Cell309" Border.Lines="All" Fill.Color="LightGray" Text="Start&#13;&#10;Date" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+          <TableCell Name="Cell310" Border.Lines="All" Fill.Color="LightGray" Text="Target&#13;&#10;Date" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+          <TableCell Name="Cell311" Border.Lines="All" Fill.Color="LightGray" Text="End&#13;&#10;Date" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+        </TableRow>
+        <TableRow Name="Row64" Height="41.58" AutoSize="true">
+          <TableCell Name="Cell312" Border.Lines="All" Fill.Color="AliceBlue" Text="[TCMObjetives17.Task]" Padding="2, 4, 2, 1" HorzAlign="Justify" Font="Arial, 9pt" ColSpan="2" RowSpan="3"/>
+          <TableCell Name="Cell313" Border.Lines="All" Fill.Color="AliceBlue" VertAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell314" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives17.Id] &gt; 0,FormatDateTime([TCMObjetives17.StartDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" Padding="2, 4, 2, 2" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell315" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives17.Id] &gt; 0,FormatDateTime([TCMObjetives17.TargetDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell316" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives17.Id] &gt; 0 &amp;&amp; Year([TCMObjetives17.EndDate]) &gt; 1,FormatDateTime([TCMObjetives17.EndDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+        </TableRow>
+        <TableRow Name="Row65">
+          <TableCell Name="Cell317" Font="Arial, 10pt"/>
+          <TableCell Name="Cell318" Font="Arial, 10pt"/>
+          <TableCell Name="Cell319" Border.Lines="All" Fill.Color="LightGray" Text="Responsible Provider and Resources" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold" ColSpan="3"/>
+          <TableCell Name="Cell320" Font="Arial, 10pt"/>
+          <TableCell Name="Cell321" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row66" Height="122.85" AutoSize="true">
+          <TableCell Name="Cell322" Font="Arial, 10pt"/>
+          <TableCell Name="Cell323" Font="Arial, 10pt"/>
+          <TableCell Name="Cell324" Fill.Color="AliceBlue" Text="[TCMObjetives17.Responsible]" Padding="2, 4, 2, 1" Font="Arial, 9pt" ColSpan="3"/>
+          <TableCell Name="Cell325" Font="Arial, 10pt"/>
+          <TableCell Name="Cell326" Font="Arial, 10pt"/>
+        </TableRow>
+      </TableObject>
+    </DataBand>
+    <PageFooterBand Name="PageFooter21" Top="470.28" Width="778.3" Height="18.9">
+      <TextObject Name="Text174" Width="283.5" Height="18.9" Text="Service Plan Review (SPR) © 12.2020" VertAlign="Center" Font="Arial, 8pt, style=Italic"/>
+    </PageFooterBand>
+  </ReportPage>
+  <ReportPage Name="Page20" PaperWidth="215.9" PaperHeight="279.4" RawPaperSize="1" LeftMargin="5" TopMargin="1" RightMargin="5" BottomMargin="1" Watermark.Enabled="true" Watermark.Font="Arial, 60pt">
+    <DataBand Name="Data40" Width="778.3" Height="238.7" CanGrow="true" Guides="548.1,538.65,548.1,529.2,548.1,529.2,529.2,529.2">
+      <TextObject Name="Text175" Left="1" Top="19.9" Width="100.17" Height="18.9" Text="SECTION V" VertAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text176" Left="104.68" Top="19.9" Width="330.75" Height="18.9" Text="LONG TERM GOALS / SHORT TERM OBJECTIVES" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text177" Left="1" Top="36.25" Width="774.9" Height="37.8" Text="(Expectations of the individual, where does the individual see himself/herself in the future, what would he/she like to accomplish. It must be realistic and attainable and must be written in conjunction with the individual and family members when applicable)" VertAlign="Center" Font="Arial, 9pt, style=Italic"/>
+      <TextObject Name="Text178" Left="1" Top="76.6" Width="774.9" Height="18.9" Text="DOMAIN # [TCMDomains18.Code] [TCMDomains18.Name]" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text179" Left="1" Top="105.95" Width="425.25" Height="18.9" Text="Identified service needs from SECTION II:" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text180" Left="1" Top="125.85" Width="774.9" Height="37.8" CanGrow="true" Text="[TCMDomains18.NeedsIdentified]" HorzAlign="Justify" Font="Arial, 9pt"/>
+      <TextObject Name="Text181" Left="1" Top="171.65" Width="425.25" Height="18.9" Text="&lt;b&gt;Long Term Goal:&lt;/b&gt; (include recipient's own words) " VertAlign="Center" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text182" Left="1" Top="191.45" Width="774.9" Height="37.8" CanGrow="true" Text="[TCMDomains18.LongTerm]" HorzAlign="Justify" Font="Arial, 9pt"/>
+    </DataBand>
+    <DataBand Name="Data41" Top="242.03" Width="778.3" Height="224.91" CanGrow="true" CanShrink="true" DataSource="TCMObjetives5">
+      <TableObject Name="Table20" Left="2.27" Width="773.01" Height="224.91" Border.Lines="All" Fill.Color="White">
+        <TableColumn Name="Column91" Width="75.6"/>
+        <TableColumn Name="Column92" Width="415.8"/>
+        <TableColumn Name="Column93" Width="92.61"/>
+        <TableColumn Name="Column94" Width="92.61"/>
+        <TableColumn Name="Column95" Width="96.39"/>
+        <TableRow Name="Row67" Height="41.58">
+          <TableCell Name="Cell327" Border.Lines="All" Fill.Color="LightSlateGray" Text="Objective&#13;&#10;[IIf([TCMObjetives18.Id] &gt; 0,[TCMObjetives18.IdObjetive],&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold" TextFill.Color="White"/>
+          <TableCell Name="Cell328" Border.Lines="All" Fill.Color="LightGray" Text="&lt;b&gt;Task/Case Management Strategy&lt;/b&gt; (Who Will Do What, When and How)" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold" TextRenderType="HtmlTags"/>
+          <TableCell Name="Cell329" Border.Lines="All" Fill.Color="LightGray" Text="Start&#13;&#10;Date" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+          <TableCell Name="Cell330" Border.Lines="All" Fill.Color="LightGray" Text="Target&#13;&#10;Date" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+          <TableCell Name="Cell331" Border.Lines="All" Fill.Color="LightGray" Text="End&#13;&#10;Date" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+        </TableRow>
+        <TableRow Name="Row68" Height="41.58" AutoSize="true">
+          <TableCell Name="Cell332" Border.Lines="All" Fill.Color="AliceBlue" Text="[TCMObjetives18.Task]" Padding="2, 4, 2, 1" HorzAlign="Justify" Font="Arial, 9pt" ColSpan="2" RowSpan="3"/>
+          <TableCell Name="Cell333" Border.Lines="All" Fill.Color="AliceBlue" VertAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell334" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives18.Id] &gt; 0,FormatDateTime([TCMObjetives18.StartDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" Padding="2, 4, 2, 2" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell335" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives18.Id] &gt; 0,FormatDateTime([TCMObjetives18.TargetDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell336" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives18.Id] &gt; 0 &amp;&amp; Year([TCMObjetives18.EndDate]) &gt; 1,FormatDateTime([TCMObjetives18.EndDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+        </TableRow>
+        <TableRow Name="Row69">
+          <TableCell Name="Cell337" Font="Arial, 10pt"/>
+          <TableCell Name="Cell338" Font="Arial, 10pt"/>
+          <TableCell Name="Cell339" Border.Lines="All" Fill.Color="LightGray" Text="Responsible Provider and Resources" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold" ColSpan="3"/>
+          <TableCell Name="Cell340" Font="Arial, 10pt"/>
+          <TableCell Name="Cell341" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row70" Height="122.85" AutoSize="true">
+          <TableCell Name="Cell342" Font="Arial, 10pt"/>
+          <TableCell Name="Cell343" Font="Arial, 10pt"/>
+          <TableCell Name="Cell344" Fill.Color="AliceBlue" Text="[TCMObjetives18.Responsible]" Padding="2, 4, 2, 1" Font="Arial, 9pt" ColSpan="3"/>
+          <TableCell Name="Cell345" Font="Arial, 10pt"/>
+          <TableCell Name="Cell346" Font="Arial, 10pt"/>
+        </TableRow>
+      </TableObject>
+    </DataBand>
+    <PageFooterBand Name="PageFooter22" Top="470.28" Width="778.3" Height="18.9">
+      <TextObject Name="Text183" Width="283.5" Height="18.9" Text="Service Plan Review (SPR) © 12.2020" VertAlign="Center" Font="Arial, 8pt, style=Italic"/>
+    </PageFooterBand>
+  </ReportPage>
+  <ReportPage Name="Page21" PaperWidth="215.9" PaperHeight="279.4" RawPaperSize="1" LeftMargin="5" TopMargin="1" RightMargin="5" BottomMargin="1" Watermark.Enabled="true" Watermark.Font="Arial, 60pt">
+    <DataBand Name="Data42" Width="778.3" Height="238.7" CanGrow="true" Guides="548.1,538.65,548.1,529.2,548.1,529.2,529.2,529.2">
+      <TextObject Name="Text184" Left="1" Top="19.9" Width="100.17" Height="18.9" Text="SECTION V" VertAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text185" Left="104.68" Top="19.9" Width="330.75" Height="18.9" Text="LONG TERM GOALS / SHORT TERM OBJECTIVES" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text186" Left="1" Top="36.25" Width="774.9" Height="37.8" Text="(Expectations of the individual, where does the individual see himself/herself in the future, what would he/she like to accomplish. It must be realistic and attainable and must be written in conjunction with the individual and family members when applicable)" VertAlign="Center" Font="Arial, 9pt, style=Italic"/>
+      <TextObject Name="Text187" Left="1" Top="76.6" Width="774.9" Height="18.9" Text="DOMAIN # [TCMDomains19.Code] [TCMDomains19.Name]" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text188" Left="1" Top="105.95" Width="425.25" Height="18.9" Text="Identified service needs from SECTION II:" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text189" Left="1" Top="125.85" Width="774.9" Height="37.8" CanGrow="true" Text="[TCMDomains19.NeedsIdentified]" HorzAlign="Justify" Font="Arial, 9pt"/>
+      <TextObject Name="Text190" Left="1" Top="171.65" Width="425.25" Height="18.9" Text="&lt;b&gt;Long Term Goal:&lt;/b&gt; (include recipient's own words) " VertAlign="Center" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text191" Left="1" Top="191.45" Width="774.9" Height="37.8" CanGrow="true" Text="[TCMDomains19.LongTerm]" HorzAlign="Justify" Font="Arial, 9pt"/>
+    </DataBand>
+    <DataBand Name="Data43" Top="242.03" Width="778.3" Height="224.91" CanGrow="true" CanShrink="true" DataSource="TCMObjetives5">
+      <TableObject Name="Table21" Left="2.27" Width="773.01" Height="224.91" Border.Lines="All" Fill.Color="White">
+        <TableColumn Name="Column96" Width="75.6"/>
+        <TableColumn Name="Column97" Width="415.8"/>
+        <TableColumn Name="Column98" Width="92.61"/>
+        <TableColumn Name="Column99" Width="92.61"/>
+        <TableColumn Name="Column100" Width="96.39"/>
+        <TableRow Name="Row71" Height="41.58">
+          <TableCell Name="Cell347" Border.Lines="All" Fill.Color="LightSlateGray" Text="Objective&#13;&#10;[IIf([TCMObjetives19.Id] &gt; 0,[TCMObjetives19.IdObjetive],&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold" TextFill.Color="White"/>
+          <TableCell Name="Cell348" Border.Lines="All" Fill.Color="LightGray" Text="&lt;b&gt;Task/Case Management Strategy&lt;/b&gt; (Who Will Do What, When and How)" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold" TextRenderType="HtmlTags"/>
+          <TableCell Name="Cell349" Border.Lines="All" Fill.Color="LightGray" Text="Start&#13;&#10;Date" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+          <TableCell Name="Cell350" Border.Lines="All" Fill.Color="LightGray" Text="Target&#13;&#10;Date" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+          <TableCell Name="Cell351" Border.Lines="All" Fill.Color="LightGray" Text="End&#13;&#10;Date" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+        </TableRow>
+        <TableRow Name="Row72" Height="41.58" AutoSize="true">
+          <TableCell Name="Cell352" Border.Lines="All" Fill.Color="AliceBlue" Text="[TCMObjetives19.Task]" Padding="2, 4, 2, 1" HorzAlign="Justify" Font="Arial, 9pt" ColSpan="2" RowSpan="3"/>
+          <TableCell Name="Cell353" Border.Lines="All" Fill.Color="AliceBlue" VertAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell354" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives19.Id] &gt; 0,FormatDateTime([TCMObjetives19.StartDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" Padding="2, 4, 2, 2" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell355" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives19.Id] &gt; 0,FormatDateTime([TCMObjetives19.TargetDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell356" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives19.Id] &gt; 0 &amp;&amp; Year([TCMObjetives19.EndDate]) &gt; 1,FormatDateTime([TCMObjetives19.EndDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+        </TableRow>
+        <TableRow Name="Row73">
+          <TableCell Name="Cell379" Font="Arial, 10pt"/>
+          <TableCell Name="Cell380" Font="Arial, 10pt"/>
+          <TableCell Name="Cell381" Border.Lines="All" Fill.Color="LightGray" Text="Responsible Provider and Resources" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold" ColSpan="3"/>
+          <TableCell Name="Cell382" Font="Arial, 10pt"/>
+          <TableCell Name="Cell383" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row74" Height="122.85" AutoSize="true">
+          <TableCell Name="Cell384" Font="Arial, 10pt"/>
+          <TableCell Name="Cell385" Font="Arial, 10pt"/>
+          <TableCell Name="Cell386" Fill.Color="AliceBlue" Text="[TCMObjetives19.Responsible]" Padding="2, 4, 2, 1" Font="Arial, 9pt" ColSpan="3"/>
+          <TableCell Name="Cell387" Font="Arial, 10pt"/>
+          <TableCell Name="Cell388" Font="Arial, 10pt"/>
+        </TableRow>
+      </TableObject>
+    </DataBand>
+    <PageFooterBand Name="PageFooter23" Top="470.28" Width="778.3" Height="18.9">
+      <TextObject Name="Text192" Width="283.5" Height="18.9" Text="Service Plan Review (SPR) © 12.2020" VertAlign="Center" Font="Arial, 8pt, style=Italic"/>
+    </PageFooterBand>
+  </ReportPage>
+  <ReportPage Name="Page22" PaperWidth="215.9" PaperHeight="279.4" RawPaperSize="1" LeftMargin="5" TopMargin="1" RightMargin="5" BottomMargin="1" Watermark.Enabled="true" Watermark.Font="Arial, 60pt">
+    <DataBand Name="Data44" Width="778.3" Height="238.7" CanGrow="true" Guides="548.1,538.65,548.1,529.2,548.1,529.2,529.2,529.2">
+      <TextObject Name="Text193" Left="1" Top="19.9" Width="100.17" Height="18.9" Text="SECTION V" VertAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text194" Left="104.68" Top="19.9" Width="330.75" Height="18.9" Text="LONG TERM GOALS / SHORT TERM OBJECTIVES" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text195" Left="1" Top="36.25" Width="774.9" Height="37.8" Text="(Expectations of the individual, where does the individual see himself/herself in the future, what would he/she like to accomplish. It must be realistic and attainable and must be written in conjunction with the individual and family members when applicable)" VertAlign="Center" Font="Arial, 9pt, style=Italic"/>
+      <TextObject Name="Text196" Left="1" Top="76.6" Width="774.9" Height="18.9" Text="DOMAIN # [TCMDomains20.Code] [TCMDomains20.Name]" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text197" Left="1" Top="105.95" Width="425.25" Height="18.9" Text="Identified service needs from SECTION II:" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text198" Left="1" Top="125.85" Width="774.9" Height="37.8" CanGrow="true" Text="[TCMDomains20.NeedsIdentified]" HorzAlign="Justify" Font="Arial, 9pt"/>
+      <TextObject Name="Text199" Left="1" Top="171.65" Width="425.25" Height="18.9" Text="&lt;b&gt;Long Term Goal:&lt;/b&gt; (include recipient's own words) " VertAlign="Center" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text200" Left="1" Top="191.45" Width="774.9" Height="37.8" CanGrow="true" Text="[TCMDomains20.LongTerm]" HorzAlign="Justify" Font="Arial, 9pt"/>
+    </DataBand>
+    <DataBand Name="Data45" Top="242.03" Width="778.3" Height="224.91" CanGrow="true" CanShrink="true" DataSource="TCMObjetives5">
+      <TableObject Name="Table22" Left="2.27" Width="773.01" Height="224.91" Border.Lines="All" Fill.Color="White">
+        <TableColumn Name="Column101" Width="75.6"/>
+        <TableColumn Name="Column102" Width="415.8"/>
+        <TableColumn Name="Column103" Width="92.61"/>
+        <TableColumn Name="Column104" Width="92.61"/>
+        <TableColumn Name="Column105" Width="96.39"/>
+        <TableRow Name="Row75" Height="41.58">
+          <TableCell Name="Cell389" Border.Lines="All" Fill.Color="LightSlateGray" Text="Objective&#13;&#10;[IIf([TCMObjetives20.Id] &gt; 0,[TCMObjetives20.IdObjetive],&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold" TextFill.Color="White"/>
+          <TableCell Name="Cell390" Border.Lines="All" Fill.Color="LightGray" Text="&lt;b&gt;Task/Case Management Strategy&lt;/b&gt; (Who Will Do What, When and How)" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold" TextRenderType="HtmlTags"/>
+          <TableCell Name="Cell391" Border.Lines="All" Fill.Color="LightGray" Text="Start&#13;&#10;Date" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+          <TableCell Name="Cell392" Border.Lines="All" Fill.Color="LightGray" Text="Target&#13;&#10;Date" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+          <TableCell Name="Cell393" Border.Lines="All" Fill.Color="LightGray" Text="End&#13;&#10;Date" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+        </TableRow>
+        <TableRow Name="Row76" Height="41.58" AutoSize="true">
+          <TableCell Name="Cell394" Border.Lines="All" Fill.Color="AliceBlue" Text="[TCMObjetives20.Task]" Padding="2, 4, 2, 1" HorzAlign="Justify" Font="Arial, 9pt" ColSpan="2" RowSpan="3"/>
+          <TableCell Name="Cell395" Border.Lines="All" Fill.Color="AliceBlue" VertAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell396" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives20.Id] &gt; 0,FormatDateTime([TCMObjetives20.StartDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" Padding="2, 4, 2, 2" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell397" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives20.Id] &gt; 0,FormatDateTime([TCMObjetives20.TargetDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell398" Border.Lines="All" Fill.Color="AliceBlue" Text="[IIf([TCMObjetives20.Id] &gt; 0 &amp;&amp; Year([TCMObjetives20.EndDate]) &gt; 1,FormatDateTime([TCMObjetives20.EndDate],&quot;MM/dd/yyyy&quot;),&quot;&quot;)]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+        </TableRow>
+        <TableRow Name="Row77">
+          <TableCell Name="Cell399" Font="Arial, 10pt"/>
+          <TableCell Name="Cell400" Font="Arial, 10pt"/>
+          <TableCell Name="Cell401" Border.Lines="All" Fill.Color="LightGray" Text="Responsible Provider and Resources" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold" ColSpan="3"/>
+          <TableCell Name="Cell402" Font="Arial, 10pt"/>
+          <TableCell Name="Cell403" Font="Arial, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row78" Height="122.85" AutoSize="true">
+          <TableCell Name="Cell404" Font="Arial, 10pt"/>
+          <TableCell Name="Cell405" Font="Arial, 10pt"/>
+          <TableCell Name="Cell406" Fill.Color="AliceBlue" Text="[TCMObjetives20.Responsible]" Padding="2, 4, 2, 1" Font="Arial, 9pt" ColSpan="3"/>
+          <TableCell Name="Cell407" Font="Arial, 10pt"/>
+          <TableCell Name="Cell408" Font="Arial, 10pt"/>
+        </TableRow>
+      </TableObject>
+    </DataBand>
+    <PageFooterBand Name="PageFooter24" Top="470.28" Width="778.3" Height="18.9">
+      <TextObject Name="Text201" Width="283.5" Height="18.9" Text="Service Plan Review (SPR) © 12.2020" VertAlign="Center" Font="Arial, 8pt, style=Italic"/>
+    </PageFooterBand>
+  </ReportPage>
+  <ReportPage Name="Page23" PaperWidth="215.9" PaperHeight="279.4" RawPaperSize="1" LeftMargin="5" TopMargin="1" RightMargin="5" BottomMargin="1" Watermark.Enabled="true" Watermark.Font="Arial, 60pt">
     <DataBand Name="Data4" Width="778.3" Height="750.78" CanGrow="true" Guides="548.1,538.65,548.1,529.2,548.1,529.2,529.2,529.2">
       <TextObject Name="Text1" Top="16.9" Width="116.05" Height="18.9" Text="Recipient's Name:" VertAlign="Center" Font="Arial, 9pt"/>
       <TextObject Name="Text2" Left="481.95" Top="16.72" Width="94.5" Height="18.9" Text="Case Number:" HorzAlign="Right" VertAlign="Center" Font="Arial, 9pt"/>
@@ -750,11 +1525,11 @@
       <TextObject Name="Text377" Top="428.25" Width="87.7" Height="18.9" Text="CHILDREN" VertAlign="Center" Font="Arial, 9pt, style=Bold, Italic"/>
       <TextObject Name="Text378" Top="450.15" Width="774.9" Height="189" Text="&lt;b&gt;1.&lt;/b&gt; Client has a mental health disability (i.e., serious emotional disturbance or emotional disturbance) which requires advocacy for and ordination     of services to maintain or improve level of functioning;&#13;&#10;&lt;b&gt;2.&lt;/b&gt; Requires services to assist him or her in attaining self-sufficiency and satisfaction in the living, learning, work and social environments of his     or her choice;&#13;&#10;&lt;b&gt;3.&lt;/b&gt; Lacks a natural support system with the ability to access needed medical and social environments of his or her choice;&#13;&#10;&lt;b&gt;4.&lt;/b&gt; Requires ongoing assistance to access or maintain needed care consistently within the service delivery system;&#13;&#10;&lt;b&gt;5.&lt;/b&gt; Has a mental health disability (i.e., serious emotional disturbance or emotional disturbance) duration that, based upon professional     judgment, will last for a minimum of one year;&#13;&#10;&lt;b&gt;6.&lt;/b&gt; Is in out-of-home mental health placement or at documented risk of out-of-home mental health placement;&#13;&#10;&lt;b&gt;7.&lt;/b&gt; Is not receiving duplicate case management services from another provider; or&#13;&#10;&lt;b&gt;8.&lt;/b&gt; Has relocated from a Department of Children and Families district or region where he or she was receiving mental health targeted case     management services." HorzAlign="Justify" Font="Arial, 9pt" TextRenderType="HtmlTags"/>
     </DataBand>
-    <PageFooterBand Name="PageFooter3" Top="754.63" Width="778.3" Height="22.68">
+    <PageFooterBand Name="PageFooter3" Top="754.11" Width="778.3" Height="22.68">
       <TextObject Name="Text15" Width="283.5" Height="18.9" Text="Service Plan Review (SPR) © 12.2020" VertAlign="Center" Font="Arial, 8pt, style=Italic"/>
     </PageFooterBand>
   </ReportPage>
-  <ReportPage Name="Page9" PaperWidth="215.9" PaperHeight="279.4" RawPaperSize="1" LeftMargin="5" TopMargin="1" RightMargin="5" BottomMargin="1" Watermark.Enabled="true" Watermark.Font="Arial, 60pt">
+  <ReportPage Name="Page24" PaperWidth="215.9" PaperHeight="279.4" RawPaperSize="1" LeftMargin="5" TopMargin="1" RightMargin="5" BottomMargin="1" Watermark.Enabled="true" Watermark.Font="Arial, 60pt">
     <DataBand Name="Data5" Width="778.3" Height="892.53" CanGrow="true" Guides="548.1,538.65,548.1,529.2,548.1,529.2,529.2,529.2">
       <TextObject Name="Text17" Top="16.9" Width="116.05" Height="18.9" Text="Recipient's Name:" VertAlign="Center" Font="Arial, 9pt"/>
       <TextObject Name="Text18" Left="481.95" Top="16.72" Width="94.5" Height="18.9" Text="Case Number:" HorzAlign="Right" VertAlign="Center" Font="Arial, 9pt"/>
@@ -826,7 +1601,7 @@
       <PictureObject Name="Picture7" Left="42.8" Top="578.9" Width="95" Height="63.45" DataColumn="Signatures1.facilitatorSignature"/>
       <PictureObject Name="Picture8" Left="42.8" Top="657.05" Width="95" Height="63.45" DataColumn="Signatures1.supervisorSignature"/>
     </DataBand>
-    <PageFooterBand Name="PageFooter4" Top="896.38" Width="778.3" Height="22.68">
+    <PageFooterBand Name="PageFooter4" Top="895.86" Width="778.3" Height="22.68">
       <TextObject Name="Text31" Width="283.5" Height="18.9" Text="Service Plan Review (SPR) © 12.2020" VertAlign="Center" Font="Arial, 8pt, style=Italic"/>
     </PageFooterBand>
   </ReportPage>

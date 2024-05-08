@@ -37328,7 +37328,8 @@ namespace KyoS.Web.Helpers
             WebReport.Report.RegisterData(dataSet.Tables[0], "Diagnostics");
 
             List<TCMServicePlanReviewDomainEntity> domains = servicePlanReview.TCMServicePlanRevDomain
-                                                                              .Where(t => t.Status == SPRStatus.Added)
+                                                                              .Where(t => (t.Status == SPRStatus.Added || t.Status == SPRStatus.Open))
+                                                                              .OrderBy(t => t.CodeDomain)
                                                                               .ToList();
             int i = 1;
             TCMDomainEntity domain;
@@ -37361,7 +37362,7 @@ namespace KyoS.Web.Helpers
 
             ReportPage pageToDelete;
             //Create the empty datasets, it must be 5
-            for (int k = i; k < 6; k++)
+            for (int k = i; k < 21; k++)
             {
                 dataSet = new DataSet();
                 dataSet.Tables.Add(GetTCMDomainDS(null));
