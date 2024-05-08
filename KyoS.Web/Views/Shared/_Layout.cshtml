@@ -80,7 +80,7 @@
             </div>
             <div class="collapse navbar-collapse" id="navbarNavDropdown">
                 <ul class="nav navbar-nav">
-                    @if (User.Identity.IsAuthenticated && (User.IsInRole("Admin")))
+                 @if (User.Identity.IsAuthenticated && (User.IsInRole("Admin")))
                     {
                         <li class="class=" dropdown open"">
                             <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
@@ -740,7 +740,7 @@
                         </li>
                         <li class="class=" dropdown open"">
                             <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
-                                Human Resources<span class="caret"></span>
+                                Human Resources <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu">
                                 <li>@Html.ActionLink("My Information", "Index", "Facilitators")</li>
@@ -858,7 +858,7 @@
                                     <a class="test" tabindex="-1" href="#">Discharges</a>
                                     <ul class="dropdown-menu">
                                         <li>@Html.ActionLink("Pending", "TCMDischargeApproved", "TCMDischarges", new { approved = 1 })</li>
-                                        <li>@Html.ActionLink("Discharge all", "Index", "TCMDischarges")</li>
+                                        <li>@Html.ActionLink("All Discharges", "Index", "TCMDischarges")</li>
                                     </ul>
                                 </li>
                             </ul>
@@ -1033,7 +1033,7 @@
                         </li>
                         <li class="class=" dropdown open"">
                             <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
-                                Human Resources<span class="caret"></span>
+                                Human Resources <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu">
                                 <li>@Html.ActionLink("My Information", "Index", "CaseMannager")</li>
@@ -1102,7 +1102,7 @@
                         </li>
                         <li class="class=" dropdown open"">
                             <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
-                                Human Resources<span class="caret"></span>
+                                Human Resources <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu">
                                 <li>@Html.ActionLink("My Information", "Index", "DocumentsAssistants")</li>
