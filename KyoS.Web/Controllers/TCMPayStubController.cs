@@ -470,6 +470,7 @@ namespace KyoS.Web.Controllers
 
             TCMPayStubEntity entity = await _context.TCMPayStubs
                                                     .Include(n => n.TCMPayStubDetails)
+                                                    .Include(n => n.CaseMannager)
                                                     .FirstOrDefaultAsync(f => f.Id == id);
             if (entity == null)
             {
@@ -485,8 +486,10 @@ namespace KyoS.Web.Controllers
                     Amount = entity.Amount,
                     IdStatus = Convert.ToInt32(entity.StatusPayStub),
                     StatusList = _combosHelper.GetComboPaystubStatus(),
-                    DatePayStubPayment = DateTime.Today
-
+                    DatePayStubPayment = entity.DatePayStubPayment,
+                    CaseMannager = entity.CaseMannager,
+                    DatePayStubClose = entity.DatePayStubClose,
+                    DatePayStub = entity.DatePayStub
                 };
             }
 
@@ -509,16 +512,8 @@ namespace KyoS.Web.Controllers
 
                 if (entity != null)
                 {
-                    if (entity.Amount <= model.Amount)
-                    {
-                        entity.StatusPayStub = StatusTCMPaystub.Paid;
-                        entity.DatePayStubPayment = model.DatePayStubPayment;
-                    }
-                    else
-                    {
-                        entity.StatusPayStub = StatusTCMPaystub.Pending;
-                        entity.DatePayStubPayment = model.DatePayStubPayment;
-                    }
+                    entity.StatusPayStub = StatusTCMPaystubUtils.GetStatusBillByIndex(model.IdStatus);
+                    entity.DatePayStubPayment = model.DatePayStubPayment;
 
                     _context.Update(entity);
                     try

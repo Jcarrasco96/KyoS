@@ -2587,8 +2587,8 @@ namespace KyoS.Web.Helpers
         public IEnumerable<SelectListItem> GetComboPaystubStatus()
         {
             List<SelectListItem> list = new List<SelectListItem>
-                                { new SelectListItem { Text = StatusBill.Unbilled.ToString(), Value = "0"},
-                                  new SelectListItem { Text = StatusBill.Billed.ToString(), Value = "1"}};
+                                { new SelectListItem { Text = StatusTCMPaystub.Pending.ToString(), Value = "0"},
+                                  new SelectListItem { Text = StatusTCMPaystub.Paid.ToString(), Value = "1"}};
 
             return list;
         }
