@@ -18,6 +18,10 @@ namespace KyoS.Web.Helpers
         byte[] ExportBillDmsHelper(BillDmsEntity BillDms, string Periodo, string ClinicName, string data);
         #endregion
 
+        #region PayStub
+        byte[] ExportPayStubTCMHelper(TCMPayStubEntity paystub, string Periodo, string ClinicName, string data);
+        #endregion
+
         #region Utils functions
         byte[] ConvertStreamToByteArray(Stream stream);
         #endregion

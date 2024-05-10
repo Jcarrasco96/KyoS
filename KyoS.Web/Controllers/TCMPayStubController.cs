@@ -545,5 +545,28 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "UpdatePaid", model) });
         }
 
+        [Authorize(Roles = "Manager, CaseManager")]
+        public IActionResult EXCEL(int id)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            TCMPayStubEntity payStub = _context.TCMPayStubs
+                                               .Include(n => n.TCMPayStubDetails)
+                                               .Include(n => n.CaseMannager)
+                                               .FirstOrDefault(n => n.Id == id);
+
+            string Periodo = "Invoice until: " + payStub.DatePayStubClose.ToShortDateString();
+            string ReportName = "Invoice " + user_logged.Clinic.Name + " " + payStub.DatePayStubClose.ToShortDateString() + ".xlsx";
+            string data = "BILL";
+
+            byte[] content = _exportExcelHelper.ExportPayStubTCMHelper(payStub, Periodo, _context.Clinics.FirstOrDefault().Name, data);
+
+            return File(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", ReportName);
+
+        }
+
+
     }
 }
