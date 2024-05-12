@@ -26,5 +26,9 @@ namespace KyoS.Web.Models
         public IEnumerable<SelectListItem> StatusListDomain { get; set; }
         public IEnumerable<SelectListItem> StatusListObjetive { get; set; }
         public List<TCMServicePlanReviewDomainEntity> _TCMServicePlanRevDomain { get; set; }
+
+        [Display(Name = "Date Initial Certification")]
+        [DataType(DataType.Date)]
+        public DateTime DateInitialCertification { get; set; }
     }
 }

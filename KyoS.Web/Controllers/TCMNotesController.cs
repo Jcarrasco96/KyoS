@@ -735,7 +735,19 @@ namespace KyoS.Web.Controllers
                 if (TcmNotesViewModel.IdTCMDomain == 0)
                 {
                     DateTime open = _context.TCMClient.FirstOrDefault(n => n.Id == TcmNotesViewModel.IdTCMClient).DataOpen;
-                    DateTime dateServicePlan = _context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == TcmNotesViewModel.IdTCMClient).DateServicePlan;
+                    TCMServicePlanEntity sp = _context.TCMServicePlans
+                                                      .Include(n => n.TCMServicePlanReview)
+                                                      .FirstOrDefault(n => n.TcmClient.Id == TcmNotesViewModel.IdTCMClient);
+                    DateTime dateServicePlan;
+                    if (sp.TCMServicePlanReview != null && sp.TCMServicePlanReview.Approved == 2)
+                    {
+                        dateServicePlan = sp.TCMServicePlanReview.DateServicePlanReview;
+                    }
+                    else
+                    {
+                        dateServicePlan = sp.DateServicePlan;
+                    }
+                     
                     if (TcmNotesViewModel.DateOfServiceNote < open || TcmNotesViewModel.DateOfServiceNote > dateServicePlan || user_logged.Clinic.Setting.CreateTCMNotesWithoutDomain == false)
                     {
                         TcmNotesViewModel.SettingList = _combosHelper.GetComboTCMNoteSetting();
@@ -1045,7 +1057,20 @@ namespace KyoS.Web.Controllers
                 if (TcmNotesViewModel.IdTCMDomain == 0)
                 {
                     DateTime open = _context.TCMClient.FirstOrDefault(n => n.Id == TcmNotesViewModel.IdTCMClient).DataOpen;
-                    DateTime dateServicePlan = _context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == TcmNotesViewModel.IdTCMClient).DateServicePlan;
+                    TCMServicePlanEntity sp = _context.TCMServicePlans
+                                                      .Include(n => n.TCMServicePlanReview)
+                                                      .FirstOrDefault(n => n.TcmClient.Id == TcmNotesViewModel.IdTCMClient);
+
+                    DateTime dateServicePlan;
+                    if (sp.TCMServicePlanReview != null && sp.TCMServicePlanReview.Approved == 2)
+                    {
+                        dateServicePlan = sp.TCMServicePlanReview.DateServicePlanReview;
+                    }
+                    else
+                    {
+                        dateServicePlan = sp.DateServicePlan;
+                    }
+
                     if (TcmNotesViewModel.DateOfServiceNote < open || TcmNotesViewModel.DateOfServiceNote > dateServicePlan || user_logged.Clinic.Setting.CreateTCMNotesWithoutDomain == false)
                     {
                         TcmNotesViewModel.SettingList = _combosHelper.GetComboTCMNoteSetting();
@@ -1365,7 +1390,21 @@ namespace KyoS.Web.Controllers
                 if (NoteActivityViewModel.IdTCMDomain == 0)
                 {
                     DateTime open = _context.TCMClient.FirstOrDefault(n => n.Id == NoteActivityViewModel.IdTCMClient).DataOpen;
-                    DateTime dateServicePlan = _context.TCMServicePlans.FirstOrDefault(n => n.TcmClient.Id == NoteActivityViewModel.IdTCMClient).DateServicePlan;
+
+                    TCMServicePlanEntity sp = _context.TCMServicePlans
+                                                      .Include(n => n.TCMServicePlanReview)
+                                                      .FirstOrDefault(n => n.TcmClient.Id == NoteActivityViewModel.IdTCMClient);
+
+                    DateTime dateServicePlan;
+                    if (sp.TCMServicePlanReview != null && sp.TCMServicePlanReview.Approved == 2)
+                    {
+                        dateServicePlan = sp.TCMServicePlanReview.DateServicePlanReview;
+                    }
+                    else
+                    {
+                        dateServicePlan = sp.DateServicePlan;
+                    }
+
                     if (NoteActivityViewModel.DateOfServiceNote < open || NoteActivityViewModel.DateOfServiceNote > dateServicePlan || user_logged.Clinic.Setting.CreateTCMNotesWithoutDomain == false)
                     {
                         TCMNoteEntity tcmNote1 = await _context.TCMNote

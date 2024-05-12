@@ -23,5 +23,12 @@ namespace KyoS.Web.Models
         
         public IEnumerable<SelectListItem> status { get; set; }
 
+        public int Id_Service { get; set; }
+
+        public int Id_ServicePlanReview { get; set; }
+        public string Origin { get; set; }
+
+        public bool StatusBool { get; set; }
+
     }
 }

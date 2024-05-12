@@ -13,8 +13,10 @@
             <input type="hidden" asp-for="Id_Domain" />
             <div class="">
                 <div class="form-group col-md-12">
-                    <b>Service:</b>
-                    @Html.DisplayFor(modelItem => Model.TcmDomain.Code) - @Html.DisplayFor(modelItem => Model.TcmDomain.Name)
+                    <b>Service code:</b>
+                    <i>@Html.DisplayFor(modelItem => Model.TcmDomain.Code)</i>
+                    <b>Service name:</b>
+                    <i>@Html.DisplayFor(modelItem => Model.TcmDomain.Name)</i>
                 </div>
             </div>
             <div class="">
@@ -24,18 +26,23 @@
                     <span asp-validation-for="IdObjetive" class="text-danger"></span>
                 </div>
                 <div class="form-group col-md-6">
+                    <label asp-for="IdStatus" class="control-label">Status</label>
+                    <select asp-for="IdStatus" asp-items="Model.StatusList" class="form-control"></select>
+                    <span asp-validation-for="IdStatus" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="">
+                <div class="form-group col-md-4">
                     <label asp-for="StartDate" class="control-label">Start Date</label>&nbsp;*
                     <input asp-for="StartDate" class="form-control" />
                     <span asp-validation-for="StartDate" class="text-danger"></span>
                 </div>
-            </div>
-            <div class="">
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-4">
                     <label asp-for="TargetDate" class="control-label"></label>&nbsp;
                     <input asp-for="TargetDate" class="form-control" />
                     <span asp-validation-for="TargetDate" class="text-danger"></span>
                 </div>
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-4">
                     <label asp-for="EndDate" class="control-label">End date</label>&nbsp;
                     <input asp-for="EndDate" class="form-control" />
                     <span asp-validation-for="EndDate" class="text-danger"></span>
@@ -65,25 +72,14 @@
             <div class="col-md-12">
                 <div class="form-group">
                     <label asp-for="task" class="control-label">Task/Case Management Strategy</label>&nbsp;*
-                    <input asp-for="task" class="form-control" />
+                    <textarea asp-for="task" class="form-control" ></textarea>
                     <span asp-validation-for="task" class="text-danger"></span>
                 </div>
-            </div>
-            <div class="form-group">
-                <div class="col-md-3">
-                    <label asp-for="IdStatus" class="control-label">Status</label>
-                    <select asp-for="IdStatus" asp-items="Model.StatusList" class="form-control"></select>
-                    <span asp-validation-for="IdStatus" class="text-danger"></span>
-                </div>
-                <div class="container-fluid">
-                    &nbsp;
-                </div>
-            </div>
-            <div class="col-md-12">
+            </div> <div class="col-md-12">
                 <div class="form-group">
-                    <label asp-for="ChangesUpdates" class="control-label">Objectives Changes/Updates</label>&nbsp;*
-                    <input asp-for="ChangesUpdates" class="form-control" />
-                    <span asp-validation-for="ChangesUpdates" class="text-danger"></span>
+                    <label asp-for="Responsible" class="control-label">Responsible Provider and Resources</label>&nbsp;*
+                    <textarea asp-for="Responsible" class="form-control"></textarea>
+                    <span asp-validation-for="Responsible" class="text-danger"></span>
                 </div>
             </div>
             <div class="col-md-12">

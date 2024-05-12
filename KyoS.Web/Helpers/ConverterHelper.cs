@@ -2580,7 +2580,10 @@ namespace KyoS.Web.Helpers
                 DateTCMSupervisorSignature = (TcmServicePlanReviewEntity.DateTCMSupervisorSignature.Year != 1) ? TcmServicePlanReviewEntity.DateTCMSupervisorSignature
                                                                                                                  : DateTime.Today.Date,
                 HasBeenExplained = TcmServicePlanReviewEntity.HasBeenExplained,
-                TheExpertedReviewDate = TcmServicePlanReviewEntity.TheExpertedReviewDate
+                TheExpertedReviewDate = TcmServicePlanReviewEntity.TheExpertedReviewDate,
+                DateAssessment = TcmServicePlanReviewEntity.DateAssessment,
+                DateCertification = TcmServicePlanReviewEntity.DateCertification,
+                DateInitialCertification = TcmServicePlanReviewEntity.TcmServicePlan.TcmClient.TcmIntakeAppendixJ.FirstOrDefault(n => n.AppendixType == AppendixJType.Initial).Date
             };
         }
 
@@ -2617,20 +2620,33 @@ namespace KyoS.Web.Helpers
                 DateTCMCaseManagerSignature = model.DateTCMCaseManagerSignature,
                 DateTCMSupervisorSignature = model.DateTCMSupervisorSignature,
                 HasBeenExplained = model.HasBeenExplained,
-                TheExpertedReviewDate = model.TheExpertedReviewDate
+                TheExpertedReviewDate = model.TheExpertedReviewDate,
+                DateAssessment = model.DateAssessment,
+                DateCertification = model.DateCertification
 
             };
         }
 
-        public TCMServicePlanReviewDomainViewModel ToTCMServicePlanReviewDomainViewModel(TCMServicePlanReviewDomainEntity TcmServicePlanReviewDomianEntity)
+        public TCMServicePlanReviewDomainViewModel ToTCMServicePlanReviewDomainViewModel(TCMServicePlanReviewDomainEntity entity)
         {
             return new TCMServicePlanReviewDomainViewModel
             {
-                Id = TcmServicePlanReviewDomianEntity.Id,
-                ChangesUpdate = TcmServicePlanReviewDomianEntity.ChangesUpdate,
-                IdTcmDomain = TcmServicePlanReviewDomianEntity.TcmDomain.Id,
-                TcmDomain = TcmServicePlanReviewDomianEntity.TcmDomain,
-                status = _combosHelper.GetComboClientStatus()
+                Id = entity.Id,
+                ChangesUpdate = entity.ChangesUpdate,
+                IdTcmDomain = entity.TcmDomain.Id,
+                TcmDomain = entity.TcmDomain,
+                status = _combosHelper.GetComboClientStatus(),
+                Name = entity.Name,
+                CodeDomain = entity.CodeDomain,
+                LongTerm = entity.LongTerm,
+                DateAccomplished = entity.DateAccomplished,
+                DateIdentified = entity.DateIdentified,
+                NeedsIdentified = entity.NeedsIdentified,
+                Status  = entity.Status,
+                TcmServicePlanReview = entity.TcmServicePlanReview,
+                Id_ServicePlanReview = entity.TcmServicePlanReview.Id,
+                TCMServicePlanRevDomainObjectiive = entity.TCMServicePlanRevDomainObjectiive
+                
               
             };
         }
@@ -2645,7 +2661,15 @@ namespace KyoS.Web.Helpers
                 LastModifiedBy = !isNew ? userId : string.Empty,
                 LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
                 TcmDomain = model.TcmDomain,
-                ChangesUpdate = model.ChangesUpdate
+                ChangesUpdate = model.ChangesUpdate,
+                CodeDomain = model.CodeDomain,
+                DateAccomplished = model.DateAccomplished,
+                DateIdentified = model.DateIdentified,
+                LongTerm = model.LongTerm,
+                Name = model.Name,
+                NeedsIdentified = model.NeedsIdentified,
+                Status = model.Status,
+                TcmServicePlanReview = _context.TCMServicePlanReviews.FirstOrDefault(n => n.Id == model.Id_ServicePlanReview)
                
             };
         }
