@@ -2092,8 +2092,23 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant, Frontdesk, Biller")]
-        public async Task<IActionResult> ClientHistory(int idClient = 0)
+        public async Task<IActionResult> ClientHistory(int idClient = 0, int idError = 0)
         {
+            if (idError == 1)
+            {
+                ViewBag.Error = "Mtpr";
+            }
+            else
+            {
+                if (idError == 2)
+                {
+                    ViewBag.Error = "Addendum";
+                }
+                else
+                {
+                    ViewBag.Error = "N";
+                }
+            }
             UserEntity user_logged = _context.Users
 
                                              .Include(u => u.Clinic)

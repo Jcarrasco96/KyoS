@@ -15746,7 +15746,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant")]
-        public IActionResult ViewAllGoals(int idMtp = 0)
+        public IActionResult ViewAllGoals(int idMtp = 0, int origin = 0)
         {
             UserEntity user_logged = _context.Users
 
@@ -15828,7 +15828,7 @@ namespace KyoS.Web.Controllers
                 allGoals_List.Add(goal_temp);
                 goal_temp = new AllGoals();
             }
-
+            ViewData["origin"] = origin;
             return View(allGoals_List);
         }
 

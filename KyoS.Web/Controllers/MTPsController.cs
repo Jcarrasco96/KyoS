@@ -5887,10 +5887,19 @@ namespace KyoS.Web.Controllers
             {
                 return RedirectToAction("Home/Error404");
             }
-
+           
             _context.Adendums.Remove(addendum);
-            await _context.SaveChangesAsync();
-            return RedirectToAction("ClientHistory", "Clients", new { idClient = addendum.Mtp.Client.Id });
+
+            try
+            {
+                await _context.SaveChangesAsync();
+                return RedirectToAction("ClientHistory", "Clients", new { idClient = addendum.Mtp.Client.Id, idError = 0 });
+            }
+            catch (System.Exception ex)
+            {
+                return RedirectToAction("ClientHistory", "Clients", new { idClient = addendum.Mtp.Client.Id, idError = 2 });
+            }
+           
         }
 
         [Authorize(Roles = "Manager, Frontdesk")]
@@ -6196,6 +6205,66 @@ namespace KyoS.Web.Controllers
             return View();
         }
 
-       
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> DeleteMTPR(int? id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            MTPReviewEntity mtpr = await _context.MTPReviews
+                                                 .Include(n => n.Mtp)
+                                                 .ThenInclude(n => n.Goals)
+                                                 .ThenInclude(n => n.Objetives)
+                                                 .Include(n => n.Mtp)
+                                                 .ThenInclude(n => n.Client)
+
+                                                 .FirstOrDefaultAsync(t => t.Id == id);
+
+            if (mtpr == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+            
+            if (_context.Goals.Where(n => n.IdMTPReview == id).Count() > 0)
+            {
+                return RedirectToAction("ClientHistory", "Clients", new { idClient = mtpr.Mtp.Client.Id, idError = 1 });
+            }
+
+            ObjetiveEntity objective = new ObjetiveEntity();
+            List<ObjetiveEntity> list = new List<ObjetiveEntity>();
+
+            if (mtpr.Mtp.Goals.Count() > 0)
+            {
+                foreach (var item in mtpr.Mtp.Goals)
+                {
+                    if (item.Objetives.Count() > 0)
+                    {
+                        foreach (var obj in item.Objetives)
+                        {
+                            objective = obj;
+                            objective.DateResolved = mtpr.Mtp.AdmissionDateMTP.AddMonths(mtpr.Mtp.NumberOfMonths.Value);
+                            objective.DateTarget = mtpr.Mtp.AdmissionDateMTP.AddMonths(mtpr.Mtp.NumberOfMonths.Value);
+                        }
+                    }                 
+
+                }
+            }
+            
+            _context.MTPReviews.Remove(mtpr);
+            try
+            {
+                await _context.SaveChangesAsync();
+                return RedirectToAction("ClientHistory", "Clients", new { idClient = mtpr.Mtp.Client.Id, idError = 0 });
+            }
+            catch
+            {
+                return RedirectToAction("ClientHistory", "Clients", new { idClient = mtpr.Mtp.Client.Id, idError = 1 });
+            }
+           
+        }
+
+
     }
 }

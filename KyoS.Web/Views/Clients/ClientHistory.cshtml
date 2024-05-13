@@ -22,7 +22,43 @@
             <li class="active">Client History</li>
         </ul><!--.breadcrumb-->
     </div>
+    @if (ViewBag.Error == "N")
+    {
+        <div class="alert alert-block alert-success">
+            <button type="button" class="close" data-dismiss="alert">
+                <i class="icon-remove"></i>
+            </button>
+            <i class="icon-ok green"></i>
+            <strong class="green">
+                Client has been successfully update
+            </strong>
 
+        </div>
+    }
+    @if (ViewBag.Error == "Mtpr")
+    {
+        <div class="alert alert-block alert-danger">
+            <button type="button" class="close" data-dismiss="alert">
+                <i class="icon-remove"></i>
+            </button>
+            <i class="icon-ok red"></i>
+            <strong class="red">
+                Error. The MTPR has related goals, you must first review the related notes and then delete the goals.
+            </strong>
+        </div>
+    }
+    @if (ViewBag.Error == "Addendum")
+    {
+        <div class="alert alert-block alert-danger">
+            <button type="button" class="close" data-dismiss="alert">
+                <i class="icon-remove"></i>
+            </button>
+            <i class="icon-ok red"></i>
+            <strong class="red">
+                Error. The Addendum has related goals, you must first review the related notes and then delete the goals.
+            </strong>
+        </div>
+    }
     <div class="row">        
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <partial name="_ClientAllDate" />
@@ -220,7 +256,7 @@
             });
         }
 
-         function ConfirmDeleteAddendum(e) {
+        function ConfirmDeleteAddendum(e) {
             Swal.fire({
                 title: 'Do you want to do this action?',
                 text: "Note: The note will be deleted, this action is irreversible.",
@@ -232,6 +268,23 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     var url = "@Url.Action("DeleteAddendum", "Mtps")";
+                    window.location.href = url + '/' + e;
+                }
+            });
+        }
+
+        function ConfirmDeleteMTPR(e) {
+            Swal.fire({
+                title: 'Do you want delete this MTPR?',
+                text: "Note: All data related to this element will be deleted.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var url = "@Url.Action("DeleteMTPR", "MTPs")";
                     window.location.href = url + '/' + e;
                 }
             });

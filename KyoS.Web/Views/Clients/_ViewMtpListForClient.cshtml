@@ -99,7 +99,7 @@
                                                             {
                                                                 <a asp-action="ReturnMtpReviewTo" asp-controller="Mtps" asp-route-id="@element.Id" asp-route-clientId="@item.Client.Id" class="btn btn-warning" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
                                                                 <a asp-action="PrintMTPReview" asp-controller="Mtps" asp-route-id="@element.Id" class="btn btn-success" title="Print MTPR" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
-                                                                <a asp-action="Delete" asp-controller="Mtps" asp-route-id="@element.Id" asp-route-clientId="@item.Client.Id" class="btn btn-danger disabled" title="Delete FARS"><i class="glyphicon glyphicon-trash"></i></a>
+                                                                <a onclick="ConfirmDeleteMTPR(@element.Id)" class="btn btn-danger" title="Delete MTPR"><i class="glyphicon glyphicon-trash"></i></a>
                                                             }
                                                             else
                                                             {
@@ -107,13 +107,13 @@
                                                                 {
                                                                     <a asp-action="ReturnMtpReviewTo" asp-controller="Mtps" asp-route-id="@element.Id" asp-route-clientId="@item.Client.Id" class="btn btn-warning" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
                                                                     <a asp-action="PrintMTPReview" asp-controller="Mtps" asp-route-id="@element.Id" class="btn btn-success disabled" title="Print FARS" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
-                                                                    <a asp-action="Delete" asp-controller="Mtps" asp-route-id="@element.Id" asp-route-clientId="@item.Client.Id" class="btn btn-danger disabled" title="Delete MTPR"><i class="glyphicon glyphicon-trash"></i></a>
+                                                                    <a onclick="ConfirmDeleteMTPR(@element.Id)" class="btn btn-danger" title="Delete MTPR"><i class="glyphicon glyphicon-trash"></i></a>
                                                                 }
                                                                 else
                                                                 {
                                                                     <a asp-action="ReturnMtpReviewTo" asp-controller="Mtps" asp-route-id="@element.Id" asp-route-clientId="@item.Client.Id" class="btn btn-warning disabled" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
                                                                     <a asp-action="PrintMTPReview" asp-controller="Mtps" asp-route-id="@element.Id" class="btn btn-success disabled" title="Print MTPR" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
-                                                                    <a asp-action="Delete" asp-controller="Mtps" asp-route-id="@element.Id" asp-route-clientId="@item.Client.Id" class="btn btn-danger disabled" title="Delete MTPR"><i class="glyphicon glyphicon-trash"></i></a>
+                                                                    <a onclick="ConfirmDeleteMTPR(@element.Id)" class="btn btn-danger" title="Delete MTPR"><i class="glyphicon glyphicon-trash"></i></a>
                                                                 }
                                                             }
                                                         }
@@ -201,7 +201,7 @@
                                                         {
                                                             <a asp-action="ReturnAddendumsTo" asp-controller="Mtps" asp-route-id="@element.Id" asp-route-clientId="@item.Client.Id" class="btn btn-warning" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
                                                             <a asp-action="PrintAdendum" asp-controller="Mtps" asp-route-id="@element.Id" class="btn btn-success" title="Print Addendum" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
-                                                            <a asp-action="Delete" asp-controller="Mtps" asp-route-id="@element.Id" asp-route-clientId="@item.Client.Id" class="btn btn-danger disabled" title="Delete Addendum"><i class="glyphicon glyphicon-trash"></i></a>
+                                                            <a onclick="ConfirmDeleteAddendum(@element.Id)" class="btn btn-danger" title="Delete Addendum"><i class="glyphicon glyphicon-trash"></i></a>
                                                         }
                                                         else
                                                         {
@@ -209,7 +209,7 @@
                                                             {
                                                                 <a asp-action="ReturnAddendumsTo" asp-controller="Mtps" asp-route-id="@element.Id" asp-route-clientId="@item.Client.Id" class="btn btn-warning" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
                                                                 <a asp-action="PrintAdendum" asp-controller="Mtps" asp-route-id="@element.Id" class="btn btn-success disabled" title="Print Addendum" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
-                                                                <a asp-action="Delete" asp-controller="Mtps" asp-route-id="@element.Id" asp-route-clientId="@item.Client.Id" class="btn btn-danger disabled" title="Delete Addendum"><i class="glyphicon glyphicon-trash"></i></a>
+                                                                <a onclick="ConfirmDeleteAddendum(@element.Id)" class="btn btn-danger" title="Delete Addendum"><i class="glyphicon glyphicon-trash"></i></a>
                                                             }
                                                             else
                                                             {
@@ -217,7 +217,7 @@
                                                                 <a asp-action="PrintAdendum" asp-controller="Mtps" asp-route-id="@element.Id" class="btn btn-success disabled" title="Print Addendum" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                                                 if (element.Goals.Count() == 0)
                                                                 {
-                                                                    <a onclick="ConfirmDeleteAddendum(@element.Id)" class="btn btn-danger" title="Delete Addendum"><i class="glyphicon glyphicon-trash"></i></a>
+                                                                   <a onclick="ConfirmDeleteAddendum(@element.Id)" class="btn btn-danger" title="Delete Addendum"><i class="glyphicon glyphicon-trash"></i></a>
                                                                 }
                                                                 else
                                                                 {
