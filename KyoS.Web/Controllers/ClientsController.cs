@@ -183,13 +183,19 @@ namespace KyoS.Web.Controllers
                 List<SelectListItem> list = new List<SelectListItem>();
 
                 List<ClientEntity> clients = _context.Clients.ToList();
-                string maxNumber = clients.MaxBy(n => n.Code).Code;
-                int temp = 0;
                 string maxNumberInc = string.Empty;
-                if (Int32.TryParse(maxNumber, out temp) == true)
+
+                if (clients.Count() > 0)
                 {
-                    maxNumberInc = (Convert.ToInt32(temp) + 1).ToString();
+                    string maxNumber = clients.MaxBy(n => n.Code).Code;
+                    int temp = 0;
+
+                    if (Int32.TryParse(maxNumber, out temp) == true)
+                    {
+                        maxNumberInc = (Convert.ToInt32(temp) + 1).ToString();
+                    }
                 }
+                
 
                 list.Insert(0, new SelectListItem
                 {

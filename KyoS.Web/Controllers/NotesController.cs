@@ -12643,10 +12643,14 @@ namespace KyoS.Web.Controllers
             else
             {
                 int max = 0;
-                max = _context.Weeks
-                              .Where(w => (w.Clinic.Id == user_logged.Clinic.Id))
-                              .Max(w => w.Id);                                                
-                
+                if (_context.Weeks.Where(w => (w.Clinic.Id == user_logged.Clinic.Id)).Count() > 0)
+                {
+                    max = _context.Weeks
+                                  .Where(w => (w.Clinic.Id == user_logged.Clinic.Id))
+                                  .Max(w => w.Id);
+
+                }
+
                 List<WeekEntity> query = await _context.Weeks
 
                                                        .Include(w => w.Days)
