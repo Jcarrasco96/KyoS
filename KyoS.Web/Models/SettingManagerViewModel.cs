@@ -108,5 +108,6 @@ namespace KyoS.Web.Models
         public int IdDashboard { get; set; }
 
         public IEnumerable<SelectListItem> Dashboards { get; set; }
+        public bool LockTCMNoteForOneMonthIdle { get; set; }
     }
 }

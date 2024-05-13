@@ -220,8 +220,9 @@ namespace KyoS.Web.Controllers
                 MTPmultipleSignatures = user_logged.Clinic.Setting.MTPmultipleSignatures,
                 TCMLockCreateNote = user_logged.Clinic.Setting.TCMLockCreateNote,
                 IdDashboard = (user_logged.Clinic.Setting.DashBoardPrincipal == DashboardType.MH) ? 0 : 1,
-                Dashboards = _combosHelper.GetComboDashboardType()
-            };
+                Dashboards = _combosHelper.GetComboDashboardType(),
+                LockTCMNoteForOneMonthIdle = user_logged.Clinic.Setting.LockTCMNoteForOneMonthIdle
+    };
 
             return View(model);
         }
@@ -290,6 +291,7 @@ namespace KyoS.Web.Controllers
                     setting.TCMPayStub_Filtro = StatusUtils.GetFiltroTCMPayStubByIndex(model.IdFiltroPayStub);
                     setting.MTPmultipleSignatures = model.MTPmultipleSignatures;
                     setting.DashBoardPrincipal = DashboardUtils.GetDashboardTypeByIndex(model.IdDashboard);
+                    setting.LockTCMNoteForOneMonthIdle = model.LockTCMNoteForOneMonthIdle;
                 }
                 _context.Update(setting);
                 await _context.SaveChangesAsync();

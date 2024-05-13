@@ -134,10 +134,25 @@ namespace KyoS.Web.Controllers
 
             UserEntity user_logged = _context.Users
                                              .Include(u => u.Clinic)
+                                             .ThenInclude(u => u.Setting)
                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
             if (_context.TCMDateBlocked.Any(n => n.DateBlocked.Date == dateTime.Date) == true)
             {
                 return RedirectToAction("Index", "TCMBilling", new { id = 1});
+            }
+
+            if (user_logged.Clinic.Setting.LockTCMNoteForOneMonthIdle == true)
+            {
+                List<TCMNoteEntity> list = _context.TCMNote.Where(n => n.TCMClient.Id == IdTCMClient).ToList();
+                DateTime lastTime = list.MaxBy(n => n.DateOfService).DateOfService;
+                TCMIntakeAppendixJEntity appendixJ = _context.TCMIntakeAppendixJ.FirstOrDefault(n => n.TcmClient_FK == IdTCMClient && n.Date > lastTime);
+
+                if (lastTime.AddDays(30.0) < dateTime && appendixJ == null)
+                {
+                    return RedirectToAction("Index", "TCMBilling", new { id = 3 });
+                }
+
             }
 
             CaseMannagerEntity caseManager = _context.CaseManagers
@@ -442,6 +457,24 @@ namespace KyoS.Web.Controllers
                 return View(tcmNotesViewModel);
             }
 
+            //si se cambia el dia de la nota,verificar que no exista un mes de diferencia con alguna anterior
+            if (user_logged.Clinic.Setting.LockTCMNoteForOneMonthIdle == true)
+            {
+                List<TCMNoteEntity> list = _context.TCMNote.Where(n => n.TCMClient.Id == tcmNotesViewModel.IdTCMClient && n.Id != tcmNotesViewModel.IdTCMNote && n.DateOfService < tcmNotesViewModel.DateOfService).ToList();
+                DateTime lastTime = list.MaxBy(n => n.DateOfService).DateOfService;
+                TCMIntakeAppendixJEntity appendixJ = _context.TCMIntakeAppendixJ.FirstOrDefault(n => n.TcmClient_FK == tcmNotesViewModel.IdTCMClient && n.Date > lastTime);
+
+                if (lastTime.AddDays(30.0) < tcmNotesViewModel.DateOfService && appendixJ == null)
+                {
+                    ViewData["origin"] = origin;
+                    ViewData["available"] = UnitsAvailable(tcmNotesViewModel.DateOfService, tcmNotesViewModel.IdTCMClient);
+                    ViewData["interval"] = interval;
+                    ViewBag.Delete = "A";
+                    tcmNotesViewModel.TCMNoteActivity = _context.TCMNoteActivity.Where(n => n.TCMNote.Id == tcmNotesViewModel.Id).ToList();
+                    return View(tcmNotesViewModel);
+                }
+            }
+            
             if (ModelState.IsValid)
             {
                 //reviso al cambiar la fecha de la nota, que para el dia que se esta cambiando no exista overlaping

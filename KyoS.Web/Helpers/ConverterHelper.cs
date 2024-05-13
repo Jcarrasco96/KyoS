@@ -1764,7 +1764,8 @@ namespace KyoS.Web.Helpers
                 TCMPayStub_Filtro = StatusUtils.GetFiltroTCMPayStubByIndex(model.IdFiltroPayStub),
                 MTPmultipleSignatures = model.MTPmultipleSignatures,
                 TCMLockCreateNote = model.TCMLockCreateNote,
-                DashBoardPrincipal = DashboardUtils.GetDashboardTypeByIndex(model.IdDashboard)
+                DashBoardPrincipal = DashboardUtils.GetDashboardTypeByIndex(model.IdDashboard),
+                LockTCMNoteForOneMonthIdle = model.LockTCMNoteForOneMonthIdle
             };
         }
 
@@ -1802,7 +1803,8 @@ namespace KyoS.Web.Helpers
                 MTPmultipleSignatures = model.MTPmultipleSignatures,
                 TCMLockCreateNote = model.TCMLockCreateNote,
                 IdDashboard = (model.DashBoardPrincipal == DashboardType.MH) ? 0 : 1,
-                Dashboards = _combosHelper.GetComboDashboardType()
+                Dashboards = _combosHelper.GetComboDashboardType(),
+                LockTCMNoteForOneMonthIdle = model.LockTCMNoteForOneMonthIdle
             };
         }
 

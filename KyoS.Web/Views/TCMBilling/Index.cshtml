@@ -37,6 +37,18 @@
         </strong>
     </div>
 }
+@if (ViewBag.DateBlocked == "A")
+{
+    <div class="alert alert-block alert-danger">
+        <button type="button" class="close" data-dismiss="alert">
+            <i class="icon-remove"></i>
+        </button>
+        <i class="icon-ok red"></i>
+        <strong class="red">
+            Error. The service has not been provided for more than 30 days. You must make a new appendixJ or make a note on a date earlier than the selected one.
+        </strong>
+    </div>
+}
 <div class="row">
     <div class="col-md-4">
         <label asp-for="IdClient" class="control-label"></label>
