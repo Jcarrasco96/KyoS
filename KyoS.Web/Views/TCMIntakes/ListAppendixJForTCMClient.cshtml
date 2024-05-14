@@ -42,12 +42,12 @@
             @if (User.IsInRole("CaseManager"))
             {
                 <a asp-action="CreateTCMAppendixJ" asp-route-id="@Model.First().TcmClient.Id" asp-route-origi="2" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Create TCM AppendixJ</a>
-                <a onclick="showInPopupLg('@Url.Action("AuditAppendixJ", "TCMIntakes", new { idTCMClient = Model.ElementAtOrDefault(0).TcmClient_FK}, Context.Request.Scheme)','Audit Appendix J')" class="btn btn-danger" title="Audit Appendix J"><i class="glyphicon glyphicon-alert"></i>&nbsp;&nbsp;Audit Appendix J</a>
+                <a onclick="showInPopupLg('@Url.Action("AuditAppendixJ", "TCMIntakes", new { idTCMClient = Model.ElementAtOrDefault(0).TcmClient_FK}, Context.Request.Scheme)','Audit Appendix J')" class="btn btn-danger" title="Audit Appendix J"><i class="glyphicon glyphicon-alert"></i>&nbsp;&nbsp;Audit AppendixJ</a>
             }
             else
             {
-                <a asp-action="CreateTCMAppendixJ" asp-route-id="@Model.First().TcmClient.Id" asp-route-origi="@ViewData["origi"]" class="btn btn-primary disabled"><i class="glyphicon glyphicon-plus"></i> Create TCM Appendix J</a>
-                <a onclick="showInPopupLg('@Url.Action("AuditConsentForRelease", "TCMIntakes", new { idTCMClient = Model.ElementAtOrDefault(0).TcmClient_FK}, Context.Request.Scheme)','Audit Appendix J')" class="btn btn-danger" title="Audit Appendix J"><i class="glyphicon glyphicon-alert"></i>&nbsp;&nbsp;Audit Appendix J</a>
+                <a asp-action="CreateTCMAppendixJ" asp-route-id="@Model.First().TcmClient.Id" asp-route-origi="@ViewData["origi"]" class="btn btn-primary disabled"><i class="glyphicon glyphicon-plus"></i> Create TCM AppendixJ</a>
+                <a onclick="showInPopupLg('@Url.Action("AuditConsentForRelease", "TCMIntakes", new { idTCMClient = Model.ElementAtOrDefault(0).TcmClient_FK}, Context.Request.Scheme)','Audit Appendix J')" class="btn btn-danger" title="Audit Appendix J"><i class="glyphicon glyphicon-alert"></i>&nbsp;&nbsp;Audit AppendixJ</a>
             }
 
         </p>
