@@ -404,6 +404,8 @@ namespace KyoS.Web.Controllers
                     }
                 }
             }
+
+            ViewData["origin"] = origin;
             return View(mtpViewModel);
         }
 

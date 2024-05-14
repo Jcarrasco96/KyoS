@@ -159,6 +159,16 @@
                                 <input type="checkbox" asp-for="LockTCMNoteForOneMonthIdle" class="form-check-input"> Unable create TCM notes for idle cases (1 month)<br />
                             </div>
                         </div>
+                        <div class="col-md-push-12">
+                            <div class="form-group col-md-12">
+                                <input type="checkbox" asp-for="LockTCMNoteForDx" class="form-check-input"> Unable create TCM notes without a valid diagnosis<br />
+                            </div>
+                        </div>
+                        <div class="col-md-push-12">
+                            <div class="form-group col-md-12">
+                                <input type="checkbox" asp-for="LockTCMNoteForAuth" class="form-check-input"> Unable create TCM notes without a valid authorization<br />
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

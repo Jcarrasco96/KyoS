@@ -142,6 +142,7 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("Index", "TCMBilling", new { id = 1});
             }
 
+            //No permite hacer notas si paso 30 dias de la ultima nota y si no tiene ningun AppendixJ despues de eso, siempre que este acvtivo en los setti
             if (user_logged.Clinic.Setting.LockTCMNoteForOneMonthIdle == true)
             {
                 List<TCMNoteEntity> list = _context.TCMNote.Where(n => n.TCMClient.Id == IdTCMClient).ToList();
@@ -154,6 +155,26 @@ namespace KyoS.Web.Controllers
                 }
 
             }
+            //No permite hacer notas si paso sino tiene una Auth. y un Dx, siempre que este acvtivo en los setting
+            if (user_logged.Clinic.Setting.LockTCMNoteForDx == true || user_logged.Clinic.Setting.LockTCMNoteForAuth == true)
+            {
+                TCMClientEntity tcmClient = _context.TCMClient
+                                                    .Include(n => n.Client)
+                                                    .ThenInclude(n => n.Clients_Diagnostics)
+                                                    .Include(n => n.Client)
+                                                    .ThenInclude(n => n.Clients_HealthInsurances)
+                                                    .FirstOrDefault(n => n.Id == IdTCMClient);
+
+                if (tcmClient.Client.Clients_Diagnostics.Where(n => n.Principal == true && n.Active == true).Count() == 0)
+                {
+                    return RedirectToAction("Index", "TCMBilling", new { id = 4 });
+                }
+                if (tcmClient.Client.Clients_HealthInsurances.Where(n => n.Active == true && n.ApprovedDate.Date < dateTime && n.ExpiredDate.Date > dateTime).Count() == 0)
+                {
+                    return RedirectToAction("Index", "TCMBilling", new { id = 5 });
+                }
+            }
+
 
             CaseMannagerEntity caseManager = _context.CaseManagers
                                                      .FirstOrDefault(cm => cm.LinkedUser == user_logged.UserName);
@@ -474,7 +495,36 @@ namespace KyoS.Web.Controllers
                     return View(tcmNotesViewModel);
                 }
             }
-            
+            if (user_logged.Clinic.Setting.LockTCMNoteForDx == true || user_logged.Clinic.Setting.LockTCMNoteForAuth == true)
+            {
+                TCMClientEntity tcmClient = _context.TCMClient
+                                                    .Include(n => n.Client)
+                                                    .ThenInclude(n => n.Clients_Diagnostics)
+                                                    .Include(n => n.Client)
+                                                    .ThenInclude(n => n.Clients_HealthInsurances)
+                                                    .FirstOrDefault(n => n.Id == tcmNotesViewModel.IdTCMClient);
+
+                if (tcmClient.Client.Clients_Diagnostics.Where(n => n.Principal == true && n.Active == true).Count() == 0)
+                {
+                    ViewData["origin"] = origin;
+                    ViewData["available"] = UnitsAvailable(tcmNotesViewModel.DateOfService, tcmNotesViewModel.IdTCMClient);
+                    ViewData["interval"] = interval;
+                    ViewBag.Delete = "DX";
+                    tcmNotesViewModel.TCMNoteActivity = _context.TCMNoteActivity.Where(n => n.TCMNote.Id == tcmNotesViewModel.Id).ToList();
+                    return View(tcmNotesViewModel);
+                }
+                if (tcmClient.Client.Clients_HealthInsurances.Where(n => n.Active == true && n.ApprovedDate.Date < tcmNotesViewModel.DateOfService && n.ExpiredDate.Date > tcmNotesViewModel.DateOfService).Count() == 0)
+                {
+                    ViewData["origin"] = origin;
+                    ViewData["available"] = UnitsAvailable(tcmNotesViewModel.DateOfService, tcmNotesViewModel.IdTCMClient);
+                    ViewData["interval"] = interval;
+                    ViewBag.Delete = "Auth";
+                    tcmNotesViewModel.TCMNoteActivity = _context.TCMNoteActivity.Where(n => n.TCMNote.Id == tcmNotesViewModel.Id).ToList();
+                    return View(tcmNotesViewModel);
+                }
+            }
+
+
             if (ModelState.IsValid)
             {
                 //reviso al cambiar la fecha de la nota, que para el dia que se esta cambiando no exista overlaping

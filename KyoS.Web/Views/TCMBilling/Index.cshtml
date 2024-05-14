@@ -49,6 +49,30 @@
         </strong>
     </div>
 }
+@if (ViewBag.DateBlocked == "DX")
+{
+    <div class="alert alert-block alert-danger">
+        <button type="button" class="close" data-dismiss="alert">
+            <i class="icon-remove"></i>
+        </button>
+        <i class="icon-ok red"></i>
+        <strong class="red">
+            Error. You cannot create notes for that client because they do not have a valid diagnosis.
+        </strong>
+    </div>
+}
+@if (ViewBag.DateBlocked == "Auth")
+{
+    <div class="alert alert-block alert-danger">
+        <button type="button" class="close" data-dismiss="alert">
+            <i class="icon-remove"></i>
+        </button>
+        <i class="icon-ok red"></i>
+        <strong class="red">
+            Error. You cannot create notes for that client because they do not have a valid authorization.
+        </strong>
+    </div>
+}
 <div class="row">
     <div class="col-md-4">
         <label asp-for="IdClient" class="control-label"></label>

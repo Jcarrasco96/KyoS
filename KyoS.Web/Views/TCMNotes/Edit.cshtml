@@ -118,6 +118,30 @@
                     </strong>
                 </div>
             }
+            @if (ViewBag.DateBlocked == "DX")
+            {
+                <div class="alert alert-block alert-danger">
+                    <button type="button" class="close" data-dismiss="alert">
+                        <i class="icon-remove"></i>
+                    </button>
+                    <i class="icon-ok red"></i>
+                    <strong class="red">
+                        Error. You cannot create notes for that client because they do not have a valid diagnosis.
+                    </strong>
+                </div>
+            }
+            @if (ViewBag.DateBlocked == "Auth")
+            {
+                <div class="alert alert-block alert-danger">
+                    <button type="button" class="close" data-dismiss="alert">
+                        <i class="icon-remove"></i>
+                    </button>
+                    <i class="icon-ok red"></i>
+                    <strong class="red">
+                        Error. You cannot create notes for that client because they do not have a valid authorization.
+                    </strong>
+                </div>
+            }
         </div>
         <form asp-action="Edit" asp-route-id="@Model.Id" asp-route-origin="@ViewData["origin"]"  enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>

@@ -1765,7 +1765,9 @@ namespace KyoS.Web.Helpers
                 MTPmultipleSignatures = model.MTPmultipleSignatures,
                 TCMLockCreateNote = model.TCMLockCreateNote,
                 DashBoardPrincipal = DashboardUtils.GetDashboardTypeByIndex(model.IdDashboard),
-                LockTCMNoteForOneMonthIdle = model.LockTCMNoteForOneMonthIdle
+                LockTCMNoteForOneMonthIdle = model.LockTCMNoteForOneMonthIdle,
+                LockTCMNoteForDx = model.LockTCMNoteForDx,
+                LockTCMNoteForAuth = model.LockTCMNoteForAuth
             };
         }
 
@@ -1804,7 +1806,9 @@ namespace KyoS.Web.Helpers
                 TCMLockCreateNote = model.TCMLockCreateNote,
                 IdDashboard = (model.DashBoardPrincipal == DashboardType.MH) ? 0 : 1,
                 Dashboards = _combosHelper.GetComboDashboardType(),
-                LockTCMNoteForOneMonthIdle = model.LockTCMNoteForOneMonthIdle
+                LockTCMNoteForOneMonthIdle = model.LockTCMNoteForOneMonthIdle,
+                LockTCMNoteForDx = model.LockTCMNoteForDx,
+                LockTCMNoteForAuth = model.LockTCMNoteForAuth
             };
         }
 

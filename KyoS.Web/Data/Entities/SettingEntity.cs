@@ -46,5 +46,7 @@ namespace KyoS.Web.Data.Entities
         public DashboardType DashBoardPrincipal { get; set; }
 
         public bool LockTCMNoteForOneMonthIdle { get; set; }
+        public bool LockTCMNoteForDx { get; set; }
+        public bool LockTCMNoteForAuth { get; set; }
     }
 }

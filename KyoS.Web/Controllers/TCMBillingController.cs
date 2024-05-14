@@ -46,6 +46,15 @@ namespace KyoS.Web.Controllers
             {
                 ViewBag.DateBlocked = "A";
             }
+            if (id == 4)
+            {
+                ViewBag.DateBlocked = "DX";
+            }
+            if (id == 5)
+            {
+                ViewBag.DateBlocked = "Auth";
+            }
+
             UserEntity user_logged = _context.Users
                                              .Include(u => u.Clinic)
                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
