@@ -132,13 +132,19 @@ namespace KyoS.Web.Controllers
 
             TCMClientViewModel model;
             List<TCMClientEntity> clients = _context.TCMClient.ToList();
-            string maxNumber = clients.MaxBy(n => n.CaseNumber).CaseNumber;
-            int temp = 0;
             string maxNumberInc = string.Empty;
-            if (Int32.TryParse(maxNumber, out temp) == true)
+            
+            if (clients.Count() > 0)
             {
-                maxNumberInc = (Convert.ToInt32(temp) + 1).ToString();
+                string maxNumber = clients.MaxBy(n => n.CaseNumber).CaseNumber;
+                int temp = 0;
+                
+                if (Int32.TryParse(maxNumber, out temp) == true)
+                {
+                    maxNumberInc = (Convert.ToInt32(temp) + 1).ToString();
+                }
             }
+            
             
             if (User.IsInRole("Manager") || User.IsInRole("TCMSupervisor"))
             {
