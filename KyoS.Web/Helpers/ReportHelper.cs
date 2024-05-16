@@ -33191,7 +33191,9 @@ namespace KyoS.Web.Helpers
             dt.Columns.Add("DateTCMSupervisorSignature", typeof(DateTime));
             dt.Columns.Add("HasBeenExplained", typeof(bool));
             dt.Columns.Add("TheExpertedReviewDate", typeof(DateTime));
-            
+            dt.Columns.Add("DateAssessment", typeof(DateTime));
+            dt.Columns.Add("DateCertification", typeof(DateTime));
+
             if (servicePlanReview != null)
             {
                 dt.Rows.Add(new object[]
@@ -33218,7 +33220,9 @@ namespace KyoS.Web.Helpers
                     servicePlanReview.DateTCMCaseManagerSignature,
                     servicePlanReview.DateTCMSupervisorSignature,
                     servicePlanReview.HasBeenExplained,
-                    servicePlanReview.TheExpertedReviewDate
+                    servicePlanReview.TheExpertedReviewDate,
+                    servicePlanReview.DateAssessment,
+                    servicePlanReview.DateCertification
             });
             }
             else
@@ -33247,7 +33251,79 @@ namespace KyoS.Web.Helpers
                     new DateTime(),
                     new DateTime(),
                     false,
-                    new DateTime()                    
+                    new DateTime(),
+                    new DateTime(),
+                    new DateTime()
+                });
+            }
+
+            return dt;
+        }
+
+        private DataTable GetTCMServicePlanReviewDomainDS(TCMServicePlanReviewDomainEntity domain)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "TCMServicePlanReviewDomains"
+            };
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("ChangesUpdate", typeof(string));
+            dt.Columns.Add("TcmDomainId", typeof(int));
+            dt.Columns.Add("Status", typeof(int));
+            dt.Columns.Add("TcmServicePlanReviewId", typeof(int));
+            dt.Columns.Add("CodeDomain", typeof(string));
+            dt.Columns.Add("Code", typeof(string));
+            dt.Columns.Add("CreatedOn", typeof(DateTime));
+            dt.Columns.Add("Goals", typeof(string));
+            dt.Columns.Add("LastModifiedOn", typeof(DateTime));
+            dt.Columns.Add("DateAccomplished", typeof(DateTime));
+            dt.Columns.Add("DateIdentified", typeof(DateTime));
+            dt.Columns.Add("LongTerm", typeof(string));
+            dt.Columns.Add("Name", typeof(string));
+            dt.Columns.Add("NeedsIdentified", typeof(string));
+
+            if (domain != null)
+            {
+                dt.Rows.Add(new object[]
+                {
+                    domain.Id,
+                    domain.ChangesUpdate,
+                    0,
+                    domain.Status,
+                    0,
+                    domain.CodeDomain,
+                    (domain.TcmDomain != null) ? domain.TcmDomain.Code : string.Empty,
+                    domain.CreatedOn,
+                    (domain.TcmDomain != null) ? domain.TcmDomain.Name : string.Empty,
+                    domain.LastModifiedOn,
+                    domain.DateAccomplished,
+                    domain.DateIdentified,
+                    domain.LongTerm,
+                    domain.Name,
+                    domain.NeedsIdentified
+                });
+            }
+            else 
+            {
+                dt.Rows.Add(new object[]
+                {
+                    0,
+                    string.Empty,
+                    0,
+                    SPRStatus.Closed,
+                    0,
+                    string.Empty,
+                    string.Empty,
+                    new DateTime(),
+                    string.Empty,
+                    new DateTime(),
+                    new DateTime(),
+                    new DateTime(),
+                    string.Empty,
+                    string.Empty,
+                    string.Empty
                 });
             }
 
@@ -33273,6 +33349,12 @@ namespace KyoS.Web.Helpers
             dt.Columns.Add("Goals", typeof(string));
             dt.Columns.Add("LastModifiedOn", typeof(DateTime));
 
+            dt.Columns.Add("DateAccomplished", typeof(DateTime));
+            dt.Columns.Add("DateIdentified", typeof(DateTime));
+            dt.Columns.Add("LongTerm", typeof(string));
+            dt.Columns.Add("Name", typeof(string));
+            dt.Columns.Add("NeedsIdentified", typeof(string));            
+
             foreach (TCMServicePlanReviewDomainEntity item in domains)
             {
                 dt.Rows.Add(new object[]
@@ -33286,10 +33368,66 @@ namespace KyoS.Web.Helpers
                     (item.TcmDomain != null) ? item.TcmDomain.Code : string.Empty,
                     item.CreatedOn,
                     (item.TcmDomain != null) ? item.TcmDomain.Name : string.Empty,
-                    item.LastModifiedOn
+                    item.LastModifiedOn,
+                    item.DateAccomplished,
+                    item.DateIdentified,
+                    item.LongTerm,
+                    item.Name,
+                    item.NeedsIdentified
                 });
             }
             
+            return dt;
+        }
+
+        private DataTable GetTCMServicePlanReviewDomainObjectivesListDS(List<TCMServicePlanReviewDomainObjectiveEntity> objectives)
+        {
+            DataTable dt = new DataTable
+            {
+                TableName = "TCMServicePlanReviewDomainObjectives"
+            };
+
+            // Create columns
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("IdObjective", typeof(int));
+            dt.Columns.Add("DateEndObjective", typeof(DateTime));
+            dt.Columns.Add("tcmServicePlanReviewDomainId", typeof(int));
+            dt.Columns.Add("Status", typeof(int));            
+            dt.Columns.Add("Origin", typeof(string));
+            dt.Columns.Add("Task", typeof(string));
+            dt.Columns.Add("CreatedBy", typeof(string));
+            dt.Columns.Add("CreatedOn", typeof(DateTime));
+            dt.Columns.Add("LastModifiedBy", typeof(string));
+            dt.Columns.Add("LastModifiedOn", typeof(DateTime));
+            dt.Columns.Add("Finish", typeof(bool));
+            dt.Columns.Add("Name", typeof(string));
+            dt.Columns.Add("Responsible", typeof(string));
+            dt.Columns.Add("StartDate", typeof(DateTime));
+            dt.Columns.Add("TargetDate", typeof(DateTime));
+
+            foreach (TCMServicePlanReviewDomainObjectiveEntity item in objectives)
+            {
+                dt.Rows.Add(new object[]
+                {
+                    item.Id,
+                    item.IdObjective,
+                    item.DateEndObjective,
+                    (item.tcmServicePlanReviewDomain != null) ? item.tcmServicePlanReviewDomain.Id : 0,
+                    item.Status,
+                    item.Origin,
+                    item.Task,
+                    item.CreatedBy,
+                    item.CreatedOn,
+                    item.LastModifiedBy,
+                    item.LastModifiedOn,
+                    item.Finish,
+                    item.Name,
+                    item.Responsible,
+                    item.StartDate,
+                    item.TargetDate
+            });
+            }
+
             return dt;
         }
 
@@ -37332,29 +37470,29 @@ namespace KyoS.Web.Helpers
                                                                               .OrderBy(t => t.CodeDomain)
                                                                               .ToList();
             int i = 1;
-            TCMDomainEntity domain;
+            TCMServicePlanReviewDomainEntity domain;
             foreach (var item in domains)
             {
-                domain = _context.TCMDomains
-                                 .Include(t => t.TCMObjetive)
-                                 .FirstOrDefault(d => d.Id == item.TcmDomain.Id);
+                domain = _context.TCMServicePlanReviewDomains
+                                 .Include(t => t.TCMServicePlanRevDomainObjectiive)
+                                 .FirstOrDefault(d => d.Id == item.Id);
                 if (domain != null)
                 {
                     dataSet = new DataSet();
-                    dataSet.Tables.Add(GetTCMDomainDS(domain));
-                    WebReport.Report.RegisterData(dataSet.Tables[0], $"TCMDomains{i}");
+                    dataSet.Tables.Add(GetTCMServicePlanReviewDomainDS(domain));
+                    WebReport.Report.RegisterData(dataSet.Tables[0], $"TCMServicePlanReviewDomains{i}");
 
-                    if (domain.TCMObjetive.Count() > 0)
+                    if (domain.TCMServicePlanRevDomainObjectiive.Count() > 0)
                     {
                         dataSet = new DataSet();
-                        dataSet.Tables.Add(GetTCMObjectiveListDS(domain.TCMObjetive));
-                        WebReport.Report.RegisterData(dataSet.Tables[0], $"TCMObjetives{i}");
+                        dataSet.Tables.Add(GetTCMServicePlanReviewDomainObjectivesListDS(domain.TCMServicePlanRevDomainObjectiive));
+                        WebReport.Report.RegisterData(dataSet.Tables[0], $"TCMServicePlanReviewDomainObjectives{i}");
                     }
                     else
                     {
                         dataSet = new DataSet();
-                        dataSet.Tables.Add(GetTCMObjectiveListDS(new List<TCMObjetiveEntity>()));
-                        WebReport.Report.RegisterData(dataSet.Tables[0], $"TCMObjetives{i}");
+                        dataSet.Tables.Add(GetTCMServicePlanReviewDomainObjectivesListDS(new List<TCMServicePlanReviewDomainObjectiveEntity>()));
+                        WebReport.Report.RegisterData(dataSet.Tables[0], $"TCMServicePlanReviewDomainObjectives{i}");
                     }
                     i++;
                 }
@@ -37365,12 +37503,12 @@ namespace KyoS.Web.Helpers
             for (int k = i; k < 21; k++)
             {
                 dataSet = new DataSet();
-                dataSet.Tables.Add(GetTCMDomainDS(null));
-                WebReport.Report.RegisterData(dataSet.Tables[0], $"TCMDomains{k}");
+                dataSet.Tables.Add(GetTCMServicePlanReviewDomainDS(null));
+                WebReport.Report.RegisterData(dataSet.Tables[0], $"TCMServicePlanReviewDomains{k}");
 
                 dataSet = new DataSet();
-                dataSet.Tables.Add(GetTCMObjectiveListDS(new List<TCMObjetiveEntity>()));
-                WebReport.Report.RegisterData(dataSet.Tables[0], $"TCMObjetives{k}");
+                dataSet.Tables.Add(GetTCMServicePlanReviewDomainObjectivesListDS(new List<TCMServicePlanReviewDomainObjectiveEntity>()));
+                WebReport.Report.RegisterData(dataSet.Tables[0], $"TCMServicePlanReviewDomainObjectives{k}");
 
                 pageToDelete = WebReport.Report.FindObject($"Page{k + 2}") as ReportPage;
                 pageToDelete.Visible = false;
