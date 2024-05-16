@@ -1371,6 +1371,11 @@ namespace KyoS.Web.Controllers
                 tcmServicePlanReviewObjetive.StartDate = tcmObjetiveViewModel.StartDate;
                 tcmServicePlanReviewObjetive.TargetDate = tcmObjetiveViewModel.TargetDate;
                 tcmServicePlanReviewObjetive.DateEndObjective = tcmObjetiveViewModel.EndDate;
+                tcmServicePlanReviewObjetive.CreatedOn = tcmObjetiveViewModel.CreatedOn;
+                tcmServicePlanReviewObjetive.CreatedBy = tcmObjetiveViewModel.CreatedBy;
+                tcmServicePlanReviewObjetive.LastModifiedBy = user_logged.UserName;
+                tcmServicePlanReviewObjetive.LastModifiedOn = DateTime.Today;
+
 
 
                 TCMDomainEntity tcmDomain = _context.TCMDomains
