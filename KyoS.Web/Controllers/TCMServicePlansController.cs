@@ -2620,6 +2620,12 @@ namespace KyoS.Web.Controllers
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
 
+            if (servicePlan.TCMSupervisor.Clinic.Name == "BRIDGE FOR THE LIFE HEALTH SERVICE LLC")
+            {
+                Stream stream = _reportHelper.BridgeTCMServicePlan(servicePlan);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+
             return null;
         }
 

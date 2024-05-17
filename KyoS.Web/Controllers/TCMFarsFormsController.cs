@@ -443,6 +443,8 @@ namespace KyoS.Web.Controllers
                                                .ThenInclude(f => f.Client)
                                                .ThenInclude(c => c.LegalGuardian)
 
+                                               .AsSplitQuery()
+
                                                .FirstOrDefault(f => (f.Id == id));
             if (entity == null)
             {
@@ -477,6 +479,11 @@ namespace KyoS.Web.Controllers
             if (entity.TCMClient.Client.Clinic.Name == "MY FLORIDA CASE MANAGEMENT SERVICES LLC")
             {
                 Stream stream = _reportHelper.TCMMyFloridaFarsReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (entity.TCMClient.Client.Clinic.Name == "BRIDGE FOR THE LIFE HEALTH SERVICE LLC")
+            {
+                Stream stream = _reportHelper.TCMBridgeFarsReport(entity);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
 
