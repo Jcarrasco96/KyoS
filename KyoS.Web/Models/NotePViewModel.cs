@@ -184,5 +184,10 @@ namespace KyoS.Web.Models
 
         public string CodeBill { get; set; }
 
+        public int Minute1 { get; set; }
+        public int Minute2 { get; set; }
+        public int Minute3 { get; set; }
+        public int Minute4 { get; set; }
+
     }
 }

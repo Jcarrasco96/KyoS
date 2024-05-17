@@ -1042,7 +1042,8 @@ namespace KyoS.Web.Helpers
                 Facilitator = await _context.Facilitators.FindAsync(model.IdFacilitator),
                 Service = model.Service,
                 SharedSession = model.SharedSession,
-                Schedule = await _context.Schedule.FindAsync(model.IdSchedule)
+                Schedule = await _context.Schedule.FindAsync(model.IdSchedule),
+                Name = model.Name
             };
         }
 
@@ -1063,7 +1064,8 @@ namespace KyoS.Web.Helpers
                 Pm = groupEntity.Pm,
                 Clients = groupEntity.Clients,
                 SharedSession = groupEntity.SharedSession,
-                Schedules = _combosHelper.GetComboSchedulesByClinic(facilitator.Clinic.Id, groupEntity.Service)
+                Schedules = _combosHelper.GetComboSchedulesByClinic(facilitator.Clinic.Id, groupEntity.Service),
+                Name = groupEntity.Name
             };
             if (groupEntity.Schedule != null)
             {
@@ -1243,7 +1245,8 @@ namespace KyoS.Web.Helpers
                 BehaviorModification = model.BehaviorModification,
                 Other_Intervention = model.Other_Intervention,
                 SubSchedule = await _context.SubSchedule.FindAsync(model.IdSubSchedule),
-                Setting = model.Setting
+                Setting = model.Setting,
+                Minute = model.Minute
             };
         }
 

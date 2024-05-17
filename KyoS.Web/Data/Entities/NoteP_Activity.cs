@@ -28,5 +28,6 @@ namespace KyoS.Web.Data.Entities
 
         public ObjetiveEntity Objetive { get; set; }
         public SubScheduleEntity SubSchedule { get; set; }
+        public int Minute { get; set; }
     }
 }

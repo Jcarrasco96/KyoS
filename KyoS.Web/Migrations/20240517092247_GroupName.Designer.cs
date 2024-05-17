@@ -4,6 +4,7 @@ using KyoS.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KyoS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20240517092247_GroupName")]
+    partial class GroupName
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -4237,9 +4240,6 @@ namespace KyoS.Web.Migrations
                     b.Property<int?>("GroupNote2Id")
                         .HasColumnType("int");
 
-                    b.Property<int>("Minute")
-                        .HasColumnType("int");
-
                     b.Property<int?>("ObjetiveId")
                         .HasColumnType("int");
 
@@ -4437,9 +4437,6 @@ namespace KyoS.Web.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("GroupNoteId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Minute")
                         .HasColumnType("int");
 
                     b.Property<int?>("ObjetiveId")
@@ -4780,9 +4777,6 @@ namespace KyoS.Web.Migrations
                     b.Property<bool>("Meticulous")
                         .HasColumnType("bit");
 
-                    b.Property<int>("Minute")
-                        .HasColumnType("int");
-
                     b.Property<string>("ObjectiveData")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -4820,9 +4814,6 @@ namespace KyoS.Web.Migrations
 
                     b.Property<bool>("Psychotic")
                         .HasColumnType("bit");
-
-                    b.Property<int>("RealUnits")
-                        .HasColumnType("int");
 
                     b.Property<bool>("Regressing")
                         .HasColumnType("bit");
@@ -7320,9 +7311,6 @@ namespace KyoS.Web.Migrations
                     b.Property<bool>("EngagedActive")
                         .HasColumnType("bit");
 
-                    b.Property<int>("Minute")
-                        .HasColumnType("int");
-
                     b.Property<int?>("NotePId")
                         .HasColumnType("int");
 
@@ -7430,9 +7418,6 @@ namespace KyoS.Web.Migrations
 
                     b.Property<string>("AnswerFacilitator")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Minute")
-                        .HasColumnType("int");
 
                     b.Property<int?>("NoteId")
                         .HasColumnType("int");
