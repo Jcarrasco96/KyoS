@@ -34443,6 +34443,57 @@ namespace KyoS.Web.Helpers
 
             return stream;
         }
+        public Stream BridgeTCMNoteReportSchema1(TCMNoteEntity note)
+        {
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\TCMApprovedNotes\\rptBridgeTCMNote1.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMNoteDS(note));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMNote");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetCaseManagerDS(note.TCMClient.Casemanager));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "CaseManagers");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMClientDS(note.TCMClient));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMClient");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetClientDS(note.TCMClient.Client));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMNoteActivityListDS(note.TCMNoteActivity.ToList()));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMNoteActivity");
+
+            //signatures images 
+            byte[] stream1 = null;
+            //byte[] stream2 = null;
+            string path;
+            if (!string.IsNullOrEmpty(note.TCMClient.Casemanager.SignaturePath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(note.TCMClient.Casemanager.SignaturePath)}");
+                stream1 = _imageHelper.ImageToByteArray(path);
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(null, stream1));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
+
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
+        }
         #endregion
 
         #region TCM Service Plan
@@ -35176,6 +35227,131 @@ namespace KyoS.Web.Helpers
 
             return stream;
         }
+        public Stream BridgeTCMServicePlan(TCMServicePlanEntity servicePlan)
+        {
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\TCMServicesPlans\\rptBridgeTCMServicePlan.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMServicePlanDS(servicePlan));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMServicePlans");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetCaseManagerDS(servicePlan.TcmClient.Casemanager));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "CaseManagers");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMClientDS(servicePlan.TcmClient));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMClient");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetClientDS(servicePlan.TcmClient.Client));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMSupervisorDS(servicePlan.TCMSupervisor));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "TCMSupervisors");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetDiagnosticsListDS(servicePlan.TcmClient.Client.Clients_Diagnostics.ToList()));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Diagnostics");
+
+            //To bind domains with services, and it includes objectives
+            List<TCMServiceEntity> services = _context.TCMServices.OrderBy(t => t.Code).ToList();
+            int i = 1;
+            TCMDomainEntity domain;
+            foreach (var item in services)
+            {
+                domain = servicePlan.TCMDomain.FirstOrDefault(d => d.Code == item.Code);
+                if (domain != null)
+                {
+                    dataSet = new DataSet();
+                    dataSet.Tables.Add(GetTCMDomainDS(domain));
+                    WebReport.Report.RegisterData(dataSet.Tables[0], $"TCMDomains{i}");
+
+                    if (domain.TCMObjetive.Count() > 0)
+                    {
+                        dataSet = new DataSet();
+                        dataSet.Tables.Add(GetTCMObjectiveListDS(domain.TCMObjetive));
+                        WebReport.Report.RegisterData(dataSet.Tables[0], $"TCMObjetives{i}");
+                    }
+                    else
+                    {
+                        dataSet = new DataSet();
+                        dataSet.Tables.Add(GetTCMObjectiveListDS(new List<TCMObjetiveEntity>()));
+                        WebReport.Report.RegisterData(dataSet.Tables[0], $"TCMObjetives{i}");
+                    }
+                    i++;
+                }
+            }
+
+            ReportPage pageToDelete;
+            //Create the empty datasets, it must be 20
+            for (int k = i; k < 21; k++)
+            {
+                dataSet = new DataSet();
+                dataSet.Tables.Add(GetTCMDomainDS(null));
+                WebReport.Report.RegisterData(dataSet.Tables[0], $"TCMDomains{k}");
+
+                dataSet = new DataSet();
+                dataSet.Tables.Add(GetTCMObjectiveListDS(new List<TCMObjetiveEntity>()));
+                WebReport.Report.RegisterData(dataSet.Tables[0], $"TCMObjetives{k}");
+
+                pageToDelete = WebReport.Report.FindObject($"Page{k + 2}") as ReportPage;
+                pageToDelete.Visible = false;
+            }
+
+            //signatures images 
+            byte[] stream1 = null;
+            byte[] stream2 = null;
+            string path;
+            if (!string.IsNullOrEmpty(servicePlan.TCMSupervisor.SignaturePath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(servicePlan.TCMSupervisor.SignaturePath)}");
+                stream1 = _imageHelper.ImageToByteArray(path);
+            }
+            if (!string.IsNullOrEmpty(servicePlan.TcmClient.Casemanager.SignaturePath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(servicePlan.TcmClient.Casemanager.SignaturePath)}");
+                stream2 = _imageHelper.ImageToByteArray(path);
+            }
+
+            byte[] stream3 = null;
+            byte[] stream4 = null;
+            if (!string.IsNullOrEmpty(servicePlan.TcmClient.Client.SignPath))
+            {
+                path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(servicePlan.TcmClient.Client.SignPath)}");
+                stream3 = _imageHelper.ImageToByteArray(path);
+            }
+            if (servicePlan.TcmClient.Client.LegalGuardian != null)
+            {
+                if (!string.IsNullOrEmpty(servicePlan.TcmClient.Client.LegalGuardian.SignPath))
+                {
+                    path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(servicePlan.TcmClient.Client.LegalGuardian.SignPath)}");
+                    stream4 = _imageHelper.ImageToByteArray(path);
+                }
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream1, stream2));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream3, stream4));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures1");
+
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
+        }
         #endregion
 
         #region TCM Fars Form reports
@@ -35534,6 +35710,76 @@ namespace KyoS.Web.Helpers
             WebReport WebReport = new WebReport();
 
             string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\TCMFars\\rptTCMFarsCommunityHTC.frx";
+
+            RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+            WebReport.Report.Load(rdlcFilePath);
+
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(GetClientDS(fars.TCMClient.Client));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clients");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetClinicDS(fars.TCMClient.Client.Clinic));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Clinics");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetEmergencyContactDS(fars.TCMClient.Client.EmergencyContact));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "EmergencyContacts");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetLegalGuardianDS(fars.TCMClient.Client.LegalGuardian));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "LegalGuardians");
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetTCMFarsDS(fars));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "FarsForm");
+
+            //signatures images 
+            byte[] stream1 = null;
+            byte[] stream2 = null;
+            string path;
+
+            CaseMannagerEntity caseManager = _context.CaseManagers
+                                                     .FirstOrDefault(f => f.LinkedUser == fars.CreatedBy);
+            if (caseManager != null)
+            {
+                if (!string.IsNullOrEmpty(caseManager.SignaturePath))
+                {
+                    path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(caseManager.SignaturePath)}");
+                    stream2 = _imageHelper.ImageToByteArray(path);
+                }
+            }
+            else
+            {
+                TCMSupervisorEntity supervisor = _context.TCMSupervisors
+                                                         .FirstOrDefault(f => f.LinkedUser == fars.CreatedBy);
+                if (supervisor != null)
+                {
+                    if (!string.IsNullOrEmpty(supervisor.SignaturePath))
+                    {
+                        path = string.Format($"{_webhostEnvironment.WebRootPath}{_imageHelper.TrimPath(supervisor.SignaturePath)}");
+                        stream2 = _imageHelper.ImageToByteArray(path);
+                    }
+                }
+            }
+
+            dataSet = new DataSet();
+            dataSet.Tables.Add(GetSignaturesDS(stream1, stream2));
+            WebReport.Report.RegisterData(dataSet.Tables[0], "Signatures");
+
+            WebReport.Report.Prepare();
+
+            Stream stream = new MemoryStream();
+            WebReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
+
+            return stream;
+        }
+        public Stream TCMBridgeFarsReport(TCMFarsFormEntity fars)
+        {
+            WebReport WebReport = new WebReport();
+
+            string rdlcFilePath = $"{_webhostEnvironment.WebRootPath}\\Reports\\TCMFars\\rptTCMFarsBridge.frx";
 
             RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
             WebReport.Report.Load(rdlcFilePath);

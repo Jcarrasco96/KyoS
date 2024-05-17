@@ -2254,6 +2254,8 @@ namespace KyoS.Web.Controllers
 
                                          .Include(n => n.TCMNoteActivity)
                                          .ThenInclude(na => na.TCMDomain)
+                                         
+                                         .AsSplitQuery()
 
                                          .FirstOrDefault(n => (n.Id == id && n.Status == NoteStatus.Approved));
             if (note == null)
@@ -2294,6 +2296,12 @@ namespace KyoS.Web.Controllers
             if (note.TCMClient.Casemanager.Clinic.Name == "MY FLORIDA CASE MANAGEMENT SERVICES LLC")
             {
                 Stream stream = _reportHelper.MyFloridaTCMNoteReportSchema1(note);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+
+            if (note.TCMClient.Casemanager.Clinic.Name == "BRIDGE FOR THE LIFE HEALTH SERVICE LLC")
+            {
+                Stream stream = _reportHelper.BridgeTCMNoteReportSchema1(note);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
 
