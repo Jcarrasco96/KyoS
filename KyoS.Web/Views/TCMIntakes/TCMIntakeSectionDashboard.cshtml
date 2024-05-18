@@ -1,4 +1,4 @@
-﻿@model KyoS.Web.Data.Entities.TCMClientEntity
+﻿        @model KyoS.Web.Data.Entities.TCMClientEntity
 
 @{
     ViewData["Title"] = "Open Binder Section 1";
@@ -31,6 +31,18 @@
         }
     </ul><!--.breadcrumb-->
 </div>
+@if (ViewBag.Creado == "SPR")
+{
+    <div class="alert alert-block alert-danger">
+        <button type="button" class="close" data-dismiss="alert">
+            <i class="icon-remove"></i>
+        </button>
+        <i class="icon-ok red"></i>
+        <strong class="red">
+            Error. You can’t make a SPR without an approved certification.
+        </strong>
+    </div>
+}
 <div>
 
     @if (ViewData["Section"].ToString() == "1" || ViewBag.Section == "1")
@@ -879,7 +891,7 @@
                 }
             </div>
             <div class="col-sm-3 col-md-2">
-                @if (Model.TcmServicePlan == null || Model.TcmServicePlan.Approved < 2 || Model.TcmIntakeAppendixJ.Where(n => n.AppendixType == KyoS.Common.Enums.AppendixJType.Review).Count() == 0)
+                @if (Model.TcmServicePlan == null || Model.TcmServicePlan.Approved < 2 )
                 {                    
                     <div class="thumbnail list-group-item list-group-item-text">
                         <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Discharge<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>

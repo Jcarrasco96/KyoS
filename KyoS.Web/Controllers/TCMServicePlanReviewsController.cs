@@ -206,8 +206,8 @@ namespace KyoS.Web.Controllers
             }
             else
             {
-                ViewData["origin"] = 1;
-                return RedirectToAction("TCMIntakeSectionDashboard", "TCMIntakes", new { id = _context.TCMClient.FirstOrDefault(n => n.TcmServicePlan.Id == IdServicePlan).Id, section = 4 });
+                ViewData["origin"] = 0;
+                return RedirectToAction("TCMIntakeSectionDashboard", "TCMIntakes", new { id = _context.TCMClient.FirstOrDefault(n => n.TcmServicePlan.Id == IdServicePlan).Id, section = 4, origin = 0, error = 1 });
             }           
         }
 

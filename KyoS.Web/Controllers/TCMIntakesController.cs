@@ -3407,13 +3407,16 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "CaseManager, TCMSupervisor")]
-        public async Task<IActionResult> TCMIntakeSectionDashboard(int id = 0, int section = 0, int origin = 0)
+        public async Task<IActionResult> TCMIntakeSectionDashboard(int id = 0, int section = 0, int origin = 0, int error = 0)
         {
             if (id == 0)
             {
                 return RedirectToAction("Home/Error404");
             }
-
+            if (error == 1)
+            {
+                ViewBag.Creado = "SPR";
+            }
             UserEntity user_logged = await _context.Users
                                                    .Include(u => u.Clinic)
                                                    .ThenInclude(c => c.Setting)
