@@ -409,7 +409,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Manager")]
-        public async Task<IActionResult> Edit(int? id, int error = 0, int idFacilitator = 0, int idClient = 0, int all = 0)
+        public async Task<IActionResult> Edit(int? id, int error = 0, int idFacilitator = 0, int idClient = 0, int all = 0, string test = "")
         {
             if (id == null)
             {
@@ -430,7 +430,7 @@ namespace KyoS.Web.Controllers
                 FacilitatorEntity facilitator = _context.Facilitators
                                                         .FirstOrDefault(f => f.Id == idFacilitator);
                 ViewBag.Error = "0";
-                ViewBag.errorText = $"Error. The facilitator {facilitator.Name} has another therapy already at that time";
+                ViewBag.errorText = $"Error. The facilitator {facilitator.Name} has another therapy already at that time" + test;
             }
 
             //One client has a created note from another service at that time.
@@ -439,7 +439,7 @@ namespace KyoS.Web.Controllers
                 ClientEntity client = _context.Clients
                                               .FirstOrDefault(f => f.Id == idClient);
                 ViewBag.Error = "1";
-                ViewBag.errorText = $"Error. The client {client.Name} has a created note from another therapy at that time";
+                ViewBag.errorText = $"Error. The client {client.Name} has a created note from another therapy at that time" + test;
             }
 
             MultiSelectList client_list;
@@ -610,12 +610,13 @@ namespace KyoS.Web.Controllers
                             foreach (WorkdayEntity item in workdays)
                             {
                                 //si el cliente no tiene asistencia en un dia laborable en Workdays_Clients entonces se crea
-                                if (!item.Workdays_Clients.Any(wc => wc.Client.Id == client.Id))
+                                if (!item.Workdays_Clients.Any(wc => wc.Client.Id == client.Id) && client.MTPs.Where(n => n.Goals.Where(g => g.Service == ServiceType.PSR && g.Objetives.Where(o => o.DateOpened <= item.Date && o.DateResolved >= item.Date).Count() > 0).Count() > 0).Count() > 0)
                                 {
                                     //Verify the client is not present in other services of notes at the same time
                                     if (this.VerifyNotesAtSameTime(client.Id, group.Meridian, item.Date, original_group.Schedule.InitialTime, original_group.Schedule.EndTime, ServiceType.PSR))
                                     {
-                                        return RedirectToAction(nameof(Edit), new { id = model.Id, error = 2, idClient = client.Id });
+                                        string test = ", review date (" + item.Date.ToShortDateString() + "). Individual Therapy";
+                                        return RedirectToAction(nameof(Edit), new { id = model.Id, error = 2, idClient = client.Id, test = test });
                                     }
 
                                     //verifico que el facilitator tenga disponibilidad para dar la terapia en el dia correspondiente                            
@@ -1094,7 +1095,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Manager")]
-        public async Task<IActionResult> EditGT(int? id, int error = 0, int idFacilitator = 0, int idClient = 0, int all = 0)
+        public async Task<IActionResult> EditGT(int? id, int error = 0, int idFacilitator = 0, int idClient = 0, int all = 0, string test = "")
         {
             if (id == null)
             {
@@ -1117,7 +1118,7 @@ namespace KyoS.Web.Controllers
                 FacilitatorEntity facilitator = _context.Facilitators
                                                         .FirstOrDefault(f => f.Id == idFacilitator);
                 ViewBag.Error = "0";
-                ViewBag.errorText = $"Error. The facilitator {facilitator.Name} has another therapy already at that time";
+                ViewBag.errorText = $"Error. The facilitator {facilitator.Name} has another therapy already at that time" + test;
             }
 
             //One client has a created note from another service at that time.
@@ -1126,7 +1127,7 @@ namespace KyoS.Web.Controllers
                 ClientEntity client = _context.Clients
                                               .FirstOrDefault(f => f.Id == idClient);
                 ViewBag.Error = "1";
-                ViewBag.errorText = $"Error. The client {client.Name} has a created note from another therapy at that time";
+                ViewBag.errorText = $"Error. The client {client.Name} has a created note from another therapy at that time" + test;
             }
 
             MultiSelectList client_list;
@@ -1222,6 +1223,8 @@ namespace KyoS.Web.Controllers
                     {
                         client = await _context.Clients
                                                .Include(c => c.MTPs)
+                                               .ThenInclude(c => c.Goals)
+                                               .ThenInclude(c => c.Objetives)
                                                .FirstOrDefaultAsync(c => c.Id == Convert.ToInt32(value));
 
                         DateTime developed_date;
@@ -1281,12 +1284,13 @@ namespace KyoS.Web.Controllers
                             foreach (WorkdayEntity item in workdays)
                             {
                                 //si el cliente no tiene asistencia en un dia laborable en Workdays_Clients entonces se crea
-                                if (!item.Workdays_Clients.Any(wc => wc.Client.Id == client.Id))
+                                if (!item.Workdays_Clients.Any(wc => wc.Client.Id == client.Id) && client.MTPs.Where(n => n.Goals.Where(g => g.Service == ServiceType.Group && g.Objetives.Where(o => o.DateOpened <= item.Date && o.DateResolved >= item.Date).Count() > 0).Count() > 0).Count() > 0)
                                 {
                                     //Verify the client is not present in other services of notes at the same time
                                      if (this.VerifyNotesAtSameTime(client.Id, group.Meridian, item.Date, original_group.Schedule.InitialTime, original_group.Schedule.EndTime, ServiceType.Group))
                                      {
-                                         return RedirectToAction(nameof(EditGT), new { id = model.Id, error = 2, idClient = client.Id, all });
+                                         string test = ", review date (" + item.Date.ToShortDateString() + "). Individual Therapy";
+                                         return RedirectToAction(nameof(EditGT), new { id = model.Id, error = 2, idClient = client.Id, all, test = test });
                                      }
 
                                      //verifico que el facilitator tenga disponibilidad para dar la terapia en el dia correspondiente                            

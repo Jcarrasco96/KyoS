@@ -15893,7 +15893,9 @@ namespace KyoS.Web.Controllers
                     objective_temp.NumberObjective = objective.Objetive;
                     objective_temp.Description = objective.Description;
                     objective_temp.Intervention = objective.Intervention;
-                    objective_temp.DateTarget = objective.DateResolved.ToShortDateString().ToString();
+                    objective_temp.DateOpen = objective.DateOpened.ToShortDateString().ToString();
+                    objective_temp.DateTarget = objective.DateTarget.ToShortDateString().ToString();
+                    objective_temp.DateResolved = objective.DateResolved.ToShortDateString().ToString();
                     objective_temp.IdObjective = objective.Id;
 
                     goal_temp.AllObjectives.Add(objective_temp);
