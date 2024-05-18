@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
 
 namespace KyoS.Web.Data.Entities
 {
@@ -14,6 +15,7 @@ namespace KyoS.Web.Data.Entities
 
         public string Prescriber { get; set; }
 
+        [DataType(DataType.Date)]
         public DateTime DateIdentify { get; set; }
         public bool Active { get; set; }
     }

@@ -1485,11 +1485,16 @@ namespace KyoS.Web.Controllers
                 UserEntity user_logged = _context.Users.Include(u => u.Clinic)
                                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
+                ClientEntity client = _context.Clients.Include(n => n.Psychiatrist).FirstOrDefault(m => m.Id == id);
+
                 Client_DiagnosticViewModel model = new Client_DiagnosticViewModel
                 {
                     IdDiagnostic = 0,
                     Diagnostics = _combosHelper.GetComboDiagnosticsByClient(id),
-                    IdClient = id
+                    IdClient = id,
+                    DateIdentify = DateTime.Now,
+                    Active = true,
+                    Prescriber = (client.Psychiatrist != null) ? client.Psychiatrist.Name : string.Empty
                 };
                 return View(model);
             }
@@ -1518,7 +1523,10 @@ namespace KyoS.Web.Controllers
                     Id = 0,
                     Client = client,
                     Diagnostic = diagnostic,
-                    Principal = client_diagnosticViewModel.Principal
+                    Principal = client_diagnosticViewModel.Principal,
+                    Active = client_diagnosticViewModel.Active,
+                    DateIdentify = client_diagnosticViewModel.DateIdentify,
+                    Prescriber = client_diagnosticViewModel.Prescriber
 
                 };
 

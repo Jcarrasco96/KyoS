@@ -91,7 +91,8 @@ namespace KyoS.Web.Controllers
                                           .AsSplitQuery()
                                           .Where(c => (c.Clinic.Id == user_logged.Clinic.Id
                                                 && (c.Bio.CreatedBy == user_logged.UserName
-                                                     || c.MTPs.Where(m => m.CreatedBy == user_logged.UserName).Count() > 0)))
+                                                     || c.MTPs.Where(m => m.CreatedBy == user_logged.UserName).Count() > 0
+                                                     || c.DocumentsAssistant.LinkedUser == user_logged.UserName)))
                                           .OrderBy(c => c.Name).ToListAsync());
             }
             if (User.IsInRole("Facilitator"))
