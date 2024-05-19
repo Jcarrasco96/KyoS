@@ -206,8 +206,13 @@
                     $("#PlanNote").val(data);
                 });
             })
+           
         });
+        function getMinute() {
+            var url = "@Url.Action("GetUnits", "Notes")";
+            $.get(url, { minutes: $("#lbMinutes").val() }, function (data) { $("#lbUnits").text(data); });
 
+        }
         function GenderVerification() {
 
                 if ($("#subjectiveData").val() != "" && $("#objectiveData").val() != "" && $("#assessment").val() != "" && $("#PlanNote").val() != "")

@@ -2280,6 +2280,14 @@ namespace KyoS.Web.Controllers
                         subScheduleEntity = value;
                     }
                 }
+
+                int minutes = Convert.ToInt32((subScheduleEntity.EndTime - subScheduleEntity.InitialTime).TotalMinutes);
+                int factor = 15;
+                int unit = minutes / factor;
+                double residuo = minutes % factor;
+                if (residuo >= 8)
+                    unit++;
+
                 individualNoteViewModel = new IndividualNoteViewModel
                 {
                     Id = id,
@@ -2292,7 +2300,8 @@ namespace KyoS.Web.Controllers
                     MTPId = 0,
                     CodeBill = user_logged.Clinic.CodeIndTherapy,
                     Setting = "53",
-                    Minute = Convert.ToInt32((subScheduleEntity.EndTime - subScheduleEntity.InitialTime).TotalMinutes)
+                    Minute = minutes,
+                    RealUnits = unit
                 };
                 if (user_logged.Clinic.Setting.IndNoteForAppointment == true)
                 {
@@ -2389,7 +2398,8 @@ namespace KyoS.Web.Controllers
                     MTPId = mtp.Id,
                     IdSubSchedule = (note.SubSchedule == null) ? 0: note.SubSchedule.Id,
                     Setting = note.Setting,
-                    Minute = note.Minute
+                    Minute = note.Minute,
+                    RealUnits = note.RealUnits
                    
                 };
 
@@ -2611,6 +2621,7 @@ namespace KyoS.Web.Controllers
                     note.Other_Intervention = model.Other_Intervention;
                     note.Setting = model.Setting;
                     note.Minute = model.Minute;
+                    note.RealUnits = model.RealUnits;
 
 
                     note.Objective = (model.IdObjetive1 != 0) ? await _context.Objetives.FirstOrDefaultAsync(o => o.Id == model.IdObjetive1) : null;
@@ -21745,6 +21756,28 @@ namespace KyoS.Web.Controllers
                 return (units);
         }
 
+        [Authorize(Roles = "Facilitator")]
+        public JsonResult GetUnits(int minutes)
+        {
+            int factor = 15;
+            int unit = minutes / factor;
+            double residuo = minutes % factor;
+            if (residuo >= 8)
+                unit++;
+           
+            return Json(unit);
+        }
 
+        [Authorize(Roles = "Facilitator")]
+        public JsonResult GetUnitsPSR(int minutes)
+        {
+            int factor = 15;
+            int unit = minutes / factor;
+            double residuo = minutes % factor;
+            if (residuo >= 8)
+                unit++;
+
+            return Json(unit);
+        }
     }
 }

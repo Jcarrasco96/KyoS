@@ -21,19 +21,24 @@
         <span asp-validation-for="IdClient" class="text-danger"></span>
     </div>
     <div class="form-group col-md-1">
-        <label asp-for="Minute" class="control-label">Minutes</label>
-        <input asp-for="Minute" class="form-control" />
-        <span asp-validation-for="Minute" class="text-danger"></span>
-    </div>
-    <div class="form-group col-md-2">
-        <label asp-for="CodeBill" class="control-label">Bill Code</label>
-        <input asp-for="CodeBill" class="form-control" readonly />
-        <span asp-validation-for="CodeBill" class="text-danger"></span>
-    </div>
-    <div class="form-group col-md-1">
         <label asp-for="Setting" class="control-label">Setting</label>
         <input asp-for="Setting" class="form-control"/>
         <span asp-validation-for="Setting" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-1">
+        <label asp-for="Minute" class="control-label">Minutes</label>
+        <input asp-for="Minute" class="form-control" id="lbMinutes" onchange="getMinute();" />
+        <span asp-validation-for="Minute" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-1">
+        <label asp-for="RealUnits" class="control-label">Units</label>
+        <textarea asp-for="RealUnits" class="form-control" id="lbUnits"  rows="1" readonly></textarea>
+        <span asp-validation-for="RealUnits" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-1">
+        <label asp-for="CodeBill" class="control-label">Bill Code</label>
+        <input asp-for="CodeBill" class="form-control" readonly />
+        <span asp-validation-for="CodeBill" class="text-danger"></span>
     </div>
     <div class="form-group col-md-5">
         @if (Model.IdClient == 0)
