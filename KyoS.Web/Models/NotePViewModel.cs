@@ -189,5 +189,8 @@ namespace KyoS.Web.Models
         public int Minute3 { get; set; }
         public int Minute4 { get; set; }
 
+        public int TotalMinutes { get; set; }
+        public string Dx { get; set; }
+
     }
 }

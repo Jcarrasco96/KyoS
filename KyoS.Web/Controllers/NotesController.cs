@@ -1126,6 +1126,10 @@ namespace KyoS.Web.Controllers
                                                           .Include(wc => wc.Client)
                                                           .ThenInclude(c => c.MTPs)
 
+                                                          .Include(wc => wc.Client)
+                                                          .ThenInclude(c => c.Clients_Diagnostics)
+                                                          .ThenInclude(c => c.Diagnostic)
+
                                                           .Include(wc => wc.Facilitator)
 
                                                           .Include(wc => wc.Schedule)
@@ -1380,6 +1384,9 @@ namespace KyoS.Web.Controllers
                     Title = activities[0].TitleNote
                    
                 };
+                noteViewModel.TotalMinutes = noteViewModel.Minute1 + noteViewModel.Minute2 + noteViewModel.Minute3 + noteViewModel.Minute4;
+                noteViewModel.RealUnits = GetTotalUnits(noteViewModel.TotalMinutes);
+               
             }
             else
             {
@@ -1443,8 +1450,8 @@ namespace KyoS.Web.Controllers
                     Withdrawn = note.Withdrawn,
                     RelatesWell = note.RelatesWell,
                     DecreasedEyeContact = note.DecreasedEyeContact,
-                    AppropiateEyeContact = note.AppropiateEyeContact,   
-                    
+                    AppropiateEyeContact = note.AppropiateEyeContact,
+
                     //progress
                     Minimal = note.Minimal,
                     Slow = note.Slow,
@@ -1483,8 +1490,8 @@ namespace KyoS.Web.Controllers
                     lifeSkills1 = activities[0].lifeSkills == null ? false : Convert.ToBoolean(activities[0].lifeSkills),
                     relaxationTraining1 = activities[0].relaxationTraining == null ? false : Convert.ToBoolean(activities[0].relaxationTraining),
                     socialSkills1 = activities[0].socialSkills == null ? false : Convert.ToBoolean(activities[0].socialSkills),
-                    stressManagement1 = activities[0].stressManagement == null ? false : Convert.ToBoolean(activities[0].stressManagement),  
-                    
+                    stressManagement1 = activities[0].stressManagement == null ? false : Convert.ToBoolean(activities[0].stressManagement),
+
                     //Client's response
                     Cooperative1 = (note_Activity.Count > 0) ? note_Activity[0].Cooperative : false,
                     Assertive1 = (note_Activity.Count > 0) ? note_Activity[0].Assertive : false,
@@ -1497,7 +1504,7 @@ namespace KyoS.Web.Controllers
                     Aggresive1 = (note_Activity.Count > 0) ? note_Activity[0].Aggresive : false,
                     Resistant1 = (note_Activity.Count > 0) ? note_Activity[0].Resistant : false,
                     Other1 = (note_Activity.Count > 0) ? note_Activity[0].Other : false,
-                    
+
                     Present2 = note_Activity[1].Present,
                     Theme2 = (activities.Count > 1) ? activities[1].Activity.Theme.Name : string.Empty,
                     FacilitatorIntervention2 = (activities.Count > 1) ? activities[1].Activity.Name : string.Empty,
@@ -1520,7 +1527,7 @@ namespace KyoS.Web.Controllers
                     relaxationTraining2 = activities[1].relaxationTraining == null ? false : Convert.ToBoolean(activities[1].relaxationTraining),
                     socialSkills2 = activities[1].socialSkills == null ? false : Convert.ToBoolean(activities[1].socialSkills),
                     stressManagement2 = activities[1].stressManagement == null ? false : Convert.ToBoolean(activities[1].stressManagement),
-                    
+
                     //Client's response
                     Cooperative2 = (note_Activity.Count > 1) ? note_Activity[1].Cooperative : false,
                     Assertive2 = (note_Activity.Count > 1) ? note_Activity[1].Assertive : false,
@@ -1605,12 +1612,27 @@ namespace KyoS.Web.Controllers
                     Aggresive4 = (note_Activity.Count > 3) ? note_Activity[3].Aggresive : false,
                     Resistant4 = (note_Activity.Count > 3) ? note_Activity[3].Resistant : false,
                     Other4 = (note_Activity.Count > 3) ? note_Activity[3].Other : false,
-                   
-                    MTPId = mtp.Id
+
+                    MTPId = mtp.Id,
+                    TotalMinutes = note_Activity[0].Minute + note_Activity[1].Minute + note_Activity[2].Minute + note_Activity[3].Minute,
+                    RealUnits = GetTotalUnits(note_Activity[0].Minute + note_Activity[1].Minute + note_Activity[2].Minute + note_Activity[3].Minute)
                 };
             }
-            double test = (workday_Client.Schedule.SubSchedules.ElementAt(0).EndTime - workday_Client.Schedule.SubSchedules.ElementAt(0).EndTime).TotalMinutes;
-            int Minute1 = Convert.ToInt16(test);
+
+            DiagnosticEntity dx = new DiagnosticEntity();
+            if (workday_Client.Client.Clients_Diagnostics.FirstOrDefault(n => n.Principal == true) != null)
+            {
+                dx = workday_Client.Client.Clients_Diagnostics.FirstOrDefault(n => n.Principal == true).Diagnostic;
+            }
+
+            if (dx != null)
+            {
+                noteViewModel.Dx = dx.Code + ": " + dx.Description;
+            }
+            else
+            {
+                noteViewModel.Dx = "The client does not have an active primary diagnosis.";
+            }
             return View(noteViewModel);
         }
 
@@ -2403,22 +2425,22 @@ namespace KyoS.Web.Controllers
                    
                 };
 
-                DiagnosticEntity dx = new DiagnosticEntity();
-                if (workday_Client.Client.Clients_Diagnostics.FirstOrDefault(n => n.Principal == true) != null)
-                { 
-                    dx = workday_Client.Client.Clients_Diagnostics.FirstOrDefault(n => n.Principal == true).Diagnostic;
-                }
-
-                if (dx != null)
-                {
-                    individualNoteViewModel.Diagnostic = dx.Code + ": " + dx.Description;
-                }
-                else
-                {
-                    individualNoteViewModel.Diagnostic = "The client have not Dx";
-                }
             }
 
+            DiagnosticEntity dx = new DiagnosticEntity();
+            if (workday_Client.Client.Clients_Diagnostics.FirstOrDefault(n => n.Principal == true) != null)
+            {
+                dx = workday_Client.Client.Clients_Diagnostics.FirstOrDefault(n => n.Principal == true).Diagnostic;
+            }
+
+            if (dx != null)
+            {
+                individualNoteViewModel.Diagnostic = dx.Code + ": " + dx.Description;
+            }
+            else
+            {
+                individualNoteViewModel.Diagnostic = "The client does not have an active primary diagnosis.";
+            }
             return View(individualNoteViewModel);
         }
 
@@ -5194,7 +5216,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction(nameof(NotesSupervision));
         }
 
-        [Authorize(Roles = "Supervisor, Facilitator")]
+        [Authorize(Roles = "Supervisor, Facilitator")] 
         public async Task<IActionResult> ApproveNoteP(int id, int origin = 0)
         {
             NotePEntity note = await _context.NotesP
@@ -5217,6 +5239,12 @@ namespace KyoS.Web.Controllers
                                              .ThenInclude(wc => wc.Client)
                                              .ThenInclude(wc => wc.Clinic)
                                              .ThenInclude(wc => wc.Setting)
+
+                                             .Include(n => n.Workday_Cient)
+                                             .ThenInclude(wc => wc.Client)
+                                             .ThenInclude(c => c.Clients_Diagnostics)
+                                             .ThenInclude(c => c.Diagnostic)
+
                                              .AsSplitQuery()
                                              .FirstOrDefaultAsync(n => n.Id == id);
 
@@ -5275,7 +5303,8 @@ namespace KyoS.Web.Controllers
                     Setting = note.Setting,
                     CodeBill = note.Workday_Cient.CodeBill,
                     MTPId = _context.MTPs.FirstOrDefault(n => n.Active == true && n.Client.Id == note.Workday_Cient.Client.Id).Id,
-
+                    RealUnits = note.RealUnits,
+                    
                     Title = note.Title,
 
                     //mental client status
@@ -5319,7 +5348,8 @@ namespace KyoS.Web.Controllers
                     FacilitatorIntervention1 = (activities.Count > 0) ? activities[0].Activity.Name : string.Empty,                   
                     Goal1 = (note_Activity[0].Objetive != null) ? note_Activity[0].Objetive.Goal.Number.ToString() : string.Empty,
                     Objetive1 = (note_Activity[0].Objetive != null) ? note_Activity[0].Objetive.Objetive : string.Empty,
-                    
+                    Minute1 = note_Activity[0].Minute,
+
                     //Skill set addressed
                     activityDailyLiving1 = activities[0].activityDailyLiving == null ? false : Convert.ToBoolean(activities[0].activityDailyLiving),
                     communityResources1 = activities[0].communityResources == null ? false : Convert.ToBoolean(activities[0].communityResources),
@@ -5349,6 +5379,7 @@ namespace KyoS.Web.Controllers
                     FacilitatorIntervention2 = (activities.Count > 1) ? activities[1].Activity.Name : string.Empty,
                     Goal2 = (note_Activity[1].Objetive != null) ? note_Activity[1].Objetive.Goal.Number.ToString() : string.Empty,
                     Objetive2 = (note_Activity[1].Objetive != null) ? note_Activity[1].Objetive.Objetive : string.Empty,
+                    Minute2 = note_Activity[1].Minute,
 
                     //Skill set addressed
                     activityDailyLiving2 = activities[1].activityDailyLiving == null ? false : Convert.ToBoolean(activities[1].activityDailyLiving),
@@ -5379,6 +5410,7 @@ namespace KyoS.Web.Controllers
                     FacilitatorIntervention3 = (activities.Count > 2) ? activities[2].Activity.Name : string.Empty,
                     Goal3 = (note_Activity[2].Objetive != null) ? note_Activity[2].Objetive.Goal.Number.ToString() : string.Empty,
                     Objetive3 = (note_Activity[2].Objetive != null) ? note_Activity[2].Objetive.Objetive : string.Empty,
+                    Minute3 = note_Activity[2].Minute,
 
                     //Skill set addressed
                     activityDailyLiving3 = activities[2].activityDailyLiving == null ? false : Convert.ToBoolean(activities[2].activityDailyLiving),
@@ -5409,6 +5441,7 @@ namespace KyoS.Web.Controllers
                     FacilitatorIntervention4 = (activities.Count > 3) ? activities[3].Activity.Name : string.Empty,
                     Goal4 = (note_Activity[3].Objetive != null) ? note_Activity[3].Objetive.Goal.Number.ToString() : string.Empty,
                     Objetive4 = (note_Activity[3].Objetive != null) ? note_Activity[3].Objetive.Objetive : string.Empty,
+                    Minute4 = note_Activity[3].Minute,
 
                     //Skill set addressed
                     activityDailyLiving4 = activities[3].activityDailyLiving == null ? false : Convert.ToBoolean(activities[3].activityDailyLiving),
@@ -5437,7 +5470,20 @@ namespace KyoS.Web.Controllers
                     DateOfApprove = note.Workday_Cient.Workday.Date
                 };
             }
-            
+
+            noteViewModel.TotalMinutes = noteViewModel.Minute1 + noteViewModel.Minute2 + noteViewModel.Minute3 + noteViewModel.Minute4;
+            DiagnosticEntity dx = new DiagnosticEntity();
+            string dxText = string.Empty;
+            if (note.Workday_Cient.Client.Clients_Diagnostics.Where(n => n.Active == true && n.Principal == true).Count() > 0)
+            {
+                dx = note.Workday_Cient.Client.Clients_Diagnostics.FirstOrDefault(n => n.Active == true && n.Principal == true).Diagnostic;
+                dxText = dx.Code + ": " + dx.Description;
+            }
+            else
+            {
+                dxText = "Not have an active principal diagnosis.";
+            }
+            noteViewModel.Dx = dxText;
             return View(noteViewModel);
         }
 
@@ -5483,7 +5529,9 @@ namespace KyoS.Web.Controllers
                                                                            .Include(wc => wc.Client)
                                                                            .ThenInclude(c => c.Clinic)
 
-                                                                           .Include(wc => wc.Client)                                                                           
+                                                                           .Include(wc => wc.Client)
+                                                                           .ThenInclude(wc => wc.Clients_Diagnostics)
+                                                                           .ThenInclude(wc => wc.Diagnostic)
 
                                                                            .Include(wc => wc.Facilitator)
                                                                            
@@ -5514,7 +5562,17 @@ namespace KyoS.Web.Controllers
                                                       .FirstOrDefaultAsync(n => n.Workday_Cient.Id == id);
 
             IndividualNoteViewModel individualNoteViewModel = null;
-
+            DiagnosticEntity dx = new DiagnosticEntity();
+            string dxText = string.Empty;
+            if (workday_Client.Client.Clients_Diagnostics.Where(n => n.Active == true && n.Principal == true).Count() > 0)
+            {
+                dx = workday_Client.Client.Clients_Diagnostics.FirstOrDefault(n => n.Active == true && n.Principal == true).Diagnostic;
+                dxText = dx.Code + ": " + dx.Description;
+            }
+            else
+            {
+                dxText = "Not have an active principal diagnosis.";
+            }
 
             individualNoteViewModel = new IndividualNoteViewModel
             {
@@ -5573,7 +5631,10 @@ namespace KyoS.Web.Controllers
                 Objetive1 = (note.Objective == null) ? string.Empty : note.Objective.Objetive,                
                 Intervention1 = (note.Objective == null) ? string.Empty : note.Objective.Intervention,
                 MTPId = note.Objective.Goal.MTP.Id,
-                DateOfApprove = note.Workday_Cient.Workday.Date
+                DateOfApprove = note.Workday_Cient.Workday.Date,
+                Minute = note.Minute,
+                RealUnits = note.RealUnits,
+                Diagnostic = dxText
             };           
 
             return View(individualNoteViewModel);
@@ -21769,8 +21830,9 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Facilitator")]
-        public JsonResult GetUnitsPSR(int minutes)
+        public JsonResult GetUnitsPSR(int minute1 = 0, int minute2 = 0, int minute3 = 0, int minute4 = 0)
         {
+            int minutes = minute1 + minute2 + minute3 + minute4;
             int factor = 15;
             int unit = minutes / factor;
             double residuo = minutes % factor;
@@ -21778,6 +21840,26 @@ namespace KyoS.Web.Controllers
                 unit++;
 
             return Json(unit);
+        }
+
+        [Authorize(Roles = "Facilitator")]
+        public JsonResult GetMinutesPSR(int minute1 = 0, int minute2 = 0, int minute3 = 0, int minute4 = 0)
+        {
+            int minutes = minute1 + minute2 + minute3 + minute4;
+
+            return Json(minutes);
+        }
+
+        [Authorize(Roles = "Facilitator")]
+        public int GetTotalUnits(int minutes)
+        {
+            int factor = 15;
+            int unit = minutes / factor;
+            double residuo = minutes % factor;
+            if (residuo >= 8)
+                unit++;
+
+            return unit;
         }
     }
 }

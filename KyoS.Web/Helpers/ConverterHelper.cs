@@ -1246,7 +1246,8 @@ namespace KyoS.Web.Helpers
                 Other_Intervention = model.Other_Intervention,
                 SubSchedule = await _context.SubSchedule.FindAsync(model.IdSubSchedule),
                 Setting = model.Setting,
-                Minute = model.Minute
+                Minute = model.Minute,
+                RealUnits = model.RealUnits
             };
         }
 
