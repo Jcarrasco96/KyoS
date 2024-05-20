@@ -551,6 +551,8 @@ namespace KyoS.Web.Controllers
                     {
                         client = await _context.Clients
                                                .Include(c => c.MTPs)
+                                               .ThenInclude(c => c.Goals)
+                                               .ThenInclude(c => c.Objetives)
                                                .FirstOrDefaultAsync(c => c.Id == Convert.ToInt32(value));
 
                         DateTime developed_date;
