@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using KyoS.Web.Models;
 using Microsoft.AspNetCore.Mvc;
-using KyoS.Web.Models;
+using System.Diagnostics;
 
 namespace KyoS.Web.Controllers
 {
@@ -16,35 +12,10 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("Index", "Desktop");
         }
 
-        public IActionResult About()
-        {
-            ViewData["Message"] = "Your application description page.";
-
-            return View();
-        }
-
-        public IActionResult Contact()
-        {
-            ViewData["Message"] = "Your contact page.";
-
-            return View();
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
-
-        [Route("error/404")]
-        public IActionResult Error404()
-        {
-            return View();
         }
     }
 }

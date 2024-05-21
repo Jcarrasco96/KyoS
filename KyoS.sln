@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29318.209
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34902.65
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KyoS.Common", "KyoS.Common\KyoS.Common.csproj", "{95CACE1D-7C66-4CB3-931A-D722466543B7}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KyoS.Web", "KyoS.Web\KyoS.Web.csproj", "{16A9285F-8807-49CB-9403-07102CB011F7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KyoS.Api", "KyoS.Api\KyoS.Api.csproj", "{A00083C3-BBA5-4941-A1D1-8957D3274345}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{16A9285F-8807-49CB-9403-07102CB011F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{16A9285F-8807-49CB-9403-07102CB011F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{16A9285F-8807-49CB-9403-07102CB011F7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A00083C3-BBA5-4941-A1D1-8957D3274345}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A00083C3-BBA5-4941-A1D1-8957D3274345}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A00083C3-BBA5-4941-A1D1-8957D3274345}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A00083C3-BBA5-4941-A1D1-8957D3274345}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
