@@ -6465,5 +6465,101 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditDxTempClient", model) });
         }
 
+        public async Task<IActionResult> DuplicateHealthInsuranceClient(int id = 0)
+        {
+            UserEntity user_logged = await _context.Users
+                                                   .Include(u => u.Clinic)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            if (id != 0)
+            {
+                HealthInsuranceTempEntity healthInsuranceTempEntity = await _context.HealthInsuranceTemp
+                                                                                    .FirstOrDefaultAsync(u => u.Id == id);
+
+                HealthInsuranceTempViewModel entity = new HealthInsuranceTempViewModel()
+                {
+                    ApprovedDate = healthInsuranceTempEntity.ApprovedDate,
+                    DurationTime = healthInsuranceTempEntity.DurationTime,
+                    IdhealthInsurance = _context.HealthInsurances.FirstOrDefault(n => n.Name == healthInsuranceTempEntity.Name).Id,
+                    HealthInsurance = _combosHelper.GetComboActiveInsurancesByClinic(user_logged.Clinic.Id),
+                    ClientName = _context.Clients.FirstOrDefault(n => n.Id == healthInsuranceTempEntity.IdClient).Name,
+                    MemberId = healthInsuranceTempEntity.MemberId,
+                    Units = healthInsuranceTempEntity.Units,
+                    IdClient = healthInsuranceTempEntity.IdClient,
+                    AuthorizationNumber = healthInsuranceTempEntity.AuthorizationNumber,
+                    Id = id,
+                    Name = healthInsuranceTempEntity.Name,
+                    Active = healthInsuranceTempEntity.Active,
+                    UserName = user_logged.UserName,
+                    IdAgencyService = (healthInsuranceTempEntity.Agency == ServiceAgency.CMH) ? 0 : 1,
+                    AgencyServices = _combosHelper.GetComboServiceAgency(),
+                    ExpiredDate = healthInsuranceTempEntity.ExpiredDate,
+                    EffectiveDate = healthInsuranceTempEntity.EffectiveDate,
+                    EndCoverageDate = healthInsuranceTempEntity.EndCoverageDate,
+                    IdInsuranceType = (healthInsuranceTempEntity.InsuranceType == InsuranceType.Medicaid) ? 0 : (healthInsuranceTempEntity.InsuranceType == InsuranceType.Medicare) ? 1 : (healthInsuranceTempEntity.InsuranceType == InsuranceType.Comercial) ? 2 : 3,
+                    InsuranceTypes = _combosHelper.GetComboInsuranceType(),
+                    IdInsurancePlanType = (healthInsuranceTempEntity.InsurancePlan == InsurancePlanType.Full_Medicaid) ? 0 : (healthInsuranceTempEntity.InsurancePlan == InsurancePlanType.Medicare_Part_AB) ? 1 : 2,
+                    InsurancePlanTypes = _combosHelper.GetComboInsurancePlanType(),
+                    IdInsuranceCoverageType = (healthInsuranceTempEntity.InsuranceCoverage == InsuranceCoverageType.Full_Medicaid) ? 0 : (healthInsuranceTempEntity.InsuranceCoverage == InsuranceCoverageType.MMA_Capitated) ? 1 : (healthInsuranceTempEntity.InsuranceCoverage == InsuranceCoverageType.Dual_Special_Needs_Plan) ? 2 : (healthInsuranceTempEntity.InsuranceCoverage == InsuranceCoverageType.Medicare_Special_Needs) ? 3 : (healthInsuranceTempEntity.InsuranceCoverage == InsuranceCoverageType.Medicare_Advantage_Plan) ? 4 : (healthInsuranceTempEntity.InsuranceCoverage == InsuranceCoverageType.HMO) ? 5 : (healthInsuranceTempEntity.InsuranceCoverage == InsuranceCoverageType.PPO) ? 6 : (healthInsuranceTempEntity.InsuranceCoverage == InsuranceCoverageType.EPO) ? 7 : 8,
+                    InsuranceCoverageTypes = _combosHelper.GetComboInsuranceCoverageType()
+
+                };
+                return View(entity);
+            }
+
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DuplicateHealthInsuranceClient(int id, HealthInsuranceTempViewModel HealthInsuranceModel)
+        {
+            UserEntity user_logged = _context.Users
+                                                 .Include(u => u.Clinic)
+                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (ModelState.IsValid)
+            {
+                if (id != 0)
+                {
+
+                    HealthInsuranceTempEntity healthInsuranceTemp = new HealthInsuranceTempEntity
+                    {
+                        Id = 0,
+                        UserName = HealthInsuranceModel.UserName,
+                        ApprovedDate = HealthInsuranceModel.ApprovedDate,
+                        Active = HealthInsuranceModel.Active,
+                        DurationTime = HealthInsuranceModel.DurationTime,
+                        MemberId = HealthInsuranceModel.MemberId,
+                        Units = HealthInsuranceModel.Units,
+                        Name = HealthInsuranceModel.Name,
+                        IdClient = HealthInsuranceModel.IdClient,
+                        AuthorizationNumber = HealthInsuranceModel.AuthorizationNumber,
+                        Agency = ServiceAgencyUtils.GetServiceAgencyByIndex(HealthInsuranceModel.IdAgencyService),
+                        ExpiredDate = HealthInsuranceModel.ExpiredDate,
+                        EffectiveDate = HealthInsuranceModel.EffectiveDate,
+                        EndCoverageDate = HealthInsuranceModel.EndCoverageDate,
+                        InsuranceType = InsuranceUtils.GetInsuranceTypeByIndex(HealthInsuranceModel.IdInsuranceType),
+                        InsurancePlan = InsurancePlanUtils.GetInsurancePlanTypeByIndex(HealthInsuranceModel.IdInsurancePlanType),
+                        InsuranceCoverage = InsuranceCoverageUtils.GetInsuranceCoverageTypeByIndex(HealthInsuranceModel.IdInsuranceCoverageType)
+                    };
+                    _context.Add(healthInsuranceTemp);
+                    await _context.SaveChangesAsync();
+
+                    List<HealthInsuranceTempEntity> list = await _context.HealthInsuranceTemp
+                                                                         .Where(n => n.IdClient == HealthInsuranceModel.IdClient
+                                                                            && n.UserName == HealthInsuranceModel.UserName)
+                                                                         .ToListAsync();
+
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewHealthInsurance", list) });
+
+                }
+                return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewHealthInsurance", _context.HealthInsuranceTemp.Where(m => m.IdClient == HealthInsuranceModel.IdClient && m.UserName == HealthInsuranceModel.UserName).ToList()) });
+            }
+
+
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditHealthInsuranceClient", HealthInsuranceModel) });
+        }
+
     }
 }
