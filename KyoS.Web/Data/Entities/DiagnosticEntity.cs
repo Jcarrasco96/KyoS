@@ -1,4 +1,5 @@
 ﻿using KyoS.Web.Data.Contracts;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace KyoS.Web.Data.Entities
@@ -14,5 +15,7 @@ namespace KyoS.Web.Data.Entities
         [Display(Name = "Diagnostic")]
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         public string Description { get; set; }
+
+        public IEnumerable<Client_Diagnostic> Client_Diagnostics { get; set; }
     }
 }

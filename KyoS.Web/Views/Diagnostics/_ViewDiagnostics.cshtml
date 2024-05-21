@@ -11,11 +11,20 @@
             <table class="table table-hover table-responsive table-striped" id="MyTable">
                 <thead>
                     <tr>
-                        <th class="col-md-2" style="text-align:center;">
+                        <th class="col-md-1" style="text-align:center;">
                             @Html.DisplayNameFor(model => model.Code)
                         </th>
-                        <th class="col-md-8" style="text-align:left;">
+                        <th class="col-md-6" style="text-align:left;">
                             @Html.DisplayNameFor(model => model.Description)
+                        </th>
+                        <th class="col-md-1" style="text-align:center;">
+                            Open
+                        </th>
+                        <th class="col-md-1" style="text-align:center;">
+                            Close
+                        </th>
+                        <th class="col-md-1" style="text-align:center;">
+                            Principal
                         </th>
                         <th class="col-md-2">
                         </th>
@@ -30,6 +39,48 @@
                             </td>
                             <td align="left">
                                 @Html.DisplayFor(modelItem => item.Description)
+                            </td>
+                            <td align="center">
+                               @if (@item.Client_Diagnostics.Where(n => n.Client.Status == KyoS.Common.Enums.StatusType.Open).Count() > 0)
+                               {
+                                  <a onclick="showInPopupLg('@Url.Action("ViewDetails","Diagnostics",new {id = @item.Id, status = KyoS.Common.Enums.StatusType.Open, principal = true },Context.Request.Scheme)','View Details')" class="btn btn-info" title="View Details">
+                                     @item.Client_Diagnostics.Where(n => n.Client.Status == KyoS.Common.Enums.StatusType.Open).Count()
+                                  </a>
+                               }
+                               else
+                               {
+                                  <a onclick="showInPopupLg('@Url.Action("ViewDetails","Diagnostics",new {id = @item.Id, status = KyoS.Common.Enums.StatusType.Open, principal = true },Context.Request.Scheme)','View Details')" class="btn btn-default disabled" title="View Details">
+                                    0
+                                  </a>
+                               }
+                            </td>
+                            <td align="center">
+                                @if (@item.Client_Diagnostics.Where(n => n.Client.Status == KyoS.Common.Enums.StatusType.Close).Count() > 0)
+                                {
+                                    <a onclick="showInPopupLg('@Url.Action("ViewDetails","Diagnostics",new {id = @item.Id, status = KyoS.Common.Enums.StatusType.Close, principal = true },Context.Request.Scheme)','View Details')" class="btn btn-info" title="View Details">
+                                        @item.Client_Diagnostics.Where(n => n.Client.Status == KyoS.Common.Enums.StatusType.Close).Count()
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a onclick="showInPopupLg('@Url.Action("ViewDetails","Diagnostics",new {id = @item.Id, status = KyoS.Common.Enums.StatusType.Open, principal = true },Context.Request.Scheme)','View Details')" class="btn btn-default disabled" title="View Details">
+                                        0
+                                    </a>
+                                }
+                            </td>
+                            <td align="center">
+                                @if (@item.Client_Diagnostics.Where(n => n.Principal == true).Count() > 0)
+                                {
+                                    <a onclick="showInPopupLg('@Url.Action("ViewDetails","Diagnostics",new {id = @item.Id, status = 0, principal = true },Context.Request.Scheme)','View Details')" class="btn btn-info" title="View Details">
+                                        @item.Client_Diagnostics.Where(n => n.Principal == true).Count()    
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a onclick="showInPopupLg('@Url.Action("ViewDetails","Diagnostics",new {id = @item.Id, status = KyoS.Common.Enums.StatusType.Open, principal = true },Context.Request.Scheme)','View Details')" class="btn btn-default disabled" title="View Details">
+                                        0
+                                    </a>
+                                }
                             </td>
                             <td align="right">
                                 @*<a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" title="Edit diagnostic"><i class="glyphicon glyphicon-pencil"></i></a>*@
