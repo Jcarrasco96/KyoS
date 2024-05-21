@@ -2428,7 +2428,8 @@ namespace KyoS.Web.Controllers
             }
 
             DiagnosticEntity dx = new DiagnosticEntity();
-            if (workday_Client.Client.Clients_Diagnostics.FirstOrDefault(n => n.Principal == true) != null)
+            
+            if (workday_Client.Client != null && workday_Client.Client.Clients_Diagnostics.FirstOrDefault(n => n.Principal == true) != null)
             {
                 dx = workday_Client.Client.Clients_Diagnostics.FirstOrDefault(n => n.Principal == true).Diagnostic;
             }
