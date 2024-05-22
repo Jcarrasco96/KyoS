@@ -50,6 +50,8 @@ namespace KyoS.Web.Controllers
             }
 
             return View(await _context.HealthInsurances
+                                      .Include(n => n.Client_HealthInsurances)
+                                      .ThenInclude(n => n.Client)
                                       .Where(hi => hi.Clinic.Id == user_logged.Clinic.Id)
                                       .OrderBy(c => c.Name).ToListAsync());
         }
@@ -951,5 +953,35 @@ namespace KyoS.Web.Controllers
             }
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditModal", healthInsuranceViewModel) });
         }
+
+
+        public async Task<IActionResult> ViewDetails(int id = 0, StatusType status = StatusType.Open)
+        {
+            List<ClientEntity> clients = new List<ClientEntity>();
+            if (id > 0)
+            {
+                UserEntity user_logged = await _context.Users
+                                                       .Include(u => u.Clinic)
+                                                       .ThenInclude(c => c.Setting)
+                                                       .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+                if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
+                {
+                    return RedirectToAction("NotAuthorized", "Account");
+                }
+
+                clients = await _context.Clients
+                                        .Include(n => n.Clients_HealthInsurances)
+                                        .ThenInclude(n => n.HealthInsurance)
+                                        .Where(n => n.Clients_HealthInsurances.Where(m => m.Active == true && m.HealthInsurance.Id == id).Count() > 0
+                                                 && n.Status == status)
+                                        .OrderBy(d => d.Name)
+                                        .ToListAsync();
+            }
+
+
+            return View(clients);
+        }
+
     }
 }

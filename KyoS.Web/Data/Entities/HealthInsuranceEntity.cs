@@ -1,6 +1,7 @@
 ﻿using KyoS.Web.Data.Contracts;
-using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System;
 
 namespace KyoS.Web.Data.Entities
 {
@@ -25,5 +26,6 @@ namespace KyoS.Web.Data.Entities
 
         public ClinicEntity Clinic { get; set; }
         public bool NeedAuthorization { get; set; }
+        public IEnumerable<Client_HealthInsurance> Client_HealthInsurances { get; set; }
     }
 }
