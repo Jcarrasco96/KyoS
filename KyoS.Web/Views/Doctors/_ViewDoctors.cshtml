@@ -11,10 +11,10 @@
                 <table class="table table-hover table-responsive table-striped" id="MyTable">
                     <thead>
                         <tr>
-                            <th class="col-md-3">
+                            <th class="col-md-2">
                                 @Html.DisplayNameFor(model => model.Name)
                             </th>
-                            <th class="col-md-4">
+                            <th class="col-md-2">
                                 @Html.DisplayNameFor(model => model.Address)
                             </th>
                             <th class="col-md-1" style="text-align:center;">
@@ -26,7 +26,13 @@
                             <th class="col-md-2" style="text-align:center;">
                                 @Html.DisplayNameFor(model => model.Email)
                             </th>
-                            <th class="col-md-1">
+                            <th class="col-md-1" style="text-align:center;">
+                                Open
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Close
+                            </th>
+                            <th class="col-md-2">
                             </th>
                         </tr>
                     </thead>
@@ -48,6 +54,34 @@
                                 </td>
                                 <td align="center">
                                     @Html.DisplayFor(modelItem => item.Email)
+                                </td>
+                                <td align="center">
+                                    @if (@item.Clients.Where(n => n.Status == KyoS.Common.Enums.StatusType.Open).Count() > 0)
+                                    {
+                                        <a onclick="showInPopupLg('@Url.Action("ViewDetails","Doctors",new {id = @item.Id, status = KyoS.Common.Enums.StatusType.Open },Context.Request.Scheme)','View Details')" class="btn btn-info" title="View Details">
+                                            @item.Clients.Where(n => n.Status == KyoS.Common.Enums.StatusType.Open).Count()
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a onclick="showInPopupLg('@Url.Action("ViewDetails","Doctors",new {id = @item.Id, status = KyoS.Common.Enums.StatusType.Open},Context.Request.Scheme)','View Details')" class="btn btn-default disabled" title="View Details">
+                                            0
+                                        </a>
+                                    }
+                                </td>
+                                <td align="center">
+                                    @if (@item.Clients.Where(n => n.Status == KyoS.Common.Enums.StatusType.Close).Count() > 0)
+                                    {
+                                        <a onclick="showInPopupLg('@Url.Action("ViewDetails","Doctors",new {id = @item.Id, status = KyoS.Common.Enums.StatusType.Close },Context.Request.Scheme)','View Details')" class="btn btn-info" title="View Details">
+                                            @item.Clients.Where(n => n.Status == KyoS.Common.Enums.StatusType.Close).Count()
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a onclick="showInPopupLg('@Url.Action("ViewDetails","Doctors",new {id = @item.Id, status = KyoS.Common.Enums.StatusType.Close},Context.Request.Scheme)','View Details')" class="btn btn-default disabled" title="View Details">
+                                            0
+                                        </a>
+                                    }
                                 </td>
                                 <td align="right">
                                     @*<a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" title="Edit doctor"><i class="glyphicon glyphicon-pencil"></i></a>*@
