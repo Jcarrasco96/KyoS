@@ -245,8 +245,6 @@ namespace KyoS.Web.Helpers
                             }
                         }
                     }
-
-
                 }
 
                 worksheet.ColumnsUsed().AdjustToContents();
