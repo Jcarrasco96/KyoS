@@ -574,14 +574,12 @@ namespace KyoS.Web.Controllers
                     TCMClientEntity tcmclient = _context.TCMClient
                                                         .Include(n => n.Client)
                                                         .ThenInclude(n => n.MedicationList)
-                                                        .Include(n => n.Client)
-                                                        .ThenInclude(n => n.Doctor)
-                                                        .Include(n => n.Client)
-                                                        .ThenInclude(n => n.Psychiatrist)
-                                                        .Include(n => n.Client)
-                                                        .ThenInclude(n => n.EmergencyContact)
+                                                       
                                                         .Include(n => n.Client)
                                                         .ThenInclude(n => n.IndividualTherapyFacilitator)
+
+                                                        .Include(n => n.TCMIntakeForm)
+                                                        
                                                         .FirstOrDefault(n => n.Id == tcmAssessmentViewModel.TcmClient_FK);
 
                     tcmAssessmentEntity.MedicationList = new List<TCMAssessmentMedicationEntity>();
@@ -603,12 +601,12 @@ namespace KyoS.Web.Controllers
 
                     //llenar la tabla IndividualAgency
                     tcmAssessmentEntity.IndividualAgencyList = new List<TCMAssessmentIndividualAgencyEntity>();
-                    if (tcmclient.Client.Doctor != null)
+                    if (tcmclient.TCMIntakeForm != null)
                     {
                         TCMAssessmentIndividualAgencyEntity indAgency = new TCMAssessmentIndividualAgencyEntity()
                         {
-                            Name = tcmclient.Client.Doctor.Name,
-                            Agency = user_logged.Clinic.Initials,
+                            Name = tcmclient.TCMIntakeForm.PCP_Name,
+                            Agency = tcmclient.TCMIntakeForm.PCP_Place,
                             RelationShip = "PCP",
                             CreatedBy = user_logged.UserName,
                             CreatedOn = DateTime.Now                            
@@ -620,8 +618,8 @@ namespace KyoS.Web.Controllers
                     {
                         TCMAssessmentIndividualAgencyEntity indAgency = new TCMAssessmentIndividualAgencyEntity()
                         {
-                            Name = tcmclient.Client.Psychiatrist.Name,
-                            Agency = user_logged.Clinic.Initials,
+                            Name = tcmclient.TCMIntakeForm.Psychiatrist_Name,
+                            Agency = "",
                             RelationShip = "PSY",
                             CreatedBy = user_logged.UserName,
                             CreatedOn = DateTime.Now
