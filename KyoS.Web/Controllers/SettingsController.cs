@@ -161,9 +161,9 @@ namespace KyoS.Web.Controllers
         public async Task<IActionResult> EditSettingManager()
         {
             UserEntity user_logged = _context.Users
-                                            .Include(u => u.Clinic)
-                                            .ThenInclude(u => u.Setting)
-                                            .FirstOrDefault(u => u.UserName == User.Identity.Name);
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(u => u.Setting)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
             if (user_logged.Clinic.Setting == null)
             {
@@ -221,7 +221,9 @@ namespace KyoS.Web.Controllers
                 TCMLockCreateNote = user_logged.Clinic.Setting.TCMLockCreateNote,
                 IdDashboard = (user_logged.Clinic.Setting.DashBoardPrincipal == DashboardType.MH) ? 0 : 1,
                 Dashboards = _combosHelper.GetComboDashboardType(),
-                LockTCMNoteForOneMonthIdle = user_logged.Clinic.Setting.LockTCMNoteForOneMonthIdle
+                LockTCMNoteForOneMonthIdle = user_logged.Clinic.Setting.LockTCMNoteForOneMonthIdle,
+                LockTCMNoteForAuth = user_logged.Clinic.Setting.LockTCMNoteForAuth,
+                LockTCMNoteForDx = user_logged.Clinic.Setting.LockTCMNoteForDx
     };
 
             return View(model);
@@ -292,6 +294,8 @@ namespace KyoS.Web.Controllers
                     setting.MTPmultipleSignatures = model.MTPmultipleSignatures;
                     setting.DashBoardPrincipal = DashboardUtils.GetDashboardTypeByIndex(model.IdDashboard);
                     setting.LockTCMNoteForOneMonthIdle = model.LockTCMNoteForOneMonthIdle;
+                    setting.LockTCMNoteForAuth = model.LockTCMNoteForAuth;
+                    setting.LockTCMNoteForDx = model.LockTCMNoteForDx;
                 }
                 _context.Update(setting);
                 await _context.SaveChangesAsync();
