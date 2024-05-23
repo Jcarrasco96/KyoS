@@ -58,7 +58,19 @@
                                                         }
                                                     </td>
                                                     <td align="center">
-                                                        @Html.DisplayFor(modelItem => item.Service)
+                                                        @if (item.OnlyTCM == true)
+                                                        {
+                                                            <span class="label label-info">
+                                                                TCM
+                                                            </span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span class="label label-success">
+                                                                @Html.DisplayFor(modelItem => item.Service)
+                                                            </span>
+                                                        }
+
                                                     </td>
                                                    
                                                 </tr>
