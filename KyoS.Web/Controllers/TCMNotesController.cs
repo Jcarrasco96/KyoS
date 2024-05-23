@@ -146,14 +146,16 @@ namespace KyoS.Web.Controllers
             if (user_logged.Clinic.Setting.LockTCMNoteForOneMonthIdle == true)
             {
                 List<TCMNoteEntity> list = _context.TCMNote.Where(n => n.TCMClient.Id == IdTCMClient).ToList();
-                DateTime lastTime = list.MaxBy(n => n.DateOfService).DateOfService;
-                TCMIntakeAppendixJEntity appendixJ = _context.TCMIntakeAppendixJ.FirstOrDefault(n => n.TcmClient_FK == IdTCMClient && n.Date > lastTime);
-
-                if (lastTime.AddDays(30.0) < dateTime && appendixJ == null)
+                if (list.Count() > 0)
                 {
-                    return RedirectToAction("Index", "TCMBilling", new { id = 3 });
-                }
+                    DateTime lastTime = list.MaxBy(n => n.DateOfService).DateOfService;
+                    TCMIntakeAppendixJEntity appendixJ = _context.TCMIntakeAppendixJ.FirstOrDefault(n => n.TcmClient_FK == IdTCMClient && n.Date > lastTime);
 
+                    if (lastTime.AddDays(30.0) < dateTime && appendixJ == null)
+                    {
+                        return RedirectToAction("Index", "TCMBilling", new { id = 3 });
+                    }
+                }                
             }
             //No permite hacer notas si paso sino tiene una Auth. y un Dx, siempre que este acvtivo en los setting
             if (user_logged.Clinic.Setting.LockTCMNoteForDx == true || user_logged.Clinic.Setting.LockTCMNoteForAuth == true)

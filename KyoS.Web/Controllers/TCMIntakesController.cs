@@ -5955,7 +5955,7 @@ namespace KyoS.Web.Controllers
 
             try
             {
-                appendixJ.Approved = 0;
+                appendixJ.Approved = 1;
                 _context.TCMIntakeAppendixJ.Update(appendixJ);
                 await _context.SaveChangesAsync();
             }
