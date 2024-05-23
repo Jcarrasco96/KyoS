@@ -1215,5 +1215,82 @@ namespace KyoS.Web.Controllers
             
             return View(auditCertification_List);
         }
+
+        [Authorize(Roles = "CaseManager")]
+        public async Task<IActionResult> EditModalRO(int? id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            CaseMannagerEntity caseMannagerEntity = await _context.CaseManagers
+                                                                  .Include(f => f.Clinic)
+                                                                  .Include(f => f.TCMSupervisor)
+                                                                  .Include(f => f.TCMCertifications)
+                                                                  .ThenInclude(f => f.Course)
+                                                                  .FirstOrDefaultAsync(f => f.Id == id);
+            if (caseMannagerEntity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            CaseMannagerViewModel caseMannagerViewModel;
+            if (User.IsInRole("Manager"))
+            {
+                UserEntity user_logged = _context.Users
+                                                 .Include(u => u.Clinic)
+                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                caseMannagerViewModel = _converterHelper.ToCaseMannagerViewModel(caseMannagerEntity, user_logged.Clinic.Id);
+                if (user_logged.Clinic != null)
+                {
+                    List<SelectListItem> list = new List<SelectListItem>();
+                    list.Insert(0, new SelectListItem
+                    {
+                        Text = user_logged.Clinic.Name,
+                        Value = $"{user_logged.Clinic.Id}"
+                    });
+                    caseMannagerViewModel.Clinics = list;
+                }
+                List<CaseManagerCertificationEntity> CertificationList = new List<CaseManagerCertificationEntity>();
+                CaseManagerCertificationEntity Certification = new CaseManagerCertificationEntity();
+                List<CourseEntity> coursList = _context.Courses.Where(n => n.Role == UserType.CaseManager).ToList();
+
+                foreach (var item in coursList)
+                {
+                    if (caseMannagerEntity.TCMCertifications.Where(n => n.Course.Id == item.Id).Count() > 0)
+                    {
+                        foreach (var value in caseMannagerEntity.TCMCertifications.Where(n => n.Course.Id == item.Id).ToList().OrderBy(c => c.ExpirationDate))
+                        {
+                            Certification.Name = item.Name;
+                            Certification.CertificationNumber = value.CertificationNumber;
+                            Certification.CertificateDate = value.CertificateDate;
+                            Certification.ExpirationDate = value.ExpirationDate;
+                            Certification.Id = value.Id;
+                            CertificationList.Add(Certification);
+                            Certification = new CaseManagerCertificationEntity();
+                        }
+                    }
+                    else
+                    {
+                        Certification.Name = item.Name;
+                        Certification.CertificationNumber = "-";
+                        Certification.CertificateDate = DateTime.Today;
+                        Certification.ExpirationDate = DateTime.Today;
+                        Certification.Id = 0;
+                        CertificationList.Add(Certification);
+                        Certification = new CaseManagerCertificationEntity();
+                    }
+
+                }
+                caseMannagerViewModel.CaseManagerCertificationIdealList = CertificationList;
+            }
+            else
+                caseMannagerViewModel = _converterHelper.ToCaseMannagerViewModel(caseMannagerEntity, 0);
+
+            return View(caseMannagerViewModel);
+        }
+
     }
 }

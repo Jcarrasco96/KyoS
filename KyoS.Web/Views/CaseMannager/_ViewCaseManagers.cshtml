@@ -159,6 +159,7 @@
                                             @if (User.IsInRole("CaseManager"))
                                             {
                                                 <a asp-action="CasesForCaseManager" asp-route-idCaseManager="@item.Id" class="btn btn-info"><i class="glyphicon glyphicon-list"></i></a>
+                                                <a onclick="showInPopupLg('@Url.Action("EditModal","CaseMannager",new {id = @item.Id},Context.Request.Scheme)','Edit Case Manager')" class="btn btn-warning disabled" title="Edit CaseManager"><i class="glyphicon glyphicon-pencil"></i></a>
                                             }
                                             else
                                             {
@@ -290,6 +291,7 @@
                                             @if (User.IsInRole("CaseManager"))
                                             {
                                                 <a asp-action="CasesForCaseManager" asp-route-idCaseManager="@item.Id" class="btn btn-info"><i class="glyphicon glyphicon-list"></i></a>
+                                                <a onclick="showInPopupLg('@Url.Action("EditModalRO","CaseMannager",new {id = @item.Id},Context.Request.Scheme)','Edit Case Manager')" class="btn btn-info  title="Edit CaseManager"><i class="glyphicon glyphicon-search"></i></a>
                                             }
                                             else
                                             {
