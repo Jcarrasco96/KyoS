@@ -116,6 +116,7 @@
                                 <td align="center">
                                     @if (item.Clinic.Facilitators != null)
                                     {
+                                        var service = string.Empty;
                                         @if (item.Clinic.Facilitators.Where(f => f.Workdays_Clients.Where(wc => (wc.Present == true && wc.Hold == false && wc.Workday.Week.Id == item.Id && wc.Client != null)).Count() != 0).Count() != 0)
                                         {
                                             <a class="icon-plus-sign-alt"></a>
@@ -124,7 +125,8 @@
                                             <table class="table table-striped">
                                                 <tr>
                                                     <th class="col-md-1"></th>
-                                                    <th class="col-md-5">Facilitator Name</th>
+                                                    <th class="col-md-3">Facilitator Name</th>
+                                                    <th class="col-md-2" style="text-align:center;">Service</th>
                                                     <th class="col-md-2" style="text-align:center;">Clients</th>
                                                     <th class="col-md-2" style="text-align:center;">Notes</th>
                                                     <th class="col-md-2" style="text-align:center;">Units</th>
@@ -144,8 +146,8 @@
                                                                         <th class="col-md-2">Client Name</th>
                                                                         <th class="col-md-2" style="text-align:center;">Medicaid ID</th>
                                                                         <th class="col-md-1" style="text-align:center;">Date</th>
-                                                                        <th class="col-md-1" style="text-align:center;">Session</th>
-                                                                        <th class="col-md-2" style="text-align:center;">Diagnostics</th>
+                                                                        <th class="col-md-2" style="text-align:center;">Session</th>
+                                                                        <th class="col-md-1" style="text-align:center;">Diagnostics</th>
                                                                         <th class="col-md-1" style="text-align:center;">Billed</th>
                                                                         <th class="col-md-1" style="text-align:center;">Notes</th>
                                                                         <th class="col-md-1" style="text-align:center;">Units</th>
@@ -166,7 +168,15 @@
                                                                                 @Html.DisplayFor(modelItem => workdayClient.Workday.Date)
                                                                             </td>
                                                                             <td align="center">
-                                                                                @Html.DisplayFor(modelItem => workdayClient.Session)
+                                                                                @if (workdayClient.Workday.Service != KyoS.Common.Enums.ServiceType.Individual)
+                                                                                {
+                                                                                    @workdayClient.Schedule.InitialTime.ToShortTimeString() <a> - </a> @workdayClient.Schedule.EndTime.ToShortTimeString()
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    @Html.DisplayFor(modelItem => workdayClient.Session)
+                                                                                }
+
                                                                             </td>
                                                                             <td align="center">
                                                                                 @if (workdayClient.Client.Clients_Diagnostics.Where(n => n.Principal == true).Count() > 0)
@@ -254,6 +264,25 @@
                                                         <td>
                                                             @Html.DisplayFor(modelItem => facilitator.Name)
                                                         </td>
+                                                        <td align="center">
+                                                             @{
+                                                                service = string.Empty;
+                                                            }
+                                                            @if (facilitator.Workdays_Clients.Where(wc => (wc.Present == true && wc.Hold == false && wc.Workday.Week.Id == item.Id && wc.Client != null)).Where(n => n.Workday.Service == KyoS.Common.Enums.ServiceType.PSR).Count() > 0)
+                                                            {
+                                                                service = "PSR";    
+                                                            }
+                                                            @if (facilitator.Workdays_Clients.Where(wc => (wc.Present == true && wc.Hold == false && wc.Workday.Week.Id == item.Id && wc.Client != null)).Where(n => n.Workday.Service == KyoS.Common.Enums.ServiceType.Group).Count() > 0)
+                                                            {
+                                                                service += "/Group";    
+                                                            }
+                                                             @if (facilitator.Workdays_Clients.Where(wc => (wc.Present == true && wc.Hold == false && wc.Workday.Week.Id == item.Id && wc.Client != null)).Where(n => n.Workday.Service == KyoS.Common.Enums.ServiceType.Individual).Count() > 0)
+                                                            {
+                                                                service += "/Ind";    
+                                                            }
+                                                            <a>@service</a>
+                                                           
+                                                        </td align="center">
                                                         <td align="center">
                                                             @facilitator.Workdays_Clients.Where(wc => (wc.Present == true && wc.Hold == false && wc.Workday.Week.Id == item.Id && wc.Client != null)).Select(wc => wc.Client).Distinct().Count()
                                                         </td>
