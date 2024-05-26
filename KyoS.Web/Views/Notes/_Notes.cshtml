@@ -6,6 +6,7 @@
             <strong>Focus of the 1st group: @Model.Topic1</strong>
             <br />
             <strong>Activity Provided: </strong>@Model.Activity1
+            <input type="checkbox" asp-for="Present1" id="Present1" /> Present &nbsp;
         </div>
     </div>
     <div class="col-md-push-12">
@@ -13,6 +14,7 @@
             <strong>Focus of the 2nd group: @Model.Topic2</strong>
             <br />
             <strong>Activity Provided: </strong>@Model.Activity2
+            <input type="checkbox" asp-for="Present2" id="Present2" /> Present &nbsp;
         </div>
     </div>
     <div class="col-md-push-12">
@@ -20,6 +22,7 @@
             <strong>Focus of the 3rd group: @Model.Topic3</strong>
             <br />
             <strong>Activity Provided: </strong>@Model.Activity3
+            <input type="checkbox" asp-for="Present3" id="Present3" /> Present &nbsp;
         </div>
     </div>
     <div class="col-md-push-12">
@@ -27,6 +30,7 @@
             <strong>Focus of the 4th group: @Model.Topic4</strong>
             <br />
             <strong>Activity Provided: </strong>@Model.Activity4
+            <input type="checkbox" asp-for="Present4" id="Present4" /> Present &nbsp;
         </div>
     </div>
     <div class="col-md-push-12">
@@ -134,6 +138,12 @@
             <strong>Focus of the 1st group: @Model.Topic1</strong>
             <br />
             <strong>Activity Provided: </strong>@Model.Activity1
+            <br />
+            <label class="control-label">Client's assistance:</label>
+            &nbsp;
+            <input type="checkbox" asp-for="Present1" id="Present1" /> Present &nbsp;
+            <br />
+            <label>Minutes</label> :  <input asp-for="Minute1" id="minute1" class="form-control" style="width:10%" onchange="getMinute();" />
         </div>
     </div>
     <div class="col-md-push-12">
@@ -193,6 +203,12 @@
             <strong>Focus of the 2nd group: @Model.Topic2</strong>
             <br />
             <strong>Activity Provided: </strong>@Model.Activity2
+            <br />
+            <label class="control-label">Client's assistance:</label>
+            &nbsp;
+            <input type="checkbox" asp-for="Present2" id="Present2" /> Present &nbsp;
+            <br />
+            <label>Minutes</label> :  <input asp-for="Minute2" id="minute2" class="form-control" style="width:10%" onchange="getMinute();" />
         </div>
     </div>
     <div class="col-md-push-12">
@@ -252,6 +268,12 @@
             <strong>Focus of the 3rd group: @Model.Topic3</strong>
             <br />
             <strong>Activity Provided: </strong>@Model.Activity3
+            <br />
+            <label class="control-label">Client's assistance:</label>
+            &nbsp;
+            <input type="checkbox" asp-for="Present3" id="Present3" /> Present &nbsp;
+            <br />
+            <label>Minutes</label> :  <input asp-for="Minute3" id="minute3" class="form-control" style="width:10%" onchange="getMinute();" />
         </div>
     </div>
     <div class="col-md-push-12">
@@ -311,6 +333,12 @@
             <strong>Focus of the 4th group: @Model.Topic4</strong>
             <br />
             <strong>Activity Provided: </strong>@Model.Activity4
+            <br />
+            <label class="control-label">Client's assistance:</label>
+            &nbsp;
+            <input type="checkbox" asp-for="Present4" id="Present3" /> Present &nbsp;
+            <br />
+            <label>Minutes</label> :  <input asp-for="Minute4" id="minute4" class="form-control" style="width:10%" onchange="getMinute();" />
         </div>
     </div>
     <div class="col-md-push-12">

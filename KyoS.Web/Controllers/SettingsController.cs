@@ -223,8 +223,12 @@ namespace KyoS.Web.Controllers
                 Dashboards = _combosHelper.GetComboDashboardType(),
                 LockTCMNoteForOneMonthIdle = user_logged.Clinic.Setting.LockTCMNoteForOneMonthIdle,
                 LockTCMNoteForAuth = user_logged.Clinic.Setting.LockTCMNoteForAuth,
-                LockTCMNoteForDx = user_logged.Clinic.Setting.LockTCMNoteForDx
-    };
+                LockTCMNoteForDx = user_logged.Clinic.Setting.LockTCMNoteForDx,
+                PricePSR = user_logged.Clinic.Setting.PricePSR,
+                PriceGroup = user_logged.Clinic.Setting.PriceGroup,
+                PriceInd = user_logged.Clinic.Setting.PriceInd,
+                PriceTCM = user_logged.Clinic.Setting.PriceTCM
+            };
 
             return View(model);
         }
@@ -274,6 +278,7 @@ namespace KyoS.Web.Controllers
                     clinic.CodeMTPR = model.CodeMTPR;
                     clinic.CodeBIO = model.CodeBIO;
                     clinic.CodeFARS = model.CodeFARS;
+                    
                 }
                 _context.Update(clinic);
                 await _context.SaveChangesAsync();
@@ -296,6 +301,10 @@ namespace KyoS.Web.Controllers
                     setting.LockTCMNoteForOneMonthIdle = model.LockTCMNoteForOneMonthIdle;
                     setting.LockTCMNoteForAuth = model.LockTCMNoteForAuth;
                     setting.LockTCMNoteForDx = model.LockTCMNoteForDx;
+                    setting.PricePSR = model.PricePSR;
+                    setting.PriceGroup = model.PriceGroup;
+                    setting.PriceInd = model.PriceInd;
+                    setting.PriceTCM = model.PriceTCM;
                 }
                 _context.Update(setting);
                 await _context.SaveChangesAsync();

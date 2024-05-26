@@ -4,6 +4,7 @@ using KyoS.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KyoS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20240525180627_EOBandDetails")]
+    partial class EOBandDetails
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -7137,9 +7140,6 @@ namespace KyoS.Web.Migrations
                     b.Property<bool>("Present")
                         .HasColumnType("bit");
 
-                    b.Property<int>("RealUnits")
-                        .HasColumnType("int");
-
                     b.Property<bool>("Regression")
                         .HasColumnType("bit");
 
@@ -7163,9 +7163,6 @@ namespace KyoS.Web.Migrations
 
                     b.Property<int?>("SupervisorId")
                         .HasColumnType("int");
-
-                    b.Property<string>("Title")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("UnableToDetermine")
                         .HasColumnType("bit");
@@ -7527,9 +7524,6 @@ namespace KyoS.Web.Migrations
 
                     b.Property<int?>("ObjetiveId")
                         .HasColumnType("int");
-
-                    b.Property<bool>("Present")
-                        .HasColumnType("bit");
 
                     b.Property<int?>("SubScheduleId")
                         .HasColumnType("int");

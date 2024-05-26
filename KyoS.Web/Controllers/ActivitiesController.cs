@@ -564,9 +564,7 @@ namespace KyoS.Web.Controllers
                                                                                .ThenInclude(a => a.Theme)
 
                                                                                .Where(waf => (waf.Workday.Id == workday.Id
-                                                                                           && waf.Facilitator.Id == facilitator_logged.Id
-                                                                                           && waf.AM == am
-                                                                                           && waf.PM == pm))
+                                                                                           && waf.Facilitator.Id == facilitator_logged.Id))
                                                                                .ToListAsync();
 
             //No hay creadas actividades del facilitador logueado en la fecha seleccionada
@@ -637,6 +635,8 @@ namespace KyoS.Web.Controllers
                     IdWorkday = id,
                     Date = workday.Date.ToShortDateString(),
                     Day = workday.Date.DayOfWeek.ToString(),
+                    AM = true,
+                    PM = true,
 
                     IdTopic1 = (list1.Count != 0) ? topics[0].Id : 0,
                     Topics1 = (list1.Count != 0) ? list1 : _combosHelper.GetComboThemesByClinic(workday.Week.Clinic.Id, ThemeType.PSR),
@@ -721,6 +721,9 @@ namespace KyoS.Web.Controllers
                     IdWorkday = id,
                     Date = workday.Date.ToShortDateString(),
                     Day = workday.Date.DayOfWeek.ToString(),
+                    AM = activities_list.ElementAtOrDefault(0).PM,
+                    PM = activities_list.ElementAtOrDefault(0).AM,
+                    TitleNote = activities_list.ElementAtOrDefault(0).TitleNote,
 
                     IdTopic1 = (activities_list.Count > 0) ? activities_list[0].Activity.Theme.Id : 0,
                     Topics1 = (list1.Count != 0) ? list1 : _combosHelper.GetComboThemesByClinic(workday.Week.Clinic.Id, ThemeType.PSR),
@@ -779,7 +782,10 @@ namespace KyoS.Web.Controllers
                     Facilitator = facilitator_logged,
                     Workday = workday,
                     Activity = await _context.Activities.FirstOrDefaultAsync(a => a.Id == model.IdActivity1),
-                    Schema = facilitator_logged.Clinic.Schema
+                    Schema = facilitator_logged.Clinic.Schema,
+                    AM = model.AM,
+                    PM = model.PM,
+                    TitleNote = model.TitleNote
                 };
                 _context.Add(activity);
                 activity = new Workday_Activity_Facilitator
@@ -787,7 +793,10 @@ namespace KyoS.Web.Controllers
                     Facilitator = facilitator_logged,
                     Workday = workday,
                     Activity = await _context.Activities.FirstOrDefaultAsync(a => a.Id == model.IdActivity2),
-                    Schema = facilitator_logged.Clinic.Schema
+                    Schema = facilitator_logged.Clinic.Schema,
+                    AM = model.AM,
+                    PM = model.PM,
+                    TitleNote = model.TitleNote
                 };
                 _context.Add(activity);
                 activity = new Workday_Activity_Facilitator
@@ -795,7 +804,10 @@ namespace KyoS.Web.Controllers
                     Facilitator = facilitator_logged,
                     Workday = workday,
                     Activity = await _context.Activities.FirstOrDefaultAsync(a => a.Id == model.IdActivity3),
-                    Schema = facilitator_logged.Clinic.Schema
+                    Schema = facilitator_logged.Clinic.Schema,
+                    AM = model.AM,
+                    PM = model.PM,
+                    TitleNote = model.TitleNote
                 };
                 _context.Add(activity);
                 activity = new Workday_Activity_Facilitator
@@ -803,7 +815,10 @@ namespace KyoS.Web.Controllers
                     Facilitator = facilitator_logged,
                     Workday = workday,
                     Activity = await _context.Activities.FirstOrDefaultAsync(a => a.Id == model.IdActivity4),
-                    Schema = facilitator_logged.Clinic.Schema
+                    Schema = facilitator_logged.Clinic.Schema,
+                    AM = model.AM,
+                    PM = model.PM,
+                    TitleNote = model.TitleNote
                 };
                 _context.Add(activity);
 

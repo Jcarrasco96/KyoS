@@ -48,5 +48,10 @@ namespace KyoS.Web.Data.Entities
         public bool LockTCMNoteForOneMonthIdle { get; set; }
         public bool LockTCMNoteForDx { get; set; }
         public bool LockTCMNoteForAuth { get; set; }
+
+        public decimal PricePSR { get; set; }
+        public decimal PriceGroup { get; set; }
+        public decimal PriceInd { get; set; }
+        public decimal PriceTCM { get; set; }
     }
 }

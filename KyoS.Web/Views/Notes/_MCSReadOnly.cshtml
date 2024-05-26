@@ -4,11 +4,69 @@
         <a asp-action="MTPView" asp-route-id="@Model.Id" target="_blank">View of MTP</a>
         <h5>Facilitator: @Model.Workday_Cient.Facilitator.Name</h5>
         <h5>Date: @Model.Workday_Cient.Workday.Date.ToShortDateString() Session: @Model.Workday_Cient.Workday.Day @Model.Workday_Cient.Session</h5>
-        <h5>Bill Code: @Model.CodeBill</h5>
         <hr />
     </div>
+
+<div class="col-md-push-12">
+    <div class="form-group col-md-3">
+        <label asp-for="Title" class="control-label">Note title</label>
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="Setting" class="control-label"></label>
+        <br />
+        @if (Model.Setting == "53")
+        {
+            <input type="radio" name="Setting" value="53" checked="checked" />
+        }
+        else
+        {
+            <input type="radio" name="Setting" value="53" />
+        }
+        <strong>53</strong>&nbsp;Client in the clinic
+        &nbsp;
+        &nbsp;
+        <br />
+        @if (Model.Setting == "02")
+        {
+            <input type="radio" name="Setting" value="02" checked="checked" />
+        }
+        else
+        {
+            <input type="radio" name="Setting" value="02" />
+        }
+        <strong>02</strong>&nbsp;Remote
+    </div>
+    <div class="form-group col-md-1">
+        <label asp-for="CodeBill" class="control-label">Bill Code</label>
+        <input asp-for="CodeBill" class="form-control" />
+        <span asp-validation-for="CodeBill" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-1">
+        <label asp-for="TotalMinutes" class="control-label">Minutes</label>
+        <textarea asp-for="TotalMinutes" class="form-control" rows="1" disabled id="lbTotalMinutes"></textarea>
+        <span asp-validation-for="TotalMinutes" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-1">
+        <label asp-for="RealUnits" class="control-label">Units</label>
+        <textarea asp-for="RealUnits" class="form-control" rows="1" disabled id="lbUnits"></textarea>
+        <span asp-validation-for="RealUnits" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-4">
+        <label asp-for="Dx" class="control-label">Dx: Description</label>
+        <textarea asp-for="Dx" class="form-control" rows="1" disabled></textarea>
+        <span asp-validation-for="Dx" class="text-danger"></span>
+    </div>
+    <div class="container-fluid">
+        &nbsp;
+    </div>
+</div>
 <div class="col-md-8">
     <p style="font-weight:bold;">Description of Client’s Mental Status (As evidenced by): Client.</p>
+</div>
+<div class="col-md-4">
+    &nbsp;
 </div>
 <div class="col-md-8">
     <table border="1" width="100%">

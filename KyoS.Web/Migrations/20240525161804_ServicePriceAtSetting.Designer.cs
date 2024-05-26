@@ -4,6 +4,7 @@ using KyoS.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KyoS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20240525161804_ServicePriceAtSetting")]
+    partial class ServicePriceAtSetting
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -3245,88 +3248,6 @@ namespace KyoS.Web.Migrations
                         .IsUnique();
 
                     b.ToTable("DocumentsAssistant");
-                });
-
-            modelBuilder.Entity("KyoS.Web.Data.Entities.EOBDetailsEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<DateTime>("DateService")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("EOBId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IdCLient")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IdTCMNotes")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IdWorkddayClient")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("MedicaidBill")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("NameClient")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("PaidDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("ServiceAgency")
-                        .HasColumnType("int");
-
-                    b.Property<int>("StatusBill")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Unit")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EOBId");
-
-                    b.ToTable("EOBDetails");
-                });
-
-            modelBuilder.Entity("KyoS.Web.Data.Entities.EOBEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<DateTime>("DateBill")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DateBillClose")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DateBillPayment")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("StatusBill")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Units")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("EOBs");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.EligibilityEntity", b =>
@@ -7137,9 +7058,6 @@ namespace KyoS.Web.Migrations
                     b.Property<bool>("Present")
                         .HasColumnType("bit");
 
-                    b.Property<int>("RealUnits")
-                        .HasColumnType("int");
-
                     b.Property<bool>("Regression")
                         .HasColumnType("bit");
 
@@ -7163,9 +7081,6 @@ namespace KyoS.Web.Migrations
 
                     b.Property<int?>("SupervisorId")
                         .HasColumnType("int");
-
-                    b.Property<string>("Title")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("UnableToDetermine")
                         .HasColumnType("bit");
@@ -7527,9 +7442,6 @@ namespace KyoS.Web.Migrations
 
                     b.Property<int?>("ObjetiveId")
                         .HasColumnType("int");
-
-                    b.Property<bool>("Present")
-                        .HasColumnType("bit");
 
                     b.Property<int?>("SubScheduleId")
                         .HasColumnType("int");
@@ -14084,9 +13996,6 @@ namespace KyoS.Web.Migrations
                     b.Property<bool>("DeniedBill")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("EOBId")
-                        .HasColumnType("int");
-
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("nvarchar(max)");
 
@@ -14123,8 +14032,6 @@ namespace KyoS.Web.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("BillDmsId");
-
-                    b.HasIndex("EOBId");
 
                     b.HasIndex("PayStubId");
 
@@ -15596,9 +15503,6 @@ namespace KyoS.Web.Migrations
                     b.Property<bool>("DeniedBill")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("EOBId")
-                        .HasColumnType("int");
-
                     b.Property<int?>("FacilitatorId")
                         .HasColumnType("int");
 
@@ -15631,8 +15535,6 @@ namespace KyoS.Web.Migrations
                     b.HasIndex("BillDmsId");
 
                     b.HasIndex("ClientId");
-
-                    b.HasIndex("EOBId");
 
                     b.HasIndex("FacilitatorId");
 
@@ -16129,15 +16031,6 @@ namespace KyoS.Web.Migrations
                         .HasForeignKey("ClinicId");
 
                     b.Navigation("Clinic");
-                });
-
-            modelBuilder.Entity("KyoS.Web.Data.Entities.EOBDetailsEntity", b =>
-                {
-                    b.HasOne("KyoS.Web.Data.Entities.EOBEntity", "EOB")
-                        .WithMany("EOBDetails")
-                        .HasForeignKey("EOBId");
-
-                    b.Navigation("EOB");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.EligibilityEntity", b =>
@@ -17585,10 +17478,6 @@ namespace KyoS.Web.Migrations
                         .WithMany("TCMNotes")
                         .HasForeignKey("BillDmsId");
 
-                    b.HasOne("KyoS.Web.Data.Entities.EOBEntity", "EOB")
-                        .WithMany("TCMNotes")
-                        .HasForeignKey("EOBId");
-
                     b.HasOne("KyoS.Web.Data.Entities.TCMPayStubEntity", "PayStub")
                         .WithMany("TCMNotes")
                         .HasForeignKey("PayStubId");
@@ -17598,8 +17487,6 @@ namespace KyoS.Web.Migrations
                         .HasForeignKey("TCMClientId");
 
                     b.Navigation("BillDms");
-
-                    b.Navigation("EOB");
 
                     b.Navigation("PayStub");
 
@@ -17902,10 +17789,6 @@ namespace KyoS.Web.Migrations
                         .WithMany("Workdays_Clients")
                         .HasForeignKey("ClientId");
 
-                    b.HasOne("KyoS.Web.Data.Entities.EOBEntity", "EOB")
-                        .WithMany("Workday_Clients")
-                        .HasForeignKey("EOBId");
-
                     b.HasOne("KyoS.Web.Data.Entities.FacilitatorEntity", "Facilitator")
                         .WithMany("Workdays_Clients")
                         .HasForeignKey("FacilitatorId");
@@ -17921,8 +17804,6 @@ namespace KyoS.Web.Migrations
                     b.Navigation("BillDms");
 
                     b.Navigation("Client");
-
-                    b.Navigation("EOB");
 
                     b.Navigation("Facilitator");
 
@@ -18162,15 +18043,6 @@ namespace KyoS.Web.Migrations
             modelBuilder.Entity("KyoS.Web.Data.Entities.DocumentsAssistantEntity", b =>
                 {
                     b.Navigation("DocumentAssistantCertifications");
-                });
-
-            modelBuilder.Entity("KyoS.Web.Data.Entities.EOBEntity", b =>
-                {
-                    b.Navigation("EOBDetails");
-
-                    b.Navigation("TCMNotes");
-
-                    b.Navigation("Workday_Clients");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.EmergencyContactEntity", b =>

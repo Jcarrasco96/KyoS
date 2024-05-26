@@ -176,6 +176,8 @@ namespace KyoS.Web.Data
         public DbSet<DocumentAssistantCertificationEntity> DocumentAssistantCertifications { get; set; }
         public DbSet<SupervisorCertificationEntity> SupervisorCertifications { get; set; }
         public DbSet<NotePSYEntity> NotesPSYs { get; set; }
+        public DbSet<EOBEntity> EOBs { get; set; }
+        public DbSet<EOBDetailsEntity> EOBDetails { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

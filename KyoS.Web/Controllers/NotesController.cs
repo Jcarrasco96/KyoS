@@ -376,22 +376,30 @@ namespace KyoS.Web.Controllers
                 ViewBag.Error = "5";
             }
 
-            Workday_Client workday_Client = await _context.Workdays_Clients.Include(wc => wc.Workday)
-                                                                           .ThenInclude(w => w.Workdays_Activities_Facilitators)
-                                                                           .ThenInclude(waf => waf.Activity)
-                                                                           .ThenInclude(a => a.Theme)
+            Workday_Client workday_Client = await _context.Workdays_Clients
+                                                          .Include(wc => wc.Workday)
+                                                          .ThenInclude(w => w.Workdays_Activities_Facilitators)
+                                                          .ThenInclude(waf => waf.Activity)
+                                                          .ThenInclude(a => a.Theme)
 
-                                                                           .Include(wc => wc.Client)
-                                                                           .ThenInclude(c => c.Clinic)
+                                                          .Include(wc => wc.Client)
+                                                          .ThenInclude(c => c.Clinic)
 
-                                                                           .Include(wc => wc.Client)
-                                                                           .ThenInclude(c => c.Group)
+                                                          .Include(wc => wc.Client)
+                                                          .ThenInclude(c => c.Group)
 
-                                                                           .Include(wc => wc.Client)
-                                                                           .ThenInclude(c => c.MTPs)
+                                                          .Include(wc => wc.Client)
+                                                          .ThenInclude(c => c.MTPs)
 
-                                                                           .Include(wc => wc.Facilitator)
-                                                                           .FirstOrDefaultAsync(wc => wc.Id == id);
+                                                          .Include(wc => wc.Schedule)
+                                                          .ThenInclude(c => c.SubSchedules)
+
+                                                          .Include(wc => wc.Client)
+                                                          .ThenInclude(c => c.Clients_Diagnostics)
+                                                          .ThenInclude(c => c.Diagnostic)
+
+                                                          .Include(wc => wc.Facilitator)
+                                                          .FirstOrDefaultAsync(wc => wc.Id == id);
 
             if (workday_Client == null)
             {
@@ -541,7 +549,8 @@ namespace KyoS.Web.Controllers
                     Activity1 = (activities.Count > 0) ? activities[0].Activity.Name : string.Empty,
                     Goals1 = goals,
                     Objetives1 = objs,
-                    Minute1 = 60,
+                    Present1 = true,
+                    Minute1 = (workday_Client.Schedule.SubSchedules.Count() > 0) ? Convert.ToInt32((workday_Client.Schedule.SubSchedules.ElementAt(0).EndTime - workday_Client.Schedule.SubSchedules.ElementAt(0).InitialTime).TotalMinutes) : 60,
 
                     //IdTopic2 = (activities.Count > 1) ? activities[1].Activity.Theme.Id : 0,
                     Topic2 = (activities.Count > 1) ? activities[1].Activity.Theme.Name : string.Empty,
@@ -549,7 +558,8 @@ namespace KyoS.Web.Controllers
                     Activity2 = (activities.Count > 1) ? activities[1].Activity.Name : string.Empty,
                     Goals2 = goals,
                     Objetives2 = objs,
-                    Minute2 = 60,
+                    Present2 = true,
+                    Minute2 = (workday_Client.Schedule.SubSchedules.Count() > 1) ? Convert.ToInt32((workday_Client.Schedule.SubSchedules.ElementAt(1).EndTime - workday_Client.Schedule.SubSchedules.ElementAt(1).InitialTime).TotalMinutes) : 60,
 
                     //IdTopic3 = (activities.Count > 2) ? activities[2].Activity.Theme.Id : 0,
                     Topic3 = (activities.Count > 2) ? activities[2].Activity.Theme.Name : string.Empty,
@@ -557,7 +567,8 @@ namespace KyoS.Web.Controllers
                     Activity3 = (activities.Count > 2) ? activities[2].Activity.Name : string.Empty,
                     Goals3 = goals,
                     Objetives3 = objs,
-                    Minute3 = 60,
+                    Present3 = true,
+                    Minute3 = (workday_Client.Schedule.SubSchedules.Count() > 2) ? Convert.ToInt32((workday_Client.Schedule.SubSchedules.ElementAt(2).EndTime - workday_Client.Schedule.SubSchedules.ElementAt(2).InitialTime).TotalMinutes) : 60,
 
                     //IdTopic4 = (activities.Count > 3) ? activities[3].Activity.Theme.Id : 0,
                     Topic4 = (activities.Count > 3) ? activities[3].Activity.Theme.Name : string.Empty,
@@ -565,11 +576,16 @@ namespace KyoS.Web.Controllers
                     Activity4 = (activities.Count > 3) ? activities[3].Activity.Name : string.Empty,
                     Goals4 = goals,
                     Objetives4 = objs,
-                    Minute4 = 60,
+                    Present4 = true,
+                    Minute4 = (workday_Client.Schedule.SubSchedules.Count() > 3) ? Convert.ToInt32((workday_Client.Schedule.SubSchedules.ElementAt(3).EndTime - workday_Client.Schedule.SubSchedules.ElementAt(3).InitialTime).TotalMinutes) : 60,
 
                     Workday_Cient = workday_Client,
-                    Setting = "53"
+                    Setting = "53",
+                    Title = activities[0].TitleNote
                 };
+
+                noteViewModel.TotalMinutes = noteViewModel.Minute1 + noteViewModel.Minute2 + noteViewModel.Minute3 + noteViewModel.Minute4;
+                noteViewModel.RealUnits = GetTotalUnits(noteViewModel.TotalMinutes);
             }
             else
             {
@@ -647,6 +663,7 @@ namespace KyoS.Web.Controllers
                     SeverelyImpaired = note.SeverelyImpaired,
 
                     //IdTopic1 = (activities.Count > 0) ? activities[0].Activity.Theme.Id : 0,
+                    Present1 = note_Activity[0].Present,
                     Topic1 = (activities.Count > 0) ? activities[0].Activity.Theme.Name : string.Empty,
                     IdActivity1 = (activities.Count > 0) ? activities[0].Activity.Id : 0,
                     Activity1 = (activities.Count > 0) ? activities[0].Activity.Name : string.Empty,
@@ -660,8 +677,10 @@ namespace KyoS.Web.Controllers
                                                                         ? note_Activity[0].Objetive.Goal.Id : 0),
                     Intervention1 = ((note_Activity.Count > 0) && (note_Activity[0].Objetive != null)) ? note_Activity[0].Objetive.Intervention : string.Empty,
                     Minute1 = note_Activity[0].Minute,
+                    
 
                     //IdTopic2 = (activities.Count > 1) ? activities[1].Activity.Theme.Id : 0,
+                    Present2 = note_Activity[1].Present,
                     Topic2 = (activities.Count > 1) ? activities[1].Activity.Theme.Name : string.Empty,
                     IdActivity2 = (activities.Count > 1) ? activities[1].Activity.Id : 0,
                     Activity2 = (activities.Count > 1) ? activities[1].Activity.Name : string.Empty,
@@ -677,6 +696,7 @@ namespace KyoS.Web.Controllers
                     Minute2 = note_Activity[1].Minute,
 
                     //IdTopic3 = (activities.Count > 2) ? activities[2].Activity.Theme.Id : 0,
+                    Present3 = note_Activity[2].Present,
                     Topic3 = (activities.Count > 2) ? activities[2].Activity.Theme.Name : string.Empty,
                     IdActivity3 = (activities.Count > 2) ? activities[2].Activity.Id : 0,
                     Activity3 = (activities.Count > 2) ? activities[2].Activity.Name : string.Empty,
@@ -692,6 +712,7 @@ namespace KyoS.Web.Controllers
                     Minute3 = note_Activity[2].Minute,
 
                     //IdTopic4 = (activities.Count > 3) ? activities[3].Activity.Theme.Id : 0,
+                    Present4 = note_Activity[3].Present,
                     Topic4 = (activities.Count > 3) ? activities[3].Activity.Theme.Name : string.Empty,
                     IdActivity4 = (activities.Count > 3) ? activities[3].Activity.Id : 0,
                     Activity4 = (activities.Count > 3) ? activities[3].Activity.Name : string.Empty,
@@ -705,10 +726,30 @@ namespace KyoS.Web.Controllers
                                                                         ? note_Activity[3].Objetive.Goal.Id : 0),
                     Intervention4 = ((note_Activity.Count > 3) && (note_Activity[3].Objetive != null)) ? note_Activity[3].Objetive.Intervention : string.Empty,
                     Minute4 = note_Activity[3].Minute,
-                    Setting = note.Setting
+                    Setting = note.Setting,
+
+                    TotalMinutes = note_Activity[0].Minute + note_Activity[1].Minute + note_Activity[2].Minute + note_Activity[3].Minute,
+                    RealUnits = GetTotalUnits(note_Activity[0].Minute + note_Activity[1].Minute + note_Activity[2].Minute + note_Activity[3].Minute),
+                    Title = note.Title
 
                 };
             }
+
+            DiagnosticEntity dx = new DiagnosticEntity();
+            if (workday_Client.Client.Clients_Diagnostics.FirstOrDefault(n => n.Principal == true) != null)
+            {
+                dx = workday_Client.Client.Clients_Diagnostics.FirstOrDefault(n => n.Principal == true).Diagnostic;
+            }
+
+            if (dx != null)
+            {
+                noteViewModel.Dx = dx.Code + ": " + dx.Description;
+            }
+            else
+            {
+                noteViewModel.Dx = "The client does not have an active primary diagnosis.";
+            }
+
             return View(noteViewModel);
         }
 
@@ -748,9 +789,19 @@ namespace KyoS.Web.Controllers
                 if (note == null)   //la nota no está creada
                 {
                     //Verify the client is not present in other services of notes at the same time
-                    if (this.VerifyNotesAtSameTime(workday_Client.Client.Id, workday_Client.Session, workday_Client.Workday.Date))
+                    if (workday_Client.Schedule != null)
                     {
-                        return RedirectToAction(nameof(EditNote), new { id = model.Id, error = 5, origin = model.Origin });
+                        if (this.VerifyNotesAtSameTime(workday_Client.Client.Id, workday_Client.Session, workday_Client.Workday.Date, workday_Client.Schedule.InitialTime, workday_Client.Schedule.EndTime, workday_Client.Id))
+                        {
+                            return RedirectToAction(nameof(EditNoteP), new { id = model.Id, error = 5, origin = model.Origin });
+                        }
+                    }
+                    else
+                    {
+                        if (this.VerifyNotesAtSameTime(workday_Client.Client.Id, workday_Client.Session, workday_Client.Workday.Date, workday_Client.Workday.Date, workday_Client.Workday.Date, workday_Client.Id))
+                        {
+                            return RedirectToAction(nameof(EditNote), new { id = model.Id, error = 5, origin = model.Origin });
+                        }
                     }
 
                     //actualizo el progress seleccionado en el plan
@@ -775,7 +826,8 @@ namespace KyoS.Web.Controllers
                     noteEntity.Decompensating = (form["Progress"] == "Decompensating") ? true : false;
                     noteEntity.UnableToDetermine = (form["Progress"] == "Unable") ? true : false;
                     noteEntity.Setting = model.Setting;
-                    
+                    noteEntity.Title = model.Title;
+
                     //vinculo el mtp activo del cliente a la nota que se creará
                     Workday_Client workday_client = await _context.Workdays_Clients
                                                                   .Include(wd => wd.Client)
@@ -826,7 +878,8 @@ namespace KyoS.Web.Controllers
                         AnswerFacilitator = (model.AnswerFacilitator1.Trim().Last() == '.') ? model.AnswerFacilitator1.Trim() : $"{model.AnswerFacilitator1.Trim()}.",
                         Objetive = _context.Objetives.FirstOrDefault(o => o.Id == model.IdObjetive1),
                         SubSchedule = bandera ? subSchedules.ElementAtOrDefault(0) : null,
-                        Minute = model.Minute1
+                        Minute = model.Minute1,
+                        Present = model.Present1
                     };
                     _context.Add(note_Activity);
                     note_Activity = new Note_Activity
@@ -837,7 +890,8 @@ namespace KyoS.Web.Controllers
                         AnswerFacilitator = (model.AnswerFacilitator2 != null) ? ((model.AnswerFacilitator2.Trim().Last() == '.') ? model.AnswerFacilitator2.Trim() : $"{model.AnswerFacilitator2.Trim()}.") : string.Empty,
                         Objetive = _context.Objetives.FirstOrDefault(o => o.Id == model.IdObjetive2),
                         SubSchedule = bandera ? subSchedules.ElementAtOrDefault(1) : null,
-                        Minute = model.Minute2
+                        Minute = model.Minute2,
+                        Present = model.Present2
                     };
                     _context.Add(note_Activity);
                     note_Activity = new Note_Activity
@@ -848,7 +902,8 @@ namespace KyoS.Web.Controllers
                         AnswerFacilitator = (model.AnswerFacilitator3 != null) ? ((model.AnswerFacilitator3.Trim().Last() == '.') ? model.AnswerFacilitator3.Trim() : $"{model.AnswerFacilitator3.Trim()}.") : string.Empty,
                         Objetive = _context.Objetives.FirstOrDefault(o => o.Id == model.IdObjetive3),
                         SubSchedule = bandera ? subSchedules.ElementAtOrDefault(2) : null,
-                        Minute = model.Minute3
+                        Minute = model.Minute3,
+                        Present = model.Present3
                     };
                     _context.Add(note_Activity);
                     note_Activity = new Note_Activity
@@ -859,7 +914,8 @@ namespace KyoS.Web.Controllers
                         AnswerFacilitator = (model.AnswerFacilitator4 != null) ? ((model.AnswerFacilitator4.Trim().Last() == '.') ? model.AnswerFacilitator4.Trim() : $"{model.AnswerFacilitator4.Trim()}.") : string.Empty,
                         Objetive = _context.Objetives.FirstOrDefault(o => o.Id == model.IdObjetive4),
                         SubSchedule = bandera ? subSchedules.ElementAtOrDefault(3) : null,
-                        Minute = model.Minute4
+                        Minute = model.Minute4,
+                        Present = model.Present4
                     };
                     _context.Add(note_Activity);
 
@@ -941,6 +997,14 @@ namespace KyoS.Web.Controllers
                     if (mtp != null)
                         note.MTPId = mtp.Id;
 
+                    // I will calculate the real units of the note
+                    int minutesTotal = 0;
+                    minutesTotal += (model.Present1) ? model.Minute1 : 0;
+                    minutesTotal += (model.Present2) ? model.Minute2 : 0;
+                    minutesTotal += (model.Present3) ? model.Minute3 : 0;
+                    minutesTotal += (model.Present4) ? model.Minute4 : 0;
+                    note.RealUnits = CalcularUnits(minutesTotal);
+
                     _context.Update(note);
                     List<Note_Activity> noteActivities_list = await _context.Notes_Activities
                                                                             .Where(na => na.Note.Id == note.Id)
@@ -968,7 +1032,8 @@ namespace KyoS.Web.Controllers
                         AnswerFacilitator = (model.AnswerFacilitator1.Trim().Last() == '.') ? model.AnswerFacilitator1.Trim() : $"{model.AnswerFacilitator1.Trim()}.",
                         Objetive = _context.Objetives.FirstOrDefault(o => o.Id == model.IdObjetive1),
                         SubSchedule = bandera ? subSchedules.ElementAtOrDefault(0) : null,
-                        Minute = model.Minute1
+                        Present = model.Present1,
+                        Minute = (model.Present1)? model.Minute1 : 0,
                     };
                     _context.Add(note_Activity);                    
                     await _context.SaveChangesAsync();
@@ -981,7 +1046,8 @@ namespace KyoS.Web.Controllers
                         AnswerFacilitator = (model.AnswerFacilitator2 != null) ? ((model.AnswerFacilitator2.Trim().Last() == '.') ? model.AnswerFacilitator2.Trim() : $"{model.AnswerFacilitator2.Trim()}.") : string.Empty,
                         Objetive = _context.Objetives.FirstOrDefault(o => o.Id == model.IdObjetive2),
                         SubSchedule = bandera ? subSchedules.ElementAtOrDefault(1) : null,
-                        Minute = model.Minute2
+                        Minute = (model.Present2) ? model.Minute2 : 0,
+                        Present = model.Present2
                     };
                     _context.Add(note_Activity);
                     await _context.SaveChangesAsync();
@@ -994,7 +1060,8 @@ namespace KyoS.Web.Controllers
                         AnswerFacilitator = (model.AnswerFacilitator3 != null) ? ((model.AnswerFacilitator3.Trim().Last() == '.') ? model.AnswerFacilitator3.Trim() : $"{model.AnswerFacilitator3.Trim()}.") : string.Empty,
                         Objetive = _context.Objetives.FirstOrDefault(o => o.Id == model.IdObjetive3),
                         SubSchedule = bandera ? subSchedules.ElementAtOrDefault(2) : null,
-                        Minute = model.Minute3
+                        Minute = (model.Present3) ? model.Minute3 : 0,
+                        Present = model.Present3
                     };
                     _context.Add(note_Activity);
                     await _context.SaveChangesAsync();
@@ -1007,7 +1074,8 @@ namespace KyoS.Web.Controllers
                         AnswerFacilitator = (model.AnswerFacilitator4 != null) ? ((model.AnswerFacilitator4.Trim().Last() == '.') ? model.AnswerFacilitator4.Trim() : $"{model.AnswerFacilitator4.Trim()}.") : string.Empty,
                         Objetive = _context.Objetives.FirstOrDefault(o => o.Id == model.IdObjetive4),
                         SubSchedule = bandera ? subSchedules.ElementAtOrDefault(3) : null,
-                        Minute = model.Minute4
+                        Minute = (model.Present4) ? model.Minute4 : 0,
+                        Present = model.Present4
                     };
                     _context.Add(note_Activity);
 
@@ -1326,7 +1394,7 @@ namespace KyoS.Web.Controllers
                     relaxationTraining1 = activities[0].relaxationTraining == null ? false : Convert.ToBoolean(activities[0].relaxationTraining),
                     socialSkills1 = activities[0].socialSkills == null ? false : Convert.ToBoolean(activities[0].socialSkills),
                     stressManagement1 = activities[0].stressManagement == null ? false : Convert.ToBoolean(activities[0].stressManagement),
-                    Minute1 = (workday_Client.Schedule.SubSchedules.Count() > 1) ? Convert.ToInt32((workday_Client.Schedule.SubSchedules.ElementAt(1).EndTime - workday_Client.Schedule.SubSchedules.ElementAt(1).InitialTime).TotalMinutes) : 0,
+                    Minute1 = (workday_Client.Schedule.SubSchedules.Count() > 0) ? Convert.ToInt32((workday_Client.Schedule.SubSchedules.ElementAt(0).EndTime - workday_Client.Schedule.SubSchedules.ElementAt(0).InitialTime).TotalMinutes) : 0,
 
                     Present2 = true,
                     Theme2 = (activities.Count > 1) ? activities[1].Activity.Theme.Name : string.Empty,
@@ -1724,12 +1792,12 @@ namespace KyoS.Web.Controllers
                     }
                                         
                     // I will calculate the real units of the note
-                    int realUnits = 0;
-                    realUnits = (model.Present1) ? realUnits + ((model.Minute1 > 0)? CalcularUnits(model.Minute1) : 0): realUnits;
-                    realUnits = (model.Present2) ? realUnits + ((model.Minute2 > 0) ? CalcularUnits(model.Minute2) : 0) : realUnits;
-                    realUnits = (model.Present3) ? realUnits + ((model.Minute3 > 0) ? CalcularUnits(model.Minute3) : 0) : realUnits;
-                    realUnits = (model.Present4) ? realUnits + ((model.Minute4 > 0) ? CalcularUnits(model.Minute4) : 0) : realUnits;
-                    noteEntity.RealUnits = realUnits;
+                    int minutesTotal = 0;
+                    minutesTotal += (model.Present1) ? model.Minute1 : 0;
+                    minutesTotal += (model.Present2) ? model.Minute2 : 0;
+                    minutesTotal += (model.Present3) ? model.Minute3 : 0;
+                    minutesTotal += (model.Present4) ? model.Minute4 : 0;
+                    noteEntity.RealUnits = CalcularUnits(minutesTotal);
 
                     _context.Add(noteEntity);
 
@@ -5009,6 +5077,11 @@ namespace KyoS.Web.Controllers
                                                                            .Include(wc => wc.Facilitator)
 
                                                                            .Include(wc => wc.NoteP)
+
+                                                                           .Include(wc => wc.Client)
+                                                                           .ThenInclude(c => c.Clients_Diagnostics)
+                                                                           .ThenInclude(c => c.Diagnostic)
+
                                                                            .AsSplitQuery()
                                                                            .FirstOrDefaultAsync(wc => wc.Id == id);
 
@@ -5055,7 +5128,9 @@ namespace KyoS.Web.Controllers
                     Schema = note.Schema,
                     CodeBill = workday_Client.CodeBill,
                     MTPId = _context.MTPs.FirstOrDefault(n => n.Active == true && n.Client.Id == workday_Client.Client.Id).Id,
-
+                    Setting = note.Setting,
+                    Title = note.Title,
+                   
                     OrientedX3 = note.OrientedX3,
                     NotTime = note.NotTime,
                     NotPlace = note.NotPlace,
@@ -5093,6 +5168,8 @@ namespace KyoS.Web.Controllers
                     AnswerFacilitator1 = note_Activity[0].AnswerFacilitator,
                     Goal1 = (note_Activity[0].Objetive != null) ? note_Activity[0].Objetive.Goal.Number.ToString() : string.Empty,
                     Objetive1 = (note_Activity[0].Objetive != null) ? note_Activity[0].Objetive.Objetive : string.Empty,
+                    Minute1 = note_Activity[0].Minute,
+                    Present1 = note_Activity[0].Present,
 
                     Topic2 = note_Activity[1].Activity.Theme.Name,
                     Activity2 = note_Activity[1].Activity.Name,
@@ -5100,6 +5177,8 @@ namespace KyoS.Web.Controllers
                     AnswerFacilitator2 = note_Activity[1].AnswerFacilitator,
                     Goal2 = (note_Activity[1].Objetive != null) ? note_Activity[1].Objetive.Goal.Number.ToString() : string.Empty,
                     Objetive2 = (note_Activity[1].Objetive != null) ? note_Activity[1].Objetive.Objetive : string.Empty,
+                    Minute2 = note_Activity[1].Minute,
+                    Present2 = note_Activity[1].Present,
 
                     Topic3 = note_Activity[2].Activity.Theme.Name,
                     Activity3 = note_Activity[2].Activity.Name,
@@ -5107,6 +5186,8 @@ namespace KyoS.Web.Controllers
                     AnswerFacilitator3 = note_Activity[2].AnswerFacilitator,
                     Goal3 = (note_Activity[2].Objetive != null) ? note_Activity[2].Objetive.Goal.Number.ToString() : string.Empty,
                     Objetive3 = (note_Activity[2].Objetive != null) ? note_Activity[2].Objetive.Objetive : string.Empty,
+                    Minute3 = note_Activity[2].Minute,
+                    Present3 = note_Activity[2].Present,
 
                     Topic4 = note_Activity[3].Activity.Theme.Name,
                     Activity4 = note_Activity[3].Activity.Name,
@@ -5114,6 +5195,11 @@ namespace KyoS.Web.Controllers
                     AnswerFacilitator4 = note_Activity[3].AnswerFacilitator,
                     Goal4 = (note_Activity[3].Objetive != null) ? note_Activity[3].Objetive.Goal.Number.ToString() : string.Empty,
                     Objetive4 = (note_Activity[3].Objetive != null) ? note_Activity[3].Objetive.Objetive : string.Empty,
+                    Minute4 = note_Activity[3].Minute,
+                    Present4 = note_Activity[3].Present,
+
+                    TotalMinutes = note_Activity[0].Minute + note_Activity[1].Minute + note_Activity[2].Minute + note_Activity[3].Minute,
+                    RealUnits = GetTotalUnits(note_Activity[0].Minute + note_Activity[1].Minute + note_Activity[2].Minute + note_Activity[3].Minute),
                 };
             }
             if (note.Schema == Common.Enums.SchemaType.Schema4)
@@ -5180,8 +5266,23 @@ namespace KyoS.Web.Controllers
                     Goal3 = (note_Activity[2].Objetive != null) ? note_Activity[2].Objetive.Goal.Number.ToString() : string.Empty,
                     Objetive3 = (note_Activity[2].Objetive != null) ? note_Activity[2].Objetive.Objetive : string.Empty                    
                 };
-            }            
-            
+            }
+
+            DiagnosticEntity dx = new DiagnosticEntity();
+            if (workday_Client.Client.Clients_Diagnostics.FirstOrDefault(n => n.Principal == true) != null)
+            {
+                dx = workday_Client.Client.Clients_Diagnostics.FirstOrDefault(n => n.Principal == true).Diagnostic;
+            }
+
+            if (dx != null)
+            {
+                noteViewModel.Dx = dx.Code + ": " + dx.Description;
+            }
+            else
+            {
+                noteViewModel.Dx = "The client does not have an active primary diagnosis.";
+            }
+
             return View(noteViewModel);
         }
 
