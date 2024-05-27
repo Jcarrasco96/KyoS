@@ -383,12 +383,12 @@ namespace KyoS.Web.Controllers
                             if (origin == 1)
                             {
                                 List<TCMClientEntity> tcmClients = await _context.TCMClient
-                                                                                 .Include(g => g.Casemanager)
-                                                                                 .Include(g => g.Client)
-                                                                                 .Where(s => s.Client.Clinic.Id == user_logged.Clinic.Id)
-                                                                                 .OrderBy(g => g.Casemanager.Name)
-                                                                                 .ToListAsync();
-                                return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "GetCaseOpen", tcmClients) });
+                                                                                  .Include(g => g.Casemanager)
+                                                                                  .Include(g => g.Client)
+                                                                                  .Where(g => g.Status == StatusType.Open)
+                                                                                  .OrderBy(g => g.Client.Name)
+                                                                                  .ToListAsync();
+                                return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewCaseOpen", tcmClients) });
 
                             }
                             if (origin == 2)
