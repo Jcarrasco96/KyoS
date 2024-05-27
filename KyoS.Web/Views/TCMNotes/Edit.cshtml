@@ -73,7 +73,7 @@
                     </strong>
                 </div>
             }
-            @if (ViewBag.Delete == "Interval")
+            @if (ViewBag.DateBlocked == "Interval")
             {
                 <div class="alert alert-block alert-danger">
                     <button type="button" class="close" data-dismiss="alert">
@@ -84,7 +84,7 @@
                     </strong>
                 </div>
             }
-            @if (ViewBag.Delete == "MH")
+            @if (ViewBag.DateBlocked == "MH")
             {
                 <div class="alert alert-block alert-danger">
                     <button type="button" class="close" data-dismiss="alert">
@@ -95,7 +95,7 @@
                     </strong>
                 </div>
             }
-            @if (ViewBag.Delete == "Supervision")
+            @if (ViewBag.DateBlocked == "Supervision")
             {
                 <div class="alert alert-block alert-danger">
                     <button type="button" class="close" data-dismiss="alert">
@@ -106,7 +106,7 @@
                     </strong>
                 </div>
             }
-            @if (ViewBag.Delete == "A")
+            @if (ViewBag.DateBlocked == "A")
             {
                 <div class="alert alert-block alert-danger">
                     <button type="button" class="close" data-dismiss="alert">
@@ -139,6 +139,18 @@
                     <i class="icon-ok red"></i>
                     <strong class="red">
                         Error. You cannot create notes for that client because they do not have a valid authorization.
+                    </strong>
+                </div>
+            }
+            @if (ViewBag.DateBlocked == "locked")
+            {
+                <div class="alert alert-block alert-danger">
+                    <button type="button" class="close" data-dismiss="alert">
+                        <i class="icon-remove"></i>
+                    </button>
+                    <i class="icon-ok red"></i>
+                    <strong class="red">
+                        Error. This time is blocked by the manager.
                     </strong>
                 </div>
             }

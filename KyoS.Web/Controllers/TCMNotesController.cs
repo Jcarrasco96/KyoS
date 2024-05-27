@@ -215,7 +215,8 @@ namespace KyoS.Web.Controllers
                                                       .Where(na => na.UserName == user_logged.UserName),
                         Sign = false,
                         CodeBill = user_logged.Clinic.CPTCode_TCM,
-                        Billable = billable
+                        Billable = billable,
+                        DateOfServiceReference = dateTime
 
                     };
                     ViewData["origin"] = origin;
@@ -238,6 +239,7 @@ namespace KyoS.Web.Controllers
         {
             UserEntity user_logged = _context.Users
                                              .Include(u => u.Clinic)
+                                             .ThenInclude(u => u.Setting)
                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
             if (ModelState.IsValid)
@@ -246,6 +248,70 @@ namespace KyoS.Web.Controllers
 
                 if (NoteEntity.Id == 0)
                 {
+                    //si se cambia el dia de la nota,verificar que no exista un mes de diferencia con alguna anterior
+                    if (user_logged.Clinic.Setting.LockTCMNoteForOneMonthIdle == true)
+                    {
+                        List<TCMNoteEntity> list = _context.TCMNote.Where(n => n.TCMClient.Id == TcmNoteViewModel.IdTCMClient && n.Id != TcmNoteViewModel.IdTCMNote && n.DateOfService < TcmNoteViewModel.DateOfService).ToList();
+                        if (list.Count() > 0)
+                        {
+                            DateTime lastTime = list.MaxBy(n => n.DateOfService).DateOfService;
+                            TCMIntakeAppendixJEntity appendixJ = _context.TCMIntakeAppendixJ.FirstOrDefault(n => n.TcmClient_FK == TcmNoteViewModel.IdTCMClient && n.Date > lastTime);
+
+                            if (lastTime.AddDays(30.0) < TcmNoteViewModel.DateOfService && appendixJ == null)
+                            {
+                                ViewData["origin"] = origin;
+                                ViewData["available"] = UnitsAvailable(TcmNoteViewModel.DateOfService, TcmNoteViewModel.IdTCMClient,true);
+                                ViewBag.DateBlocked = "A";
+                                TcmNoteViewModel.TCMNoteActivityTemp = _context.TCMNoteActivityTemp
+                                                                               .Where(na => na.UserName == user_logged.UserName);
+                                return View(TcmNoteViewModel);
+                            }
+                        }
+                    }
+
+                    //severificar que exista una authiorization valida y un Dx
+                    if (user_logged.Clinic.Setting.LockTCMNoteForDx == true || user_logged.Clinic.Setting.LockTCMNoteForAuth == true)
+                    {
+                        TCMClientEntity tcmClient = _context.TCMClient
+                                                            .Include(n => n.Client)
+                                                            .ThenInclude(n => n.Clients_Diagnostics)
+                                                            .Include(n => n.Client)
+                                                            .ThenInclude(n => n.Clients_HealthInsurances)
+                                                            .FirstOrDefault(n => n.Id == TcmNoteViewModel.IdTCMClient);
+
+                        if (tcmClient.Client.Clients_Diagnostics.Where(n => n.Principal == true && n.Active == true).Count() == 0)
+                        {
+                            ViewData["origin"] = origin;
+                            ViewData["available"] = UnitsAvailable(TcmNoteViewModel.DateOfService, TcmNoteViewModel.IdTCMClient, true);
+                            ViewBag.DateBlocked = "DX";
+                            TcmNoteViewModel.TCMNoteActivityTemp = _context.TCMNoteActivityTemp
+                                                                           .Where(na => na.UserName == user_logged.UserName);
+                            ModelState.AddModelError(string.Empty, $"Error. The client does not have diagnostics for the date of this service.");
+                            return View(TcmNoteViewModel);
+                        }
+                        if (tcmClient.Client.Clients_HealthInsurances.Where(n => n.Active == true && n.ApprovedDate.Date <= TcmNoteViewModel.DateOfService && n.ExpiredDate.Date >= TcmNoteViewModel.DateOfService).Count() == 0)
+                        {
+                            ViewData["origin"] = origin;
+                            ViewData["available"] = UnitsAvailable(TcmNoteViewModel.DateOfService, TcmNoteViewModel.IdTCMClient, true);
+                            ViewBag.DateBlocked = "Auth";
+                            TcmNoteViewModel.TCMNoteActivityTemp = _context.TCMNoteActivityTemp
+                                                                           .Where(na => na.UserName == user_logged.UserName);
+                            ModelState.AddModelError(string.Empty, $"Error. The client does not have valid authorization for the date of this service.");
+                            return View(TcmNoteViewModel);
+                        }
+                    }
+
+                    //reviso al cambiar la fecha de la nota, que para el dia que se esta cambiando no este bloqueado
+                    if (_context.TCMDateBlocked.FirstOrDefault(n => n.DateBlocked == TcmNoteViewModel.DateOfService) != null)
+                    {
+                        ViewData["origin"] = origin;
+                        ViewData["available"] = UnitsAvailable(TcmNoteViewModel.DateOfService, TcmNoteViewModel.IdTCMClient, true);
+                        ViewBag.DateBlocked = "locked";
+                        TcmNoteViewModel.DateOfService = TcmNoteViewModel.DateOfServiceReference;
+                        TcmNoteViewModel.TCMNoteActivityTemp = _context.TCMNoteActivityTemp
+                                                                       .Where(na => na.UserName == user_logged.UserName);
+                        return View(TcmNoteViewModel);
+                    }
 
                     _context.TCMNote.Add(NoteEntity);
                     List<TCMNoteActivityTempEntity> noteActivities = await _context.TCMNoteActivityTemp
@@ -494,12 +560,14 @@ namespace KyoS.Web.Controllers
                         ViewData["origin"] = origin;
                         ViewData["available"] = UnitsAvailable(tcmNotesViewModel.DateOfService, tcmNotesViewModel.IdTCMClient);
                         ViewData["interval"] = interval;
-                        ViewBag.Delete = "A";
+                        ViewBag.DateBlocked = "A";
                         tcmNotesViewModel.TCMNoteActivity = _context.TCMNoteActivity.Where(n => n.TCMNote.Id == tcmNotesViewModel.Id).ToList();
                         return View(tcmNotesViewModel);
                     }
                 }
             }
+
+            //severificar que exista una authiorization valida y un Dx
             if (user_logged.Clinic.Setting.LockTCMNoteForDx == true || user_logged.Clinic.Setting.LockTCMNoteForAuth == true)
             {
                 TCMClientEntity tcmClient = _context.TCMClient
@@ -514,7 +582,7 @@ namespace KyoS.Web.Controllers
                     ViewData["origin"] = origin;
                     ViewData["available"] = UnitsAvailable(tcmNotesViewModel.DateOfService, tcmNotesViewModel.IdTCMClient);
                     ViewData["interval"] = interval;
-                    ViewBag.Delete = "DX";
+                    ViewBag.DateBlocked = "DX";
                     tcmNotesViewModel.TCMNoteActivity = _context.TCMNoteActivity.Where(n => n.TCMNote.Id == tcmNotesViewModel.Id).ToList();
                     ModelState.AddModelError(string.Empty, $"Error. The client does not have diagnostics for the date of this service.");
                     return View(tcmNotesViewModel);
@@ -524,13 +592,12 @@ namespace KyoS.Web.Controllers
                     ViewData["origin"] = origin;
                     ViewData["available"] = UnitsAvailable(tcmNotesViewModel.DateOfService, tcmNotesViewModel.IdTCMClient);
                     ViewData["interval"] = interval;
-                    ViewBag.Delete = "Auth";
+                    ViewBag.DateBlocked = "Auth";
                     tcmNotesViewModel.TCMNoteActivity = _context.TCMNoteActivity.Where(n => n.TCMNote.Id == tcmNotesViewModel.Id).ToList();
                     ModelState.AddModelError(string.Empty, $"Error. The client does not have valid authorization for the date of this service.");
                     return View(tcmNotesViewModel);
                 }
             }
-
 
             if (ModelState.IsValid)
             {
@@ -554,7 +621,7 @@ namespace KyoS.Web.Controllers
                             ViewData["origin"] = origin;
                             ViewData["available"] = UnitsAvailable(tcmNotesViewModel.DateOfService, tcmNotesViewModel.IdTCMClient);
                             ViewData["interval"] = interval;
-                            ViewBag.Delete = "Interval";
+                            ViewBag.DateBlocked = "Interval";
                             tcmNotesViewModel.TCMNoteActivity = _context.TCMNoteActivity.Where(n => n.TCMNote.Id == tcmNotesViewModel.Id).ToList();
                             return View(tcmNotesViewModel);
 
@@ -566,7 +633,7 @@ namespace KyoS.Web.Controllers
                             ViewData["origin"] = origin;
                             ViewData["available"] = UnitsAvailable(tcmNotesViewModel.DateOfService, tcmNotesViewModel.IdTCMClient);
                             ViewData["interval"] = interval;
-                            ViewBag.Delete = "MH";
+                            ViewBag.DateBlocked = "MH";
                             tcmNotesViewModel.TCMNoteActivity = _context.TCMNoteActivity.Where(n => n.TCMNote.Id == tcmNotesViewModel.Id).ToList();
                             return View(tcmNotesViewModel);
 
@@ -588,7 +655,7 @@ namespace KyoS.Web.Controllers
                                 ViewData["origin"] = origin;
                                 ViewData["available"] = UnitsAvailable(tcmNotesViewModel.DateOfService, tcmNotesViewModel.IdTCMClient);
                                 ViewData["interval"] = interval;
-                                ViewBag.Delete = "Supervision";
+                                ViewBag.DateBlocked = "Supervision";
                                 tcmNotesViewModel.TCMNoteActivity = _context.TCMNoteActivity.Where(n => n.TCMNote.Id == tcmNotesViewModel.Id).ToList();
                                 return View(tcmNotesViewModel);
 
@@ -597,6 +664,17 @@ namespace KyoS.Web.Controllers
                         }
                     }
 
+                }
+
+                //reviso al cambiar la fecha de la nota, que para el dia que se esta cambiando no este bloqueado
+                if (_context.TCMDateBlocked.FirstOrDefault(n => n.DateBlocked == tcmNotesViewModel.DateOfService) != null)
+                {
+                    ViewData["origin"] = origin;
+                    ViewData["available"] = UnitsAvailable(tcmNotesViewModel.DateOfService, tcmNotesViewModel.IdTCMClient);
+                    ViewData["interval"] = interval;
+                    ViewBag.DateBlocked = "locked";
+                    tcmNotesViewModel.TCMNoteActivity = _context.TCMNoteActivity.Where(n => n.TCMNote.Id == tcmNotesViewModel.Id).ToList();
+                    return View(tcmNotesViewModel);
                 }
 
                 TCMNoteEntity tcmNotesEntity = await _converterHelper.ToTCMNoteEntity(tcmNotesViewModel, false, user_logged.UserName);

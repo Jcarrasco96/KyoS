@@ -21,6 +21,54 @@
     </div>
     
     <div class="row">
+        @if (ViewBag.DateBlocked == "A")
+        {
+            <div class="alert alert-block alert-danger">
+                <button type="button" class="close" data-dismiss="alert">
+                    <i class="icon-remove"></i>
+                </button>
+                <i class="icon-ok red"></i>
+                <strong class="red">
+                    Error. The service has not been provided for more than 30 days. You must make a new appendixJ or make a note on a date earlier than the selected one.
+                </strong>
+            </div>
+        }
+        @if (ViewBag.DateBlocked == "DX")
+        {
+            <div class="alert alert-block alert-danger">
+                <button type="button" class="close" data-dismiss="alert">
+                    <i class="icon-remove"></i>
+                </button>
+                <i class="icon-ok red"></i>
+                <strong class="red">
+                    Error. You cannot create notes for that client because they do not have a valid diagnosis.
+                </strong>
+            </div>
+        }
+        @if (ViewBag.DateBlocked == "Auth")
+        {
+            <div class="alert alert-block alert-danger">
+                <button type="button" class="close" data-dismiss="alert">
+                    <i class="icon-remove"></i>
+                </button>
+                <i class="icon-ok red"></i>
+                <strong class="red">
+                    Error. You cannot create notes for that client because they do not have a valid authorization.
+                </strong>
+            </div>
+        }
+        @if (ViewBag.DateBlocked == "locked")
+        {
+            <div class="alert alert-block alert-danger">
+                <button type="button" class="close" data-dismiss="alert">
+                    <i class="icon-remove"></i>
+                </button>
+                <i class="icon-ok red"></i>
+                <strong class="red">
+                    Error. This time is blocked by the manager.
+                </strong>
+            </div>
+        }
         <form asp-action="Create" asp-route-id="@Model.Id" asp-route-origin="@ViewData["origin"]" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="IdTCMClient" />
@@ -29,6 +77,7 @@
             <input type="hidden" asp-for="CreatedOn" />
             <input type="hidden" asp-for="CreatedBy" />
             <input type="hidden" asp-for="CodeBill" />
+            <input type="hidden" asp-for="DateOfServiceReference" />
             <partial name="_TCMNotes" />
             <div class="col-md-push-12">
                 <div class="col-md-12 form-group">
