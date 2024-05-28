@@ -1,0 +1,33 @@
+﻿@model KyoS.Web.Models.TCMNoteUpdatePaidViewModel
+@{
+    Layout = null;
+}
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="UpdateDatePaid" onsubmit="return jQueryAjaxPostUpdatePaid(this);">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="IdTCMNote" />
+            <input type="hidden" asp-for="IdCaseManager" />
+            <input type="hidden" asp-for="Billed" />
+            <input type="hidden" asp-for="DateInterval" />
+            <input type="hidden" asp-for="IdClient" />
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label asp-for="DatePaid" class="control-label"></label>
+                    <input asp-for="DatePaid" class="form-control"/>
+                    <span asp-validation-for="DatePaid" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <hr />
+            </div>
+            <div>
+                <div class="col-md-offset-9">
+                    <input type="submit" value="Submit" class="btn btn-primary" />
+                    <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
