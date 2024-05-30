@@ -410,6 +410,8 @@ namespace KyoS.Web.Controllers
                     TCMNoteEntity TcmNote = _context.TCMNote
                                                     .Include(b => b.TCMClient)
                                                     .ThenInclude(b => b.Client)
+                                                    .ThenInclude(b => b.Clinic)
+                                                    .ThenInclude(b => b.Setting)
                                                     .Include(b => b.TCMClient)
                                                     .ThenInclude(b => b.Casemanager)
                                                     .ThenInclude(b => b.TCMSupervisor)
@@ -460,6 +462,8 @@ namespace KyoS.Web.Controllers
                         TCMNoteEntity TcmNote = _context.TCMNote
                                                         .Include(b => b.TCMClient)
                                                         .ThenInclude(b => b.Client)
+                                                        .ThenInclude(b => b.Clinic)
+                                                        .ThenInclude(b => b.Setting)
                                                         .Include(b => b.TCMClient)
                                                         .ThenInclude(b => b.Casemanager)
                                                         .ThenInclude(b => b.TCMSupervisor)
@@ -510,6 +514,8 @@ namespace KyoS.Web.Controllers
                     TCMNoteEntity TcmNote = _context.TCMNote
                                                        .Include(b => b.TCMClient)
                                                        .ThenInclude(b => b.Client)
+                                                       .ThenInclude(b => b.Clinic)
+                                                       .ThenInclude(b => b.Setting)
                                                        .Include(b => b.TCMClient)
                                                        .ThenInclude(b => b.Casemanager)
                                                        .ThenInclude(b => b.TCMSupervisor)
@@ -542,6 +548,7 @@ namespace KyoS.Web.Controllers
                 ViewData["available"] = UnitsAvailable(tcmNotesViewModel.DateOfService, tcmNotesViewModel.IdTCMClient);
                 ViewData["interval"] = interval;
                 ViewBag.Delete = "Exists";
+                tcmNotesViewModel.TCMClient.Client.Clinic = user_logged.Clinic;
                 tcmNotesViewModel.TCMNoteActivity = _context.TCMNoteActivity.Where(n => n.TCMNote.Id == tcmNotesViewModel.Id).ToList();
                 return View(tcmNotesViewModel);
             }
@@ -562,6 +569,7 @@ namespace KyoS.Web.Controllers
                         ViewData["interval"] = interval;
                         ViewBag.DateBlocked = "A";
                         tcmNotesViewModel.TCMNoteActivity = _context.TCMNoteActivity.Where(n => n.TCMNote.Id == tcmNotesViewModel.Id).ToList();
+                        tcmNotesViewModel.TCMClient.Client.Clinic = user_logged.Clinic;
                         return View(tcmNotesViewModel);
                     }
                 }
@@ -584,6 +592,7 @@ namespace KyoS.Web.Controllers
                     ViewData["interval"] = interval;
                     ViewBag.DateBlocked = "DX";
                     tcmNotesViewModel.TCMNoteActivity = _context.TCMNoteActivity.Where(n => n.TCMNote.Id == tcmNotesViewModel.Id).ToList();
+                    tcmNotesViewModel.TCMClient.Client.Clinic = user_logged.Clinic;
                     ModelState.AddModelError(string.Empty, $"Error. The client does not have diagnostics for the date of this service.");
                     return View(tcmNotesViewModel);
                 }
@@ -594,6 +603,7 @@ namespace KyoS.Web.Controllers
                     ViewData["interval"] = interval;
                     ViewBag.DateBlocked = "Auth";
                     tcmNotesViewModel.TCMNoteActivity = _context.TCMNoteActivity.Where(n => n.TCMNote.Id == tcmNotesViewModel.Id).ToList();
+                    tcmNotesViewModel.TCMClient.Client.Clinic = user_logged.Clinic;
                     ModelState.AddModelError(string.Empty, $"Error. The client does not have valid authorization for the date of this service.");
                     return View(tcmNotesViewModel);
                 }
@@ -623,11 +633,15 @@ namespace KyoS.Web.Controllers
                             ViewData["interval"] = interval;
                             ViewBag.DateBlocked = "Interval";
                             tcmNotesViewModel.TCMNoteActivity = _context.TCMNoteActivity.Where(n => n.TCMNote.Id == tcmNotesViewModel.Id).ToList();
+                            tcmNotesViewModel.TCMClient.Client.Clinic = user_logged.Clinic;
                             return View(tcmNotesViewModel);
 
                         }
 
                         //check overlapin Mental Health
+                        item.StartTime = new DateTime(tcmNotesViewModel.DateOfService.Year, tcmNotesViewModel.DateOfService.Month, tcmNotesViewModel.DateOfService.Day, item.StartTime.Hour, item.StartTime.Minute, 0);
+                        item.EndTime = new DateTime(tcmNotesViewModel.DateOfService.Year, tcmNotesViewModel.DateOfService.Month, tcmNotesViewModel.DateOfService.Day, item.EndTime.Hour, item.EndTime.Minute, 0);
+
                         if (CheckOverlappingMH(item.StartTime, item.EndTime, _context.TCMClient.Include(n => n.Client).FirstOrDefault(n => n.Id == tcmNotesViewModel.IdTCMClient).Client.Id) == true)
                         {
                             ViewData["origin"] = origin;
@@ -635,6 +649,7 @@ namespace KyoS.Web.Controllers
                             ViewData["interval"] = interval;
                             ViewBag.DateBlocked = "MH";
                             tcmNotesViewModel.TCMNoteActivity = _context.TCMNoteActivity.Where(n => n.TCMNote.Id == tcmNotesViewModel.Id).ToList();
+                            tcmNotesViewModel.TCMClient.Client.Clinic = user_logged.Clinic;
                             return View(tcmNotesViewModel);
 
                         }
@@ -657,6 +672,7 @@ namespace KyoS.Web.Controllers
                                 ViewData["interval"] = interval;
                                 ViewBag.DateBlocked = "Supervision";
                                 tcmNotesViewModel.TCMNoteActivity = _context.TCMNoteActivity.Where(n => n.TCMNote.Id == tcmNotesViewModel.Id).ToList();
+                                tcmNotesViewModel.TCMClient.Client.Clinic = user_logged.Clinic;
                                 return View(tcmNotesViewModel);
 
                             }
@@ -674,6 +690,7 @@ namespace KyoS.Web.Controllers
                     ViewData["interval"] = interval;
                     ViewBag.DateBlocked = "locked";
                     tcmNotesViewModel.TCMNoteActivity = _context.TCMNoteActivity.Where(n => n.TCMNote.Id == tcmNotesViewModel.Id).ToList();
+                    tcmNotesViewModel.TCMClient.Client.Clinic = user_logged.Clinic;
                     return View(tcmNotesViewModel);
                 }
 
@@ -787,6 +804,7 @@ namespace KyoS.Web.Controllers
             ViewData["available"] = UnitsAvailable(tcmNotesViewModel.DateOfService, tcmNotesViewModel.IdTCMClient);
             ViewData["interval"] = interval;
             tcmNotesViewModel.TCMNoteActivity = _context.TCMNoteActivity.Where(n => n.TCMNote.Id == tcmNotesViewModel.Id).ToList();
+            tcmNotesViewModel.TCMClient.Client.Clinic = user_logged.Clinic;
             return View(tcmNotesViewModel);
             
         }

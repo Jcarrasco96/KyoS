@@ -120,7 +120,7 @@
                                     }
                                     else
                                     {
-                                        @if (User.IsInRole("TCMSupervisor") == true && item.TCMNote.TCMClient.Casemanager.Clinic.Setting.TCMSupervisorEdit == true)
+                                        @if (User.IsInRole("TCMSupervisor") == true && item.TCMNote.TCMClient.Client.Clinic.Setting.TCMSupervisorEdit == true)
                                         {
                                             <a onclick="showInPopupLg('@Url.Action("EditNoteActivity", "TCMNotes", new { id = item.Id, unitsAvaliable = @ViewData["Id"] }, Context.Request.Scheme)','Edit Service')" class="btn btn-warning" title="Edit service"><i class="glyphicon glyphicon-pencil"></i></a>
                                             <a asp-action="DeleteTCMNoteActivity" asp-route-id="@item.Id" class="btn btn-danger" title="Delete service"><i class="glyphicon glyphicon-trash"></i></a>
