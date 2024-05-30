@@ -29,7 +29,7 @@ namespace KyoS.Web.Controllers
             Configuration = configuration;
         }
 
-        [Authorize(Roles = "Manager, Frontdesk, CaseManager")]
+        [Authorize(Roles = "Manager, Frontdesk, CaseManager, TCMSupervisor")]
         public IActionResult Index()
         {
             UserEntity user_logged = _context.Users
@@ -54,13 +54,26 @@ namespace KyoS.Web.Controllers
             }
             else
             {
-                CalendarCMH model = new CalendarCMH
+                if (User.IsInRole("TCMSupervisor"))
                 {
-                    IdClient = 0,
-                    Clients = _combosHelper.GetComboClientsByClinic(user_logged.Clinic.Id, false)
-                };
+                    CalendarCMH model = new CalendarCMH
+                    {
+                        IdClient = 0,
+                        Clients = _combosHelper.GetComboClientsByCaseManagerByTCMSupervisor(user_logged.UserName, 1)
+                    };
 
-                return View(model);
+                    return View(model);
+                }
+                else
+                {
+                    CalendarCMH model = new CalendarCMH
+                    {
+                        IdClient = 0,
+                        Clients = _combosHelper.GetComboTCMClientsByClinic_ClientId(user_logged.Clinic.Id)
+                    };
+
+                    return View(model);
+                }
             }
             
         }
@@ -150,7 +163,7 @@ namespace KyoS.Web.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "Manager, Frontdesk, CaseManager")]
+        [Authorize(Roles = "Manager, Frontdesk, CaseManager, TCMSupervisor")]
         public async Task<IActionResult> Events(string start, string end, int idClient)
         {
             if (idClient != 0)

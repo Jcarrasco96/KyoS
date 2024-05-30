@@ -120,5 +120,7 @@ namespace KyoS.Web.Helpers
 
         IEnumerable<SelectListItem> GetComboInsuranceCoverageType();
         IEnumerable<SelectListItem> GetComboClientsByTCM(string userName, int idClinic, bool blank = false);
+        IEnumerable<SelectListItem> GetComboClientsByCaseManagerByTCMSupervisor(string user, int allClient);
+        IEnumerable<SelectListItem> GetComboTCMClientsByClinic_ClientId(int idClinic);
     }
 }
