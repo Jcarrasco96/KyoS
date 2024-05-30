@@ -6388,6 +6388,8 @@ namespace KyoS.Web.Controllers
 
                                         .Include(wc => wc.Workday)
 
+                                        .AsSplitQuery()
+
                                         .FirstOrDefault(wc => (wc.Id == item.Id));
 
                 if ((workdayClient.Note != null) && (workdayClient.Note.Status == NoteStatus.Approved))
@@ -6471,6 +6473,8 @@ namespace KyoS.Web.Controllers
                                                                           .Include(wc => wc.Workday)
                                                                             .ThenInclude(w => w.Workdays_Activities_Facilitators)
                                                                             .ThenInclude(waf => waf.Facilitator)
+
+                                                                          .AsSplitQuery()
 
                                                                           .Where(wc => (wc.Facilitator.LinkedUser == User.Identity.Name
                                                                                         && wc.NoteP != null && wc.NoteP.Status == NoteStatus.Approved
@@ -6569,6 +6573,8 @@ namespace KyoS.Web.Controllers
 
                                         .Include(wc => wc.Workday)
 
+                                        .AsSplitQuery()
+
                                         .FirstOrDefault(wc => (wc.Id == item.Id));
 
                 if ((workdayClient.IndividualNote != null) && (workdayClient.IndividualNote.Status == NoteStatus.Approved))
@@ -6641,6 +6647,8 @@ namespace KyoS.Web.Controllers
                                         .ThenInclude(o => o.Goal)
 
                                         .Include(wc => wc.Workday)
+
+                                        .AsSplitQuery()
 
                                         .FirstOrDefault(wc => (wc.Id == item.Id));               
 
@@ -6716,6 +6724,8 @@ namespace KyoS.Web.Controllers
                                         .Include(wc => wc.Workday)
 
                                         .Include(wc => wc.Schedule)
+
+                                        .AsSplitQuery()
 
                                         .FirstOrDefault(wc => (wc.Id == item.Id));
 
@@ -7031,6 +7041,19 @@ namespace KyoS.Web.Controllers
                 }
             }
 
+            if (workdayClient.NoteP.Supervisor.Clinic.Name == "BETTER YEARS AHEAD MEDICAL CENTER")
+            {
+                if (workdayClient.NoteP.Schema == Common.Enums.SchemaType.Schema3)
+                {
+                    Stream stream;
+                    if (!workdayClient.SharedSession)
+                        stream = _reportHelper.ByaNoteReportSchema3(workdayClient);
+                    else
+                        stream = _reportHelper.ByaNoteReportSchema3SS(workdayClient);
+                    return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+                }
+            }
+
             return null;
         }
 
@@ -7120,6 +7143,11 @@ namespace KyoS.Web.Controllers
             if (workdayClient.IndividualNote.Supervisor.Clinic.Name == "MEDISANA HEALTH CENTER")
             {
                 Stream stream = _reportHelper.MedisanaIndNoteReportSchema1(workdayClient);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (workdayClient.IndividualNote.Supervisor.Clinic.Name == "BETTER YEARS AHEAD MEDICAL CENTER")
+            {
+                Stream stream = _reportHelper.ByaIndNoteReportSchema1(workdayClient);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
             return null;
@@ -7389,6 +7417,21 @@ namespace KyoS.Web.Controllers
                 if (workdayClient.GroupNote2.Schema == SchemaTypeGroup.Schema3)
                 {
                     stream = _reportHelper.MedisanaGroupNoteReportSchema3(workdayClient);
+                }
+
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (workdayClient.GroupNote2.Supervisor.Clinic.Name == "BETTER YEARS AHEAD MEDICAL CENTER")
+            {
+                Stream stream = null;
+
+                if (workdayClient.GroupNote2.Schema == SchemaTypeGroup.Schema2)
+                {
+                    stream = _reportHelper.ByaGroupNoteReportSchema2(workdayClient);
+                }
+                if (workdayClient.GroupNote2.Schema == SchemaTypeGroup.Schema3)
+                {
+                    stream = _reportHelper.ByaGroupNoteReportSchema3(workdayClient);
                 }
 
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
@@ -12426,6 +12469,11 @@ namespace KyoS.Web.Controllers
                 Stream stream = _reportHelper.MedisanaAbsenceNoteReport(workdayClient);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
+            if (workdayClient.Client.Clinic.Name == "BETTER YEARS AHEAD MEDICAL CENTER")
+            {
+                Stream stream = _reportHelper.ByaAbsenceNoteReport(workdayClient);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
 
             return null;
         }
@@ -12516,6 +12564,11 @@ namespace KyoS.Web.Controllers
             if (workdayClient.Facilitator.Clinic.Name == "MEDISANA HEALTH CENTER")
             {
                 Stream stream = _reportHelper.MedisanaAbsenceNoteReport(workdayClient);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (workdayClient.Facilitator.Clinic.Name == "BETTER YEARS AHEAD MEDICAL CENTER")
+            {
+                Stream stream = _reportHelper.ByaAbsenceNoteReport(workdayClient);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
 
@@ -12610,6 +12663,11 @@ namespace KyoS.Web.Controllers
                 Stream stream = _reportHelper.MedisanaAbsenceNoteReport(workdayClient);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
+            if (workdayClient.Facilitator.Clinic.Name == "BETTER YEARS AHEAD MEDICAL CENTER")
+            {
+                Stream stream = _reportHelper.ByaAbsenceNoteReport(workdayClient);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
 
             return null;
         }
@@ -12620,11 +12678,13 @@ namespace KyoS.Web.Controllers
             List<Workday_Client> workdayClientList = await _context.Workdays_Clients
 
                                                                    .Include(wc => wc.Facilitator)
-                                                                    .ThenInclude(c => c.Clinic)
+                                                                   .ThenInclude(c => c.Clinic)
 
                                                                    .Include(wc => wc.Client)                                                  
 
                                                                    .Include(wc => wc.Workday)
+
+                                                                   .AsSplitQuery()
 
                                                                    .Where(wc => (wc.Client.Id == id && wc.Workday.Week.Id == idWeek 
                                                                               && wc.Workday.Service == service)).ToListAsync();
@@ -12643,11 +12703,13 @@ namespace KyoS.Web.Controllers
             List<Workday_Client> workdayClientList = await _context.Workdays_Clients
 
                                                                    .Include(wc => wc.Facilitator)
-                                                                    .ThenInclude(c => c.Clinic)
+                                                                   .ThenInclude(c => c.Clinic)
 
                                                                    .Include(wc => wc.Client)
 
                                                                    .Include(wc => wc.Workday)
+
+                                                                   .AsSplitQuery()
 
                                                                    .Where(wc => (wc.Client.Id == id && wc.Workday.Week.Id == idWeek && wc.Workday.Service == ServiceType.Group)).ToListAsync();
             if (workdayClientList.Count() == 0)
