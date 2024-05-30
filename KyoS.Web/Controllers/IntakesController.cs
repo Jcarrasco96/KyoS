@@ -2292,6 +2292,12 @@ namespace KyoS.Web.Controllers
                                                       .Include(c => c.IntakeMedicalHistory)
                                                       .Include(c => c.Clinic)
                                                       .Include(c => c.IntakeNoHarm)
+                                                      .Include(n => n.IntakeConsentForTelehealth)
+                                                      .Include(n => n.IntakeNoDuplicateService)
+                                                      .Include(n => n.IntakeAdvancedDirective)
+                                                      .Include(n => n.IntakeClientIdDocumentVerification)
+                                                      .Include(n => n.IntakeForeignLanguage)
+                                                      .Include(n => n.IntakeNoHarm)
 
                                                       .FirstOrDefaultAsync(c => c.Id == id);
             if (clientEntity == null)
