@@ -40,6 +40,18 @@
             </strong>
         </div>
     }
+    @if (ViewBag.MtpExpired == "CH")
+    {
+        <div class="alert alert-block alert-danger">
+            <button type="button" class="close" data-dismiss="alert">
+                <i class="icon-remove"></i>
+            </button>
+            <i class="icon-ok danger"></i>
+            <strong class="danger">
+                It is not possible to change the service time, there is another service at that time
+            </strong>
+        </div>
+    }
 </div>
 
 <div class="col-md-push-12">
