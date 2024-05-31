@@ -401,10 +401,10 @@ namespace KyoS.Web.Controllers
 
                 ClientEntity client = _context.Clients.FirstOrDefault(n => n.Id == tcmclient.Client.Id);
 
-                Client_HealthInsurance client_health = _context.Clients_HealthInsurances
+                /*Client_HealthInsurance client_health = _context.Clients_HealthInsurances
                                                                .FirstOrDefault(n => (n.Client.Id == tcmclient.Client.Id
                                                                         && n.Active == true
-                                                                        && n.HealthInsurance.Id == IntakeViewModel.IdHealthPlan));
+                                                                        && n.HealthInsurance.Id == IntakeViewModel.IdHealthPlan));*/
 
                 if (emergency == null)
                 {
@@ -453,7 +453,7 @@ namespace KyoS.Web.Controllers
                     await _context.SaveChangesAsync();
                 }
 
-                if (client_health != null && client_health.MemberId != IntakeViewModel.HealthMemberId)
+               /* if (client_health != null && client_health.MemberId != IntakeViewModel.HealthMemberId)
                 {
                     client_health.MemberId = IntakeViewModel.HealthMemberId;
                     client_health.LastModifiedBy = user_logged.Id;
@@ -489,7 +489,7 @@ namespace KyoS.Web.Controllers
                         await _context.SaveChangesAsync();
 
                     }
-                }
+                }*/
 
                 TCMIntakeFormEntity IntakeEntity = _context.TCMIntakeForms.Find(IntakeViewModel.Id);
                 if (IntakeEntity == null)
