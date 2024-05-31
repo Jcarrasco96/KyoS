@@ -649,7 +649,14 @@
                                 <li>@Html.ActionLink("Activities / Facilitator's Interventions per PSR week", "ActivitiesPerWeek", "Activities")</li>
                                 <li>@Html.ActionLink("Activities / Facilitator's Interventions per Group week", "ActivitiesPerGroupWeek", "Activities")</li>
                                 <li role="separator" class="divider"></li>
-                                <li>@Html.ActionLink("My Calendar", "IndexFacilitator", "Calendar")</li>
+                                <li class="dropdown-submenu">
+                                    <a class="test" tabindex="-1" href="#">Calendar</a>
+                                    <ul class="dropdown-menu">
+                                        <li>@Html.ActionLink("Client", "Index", "Calendar")</li>
+                                        <li>@Html.ActionLink("My Calendar", "IndexFacilitator", "Calendar")</li>
+                                    </ul>
+                                </li>
+                                
                             </ul>
                         </li>
                         <li class="class=" dropdown open"">

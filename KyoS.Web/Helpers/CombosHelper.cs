@@ -2919,5 +2919,31 @@ namespace KyoS.Web.Helpers
 
             return list;
         }
+
+        public IEnumerable<SelectListItem> GetComboClientsByFacilitator(FacilitatorEntity facilitator, int idClinic = 0)
+        {
+
+            List<SelectListItem> list = _context.Clients
+                                                
+                                                .Where(c => c.Clinic.Id == idClinic
+                                                        && (c.IndividualTherapyFacilitator == facilitator
+                                                         || c.IdFacilitatorGroup == facilitator.Id
+                                                         || c.IdFacilitatorPSR == facilitator.Id))
+                                                .OrderBy(n => n.Name)
+                                                .Select(c => new SelectListItem
+                                                {
+                                                    Text = $"{c.Name}",
+                                                    Value = $"{c.Id}"
+                                                }).ToList();
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[All Clients...]",
+                Value = "0"
+            });
+
+            return list;
+        }
+
     }
 }
