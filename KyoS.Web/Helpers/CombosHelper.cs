@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
 
 
 namespace KyoS.Web.Helpers
@@ -1895,7 +1896,14 @@ namespace KyoS.Web.Helpers
                                                         && n.Client.Id == idClient
                                                         && n.Id != idWorkdayClient)
                                                     .ToList();
-           
+
+            TCMClientEntity tcmclient = _context.TCMClient
+                                                .Include(n => n.TCMNote)
+                                                .ThenInclude(n => n.TCMNoteActivity)
+                                                .Include(n => n.Client)
+                                                .AsSplitQuery()
+                                                .FirstOrDefault(c => c.Client.Id == idClient);
+
             List<ScheduleEntity> listSchedulesSalida = new List<ScheduleEntity>();
             if (allNotes.Count() > 0)
             {
@@ -1910,7 +1918,16 @@ namespace KyoS.Web.Helpers
                         && !allNotes.Exists(n => ((n.IndividualNote.SubSchedule.InitialTime.TimeOfDay >= item.InitialTime.TimeOfDay && n.IndividualNote.SubSchedule.InitialTime.TimeOfDay <= item.EndTime.TimeOfDay)
                                                && (n.IndividualNote.SubSchedule.EndTime.TimeOfDay >= item.InitialTime.TimeOfDay && n.IndividualNote.SubSchedule.EndTime.TimeOfDay <= item.EndTime.TimeOfDay))))
                     {
-                        listSchedulesSalida.Add(item);
+                        if (tcmclient.TCMNote.Where(n => (n.DateOfService == worday.Date
+                                          && n.TCMNoteActivity.Where(m => (m.StartTime.TimeOfDay <= item.InitialTime.TimeOfDay && m.EndTime.TimeOfDay >= item.InitialTime.TimeOfDay)
+                                              || (m.StartTime.TimeOfDay <= item.EndTime.TimeOfDay && m.EndTime.TimeOfDay >= item.EndTime.TimeOfDay)
+                                              || (m.StartTime.TimeOfDay > item.InitialTime.TimeOfDay && m.EndTime.TimeOfDay > item.InitialTime.TimeOfDay && m.StartTime.TimeOfDay < item.EndTime.TimeOfDay && m.EndTime.TimeOfDay < item.EndTime.TimeOfDay))
+                                          .Count() > 0))
+                                        .Count() == 0)
+                        {
+                            listSchedulesSalida.Add(item);
+                        }
+                       
                     }
                 }
             }
@@ -1958,6 +1975,13 @@ namespace KyoS.Web.Helpers
                                                                     && n.Workday.Id == idWorkday
                                                                     && n.Client == null).ToList();
 
+            TCMClientEntity tcmclient = _context.TCMClient
+                                                .Include(n => n.TCMNote)
+                                                .ThenInclude(n => n.TCMNoteActivity)
+                                                .Include(n => n.Client)
+                                                .AsSplitQuery()
+                                                .FirstOrDefault(c => c.Client.Id == idClient);
+
             foreach (var item in workday_Clients)
             {
                 if (item.Schedule != null)
@@ -2000,7 +2024,16 @@ namespace KyoS.Web.Helpers
                         (allNotes.Exists(n => (n.Schedule.InitialTime.TimeOfDay < item.InitialTime.TimeOfDay && n.Schedule.EndTime.TimeOfDay > item.InitialTime.TimeOfDay || n.Schedule.InitialTime.TimeOfDay < item.EndTime.TimeOfDay && n.Schedule.EndTime.TimeOfDay > item.EndTime.TimeOfDay) && n.Present == false)
                         || allNotes.Exists(n => (n.Schedule.InitialTime.TimeOfDay < item.InitialTime.TimeOfDay && n.Schedule.InitialTime.TimeOfDay < item.EndTime.TimeOfDay && n.Schedule.EndTime.TimeOfDay > item.InitialTime.TimeOfDay && n.Schedule.EndTime.TimeOfDay > item.EndTime.TimeOfDay && n.Present == false))))
                     {
-                        listSubSchedulesSalida.Add(item);
+                        if (tcmclient.TCMNote.Where(n => (n.DateOfService == worday.Date
+                                         && n.TCMNoteActivity.Where(m => (m.StartTime.TimeOfDay <= item.InitialTime.TimeOfDay && m.EndTime.TimeOfDay >= item.InitialTime.TimeOfDay)
+                                             || (m.StartTime.TimeOfDay <= item.EndTime.TimeOfDay && m.EndTime.TimeOfDay >= item.EndTime.TimeOfDay)
+                                             || (m.StartTime.TimeOfDay > item.InitialTime.TimeOfDay && m.EndTime.TimeOfDay > item.InitialTime.TimeOfDay && m.StartTime.TimeOfDay < item.EndTime.TimeOfDay && m.EndTime.TimeOfDay < item.EndTime.TimeOfDay))
+                                         .Count() > 0))
+                                       .Count() == 0)
+                        {
+                            listSubSchedulesSalida.Add(item);
+                        }
+
                     }
                 }
             }
@@ -2156,6 +2189,7 @@ namespace KyoS.Web.Helpers
             List<SelectListItem> list = _context.TCMClient
                                                 .Include(n => n.Client)
                                                 .Where(c => c.Client.Clinic.Id == idClinic)
+                                                .OrderBy(n => n.Client.Name)
                                                 .Select(c => new SelectListItem
                                                 {
                                                     Text = $"{c.Client.Name} ",
@@ -2828,6 +2862,60 @@ namespace KyoS.Web.Helpers
                     Value = "0"
                 });
             }
+
+            return list;
+        }
+
+        public IEnumerable<SelectListItem> GetComboClientsByCaseManagerByTCMSupervisor(string user, int allClient = 0)
+        {
+            List<SelectListItem> list = _context.TCMClient
+                                                .Include(n => n.Client)
+                                                .Where(c => (c.Casemanager.TCMSupervisor.LinkedUser == user))
+                                                .OrderBy(n => n.Client.Name)
+                                                .Select(c => new SelectListItem
+                                                {
+                                                    Text = $"{c.Client.Name}",
+                                                    Value = $"{c.Client.Id}"
+                                                })
+                                                .ToList();
+            if (allClient == 0)
+            {
+                list.Insert(0, new SelectListItem
+                {
+                    Text = "[All Clients...]",
+                    Value = "0"
+                });
+            }
+            else
+            {
+                list.Insert(0, new SelectListItem
+                {
+                    Text = "[Select Client...]",
+                    Value = "0"
+                });
+            }
+
+
+            return list;
+        }
+
+        public IEnumerable<SelectListItem> GetComboTCMClientsByClinic_ClientId(int idClinic = 0)
+        {
+            List<SelectListItem> list = _context.TCMClient
+                                                .Include(n => n.Client)
+                                                .Where(c => c.Client.Clinic.Id == idClinic)
+                                                .OrderBy(n => n.Client.Name)
+                                                .Select(c => new SelectListItem
+                                                {
+                                                    Text = $"{c.Client.Name}",
+                                                    Value = $"{c.Client.Id}"
+                                                }).ToList();
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[All Clients...]",
+                Value = "0"
+            });
 
             return list;
         }

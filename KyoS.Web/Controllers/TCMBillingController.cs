@@ -31,7 +31,7 @@ namespace KyoS.Web.Controllers
             _fileHelper = fileHelper;
         }
 
-        [Authorize(Roles = "CaseManager")]
+        [Authorize(Roles = "CaseManager, Manager")]
         public IActionResult Index(int id = 0, string initDate = "")
         {
             if (id == 1)
@@ -60,15 +60,30 @@ namespace KyoS.Web.Controllers
                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
             DateTime initialDate = (initDate == string.Empty) ? DateTime.Now : Convert.ToDateTime(initDate);
-            
-            TCMBillingViewModel model = new TCMBillingViewModel
-            {
-                IdClient = 0,
-                Clients = _combosHelper.GetComboTCMClientsByCaseManager(user_logged.UserName),
-                StartDate = $"{initialDate.Year}-{initialDate.Month.ToString("00")}-{initialDate.Day.ToString("00")}"                
-            };
 
-            return View(model);
+            if (User.IsInRole("CaseManager"))
+            {
+                TCMBillingViewModel model = new TCMBillingViewModel
+                {
+                    IdClient = 0,
+                    Clients = _combosHelper.GetComboTCMClientsByCaseManager(user_logged.UserName),
+                    StartDate = $"{initialDate.Year}-{initialDate.Month.ToString("00")}-{initialDate.Day.ToString("00")}"
+                };
+
+                return View(model);
+            }
+            else
+            {
+                TCMBillingViewModel model = new TCMBillingViewModel
+                {
+                    IdClient = 0,
+                    Clients = _combosHelper.GetComboTCMClientsByClinic(user_logged.Clinic.Id),
+                    StartDate = $"{initialDate.Year}-{initialDate.Month.ToString("00")}-{initialDate.Day.ToString("00")}"
+                };
+
+                return View(model);
+            }
+            
         }
 
         [Authorize(Roles = "CaseManager")]
