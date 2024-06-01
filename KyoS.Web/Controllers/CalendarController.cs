@@ -29,7 +29,7 @@ namespace KyoS.Web.Controllers
             Configuration = configuration;
         }
 
-        [Authorize(Roles = "Manager, Frontdesk, CaseManager, TCMSupervisor")]
+        [Authorize(Roles = "Manager, Frontdesk, CaseManager, TCMSupervisor, Facilitator")]
         public IActionResult Index()
         {
             UserEntity user_logged = _context.Users
@@ -66,13 +66,27 @@ namespace KyoS.Web.Controllers
                 }
                 else
                 {
-                    CalendarCMH model = new CalendarCMH
+                    if (User.IsInRole("Facilitator"))
                     {
-                        IdClient = 0,
-                        Clients = _combosHelper.GetComboTCMClientsByClinic_ClientId(user_logged.Clinic.Id)
-                    };
+                        FacilitatorEntity facilitator = _context.Facilitators.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
+                        CalendarCMH model = new CalendarCMH
+                        {
+                            IdClient = 0,
+                            Clients = _combosHelper.GetComboClientsByFacilitator(facilitator, user_logged.Clinic.Id)
+                        };
 
-                    return View(model);
+                        return View(model);
+                    }
+                    else
+                    {
+                        CalendarCMH model = new CalendarCMH
+                        {
+                            IdClient = 0,
+                            Clients = _combosHelper.GetComboTCMClientsByClinic_ClientId(user_logged.Clinic.Id)
+                        };
+
+                        return View(model);
+                    }
                 }
             }
             
@@ -163,7 +177,7 @@ namespace KyoS.Web.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "Manager, Frontdesk, CaseManager, TCMSupervisor")]
+        [Authorize(Roles = "Manager, Frontdesk, CaseManager, TCMSupervisor, Facilitator")]
         public async Task<IActionResult> Events(string start, string end, int idClient)
         {
             if (idClient != 0)

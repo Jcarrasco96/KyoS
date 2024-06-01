@@ -198,19 +198,19 @@
     <div class="col-md-push-12">
         <div class="form-group col-md-12">
             <label asp-for="Elibigility" class="control-label">Elibigility</label>
-            <textarea asp-for="Elibigility" class="form-control" rows="2"></textarea>
+            <textarea asp-for="Elibigility" class="form-control" rows="5"></textarea>
             <span asp-validation-for="Elibigility" class="text-danger"></span>
         </div>
     </div>
     <div class="col-md-push-12">
         <div class="form-group col-md-5">
             <label asp-for="IdHealthPlan" class="control-label"></label>
-            <select asp-for="IdHealthPlan" asp-items="Model.HealthPlan" class="form-control"></select>
+            <select asp-for="IdHealthPlan" asp-items="Model.HealthPlan" class="form-control" disabled></select>
             <span asp-validation-for="IdHealthPlan" class="text-danger"></span>
         </div>
         <div class="form-group col-md-3">
             <label asp-for="HealthMemberId" class="control-label">Member ID</label>
-            <input asp-for="HealthMemberId" class="form-control">
+            <input asp-for="HealthMemberId" class="form-control" disabled>
             <span asp-validation-for="HealthMemberId" class="text-danger"></span>
         </div>
         <div class="form-group col-md-4">
@@ -397,7 +397,7 @@
     <div class="col-md-push-12">
         <div class="form-group col-md-12">
             <label asp-for="CaseManagerNotes" class="control-label">Case Manager's notes</label>
-            <textarea asp-for="CaseManagerNotes" class="form-control" rows="2"></textarea>
+            <textarea asp-for="CaseManagerNotes" class="form-control" rows="5"></textarea>
             <span asp-validation-for="CaseManagerNotes" class="text-danger"></span>
         </div>
     </div>
