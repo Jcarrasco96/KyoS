@@ -18,25 +18,11 @@ public class BillsController : Controller
         _context = context;
     }
 
-    [HttpGet("{idStatus}")]
-    public async Task<IActionResult> NotBilled(int idStatus)    //  0 - Edition, 1 - Pending, 2 - Approved, 3 - all status, 4 - not started
+    [HttpGet("MHNotBilled/{idStatus}")]
+    public async Task<IActionResult> MHNotBilled(int idStatus)    //  0 - Edition, 1 - Pending, 2 - Approved, 3 - all status, 4 - not started
     {
-        NoteStatus status = NoteStatus.Approved;
-        bool allStatus = false;
-        if (idStatus < 2)
-        {
-            status = (idStatus == 0) ? NoteStatus.Edition : (idStatus == 1) ? NoteStatus.Pending : NoteStatus.Approved;
-        }
-        else
-        {
-            if (idStatus == 3)
-            {
-                allStatus = true;
-            }
-        }
-       
         List<Workday_Client> workday_Client = null!;
-        List<TCMNoteEntity> tcmNotesUnBill = null!;
+        
         if (idStatus == 0 || idStatus == 1 || idStatus == 2)
         {
             workday_Client = await _context.Workdays_Clients
@@ -90,38 +76,7 @@ public class BillsController : Controller
                                                                                     || (int)wc.GroupNote2.Status == idStatus))
                                             .OrderBy(wc => wc.Client.Name)
                                             .ThenBy(wc => wc.Workday.Date)
-                                            .ToListAsync();
-
-            tcmNotesUnBill = _context.TCMNote
-                                     .Include(t => t.TCMClient)
-                                     .ThenInclude(c => c.Client)
-                                     .ThenInclude(cl => cl.Clients_Diagnostics)
-                                     .ThenInclude(cd => cd.Diagnostic)
-
-                                     .Include(t => t.TCMClient)
-                                     .ThenInclude(c => c.Client)
-                                     .ThenInclude(cl => cl.Clients_HealthInsurances)
-                                     .ThenInclude(cd => cd.HealthInsurance)
-
-                                     .Include(t => t.TCMNoteActivity)
-
-                                     .Include(t => t.TCMClient)
-                                     .ThenInclude(t => t.Casemanager)
-                                     .ThenInclude(t => t.TCMSupervisor)
-                                     
-                                     .Include(t => t.TCMClient)
-                                     .ThenInclude(c => c.Client)
-                                     .ThenInclude(w => w.Clinic)
-                                     .ThenInclude(w => w.Setting)
-
-                                     .AsSplitQuery()
-
-                                     .Where(t => t.EOB == null
-                                              && t.BilledDate == null
-                                              && t.TCMNoteActivity.Where(n => n.Billable == true).Count() > 0
-                                              && t.Status == status)
-                                              
-                                     .ToList();
+                                            .ToListAsync();            
         }
         else
         {
@@ -174,41 +129,11 @@ public class BillsController : Controller
                                                             && wc.BilledDate == null)
                                                 .OrderBy(wc => wc.Client.Name)
                                                 .ThenBy(wc => wc.Workday.Date)
-                                                .ToListAsync();
-
-                tcmNotesUnBill = _context.TCMNote
-                                         .Include(t => t.TCMClient)
-                                         .ThenInclude(c => c.Client)
-                                         .ThenInclude(cl => cl.Clients_Diagnostics)
-                                         .ThenInclude(cd => cd.Diagnostic)
-
-                                         .Include(t => t.TCMClient)
-                                         .ThenInclude(c => c.Client)
-                                         .ThenInclude(cl => cl.Clients_HealthInsurances)
-                                         .ThenInclude(cd => cd.HealthInsurance)
-
-                                         .Include(t => t.TCMNoteActivity)
-
-                                         .Include(t => t.TCMClient)
-                                         .ThenInclude(t => t.Casemanager)
-                                         .ThenInclude(t => t.TCMSupervisor)
-                                         
-                                         .Include(t => t.TCMClient)
-                                         .ThenInclude(c => c.Client)
-                                         .ThenInclude(w => w.Clinic)
-                                         .ThenInclude(w => w.Setting)
-
-                                         .AsSplitQuery()
-
-                                         .Where(t => t.EOB == null
-                                                  && t.BilledDate == null
-                                                  && t.TCMNoteActivity.Where(n => n.Billable == true).Count() > 0)
-
-                                         .ToList();
+                                                .ToListAsync();                
             }
             else
             {
-                if (idStatus == 4) //only MH
+                if (idStatus == 4)
                 {
                     workday_Client = await _context.Workdays_Clients
 
@@ -285,7 +210,7 @@ public class BillsController : Controller
                 setting = item.Note.Setting;
                 units = 16;
                 amount = 16 * item.Client.Clinic.Setting.PricePSR;
-                supervisor = (item.Note.Supervisor != null)? item.Note.Supervisor.Name : string.Empty;
+                supervisor = (item.Note.Supervisor != null) ? item.Note.Supervisor.Name : string.Empty;
             }
             else
             {
@@ -341,22 +266,102 @@ public class BillsController : Controller
 
             }
 
-            NotBilled value = new NotBilled(item.Client.Name, item.Client.Code, item.Client.DateOfBirth.ToShortDateString(), item.Client.MedicaidID,
-                                            insuranceMemberId, (item.Client.Clients_Diagnostics.Count() > 0) ? item.Client.Clients_Diagnostics.ElementAt(0).Diagnostic.Code : "-",
+            NotBilled value = new NotBilled(item.Client.Name, item.Client.Code, item.Client.DateOfBirth.ToShortDateString(), item.Client.MedicaidID, item.Client.FullAddress,
+                                            item.Client.City, item.Client.State, item.Client.ZipCode, insuranceMemberId,
+                                            (item.Client.Clients_Diagnostics.Count() > 0) ? item.Client.Clients_Diagnostics.ElementAt(0).Diagnostic.Code : "-",
                                             item.Workday.Date.ToShortDateString(), service, setting, units, amount, supervisor, "Not Billed");
 
             notBilleds.Add(value);
         }
+        
+        return Ok(notBilleds);
+    }
 
+    [HttpGet("TCMNotBilled/{idStatus}")]
+    public async Task<IActionResult> TCMNotBilled(int idStatus)   //  0 - Edition, 1 - Pending, 2 - Approved, 3 - all status
+    {
+        List<TCMNoteEntity> tcmNotesUnBill = null!;
+        if (idStatus == 0 || idStatus == 1 || idStatus == 2)
+        {
+            tcmNotesUnBill = await _context.TCMNote
+
+                                           .Include(t => t.TCMClient)
+                                           .ThenInclude(c => c.Client)
+                                           .ThenInclude(cl => cl.Clients_Diagnostics)
+                                           .ThenInclude(cd => cd.Diagnostic)
+
+                                           .Include(t => t.TCMClient)
+                                           .ThenInclude(c => c.Client)
+                                           .ThenInclude(cl => cl.Clients_HealthInsurances)
+                                           .ThenInclude(cd => cd.HealthInsurance)
+
+                                           .Include(t => t.TCMNoteActivity)
+
+                                           .Include(t => t.TCMClient)
+                                           .ThenInclude(t => t.Casemanager)
+                                           .ThenInclude(t => t.TCMSupervisor)
+
+                                           .Include(t => t.TCMClient)
+                                           .ThenInclude(c => c.Client)
+                                           .ThenInclude(w => w.Clinic)
+                                           .ThenInclude(w => w.Setting)
+
+                                           .AsSplitQuery()
+
+                                           .Where(t => t.EOB == null
+                                                    && t.BilledDate == null
+                                                    && t.TCMNoteActivity.Where(n => n.Billable == true).Count() > 0
+                                                    && (int)t.Status == idStatus)
+
+                                           .ToListAsync();
+        }
+        else
+        {
+            if (idStatus == 3)
+            {
+                tcmNotesUnBill = await _context.TCMNote
+                                         
+                                               .Include(t => t.TCMClient)
+                                               .ThenInclude(c => c.Client)
+                                               .ThenInclude(cl => cl.Clients_Diagnostics)
+                                               .ThenInclude(cd => cd.Diagnostic)
+
+                                               .Include(t => t.TCMClient)
+                                               .ThenInclude(c => c.Client)
+                                               .ThenInclude(cl => cl.Clients_HealthInsurances)
+                                               .ThenInclude(cd => cd.HealthInsurance)
+
+                                               .Include(t => t.TCMNoteActivity)
+
+                                               .Include(t => t.TCMClient)
+                                               .ThenInclude(t => t.Casemanager)
+                                               .ThenInclude(t => t.TCMSupervisor)
+
+                                               .Include(t => t.TCMClient)
+                                               .ThenInclude(c => c.Client)
+                                               .ThenInclude(w => w.Clinic)
+                                               .ThenInclude(w => w.Setting)
+
+                                               .AsSplitQuery()
+
+                                               .Where(t => t.EOB == null
+                                                        && t.BilledDate == null
+                                                        && t.TCMNoteActivity.Where(n => n.Billable == true).Count() > 0)
+
+                                               .ToListAsync();
+            }            
+        }
+
+        List<NotBilled> notBilleds = new List<NotBilled>();
+
+        string insuranceMemberId = string.Empty;        
         int Unit = 0;
-       // int UnitTotal = 0;
         decimal amountTCM = 0.00m;
-       // decimal amountTotal = 0.00m;
-
+        
         int minutesTCM = 0;
         int residuoTCM = 0;
         int unitTCM = 0;
-        //List<int> idTCMs = new List<int>();
+        
         foreach (var item in tcmNotesUnBill)
         {
             minutesTCM = item.TCMNoteActivity.Sum(n => n.Minutes);
@@ -373,16 +378,11 @@ public class BillsController : Controller
                 amountTCM = (decimal)(unitTCM * item.TCMClient.Client.Clinic.Setting.PriceTCM);
             }
 
-           // if (idTCMs.Contains(item.TCMClient.Casemanager.Id) == false)
-           // {
-           //     idTCMs.Add(item.TCMClient.Casemanager.Id);
-           // }
-           // UnitTotal += Unit;
-           // amountTotal += amountTCM;
-
-            NotBilled value = new NotBilled(item.TCMClient.Client.Name, item.TCMClient.Client.Code, item.TCMClient.Client.DateOfBirth.ToShortDateString(), item.TCMClient.Client.MedicaidID,
-                                           insuranceMemberId, (item.TCMClient.Client.Clients_Diagnostics.Count() > 0) ? item.TCMClient.Client.Clients_Diagnostics.ElementAt(0).Diagnostic.Code : "-",
-                                           item.DateOfService.ToShortDateString(), "TCM", item.TCMNoteActivity.FirstOrDefault().Setting, Unit, amountTCM, item.TCMClient.Casemanager.TCMSupervisor.Name, "Not Billed");
+            NotBilled value = new NotBilled(item.TCMClient.Client.Name, item.TCMClient.Client.Code, item.TCMClient.Client.DateOfBirth.ToShortDateString(), 
+                                            item.TCMClient.Client.MedicaidID, item.TCMClient.Client.FullAddress, item.TCMClient.Client.City, item.TCMClient.Client.State, 
+                                            item.TCMClient.Client.ZipCode, insuranceMemberId, (item.TCMClient.Client.Clients_Diagnostics.Count() > 0) ? item.TCMClient.Client.Clients_Diagnostics.ElementAt(0).Diagnostic.Code : "-",
+                                            item.DateOfService.ToShortDateString(), "TCM", item.TCMNoteActivity.FirstOrDefault()!.Setting, Unit, amountTCM,
+                                            item.TCMClient.Casemanager.TCMSupervisor.Name, "Not Billed");
 
             notBilleds.Add(value);
 

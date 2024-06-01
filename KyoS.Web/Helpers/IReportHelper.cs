@@ -25,6 +25,7 @@ namespace KyoS.Web.Helpers
         Stream AlliedAbsenceNoteReport(Workday_Client workdayClient);
         Stream YourNeighborAbsenceNoteReport(Workday_Client workdayClient);
         Stream MedisanaAbsenceNoteReport(Workday_Client workdayClient);
+        Stream ByaAbsenceNoteReport(Workday_Client workdayClient);
         #endregion
 
         #region Approved PSR Notes reports
@@ -51,6 +52,8 @@ namespace KyoS.Web.Helpers
         Stream YourNeighborNoteReportSchema3SS(Workday_Client workdayClient);
         Stream MedisanaNoteReportSchema3(Workday_Client workdayClient);
         Stream MedisanaNoteReportSchema3SS(Workday_Client workdayClient);
+        Stream ByaNoteReportSchema3(Workday_Client workdayClient);
+        Stream ByaNoteReportSchema3SS(Workday_Client workdayClient);
         #endregion
 
         #region Approved Individual Notes reports
@@ -65,6 +68,7 @@ namespace KyoS.Web.Helpers
         Stream AlliedIndNoteReportSchema1(Workday_Client workdayClient);
         Stream YourNeighborIndNoteReportSchema1(Workday_Client workdayClient);
         Stream MedisanaIndNoteReportSchema1(Workday_Client workdayClient);
+        Stream ByaIndNoteReportSchema1(Workday_Client workdayClient);
         #endregion
 
         #region Approved Group Notes reports
@@ -93,6 +97,8 @@ namespace KyoS.Web.Helpers
         Stream YourNeighborGroupNoteReportSchema3(Workday_Client workdayClient);
         Stream MedisanaGroupNoteReportSchema2(Workday_Client workdayClient);
         Stream MedisanaGroupNoteReportSchema3(Workday_Client workdayClient);
+        Stream ByaGroupNoteReportSchema2(Workday_Client workdayClient);
+        Stream ByaGroupNoteReportSchema3(Workday_Client workdayClient);
         #endregion
 
         #region MTP reports
@@ -110,6 +116,7 @@ namespace KyoS.Web.Helpers
         Stream AlliedMTPReport(MTPEntity mtp);
         Stream YourNeighborMTPReport(MTPEntity mtp);
         Stream MedisanaMTPReport(MTPEntity mtp);
+        Stream ByaMTPReport(MTPEntity mtp);
         #endregion
 
         #region PSR Generics reports
@@ -136,7 +143,8 @@ namespace KyoS.Web.Helpers
         Stream IntakeTelehealthConsent(IntakeConsentForTelehealthEntity intake);
         Stream IntakeNoDuplicateService(IntakeNoDuplicateServiceEntity intake);
         Stream IntakeNoHarmContract(IntakeNoHarmEntity intake);
-        
+        Stream ByaIntakeReport(IntakeScreeningEntity intake);
+
         #endregion
 
         #region Fars reports
@@ -150,6 +158,7 @@ namespace KyoS.Web.Helpers
         Stream OrionFarsReport(FarsFormEntity intake);
         Stream AlliedFarsReport(FarsFormEntity intake);
         Stream YourNeighborFarsReport(FarsFormEntity intake);
+        Stream ByaFarsReport(FarsFormEntity intake);
         #endregion
 
         #region Discharge reports
@@ -173,6 +182,8 @@ namespace KyoS.Web.Helpers
         Stream AlliedDischargeJCReport(DischargeEntity intake);
         Stream YourNeighborDischargeReport(DischargeEntity intake);
         Stream YourNeighborDischargeJCReport(DischargeEntity intake);
+        Stream ByaDischargeReport(DischargeEntity intake);
+        Stream ByaDischargeJCReport(DischargeEntity intake);
         #endregion
 
         #region Bio reports
@@ -187,6 +198,7 @@ namespace KyoS.Web.Helpers
         Stream AlliedBioReport(BioEntity bio);
         Stream YourNeighborBioReport(BioEntity bio);
         Stream MedisanaBioReport(BioEntity bio);
+        Stream ByaBioReport(BioEntity bio);
         #endregion
 
         #region Addendum reports
@@ -200,6 +212,7 @@ namespace KyoS.Web.Helpers
         Stream OrionAddendumReport(AdendumEntity addendum);
         Stream AlliedAddendumReport(AdendumEntity addendum);
         Stream YourNeighborAddendumReport(AdendumEntity addendum);
+        Stream ByaAddendumReport(AdendumEntity addendum);
         #endregion
 
         #region MTP Review reports
@@ -213,6 +226,7 @@ namespace KyoS.Web.Helpers
         Stream OrionMTPReviewReport(MTPReviewEntity review);
         Stream AlliedMTPReviewReport(MTPReviewEntity review);
         Stream YourNeighborMTPReviewReport(MTPReviewEntity review);
+        Stream ByaMTPReviewReport(MTPReviewEntity review);
         #endregion
 
         #region Medical History
@@ -226,6 +240,7 @@ namespace KyoS.Web.Helpers
         Stream OrionMedicalHistoryReport(IntakeMedicalHistoryEntity medicalHistory);
         Stream AlliedMedicalHistoryReport(IntakeMedicalHistoryEntity medicalHistory);
         Stream YourNeighborMedicalHistoryReport(IntakeMedicalHistoryEntity medicalHistory);
+        Stream ByaMedicalHistoryReport(IntakeMedicalHistoryEntity medicalHistory);
         #endregion
 
         #region Brief reports
@@ -239,6 +254,7 @@ namespace KyoS.Web.Helpers
         Stream OrionBriefReport(BriefEntity brief);
         Stream AlliedBriefReport(BriefEntity brief);
         Stream YourNeighborBriefReport(BriefEntity brief);
+        Stream ByaBriefReport(BriefEntity brief);
         #endregion
 
         #region Safety Plan reports

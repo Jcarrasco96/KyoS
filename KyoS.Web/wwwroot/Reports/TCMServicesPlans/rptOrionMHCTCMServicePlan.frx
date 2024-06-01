@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="02/02/2024 17:45:35" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="06/01/2024 00:04:19" ReportInfo.CreatorVersion="2021.1.0.0">
   <ScriptText>using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -22,7 +22,7 @@ namespace FastReport
 }
 </ScriptText>
   <Dictionary>
-    <MsSqlDataConnection Name="Connection2" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3sveNprF/Tn+QB6x6MwUWfw==">
+    <MsSqlDataConnection Name="Connection2" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3ixSyE5PJ48qHTtkpM6Xhng==">
       <TableDataSource Name="TCMDomains2" DataType="System.Int32" Enabled="true" TableName="TCMDomains">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -58,7 +58,7 @@ namespace FastReport
         <Column Name="LastModifiedOn" DataType="System.DateTime"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection4" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3/6uWox786cRSj3Eh3HRm0g==">
+    <MsSqlDataConnection Name="Connection4" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3vGaNuhQbUS2gad/FP8A7fA==">
       <TableDataSource Name="TCMDomains4" DataType="System.Int32" Enabled="true" TableName="TCMDomains">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -94,7 +94,7 @@ namespace FastReport
         <Column Name="LastModifiedOn" DataType="System.DateTime"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection5" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3GiarLJ69eHDdSlBXXhah7w==">
+    <MsSqlDataConnection Name="Connection5" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3cmD4CUYqZqoKAKZ09t9YEg==">
       <TableDataSource Name="TCMDomains5" DataType="System.Int32" Enabled="true" TableName="TCMDomains">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -130,7 +130,7 @@ namespace FastReport
         <Column Name="LastModifiedOn" DataType="System.DateTime"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection6" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3JgUaBpz2gEpGxFjbzIdVfg==">
+    <MsSqlDataConnection Name="Connection6" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3hetru4aVI8xNpa/xsxiAwg==">
       <TableDataSource Name="TCMDomains6" DataType="System.Int32" Enabled="true" TableName="TCMDomains">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -166,7 +166,7 @@ namespace FastReport
         <Column Name="LastModifiedOn" DataType="System.DateTime"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection7" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3iih08FEeOZL2FElyjg+5qA==">
+    <MsSqlDataConnection Name="Connection7" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3vdFBNPtdRIBgZ/UzY01X7g==">
       <TableDataSource Name="TCMDomains7" DataType="System.Int32" Enabled="true" TableName="TCMDomains">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -202,7 +202,7 @@ namespace FastReport
         <Column Name="LastModifiedOn" DataType="System.DateTime"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection8" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u322dqeV6JPPms+NVN6xBAxg==">
+    <MsSqlDataConnection Name="Connection8" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u38cCmrEWibRTsf8Coo/+KYw==">
       <TableDataSource Name="TCMDomains8" DataType="System.Int32" Enabled="true" TableName="TCMDomains">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -238,7 +238,7 @@ namespace FastReport
         <Column Name="LastModifiedOn" DataType="System.DateTime"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection9" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3RdlfLkc9vxfq4GRyNwUl9Q==">
+    <MsSqlDataConnection Name="Connection9" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3t4yossrWBqgaRiF3suz+bA==">
       <TableDataSource Name="TCMDomains9" DataType="System.Int32" Enabled="true" TableName="TCMDomains">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -274,7 +274,7 @@ namespace FastReport
         <Column Name="LastModifiedOn" DataType="System.DateTime"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection10" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3pVaYMz75LqQH0YrZ0mMmjQ==">
+    <MsSqlDataConnection Name="Connection10" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3ZGKu2Rj3RMjDT8zIytax+g==">
       <TableDataSource Name="TCMDomains10" DataType="System.Int32" Enabled="true" TableName="TCMDomains">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -310,7 +310,7 @@ namespace FastReport
         <Column Name="LastModifiedOn" DataType="System.DateTime"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection11" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3LICcAGmIQEwEAs+0omaTjQ==">
+    <MsSqlDataConnection Name="Connection11" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3SSK5PKm0qfi3ebbP1nmW8A==">
       <TableDataSource Name="TCMDomains11" DataType="System.Int32" Enabled="true" TableName="TCMDomains">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -346,7 +346,7 @@ namespace FastReport
         <Column Name="LastModifiedOn" DataType="System.DateTime"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection12" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3xslBGMVP0CDcusLkGdQvqg==">
+    <MsSqlDataConnection Name="Connection12" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3hGxiCICKbdxY0ZuYWtvYHA==">
       <TableDataSource Name="TCMDomains12" DataType="System.Int32" Enabled="true" TableName="TCMDomains">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -382,7 +382,7 @@ namespace FastReport
         <Column Name="LastModifiedOn" DataType="System.DateTime"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3SrsXxjQXKf7pKZ9DBZ0mHg==">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3fMF15p0zYGkxsLTxyKG8tg==">
       <TableDataSource Name="Clients" DataType="System.Int32" Enabled="true" TableName="Clients">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -462,6 +462,7 @@ namespace FastReport
         <Column Name="CreatedOn" DataType="System.DateTime"/>
         <Column Name="LastModifiedBy" DataType="System.String"/>
         <Column Name="LastModifiedOn" DataType="System.DateTime"/>
+        <Column Name="Credentials" DataType="System.String" PropName="Column"/>
       </TableDataSource>
       <TableDataSource Name="TCMClient" DataType="System.Int32" Enabled="true" TableName="TCMClient">
         <Column Name="Id" DataType="System.Int32"/>
@@ -503,7 +504,7 @@ namespace FastReport
         <Column Name="DateTcmSignature" DataType="System.DateTime" PropName="Column1"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection3" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3lcRGH8z6DGi1BWOg+eFFOw==">
+    <MsSqlDataConnection Name="Connection3" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u32YAMW/+B8RX1n3ZsL91WBA==">
       <TableDataSource Name="TCMDomains3" DataType="System.Int32" Enabled="true" TableName="TCMDomains">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -539,7 +540,7 @@ namespace FastReport
         <Column Name="LastModifiedOn" DataType="System.DateTime"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection13" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pKiygLNrR2GSkUua6CZa7zWuDzNGOn7cjq7mn0WTOnccDkyyV5BLvtFa1BRlcYFBrBlmu3ZWcEAKOrjLSE99FKA==">
+    <MsSqlDataConnection Name="Connection13" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pKiygLNrR2GSkUua6CZa7zWuDzNGOn7cjq7mn0WTOnccDkyyV5BLvtFa1BRlcYFBr99I6d4clAZhglNpxUcI2VQ==">
       <TableDataSource Name="TCMDomains" Alias="TCMDomains13" DataType="System.Int32" Enabled="true" TableName="TCMDomains">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -575,7 +576,7 @@ namespace FastReport
         <Column Name="LastModifiedOn" DataType="System.DateTime"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection14" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pKiygLNrR2GSkUua6CZa7zWuDzNGOn7cjq7mn0WTOnccDkyyV5BLvtFa1BRlcYFBr4B4fk59vli9IXdn8gnd9/g==">
+    <MsSqlDataConnection Name="Connection14" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pKiygLNrR2GSkUua6CZa7zWuDzNGOn7cjq7mn0WTOnccDkyyV5BLvtFa1BRlcYFBrQa2qI8pw9+j0UUG9G26Mzw==">
       <TableDataSource Name="TCMDomains13" Alias="TCMDomains14" DataType="System.Int32" Enabled="true" TableName="TCMDomains">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -611,7 +612,7 @@ namespace FastReport
         <Column Name="LastModifiedOn" DataType="System.DateTime"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection15" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pKiygLNrR2GSkUua6CZa7zWuDzNGOn7cjq7mn0WTOnccDkyyV5BLvtFa1BRlcYFBrMD0UDh+XgkyB7+qbqpejwQ==">
+    <MsSqlDataConnection Name="Connection15" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pKiygLNrR2GSkUua6CZa7zWuDzNGOn7cjq7mn0WTOnccDkyyV5BLvtFa1BRlcYFBrXZM2tLMylX5auu7sPfB8OQ==">
       <TableDataSource Name="TCMDomains14" Alias="TCMDomains15" DataType="System.Int32" Enabled="true" TableName="TCMDomains">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -647,7 +648,7 @@ namespace FastReport
         <Column Name="LastModifiedOn" DataType="System.DateTime"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection16" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pKiygLNrR2GSkUua6CZa7zWuDzNGOn7cjq7mn0WTOnccDkyyV5BLvtFa1BRlcYFBrs28GfmJ1UmhnfROtzB1YpA==">
+    <MsSqlDataConnection Name="Connection16" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pKiygLNrR2GSkUua6CZa7zWuDzNGOn7cjq7mn0WTOnccDkyyV5BLvtFa1BRlcYFBr5132gNQEJkQB3OngILDwVQ==">
       <TableDataSource Name="TCMDomains15" Alias="TCMDomains16" DataType="System.Int32" Enabled="true" TableName="TCMDomains">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -683,7 +684,7 @@ namespace FastReport
         <Column Name="LastModifiedOn" DataType="System.DateTime"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection17" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pKiygLNrR2GSkUua6CZa7zWuDzNGOn7cjq7mn0WTOnccDkyyV5BLvtFa1BRlcYFBr67pZxxsLynoAqdM58hOvTg==">
+    <MsSqlDataConnection Name="Connection17" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pKiygLNrR2GSkUua6CZa7zWuDzNGOn7cjq7mn0WTOnccDkyyV5BLvtFa1BRlcYFBr+EvqqZ42YvyXGD6/KP+ugQ==">
       <TableDataSource Name="TCMDomains16" Alias="TCMDomains17" DataType="System.Int32" Enabled="true" TableName="TCMDomains">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -719,7 +720,7 @@ namespace FastReport
         <Column Name="LastModifiedOn" DataType="System.DateTime"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection18" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pKiygLNrR2GSkUua6CZa7zWuDzNGOn7cjq7mn0WTOnccDkyyV5BLvtFa1BRlcYFBrAkq2OKXdrv2ET4iZugPAnw==">
+    <MsSqlDataConnection Name="Connection18" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pKiygLNrR2GSkUua6CZa7zWuDzNGOn7cjq7mn0WTOnccDkyyV5BLvtFa1BRlcYFBr9M0g2Ogdy3U/Hrm9kPP5hg==">
       <TableDataSource Name="TCMDomains17" Alias="TCMDomains18" DataType="System.Int32" Enabled="true" TableName="TCMDomains">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -755,7 +756,7 @@ namespace FastReport
         <Column Name="LastModifiedOn" DataType="System.DateTime"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection19" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pKiygLNrR2GSkUua6CZa7zWuDzNGOn7cjq7mn0WTOnccDkyyV5BLvtFa1BRlcYFBrz/vH03biwq2fG7LNyONMaA==">
+    <MsSqlDataConnection Name="Connection19" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pKiygLNrR2GSkUua6CZa7zWuDzNGOn7cjq7mn0WTOnccDkyyV5BLvtFa1BRlcYFBrCY9If8Mv0ed/M8BXIIr+0A==">
       <TableDataSource Name="TCMDomains18" Alias="TCMDomains19" DataType="System.Int32" Enabled="true" TableName="TCMDomains">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -791,7 +792,7 @@ namespace FastReport
         <Column Name="LastModifiedOn" DataType="System.DateTime"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection20" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pKiygLNrR2GSkUua6CZa7zWuDzNGOn7cjq7mn0WTOnccDkyyV5BLvtFa1BRlcYFBrN+OehxQjbVAMjaRNycp2Gg==">
+    <MsSqlDataConnection Name="Connection20" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pKiygLNrR2GSkUua6CZa7zWuDzNGOn7cjq7mn0WTOnccDkyyV5BLvtFa1BRlcYFBrTW++wwYgb8op4mSlu11FlA==">
       <TableDataSource Name="TCMDomains19" Alias="TCMDomains20" DataType="System.Int32" Enabled="true" TableName="TCMDomains">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -827,7 +828,7 @@ namespace FastReport
         <Column Name="LastModifiedOn" DataType="System.DateTime"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection1" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pSrjZHqPCSNXKYfct7zavy9myey+m7LlneqXrU/O01HluWX5xN0Wi9iEsLcNk0RAxQTK/vkCbP84JEJ34oyUAuOSTf3Dco3DqMqWfBC3oW9c=">
+    <MsSqlDataConnection Name="Connection1" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pSrjZHqPCSNXKYfct7zavy9myey+m7LlneqXrU/O01HluWX5xN0Wi9iEsLcNk0RAxQTK/vkCbP84JEJ34oyUAuBh0GPYUbepyjyAiXh2rKqU=">
       <TableDataSource Name="TCMDomains1" DataType="System.Int32" Enabled="true" TableName="TCMDomains">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -879,7 +880,7 @@ namespace FastReport
       <LineObject Name="Line4" Left="775.52" Top="84.7" Width="-776"/>
       <TextObject Name="Text226" Left="195" Top="49.25" Width="383.9" Height="22" CanGrow="true" Text="CASE MANAGEMENT SERVICE PLAN " Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
     </PageHeaderBand>
-    <DataBand Name="Data29" Top="88.9" Width="778.3" Height="122.85">
+    <DataBand Name="Data29" Top="88.38" Width="778.3" Height="122.85">
       <TextObject Name="Text233" Left="38.8" Top="15.45" Width="90.72" Height="18.9" Fill.Color="WhiteSmoke" Text="SECTION I" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt"/>
       <TextObject Name="Text39" Top="42.8" Width="132.3" Height="18.9" Text="Recipient Name:" HorzAlign="Right" Font="Arial, 10pt, style=Bold"/>
       <TextObject Name="Text40" Left="405.35" Top="42.8" Width="151.2" Height="18.9" Text="Date of service plan:" HorzAlign="Right" Font="Arial, 10pt, style=Bold"/>
@@ -897,7 +898,7 @@ namespace FastReport
       <CheckBoxObject Name="CheckBox27" Left="563" Top="92.05" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" Expression="IIf([Clients.Gender] == 1,true,false)"/>
       <CheckBoxObject Name="CheckBox28" Left="622.7" Top="92.23" Width="11.34" Height="11.34" Border.Lines="All" Checked="false" Expression="IIf([Clients.Gender] == 0,true,false)"/>
     </DataBand>
-    <DataBand Name="Data1" Top="270.47" Width="778.3" Height="28.25" FirstRowStartsNewPage="true" Guides="0,0,0" DataSource="Diagnostics" PrintIfDatasourceEmpty="true">
+    <DataBand Name="Data1" Top="268.93" Width="778.3" Height="28.25" FirstRowStartsNewPage="true" Guides="0,0,0" DataSource="Diagnostics" PrintIfDatasourceEmpty="true">
       <TableObject Name="Table1" Left="7.18" Top="-0.1" Width="764.32" Height="28.35">
         <TableColumn Name="Column1" Width="127"/>
         <TableColumn Name="Column2" Width="637.32"/>
@@ -906,7 +907,7 @@ namespace FastReport
           <TableCell Name="Cell2" Border.Lines="All" Fill.Color="AliceBlue" Text="[Diagnostics.Description]" VertAlign="Center" Font="Arial, 9pt"/>
         </TableRow>
       </TableObject>
-      <DataHeaderBand Name="DataHeader1" Top="215.59" Width="778.3" Height="51.03">
+      <DataHeaderBand Name="DataHeader1" Top="214.57" Width="778.3" Height="51.03">
         <TableObject Name="Table2" Left="7" Top="28.35" Width="764.32" Height="22.68">
           <TableColumn Name="Column3" Width="127"/>
           <TableColumn Name="Column4" Width="637.32"/>
@@ -918,7 +919,7 @@ namespace FastReport
         <TextObject Name="Text85" Left="7.35" Top="5.55" Width="764.32" Height="22.68" Border.Lines="All" Fill.Color="LightGray" Text="Diagnosis Provided by a Licensed Practitioner" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt, style=Bold, Italic"/>
       </DataHeaderBand>
     </DataBand>
-    <DataBand Name="Data7" Top="302.56" Width="778.3" Height="643.05" CanBreak="true" FirstRowStartsNewPage="true">
+    <DataBand Name="Data7" Top="300.51" Width="778.3" Height="643.05" CanBreak="true" FirstRowStartsNewPage="true">
       <TextObject Name="Text238" Left="7.18" Top="11.45" Width="764.32" Height="22.68" Border.Lines="All" Fill.Color="LightGray" Text="Services Provided Prior to Development of Service Plan" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt, style=Bold, Italic"/>
       <TableObject Name="Table27" Left="7.18" Top="34.35" Width="764.33" Height="22.68">
         <TableColumn Name="Column95" Width="136.65"/>
@@ -981,7 +982,7 @@ namespace FastReport
         </TableRow>
       </TableObject>
     </DataBand>
-    <PageFooterBand Name="PageFooter1" Top="949.46" Width="778.3" Height="28.35">
+    <PageFooterBand Name="PageFooter1" Top="946.9" Width="778.3" Height="28.35">
       <TextObject Name="Text239" Left="2" Top="4" Width="359.1" Height="18.9" Fill.Color="White" Text="Open Binder © 02.2019 Ver. 20190825" HorzAlign="Justify" Font="Arial, 10pt, style=Italic"/>
     </PageFooterBand>
   </ReportPage>
@@ -2298,7 +2299,7 @@ namespace FastReport
       <TextObject Name="Text161" Left="405.35" Top="4.45" Width="151.2" Height="18.9" Text="Date of service plan:" HorzAlign="Right" Font="Arial, 10pt, style=Bold"/>
       <TextObject Name="Text162" Left="557.55" Top="4.45" Width="170.1" Height="18.9" Text="[TCMServicePlans.DateServicePlan]" Format="Date" Format.Format="d" Font="Arial, 10pt"/>
     </PageHeaderBand>
-    <DataBand Name="Data28" Top="32.2" Width="778.3" Height="587.79" CanBreak="true" FirstRowStartsNewPage="true" Guides="406.35,396.9,396.9,387.45,387.45,387.45,406.35,406.35,396.9,396.9,396.9" DataSource="CaseManagers">
+    <DataBand Name="Data28" Top="31.68" Width="778.3" Height="587.79" CanBreak="true" FirstRowStartsNewPage="true" Guides="406.35,396.9,396.9,387.45,387.45,387.45,406.35,406.35,396.9,396.9,396.9" DataSource="CaseManagers">
       <TextObject Name="Text163" Left="2.27" Top="9.45" Width="100.17" Height="18.9" Fill.Color="WhiteSmoke" Text="SECTION IV" HorzAlign="Center" VertAlign="Center" Font="Arial, 11pt, style=Bold"/>
       <TextObject Name="Text164" Left="105.95" Top="9.45" Width="330.75" Height="18.9" Text="Service Plan Signatures" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
       <TextObject Name="Text165" Left="2.27" Top="35.25" Width="774.9" Height="94.5" Text="We, the members of the case management team, hereby certify that this recipient is eligible for case management services which will be rendered through Orion Mental Health Center LLC.&#10;The signatures below indicate that the goals and objectives as outlined in the Service Plan have been developed in partnership with the recipient and the legal guardian/custodian (when applicable) and are valid for a period of six (6)  months, unless extended due to reasonable criteria.   " HorzAlign="Justify" Font="Arial, 10pt"/>
@@ -2339,13 +2340,13 @@ namespace FastReport
       <TextObject Name="Text275" Left="539.2" Top="463.85" Width="103.95" Height="18.9" Text="Credentials" Font="Arial, 10pt"/>
       <TextObject Name="Text276" Left="539.1" Top="529.2" Width="103.95" Height="18.9" Text="_____________________________" Font="Arial, 9pt"/>
       <TextObject Name="Text278" Left="538.65" Top="440.15" Width="113.4" Height="18.9" Text="[CaseManagers.Credentials]" Font="Arial, 10pt"/>
-      <TextObject Name="Text279" Left="538.65" Top="525.8" Width="113.4" Height="18.9" Text="[TCMSupervisors.Code]" Font="Arial, 10pt"/>
+      <TextObject Name="Text279" Left="538.65" Top="525.8" Width="113.4" Height="18.9" Text="[TCMSupervisors.Credentials]" Font="Arial, 10pt"/>
       <TextObject Name="Text326" Left="670.5" Top="444.6" Width="94.5" Height="18.9" Text="_____________________________" Font="Arial, 9pt"/>
       <TextObject Name="Text327" Left="670.41" Top="529.2" Width="94.5" Height="18.9" Text="_____________________________" Font="Arial, 9pt"/>
       <TextObject Name="Text273" Left="671.5" Top="548.9" Width="94.5" Height="18.9" Text="Date" Font="Arial, 10pt"/>
       <TextObject Name="Text277" Left="539.65" Top="548.9" Width="103.95" Height="18.9" Text="Credentials" Font="Arial, 10pt"/>
     </DataBand>
-    <PageFooterBand Name="PageFooter15" Top="623.83" Width="778.3" Height="28.35">
+    <PageFooterBand Name="PageFooter15" Top="622.81" Width="778.3" Height="28.35">
       <TextObject Name="Text171" Left="2" Top="4" Width="368.55" Height="18.9" Fill.Color="White" Text="Open Binder © 02.2019 Ver. 20190825" HorzAlign="Justify" Font="Arial, 10pt, style=Italic"/>
     </PageFooterBand>
   </ReportPage>
