@@ -26389,6 +26389,7 @@ namespace KyoS.Web.Helpers
             dt.Columns.Add("Status", typeof(int));
             dt.Columns.Add("RaterEducation", typeof(string));
             dt.Columns.Add("RaterFMHCertification", typeof(string));
+            dt.Columns.Add("Credentials", typeof(string));
 
             if (supervisor != null)
             {
@@ -26403,7 +26404,8 @@ namespace KyoS.Web.Helpers
                                             supervisor.SignaturePath,
                                             0,
                                             supervisor.RaterEducation,
-                                            supervisor.RaterFMHCertification
+                                            supervisor.RaterFMHCertification,
+                                            supervisor.Credentials
                                         });
             }
             else
@@ -26418,6 +26420,7 @@ namespace KyoS.Web.Helpers
                                             string.Empty,
                                             string.Empty,
                                             0,
+                                            string.Empty,
                                             string.Empty,
                                             string.Empty
                                         });
