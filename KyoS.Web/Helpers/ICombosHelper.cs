@@ -123,5 +123,6 @@ namespace KyoS.Web.Helpers
         IEnumerable<SelectListItem> GetComboClientsByCaseManagerByTCMSupervisor(string user, int allClient);
         IEnumerable<SelectListItem> GetComboTCMClientsByClinic_ClientId(int idClinic);
         IEnumerable<SelectListItem> GetComboClientsByFacilitator(FacilitatorEntity facilitator, int idClinic = 0);
+        IEnumerable<SelectListItem> GetComboRolesNotRelationed(string name);
     }
 }

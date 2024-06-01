@@ -5,6 +5,7 @@ using KyoS.Web.Data.Entities;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
@@ -2939,6 +2940,37 @@ namespace KyoS.Web.Helpers
             list.Insert(0, new SelectListItem
             {
                 Text = "[All Clients...]",
+                Value = "0"
+            });
+
+            return list;
+        }
+
+        public IEnumerable<SelectListItem> GetComboRolesNotRelationed(string name = "")
+        {
+            List<SelectListItem> list = new List<SelectListItem>
+                                { new SelectListItem { Text = UserType.Documents_Assistant.ToString(), Value = "1"},
+                                  new SelectListItem { Text = UserType.Facilitator.ToString(), Value = "2"},
+                                  new SelectListItem { Text = UserType.Supervisor.ToString(), Value = "3"},
+                                  new SelectListItem { Text = UserType.CaseManager.ToString(), Value = "4"},
+                                  new SelectListItem { Text = UserType.TCMSupervisor.ToString(), Value = "5"},
+                                  new SelectListItem { Text = UserType.Manager.ToString(), Value = "6"},
+                                  new SelectListItem { Text = UserType.Frontdesk.ToString(), Value = "8"},
+                                  new SelectListItem { Text = UserType.Biller.ToString(), Value = "9"}
+            };
+
+            List<CourseEntity> courses = _context.Courses.Where(n => n.Name == name).ToList();
+
+            SelectListItem value = new SelectListItem();
+
+            foreach (var item in courses)
+            {
+                value  = list.FirstOrDefault(n => n.Text == item.Role.ToString());
+                list.Remove(value);
+            }
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Select role...]",
                 Value = "0"
             });
 
