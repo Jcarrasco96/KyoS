@@ -1846,6 +1846,8 @@ namespace KyoS.Web.Controllers
                                                                           .ThenInclude(f => f.Setting)
                                                                           .Include(f => f.TcmServicePlan.TcmClient.Client)
                                                                           .Include(f => f.TcmServicePlan.TCMDomain)
+                                                                          .Include(f => f.TcmServicePlan.TcmClient.TcmIntakeAppendixJ)
+                                                                          .Include(f => f.TcmServicePlan.TcmClient.TcmIntakeAppendixI)
                                                                           .FirstOrDefault(f => (f.TcmServicePlan_FK == IdServicePlan
                                                                              && f.TcmServicePlan.Approved == 2
                                                                              && f.Id == Id));
