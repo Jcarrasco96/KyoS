@@ -141,5 +141,7 @@ namespace KyoS.Web.Data.Entities
         public bool DeniedBill { get; set; }
 
         public int Units { get; set; }
+
+        public PayStubEntity PayStub { get; set; }
     }
 }

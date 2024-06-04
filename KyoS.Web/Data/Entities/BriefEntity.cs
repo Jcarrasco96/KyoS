@@ -198,5 +198,6 @@ namespace KyoS.Web.Data.Entities
         public BioStatus Status { get; set; }
 
         public IEnumerable<MessageEntity> Messages { get; set; }
+        public PayStubEntity PayStub { get; set; }
     }
 }

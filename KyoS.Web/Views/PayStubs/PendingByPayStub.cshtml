@@ -1,0 +1,163 @@
+﻿@model KyoS.Web.Models.DocumentsPendingByPayStubViewModel
+@{
+    ViewData["Title"] = "Pay Stub";
+}
+
+<link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
+
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home"></i>
+            @Html.ActionLink("Paystubs history", "Index", "PayStubs")
+        </li>
+        <li class="active">Paystubs Invoice Details</li>
+    </ul><!--.breadcrumb-->
+</div>
+
+<p>
+
+</p>
+
+<div class="row">
+    <div class="col-md-12">
+        @if (User.IsInRole("Manager"))
+        {
+            <form asp-action="PendingByPayStub" asp-route-datePayStubclose="@DateTime.Today" asp-route-facilitator=@ViewData["facilitator"] enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="Amount" />
+                <input type="hidden" asp-for="Units" />
+                <input type="hidden" asp-for="IdStatus" />
+                <input type="hidden" asp-for="IdFacilitator" />
+                <input type="hidden" asp-for="IdDocumentAssisstant" />
+
+                <div class="col-md-4">
+                    &nbsp;
+                </div>
+                <div class="col-md-2 form-group">
+                    <label asp-for="DatePayStubClose" class="control-label"> Close Date</label>
+                    <input asp-for="DatePayStubClose" class="form-control" id="cbDateClose" />
+                    <span asp-validation-for="DatePayStubClose" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-2 form-group">
+                    <br />
+                    <input type="submit" value="Generate paystub for this period" class="btn btn-success" />
+                </div>
+                <div class="col-md-4 form-group">
+                    &nbsp;
+                </div>
+            </form>
+        }
+        @if (User.IsInRole("Facilitator") || User.IsInRole("Documents_Assistant"))
+        {
+            <form asp-action="PendingByPayStub" asp-route-datePayStubclose="@DateTime.Today" asp-route-facilitator=1 enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="Amount" />
+                <input type="hidden" asp-for="Units" />
+                <input type="hidden" asp-for="IdStatus" />
+                <input type="hidden" asp-for="IdFacilitator" />
+                <input type="hidden" asp-for="IdDocumentAssisstant" />
+
+                <div class="col-md-5">
+                    &nbsp;
+                </div>
+                <div class="col-md-2 form-group">
+                    <label asp-for="DatePayStubClose" class="control-label"> Close Date</label>
+                    <input asp-for="DatePayStubClose" class="form-control" id="cbDateClose" />
+                    <span asp-validation-for="DatePayStubClose" class="text-danger"></span>
+                </div>
+
+
+                <div class="col-md-5 form-group">
+                    &nbsp;
+                </div>
+            </form>
+        }
+    </div>
+    <div class="col-md-12">
+        <div class="col-md-3">
+            &nbsp;
+        </div>
+        <div class="col-md-1">
+            <div class="thumbnail list-group-item list-group-item-danger">
+                <p style="text-align:center">Employee</p>
+                <h4 style="text-align:center; font-weight:bold;">@Model.CantFacilitators</h4>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="thumbnail list-group-item list-group-item-danger">
+                <p style="text-align:center">Documents</p>
+                <h4 style="text-align:center; font-weight:bold;">@Model.AmountNote</h4>
+            </div>
+        </div>
+        <div class="col-md-1">
+            <div class="thumbnail list-group-item list-group-item-danger">
+                <p style="text-align:center">Units</p>
+                <h4 style="text-align:center; font-weight:bold;">@Model.Units</h4>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="thumbnail list-group-item list-group-item-warning">
+                <p style="text-align:center">Estimated Income</p>
+                <h4 style="text-align:center; font-weight:bold;">$ @Model.Amount</h4>
+            </div>
+        </div>
+        <div class="col-md-3">
+            &nbsp;
+        </div>
+    </div>
+    <div class="col-md-12">
+        <hr />
+    </div>
+</div>
+
+@if ((User.IsInRole("Manager") && ViewData["facilitator"].ToString() == "1")|| User.IsInRole("Facilitator"))
+{
+    <div class="row">
+        <div id="view-billdms">
+            @await Html.PartialAsync("_ViewPayStubDetails", Model.WorkdaysClientList)
+        </div>
+    </div>    
+}
+@if ((User.IsInRole("Manager") && ViewData["facilitator"].ToString() == "0") || User.IsInRole("Documents_Assistant"))
+{
+    <div class="row">
+        <div id="view-billdms">
+            @await Html.PartialAsync("_ViewPayStubDetailsDocuments", Model.DocumentsPending)
+        </div>
+    </div>
+}
+
+
+<partial name="_ModalPopup" />
+<partial name="_DeleteDialog" />
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script src="~/js/jquery.dataTables.min.js"></script>
+    <script src="~/js/moment.min.js"></script>
+    <script src="~/js/datetime-moment.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $.fn.dataTable.moment('MM/DD/YYYY');
+
+            $('#MyTable').DataTable({
+                "order": [[3, "asc"]],
+                "pageLength": 100
+            });
+
+            $("#cbDateClose").change(function () {
+                var wwwUrlPath = window.document.location.href;
+                var pos = wwwUrlPath.indexOf('/PayStubs/PendingByPayStub');
+                var localhostPath = wwwUrlPath.substring(0, pos);
+                var url = 'PayStubs/PendingByPayStub';
+                window.location.href = localhostPath + '/' + url + '?datePayStubclose=' + $("#cbDateClose").val();
+            })
+        })
+    </script>
+}
+

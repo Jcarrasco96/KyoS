@@ -260,6 +260,12 @@
                                             <li><a asp-area="" asp-controller="Calendar" asp-action="IndexDocumentsAssistant">Documents Assistant</a></li>
                                         </ul>
                                     </li>
+                                    <li class="dropdown-submenu">
+                                        <a class="test" tabindex="-1" href="#">Paystubs &nbsp;</a>
+                                        <ul class="dropdown-menu">
+                                            <li>@Html.ActionLink("Employee", "Index", "PayStubs")</li>
+                                        </ul>
+                                    </li>
                                     <li role="separator" class="divider"></li>
                                     <li>@Html.ActionLink("Topics / Activity", "Index", "Themes")</li>
                                     <li role="separator" class="divider"></li>
@@ -762,7 +768,12 @@
                             </a>
                             <ul class="dropdown-menu" role="menu">
                                 <li>@Html.ActionLink("My Information", "Index", "Facilitators")</li>
-                                <li>@Html.ActionLink("Paystubs", "Index", "TCMPayStub")</li>
+                                <li class="dropdown-submenu">
+                                    <a class="test" tabindex="-1" href="#">Paystubs &nbsp;</a>
+                                    <ul class="dropdown-menu">
+                                        <li>@Html.ActionLink("My PayStubs", "Index", "PayStubs")</li>
+                                    </ul>
+                                </li>
                             </ul>
                         </li>
                         <li>
@@ -1136,7 +1147,7 @@
                             </a>
                             <ul class="dropdown-menu" role="menu">
                                 <li>@Html.ActionLink("My Information", "Index", "DocumentsAssistants")</li>
-                                <li>@Html.ActionLink("Paystubs", "Index", "TCMPayStub")</li>
+                                <li>@Html.ActionLink("Paystubs", "Index", "PayStubs")</li>
                             </ul>
                         </li>
                         <li><a asp-area="" asp-controller="Incidents" asp-action="Index">Incidents</a></li>

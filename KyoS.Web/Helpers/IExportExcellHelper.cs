@@ -20,6 +20,8 @@ namespace KyoS.Web.Helpers
 
         #region PayStub
         byte[] ExportPayStubTCMHelper(TCMPayStubEntity paystub, string Periodo, string ClinicName, string data);
+        byte[] ExportPayStubFacilitatorHelper(PayStubEntity paystub, string Periodo, string ClinicName, string data);
+        byte[] ExportPayStubDocAssisstantHelper(PayStubEntity paystub, string Periodo, string ClinicName, string data);
         #endregion
 
         #region Utils functions

@@ -185,7 +185,7 @@ namespace KyoS.Web.Controllers
                         modelTemp.Amount = PaystubDetailsList.Sum(n => n.Amount);
 
 
-                        TCMPayStubEntity paystub = _converterHelper.ToPayStubEntity(modelTemp, true);
+                        TCMPayStubEntity paystub = _converterHelper.ToTCMPayStubEntity(modelTemp, true);
                         _context.Add(paystub);
                     }
                     
