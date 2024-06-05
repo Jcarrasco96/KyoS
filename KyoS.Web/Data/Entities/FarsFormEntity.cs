@@ -171,5 +171,6 @@ namespace KyoS.Web.Data.Entities
         [DataType(DataType.Time)]
         [DisplayFormat(DataFormatString = "{0:hh:mm tt}", ApplyFormatInEditMode = false)]
         public DateTime EndTime { get; set; }
+        public PayStubEntity PayStub { get; set; }
     }
 }

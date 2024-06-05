@@ -8724,7 +8724,7 @@ namespace KyoS.Web.Helpers
             return model;
         }
 
-        public TCMPayStubEntity ToPayStubEntity(TCMNotePendingByPayStubViewModel model, bool isNew)
+        public TCMPayStubEntity ToTCMPayStubEntity(TCMNotePendingByPayStubViewModel model, bool isNew)
         {
             return new TCMPayStubEntity
             {
@@ -8741,7 +8741,7 @@ namespace KyoS.Web.Helpers
             };
         }
 
-        public TCMNotePendingByPayStubViewModel ToPayStubViewModel(TCMPayStubEntity model)
+        public TCMNotePendingByPayStubViewModel ToTCMPayStubViewModel(TCMPayStubEntity model)
         {
             return new TCMNotePendingByPayStubViewModel
             {
@@ -9581,6 +9581,48 @@ namespace KyoS.Web.Helpers
 
             };
 
+        }
+
+        public PayStubEntity ToPayStubEntity(DocumentsPendingByPayStubViewModel model, bool isNew)
+        {
+            return new PayStubEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                Amount = model.Amount,
+                DatePayStub = model.DatePayStub,
+                DatePayStubClose = model.DatePayStubClose,
+                DatePayStubPayment = model.DatePayStubPayment,
+                StatusPayStub = StatusTCMPaystubUtils.GetStatusBillByIndex(model.IdStatus),
+                WordayClients = model.WorkdaysClientList,
+                Units = model.Units,
+                Facilitator = (model.IdFacilitator > 0)? _context.Facilitators.Find(model.IdFacilitator) : null,
+                Doc_Assisstant = (model.IdDocumentAssisstant > 0) ? _context.DocumentsAssistant.Find(model.IdDocumentAssisstant) : null,
+                PayStubDetails = model.PaystubDetails,
+                Bios = model.BioList,
+                MTPs = model.MtpList,
+                Fars = model.FarsList,
+                MedicalHistory = model.MedicalHistoryList
+            };
+        }
+
+        public DocumentsPendingByPayStubViewModel ToPayStubViewModel(PayStubEntity model)
+        {
+            return new DocumentsPendingByPayStubViewModel
+            {
+                Id = model.Id,
+                Amount = model.Amount,
+                PaystubDetails = model.PayStubDetails,
+                DatePayStub = model.DatePayStub,
+                DatePayStubClose = model.DatePayStubClose,
+                DatePayStubPayment = model.DatePayStubPayment,
+                Units = model.Units,
+                IdStatus = (model.StatusPayStub == StatusTCMPaystub.Pending) ? 0 : 1,
+                StatusList = _combosHelper.GetComboBillStatus()
+
+                // AmountCMHNotes = model.TCMPayStubDetails.Where(n => n.ServiceAgency == ServiceAgency.CMH).Count(),
+                // AmountTCMNotes = model.BillDmsDetails.Where(n => n.ServiceAgency == ServiceAgency.TCM).Count(),
+
+            };
         }
 
 

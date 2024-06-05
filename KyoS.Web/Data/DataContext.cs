@@ -178,6 +178,8 @@ namespace KyoS.Web.Data
         public DbSet<NotePSYEntity> NotesPSYs { get; set; }
         public DbSet<EOBEntity> EOBs { get; set; }
         public DbSet<EOBDetailsEntity> EOBDetails { get; set; }
+        public DbSet<PayStubEntity> PayStubs { get; set; }
+        public DbSet<PayStubDetailsEntity> PayStubDetails { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -256,5 +256,77 @@ namespace KyoS.Web.Controllers
             return View(model);
         }
 
+        public async Task<IActionResult> DuplicateCourse(int id = 0)
+        {
+            UserEntity user_logged = await _context.Users
+                                                   .Include(u => u.Clinic)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            if (id != 0)
+            {
+                CourseEntity course = await _context.Courses
+                                                    .FirstOrDefaultAsync(u => u.Id == id);
+
+                CourseViewModel model = new CourseViewModel()
+                {
+                   Id = id,
+                   Name = course.Name,
+                   Active = course.Active,
+                   ValidPeriod = course.ValidPeriod,
+                   Clinic = course.Clinic,
+                   Description = course.Description,
+                   Roles = _combosHelper.GetComboRolesNotRelationed(course.Name),
+                   IdRole = 0
+                };
+                return View(model);
+            }
+
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DuplicateCourse(CourseViewModel model)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (ModelState.IsValid)
+            {
+                if (model.Id != 0)
+                {
+                    CourseEntity course = _converterHelper.ToCourseEntity(model, true, user_logged.UserName);
+                    course.Clinic = user_logged.Clinic;
+                    _context.Add(course);
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+                        List<CourseEntity> courses = await _context.Courses
+                                                                   .OrderBy(g => g.Role)
+                                                                   .ThenBy(g => g.Name)
+                                                                   .ToListAsync();
+
+                        return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewCourses", courses) });
+                    }
+                    catch (System.Exception ex)
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+
+                }
+
+                model.Roles = _combosHelper.GetComboRoles();
+
+                return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "DuplicateCourse", model) });
+            }
+
+
+            model.Roles = _combosHelper.GetComboRoles();
+
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "DuplicateCourse", model) });
+        }
+
+
     }
 }

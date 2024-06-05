@@ -45,6 +45,6 @@ namespace KyoS.Web.Data.Entities
 
         public BillDmsEntity BillDms { get; set; }
         public EOBEntity EOB { get; set; }
-
+        public PayStubEntity PayStub { get; set; }
     }
 }

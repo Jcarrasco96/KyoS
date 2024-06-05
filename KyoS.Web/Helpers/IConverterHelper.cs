@@ -250,8 +250,8 @@ namespace KyoS.Web.Helpers
         MeetingNotesViewModel ToMeetingNoteViewModel(MeetingNoteEntity model);
         MeetingNotes_Facilitator ToMeetingNoteFacilitatorEntity(MeetingNotesFacilitatorModel model, bool isNew);
         MeetingNotesFacilitatorModel ToMeetingNoteFacilitatorViewModel(MeetingNotes_Facilitator model);
-        TCMPayStubEntity ToPayStubEntity(TCMNotePendingByPayStubViewModel model, bool isNew);
-        TCMNotePendingByPayStubViewModel ToPayStubViewModel(TCMPayStubEntity model);
+        TCMPayStubEntity ToTCMPayStubEntity(TCMNotePendingByPayStubViewModel model, bool isNew);
+        TCMNotePendingByPayStubViewModel ToTCMPayStubViewModel(TCMPayStubEntity model);
         TCMIntakeMedicalHistoryEntity ToTCMIntakeMedicalHistoryEntity(TCMIntakeMedicalHistoryViewModel model, bool isNew, string userId);
         TCMIntakeMedicalHistoryViewModel ToTCMIntakeMedicalHistoryViewModel(TCMIntakeMedicalHistoryEntity model);
         Workday_Activity_Facilitator ToWorkdayActivityFacilitatorEntity(Workday_Activity_FacilitatorSkillViewModel model);
@@ -280,5 +280,7 @@ namespace KyoS.Web.Helpers
         SupervisorCertificationViewModel ToSupervisorCertificationViewModel(SupervisorCertificationEntity model, int idClinic);
         NotePSYEntity ToNotePSYEntity(NotePSYViewModel model, bool isNew, string userId);
         NotePSYViewModel ToNotePSYViewModel(NotePSYEntity model, int idClinic);
+        PayStubEntity ToPayStubEntity(DocumentsPendingByPayStubViewModel model, bool isNew);
+        DocumentsPendingByPayStubViewModel ToPayStubViewModel(PayStubEntity model);
     }
 }
