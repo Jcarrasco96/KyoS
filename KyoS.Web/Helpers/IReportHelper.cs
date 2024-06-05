@@ -277,6 +277,7 @@ namespace KyoS.Web.Helpers
         Stream MyFloridaTCMNoteReportSchema1(TCMNoteEntity note);
         Stream CommunityHTCTCMNoteReportSchema1(TCMNoteEntity note);
         Stream BridgeTCMNoteReportSchema1(TCMNoteEntity note);
+        Stream MultiServicesTCMNoteReportSchema1(TCMNoteEntity note);
         #endregion
 
         #region TCM Service Plan
@@ -287,6 +288,7 @@ namespace KyoS.Web.Helpers
         Stream MyFloridaTCMServicePlan(TCMServicePlanEntity servicePlan);
         Stream CommunityHTCTCMServicePlan(TCMServicePlanEntity servicePlan);
         Stream BridgeTCMServicePlan(TCMServicePlanEntity servicePlan);
+        Stream MultiServicesTCMServicePlan(TCMServicePlanEntity servicePlan);
         #endregion
 
         #region TCM Fars Form
@@ -297,6 +299,7 @@ namespace KyoS.Web.Helpers
         Stream TCMMyFloridaFarsReport(TCMFarsFormEntity fars);
         Stream TCMCommunityHTCFarsReport(TCMFarsFormEntity fars);
         Stream TCMBridgeFarsReport(TCMFarsFormEntity fars);
+        Stream TCMMultiServicesFarsReport(TCMFarsFormEntity fars);
         #endregion
 
         #region TCM Binder Section #1

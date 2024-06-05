@@ -486,6 +486,11 @@ namespace KyoS.Web.Controllers
                 Stream stream = _reportHelper.TCMBridgeFarsReport(entity);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
+            if (entity.TCMClient.Client.Clinic.Name == "MULTISERVICES HEALTH")
+            {
+                Stream stream = _reportHelper.TCMMultiServicesFarsReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
 
             return null;
         }
