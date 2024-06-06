@@ -2847,7 +2847,7 @@
             <div class="col-md-12">
                 &nbsp;
             </div>
-            <div class="col-md-2">
+            <div class="col-md-1">
                 &nbsp;
             </div>
             <div class="col-md-2">
@@ -2923,13 +2923,31 @@
                 }
             </div>
             <div class="col-md-2">
+                @if (ViewBag.ClientWithoutFARS == 0)
+                {
+                    <div class="thumbnail list-group-item list-group-item-text">
+                        <h4 style="align-content:end;"><i class="icon-legal" style="padding-right: 10px !important;"></i>Clients<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;without FARS</h4>
+                        <span class="message-counter-cero">@ViewBag.ClientWithoutFARS</span>
+                    </div>
+                }
+                else
+                {
+                    <a style="text-decoration: none;" asp-controller="FarsForms" asp-action="ClientswithoutFARS" role="button">
+                        <div class="thumbnail list-group-item list-group-item-danger">
+                            <h4 style="align-content:end;"><i class="icon-legal" style="padding-right: 10px !important;"></i>Clients<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;without FARS</h4>
+                            <span class="message-counter">@ViewBag.ClientWithoutFARS</span>
+                        </div>
+                    </a>
+                }
+            </div>
+            <div class="col-md-1">
                 &nbsp;
             </div>
             //NewLine
             <div class="col-md-12">
                 &nbsp;
             </div>
-            <div class="col-md-2">
+            <div class="col-md-1">
                 &nbsp;
             </div>
             <div class="col-md-2">
@@ -3005,6 +3023,24 @@
                 }
             </div>
             <div class="col-md-2">
+                @if (ViewBag.MTPrWithReview == "0")
+                {
+                    <div class="thumbnail list-group-item list-group-item-text">
+                        <h4 style="align-content:end;"><i class="icon-edit" style="padding-right: 10px !important;"></i>MTPRs<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;with review</h4>
+                        <span class="message-counter-cero">@ViewBag.MTPrWithReview</span>
+                    </div>
+                }
+                else
+                {
+                    <a style="text-decoration: none;" asp-controller="MTPs" asp-action="MTPrWithReview" role="button">
+                        <div class="thumbnail list-group-item list-group-item-warning">
+                            <h4 style="align-content:end;"><i class="icon-share" style="padding-right: 10px !important;"></i>MTPRs<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;with review</h4>
+                            <span class="message-counter-warning">@ViewBag.MTPrWithReview</span>
+                        </div>
+                    </a>
+                }
+            </div>
+            <div class="col-md-1">
                 &nbsp;
             </div>
         }

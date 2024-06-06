@@ -759,6 +759,12 @@ namespace KyoS.Web.Controllers
                                                                           && wc.OnlyTCM == false)
                                                                           && ((wc.DocumentsAssistant != null && wc.DocumentsAssistant.LinkedUser == user_logged.UserName)
                                                                              || wc.DocumentsAssistant == null));
+
+                ViewBag.ClientWithoutFARS = await _context.Clients
+                                                          .CountAsync(n => n.Clinic.Id == user_logged.Clinic.Id
+                                                            && ((n.MTPs.FirstOrDefault(m => m.Active == true).MtpReviewList.Where(r => r.CreatedBy == user_logged.UserName).Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.MtpReview && f.CreatedBy == user_logged.UserName).Count() == 0)
+                                                              || (n.MTPs.Where(m => m.AdendumList.Where(a => a.CreatedBy == user_logged.UserName).Count() > n.FarsFormList.Where(f => f.Type == FARSType.Addendums && f.CreatedBy == user_logged.UserName).Count()).Count() > 0))
+                                                               && n.OnlyTCM == false);
             }
             if (User.IsInRole("TCMSupervisor"))
             {
