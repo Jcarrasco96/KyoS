@@ -79,12 +79,24 @@
         <div class="col-md-3">
             &nbsp;
         </div>
-        <div class="col-md-1">
-            <div class="thumbnail list-group-item list-group-item-danger">
-                <p style="text-align:center">Employee</p>
-                <h4 style="text-align:center; font-weight:bold;">@Model.CantFacilitators</h4>
+        @if (ViewData["facilitator"].ToString() == "1")
+        {
+            <div class="col-md-1">
+                <div class="thumbnail list-group-item list-group-item-danger">
+                    <p style="text-align:center">Employee</p>
+                    <h4 style="text-align:center; font-weight:bold;">@Model.CantFacilitators</h4>
+                </div>
             </div>
-        </div>
+        }
+        else
+        {
+            <div class="col-md-1">
+                <div class="thumbnail list-group-item list-group-item-danger">
+                    <p style="text-align:center">Employee</p>
+                    <h4 style="text-align:center; font-weight:bold;">@Model.CantDocumentsAssisstant</h4>
+                </div>
+            </div>
+        }
         <div class="col-md-2">
             <div class="thumbnail list-group-item list-group-item-danger">
                 <p style="text-align:center">Documents</p>
