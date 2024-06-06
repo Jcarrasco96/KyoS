@@ -3646,6 +3646,10 @@ namespace KyoS.Web.Controllers
                         List<TCMDomainEntity> domainList = await _context.TCMDomains
                                                                          .Include(h => h.TCMObjetive)
                                                                          .Include(g => g.TcmServicePlan)
+                                                                         .ThenInclude(g => g.TcmClient)
+                                                                         .ThenInclude(g => g.Client)
+                                                                         .ThenInclude(g => g.Clinic)
+                                                                         .ThenInclude(g => g.Setting)
                                                                          .Where(g => (g.TcmServicePlan.Id == serviceplan.Id))
                                                                          .OrderBy(g => g.Code)
                                                                          .ToListAsync();
@@ -3721,6 +3725,10 @@ namespace KyoS.Web.Controllers
                         List<TCMDomainEntity> domainList = await _context.TCMDomains
                                                                          .Include(h => h.TCMObjetive)
                                                                          .Include(g => g.TcmServicePlan)
+                                                                         .ThenInclude(g => g.TcmClient)
+                                                                         .ThenInclude(g => g.Client)
+                                                                         .ThenInclude(g => g.Clinic)
+                                                                         .ThenInclude(g => g.Setting)
                                                                          .Where(g => (g.TcmServicePlan.Id == serviceplan.Id))
                                                                          .OrderBy(g => g.Code)
                                                                          .ToListAsync();
