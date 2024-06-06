@@ -2025,14 +2025,17 @@ namespace KyoS.Web.Helpers
                         (allNotes.Exists(n => (n.Schedule.InitialTime.TimeOfDay < item.InitialTime.TimeOfDay && n.Schedule.EndTime.TimeOfDay > item.InitialTime.TimeOfDay || n.Schedule.InitialTime.TimeOfDay < item.EndTime.TimeOfDay && n.Schedule.EndTime.TimeOfDay > item.EndTime.TimeOfDay) && n.Present == false)
                         || allNotes.Exists(n => (n.Schedule.InitialTime.TimeOfDay < item.InitialTime.TimeOfDay && n.Schedule.InitialTime.TimeOfDay < item.EndTime.TimeOfDay && n.Schedule.EndTime.TimeOfDay > item.InitialTime.TimeOfDay && n.Schedule.EndTime.TimeOfDay > item.EndTime.TimeOfDay && n.Present == false))))
                     {
-                        if (tcmclient.TCMNote.Where(n => (n.DateOfService == worday.Date
-                                         && n.TCMNoteActivity.Where(m => (m.StartTime.TimeOfDay <= item.InitialTime.TimeOfDay && m.EndTime.TimeOfDay >= item.InitialTime.TimeOfDay)
-                                             || (m.StartTime.TimeOfDay <= item.EndTime.TimeOfDay && m.EndTime.TimeOfDay >= item.EndTime.TimeOfDay)
-                                             || (m.StartTime.TimeOfDay > item.InitialTime.TimeOfDay && m.EndTime.TimeOfDay > item.InitialTime.TimeOfDay && m.StartTime.TimeOfDay < item.EndTime.TimeOfDay && m.EndTime.TimeOfDay < item.EndTime.TimeOfDay))
-                                         .Count() > 0))
-                                       .Count() == 0)
+                        if (tcmclient != null)
                         {
-                            listSubSchedulesSalida.Add(item);
+                            if (tcmclient.TCMNote.Where(n => (n.DateOfService == worday.Date
+                                             && n.TCMNoteActivity.Where(m => (m.StartTime.TimeOfDay <= item.InitialTime.TimeOfDay && m.EndTime.TimeOfDay >= item.InitialTime.TimeOfDay)
+                                                 || (m.StartTime.TimeOfDay <= item.EndTime.TimeOfDay && m.EndTime.TimeOfDay >= item.EndTime.TimeOfDay)
+                                                 || (m.StartTime.TimeOfDay > item.InitialTime.TimeOfDay && m.EndTime.TimeOfDay > item.InitialTime.TimeOfDay && m.StartTime.TimeOfDay < item.EndTime.TimeOfDay && m.EndTime.TimeOfDay < item.EndTime.TimeOfDay))
+                                             .Count() > 0))
+                                           .Count() == 0)
+                            {
+                                listSubSchedulesSalida.Add(item);
+                            }
                         }
 
                     }
