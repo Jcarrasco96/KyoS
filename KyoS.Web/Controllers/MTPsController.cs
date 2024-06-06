@@ -265,8 +265,9 @@ namespace KyoS.Web.Controllers
                 }
 
                 //calcular las unidades a partir del tiempo de desarrollo del MTP
-                int units = (mtpViewModel.EndTime.TimeOfDay - mtpViewModel.StartTime.TimeOfDay).Minutes/15;
-                if ((mtpViewModel.EndTime.TimeOfDay - mtpViewModel.StartTime.TimeOfDay).Minutes % 15 > 7)
+                double minutes = (mtpViewModel.EndTime.TimeOfDay - mtpViewModel.StartTime.TimeOfDay).TotalMinutes;
+                int units = (int)(minutes / 15);
+                if (minutes % 15 > 7)
                 {
                     units++;
                     mtpViewModel.Units = units;
@@ -276,7 +277,7 @@ namespace KyoS.Web.Controllers
                     mtpViewModel.Units = units;
                 }
 
-                mtpViewModel.Units = 0;
+                //mtpViewModel.Units = 0;
                 DateTime start = new DateTime(mtpViewModel.AdmissionDateMTP.Year, mtpViewModel.AdmissionDateMTP.Month, mtpViewModel.AdmissionDateMTP.Day, mtpViewModel.StartTime.Hour, mtpViewModel.StartTime.Minute, mtpViewModel.StartTime.Second);
                 mtpViewModel.StartTime = start;
                 DateTime end = new DateTime(mtpViewModel.AdmissionDateMTP.Year, mtpViewModel.AdmissionDateMTP.Month, mtpViewModel.AdmissionDateMTP.Day, mtpViewModel.EndTime.Hour, mtpViewModel.EndTime.Minute, mtpViewModel.EndTime.Second);
@@ -525,8 +526,10 @@ namespace KyoS.Web.Controllers
                 }
 
                 //calcular las unidades a partir del tiempo de desarrollo del MTP
-                int units = (mtpViewModel.EndTime.TimeOfDay - mtpViewModel.StartTime.TimeOfDay).Minutes / 15;
-                if ((mtpViewModel.EndTime.TimeOfDay - mtpViewModel.StartTime.TimeOfDay).Minutes % 15 > 7)
+
+                double minutes = (mtpViewModel.EndTime.TimeOfDay - mtpViewModel.StartTime.TimeOfDay).TotalMinutes;
+                int units = (int)(minutes / 15);
+                if (minutes % 15 > 7)
                 {
                     units++;
                     mtpViewModel.Units = units;

@@ -98,11 +98,11 @@ namespace KyoS.Web.Controllers
         {
 
             UserEntity user_logged = _context.Users
-                                                 .Include(u => u.Clinic)
-                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
             ClientEntity client = _context.Clients.Include(n => n.FarsFormList)
                                                   .Include(n => n.Clinic)
-                                                    .FirstOrDefault(n => n.Id == id);
+                                                  .FirstOrDefault(n => n.Id == id);
             FarsFormViewModel model;
 
             if (user_logged.Clinic != null)
@@ -156,7 +156,8 @@ namespace KyoS.Web.Controllers
                    IdType = 0,
                    FarsType = _combosHelper.GetComboFARSType(),
                    StartTime = DateTime.Now,
-                   EndTime = DateTime.Now.AddMinutes(15)
+                   EndTime = DateTime.Now.AddMinutes(15),
+                   CodeBill = user_logged.Clinic.CodeFARS
                 };
 
                 SupervisorEntity supervisor = _context.Supervisors.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
