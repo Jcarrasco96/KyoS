@@ -26242,6 +26242,7 @@ namespace KyoS.Web.Helpers
             dt.Columns.Add("Status", typeof(int));
             dt.Columns.Add("LinkedUser", typeof(string));
             dt.Columns.Add("SignaturePath", typeof(string));
+            dt.Columns.Add("Credentials", typeof(string));
 
             if (facilitator != null)
             {
@@ -26253,7 +26254,8 @@ namespace KyoS.Web.Helpers
                                             facilitator.Clinic.Id,
                                             facilitator.Status,
                                             facilitator.LinkedUser,
-                                            facilitator.SignaturePath
+                                            facilitator.SignaturePath,
+                                            facilitator.Credentials
                                         });
             }
             else
@@ -26265,6 +26267,7 @@ namespace KyoS.Web.Helpers
                                             string.Empty,
                                             0,
                                             Common.Enums.StatusType.Close,
+                                            string.Empty,
                                             string.Empty,
                                             string.Empty
                                         });
@@ -26288,6 +26291,7 @@ namespace KyoS.Web.Helpers
             dt.Columns.Add("ClinicId", typeof(int));            
             dt.Columns.Add("LinkedUser", typeof(string));
             dt.Columns.Add("SignaturePath", typeof(string));
+            dt.Columns.Add("Credentials", typeof(string));
 
             if (supervisor != null)
             {
@@ -26299,7 +26303,8 @@ namespace KyoS.Web.Helpers
                                             supervisor.Code,
                                             0,
                                             supervisor.LinkedUser,
-                                            supervisor.SignaturePath
+                                            supervisor.SignaturePath,
+                                            supervisor.Credentials
                                         });
             }
             else
@@ -26311,6 +26316,7 @@ namespace KyoS.Web.Helpers
                                             string.Empty,
                                             string.Empty,
                                             0,
+                                            string.Empty,
                                             string.Empty,
                                             string.Empty
                                         });
@@ -26336,6 +26342,7 @@ namespace KyoS.Web.Helpers
             dt.Columns.Add("SignaturePath", typeof(string));
             dt.Columns.Add("RaterEducation", typeof(string));
             dt.Columns.Add("RaterFMHCertification", typeof(string));
+            dt.Columns.Add("Credentials", typeof(string));
 
             if (assistant != null)
             {
@@ -26349,7 +26356,8 @@ namespace KyoS.Web.Helpers
                                             assistant.LinkedUser,
                                             assistant.SignaturePath,
                                             assistant.RaterEducation,
-                                            assistant.RaterFMHCertification
+                                            assistant.RaterFMHCertification,
+                                            assistant.Credentials
                                         });
             }
             else
@@ -26361,6 +26369,7 @@ namespace KyoS.Web.Helpers
                                             string.Empty,
                                             string.Empty,
                                             0,
+                                            string.Empty,
                                             string.Empty,
                                             string.Empty,
                                             string.Empty,
