@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="05/29/2024 16:58:44" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="06/06/2024 12:29:48" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u31NQLdk629eSLmUD2LFNk7A==">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3V9mL610rFznRWt5Rqb0s4g==">
       <TableDataSource Name="Clinics" DataType="System.Int32" Enabled="true" TableName="Clinics">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -136,6 +136,7 @@
         <Column Name="SignaturePath" DataType="System.String"/>
         <Column Name="RaterEducation" DataType="System.String"/>
         <Column Name="RaterFMHCertification" DataType="System.String"/>
+        <Column Name="Credentials" DataType="System.String" PropName="Column"/>
       </TableDataSource>
       <TableDataSource Name="Classifications" Alias="Signatures" DataType="System.Int32" Enabled="true" TableName="Classifications">
         <Column Name="supervisorSignature" DataType="System.Byte[]" PropName="Id"/>
@@ -151,6 +152,7 @@
         <Column Name="ClinicId" DataType="System.Int32"/>
         <Column Name="RaterEducation" DataType="System.String"/>
         <Column Name="RaterFMHCertification" DataType="System.String"/>
+        <Column Name="Credentials" DataType="System.String" PropName="Column"/>
       </TableDataSource>
       <TableDataSource Name="Referreds" DataType="System.Int32" Enabled="true" TableName="Referreds">
         <Column Name="Id" DataType="System.Int32"/>
@@ -291,7 +293,7 @@
         <Column Name="Code90791" DataType="System.Boolean" PropName="Column" BindableControl="CheckBox"/>
       </TableDataSource>
     </MsSqlDataConnection>
-    <MsSqlDataConnection Name="Connection1" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u33sUE3kUfYbvg1X7p4Cg6TQ==">
+    <MsSqlDataConnection Name="Connection1" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3TSQ9v70nH5Jx8An/tajNwg==">
       <TableDataSource Name="Classifications1" Alias="Signatures1" DataType="System.Int32" Enabled="true" TableName="Classifications">
         <Column Name="supervisorSignature" DataType="System.Byte[]" PropName="Id"/>
         <Column Name="facilitatorSignature" DataType="System.Byte[]" PropName="Name"/>
@@ -929,9 +931,9 @@
       <LineObject Name="Line22" Left="276.6" Top="439.7" Width="-79.38"/>
       <TextObject Name="Text783" Left="198.45" Top="686.45" Width="81.5" Height="24.57" CanGrow="true" Text="Credentials" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
       <LineObject Name="Line23" Left="277.6" Top="681.53" Width="-79.38"/>
-      <TextObject Name="Text784" Left="198.45" Top="245.25" Width="81.65" Height="18.9" Text="[IIf([DocumentsAssistant.Id] == 0,[Supervisors.Code],&quot;&quot;)]" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
-      <TextObject Name="Text785" Left="198.45" Top="419.2" Width="81.65" Height="18.9" Text="[DocumentsAssistant.Code]" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
-      <TextObject Name="Text786" Left="198.45" Top="660.37" Width="81.65" Height="18.9" Text="[Supervisors.Code]" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text784" Left="198.45" Top="245.25" Width="81.65" Height="18.9" Text="[IIf([DocumentsAssistant.Id] == 0,[Supervisors.Credentials],&quot;&quot;)]" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text785" Left="198.45" Top="419.2" Width="81.65" Height="18.9" Text="[DocumentsAssistant.Credentials]" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text786" Left="198.45" Top="660.37" Width="81.65" Height="18.9" Text="[Supervisors.Credentials]" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
       <TextObject Name="Text787" Left="616.14" Top="96.01" Width="141.75" Height="18.9" Text="[Bio.DateBio]" Format="Date" Format.Format="d" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
     </DataBand>
   </ReportPage>

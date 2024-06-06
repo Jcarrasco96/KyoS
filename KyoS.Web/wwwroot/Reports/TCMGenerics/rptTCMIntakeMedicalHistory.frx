@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="03/01/2024 12:17:32" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="06/06/2024 13:52:53" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pSrjZHqPCSNXKYfct7zavy9myey+m7LlneqXrU/O01HluWX5xN0Wi9iEsLcNk0RAxQTK/vkCbP84JEJ34oyUAuKH95pSBs1P1GaEVhIQ9BB4=">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pSrjZHqPCSNXKYfct7zavy9myey+m7LlneqXrU/O01HluWX5xN0Wi9iEsLcNk0RAxQTK/vkCbP84JEJ34oyUAuLRRzhePxuMyMP6oy/rNUeg=">
       <TableDataSource Name="Clinics" DataType="System.Int32" Enabled="true" TableName="Clinics">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -261,7 +261,7 @@
       <PictureObject Name="Picture1" Left="7.45" Top="10.45" Width="103.95" Height="66.15"/>
       <LineObject Name="Line9" Left="125.3" Top="11" Height="66.15"/>
     </PageHeaderBand>
-    <DataBand Name="Data14" Top="93.44" Width="778.3" Height="737.1" DataSource="Clients">
+    <DataBand Name="Data14" Top="92.92" Width="778.3" Height="737.1" DataSource="Clients">
       <TextObject Name="Text399" Top="19.25" Width="160.65" Height="18.9" Text="Recipient:" HorzAlign="Right" VertAlign="Center" Font="Arial, 10pt"/>
       <TextObject Name="Text400" Top="38.15" Width="160.65" Height="18.9" Text="Primary Care Physician:" HorzAlign="Right" VertAlign="Center" Font="Arial, 10pt"/>
       <TextObject Name="Text401" Left="500.85" Top="19.25" Width="75.6" Height="18.9" Text="Case No:" HorzAlign="Right" VertAlign="Center" Font="Arial, 10pt"/>
@@ -817,7 +817,7 @@
       <PictureObject Name="Picture4" Left="7.45" Top="10.45" Width="103.95" Height="66.15"/>
       <LineObject Name="Line11" Left="125.3" Top="11" Height="66.15"/>
     </PageHeaderBand>
-    <DataBand Name="Data15" Top="93.44" Width="778.3" Height="755.37">
+    <DataBand Name="Data15" Top="92.92" Width="778.3" Height="755.37">
       <TextObject Name="Text397" Top="14.74" Width="780.8" Height="22" CanGrow="true" Text="Continued..." Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 11pt, style=Bold"/>
       <TextObject Name="Text413" Left="9.45" Top="57.08" Width="122.85" Height="18.9" Text="Recipient:" HorzAlign="Right" VertAlign="Center" Font="Arial, 10pt"/>
       <TextObject Name="Text414" Left="510.3" Top="57.08" Width="75.6" Height="18.9" Text="Case No:" HorzAlign="Right" VertAlign="Center" Font="Arial, 10pt"/>
@@ -1089,7 +1089,7 @@
       <PictureObject Name="Picture5" Left="7.45" Top="10.45" Width="103.95" Height="66.15"/>
       <LineObject Name="Line13" Left="125.3" Top="11" Height="66.15"/>
     </PageHeaderBand>
-    <DataBand Name="Data16" Top="93.44" Width="778.3" Height="285.5" Guides="519.75">
+    <DataBand Name="Data16" Top="92.92" Width="778.3" Height="285.5" Guides="519.75">
       <TextObject Name="Text398" Top="16.29" Width="780.8" Height="22" CanGrow="true" Text="Continued..." Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 11pt, style=Bold"/>
       <TextObject Name="Text417" Top="58.63" Width="122.85" Height="18.9" Text="Recipient:" HorzAlign="Right" VertAlign="Center" Font="Arial, 10pt"/>
       <TextObject Name="Text418" Left="500.85" Top="58.63" Width="75.6" Height="18.9" Text="Case No:" HorzAlign="Right" VertAlign="Center" Font="Arial, 10pt"/>
@@ -1160,7 +1160,7 @@
         </TableRow>
       </TableObject>
     </DataBand>
-    <DataBand Name="Data1" Top="414.98" Width="778.3" Height="18.9" DataSource="TCMAssessmentMedication">
+    <DataBand Name="Data1" Top="413.44" Width="778.3" Height="18.9" DataSource="TCMAssessmentMedication">
       <TableObject Name="Table54" Width="774.9" Height="18.9" Border.Lines="All">
         <TableColumn Name="Column186" Width="233.98"/>
         <TableColumn Name="Column187" Width="139.48"/>
@@ -1173,7 +1173,7 @@
           <TableCell Name="Cell1068" Border.Lines="All" Text="[TCMAssessmentMedication.Prescriber]" HorzAlign="Center" Font="Arial, 10pt"/>
         </TableRow>
       </TableObject>
-      <DataHeaderBand Name="DataHeader1" Top="382.78" Width="778.3" Height="28.35">
+      <DataHeaderBand Name="DataHeader1" Top="381.76" Width="778.3" Height="28.35">
         <TableObject Name="Table53" Width="774.84" Height="28.35">
           <TableColumn Name="Column182" Width="233.85"/>
           <TableColumn Name="Column183" Width="139.35"/>
@@ -1188,7 +1188,7 @@
         </TableObject>
       </DataHeaderBand>
     </DataBand>
-    <DataBand Name="Data2" Top="437.72" Width="778.3" Height="154.98" CanBreak="true">
+    <DataBand Name="Data2" Top="435.67" Width="778.3" Height="154.98" CanBreak="true">
       <TableObject Name="Table44" Width="774.9" Height="154.98" Border.Lines="All">
         <TableColumn Name="Column149" Width="48.3"/>
         <TableColumn Name="Column150" Width="48.3"/>
@@ -1339,7 +1339,7 @@
       <PictureObject Name="Picture6" Left="7.45" Top="10.45" Width="103.95" Height="66.15"/>
       <LineObject Name="Line15" Left="125.3" Top="11" Height="66.15"/>
     </PageHeaderBand>
-    <DataBand Name="Data5" Top="93.44" Width="778.3" Height="797.17" CanBreak="true" DataSource="Clients">
+    <DataBand Name="Data5" Top="92.92" Width="778.3" Height="797.17" CanBreak="true" DataSource="Clients">
       <TableObject Name="Table7" Top="116.85" Width="775.08" Height="236.25" Border.Lines="All">
         <TableColumn Name="Column31" Width="23.15"/>
         <TableColumn Name="Column32" Width="212.15"/>
@@ -1443,11 +1443,11 @@
       <CheckBoxObject Name="CheckBox41" Top="360.1" Width="11.34" Height="11.34" Border.Lines="All"/>
       <LineObject Name="Line1" Left="355.65" Top="767" Width="-230.58"/>
       <LineObject Name="Line2" Left="585.45" Top="767" Width="-98.28"/>
-      <TextObject Name="Text28" Left="122.85" Top="768.9" Width="232.7" Height="24.57" CanGrow="true" Text="Employee Name / Credentials" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text28" Left="122.85" Top="768.9" Width="232.7" Height="24.57" CanGrow="true" Text="Employee Name / Signature" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
       <TextObject Name="Text29" Left="488.4" Top="768.9" Width="94.5" Height="24.57" CanGrow="true" Text="Date" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
       <TextObject Name="Text30" Left="489.4" Top="748.2" Width="94.5" Height="18.9" Text="[IIf(Year([TCMIntakeMedicalHistory.DateSignatureEmployee]) == 1,&quot;&quot;,[TCMIntakeMedicalHistory.DateSignatureEmployee])]" Format="Date" Format.Format="d" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt"/>
       <PictureObject Name="Picture2" Left="301.95" Top="713.5" Width="95" Height="63.45" DataColumn="Signatures.facilitatorSignature"/>
-      <TextObject Name="Text34" Left="122.85" Top="694.5" Width="232.7" Height="24.57" CanGrow="true" Text="Person Name / Credentials" Padding="2, 2, 2, 2" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+      <TextObject Name="Text34" Left="122.85" Top="694.5" Width="232.7" Height="24.57" CanGrow="true" Text="Person Name / Signature" Padding="2, 2, 2, 2" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
       <TextObject Name="Text35" Left="488.4" Top="694.5" Width="94.5" Height="24.57" CanGrow="true" Text="Date" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 9pt, style=Bold"/>
       <LineObject Name="Line5" Left="355.65" Top="693.05" Width="-230.58"/>
       <LineObject Name="Line6" Left="585.45" Top="693.05" Width="-98.28"/>
