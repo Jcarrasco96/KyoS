@@ -122,7 +122,14 @@
                                     @Model.DatePayStub.ToShortDateString()
                                 </td>
                                 <td align="center">
-                                    @Model.DatePayStubPayment.ToShortDateString()
+                                    @if (Model.DatePayStubPayment.Year != 1)
+                                    {
+                                        @Model.DatePayStubPayment.ToShortDateString()
+                                    }
+                                    else
+                                    {
+                                        <a> - </a>
+                                    }
                                 </td>
                                 <td align="center">
                                     @item.Unit

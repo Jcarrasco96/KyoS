@@ -76,7 +76,14 @@
                                     }
                                 </td>
                                 <td align="center">
-                                    @Html.DisplayFor(modelItem => item.DatePayStubPayment)
+                                    @if (item.DatePayStubPayment.Year != 1)
+                                    {
+                                        @Html.DisplayFor(modelItem => item.DatePayStubPayment)
+                                    }
+                                    else
+                                    {
+                                        <a> - </a>
+                                    }
                                 </td>
                                 <td align="right">
                                     @if (User.IsInRole("Manager"))
