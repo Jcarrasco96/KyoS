@@ -4,6 +4,7 @@ using KyoS.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KyoS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20240607024934_CPTcodeInHealthInsurance")]
+    partial class CPTcodeInHealthInsurance
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -2535,27 +2538,6 @@ namespace KyoS.Web.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CodePSRTherapy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Company_AccountNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Company_Address")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Company_Email")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Company_Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Company_Phone")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Company_Routing")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Company_Zelle")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FaxNo")

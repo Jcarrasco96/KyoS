@@ -1496,7 +1496,7 @@ namespace KyoS.Web.Helpers
             }
         }
 
-        public byte[] ExportBillDmsHelper(BillDmsEntity abillDms, string Periodo, string ClinicName, string data)
+        public byte[] ExportBillDmsHelper(BillDmsEntity abillDms, string Periodo, string ClinicName, string data, ClinicEntity clinic)
         {
             var billDms = abillDms;            
 
@@ -1525,7 +1525,7 @@ namespace KyoS.Web.Helpers
                 worksheet.Cell(currentRow, 1).Value = "ITEM DESCRIPTION";
                 worksheet.Cell(currentRow, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Left;
                 worksheet.Cell(currentRow, 2).Value = "SERVICES";
-                worksheet.Cell(currentRow, 2).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Left;
+                worksheet.Cell(currentRow, 2).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
                 worksheet.Cell(currentRow, 3).Value = "NOTES";
                 worksheet.Cell(currentRow, 3).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
                 worksheet.Cell(currentRow, 4).Value = "UNITS";
@@ -1670,17 +1670,76 @@ namespace KyoS.Web.Helpers
                 range71.Style.Fill.SetBackgroundColor(XLColor.LightGray);
                 range71.Merge();
 
-                worksheet.Cells("A35").Value = "(*) Total units are calculated based on Medicaid codes. ";
-                worksheet.Cells("A36").Value = "Documents that are not notes are not included in the total units.";
+                currentRow++;
+                currentRow++;
+                currentRow++;
+                
+                //aqui conformo los datos de pagos
+                worksheet.Cell(currentRow, 1).Value = "Direct deposit:";
+                worksheet.Cell(currentRow, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
+                worksheet.Cell(currentRow, 1).Style.Font.FontSize = 12;
+                worksheet.Cell(currentRow, 1).Style.Font.Bold = true;
+                
+                currentRow++;
+                worksheet.Cell(currentRow, 2).Value = "Account number:";
+                worksheet.Cell(currentRow, 2).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
+                worksheet.Cell(currentRow, 3).Value = clinic.Company_AccountNumber.ToString();
+                IXLRange range73 = worksheet.Range(worksheet.Cell(currentRow, 3).Address, worksheet.Cell(currentRow, 6).Address);
+                range73.Merge();
 
-                IXLRange range110 = worksheet.Range(worksheet.Cell(35, 1).Address, worksheet.Cell(35, 6).Address);
+                currentRow++;
+                worksheet.Cell(currentRow, 2).Value = "Routing:";
+                worksheet.Cell(currentRow, 2).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
+                worksheet.Cell(currentRow, 3).Value = clinic.Company_Routing.ToString();
+                IXLRange range75 = worksheet.Range(worksheet.Cell(currentRow, 3).Address, worksheet.Cell(currentRow, 6).Address);
+                range75.Merge();
+
+                currentRow++;
+                worksheet.Cell(currentRow, 1).Value = "Check:";
+                worksheet.Cell(currentRow, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
+                worksheet.Cell(currentRow, 1).Style.Font.FontSize = 12;
+                worksheet.Cell(currentRow, 1).Style.Font.Bold = true;
+
+                currentRow++;
+                worksheet.Cell(currentRow, 2).Value = "Company:";
+                worksheet.Cell(currentRow, 2).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
+                worksheet.Cell(currentRow, 3).Value = clinic.Company_Name.ToString();
+                IXLRange range77 = worksheet.Range(worksheet.Cell(currentRow, 3).Address, worksheet.Cell(currentRow, 6).Address);
+                range77.Merge();
+
+                currentRow++;
+                worksheet.Cell(currentRow, 2).Value = "Address:";
+                worksheet.Cell(currentRow, 2).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
+                worksheet.Cell(currentRow, 3).Value = clinic.Company_Address.ToString();
+                IXLRange range79 = worksheet.Range(worksheet.Cell(currentRow, 3).Address, worksheet.Cell((currentRow + 1), 6).Address);
+                range79.Merge();
+                range79.Style.Alignment.Vertical = XLAlignmentVerticalValues.Top;
+                
+                currentRow++;
+                currentRow++;
+                worksheet.Cell(currentRow, 1).Value = "Zelle:";
+                worksheet.Cell(currentRow, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
+                worksheet.Cell(currentRow, 1).Style.Font.FontSize = 12;
+                worksheet.Cell(currentRow, 1).Style.Font.Bold = true;
+
+                currentRow++;
+                worksheet.Cell(currentRow, 2).Value = "Email:";
+                worksheet.Cell(currentRow, 2).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
+                worksheet.Cell(currentRow, 3).Value = clinic.Company_Zelle.ToString();
+                IXLRange range81 = worksheet.Range(worksheet.Cell(currentRow, 3).Address, worksheet.Cell(currentRow, 6).Address);
+                range81.Merge();
+
+                worksheet.Cells("A40").Value = "(*) Total units are calculated based on Medicaid codes. ";
+                worksheet.Cells("A41").Value = "Documents that are not notes are not included in the total units.";
+
+                IXLRange range110 = worksheet.Range(worksheet.Cell(40, 1).Address, worksheet.Cell(40, 6).Address);
                 range110.Style.Font.FontSize = 10;
                 range110.Style.Font.Bold = false;
                 range110.Style.Alignment.Vertical = XLAlignmentVerticalValues.Top;
                 range110.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
                 range110.Merge();
 
-                IXLRange range111 = worksheet.Range(worksheet.Cell(36, 1).Address, worksheet.Cell(36, 6).Address);
+                IXLRange range111 = worksheet.Range(worksheet.Cell(41, 1).Address, worksheet.Cell(41, 6).Address);
                 range111.Style.Font.FontSize = 10;
                 range111.Style.Font.Bold = false;
                 range111.Style.Alignment.Vertical = XLAlignmentVerticalValues.Top;

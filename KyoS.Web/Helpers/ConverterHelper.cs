@@ -50,7 +50,14 @@ namespace KyoS.Web.Helpers
                 CodeMTPR = model.CodeMTPR,
                 CodeFARS = model.CodeFARS,
                 CPTCode_TCM = model.CPTCode_TCM,
-                Initials = model.Initials
+                Initials = model.Initials,
+                Company_AccountNumber = model.Company_AccountNumber,
+                Company_Address = model.Company_Address,
+                Company_Email = model.Company_Email,
+                Company_Name = model.Company_Name,
+                Company_Phone = model.Company_Phone,
+                Company_Routing = model.Company_Routing,
+                Company_Zelle = model.Company_Zelle
 
             };
         }
@@ -81,7 +88,14 @@ namespace KyoS.Web.Helpers
                 CodeMTPR = clinicEntity.CodeMTPR,
                 CodeFARS = clinicEntity.CodeFARS,
                 CPTCode_TCM = clinicEntity.CPTCode_TCM,
-                Initials = clinicEntity.Initials
+                Initials = clinicEntity.Initials,
+                Company_AccountNumber = clinicEntity.Company_AccountNumber,
+                Company_Address = clinicEntity.Company_Address,
+                Company_Email = clinicEntity.Company_Email,
+                Company_Name = clinicEntity.Company_Name,
+                Company_Phone = clinicEntity.Company_Phone,
+                Company_Routing = clinicEntity.Company_Routing,
+                Company_Zelle = clinicEntity.Company_Zelle
 
             };
         }
@@ -1670,7 +1684,15 @@ namespace KyoS.Web.Helpers
                 CreatedOn = isNew ? DateTime.Now : model.CreatedOn,
                 LastModifiedBy = !isNew ? userId : string.Empty,
                 LastModifiedOn = !isNew ? DateTime.Now : Convert.ToDateTime(null),
-                NeedAuthorization = model.NeedAuthorization
+                NeedAuthorization = model.NeedAuthorization,
+                CPTcode_BIO = model.CPTcode_BIO,
+                CPTcode_FARS_MH = model.CPTcode_FARS_MH,
+                CPTcode_Group = model.CPTcode_Group,
+                CPTcode_Ind = model.CPTcode_Ind,
+                CPTcode_MTP = model.CPTcode_MTP,
+                CPTcode_MTPR = model.CPTcode_MTPR,
+                CPTcode_PSR = model.CPTcode_PSR,
+                CPTcode_TCM = model.CPTcode_TCM
             };
         }
 
@@ -1689,7 +1711,15 @@ namespace KyoS.Web.Helpers
                 CreatedOn = model.CreatedOn,
                 LastModifiedBy = model.LastModifiedBy,
                 LastModifiedOn = model.LastModifiedOn,
-                NeedAuthorization = model.NeedAuthorization
+                NeedAuthorization = model.NeedAuthorization,
+                CPTcode_BIO = model.CPTcode_BIO,
+                CPTcode_FARS_MH = model.CPTcode_FARS_MH,
+                CPTcode_Group = model.CPTcode_Group,
+                CPTcode_Ind = model.CPTcode_Ind,
+                CPTcode_MTP = model.CPTcode_MTP,
+                CPTcode_MTPR = model.CPTcode_MTPR,
+                CPTcode_PSR = model.CPTcode_PSR,
+                CPTcode_TCM = model.CPTcode_TCM
             };
         }
 

@@ -803,7 +803,7 @@ namespace KyoS.Web.Controllers
             string ReportName = "Invoice "+ user_logged.Clinic.Name + " "+ billDms.DateBillClose.ToShortDateString() + ".xlsx";
             string data = "BILL";
           
-            byte[] content = _exportExcelHelper.ExportBillDmsHelper(billDms, Periodo, _context.Clinics.FirstOrDefault().Name, data);
+            byte[] content = _exportExcelHelper.ExportBillDmsHelper(billDms, Periodo, _context.Clinics.FirstOrDefault().Name, data, user_logged.Clinic);
 
             return File(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", ReportName);
             

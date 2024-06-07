@@ -115,6 +115,51 @@
 </div>
 <div class="col-md-push-12">
     <div class="form-group col-md-3">
+        <label asp-for="Company_Name" class="control-label"></label>
+        <input asp-for="Company_Name" class="form-control" />
+        <span asp-validation-for="Company_Name" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-3">
+        <label asp-for="Company_Address" class="control-label"></label>
+        <input asp-for="Company_Address" class="form-control" />
+        <span asp-validation-for="Company_Address" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-2">
+        <label asp-for="Company_Phone" class="control-label"></label>
+        <input asp-for="Company_Phone" class="form-control" />
+        <span asp-validation-for="Company_Phone" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-4">
+        <label asp-for="Company_Email" class="control-label"></label>
+        <input asp-for="Company_Email" class="form-control" />
+        <span asp-validation-for="Company_Email" class="text-danger"></span>
+    </div>
+    <div class="container-fluid">
+        &nbsp;
+    </div>
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-4">
+        <label asp-for="Company_AccountNumber" class="control-label"></label>
+        <input asp-for="Company_AccountNumber" class="form-control" />
+        <span asp-validation-for="Company_AccountNumber" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-4">
+        <label asp-for="Company_Routing" class="control-label"></label>
+        <input asp-for="Company_Routing" class="form-control" />
+        <span asp-validation-for="Company_Routing" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-4">
+        <label asp-for="Company_Zelle" class="control-label"></label>
+        <input asp-for="Company_Zelle" class="form-control" />
+        <span asp-validation-for="Company_Zelle" class="text-danger"></span>
+    </div>
+    <div class="container-fluid">
+        &nbsp;
+    </div>
+</div>
+<div class="col-md-push-12">
+    <div class="form-group col-md-3">
         <label asp-for="LogoFile" class="control-label"></label>
         <input asp-for="LogoFile" type="file" class="form-control" />
         <span asp-validation-for="LogoFile" class="text-danger"></span>

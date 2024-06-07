@@ -398,6 +398,10 @@ namespace KyoS.Web.Controllers
                                                           .ThenInclude(c => c.Clients_Diagnostics)
                                                           .ThenInclude(c => c.Diagnostic)
 
+                                                          .Include(wc => wc.Client)
+                                                          .ThenInclude(c => c.Clients_HealthInsurances)
+                                                          .ThenInclude(c => c.HealthInsurance)
+
                                                           .Include(wc => wc.Facilitator)
                                                           .FirstOrDefaultAsync(wc => wc.Id == id);
 
@@ -512,6 +516,16 @@ namespace KyoS.Web.Controllers
             SettingEntity setting = _context.Settings
                                             .FirstOrDefault(s => s.Clinic.Id == facilitator_logged.Clinic.Id);
 
+            string CPTCode = workday_Client.Client.Clinic.CodePSRTherapy;
+            if (workday_Client.Client.Clients_HealthInsurances.FirstOrDefault(n => n.Active == true) != null)
+            {
+                string temp = workday_Client.Client.Clients_HealthInsurances.FirstOrDefault(n => n.Active == true).HealthInsurance.CPTcode_PSR;
+                if (temp != null && temp != string.Empty)
+                {
+                    CPTCode = temp;
+                }
+            }
+
             if (note == null)   //la nota no está creada
             {
                 IEnumerable<SelectListItem> goals = null;
@@ -540,7 +554,7 @@ namespace KyoS.Web.Controllers
                     Status = NoteStatus.Pending,    //es solo generico para la visualizacion del btn FinishEditing
                     Origin = origin,
                     Schema = workday_Client.Client.Clinic.Schema,
-                    CodeBill = workday_Client.Client.Clinic.CodePSRTherapy,
+                    CodeBill = CPTCode,
                    
 
                     //IdTopic1 = (activities.Count > 0) ? activities[0].Activity.Theme.Id : 0,
@@ -1195,8 +1209,12 @@ namespace KyoS.Web.Controllers
                                                           .ThenInclude(c => c.MTPs)
 
                                                           .Include(wc => wc.Client)
-                                                          .ThenInclude(c => c.Clients_Diagnostics)
-                                                          .ThenInclude(c => c.Diagnostic)
+                                                          .ThenInclude(wc => wc.Clients_Diagnostics)
+                                                          .ThenInclude(wc => wc.Diagnostic)
+
+                                                          .Include(wc => wc.Client)
+                                                          .ThenInclude(wc => wc.Clients_HealthInsurances)
+                                                          .ThenInclude(wc => wc.HealthInsurance)
 
                                                           .Include(wc => wc.Facilitator)
 
@@ -1347,6 +1365,16 @@ namespace KyoS.Web.Controllers
             SettingEntity setting = _context.Settings
                                             .FirstOrDefault(s => s.Clinic.Id == facilitator_logged.Clinic.Id);
 
+            string CPTCode = workday_Client.Client.Clinic.CodePSRTherapy;
+            if (workday_Client.Client.Clients_HealthInsurances.FirstOrDefault(n => n.Active == true) != null)
+            {
+                string temp = workday_Client.Client.Clients_HealthInsurances.FirstOrDefault(n => n.Active == true).HealthInsurance.CPTcode_PSR;
+                if (temp != null && temp != string.Empty)
+                {
+                    CPTCode = temp;
+                }
+            }
+
             if (note == null)   //la nota no está creada
             {
                 IEnumerable<SelectListItem> goals = null;
@@ -1377,7 +1405,7 @@ namespace KyoS.Web.Controllers
                     Origin = origin,
                     Schema = workday_Client.Client.Clinic.Schema,
                     Setting = "53",
-                    CodeBill = workday_Client.Client.Clinic.CodePSRTherapy,
+                    CodeBill = CPTCode,
 
                     Present1 = true,
                     Theme1 = (activities.Count > 0) ? activities[0].Activity.Theme.Name : string.Empty,
@@ -2240,29 +2268,34 @@ namespace KyoS.Web.Controllers
                 ViewBag.Error = "5";                
             }
 
-            Workday_Client workday_Client = await _context.Workdays_Clients.Include(wc => wc.Workday)
+            Workday_Client workday_Client = await _context.Workdays_Clients
+                                                          .Include(wc => wc.Workday)
                                                                            
-                                                                           .Include(wc => wc.Client)
-                                                                           .ThenInclude(c => c.Clinic)
+                                                          .Include(wc => wc.Client)
+                                                          .ThenInclude(c => c.Clinic)
 
-                                                                           .Include(wc => wc.Client)
-                                                                           .ThenInclude(c => c.MTPs)
+                                                          .Include(wc => wc.Client)
+                                                          .ThenInclude(c => c.MTPs)
 
-                                                                           .Include(wc => wc.Facilitator)
-                                                                           .ThenInclude(c => c.Clinic)  //es para saber la clinica cuando no existe la nota en individualNote
-                                                                           .ThenInclude(c => c.Setting)
+                                                          .Include(wc => wc.Facilitator)
+                                                          .ThenInclude(c => c.Clinic)  //es para saber la clinica cuando no existe la nota en individualNote
+                                                          .ThenInclude(c => c.Setting)
 
-                                                                           .Include(wc => wc.Client)
-                                                                           .ThenInclude(c => c.Clients_Diagnostics)  //es para saber la clinica cuando no existe la nota en individualNote
-                                                                           .ThenInclude(c => c.Diagnostic)
+                                                          .Include(wc => wc.Client)
+                                                          .ThenInclude(c => c.Clients_Diagnostics)  //es para saber la clinica cuando no existe la nota en individualNote
+                                                          .ThenInclude(c => c.Diagnostic)
+                                                                           
+                                                          .Include(wc => wc.Client)
+                                                          .ThenInclude(c => c.Clients_HealthInsurances)  //es para saber el cptcode si existe en el seguro
+                                                          .ThenInclude(c => c.HealthInsurance)
 
-                                                                           .Include(wc => wc.Workday)
-                                                                           .ThenInclude(w => w.Week)
+                                                          .Include(wc => wc.Workday)
+                                                          .ThenInclude(w => w.Week)
 
-                                                                           .Include(wc => wc.Schedule)
-                                                                           .ThenInclude(c => c.SubSchedules)
-                                                                           .AsSplitQuery()
-                                                                           .FirstOrDefaultAsync(wc => wc.Id == id);
+                                                          .Include(wc => wc.Schedule)
+                                                          .ThenInclude(c => c.SubSchedules)
+                                                          .AsSplitQuery()
+                                                          .FirstOrDefaultAsync(wc => wc.Id == id);
 
             if (workday_Client == null)
             {
@@ -2378,6 +2411,16 @@ namespace KyoS.Web.Controllers
                 if (residuo >= 8)
                     unit++;
 
+                string CPTCode = user_logged.Clinic.CodeIndTherapy;
+                if (workday_Client.Client.Clients_HealthInsurances.FirstOrDefault(n => n.Active == true) != null)
+                {
+                    string temp = workday_Client.Client.Clients_HealthInsurances.FirstOrDefault(n => n.Active == true).HealthInsurance.CPTcode_Ind;
+                    if (temp != null && temp != string.Empty)
+                    {
+                        CPTCode = temp;
+                    }
+                }
+
                 individualNoteViewModel = new IndividualNoteViewModel
                 {
                     Id = id,
@@ -2388,7 +2431,7 @@ namespace KyoS.Web.Controllers
                     Workday_Cient = workday_Client,
                     IdClient = 0,
                     MTPId = 0,
-                    CodeBill = user_logged.Clinic.CodeIndTherapy,
+                    CodeBill = CPTCode,
                     Setting = "53",
                     Minute = minutes,
                     RealUnits = unit
@@ -2847,6 +2890,10 @@ namespace KyoS.Web.Controllers
                                                           .Include(wc => wc.Facilitator)
                                                           .Include(wc => wc.Schedule)
 
+                                                          .Include(wc => wc.Client)
+                                                          .ThenInclude(c => c.Clients_HealthInsurances)
+                                                          .ThenInclude(c => c.HealthInsurance)
+
                                                           .FirstOrDefaultAsync(wc => wc.Id == id);
 
             if (workday_Client == null)
@@ -2981,12 +3028,22 @@ namespace KyoS.Web.Controllers
                     objs = _combosHelper.GetComboObjetives(0);
                 }
 
+                string CPTCode = workday_Client.Client.Clinic.CodeGroupTherapy;
+                if (workday_Client.Client.Clients_HealthInsurances.FirstOrDefault(n => n.Active == true) != null)
+                {
+                    string temp = workday_Client.Client.Clients_HealthInsurances.FirstOrDefault(n => n.Active == true).HealthInsurance.CPTcode_Group;
+                    if (temp != null && temp != string.Empty)
+                    {
+                        CPTCode = temp;
+                    }
+                }
+
                 noteViewModel = new GroupNoteViewModel
                 {
                     Id = id,
                     Status = NoteStatus.Pending,    //es solo generico para la visualizacion del btn FinishEditing
                     Origin = origin,      
-                    CodeBill = workday_Client.Client.Clinic.CodeGroupTherapy,
+                    CodeBill = CPTCode,
                     
                     //IdTopic1 = (activities.Count > 0) ? activities[0].Activity.Theme.Id : 0,
                     Topic1 = (activities.Count > 0) ? activities[0].Activity.Theme.Name : string.Empty,
@@ -3435,6 +3492,10 @@ namespace KyoS.Web.Controllers
                                                           .Include(wc => wc.Facilitator)
                                                           .Include(wc => wc.Schedule)
 
+                                                          .Include(wc => wc.Client)
+                                                          .ThenInclude(c => c.Clients_HealthInsurances)
+                                                          .ThenInclude(c => c.HealthInsurance)
+
                                                           .FirstOrDefaultAsync(wc => wc.Id == id);
 
             if (workday_Client == null)
@@ -3538,12 +3599,22 @@ namespace KyoS.Web.Controllers
                     objs = _combosHelper.GetComboObjetives(0);
                 }
 
+                string CPTCode = workday_Client.Client.Clinic.CodeGroupTherapy;
+                if (workday_Client.Client.Clients_HealthInsurances.FirstOrDefault(n => n.Active == true) != null)
+                {
+                    string temp = workday_Client.Client.Clients_HealthInsurances.FirstOrDefault(n => n.Active == true).HealthInsurance.CPTcode_Group;
+                    if (temp != null && temp != string.Empty)
+                    {
+                        CPTCode = temp;
+                    }
+                }
+
                 noteViewModel = new GroupNote2ViewModel
                 {
                     Id = id,
                     Status = NoteStatus.Pending,    //es solo generico para la visualizacion del btn FinishEditing
                     Origin = origin,
-                    CodeBill = workday_Client.Client.Clinic.CodeGroupTherapy,
+                    CodeBill = CPTCode,
                     GroupLeaderFacilitatorAbout = workday_Client.Workday.Workdays_Activities_Facilitators.ElementAt(0).Activity.Theme.Name,
 
                     //IdTopic1 = (activities.Count > 0) ? activities[0].Activity.Theme.Id : 0,
@@ -4034,6 +4105,11 @@ namespace KyoS.Web.Controllers
                                                           .Include(wc => wc.Schedule)
                                                           .ThenInclude(wc => wc.SubSchedules)
 
+                                                          .Include(wc => wc.Client)
+                                                          .ThenInclude(wc => wc.Clients_HealthInsurances)
+                                                          .ThenInclude(wc => wc.HealthInsurance)
+
+                                                          .AsSplitQuery()
                                                           .FirstOrDefaultAsync(wc => wc.Id == id);
 
             if (workday_Client == null)
@@ -4138,12 +4214,22 @@ namespace KyoS.Web.Controllers
                     objs = _combosHelper.GetComboObjetives(0);
                 }
 
+                string CPTCode = workday_Client.Client.Clinic.CodeGroupTherapy;
+                if (workday_Client.Client.Clients_HealthInsurances.FirstOrDefault(n => n.Active == true) != null)
+                {
+                    string temp = workday_Client.Client.Clients_HealthInsurances.FirstOrDefault(n => n.Active == true).HealthInsurance.CPTcode_Group;
+                    if (temp != null && temp != string.Empty)
+                    {
+                        CPTCode = temp;
+                    }                    
+                }
+
                 noteViewModel = new GroupNote3ViewModel
                 {
                     Id = id,
                     Status = NoteStatus.Pending,    //es solo generico para la visualizacion del btn FinishEditing
                     Origin = origin,
-                    CodeBill = workday_Client.Client.Clinic.CodeGroupTherapy,
+                    CodeBill = CPTCode,
                     GroupLeaderFacilitatorAbout = workday_Client.Workday.Workdays_Activities_Facilitators.ElementAt(0).Activity.Theme.Name,
                     Setting = "10",
 
