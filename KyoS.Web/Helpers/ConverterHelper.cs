@@ -482,7 +482,9 @@ namespace KyoS.Web.Helpers
                 DateOfClose = model.DateOfClose,
                 OnlyTCM = model.OnlyTCM,
                 Annotations = model.Annotations,
-                DocumentsAssistant = await _context.DocumentsAssistant.FirstOrDefaultAsync(d => d.Id == model.IdDocumentsAssistant)
+                DocumentsAssistant = await _context.DocumentsAssistant.FirstOrDefaultAsync(d => d.Id == model.IdDocumentsAssistant),
+                FirstName = model.FirstName,
+                LastName = model.LastName
             };
         }
 
@@ -573,7 +575,9 @@ namespace KyoS.Web.Helpers
                 IdDocumentsAssistant = (clientEntity.DocumentsAssistant != null) ? clientEntity.DocumentsAssistant.Id : 0,
                 DocumentsAssistant = clientEntity.DocumentsAssistant,
                 DocumentsAssistants = _combosHelper.GetComboDocumentsAssistantByClinic(user_logged.Clinic.Id,false,false),
-                IdTCMClient = (tcmclient != null)? tcmclient.Id : 0 
+                IdTCMClient = (tcmclient != null)? tcmclient.Id : 0,
+                FirstName = clientEntity.FirstName,
+                LastName = clientEntity.LastName
 
             };
         }

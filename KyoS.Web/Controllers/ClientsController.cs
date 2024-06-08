@@ -18,6 +18,7 @@ using System.Reflection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using DocumentFormat.OpenXml.Vml.Office;
+using DocumentFormat.OpenXml.Office.CustomUI;
 
 namespace KyoS.Web.Controllers
 {
@@ -288,6 +289,16 @@ namespace KyoS.Web.Controllers
 
                 UserEntity user_logged = _context.Users.Include(u => u.Clinic)
                                                        .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                if (clientViewModel.FirstName != string.Empty)
+                {
+                    clientViewModel.Name = clientViewModel.FirstName;
+                    if (clientViewModel.LastName != string.Empty)
+                    {
+                        clientViewModel.Name = clientViewModel.Name + ' ' + clientViewModel.LastName;
+
+                    }
+                }
 
                 ClientEntity clientEntity = await _converterHelper.ToClientEntity(clientViewModel, true, photoPath, signPath, user_logged.Id);
 
@@ -721,6 +732,15 @@ namespace KyoS.Web.Controllers
                     clientEntity.OtherLanguage_Read = clientViewModel.OtherLanguage_Read;
                     clientEntity.OtherLanguage_Speak = clientViewModel.OtherLanguage_Speak;
                     clientEntity.OtherLanguage_Understand = clientViewModel.OtherLanguage_Understand;
+
+                    if (clientEntity.FirstName != string.Empty)
+                    {
+                        clientEntity.Name = clientEntity.FirstName;
+                        if (clientEntity.FirstName != string.Empty)
+                        {
+                            clientEntity.Name = clientEntity.Name + ' ' + clientEntity.LastName;
+                        }
+                    }
 
                     //-------Primary Doctor--------------------------//
                     if (clientViewModel.IdDoctor == 0)
@@ -6559,6 +6579,87 @@ namespace KyoS.Web.Controllers
 
 
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditHealthInsuranceClient", HealthInsuranceModel) });
+        }
+
+        public async Task<IActionResult> UpdateName()
+        {
+            UserEntity user_logged = await _context.Users
+                                                   .Include(u => u.Clinic)
+                                                   .ThenInclude(c => c.Setting)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+                       
+            if (User.IsInRole("Manager") )
+            {
+                List<ClientEntity> listClient = await _context.Clients.ToListAsync();
+                List<ClientEntity> listClientSalida = new List<ClientEntity>();
+                ClientEntity Client = new ClientEntity();
+                string[] array = new string[0];
+                char[] delimitador = { '.' };
+               
+                foreach (var item in listClient)
+                {
+                    Client = item;
+                    array = item.Name.Split(delimitador);
+                    if (array.Length > 2)
+                    {
+                        Client.FirstName = array[0];
+                        for (int i = 1; i < array.Length; i++)
+                        {
+                            if (i == 1)
+                            {
+                                Client.LastName = array[i];
+                            }
+                            else
+                            {
+                                Client.LastName += ' ' + array[i];
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (array.Length == 2)
+                        {
+                            Client.FirstName = array[0] + '.';
+                            Client.LastName = array[1];
+                        }
+                        else
+                        {
+                            if (array.Length == 1)
+                            {
+                                array = item.Name.Split(' ');
+                                if (array.Length > 1)
+                                {
+                                    for (int i = 0; i < array.Length; i++)
+                                    {
+                                        if (i == 0)
+                                        {
+                                            Client.FirstName = array[i];
+                                        }
+                                        else
+                                        {
+                                            if (i == 1)
+                                            {
+                                                Client.LastName = array[i];
+                                            }
+                                            else
+                                            {
+                                                Client.LastName += ' ' + array[i];
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    listClientSalida.Add(Client);
+                    Client = new ClientEntity();
+                }
+                _context.UpdateRange(listClientSalida);
+                await _context.SaveChangesAsync();
+                              
+            }
+
+            return RedirectToAction("Index", "Clients");
         }
 
     }
