@@ -706,12 +706,14 @@ namespace KyoS.Web.Controllers
 
                     clientEntity.FullAddress = clientViewModel.FullAddress;
                     clientEntity.AlternativeAddress = clientViewModel.AlternativeAddress;
+                    clientEntity.Telephone = clientViewModel.Telephone;
                     clientEntity.TelephoneSecondary = clientViewModel.TelephoneSecondary;
                     clientEntity.Email = clientViewModel.Email;
                     clientEntity.Country = clientViewModel.Country;
                     clientEntity.City = clientViewModel.City;
                     clientEntity.State = clientViewModel.State;
                     clientEntity.ZipCode = clientViewModel.ZipCode;
+                    clientEntity.PlaceOfBirth = clientViewModel.PlaceOfBirth;
                     clientEntity.Race = RaceUtils.GetRaceByIndex(clientViewModel.IdRace);
                     clientEntity.MaritalStatus = MaritalUtils.GetMaritalByIndex(clientViewModel.IdMaritalStatus);
                     clientEntity.Ethnicity = EthnicityUtils.GetEthnicityByIndex(clientViewModel.IdEthnicity);
