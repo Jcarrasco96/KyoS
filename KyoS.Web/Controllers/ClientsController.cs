@@ -893,6 +893,15 @@ namespace KyoS.Web.Controllers
                 }
                 else
                 {
+                    if (clientViewModel.FirstName != string.Empty)
+                    {
+                        clientViewModel.Name = clientViewModel.FirstName;
+                        if (clientViewModel.LastName != string.Empty)
+                        {
+                            clientViewModel.Name = clientViewModel.Name + ' ' + clientViewModel.LastName;
+
+                        }
+                    }
                     ClientEntity clientEntity = await _converterHelper.ToClientEntity(clientViewModel, false, photoPath, signPath, user_logged.Id);
 
                     if (clientViewModel.IdStatus == 2) //the client was closed
