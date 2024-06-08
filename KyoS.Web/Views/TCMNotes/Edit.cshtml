@@ -170,6 +170,8 @@
             <input type="hidden" asp-for="BillDms" />
             <input type="hidden" asp-for="CodeBill" />
             <input type="hidden" asp-for="DateOfServiceReference" />
+            <input type="hidden" asp-for="TCMClient.Client.FirstName" />
+            <input type="hidden" asp-for="TCMClient.Client.LastName" />
 
             @if (User.IsInRole("TCMSupervisor") && Model.Status == KyoS.Common.Enums.NoteStatus.Approved)
             {

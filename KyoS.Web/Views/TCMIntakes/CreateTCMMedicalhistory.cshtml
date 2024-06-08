@@ -29,6 +29,8 @@
             <input type="hidden" asp-for="TCMClient_FK" />
             <input type="hidden" asp-for="AdmissionedFor" />
             <input type="hidden" asp-for="IdTCMClient" />
+            <input type="hidden" asp-for="TcmClient.Client.FirstName" />
+            <input type="hidden" asp-for="TcmClient.Client.LastName" />
             <partial name="_TCMIntakeMedicalHistory" />
             <div class="form-group col-md-12">
                 <input type="submit" value="Save" class="btn btn-primary" />
