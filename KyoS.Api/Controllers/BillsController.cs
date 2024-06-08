@@ -265,10 +265,27 @@ public class BillsController : Controller
                 }
 
             }
-
-            NotBilled value = new NotBilled(item.Client.Name, item.Client.Code, item.Client.DateOfBirth.ToShortDateString(), item.Client.MedicaidID, item.Client.FullAddress,
+            string dx = (item.Client.Clients_Diagnostics.Where(n => n.Active && n.Principal == true && n.DateIdentify.Date <= item.Workday.Date.Date).Count() > 0) ? item.Client.Clients_Diagnostics.Where(n => n.Active && n.Principal == true).ElementAt(0).Diagnostic.Code : "-";
+            string dx1 = string.Empty;
+            for (int i = 0; i < dx.Length; i++)
+            {
+                if (dx[i] != ' ')
+                {
+                    dx1 += dx[i];
+                }
+            }
+            dx = (item.Client.Clients_Diagnostics.Where(n => n.Active && n.Principal == false && n.DateIdentify.Date <= item.Workday.Date.Date).Count() > 0) ? item.Client.Clients_Diagnostics.Where(n => n.Active && n.Principal == false).ElementAt(0).Diagnostic.Code : "-";
+            string dx2 = string.Empty;
+            for (int i = 0; i < dx.Length; i++)
+            {
+                if (dx[i] != ' ')
+                {
+                    dx2 += dx[i];
+                }
+            }
+            NotBilled value = new NotBilled(item.Client.FirstName, item.Client.LastName, (item.Client.Gender == GenderType.Female)? "Female" : "Male", item.Client.Code, item.Client.DateOfBirth.ToShortDateString(), item.Client.MedicaidID, item.Client.FullAddress,
                                             item.Client.City, item.Client.State, item.Client.ZipCode, insuranceMemberId,
-                                            (item.Client.Clients_Diagnostics.Count() > 0) ? item.Client.Clients_Diagnostics.ElementAt(0).Diagnostic.Code : "-",
+                                           dx1, dx2,
                                             item.Workday.Date.ToShortDateString(), service, setting, units, amount, supervisor, "Not Billed");
 
             notBilleds.Add(value);
@@ -378,9 +395,27 @@ public class BillsController : Controller
                 amountTCM = (decimal)(unitTCM * item.TCMClient.Client.Clinic.Setting.PriceTCM);
             }
 
-            NotBilled value = new NotBilled(item.TCMClient.Client.Name, item.TCMClient.Client.Code, item.TCMClient.Client.DateOfBirth.ToShortDateString(), 
+            string dx = (item.TCMClient.Client.Clients_Diagnostics.Where(n => n.Active && n.Principal == true && n.DateIdentify.Date <= item.DateOfService).Count() > 0) ? item.TCMClient.Client.Clients_Diagnostics.Where(n => n.Active && n.Principal == true).ElementAt(0).Diagnostic.Code : "-";
+            string dx1 = string.Empty;
+            for (int i = 0; i < dx.Length; i++)
+            {
+                if (dx[i] != ' ')
+                {
+                    dx1 += dx[i];
+                }
+            }
+            dx = (item.TCMClient.Client.Clients_Diagnostics.Where(n => n.Active && n.Principal == false && n.DateIdentify.Date <= item.DateOfService).Count() > 0) ? item.TCMClient.Client.Clients_Diagnostics.Where(n => n.Active && n.Principal == false).ElementAt(0).Diagnostic.Code : "-";
+            string dx2 = string.Empty;
+            for (int i = 0; i < dx.Length; i++)
+            {
+                if (dx[i] != ' ')
+                {
+                    dx2 += dx[i];
+                }
+            }
+            NotBilled value = new NotBilled(item.TCMClient.Client.FirstName, item.TCMClient.Client.LastName, (item.TCMClient.Client.Gender == GenderType.Female)? "Female" : "Male", item.TCMClient.Client.Code, item.TCMClient.Client.DateOfBirth.ToShortDateString(), 
                                             item.TCMClient.Client.MedicaidID, item.TCMClient.Client.FullAddress, item.TCMClient.Client.City, item.TCMClient.Client.State, 
-                                            item.TCMClient.Client.ZipCode, insuranceMemberId, (item.TCMClient.Client.Clients_Diagnostics.Count() > 0) ? item.TCMClient.Client.Clients_Diagnostics.ElementAt(0).Diagnostic.Code : "-",
+                                            item.TCMClient.Client.ZipCode, insuranceMemberId,dx1, dx2,
                                             item.DateOfService.ToShortDateString(), "TCM", item.TCMNoteActivity.FirstOrDefault()!.Setting, Unit, amountTCM,
                                             item.TCMClient.Casemanager.TCMSupervisor.Name, "Not Billed");
 
