@@ -284,8 +284,7 @@ public class BillsController : Controller
                 }
             }
             NotBilled value = new NotBilled(item.Client.FirstName, item.Client.LastName, (item.Client.Gender == GenderType.Female)? "Female" : "Male", item.Client.Code, item.Client.DateOfBirth.ToShortDateString(), item.Client.MedicaidID, item.Client.FullAddress,
-                                            item.Client.City, item.Client.State, item.Client.ZipCode, insuranceMemberId,
-                                           dx1, dx2,
+                                            item.Client.City, item.Client.State, item.Client.ZipCode, insuranceMemberId, dx1, dx2,
                                             item.Workday.Date.ToShortDateString(), service, setting, units, amount, supervisor, "Not Billed");
 
             notBilleds.Add(value);

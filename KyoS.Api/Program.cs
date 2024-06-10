@@ -1,5 +1,7 @@
 using KyoS.Web.Data;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +21,25 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+//system culture
+var cultureInfo = new CultureInfo("en-US");
+cultureInfo.DateTimeFormat.DateSeparator = "/";
+cultureInfo.DateTimeFormat.ShortDatePattern = "MM/dd/yyyy";
+cultureInfo.NumberFormat.NumberDecimalSeparator = ".";
+// Configure the Localization middleware
+app.UseRequestLocalization(new RequestLocalizationOptions
+{
+    DefaultRequestCulture = new RequestCulture(cultureInfo),
+    SupportedCultures = new List<CultureInfo>
+    {
+        cultureInfo,
+    },
+    SupportedUICultures = new List<CultureInfo>
+    {
+        cultureInfo,
+    }
+});
 
 app.UseHttpsRedirection();
 
