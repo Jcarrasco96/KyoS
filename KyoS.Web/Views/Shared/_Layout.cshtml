@@ -253,7 +253,7 @@
                                         </ul>
                                     </li>
                                     <li class="dropdown-submenu">
-                                        <a class="test" tabindex="-1" href="#">Calendar</a>
+                                        <a class="test" tabindex="-1" href="#">Calendars</a>
                                         <ul class="dropdown-menu">
                                             <li><a asp-area="" asp-controller="Calendar" asp-action="Index">Clients</a></li>
                                             <li><a asp-area="" asp-controller="Calendar" asp-action="IndexFacilitator">Facilitators</a></li>
@@ -263,7 +263,7 @@
                                     <li class="dropdown-submenu">
                                         <a class="test" tabindex="-1" href="#">Paystubs &nbsp;</a>
                                         <ul class="dropdown-menu">
-                                            <li>@Html.ActionLink("Employee", "Index", "PayStubs")</li>
+                                            <li>@Html.ActionLink("Employees", "Index", "PayStubs")</li>
                                         </ul>
                                     </li>
                                     <li role="separator" class="divider"></li>
@@ -608,7 +608,7 @@
                         </li>
                         <li class="class=" dropdown open"">
                             <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
-                                Human Resources<span class="caret"></span>
+                                Human Resources <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu">
                                 <li>@Html.ActionLink("My Information", "Index", "Supervisors")</li>
@@ -656,9 +656,9 @@
                                 <li>@Html.ActionLink("Activities / Facilitator's Interventions per Group week", "ActivitiesPerGroupWeek", "Activities")</li>
                                 <li role="separator" class="divider"></li>
                                 <li class="dropdown-submenu">
-                                    <a class="test" tabindex="-1" href="#">Calendar</a>
+                                    <a class="test" tabindex="-1" href="#">Calendars</a>
                                     <ul class="dropdown-menu">
-                                        <li>@Html.ActionLink("Client", "Index", "Calendar")</li>
+                                        <li>@Html.ActionLink("Clients", "Index", "Calendar")</li>
                                         <li>@Html.ActionLink("My Calendar", "IndexFacilitator", "Calendar")</li>
                                     </ul>
                                 </li>
@@ -820,10 +820,10 @@
                                 </li>
                                 <li class="divider"></li>
                                 <li class="dropdown-submenu">
-                                    <a class="test" tabindex="-1" href="#">Calendar</a>
+                                    <a class="test" tabindex="-1" href="#">Calendars</a>
                                     <ul class="dropdown-menu">
-                                        <li>@Html.ActionLink("Client", "Index", "Calendar")</li>
-                                        <li>@Html.ActionLink("Case Manager", "TCMSupervisor", "TCMBilling")</li>
+                                        <li>@Html.ActionLink("Clients", "Index", "Calendar")</li>
+                                        <li>@Html.ActionLink("Case Managers", "TCMSupervisor", "TCMBilling")</li>
                                         <li>@Html.ActionLink("Supervision", "TCMSupervisionTimeCalendar", "TCMSupervisors")</li>
                                     </ul>
                                 </li>
@@ -974,9 +974,9 @@
                                     </ul>
                                 </li>
                                 <li class="dropdown-submenu">
-                                    <a class="test" tabindex="-1" href="#">Calendar</a>
+                                    <a class="test" tabindex="-1" href="#">Calendars</a>
                                     <ul class="dropdown-menu">
-                                        <li>@Html.ActionLink("Client", "Index", "Calendar")</li>
+                                        <li>@Html.ActionLink("Clients", "Index", "Calendar")</li>
                                         <li>@Html.ActionLink("My calendar", "Index", "TCMBilling")</li>
                                         <li>@Html.ActionLink("Supervision", "TCMSupervisionTimeCalendar", "TCMSupervisors")</li>
                                     </ul>
@@ -1163,7 +1163,7 @@
                             <ul class="dropdown-menu" role="menu">
                                 <li>@Html.ActionLink("Clients", "Index", "Clients")</li>
                                 <li class="dropdown-submenu">
-                                    <a class="test" tabindex="-1" href="#">Calendar</a>
+                                    <a class="test" tabindex="-1" href="#">Calendars</a>
                                     <ul class="dropdown-menu">
                                         <li><a asp-area="" asp-controller="Calendar" asp-action="Index">Clients</a></li>
                                         <li><a asp-area="" asp-controller="Calendar" asp-action="IndexFacilitator">Facilitators</a></li>
@@ -1208,9 +1208,9 @@
                                 Clients <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu">
-                                <li>@Html.ActionLink("All MH Case", "Index", "Clients")</li>
+                                <li>@Html.ActionLink("All MH Cases", "Index", "Clients")</li>
                                 <li role="separator" class="divider"></li>
-                                <li>@Html.ActionLink("All TCM Case", "Index", "TCMClients")</li>
+                                <li>@Html.ActionLink("All TCM Cases", "Index", "TCMClients")</li>
 
                             </ul>
                         </li>

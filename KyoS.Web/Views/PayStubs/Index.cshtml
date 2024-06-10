@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<KyoS.Web.Data.Entities.PayStubEntity>
 @{
-    ViewData["Title"] = "Paystub history";
+    ViewData["Title"] = "Paystubs history";
 }
 
 <link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
@@ -11,19 +11,19 @@
             <i class="icon-home"></i>
             @Html.ActionLink("Dashboard", "Index", "Desktop")
         </li>
-        <li class="active">Paystub history</li>
+        <li class="active">Paystubs history</li>
     </ul><!--.breadcrumb-->
 </div>
 
 <p>
     @if (User.IsInRole("Manager"))
     {
-        <a asp-action="PendingByPayStub" asp-route-datePayStubclose="@DateTime.Today" asp-route-facilitator=1 class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Generar Facilitator's Paystubs</a>
-        <a asp-action="PendingByPayStub" asp-route-datePayStubclose="@DateTime.Today" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Generar Doc. Assisstant's Paystubs</a>
+        <a asp-action="PendingByPayStub" asp-route-datePayStubclose="@DateTime.Today" asp-route-facilitator=1 class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Create Facilitator's Paystubs</a>
+        <a asp-action="PendingByPayStub" asp-route-datePayStubclose="@DateTime.Today" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Create Doc. Assisstant's Paystubs</a>
     }
     @if (User.IsInRole("Facilitator") || User.IsInRole("Documents_Assistant"))
     {
-        <a asp-action="PendingByPayStub" asp-route-datePayStubclose="@DateTime.Today" class="btn btn-info"><i class="glyphicon glyphicon-search"></i> View next Paystubs</a>
+        <a asp-action="PendingByPayStub" asp-route-datePayStubclose="@DateTime.Today" class="btn btn-info"><i class="glyphicon glyphicon-search"></i> View next paystubs</a>
     }
 </p>
 
