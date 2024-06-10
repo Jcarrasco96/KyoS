@@ -2412,15 +2412,7 @@ namespace KyoS.Web.Controllers
                     unit++;
 
                 string CPTCode = user_logged.Clinic.CodeIndTherapy;
-                if (workday_Client.Client.Clients_HealthInsurances.FirstOrDefault(n => n.Active == true) != null)
-                {
-                    string temp = workday_Client.Client.Clients_HealthInsurances.FirstOrDefault(n => n.Active == true).HealthInsurance.CPTcode_Ind;
-                    if (temp != null && temp != string.Empty)
-                    {
-                        CPTCode = temp;
-                    }
-                }
-
+               
                 individualNoteViewModel = new IndividualNoteViewModel
                 {
                     Id = id,

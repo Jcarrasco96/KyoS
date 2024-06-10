@@ -39,6 +39,9 @@
             <input type="hidden" asp-for="CreatedOn" />
             <input type="hidden" asp-for="CreatedBy" />
             <input type="hidden" asp-for="Approved" />
+            <input type="hidden" asp-for="TcmClient.Client.FirstName" />
+            <input type="hidden" asp-for="TcmClient.Client.LastName" />
+            <input type="hidden" asp-for="TcmClient.CaseNumber" />
             <partial name="_TCMIntakeAppendixI" />
             <div class="form-group col-md-12">
                 <input type="submit" value="Sign and Submit" class="btn btn-primary" />

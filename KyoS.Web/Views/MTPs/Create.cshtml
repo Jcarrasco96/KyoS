@@ -79,6 +79,8 @@
             <input type="hidden" asp-for="Review" />
             <input type="hidden" asp-for="Client.Name" />
             <input type="hidden" asp-for="AdmissionedFor" />
+            <input type="hidden" asp-for="Client.FirstName" />
+            <input type="hidden" asp-for="Client.LastName" />
             @if (ViewData["origin"].ToString() == "1")
             {
                 <input type="hidden" asp-for="IdClient" />
