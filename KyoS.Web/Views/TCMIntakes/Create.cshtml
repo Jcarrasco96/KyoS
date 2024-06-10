@@ -33,6 +33,7 @@
             <input type="hidden" asp-for="PCP_FaxNumber" />
             <input type="hidden" asp-for="TcmClient.Client.FirstName" />
             <input type="hidden" asp-for="TcmClient.Client.LastName" />
+            <input type="hidden" asp-for="TcmClient.CaseNumber" />
             <partial name="_TCMIntakesForm" />
             <div class="form-group col-md-12">
                 @if (Model.Id == 0)

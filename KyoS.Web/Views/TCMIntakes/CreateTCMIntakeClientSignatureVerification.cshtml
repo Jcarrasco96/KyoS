@@ -44,6 +44,7 @@
             <input type="hidden" asp-for="AdmissionedFor" />
             <input type="hidden" asp-for="TcmClient.Client.FirstName" />
             <input type="hidden" asp-for="TcmClient.Client.LastName" />
+            <input type="hidden" asp-for="TcmClient.CaseNumber" />
             <partial name="_TCMIntakeClientSignatureVerification" />
             <div class="form-group col-md-12">
                 @if (User.IsInRole("CaseManager"))

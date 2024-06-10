@@ -3786,6 +3786,9 @@ namespace KyoS.Web.Controllers
                 if (client.Clinic.Name == "MEDICAL & REHAB OF HILLSBOROUGH INC")
                     stream = _reportHelper.MedicalRehabIntakeReport(client.IntakeScreening);
 
+                if (client.Clinic.Name == "BETTER YEARS AHEAD MEDICAL CENTER")
+                    stream = _reportHelper.ByaIntakeReport(client.IntakeScreening);
+
                 fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"Intake.pdf"));
             }
 
@@ -3803,6 +3806,9 @@ namespace KyoS.Web.Controllers
 
                 if (client.Clinic.Name == "MEDICAL & REHAB OF HILLSBOROUGH INC")
                     stream = _reportHelper.MedicalRehabBioReport(client.Bio);
+
+                if (client.Clinic.Name == "BETTER YEARS AHEAD MEDICAL CENTER")
+                    stream = _reportHelper.ByaBioReport(client.Bio);
 
                 fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"Bio-Psychosocial Assesssment.pdf"));
             }
@@ -3822,6 +3828,9 @@ namespace KyoS.Web.Controllers
                 if (client.Clinic.Name == "MEDICAL & REHAB OF HILLSBOROUGH INC")
                     stream = _reportHelper.MedicalRehabBriefReport(client.Brief);
 
+                if (client.Clinic.Name == "BETTER YEARS AHEAD MEDICAL CENTER")
+                    stream = _reportHelper.ByaBriefReport(client.Brief);
+
                 fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"Brief Behavioral Health Status Examination.pdf"));
             }
 
@@ -3839,6 +3848,9 @@ namespace KyoS.Web.Controllers
 
                 if (client.Clinic.Name == "MEDICAL & REHAB OF HILLSBOROUGH INC")
                     stream = _reportHelper.MedicalRehabMedicalHistoryReport(client.IntakeMedicalHistory);
+
+                if (client.Clinic.Name == "BETTER YEARS AHEAD MEDICAL CENTER")
+                    stream = _reportHelper.ByaMedicalHistoryReport(client.IntakeMedicalHistory);
 
                 fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"Medical History.pdf"));
             }
@@ -3861,6 +3873,9 @@ namespace KyoS.Web.Controllers
 
                         if (client.Clinic.Name == "MEDICAL & REHAB OF HILLSBOROUGH INC")
                             stream = _reportHelper.MedicalRehabFarsReport(fars);
+
+                        if (client.Clinic.Name == "BETTER YEARS AHEAD MEDICAL CENTER")
+                            stream = _reportHelper.ByaFarsReport(fars);
 
                         fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"Fars_{fars.Type.ToString()}_{fars.Id}.pdf"));
                     }                    
@@ -3901,7 +3916,14 @@ namespace KyoS.Web.Controllers
                                 stream = _reportHelper.MedicalRehabDischargeReport(discharge);
                             else
                                 stream = _reportHelper.MedicalRehabDischargeJCReport(discharge);                            
-                        }                            
+                        }
+                        if (client.Clinic.Name == "BETTER YEARS AHEAD MEDICAL CENTER")
+                        {
+                            if (!discharge.JoinCommission)
+                                stream = _reportHelper.ByaDischargeReport(discharge);
+                            else
+                                stream = _reportHelper.ByaDischargeJCReport(discharge);
+                        }
 
                         fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"Discharge_{discharge.TypeService.ToString()}_{discharge.Id}.pdf"));
                     }                    
@@ -3995,6 +4017,27 @@ namespace KyoS.Web.Controllers
                                 if (adendum.Status == AdendumStatus.Approved)
                                 {
                                     stream = _reportHelper.MedicalRehabAddendumReport(adendum);
+                                    fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"Addendum_of_MTP{mtp.Id}_{adendum.Id}.pdf"));
+                                }
+                            }
+                        }
+                        if (client.Clinic.Name == "BETTER YEARS AHEAD MEDICAL CENTER")
+                        {
+                            stream = _reportHelper.ByaMTPReport(mtp);
+                            fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"Mtp_{mtp.Id}.pdf"));
+                            foreach (var review in mtp.MtpReviewList)
+                            {
+                                if (review.Status == AdendumStatus.Approved)
+                                {
+                                    stream = _reportHelper.ByaMTPReviewReport(review);
+                                    fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"MtpReview_of_MTP{mtp.Id}_{review.Id}.pdf"));
+                                }
+                            }
+                            foreach (var adendum in mtp.AdendumList)
+                            {
+                                if (adendum.Status == AdendumStatus.Approved)
+                                {
+                                    stream = _reportHelper.ByaAddendumReport(adendum);
                                     fileContentList.Add(File(_reportHelper.ConvertStreamToByteArray(stream), "application/pdf", $"Addendum_of_MTP{mtp.Id}_{adendum.Id}.pdf"));
                                 }
                             }
