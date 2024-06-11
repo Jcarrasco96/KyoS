@@ -1974,7 +1974,8 @@ namespace KyoS.Web.Helpers
                                                            .ThenInclude(n => n.SubSchedules)
                                                            .Where(n => n.Facilitator.Id == idFacilitator 
                                                                     && n.Workday.Id == idWorkday
-                                                                    && n.Client == null).ToList();
+                                                                    && n.Client == null
+                                                                    && n.Present == true).ToList();
 
             TCMClientEntity tcmclient = _context.TCMClient
                                                 .Include(n => n.TCMNote)
@@ -2017,7 +2018,7 @@ namespace KyoS.Web.Helpers
             List<SubScheduleEntity> listSubSchedulesSalida = new List<SubScheduleEntity>();
             if (allNotes.Count() > 0)
             {
-                foreach (var item in listSubSchedules)
+                foreach (var item in  listSubSchedules)
                 {
                     if ((!allNotes.Exists(n => (n.Schedule.InitialTime.TimeOfDay < item.InitialTime.TimeOfDay && n.Schedule.EndTime.TimeOfDay > item.InitialTime.TimeOfDay || n.Schedule.InitialTime.TimeOfDay < item.EndTime.TimeOfDay && n.Schedule.EndTime.TimeOfDay > item.EndTime.TimeOfDay))
                            && !allNotes.Exists(n => (n.Schedule.InitialTime.TimeOfDay < item.InitialTime.TimeOfDay && n.Schedule.InitialTime.TimeOfDay < item.EndTime.TimeOfDay && n.Schedule.EndTime.TimeOfDay > item.InitialTime.TimeOfDay && n.Schedule.EndTime.TimeOfDay > item.EndTime.TimeOfDay)))
@@ -2037,7 +2038,10 @@ namespace KyoS.Web.Helpers
                                 listSubSchedulesSalida.Add(item);
                             }
                         }
-
+                        else
+                        {
+                            listSubSchedulesSalida.Add(item);
+                        }
                     }
                 }
             }
