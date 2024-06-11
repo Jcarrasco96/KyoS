@@ -1,4 +1,4 @@
-﻿@model IEnumerable<KyoS.Web.Data.Entities.WeekEntity>
+﻿@model KyoS.Web.Models.BillingReportViewModel
 
 <div class="row">
     <div class="col-md-12">
@@ -28,7 +28,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var item in Model.OrderBy(w => w.WeekOfYear))
+                        @foreach (var item in Model.Weeks.OrderBy(w => w.WeekOfYear))
                         {
                             <tr>
                                 <td align="center">
@@ -148,15 +148,7 @@
                                                                                 }
                                                                             </td>
                                                                             <td align="center">
-                                                                                <a onclick="showInPopup('@Url.Action("ChangeSessionGroup", "Notes", new { id = day_client.Id }, Context.Request.Scheme)','Change Session')" class="btn btn-default" title="Change Session"><i class="glyphicon glyphicon-calendar"></i></a>
-                                                                                @*@if (day_client.BilledDate == null)
-                                                                                    {
-                                                                                        <a onclick="showInPopup('@Url.Action("ChangeSessionGroup", "Notes", new { id = day_client.Id }, Context.Request.Scheme)','Change Session')" class="btn btn-default" title="Change Session"><i class="glyphicon glyphicon-calendar"></i></a>
-                                                                                    }
-                                                                                    else
-                                                                                    {
-                                                                                        <a asp-action="ChangeSessionGroup" asp-route-id="@day_client.Id" class="btn btn-default disabled"><i class="glyphicon glyphicon-calendar"></i></a>
-                                                                                    }*@
+                                                                                <a onclick="showInPopup('@Url.Action("ChangeSessionGroup", "Notes", new { id = day_client.Id, dateInterval = Model.DateIterval}, Context.Request.Scheme)','Change Session')" class="btn btn-default" title="Change Session"><i class="glyphicon glyphicon-calendar"></i></a>
                                                                             </td>
                                                                             <td align="right">
                                                                                 @if (day_client.GroupNote == null && day_client.GroupNote2 == null)
@@ -169,7 +161,6 @@
                                                                                     if ((day_client.GroupNote != null && day_client.GroupNote.Status.ToString() == "Edition") || (day_client.GroupNote2 != null && day_client.GroupNote2.Status.ToString() == "Edition"))
                                                                                     {
                                                                                         <a asp-action="EditGroupNote" asp-route-id="@day_client.Id" class="btn btn-warning" title="Edit note"><i class="glyphicon glyphicon-file"></i></a>
-                                                                                        @*<a asp-action="Present" asp-route-id="@day_client.Id" class="btn btn-danger" title="Present or not present" asp-route-origin="6"><i class="glyphicon glyphicon-remove"></i></a>*@
                                                                                         <a asp-action="FinishEditingGroup" class="btn btn-success" asp-route-id="@day_client.Id" title="Finish edition of note"><i class="glyphicon glyphicon-ok"></i></a>
                                                                                     }
                                                                                     else
@@ -272,15 +263,7 @@
                                                                                 }
                                                                             </td>
                                                                             <td align="center">
-                                                                                <a onclick="showInPopup('@Url.Action("ChangeSessionGroup", "Notes", new { id = day_client.Id }, Context.Request.Scheme)','Change Session')" class="btn btn-default" title="Change Session"><i class="glyphicon glyphicon-calendar"></i></a>
-                                                                                @* @if (day_client.BilledDate == null)
-                                                                                    {
-                                                                                        <a onclick="showInPopup('@Url.Action("ChangeSessionGroup", "Notes", new { id = day_client.Id }, Context.Request.Scheme)','Change Session')" class="btn btn-default" title="Change Session"><i class="glyphicon glyphicon-calendar"></i></a>
-                                                                                    }
-                                                                                    else
-                                                                                    {
-                                                                                        <a asp-action="ChangeSessionGroup" asp-route-id="@day_client.Id" class="btn btn-default disabled"><i class="glyphicon glyphicon-calendar"></i></a>
-                                                                                    }*@
+                                                                                <a onclick="showInPopup('@Url.Action("ChangeSessionGroup", "Notes", new { id = day_client.Id, dateInterval = Model.DateIterval}, Context.Request.Scheme)','Change Session')" class="btn btn-default" title="Change Session"><i class="glyphicon glyphicon-calendar"></i></a>
                                                                             </td>
                                                                             <td align="right">
                                                                                 <a asp-action="EditGroupNote" asp-route-id="@day_client.Id" class="btn btn-warning disabled"><i class="glyphicon glyphicon-file"></i></a>
