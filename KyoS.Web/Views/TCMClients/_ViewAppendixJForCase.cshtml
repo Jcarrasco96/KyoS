@@ -96,7 +96,7 @@
                                         {
                                             <a asp-action="AppendixJReturnTo" asp-controller="TCMIntakes" asp-route-id="@item.Id" asp-route-tcmClientId="@item.TcmClient_FK" class="btn btn-warning" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
                                             <a asp-action="EditAppendixJReadOnly" asp-controller="TCMIntakes" asp-route-id="@item.Id" asp-route-origi="1" class="btn btn-info" title="View Appendix I"><i class="glyphicon glyphicon-list"></i></a>
-                                            <a asp-action="PrintTCMAppendixJ" asp-controller="TCMIntakes" asp-route-id="@item.TcmClient_FK" class="btn btn-success" title="Print Service Plan" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                            <a asp-action="PrintTCMAppendixJ" asp-controller="TCMIntakes" asp-route-id="@item.Id" class="btn btn-success" title="Print Service Plan" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                         }
                                         else
                                         {
@@ -104,13 +104,13 @@
                                             {
                                                 <a asp-action="AppendixJReturnTo" asp-controller="TCMIntakes" asp-route-id="@item.Id" asp-route-tcmClientId="@item.TcmClient_FK" class="btn btn-warning" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
                                                 <a asp-action="EditAppendixJReadOnly" asp-controller="TCMIntakes" asp-route-id="@item.Id" asp-route-origi="1" class="btn btn-info" title="View Appendix J"><i class="glyphicon glyphicon-list"></i></a>
-                                                <a asp-action="PrintTCMAppendixJ" asp-controller="TCMIntakes" asp-route-id="@item.TcmClient_FK" class="btn btn-success disabled" title="Print Service Plan" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                                <a asp-action="PrintTCMAppendixJ" asp-controller="TCMIntakes" asp-route-id="@item.Id" class="btn btn-success disabled" title="Print Service Plan" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                             }
                                             else
                                             {
                                                 <a asp-action="AppendixJReturnTo" asp-controller="TCMIntakes" asp-route-id="@item.Id" asp-route-tcmClientId="@item.TcmClient_FK" class="btn btn-warning disabled" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
                                                 <a asp-action="EditAppendixJReadOnly" asp-controller="TCMIntakes" asp-route-id="@item.Id" asp-route-origi="1" class="btn btn-info" title="View Appendix J"><i class="glyphicon glyphicon-list"></i></a>
-                                                <a asp-action="PrintTCMAppendixJ" asp-controller="TCMIntakes" asp-route-id="@item.TcmClient_FK" class="btn btn-success disabled" title="Print Service Plan" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                                <a asp-action="PrintTCMAppendixJ" asp-controller="TCMIntakes" asp-route-id="@item.Id" class="btn btn-success disabled" title="Print Service Plan" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                             }
                                         }
                                         <a onclick="ConfirmDeleteAppendixJ(@item.Id)" class="btn btn-danger" title="Delete Appendix J"><i class="glyphicon glyphicon-trash"></i></a>
@@ -121,11 +121,11 @@
                                         <a asp-action="EditAppendixJReadOnly" asp-controller="TCMIntakes" asp-route-id="@item.Id" asp-route-origi="1" class="btn btn-info" title="View Appendix J"><i class="glyphicon glyphicon-list"></i></a>
                                         @if (item.Approved == 2)
                                         {
-                                            <a asp-action="PrintTCMAppendixJ" asp-controller="TCMIntakes" asp-route-id="@item.TcmClient_FK" class="btn btn-success" title="Print Service Plan" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                            <a asp-action="PrintTCMAppendixJ" asp-controller="TCMIntakes" asp-route-id="@item.Id" class="btn btn-success" title="Print Service Plan" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                         }
                                         else
                                         {
-                                            <a asp-action="PrintTCMAppendixJ" asp-controller="TCMIntakes" asp-route-id="@item.TcmClient_FK" class="btn btn-success disabled" title="Print Service Plan" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                            <a asp-action="PrintTCMAppendixJ" asp-controller="TCMIntakes" asp-route-id="@item.Id" class="btn btn-success disabled" title="Print Service Plan" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                         }
                                         <a onclick="ConfirmDeleteAppendixJ(@item.Id)" class="btn btn-danger disabled" title="Delete Appendix J"><i class="glyphicon glyphicon-trash"></i></a>
                                     }
