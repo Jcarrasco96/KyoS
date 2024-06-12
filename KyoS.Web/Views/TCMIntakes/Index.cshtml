@@ -46,11 +46,14 @@
                             <th class="col-md-3">
                                 Client Name
                             </th>
-                            <th class="col-md-3">
+                            <th class="col-md-2">
                                 TCM Name
                             </th>
-                            <th class="col-md-2" style="text-align:center;">
-                                Open Date
+                            <th class="col-md-1" style="text-align:center;">
+                                Open
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Close
                             </th>
                             <th class="col-md-1" style="text-align:center;">
                                 Status
@@ -58,7 +61,7 @@
                             <th class="col-md-2" style="text-align:center;">
                                 Program
                             </th>
-                            <th class="col-md-1" align="right">
+                            <th class="col-md-2" align="right">
                             </th>
                         </tr>
                     </thead>
@@ -85,6 +88,31 @@
                                 </td>
                                 <td align="center">
                                     @Html.DisplayFor(modelItem => item.DataOpen)
+                                </td>
+                                <td align="center">
+                                    @if (DateTime.Today > item.DataClose)
+                                    {
+                                        <span class="label label-danger">
+                                            @Html.DisplayFor(modelItem => item.DataClose)
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        @if (DateTime.Today >= item.DataClose.AddDays(-15.0))
+                                        {
+                                            <span class="label label-warning">
+                                                @Html.DisplayFor(modelItem => item.DataClose)
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="label label-success">
+                                                @Html.DisplayFor(modelItem => item.DataClose)
+                                            </span>
+                                        }
+                                    
+                                    }
+                                   
                                 </td>
                                 <td align="center">
                                     @if (item.Status == KyoS.Common.Enums.StatusType.Open)
