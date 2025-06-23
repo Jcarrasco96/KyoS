@@ -25,7 +25,7 @@
                 </button>
                 <i class="icon-ok green"></i>
                 <strong class="green">
-                    Client been successfully created
+                    Client has been successfully created
                 </strong>
 
             </div>
@@ -56,7 +56,7 @@
         }
     </div>
     <div>
-        <form asp-action="Create" enctype="multipart/form-data">
+        <form asp-action="Create" enctype="multipart/form-data" onsubmit="return false;" id="form1">
             <div class="form-group col-md-12">
                 <!-- Nav tabs -->
                 <ul class="nav nav-tabs" role="tablist">
@@ -79,7 +79,7 @@
                         <input type="hidden" asp-for="IdClinic" />
                         <partial name="_Clients" />
                         <div class="form-group col-md-12">
-                            <input type="submit" value="Create" class="btn btn-primary" />
+                            <input type="submit" value="Create" class="btn btn-primary" id="btnSave" />
                             &nbsp;
                             <a asp-action="Index" class="btn btn-success">Back</a>
                         </div>
@@ -145,6 +145,14 @@
 
                 if (File && File[0]) {
                     ReadImageSign(File[0]);
+                }
+            });
+
+            $("#btnSave").click(function () {
+                if ($("#Name").val() != "" && $("#IdGender").val() != 0 && $("#IdStatus").val() != 0 
+                                           && !isNaN(new Date($("#AdmisionDate").val())) && !isNaN(new Date($("#DateOfBirth").val()))) {
+                    $("#btnSave").prop('disabled', true);
+                    form1.submit();
                 }
             });
         });

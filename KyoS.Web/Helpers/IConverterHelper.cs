@@ -2,6 +2,7 @@
 using KyoS.Web.Models;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using KyoS.Web.Migrations;
 
 namespace KyoS.Web.Helpers
 {
@@ -188,8 +189,8 @@ namespace KyoS.Web.Helpers
         GoalsTempViewModel ToGoalTempViewModel(GoalsTempEntity model);
         Task<ObjectiveTempEntity> ToObjectiveTempEntity(ObjectiveTempViewModel model, bool isNew);
         ObjectiveTempViewModel ToObjectiveTempViewModel(ObjectiveTempEntity model);
-        Task<BriefEntity> ToBriefEntity(BriefViewModel model, bool isNew, string userId);
-        BriefViewModel ToBriefViewModel(BriefEntity model);
+        Task<Data.Entities.BriefEntity> ToBriefEntity(BriefViewModel model, bool isNew, string userId);
+        BriefViewModel ToBriefViewModel(Data.Entities.BriefEntity model);
         Task<GroupNote2Entity> ToGroupNote2Entity(GroupNote2ViewModel model, bool isNew);
         Task<GroupNote2Entity> ToGroupNote3Entity(GroupNote3ViewModel model, bool isNew);
         ScheduleEntity ToScheduleEntity(ScheduleViewModel model, bool isNew, UserEntity user);
@@ -215,9 +216,9 @@ namespace KyoS.Web.Helpers
         TCMDateBlockedViewModel ToTCMDateBlockedViewModel(TCMDateBlockedEntity model);
         Task<CiteEntity> ToCiteEntity(CiteViewModel model, bool isNew, string userId);
         CiteViewModel ToCiteViewModel(CiteEntity model, int idClinic);
-        Task<BillDmsEntity> ToBillDMSEntity(BillDmsViewModel model, bool isNew);
+        BillDmsEntity ToBillDMSEntity(BillDmsViewModel model, bool isNew);
         BillDmsViewModel ToBillDMSViewModel(BillDmsEntity model);
-        Task<BillDmsPaidEntity> ToBillDMSPaidEntity(BillDmsPaidViewModel model, bool isNew);
+        BillDmsPaidEntity ToBillDMSPaidEntity(BillDmsPaidViewModel model, bool isNew);
         BillDmsPaidViewModel ToBillDMSPaidModel(BillDmsPaidEntity model);
         Task<TCMReferralFormEntity> ToTCMReferralFormEntity(TCMReferralFormViewModel model, bool isNew, string userId);
         TCMReferralFormViewModel ToTCMReferralFormViewModel(TCMReferralFormEntity model);
@@ -225,7 +226,7 @@ namespace KyoS.Web.Helpers
         TCMSupervisionTimeViewModel ToTCMSupervisionTimeViewModel(TCMSupervisionTimeEntity model, int idClinic);
         Task<TCMSubServiceEntity> ToTCMSubServiceEntity(TCMSubServiceViewModel model, bool isNew, string userId);
         TCMSubServiceViewModel ToTCMSubServiceViewModel(TCMSubServiceEntity model);
-        Task<TCMTransferEntity> ToTCMTransferEntity(TCMTransferViewModel model, bool isNew, string userId);
+        TCMTransferEntity ToTCMTransferEntity(TCMTransferViewModel model, bool isNew, string userId);
         TCMTransferViewModel ToTCMTransferViewModel(TCMTransferEntity model);
         IntakeConsentForTelehealthEntity ToIntakeConsentForTelehealthEntity(IntakeConsentForTelehealthViewModel model, bool isNew);
         IntakeConsentForTelehealthViewModel ToIntakeConsentForTelehealthViewModel(IntakeConsentForTelehealthEntity model);
@@ -245,14 +246,41 @@ namespace KyoS.Web.Helpers
         SafetyPlanViewModel ToSafetyPlanViewModel(SafetyPlanEntity model);
         Task<IncidentReportEntity> ToIncidentReportEntity(IncidentReportViewModel model, bool isNew, string userId);
         IncidentReportViewModel ToIncidentReportViewModel(IncidentReportEntity model);
-        Task<MeetingNoteEntity> ToMeetingNoteEntity(MeetingNotesViewModel model, bool isNew);
+        MeetingNoteEntity ToMeetingNoteEntity(MeetingNotesViewModel model, bool isNew);
         MeetingNotesViewModel ToMeetingNoteViewModel(MeetingNoteEntity model);
-        Task<MeetingNotes_Facilitator> ToMeetingNoteFacilitatorEntity(MeetingNotesFacilitatorModel model, bool isNew);
+        MeetingNotes_Facilitator ToMeetingNoteFacilitatorEntity(MeetingNotesFacilitatorModel model, bool isNew);
         MeetingNotesFacilitatorModel ToMeetingNoteFacilitatorViewModel(MeetingNotes_Facilitator model);
-        Task<TCMPayStubEntity> ToPayStubEntity(TCMNotePendingByPayStubViewModel model, bool isNew);
-        TCMNotePendingByPayStubViewModel ToPayStubViewModel(TCMPayStubEntity model);
-
+        TCMPayStubEntity ToTCMPayStubEntity(TCMNotePendingByPayStubViewModel model, bool isNew);
+        TCMNotePendingByPayStubViewModel ToTCMPayStubViewModel(TCMPayStubEntity model);
         TCMIntakeMedicalHistoryEntity ToTCMIntakeMedicalHistoryEntity(TCMIntakeMedicalHistoryViewModel model, bool isNew, string userId);
         TCMIntakeMedicalHistoryViewModel ToTCMIntakeMedicalHistoryViewModel(TCMIntakeMedicalHistoryEntity model);
+        Workday_Activity_Facilitator ToWorkdayActivityFacilitatorEntity(Workday_Activity_FacilitatorSkillViewModel model);
+        Workday_Activity_FacilitatorSkillViewModel ToWorkdayActivityFacilitatorViewModel(Workday_Activity_Facilitator model);
+        IntakeNoHarmEntity ToIntakeNoHarmEntity(IntakeNoHarmViewModel model, bool isNew);
+        IntakeNoHarmViewModel ToIntakeNoHarmViewModel(IntakeNoHarmEntity model);
+        CourseEntity ToCourseEntity(CourseViewModel model, bool isNew, string userId);
+        CourseViewModel ToCourseViewModel(CourseEntity model);
+        CaseManagerCertificationEntity ToCaseManagerCertificationEntity(CaseMannagerCertificationViewModel model, bool isNew, string userId);
+        CaseMannagerCertificationViewModel ToCaseManagerCertificationViewModel(CaseManagerCertificationEntity model);
+        TCMSupervisorCertificationEntity ToTCMSupervisorCertificationEntity(TCMSupervisorCertificationViewModel model, bool isNew, string userId);
+        TCMSupervisorCertificationViewModel ToTCMSupervisorCertificationViewModel(TCMSupervisorCertificationEntity model, int idClinic);
+        PromotionEntity ToPromotionEntity(PromotionViewModel model, bool isNew);
+        PromotionViewModel ToPromotionViewModel(PromotionEntity model);
+        PromotionPhotosEntity ToPromotionPhotoEntity(PromotionPhotoViewModel model, bool isNew, string photoPath);
+        PromotionPhotoViewModel ToPromotionPhotoViewModel(PromotionPhotosEntity model);
+
+        Task<TCMSubServiceStepEntity> ToTCMSubServiceStepEntity(TCMSubServiceStepViewModel model, bool isNew, string userId);
+        TCMSubServiceStepViewModel ToTCMSubServiceStepViewModel(TCMSubServiceStepEntity model);
+
+        FacilitatorCertificationEntity ToFacilitatorCertificationEntity(FacilitatorCertificationViewModel model, bool isNew, string userId);
+        FacilitatorCertificationViewModel ToFacilitatorCertificationViewModel(FacilitatorCertificationEntity model);
+        DocumentAssistantCertificationEntity ToDocumentAssistantCertificationEntity(DocumentAssistantCertificationViewModel model, bool isNew, string userId);
+        DocumentAssistantCertificationViewModel ToDocumentAssistantCertificationViewModel(DocumentAssistantCertificationEntity model, int idClinic);
+        SupervisorCertificationEntity ToSupervisorCertificationEntity(SupervisorCertificationViewModel model, bool isNew, string userId);
+        SupervisorCertificationViewModel ToSupervisorCertificationViewModel(SupervisorCertificationEntity model, int idClinic);
+        NotePSYEntity ToNotePSYEntity(NotePSYViewModel model, bool isNew, string userId);
+        NotePSYViewModel ToNotePSYViewModel(NotePSYEntity model, int idClinic);
+        PayStubEntity ToPayStubEntity(DocumentsPendingByPayStubViewModel model, bool isNew);
+        DocumentsPendingByPayStubViewModel ToPayStubViewModel(PayStubEntity model);
     }
 }

@@ -13,17 +13,17 @@
                         <th class="col-md-4">
                             Name
                         </th>
-                        <th class="col-md-2" style="text-align:left;">
+                        <th class="col-md-3" style="text-align:left;">
                             Health Insurance
                         </th>
-                        <th class="col-md-2" style="text-align:center;">
-                            Admission Date
+                        <th class="col-md-1" style="text-align:center;">
+                            Birth Day
                         </th>
                         <th class="col-md-1" style="text-align:center;">
-                            Status
+                            Admission
                         </th>
                         <th class="col-md-2" style="text-align:center;">
-                            MH Therapy
+                            Program
                         </th>
                         <th class="col-md-1" align="right">
                         </th>
@@ -44,34 +44,32 @@
                                 }
                                 &nbsp;
                                 @Html.DisplayFor(modelItem => item.Name)
-                                |
+                                <a>|</a>
                                 @Html.DisplayFor(modelItem => item.Code)
                             </td>
                             <td align="left">
                                 @if (item.Clients_HealthInsurances.Where(n => n.Active == true).Count() > 0)
                                 {
-                                    @item.Clients_HealthInsurances.FirstOrDefault(n => n.Active == true).HealthInsurance.Name
+                                    @Html.DisplayFor(modelItem => item.Clients_HealthInsurances.FirstOrDefault(n => n.Active == true).HealthInsurance.Name)
+                                    <a>|</a>
+                                    @Html.DisplayFor(modelItem => item.Clients_HealthInsurances.FirstOrDefault(n => n.Active == true).MemberId)
                                 }                               
+                            </td>
+                            <td align="center">
+                                @Html.DisplayFor(modelItem => item.DateOfBirth)
                             </td>
                             <td align="center">
                                 @Html.DisplayFor(modelItem => item.AdmisionDate)
                             </td>
                             <td align="center">
-                                @if (item.Status == KyoS.Common.Enums.StatusType.Open)
+                                @if (item.OnlyTCM == true)
                                 {
-                                    <span class="label label-success">
-                                        Open
-                                    </span>
+                                    <strong>TCM</strong>
                                 }
-                                @if (item.Status == KyoS.Common.Enums.StatusType.Close)
+                                else
                                 {
-                                    <span class="label label-default">
-                                        Close
-                                    </span>
+                                    @Html.DisplayFor(modelItem => item.Service)
                                 }
-                            </td>
-                            <td align="center">
-                                @Html.DisplayFor(modelItem => item.Service)
                             </td>
                             <td align="right">
                                 @if (item.Status == KyoS.Common.Enums.StatusType.Open && User.IsInRole("Manager"))

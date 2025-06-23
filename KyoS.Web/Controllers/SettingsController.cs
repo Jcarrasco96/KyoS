@@ -20,14 +20,15 @@ namespace KyoS.Web.Controllers
         private readonly IConverterHelper _converterHelper;
         private readonly ICombosHelper _combosHelper;
         private readonly IRenderHelper _renderHelper;
+        private readonly IImageHelper _imageHelper;
 
-       
         public SettingsController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper, IRenderHelper renderHelper, IImageHelper imageHelper)
         {
             _context = context;
             _combosHelper = combosHelper;
             _converterHelper = converterHelper;
             _renderHelper = renderHelper;
+            _imageHelper = imageHelper;
         }
 
         [Authorize(Roles = "Admin")]
@@ -46,7 +47,9 @@ namespace KyoS.Web.Controllers
             SettingViewModel entity = new SettingViewModel()
             {
                 IdClinic = 0,
-                Clinics = _combosHelper.GetComboClinics()
+                Clinics = _combosHelper.GetComboClinics(),
+                IdDashboard = 0,
+                Dashboards = _combosHelper.GetComboDashboardType()
             };
             return View(entity);
         }
@@ -158,9 +161,9 @@ namespace KyoS.Web.Controllers
         public async Task<IActionResult> EditSettingManager()
         {
             UserEntity user_logged = _context.Users
-                                            .Include(u => u.Clinic)
-                                            .ThenInclude(u => u.Setting)
-                                            .FirstOrDefault(u => u.UserName == User.Identity.Name);
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(u => u.Setting)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
             if (user_logged.Clinic.Setting == null)
             {
@@ -214,7 +217,17 @@ namespace KyoS.Web.Controllers
                 CreateTCMNotesWithoutDomain = user_logged.Clinic.Setting.CreateTCMNotesWithoutDomain,
                 IdFiltroPayStub = (user_logged.Clinic.Setting.TCMPayStub_Filtro == TCMPayStubFiltro.Created) ? 0 : (user_logged.Clinic.Setting.TCMPayStub_Filtro == TCMPayStubFiltro.Approved) ? 1 : (user_logged.Clinic.Setting.TCMPayStub_Filtro == TCMPayStubFiltro.Billed) ? 2 : 3,
                 FiltroPayStubs = _combosHelper.GetComboFiltroTCMPayStubByClinic(),
-                MTPmultipleSignatures = user_logged.Clinic.Setting.MTPmultipleSignatures
+                MTPmultipleSignatures = user_logged.Clinic.Setting.MTPmultipleSignatures,
+                TCMLockCreateNote = user_logged.Clinic.Setting.TCMLockCreateNote,
+                IdDashboard = (user_logged.Clinic.Setting.DashBoardPrincipal == DashboardType.MH) ? 0 : 1,
+                Dashboards = _combosHelper.GetComboDashboardType(),
+                LockTCMNoteForOneMonthIdle = user_logged.Clinic.Setting.LockTCMNoteForOneMonthIdle,
+                LockTCMNoteForAuth = user_logged.Clinic.Setting.LockTCMNoteForAuth,
+                LockTCMNoteForDx = user_logged.Clinic.Setting.LockTCMNoteForDx,
+                PricePSR = user_logged.Clinic.Setting.PricePSR,
+                PriceGroup = user_logged.Clinic.Setting.PriceGroup,
+                PriceInd = user_logged.Clinic.Setting.PriceInd,
+                PriceTCM = user_logged.Clinic.Setting.PriceTCM
             };
 
             return View(model);
@@ -235,6 +248,14 @@ namespace KyoS.Web.Controllers
                 SettingEntity setting = await _context.Settings.FirstOrDefaultAsync(n => n.Id == user_logged.Clinic.Setting.Id);
                 ClinicEntity clinic = await _context.Clinics.FirstOrDefaultAsync(n => n.Id == user_logged.Clinic.Id);
 
+
+                string pathSignatureClinical = model.SignaturePath;
+
+                if (model.SignatureFile != null)
+                {
+                    pathSignatureClinical = await _imageHelper.UploadImageAsync(model.SignatureFile, "Clinics");
+                }
+
                 if (clinic != null)
                 {
                     clinic.CEO = model.CEO;
@@ -242,7 +263,7 @@ namespace KyoS.Web.Controllers
                     clinic.ProviderMedicaidId = model.ProviderMedicaidId;
                     clinic.ProviderTaxId = model.ProviderTaxId;
                     clinic.ClinicalDirector = model.ClinicalDirector;
-                    clinic.SignaturePath = model.SignaturePath;
+                    clinic.SignaturePath = pathSignatureClinical;
                     clinic.Address = model.Address;
                     clinic.City = model.City;
                     clinic.ZipCode = model.ZipCode;
@@ -257,6 +278,7 @@ namespace KyoS.Web.Controllers
                     clinic.CodeMTPR = model.CodeMTPR;
                     clinic.CodeBIO = model.CodeBIO;
                     clinic.CodeFARS = model.CodeFARS;
+                    
                 }
                 _context.Update(clinic);
                 await _context.SaveChangesAsync();
@@ -275,6 +297,14 @@ namespace KyoS.Web.Controllers
                     setting.CreateTCMNotesWithoutDomain = model.CreateTCMNotesWithoutDomain;
                     setting.TCMPayStub_Filtro = StatusUtils.GetFiltroTCMPayStubByIndex(model.IdFiltroPayStub);
                     setting.MTPmultipleSignatures = model.MTPmultipleSignatures;
+                    setting.DashBoardPrincipal = DashboardUtils.GetDashboardTypeByIndex(model.IdDashboard);
+                    setting.LockTCMNoteForOneMonthIdle = model.LockTCMNoteForOneMonthIdle;
+                    setting.LockTCMNoteForAuth = model.LockTCMNoteForAuth;
+                    setting.LockTCMNoteForDx = model.LockTCMNoteForDx;
+                    setting.PricePSR = model.PricePSR;
+                    setting.PriceGroup = model.PriceGroup;
+                    setting.PriceInd = model.PriceInd;
+                    setting.PriceTCM = model.PriceTCM;
                 }
                 _context.Update(setting);
                 await _context.SaveChangesAsync();

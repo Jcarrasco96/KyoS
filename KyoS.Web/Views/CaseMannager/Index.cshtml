@@ -16,8 +16,13 @@
 </div>
 
 <p>
-    <a onclick="showInPopupLg('@Url.Action("CreateModal","CaseMannager",null,Context.Request.Scheme)','Create Case Manager')" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Create Case Manager</a>
-    <a asp-action="Signatures" class="btn btn-default"><i class="glyphicon glyphicon-pencil"></i> Case Manager's Signatures</a>
+    @if (User.IsInRole("Manager"))
+    {
+        <a onclick="showInPopupLg('@Url.Action("CreateModal","CaseMannager",null,Context.Request.Scheme)','Create Case Manager')" class="btn btn-primary" title="Create Case Manager"><i class="glyphicon glyphicon-plus"></i> Create Case Manager</a>
+        <a asp-action="Signatures" class="btn btn-default"><i class="glyphicon glyphicon-pencil"></i> Case Manager's Signatures</a>
+    }        
+    <a asp-action="CaseManagerCertification" class="btn btn-default"><i class="glyphicon glyphicon-eye-open"></i> Case Manager's certifications</a>
+    <a onclick="showInPopupLg('@Url.Action("AuditCertification","CaseMannager",null,Context.Request.Scheme)','Audit TCM Certifications')" class="btn btn-danger" title="Audit TCM Certifications"><i class="glyphicon glyphicon-alert"></i>  Audit TCM Certifications</a>
 </p>
 
 <div class="row">
@@ -38,9 +43,10 @@
 
 <div class="row">
     <div id="view-casemanagers">
-        @await Html.PartialAsync("_ViewCaseManagers", Model)
+        @await Html.PartialAsync("_ViewCaseManagers", Model.ToList())
     </div>
 </div>
+
 <partial name="_ModalPopupLg" />
 <partial name="_DeleteDialog" />
 
@@ -49,22 +55,14 @@
     <script src="~/js/jquery.dataTables.min.js"></script>
 
     <script type="text/javascript">
-                        $(document).ready(function () {
-                            $('#MyTable').DataTable();
+        $(document).ready(function () {
+            $('#MyTable').DataTable({
+                "order": [[1, "asc"]],
+                "pageLength": 50
+            });            
+        });
 
-                            // Delete item
-                            var item_to_delete;
-
-                            $('.deleteItem').click((e) => {
-                                item_to_delete = e.currentTarget.dataset.id;
-                            });
-
-                            $("#btnYesDelete").click(function () {
-                                var url = "@Url.Action("Delete", "CaseMannager")";
-                                window.location.href = url + '/' + item_to_delete;
-                            });
-                        });
-         function ConfirmDelete(e) {
+        function ConfirmDelete(e) {
             Swal.fire({
                 title: 'Do you want to delete?',
                 text: "Note: All data related to this element will be deleted.",

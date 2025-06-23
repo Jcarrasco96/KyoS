@@ -43,12 +43,12 @@
     <hr />
 </div>
 <div class="col-md-push-12">    
-    <div class="form-group col-md-4">
+    <div class="form-group col-md-3">
         <label asp-for="Title" class="control-label">Note title</label>
         <input asp-for="Title" class="form-control"/>
         <span asp-validation-for="Title" class="text-danger"></span>
     </div>
-    <div class="form-group col-md-3">        
+    <div class="form-group col-md-2">        
             <label asp-for="Setting" class="control-label"></label>
             <br />
             @if (Model.Setting == "53")
@@ -62,6 +62,7 @@
             <strong>53</strong>&nbsp;Client in the clinic
             &nbsp;
             &nbsp;
+            <br />
             @if (Model.Setting == "02")
             {
                 <input type="radio" name="Setting" value="02" checked="checked" />
@@ -72,10 +73,25 @@
             }
             <strong>02</strong>&nbsp;Remote        
     </div>
-     <div class="form-group col-md-2">
+    <div class="form-group col-md-1">
         <label asp-for="CodeBill" class="control-label">Bill Code</label>
         <input asp-for="CodeBill" class="form-control"/>
         <span asp-validation-for="CodeBill" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-1">
+        <label asp-for="TotalMinutes" class="control-label">Minutes</label>
+        <textarea asp-for="TotalMinutes" class="form-control" rows="1" disabled id="lbTotalMinutes"></textarea>
+        <span asp-validation-for="TotalMinutes" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-1">
+        <label asp-for="RealUnits" class="control-label">Units</label>
+        <textarea asp-for="RealUnits" class="form-control" rows="1" disabled id="lbUnits"></textarea>
+        <span asp-validation-for="RealUnits" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-4">
+        <label asp-for="Dx" class="control-label">Dx: Description</label>
+        <textarea asp-for="Dx" class="form-control" rows="1" disabled ></textarea>
+        <span asp-validation-for="Dx" class="text-danger"></span>
     </div>
     <div class="container-fluid">
         &nbsp;

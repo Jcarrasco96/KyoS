@@ -15,7 +15,15 @@
         <ul class="breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                @Html.ActionLink("Update Appendix J", "UpdateAppendixJ", "TCMIntakes")
+                @if (ViewData["origi"].ToString() == "0")
+                {
+                    @Html.ActionLink("TCM AppendixJ List", "ListAppendixJForTCMClient", "TCMIntakes", new { id = Model.IdTCMClient, origi = ViewData["origi"] })
+                }
+                else
+                {
+                    @Html.ActionLink("Update Appendix J", "UpdateAppendixJ", "TCMIntakes")
+                }
+                
             </li>
             <li class="active">TCM AppendixJ</li>
         </ul><!--.breadcrumb-->
@@ -31,10 +39,23 @@
             <input type="hidden" asp-for="AdmissionedFor" />
             <input type="hidden" asp-for="CreatedOn" />
             <input type="hidden" asp-for="CreatedBy" />
+            <input type="hidden" asp-for="DateExpired" />
+            <input type="hidden" asp-for="Active" />
+            <input type="hidden" asp-for="Approved" />
+            <input type="hidden" asp-for="TcmClient.Client.FirstName" />
+            <input type="hidden" asp-for="TcmClient.Client.LastName" />
             <partial name="_TCMIntakeAppendixJReadOnly" />
             <div class="form-group col-md-12">
-                <input type="submit" value="Update" class="btn btn-primary" />
-                <a asp-action="UpdateAppendixJ" class="btn btn-success">Back</a>
+                <input type="submit" value="Save" class="btn btn-primary" />
+                @if (ViewData["origi"].ToString() == "0")
+                {
+                    <a asp-action="ListAppendixJForTCMClient" asp-route-id="@Model.IdTCMClient" asp-route-origi="@ViewData["origi"]" class="btn btn-success">Back</a>
+                }
+                else
+                {
+                    <a asp-action="UpdateAppendixJ" class="btn btn-success">Back</a>
+                }
+                
             </div>
         </form>
     </div>

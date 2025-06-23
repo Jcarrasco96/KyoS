@@ -44,9 +44,10 @@
                                     @Html.DisplayFor(modelItem => item.Outcome)
                                 </td>
                                 <td align="right">
-                                    @if (User.IsInRole("CaseManager"))
+                                    @if (User.IsInRole("CaseManager") || User.IsInRole("TCMSupervisor"))
                                     {
-                                       <a onclick="showInPopup('@Url.Action("EditSurgeryModal", "TCMAssessments", new { id = @item.Id }, Context.Request.Scheme)','Edit Behavioral Health')" class="btn btn-warning" title="Edit Behavioral Health"><i class="glyphicon glyphicon-pencil"></i></a>
+                                        <a onclick="showInPopup('@Url.Action("EditSurgeryModal", "TCMAssessments", new { id = @item.Id }, Context.Request.Scheme)','Edit Surgery')" class="btn btn-warning" title="Edit Surgery"><i class="glyphicon glyphicon-pencil"></i></a>
+                                        <a onclick="showInPopup('@Url.Action("DeleteSurgery", "TCMAssessments",new { id = @item.Id}, Context.Request.Scheme)','Confirmation')" class="btn btn-danger" title="Delete Surgery"><i class="glyphicon glyphicon-trash"></i></a>
                                     }
                                 </td>
                             </tr>

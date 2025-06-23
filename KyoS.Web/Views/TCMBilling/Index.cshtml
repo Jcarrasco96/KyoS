@@ -25,6 +25,54 @@
         </strong>
     </div>
 }
+@if (ViewBag.DateBlocked == "E")
+{
+    <div class="alert alert-block alert-danger">
+        <button type="button" class="close" data-dismiss="alert">
+            <i class="icon-remove"></i>
+        </button>
+        <i class="icon-ok red"></i>
+        <strong class="red">
+            Error. The date is disabled for the manager, it is unavailable for edit notes.
+        </strong>
+    </div>
+}
+@if (ViewBag.DateBlocked == "A")
+{
+    <div class="alert alert-block alert-danger">
+        <button type="button" class="close" data-dismiss="alert">
+            <i class="icon-remove"></i>
+        </button>
+        <i class="icon-ok red"></i>
+        <strong class="red">
+            Error. The service has not been provided for more than 30 days. You must make a new appendixJ or make a note on a date earlier than the selected one.
+        </strong>
+    </div>
+}
+@if (ViewBag.DateBlocked == "DX")
+{
+    <div class="alert alert-block alert-danger">
+        <button type="button" class="close" data-dismiss="alert">
+            <i class="icon-remove"></i>
+        </button>
+        <i class="icon-ok red"></i>
+        <strong class="red">
+            Error. You cannot create notes for that client because they do not have a valid diagnosis.
+        </strong>
+    </div>
+}
+@if (ViewBag.DateBlocked == "Auth")
+{
+    <div class="alert alert-block alert-danger">
+        <button type="button" class="close" data-dismiss="alert">
+            <i class="icon-remove"></i>
+        </button>
+        <i class="icon-ok red"></i>
+        <strong class="red">
+            Error. You cannot create notes for that client because they do not have a valid authorization.
+        </strong>
+    </div>
+}
 <div class="row">
     <div class="col-md-4">
         <label asp-for="IdClient" class="control-label"></label>
@@ -55,9 +103,13 @@
             <h4 style="text-align:center; font-weight:bold;">$<label id="lbMoney"></label></h4>
         </div>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-2">
         &nbsp;
     </div>
+    <div class="col-md-1">
+        <a onclick="showInPopupLg('@Url.Action("AuditTCMClientActive", "TCMClients", null, Context.Request.Scheme)','Last Service')" class="btn btn-danger" title="Last Service"><i class="glyphicon glyphicon-alert"></i>&nbsp;&nbsp;Last Service</a>
+    </div>
+   
 </div>
 <div class="row">
     <div class="col-md-12">
@@ -71,7 +123,7 @@
         <div id='calendar'></div>
     </div>
 </div>
-
+<partial name="_ModalPopupLg" />
 <partial name="_ModalPopup" />
 
 @section Scripts {

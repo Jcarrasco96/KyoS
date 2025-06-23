@@ -14,7 +14,7 @@
                         <th class="col-md-1">
 
                         </th>
-                        <th class="col-md-3">
+                        <th class="col-md-2">
                             Client Name | Case Number
                         </th>
                         <th class="col-md-1" style="text-align:center;">
@@ -24,13 +24,13 @@
                             Health Insurance | ID
                         </th>
                         <th class="col-md-1" style="text-align:center;">
+                            Authorization
+                        </th>
+                        <th class="col-md-1" style="text-align:center;">
                             Dx. Code
                         </th>
                         <th class="col-md-1" style="text-align:center;">
-                            Units
-                        </th>
-                        <th class="col-md-1" style="text-align:center;">
-                            Amount
+                            Units/$
                         </th>
                         <th class="col-md-2">
 
@@ -44,24 +44,6 @@
                         {
                             var @unit = 0;
                            
-                            /*foreach (var note in item.TCMNote.Where(n => n.BilledDate == null))
-                            {
-                                foreach (var activity in note.TCMNoteActivity)
-                                {
-                                    valor = (activity.Minutes) / 15;
-                                    residuo = (activity.Minutes) % 15;
-                                    valorAumentado = valor + 1;
-                                    @if (@residuo > 7)
-                                    {
-                                        unit = unit + valorAumentado;
-                                    }
-                                    else
-                                    {
-                                        unit = unit + valor;
-                                    }
-                                }
-                            }*/
-
                             <tr>
                                 <td>
                                     @if (item.TCMNote.Count() != 0)
@@ -77,7 +59,7 @@
                                             <tr>
                                                 <th class="col-md-1" style="text-align:center;">Birth Date</th>
                                                 <th class="col-md-1" style="text-align:center;">CPT code</th>
-                                                <th class="col-md-2">CaseManager</th>
+                                                    <th class="col-md-2">TCM Supervisor</th>
                                                 <th class="col-md-1" style="text-align:center;">Setting</th>
                                                 <th class="col-md-1" style="text-align:center;">Units</th>
                                                 <th class="col-md-1" style="text-align:center;">Date</th>
@@ -120,7 +102,7 @@
                                                 <tr>
                                                     <td align="center">@Html.DisplayFor(modelItem => item.Client.DateOfBirth)</td>
                                                     <td align="center">@Html.DisplayFor(modelItem => product.CodeBill)</td>
-                                                    <td>@Html.DisplayFor(modelItem => item.Casemanager.Name)</td>
+                                                    <td>@Html.DisplayFor(modelItem => item.Casemanager.TCMSupervisor.Name)</td>
                                                     <td align="center">
                                                         @if (product.TCMNoteActivity.Count() > 0)
                                                         {
@@ -218,16 +200,19 @@
                                     }
                                 </td>
                                 <td align="center">
+                                    @if (item.Client.Clients_HealthInsurances.Where(n => n.Active == true).Count() > 0)
+                                    {
+                                        @Html.DisplayFor(modelItem => item.Client.Clients_HealthInsurances.First(n => n.Active == true).AuthorizationNumber)
+                                    }
+                                </td>
+                                <td align="center">
                                     @if (item.Client.Clients_Diagnostics.Count() > 0)
                                     {
                                         @Html.DisplayFor(modelItem => item.Client.Clients_Diagnostics.ElementAtOrDefault(0).Diagnostic.Code)
                                     }
                                 </td>
                                 <td align="center">
-                                    @unit
-                                </td>
-                                <td align="center">
-                                    @(unit * 12)
+                                    @unit<a> |</a> @(unit * 12)
                                 </td>
                                 <td align="right">
                                     <a asp-action="BillTCMClientToday" asp-route-id="@item.Id" class="btn btn-warning" title="Billed today"><i class="glyphicon glyphicon-ok"></i></a>
@@ -276,7 +261,7 @@
                                             <tr>
                                                 <th class="col-md-1" style="text-align:center;">Birth Date</th>
                                                 <th class="col-md-1" style="text-align:center;">CPT code</th>
-                                                <th class="col-md-2">CaseManager</th>
+                                                <th class="col-md-2">TCM Supervisor</th>
                                                 <th class="col-md-1" style="text-align:center;">Setting</th>
                                                 <th class="col-md-1" style="text-align:center;">Units</th>
                                                 <th class="col-md-1" style="text-align:center;">Date</th>
@@ -318,7 +303,7 @@
                                                 <tr>
                                                     <td align="center">@Html.DisplayFor(modelItem => item.Client.DateOfBirth)</td>
                                                     <td align="center">@Html.DisplayFor(modelItem => product.CodeBill)</td>
-                                                    <td>@Html.DisplayFor(modelItem => item.Casemanager.Name)</td>
+                                                    <td>@Html.DisplayFor(modelItem => item.Casemanager.TCMSupervisor.Name)</td>
                                                     <td align="center">
                                                         @if (product.TCMNoteActivity.Count() > 0)
                                                         {
@@ -416,16 +401,19 @@
                                     }
                                 </td>
                                 <td align="center">
+                                    @if (item.Client.Clients_HealthInsurances.Where(n => n.Active == true).Count() > 0)
+                                    {
+                                        @Html.DisplayFor(modelItem => item.Client.Clients_HealthInsurances.First(n => n.Active == true).AuthorizationNumber)
+                                    }
+                                </td>
+                                <td align="center">
                                     @if (item.Client.Clients_Diagnostics.Count() > 0)
                                     {
                                         @Html.DisplayFor(modelItem => item.Client.Clients_Diagnostics.ElementAtOrDefault(0).Diagnostic.Code)
                                     }
                                 </td>
                                 <td align="center">
-                                    @unit
-                                </td>
-                                <td align="center">
-                                    @(unit * 12)
+                                    @unit<a> |</a>@(unit * 12)
                                 </td>
                                 <td align="right">
                                     <a asp-action="NotTCMClientToday" asp-route-id="@item.Id" class="btn btn-danger" title="Not Billed"><i class="glyphicon glyphicon-arrow-left"></i></a>

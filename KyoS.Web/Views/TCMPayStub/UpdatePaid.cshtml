@@ -8,14 +8,42 @@
         <form asp-action="UpdatePaid" asp-route-id="@Model.Id" onsubmit="return jQueryAjaxTCMPaystubPaid(this);">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
-            
+            <div>
+                <div class="form-group col-md-9">
+                    <label asp-for="CaseMannager.Name" class="control-label"> Name</label>
+                    <input asp-for="CaseMannager.Name" class="form-control" disabled />
+                    <span asp-validation-for="CaseMannager.Name" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-3">
+                    <label asp-for="Id" class="control-label"> PayStub</label>
+                    <input asp-for="Id" class="form-control" disabled />
+                    <span asp-validation-for="Id" class="text-danger"></span>
+                </div>
+            </div>
             <div>
                 <div class="form-group col-md-6">
-                    <label asp-for="Amount" class="control-label"> Amount</label>
-                    <input asp-for="Amount" class="form-control" />
-                    <span asp-validation-for="Amount" class="text-danger"></span>
+                    <label asp-for="DatePayStubClose" class="control-label"> Close</label>
+                    <input asp-for="DatePayStubClose" class="form-control" disabled />
+                    <span asp-validation-for="DatePayStubClose" class="text-danger"></span>
                 </div>
                 <div class="form-group col-md-6">
+                    <label asp-for="DatePayStub" class="control-label"> Date Paystub</label>
+                    <input asp-for="DatePayStub" class="form-control" disabled/>
+                    <span asp-validation-for="DatePayStub" class="text-danger"></span>
+                </div>
+            </div>
+            <div>
+                <div class="form-group col-md-4">
+                    <label asp-for="Amount" class="control-label"> Amount</label>
+                    <input asp-for="Amount" class="form-control" disabled />
+                    <span asp-validation-for="Amount" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-4">
+                    <label asp-for="IdStatus" class="control-label"></label>&nbsp;*
+                    <select asp-for="IdStatus" asp-items="Model.StatusList" class="form-control"></select>
+                    <span asp-validation-for="IdStatus" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-4">
                     <label asp-for="DatePayStubPayment" class="control-label"> Date Paystub Payment</label>
                     <input asp-for="DatePayStubPayment" class="form-control" />
                     <span asp-validation-for="DatePayStubPayment" class="text-danger"></span>

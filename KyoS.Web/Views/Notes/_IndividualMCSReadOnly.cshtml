@@ -5,8 +5,40 @@
     <a asp-action="ViewAllGoals" asp-route-idMtp="@Model.MTPId" target="_blank">View of Goals</a>
     <h5>Facilitator: @Model.Workday_Cient.Facilitator.Name</h5>
     <h5>Date: @Model.Workday_Cient.Workday.Date.ToShortDateString() Session: @Model.Workday_Cient.Workday.Day @Model.Workday_Cient.Session</h5>
-    <h5>Bill Code: @Model.CodeBill</h5>
-    <h5>Setting: @Model.Setting</h5>
+</div>
+<div>
+    <div class="form-group col-md-3">
+        <label asp-for="Workday_Cient.Facilitator.Name" class="control-label"></label> &nbsp;*
+        <textarea asp-for="Workday_Cient.Facilitator.Name" class="form-control" rows="1" readonly></textarea>
+        <span asp-validation-for="Workday_Cient.Facilitator.Name" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-1">
+        <label asp-for="Setting" class="control-label">Setting</label>
+        <input asp-for="Setting" class="form-control" disabled />
+        <span asp-validation-for="Setting" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-1">
+        <label asp-for="Minute" class="control-label">Minutes</label>
+        <input asp-for="Minute" class="form-control" id="lbMinutes" onchange="getMinute();" disabled />
+        <span asp-validation-for="Minute" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-1">
+        <label asp-for="RealUnits" class="control-label">Units</label>
+        <textarea asp-for="RealUnits" class="form-control" id="lbUnits" rows="1" readonly></textarea>
+        <span asp-validation-for="RealUnits" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-1">
+        <label asp-for="CodeBill" class="control-label">Bill Code</label>
+        <input asp-for="CodeBill" class="form-control" readonly />
+        <span asp-validation-for="CodeBill" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-5">
+        <label asp-for="Diagnostic" class="control-label">DX: Description</label>
+        <input asp-for="Diagnostic" class="form-control" readonly />
+        <span asp-validation-for="Diagnostic" class="text-danger"></span>
+    </div>
+</div>
+<div class="col-md-12">
     <hr />
 </div>
 <div class="col-md-12">

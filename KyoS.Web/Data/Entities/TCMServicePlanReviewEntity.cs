@@ -13,11 +13,11 @@ namespace KyoS.Web.Data.Entities
 
         public int TcmServicePlan_FK { get; set; }
 
-        [Display(Name = "Start Time")]
+        [Display(Name = "Date Service Plan Review")]
         [DataType(DataType.Date)]
         public DateTime DateServicePlanReview { get; set; }
 
-        [Display(Name = "Start Time")]
+        [Display(Name = "Intake Date")]
         [DataType(DataType.Date)]
         public DateTime DateOpending { get; set; }
 
@@ -55,6 +55,12 @@ namespace KyoS.Web.Data.Entities
         [DataType(DataType.Date)]
         public DateTime DateTCMSupervisorSignature { get; set; }
 
+        [Display(Name = "Assessment Date")]
+        [DataType(DataType.Date)]
+        public DateTime DateAssessment { get; set; }
 
+        [Display(Name = "Certification Date")]
+        [DataType(DataType.Date)]
+        public DateTime DateCertification { get; set; }
     }
 }

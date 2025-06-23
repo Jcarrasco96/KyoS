@@ -1,0 +1,154 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="03/02/2024 18:54:01" ReportInfo.CreatorVersion="2021.1.0.0">
+  <Dictionary>
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pKiygLNrR2GSkUua6CZa7zWuDzNGOn7cjq7mn0WTOnccDkyyV5BLvtFa1BRlcYFBrR3SGSWjqyqlG71/Alcm36g==">
+      <TableDataSource Name="Clinics" DataType="System.Int32" Enabled="true" TableName="Clinics">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Name" DataType="System.String"/>
+        <Column Name="LogoPath" DataType="System.String"/>
+        <Column Name="Schema" DataType="System.Int32"/>
+        <Column Name="Address" DataType="System.String"/>
+        <Column Name="CEO" DataType="System.String"/>
+        <Column Name="City" DataType="System.String"/>
+        <Column Name="FaxNo" DataType="System.String"/>
+        <Column Name="Phone" DataType="System.String"/>
+        <Column Name="State" DataType="System.String"/>
+        <Column Name="ZipCode" DataType="System.String"/>
+        <Column Name="ClinicalDirector" DataType="System.String"/>
+        <Column Name="ProviderTaxId" DataType="System.String"/>
+        <Column Name="ProviderMedicaidId" DataType="System.String"/>
+      </TableDataSource>
+      <TableDataSource Name="Clients" DataType="System.Int32" Enabled="true" TableName="Clients">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Name" DataType="System.String"/>
+        <Column Name="Gender" DataType="System.Int32"/>
+        <Column Name="Code" DataType="System.String"/>
+        <Column Name="ClinicId" DataType="System.Int32"/>
+        <Column Name="DateOfBirth" DataType="System.DateTime"/>
+        <Column Name="ZipCode" DataType="System.String"/>
+        <Column Name="Status" DataType="System.Int32"/>
+        <Column Name="GroupId" DataType="System.Int32"/>
+        <Column Name="AlternativeAddress" DataType="System.String"/>
+        <Column Name="City" DataType="System.String"/>
+        <Column Name="Country" DataType="System.String"/>
+        <Column Name="CreatedBy" DataType="System.String"/>
+        <Column Name="CreatedOn" DataType="System.DateTime"/>
+        <Column Name="DoctorId" DataType="System.Int32"/>
+        <Column Name="Email" DataType="System.String"/>
+        <Column Name="EmergencyContactId" DataType="System.Int32"/>
+        <Column Name="Ethnicity" DataType="System.Int32"/>
+        <Column Name="FullAddress" DataType="System.String"/>
+        <Column Name="LastModifiedBy" DataType="System.String"/>
+        <Column Name="LastModifiedOn" DataType="System.DateTime"/>
+        <Column Name="LegalGuardianId" DataType="System.Int32"/>
+        <Column Name="MaritalStatus" DataType="System.Int32"/>
+        <Column Name="MedicaidID" DataType="System.String"/>
+        <Column Name="OtherLanguage" DataType="System.String"/>
+        <Column Name="PhotoPath" DataType="System.String"/>
+        <Column Name="PreferredLanguage" DataType="System.Int32"/>
+        <Column Name="PsychiatristId" DataType="System.Int32"/>
+        <Column Name="Race" DataType="System.Int32"/>
+        <Column Name="SSN" DataType="System.String"/>
+        <Column Name="SignPath" DataType="System.String"/>
+        <Column Name="State" DataType="System.String"/>
+        <Column Name="Telephone" DataType="System.String"/>
+        <Column Name="TelephoneSecondary" DataType="System.String"/>
+        <Column Name="RelationShipOfLegalGuardian" DataType="System.Int32"/>
+        <Column Name="Service" DataType="System.Int32"/>
+        <Column Name="IndividualTherapyFacilitatorId" DataType="System.Int32"/>
+        <Column Name="AdmisionDate" DataType="System.DateTime"/>
+        <Column Name="PlaceOfBirth" DataType="System.String"/>
+        <Column Name="RelationShipOfEmergencyContact" DataType="System.Int32"/>
+        <Column Name="IdFacilitatorPSR" DataType="System.Int32"/>
+        <Column Name="OtherLanguage_Read" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="OtherLanguage_Speak" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="OtherLanguage_Understand" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="MedicareId" DataType="System.String"/>
+        <Column Name="DateOfClose" DataType="System.DateTime"/>
+        <Column Name="OnlyTCM" DataType="System.Boolean" BindableControl="CheckBox"/>
+      </TableDataSource>
+      <TableDataSource Name="CaseManagers" DataType="System.Int32" Enabled="true" TableName="CaseManagers">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Name" DataType="System.String"/>
+        <Column Name="ProviderNumber" DataType="System.String"/>
+        <Column Name="Status" DataType="System.Int32"/>
+        <Column Name="LinkedUser" DataType="System.String"/>
+        <Column Name="SignaturePath" DataType="System.String"/>
+        <Column Name="ClinicId" DataType="System.Int32"/>
+        <Column Name="Email" DataType="System.String"/>
+        <Column Name="Phone" DataType="System.String"/>
+        <Column Name="Credentials" DataType="System.String"/>
+        <Column Name="Money" DataType="System.Decimal"/>
+      </TableDataSource>
+      <TableDataSource Name="TCMClient" DataType="System.Int32" Enabled="true" TableName="TCMClient">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="CasemanagerId" DataType="System.Int32"/>
+        <Column Name="CaseNumber" DataType="System.String"/>
+        <Column Name="ClientId" DataType="System.Int32"/>
+        <Column Name="DataClose" DataType="System.DateTime"/>
+        <Column Name="DataOpen" DataType="System.DateTime"/>
+        <Column Name="Period" DataType="System.Int32"/>
+        <Column Name="Status" DataType="System.Int32"/>
+        <Column Name="CreatedBy" DataType="System.String"/>
+        <Column Name="CreatedOn" DataType="System.DateTime"/>
+        <Column Name="LastModifiedBy" DataType="System.String"/>
+        <Column Name="LastModifiedOn" DataType="System.DateTime"/>
+      </TableDataSource>
+      <TableDataSource Name="Classifications" Alias="Signatures" DataType="System.Int32" Enabled="true" TableName="Classifications">
+        <Column Name="supervisorSignature" DataType="System.Byte[]" PropName="Id"/>
+        <Column Name="facilitatorSignature" DataType="System.Byte[]" PropName="Name"/>
+      </TableDataSource>
+      <TableDataSource Name="TCMIntakeIntervention" DataType="System.Int32" Enabled="true" TableName="TCMIntakeIntervention">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="TcmInterventionLogId" DataType="System.Int32"/>
+        <Column Name="Date" DataType="System.DateTime"/>
+        <Column Name="Activity" DataType="System.String"/>
+        <Column Name="CreatedBy" DataType="System.String"/>
+        <Column Name="CreatedOn" DataType="System.DateTime"/>
+        <Column Name="LastModifiedBy" DataType="System.String"/>
+        <Column Name="LastModifiedOn" DataType="System.DateTime"/>
+      </TableDataSource>
+    </MsSqlDataConnection>
+    <Parameter Name="session1" DataType="System.String"/>
+  </Dictionary>
+  <ReportPage Name="Page1" PaperWidth="215.9" PaperHeight="279.4" RawPaperSize="1" LeftMargin="5" TopMargin="5" RightMargin="5" BottomMargin="5" Watermark.Enabled="true" Watermark.Font="Arial, 60pt">
+    <ReportTitleBand Name="ReportTitle1" Width="778.3" Height="89.6">
+      <TextObject Name="Textbox12" Left="123.3" Top="23.35" Width="535.1" Height="20" CanGrow="true" Text="[Clinics.Name]" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 12pt, style=Bold"/>
+      <TextObject Name="Textbox64" Left="122.3" Top="45.23" Width="535.1" Height="22" CanGrow="true" Text="Intervention Log" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 11pt, style=Bold"/>
+      <LineObject Name="Line3" Left="122.85" Top="12.45" Height="65.55"/>
+      <PictureObject Name="Picture1" Left="9.45" Top="10.9" Width="103.95" Height="66.15" Image=""/>
+      <LineObject Name="Line6" Left="121.85" Top="11.45" Height="66.15"/>
+    </ReportTitleBand>
+    <DataBand Name="Data1" Top="93.45" Width="778.3" Height="94.27">
+      <TextObject Name="Text40" Left="-5.45" Top="23.35" Width="106.6" Height="18.9" Text="Client Name:" VertAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text41" Left="404.35" Top="23.35" Width="113.4" Height="18.9" Text="Case Number:" HorzAlign="Right" VertAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text44" Left="79.92" Top="23.35" Width="302.4" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Clients.Name]" VertAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text45" Left="518.75" Top="23.35" Width="128.52" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[TCMClient.CaseNumber]" VertAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text392" Left="-5" Top="55.7" Width="425.25" Height="20.79" Text="*Use this form to document non-billable services or activities" HorzAlign="Justify" Font="Arial, 9pt, style=Bold, Italic" TextRenderType="HtmlTags"/>
+    </DataBand>
+    <DataBand Name="Data2" Top="218.09" Width="778.3" Height="18.9" CanGrow="true" DataSource="TCMIntakeIntervention">
+      <TableObject Name="Table3" Width="776.16" Height="18.9">
+        <TableColumn Name="Column6" Width="94.5"/>
+        <TableColumn Name="Column7" Width="536.89"/>
+        <TableColumn Name="Column8" Width="144.77"/>
+        <TableRow Name="Row3" AutoSize="true">
+          <TableCell Name="Cell6" Border.Lines="All" Fill.Color="White" Text="[TCMIntakeIntervention.Date]" Format="Date" Format.Format="d" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt"/>
+          <TableCell Name="Cell7" Border.Lines="All" Fill.Color="White" Text="[TCMIntakeIntervention.Activity]" Font="Arial, 10pt"/>
+          <TableCell Name="Cell8" Border.Lines="All" Fill.Color="White" HorzAlign="Center" Font="Arial, 10pt"/>
+        </TableRow>
+      </TableObject>
+      <DataHeaderBand Name="DataHeader1" Top="191.56" Width="778.3" Height="22.68">
+        <TableObject Name="Table2" Width="776.16" Height="22.68">
+          <TableColumn Name="Column3" Width="94.5"/>
+          <TableColumn Name="Column4" Width="536.89"/>
+          <TableColumn Name="Column5" Width="144.77"/>
+          <TableRow Name="Row2" Height="22.68">
+            <TableCell Name="Cell3" Border.Lines="All" Fill.Color="Gainsboro" Text="Date" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt"/>
+            <TableCell Name="Cell4" Border.Lines="All" Fill.Color="Gainsboro" Text="Activity description" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt"/>
+            <TableCell Name="Cell5" Border.Lines="All" Fill.Color="Gainsboro" Text="Signature" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt"/>
+          </TableRow>
+        </TableObject>
+      </DataHeaderBand>
+    </DataBand>
+  </ReportPage>
+</Report>

@@ -39,112 +39,118 @@
                      <tbody>
                         @foreach (var item in Model)
                          {
-                         <tr>
-                             <td>
-                                 @Html.DisplayFor(modelItem => item.Casemanager.Name)
-                             </td>
-                             <td>
-                                 @if (item.Client.Gender == KyoS.Common.Enums.GenderType.Female)
-                                 {
-                                     <i class="glyphicon glyphicon-user btn-danger"></i>
-                                 }
-                                 @if (item.Client.Gender == KyoS.Common.Enums.GenderType.Male)
-                                 {
-                                     <i class="glyphicon glyphicon-user btn-primary"></i>
-                                 }
-                                 &nbsp;
-                                 @Html.DisplayFor(modelItem => item.Client.Name)
-                             </td>
-                             <td align="center">
-                                 @Html.DisplayFor(modelItem => item.CaseNumber)
-                             </td>
-                             <td align="center">
-                                 @if (User.IsInRole("Manager") || User.IsInRole("TCMSupervisor"))
-                                 {
-                                     @if (item.TCMReferralForm != null)
+                             <tr>
+                                 <td>
+                                     @Html.DisplayFor(modelItem => item.Casemanager.Name)
+                                 </td>
+                                 <td>
+                                     @if (item.Client.Gender == KyoS.Common.Enums.GenderType.Female)
                                      {
-                                         @if (item.TCMReferralForm.TCMSign == true)
+                                         <i class="glyphicon glyphicon-user btn-danger"></i>
+                                     }
+                                     @if (item.Client.Gender == KyoS.Common.Enums.GenderType.Male)
+                                     {
+                                         <i class="glyphicon glyphicon-user btn-primary"></i>
+                                     }
+                                     &nbsp;
+                                     @Html.DisplayFor(modelItem => item.Client.Name)
+                                 </td>
+                                 <td align="center">
+                                     @Html.DisplayFor(modelItem => item.CaseNumber)
+                                 </td>
+                                 <td align="center">
+                                     @if (User.IsInRole("Manager") || User.IsInRole("TCMSupervisor"))
+                                     {
+                                         @if (item.TCMReferralForm != null)
                                          {
-                                             <a asp-action="TCMReferralAccept" asp-route-idTCMClient="@item.Id" asp-controller="TCMClients" class="btn btn-success" title="View Referral Form"><i class="glyphicon glyphicon-th-list"></i></a>
+                                             @if (item.TCMReferralForm.TCMSign == true)
+                                             {
+                                                 <a asp-action="TCMReferralAccept" asp-route-idTCMClient="@item.Id" asp-controller="TCMClients" class="btn btn-success" title="View Referral Form"><i class="glyphicon glyphicon-th-list"></i></a>
+                                             }
+                                             else
+                                             {
+                                                 <a asp-action="TCMReferralAccept" asp-route-idTCMClient="@item.Id" asp-controller="TCMClients" class="btn btn-warning" title="View Referral Form"><i class="glyphicon glyphicon-th-list"></i></a>
+                                             }
                                          }
                                          else
                                          {
-                                             <a asp-action="TCMReferralAccept" asp-route-idTCMClient="@item.Id" asp-controller="TCMClients" class="btn btn-warning" title="View Referral Form"><i class="glyphicon glyphicon-th-list"></i></a>
+                                             <a asp-action="CreateReferralForm" asp-route-idTCMClient="@item.Id" asp-controller="TCMClients" class="btn btn-danger" title="Create Referral Form"><i class="glyphicon glyphicon-th-list"></i></a>
                                          }
                                      }
-                                     else
+                                     @if (User.IsInRole("CaseManager"))
                                      {
-                                         <a asp-action="CreateReferralForm" asp-route-idTCMClient="@item.Id" asp-controller="TCMClients" class="btn btn-danger" title="Create Referral Form"><i class="glyphicon glyphicon-th-list"></i></a>
-                                     }
-                                 }
-                                 @if (User.IsInRole("CaseManager"))
-                                 {
-                                     @if (item.TCMReferralForm != null)
-                                     {
-                                         @if (item.TCMReferralForm.TCMSign == true)
+                                         @if (item.TCMReferralForm != null)
                                          {
-                                             <a asp-action="TCMReferralAccept" asp-route-idTCMClient="@item.Id" asp-controller="TCMClients" class="btn btn-success" title="View Referral Form"><i class="glyphicon glyphicon-th-list"></i></a>
+                                             @if (item.TCMReferralForm.TCMSign == true)
+                                             {
+                                                 <a asp-action="TCMReferralAccept" asp-route-idTCMClient="@item.Id" asp-controller="TCMClients" class="btn btn-success" title="View Referral Form"><i class="glyphicon glyphicon-th-list"></i></a>
+                                             }
+                                             else
+                                             {
+                                                 <a asp-action="TCMReferralAccept" asp-route-idTCMClient="@item.Id" asp-controller="TCMClients" class="btn btn-warning" title="View Referral Form"><i class="glyphicon glyphicon-th-list"></i></a>
+                                             }
                                          }
                                          else
                                          {
-                                             <a asp-action="TCMReferralAccept" asp-route-idTCMClient="@item.Id" asp-controller="TCMClients" class="btn btn-warning" title="View Referral Form"><i class="glyphicon glyphicon-th-list"></i></a>
+                                             <a asp-action="TCMReferralAccept" asp-route-id="@item.Id" asp-controller="TCMClients" class="btn btn-danger disabled" title="View Referral Form"><i class="glyphicon glyphicon-th-list"></i></a>
                                          }
                                      }
-                                     else
-                                     {
-                                         <a asp-action="TCMReferralAccept" asp-route-id="@item.Id" asp-controller="TCMClients" class="btn btn-danger disabled" title="View Referral Form"><i class="glyphicon glyphicon-th-list"></i></a>
-                                     }
-                                 }
 
-                             </td>
-                             <td align="center">
-                                 @if (item.Status == KyoS.Common.Enums.StatusType.Open)
-                                 {
-                                     <span class="label label-success">
-                                         Open
-                                     </span>
-                                 }
-                                 @if (item.Status == KyoS.Common.Enums.StatusType.Close)
-                                 {
-                                     <span class="label label-default">
-                                         Close
-                                     </span>
-                                 }
-                             </td>
-                             <td align="center">
-                                 @Html.DisplayFor(modelItem => item.DataOpen)
-                             </td>
-                             <td align="center">
-                                 @Html.DisplayFor(modelItem => item.DataClose)
-                             </td>
-                             <td align="right">
-                                 @if ((User.IsInRole("Manager") || User.IsInRole("TCMSupervisor")))
-                                 {
-                                     <a onclick="showInPopup('@Url.Action("Edit", "TCMClients", new { id = item.Id, origin = ViewData["origin"] }, Context.Request.Scheme)','Edit TCM Case')" class="btn btn-warning" title="Edit TCM Case"><i class="glyphicon glyphicon-pencil"></i></a>
-                                     <a asp-action="TCMCaseHistory" asp-route-id="@item.Id" asp-controller="TCMClients" class="btn btn-info" title="View Case History"><i class="glyphicon glyphicon-list"></i></a>
-                                     @if (User.IsInRole("Manager"))
-                                     {
-                                        <button onclick="ConfirmDelete(@item.Id)" class="btn btn-danger deleteItem" title="Delete case"><i class="glyphicon glyphicon-trash"></i></button>
-                                     }
-                                     else
-                                     { 
-                                        <button onclick="ConfirmDelete(@item.Id)" class="btn btn-danger deleteItem" title="Delete case"><i class="glyphicon glyphicon-trash"></i></button>
-                                     }
-                                 }
-                                 @if (User.IsInRole("CaseManager"))
-                                 {
+                                 </td>
+                                 <td align="center">
                                      @if (item.Status == KyoS.Common.Enums.StatusType.Open)
                                      {
-                                         <a asp-action="TCMIntakeDashboard" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-warning" title="Edit Open Binder"><i class="glyphicon glyphicon-pencil"></i></a>
+                                         <span class="label label-success">
+                                             Open
+                                         </span>
                                      }
-                                     else
+                                     @if (item.Status == KyoS.Common.Enums.StatusType.Close)
                                      {
-                                         <a class="btn btn-warning disabled" title="Edit Open Binder"><i class="glyphicon glyphicon-pencil"></i></a>
+                                         <span class="label label-default">
+                                             Close
+                                         </span>
                                      }
-                                     <a asp-action="TCMCaseHistory" asp-route-id="@item.Id" asp-controller="TCMClients" class="btn btn-info" title="View Case History"><i class="glyphicon glyphicon-list"></i></a>
-                                 }
-                             </td>
-                         </tr>
+                                 </td>
+                                 <td align="center">
+                                     @Html.DisplayFor(modelItem => item.DataOpen)
+                                 </td>
+                                 <td align="center">
+                                     @Html.DisplayFor(modelItem => item.DataClose)
+                                 </td>
+                                 <td align="right">
+                                    @if ((User.IsInRole("Manager") || User.IsInRole("TCMSupervisor")))
+                                     {
+                                         <a onclick="showInPopup('@Url.Action("Edit", "TCMClients", new { id = item.Id, origin = ViewData["origin"] }, Context.Request.Scheme)','Edit TCM Case')" class="btn btn-warning" title="Edit TCM Case"><i class="glyphicon glyphicon-pencil"></i></a>
+                                         <a asp-action="TCMCaseHistory" asp-route-id="@item.Id" asp-controller="TCMClients" class="btn btn-info" title="View Case History"><i class="glyphicon glyphicon-list"></i></a>
+                                         @if (User.IsInRole("Manager"))
+                                         {
+                                            <button onclick="ConfirmDelete(@item.Id)" class="btn btn-danger deleteItem" title="Delete case"><i class="glyphicon glyphicon-trash"></i></button>
+                                         }
+                                         else
+                                         { 
+                                            <button onclick="ConfirmDelete(@item.Id)" class="btn btn-danger deleteItem" title="Delete case"><i class="glyphicon glyphicon-trash"></i></button>
+                                         }
+                                     }
+                                     @if (User.IsInRole("CaseManager"))
+                                     {
+                                         @if (item.Status == KyoS.Common.Enums.StatusType.Open)
+                                         {
+                                             <a asp-action="TCMIntakeDashboard" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-warning" title="Edit Open Binder"><i class="glyphicon glyphicon-pencil"></i></a>
+                                         }
+                                         else
+                                         {
+                                             <a class="btn btn-warning disabled" title="Edit Open Binder"><i class="glyphicon glyphicon-pencil"></i></a>
+                                         }
+                                         <a asp-action="TCMCaseHistory" asp-route-id="@item.Id" asp-controller="TCMClients" class="btn btn-info" title="View Case History"><i class="glyphicon glyphicon-list"></i></a>
+                                     }
+                                    @if ( User.IsInRole("Biller"))
+                                    {
+                                        <a onclick="showInPopup('@Url.Action("Edit", "TCMClients", new { id = item.Id, origin = ViewData["origin"] }, Context.Request.Scheme)','Edit TCM Case')" class="btn btn-warning disabled" title="Edit TCM Case"><i class="glyphicon glyphicon-pencil"></i></a>
+                                        <a asp-action="TCMCaseHistory" asp-route-id="@item.Id" asp-controller="TCMClients" class="btn btn-info" title="View Case History"><i class="glyphicon glyphicon-list"></i></a>
+                                        <button onclick="ConfirmDelete(@item.Id)" class="btn btn-danger deleteItem disabled" title="Delete case"><i class="glyphicon glyphicon-trash"></i></button>
+                                    }
+                                 </td>
+                             </tr>
                          }
                      </tbody>
                  </table>

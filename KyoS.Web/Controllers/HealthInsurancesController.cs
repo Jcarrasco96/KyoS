@@ -50,6 +50,8 @@ namespace KyoS.Web.Controllers
             }
 
             return View(await _context.HealthInsurances
+                                      .Include(n => n.Client_HealthInsurances)
+                                      .ThenInclude(n => n.Client)
                                       .Where(hi => hi.Clinic.Id == user_logged.Clinic.Id)
                                       .OrderBy(c => c.Name).ToListAsync());
         }
@@ -85,7 +87,8 @@ namespace KyoS.Web.Controllers
             {
                 SignedDate = DateTime.Now,
                 DurationTime = 12,
-                Active = true
+                Active = true,
+                NeedAuthorization = false
             };
             return View(entity);
         }
@@ -243,7 +246,7 @@ namespace KyoS.Web.Controllers
 
         public async Task<IActionResult> UnitsAvailability(int idError = 0, int agency = 0)
         {
-            if (idError == 1) //Imposible to delete
+            if (idError == 1) //Imposible to delete 
             {
                 ViewBag.Delete = "N";
             }
@@ -265,9 +268,11 @@ namespace KyoS.Web.Controllers
 
                                                               .Include(wc => wc.HealthInsurance)
                                                               .ThenInclude(h => h.Clinic)
-
+                                                              .AsSplitQuery()
                                                               .Where(ch => (ch.HealthInsurance.Clinic.Id == user_logged.Clinic.Id
-                                                                    && ch.Agency == ServiceAgencyUtils.GetServiceAgencyByIndex(agency)))
+                                                                         && ch.Agency == ServiceAgencyUtils.GetServiceAgencyByIndex(agency)
+                                                                         && ch.Active == true
+                                                                         && ch.Client.Status == StatusType.Open))
                                                               .ToListAsync();
                 foreach (var item in list)
                 {
@@ -356,9 +361,7 @@ namespace KyoS.Web.Controllers
 
             ViewData["agency"] = agency;
             return View(unitsList);
-        }
-
-      
+        }      
        
         public async Task<IActionResult> UnitsPerClientsInsurances()
         {
@@ -824,7 +827,8 @@ namespace KyoS.Web.Controllers
             {
                 SignedDate = DateTime.Now,
                 DurationTime = 12,
-                Active = true
+                Active = true,
+                NeedAuthorization = false
             };
             return View(entity);
         }
@@ -858,8 +862,10 @@ namespace KyoS.Web.Controllers
                     {
                         await _context.SaveChangesAsync();
                         List<HealthInsuranceEntity> healthInsurance_List = await _context.HealthInsurances
-
-                                                                                         .OrderBy(d => d.Name)
+                                                                                         .Include(n => n.Client_HealthInsurances)
+                                                                                         .ThenInclude(n => n.Client)
+                                                                                         .Where(hi => (hi.Clinic.Id == user_logged.Clinic.Id))
+                                                                                         .OrderBy(c => c.Name)
                                                                                          .ToListAsync();
 
                         return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewHealthInsurances", healthInsurance_List) });
@@ -931,9 +937,11 @@ namespace KyoS.Web.Controllers
                 {
                     await _context.SaveChangesAsync();
                     List<HealthInsuranceEntity> healthInsurance_List = await _context.HealthInsurances
-
-                                                                                        .OrderBy(d => d.Name)
-                                                                                        .ToListAsync();
+                                                                                     .Include(n => n.Client_HealthInsurances)
+                                                                                     .ThenInclude(n => n.Client)
+                                                                                     .Where(hi => (hi.Clinic.Id == user_logged.Clinic.Id))
+                                                                                     .OrderBy(c => c.Name)
+                                                                                     .ToListAsync();
 
                     return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewHealthInsurances", healthInsurance_List) });
                 }
@@ -951,5 +959,35 @@ namespace KyoS.Web.Controllers
             }
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditModal", healthInsuranceViewModel) });
         }
+
+
+        public async Task<IActionResult> ViewDetails(int id = 0, StatusType status = StatusType.Open)
+        {
+            List<ClientEntity> clients = new List<ClientEntity>();
+            if (id > 0)
+            {
+                UserEntity user_logged = await _context.Users
+                                                       .Include(u => u.Clinic)
+                                                       .ThenInclude(c => c.Setting)
+                                                       .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+                if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
+                {
+                    return RedirectToAction("NotAuthorized", "Account");
+                }
+
+                clients = await _context.Clients
+                                        .Include(n => n.Clients_HealthInsurances)
+                                        .ThenInclude(n => n.HealthInsurance)
+                                        .Where(n => n.Clients_HealthInsurances.Where(m => m.Active == true && m.HealthInsurance.Id == id).Count() > 0
+                                                 && n.Status == status)
+                                        .OrderBy(d => d.Name)
+                                        .ToListAsync();
+            }
+
+
+            return View(clients);
+        }
+
     }
 }

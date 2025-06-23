@@ -1,4 +1,5 @@
-﻿using KyoS.Web.Data;
+﻿using KyoS.Common.Enums;
+using KyoS.Web.Data;
 using KyoS.Web.Data.Entities;
 using KyoS.Web.Helpers;
 using KyoS.Web.Models;
@@ -54,7 +55,10 @@ namespace KyoS.Web.Controllers
 
                 if (clinic != null)
                 {
-                    List<DiagnosticEntity> diagnostics = await _context.Diagnostics.OrderBy(d => d.Code).ToListAsync();
+                    List<DiagnosticEntity> diagnostics = await _context.Diagnostics
+                                                                       .Include(n => n.Client_Diagnostics)
+                                                                       .ThenInclude(n => n.Client)
+                                                                       .OrderBy(d => d.Code).ToListAsync();
                     List<DiagnosticEntity> diagnostics_by_clinic = new List<DiagnosticEntity>();
                     UserEntity user;
                     foreach (DiagnosticEntity item in diagnostics)
@@ -288,8 +292,7 @@ namespace KyoS.Web.Controllers
                     {
                         await _context.SaveChangesAsync();
                         
-                        List<DiagnosticEntity> diagnostics_List = await _context.Diagnostics
-
+                        List<DiagnosticEntity> diagnostics_List = await _context.Diagnostics                                                                                
                                                                                 .OrderBy(d => d.Code)
                                                                                 .ToListAsync();
 
@@ -386,6 +389,45 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateModal", diagnosticViewModel) });
         }
 
+        public async Task<IActionResult> ViewDetails(int id = 0, StatusType status = StatusType.Open, bool principal = true)
+        {
+            List<ClientEntity> clients = new List<ClientEntity>();
+            if (id > 0)
+            {
+                UserEntity user_logged = await _context.Users
+                                                   .Include(u => u.Clinic)
+                                                   .ThenInclude(c => c.Setting)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+                if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
+                {
+                    return RedirectToAction("NotAuthorized", "Account");
+                }
+                if (principal == false)
+                {
+                    clients = await _context.Clients
+                                            .Include(n => n.Clients_Diagnostics)
+                                            .ThenInclude(n => n.Diagnostic)
+                                            .Where(n => n.Clients_Diagnostics.Where(m => m.Principal == principal && m.Diagnostic.Id == id).Count() > 0
+                                                     && n.Status == status)
+                                            .OrderBy(d => d.Name)
+                                            .ToListAsync();
+                }
+                else
+                {
+                    clients = await _context.Clients
+                                            .Include(n => n.Clients_Diagnostics)
+                                            .ThenInclude(n => n.Diagnostic)
+                                            .Where(n => n.Clients_Diagnostics.Where(m => m.Principal == principal && m.Diagnostic.Id == id).Count() > 0)
+                                            .OrderBy(d => d.Name)
+                                            .ToListAsync();
+                }
+
+            }
+
+
+            return View(clients);
+        }
 
     }
 }

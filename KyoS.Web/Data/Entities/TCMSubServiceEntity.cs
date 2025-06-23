@@ -21,6 +21,10 @@ namespace KyoS.Web.Data.Entities
         public TCMServiceEntity TcmService { get; set; }
 
         public bool Active { get; set; }
+        public int Frecuency { get; set; }
+        public int Units { get; set; }
+
+        public List<TCMSubServiceStepEntity> TCMSubServiceSteps { get; set; }
 
     }
 }

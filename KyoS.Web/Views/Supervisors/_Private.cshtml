@@ -1,0 +1,55 @@
+﻿@model KyoS.Web.Models.SupervisorViewModel
+<div class="col-md-push-12">
+    &nbsp;
+</div>
+
+<div>
+    <div class="col-md-3 form-group">
+        <label asp-for="NPI" class="control-label"></label>
+        <input asp-for="NPI" class="form-control" />
+        <span asp-validation-for="NPI" class="text-danger"></span>
+    </div>
+    <div class="col-md-3 form-group">
+        <label asp-for="SSN" class="control-label"></label>
+        <input asp-for="SSN" class="form-control" />
+        <span asp-validation-for="SSN" class="text-danger"></span>
+    </div>
+    <div class="col-md-3 form-group">
+        <label asp-for="CompanyName" class="control-label"> Company Name</label>
+        <input asp-for="CompanyName" class="form-control" />
+        <span asp-validation-for="CompanyName" class="text-danger"></span>
+    </div>
+    <div class="col-md-3 form-group">
+        <label asp-for="CompanyEIN" class="control-label"> Company EIN</label>
+        <input asp-for="CompanyEIN" class="form-control" />
+        <span asp-validation-for="CompanyEIN" class="text-danger"></span>
+    </div>
+    <div class="col-md-4 form-group">
+        <label asp-for="FinancialInstitutionsName" class="control-label">Bank Name</label>
+        <input asp-for="FinancialInstitutionsName" class="form-control" />
+        <span asp-validation-for="FinancialInstitutionsName" class="text-danger"></span>
+    </div>
+   <div class="col-md-4 form-group">
+        <label asp-for="IdAccountType" class="control-label"></label>
+        <select asp-for="IdAccountType" asp-items="Model.AccountTypeList" class="form-control"></select>
+        <span asp-validation-for="IdAccountType" class="text-danger"></span>
+    </div>
+    <div class="col-md-2 form-group">
+        <label asp-for="AccountNumber" class="control-label">Account Number</label>
+        <input asp-for="AccountNumber" class="form-control" />
+        <span asp-validation-for="AccountNumber" class="text-danger"></span>
+    </div>
+    <div class="col-md-2 form-group">
+        <label asp-for="Routing" class="control-label"></label>
+        <input asp-for="Routing" class="form-control" />
+        <span asp-validation-for="Routing" class="text-danger"></span>
+    </div>
+   
+</div>
+
+<div class="col-md-push-12">
+    &nbsp;
+</div>
+
+
+

@@ -41,9 +41,11 @@
             <input type="hidden" asp-for="DateLicensedPractitioner" />
             <input type="hidden" asp-for="DateSignaturePerson" />
             <input type="hidden" asp-for="DateTherapist" />
+            <input type="hidden" asp-for="IdFacilitator" />
+            <input type="hidden" asp-for="IdIndFacilitator" />
             <partial name="_MTPReviews" />
             <div class="form-group col-md-12">
-                <input onclick="GenderVerification()" type="submit" value="Update Goal" class="btn btn-primary" />
+                <input onclick="GenderVerification()" type="submit" value="Update Goal" class="btn btn-primary" id="btnSave"/>
                 @if (Model.Origin == 0)
                 {
                     <a asp-action="Index" class="btn btn-success">Back</a>
@@ -101,6 +103,9 @@
         });
 
         function GenderVerification() {                
+            
+                $("#btnSave").prop('disabled', true);                    
+
                 var url = "@Url.Action("GetGenderByMTP", "MTPs")";
             
                 $.get(url, { idMTP: @Model.IdMTP }, function (data) {
@@ -143,6 +148,9 @@
                                 if (result.isConfirmed) {
                                     form1.submit();
                                 }
+                                else {
+                                    $("#btnSave").prop('disabled', false);
+                                }
                             });
                         }
                         else {
@@ -181,6 +189,9 @@
                                 }).then((result) => {
                                     if (result.isConfirmed) {
                                         form1.submit();
+                                    }
+                                    else {
+                                        $("#btnSave").prop('disabled', false);
                                     }
                                 });
                             }

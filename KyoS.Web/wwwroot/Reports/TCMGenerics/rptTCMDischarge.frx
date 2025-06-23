@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="01/11/2024 11:40:05" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="06/06/2024 13:48:21" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhDFmP9T+uKfsJXu65Ovrj+A1YfN5dfPvLBg6EY9L3xBgdKTD3jWzkT9igQJx8b038fdnmBHRwE7/ZLKdRKL9IM">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhDFmP9T+uKfsJXu65Ovrj+A1YfN5dfPvLBg6EY9L3xBgdKTD3jWzkT9igQJx8b03/xa8uHkPU1IoAOq3Mwxfqq">
       <TableDataSource Name="Clinics" DataType="System.Int32" Enabled="true" TableName="Clinics">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -113,6 +113,7 @@
         <Column Name="CreatedOn" DataType="System.DateTime"/>
         <Column Name="LastModifiedBy" DataType="System.String"/>
         <Column Name="LastModifiedOn" DataType="System.DateTime"/>
+        <Column Name="Credentials" DataType="System.String" PropName="Column"/>
       </TableDataSource>
       <TableDataSource Name="TCMDischarge" DataType="System.Int32" Enabled="true" TableName="TCMDischarge">
         <Column Name="Id" DataType="System.Int32"/>
@@ -173,10 +174,10 @@
       <TextObject Name="Textbox12" Left="121.75" Top="9.45" Width="535.1" Height="20" CanGrow="true" Text="[Clinics.Name]" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 12pt, style=Bold"/>
       <TextObject Name="Textbox64" Left="120.75" Top="34.33" Width="535.1" Height="22" CanGrow="true" Text="DISCHARGE SUMMARY" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 11pt, style=Bold"/>
       <LineObject Name="Line3" Left="117.85" Top="1" Height="65.55"/>
-      <PictureObject Name="Picture1" Left="9.45" Top="0.45" Width="103.95" Height="66.15" Image=""/>
+      <PictureObject Name="Picture1" Left="9.45" Top="0.45" Width="103.95" Height="66.15"/>
       <LineObject Name="Line6" Left="116.85" Height="66.15"/>
     </ReportTitleBand>
-    <DataBand Name="Data1" Top="70.45" Width="778.3" Height="677.4" Guides="548.1" DataSource="TCMDischarge">
+    <DataBand Name="Data1" Top="69.93" Width="778.3" Height="677.4" Guides="548.1" DataSource="TCMDischarge">
       <TextObject Name="Text40" Top="16.45" Width="116.05" Height="18.9" Text="Recipient's Name:" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
       <TextObject Name="Text41" Left="481.95" Top="16.9" Width="94.5" Height="18.9" Text="Case Number:" HorzAlign="Right" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
       <TextObject Name="Text44" Left="114.4" Top="16.45" Width="368.55" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Clients.Name]" VertAlign="Center" Font="Arial, 9pt"/>
@@ -238,7 +239,7 @@
       <TextObject Name="Text355" Left="25.35" Top="638.6" Width="274.05" Height="24.24" Text="Administrative Discharge " HorzAlign="Justify" Font="Arial, 11pt, style=Bold" TextRenderType="HtmlTags"/>
       <TextObject Name="Text356" Left="25.35" Top="657.5" Width="750.33" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[TCMDischarge.AdministrativeDischarge_Explain]" VertAlign="Center" Font="Arial, 9pt"/>
     </DataBand>
-    <DataBand Name="Data2" Top="812.24" Width="778.3" Height="18.9" DataSource="TCMDischargeFollowUp">
+    <DataBand Name="Data2" Top="810.7" Width="778.3" Height="18.9" DataSource="TCMDischargeFollowUp">
       <TableObject Name="Table3" Left="4" Width="771.15" Height="18.9">
         <TableColumn Name="Column8" Width="181.44"/>
         <TableColumn Name="Column9" Width="122.88"/>
@@ -253,7 +254,7 @@
           <TableCell Name="Cell12" Border.Lines="All" Text="[TCMDischargeFollowUp.NextAppt]" HorzAlign="Center" Font="Arial, 9pt"/>
         </TableRow>
       </TableObject>
-      <DataHeaderBand Name="DataHeader1" Top="751.69" Width="778.3" Height="56.7">
+      <DataHeaderBand Name="DataHeader1" Top="750.67" Width="778.3" Height="56.7">
         <TextObject Name="Text357" Top="3" Width="774.9" Height="30.24" Text="&lt;b&gt;&lt;u&gt;Follow-up/Aftercare Plan&lt;/u&gt;&lt;/b&gt; (Recommended support systems and services that will support continued treatment, recovery and well-being):" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
         <TableObject Name="Table2" Left="4" Top="37.8" Width="771.15" Height="18.9">
           <TableColumn Name="Column3" Width="181.44"/>
@@ -271,16 +272,16 @@
         </TableObject>
       </DataHeaderBand>
     </DataBand>
-    <DataBand Name="Data3" Top="834.98" Width="778.3" Height="177.42">
+    <DataBand Name="Data3" Top="832.93" Width="778.3" Height="177.42">
       <TextObject Name="Text289" Left="623.7" Top="130.79" Width="120.96" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[TCMDischarge.SupervisorSignatureDate]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
-      <PictureObject Name="Picture3" Left="47.25" Top="18" Width="95" Height="63.45" DataColumn="Signatures.facilitatorSignature"/>
+      <PictureObject Name="Picture3" Left="47.25" Top="20" Width="95" Height="63.45" DataColumn="Signatures.facilitatorSignature"/>
       <TextObject Name="Text290" Left="28.35" Top="77.7" Width="134.19" Height="18.9" CanGrow="true" Text="Staff Signature" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 8pt"/>
       <LineObject Name="Line15" Left="164.65" Top="74.25" Width="-136.08"/>
       <TextObject Name="Text291" Left="623.7" Top="77.87" Width="124.74" Height="18.9" CanGrow="true" Text="Date" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
       <TextObject Name="Text292" Left="623.7" Top="55.57" Width="120.96" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[TCMDischarge.StaffSignatureDate]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
       <TextObject Name="Text324" Left="198.45" Top="55.57" Width="243.81" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[CaseManagers.Name]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
       <TextObject Name="Text325" Left="198.45" Top="130.75" Width="243.81" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[TCMSupervisors.Name]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
-      <PictureObject Name="Picture4" Left="47.25" Top="92.95" Width="95" Height="63.45" DataColumn="Signatures.supervisorSignature"/>
+      <PictureObject Name="Picture4" Left="47.25" Top="94.95" Width="95" Height="63.45" DataColumn="Signatures.supervisorSignature"/>
       <TextObject Name="Text287" Left="28.35" Top="152.33" Width="134.19" Height="18.9" CanGrow="true" Text="Supervisor Signature" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 8pt"/>
       <LineObject Name="Line13" Left="164.65" Top="149.85" Width="-136.08"/>
       <TextObject Name="Text288" Left="623.7" Top="152.33" Width="124.74" Height="18.9" CanGrow="true" Text="Date" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
@@ -288,7 +289,7 @@
       <TextObject Name="Text359" Left="198.45" Top="152.2" Width="238.14" Height="18.9" CanGrow="true" Text="Supervisor Name" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
       <TextObject Name="Text360" Left="481.95" Top="55.7" Width="102.06" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[CaseManagers.Credentials]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
       <TextObject Name="Text361" Left="481.95" Top="77.7" Width="105.84" Height="18.9" CanGrow="true" Text="Credentials" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
-      <TextObject Name="Text362" Left="481.95" Top="130.85" Width="102.06" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[TCMSupervisors.Code]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text362" Left="481.95" Top="130.85" Width="102.06" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[TCMSupervisors.Credentials]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
       <TextObject Name="Text363" Left="481.95" Top="152.33" Width="105.84" Height="18.9" CanGrow="true" Text="Credentials" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
     </DataBand>
   </ReportPage>

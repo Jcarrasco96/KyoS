@@ -1,4 +1,4 @@
-﻿@model IEnumerable<KyoS.Web.Data.Entities.WeekEntity>
+﻿@model KyoS.Web.Models.BillingReportViewModel
 @{
     ViewData["Title"] = "PSR Notes";
 }
@@ -40,13 +40,39 @@
             </strong>
         </div>
     }
+    @if (ViewBag.MtpExpired == "CH")
+    {
+        <div class="alert alert-block alert-danger">
+            <button type="button" class="close" data-dismiss="alert">
+                <i class="icon-remove"></i>
+            </button>
+            <i class="icon-ok danger"></i>
+            <strong class="danger">
+                It is not possible to change the service time, there is another service at that time
+            </strong>
+        </div>
+    }
 </div>
 
-<div class="col-md-push-12">
-    <form asp-action="ChangeNotes" enctype="multipart/form-data">
-      
+<div class="row">
+    <form asp-action="Index" enctype="multipart/form-data">
+        <div class="form-group col-md-3">
+            <label class="control-label">Date Range</label>&nbsp;*<br />
+            <input type="text"
+                   asp-for="DateIterval"
+                   data-range="true"
+                   data-multiple-dates-separator=" - "
+                   data-language="en"
+                   class="form-control datepicker-here" />
+        </div>
+        <div class="col-md-12">
+            <button type="submit" class="btn btn-success" title="Filter"><i class="glyphicon glyphicon-filter"></i> Filter</button>
+        </div>
     </form>
-    <div id="view-notes">
+    <div class="col-md-12">
+        <hr />
+    </div>
+    <div class="col-md-12" id="view-notes">
         @await Html.PartialAsync("_ViewNotes", Model)
     </div>
 </div>

@@ -93,7 +93,7 @@
                             </td>
                             <td align="right">
 
-                                @if (User.IsInRole("Facilitator"))
+                                @if (User.IsInRole("Facilitator") || User.IsInRole("Documents_Assistant"))
                                 {
                                     <a asp-action="Create" asp-controller="FarsForms" asp-route-id="@item.Id" asp-route-origin="2" class="btn btn-primary" title="Create FARS"><i class="glyphicon glyphicon-plus"></i></a>
                                 }

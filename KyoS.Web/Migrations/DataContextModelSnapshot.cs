@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
+#nullable disable
+
 namespace KyoS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
@@ -15,16 +17,18 @@ namespace KyoS.Web.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .UseIdentityColumns()
-                .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.1");
+                .HasAnnotation("ProductVersion", "8.0.1")
+                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.ActivityEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
@@ -76,8 +80,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
@@ -143,8 +148,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(18,2)");
@@ -193,8 +199,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(18,2)");
@@ -220,6 +227,12 @@ namespace KyoS.Web.Migrations
                     b.Property<int>("Units")
                         .HasColumnType("int");
 
+                    b.Property<int>("UnitsMH")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UnitsTCM")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.ToTable("BillDms");
@@ -229,8 +242,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(18,2)");
@@ -255,8 +269,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<bool>("AReferral")
                         .HasColumnType("bit");
@@ -666,6 +681,9 @@ namespace KyoS.Web.Migrations
                     b.Property<string>("Outcome")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("PayStubId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime?>("PaymentDate")
                         .HasColumnType("datetime2");
 
@@ -871,6 +889,8 @@ namespace KyoS.Web.Migrations
 
                     b.HasIndex("DocumentsAssistantId");
 
+                    b.HasIndex("PayStubId");
+
                     b.HasIndex("SupervisorId");
 
                     b.ToTable("Bio");
@@ -880,8 +900,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<bool>("AReferral")
                         .HasColumnType("bit");
@@ -1462,8 +1483,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int?>("ClientId")
                         .HasColumnType("int");
@@ -1486,8 +1508,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("AdmissionedFor")
                         .HasColumnType("nvarchar(max)");
@@ -1717,6 +1740,9 @@ namespace KyoS.Web.Migrations
                     b.Property<bool>("Oriented_FullOriented")
                         .HasColumnType("bit");
 
+                    b.Property<int?>("PayStubId")
+                        .HasColumnType("int");
+
                     b.Property<string>("PresentingProblem")
                         .HasColumnType("nvarchar(max)");
 
@@ -1862,37 +1888,166 @@ namespace KyoS.Web.Migrations
 
                     b.HasIndex("DocumentsAssistantId");
 
+                    b.HasIndex("PayStubId");
+
                     b.HasIndex("SupervisorId");
 
                     b.ToTable("Brief");
+                });
+
+            modelBuilder.Entity("KyoS.Web.Data.Entities.CaseManagerCertificationEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CertificateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CertificationNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("CourseId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("ExpirationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("LastModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("TCMId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CourseId");
+
+                    b.HasIndex("TCMId");
+
+                    b.ToTable("CaseManagerCertifications");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.CaseMannagerEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AccountNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("AccountType")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("AssignedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CAQH")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("City")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("ClinicId")
                         .HasColumnType("int");
 
+                    b.Property<string>("CompanyEIN")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CompanyName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CredentialExpirationDate")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Credentials")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("DEALicense")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DateOfBirth")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FinancialInstitutionsName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Gender")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("HiringDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("LastModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LinkedUser")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("MedicaidProviderID")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MedicareProviderID")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MiddleName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<decimal>("Money")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("NPI")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("PH")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PaymentMethod")
+                        .HasColumnType("int");
 
                     b.Property<string>("Phone")
                         .HasColumnType("nvarchar(max)");
@@ -1906,7 +2061,16 @@ namespace KyoS.Web.Migrations
                     b.Property<string>("RaterFMHCertification")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Routing")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SSN")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("SignaturePath")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("State")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Status")
@@ -1914,6 +2078,9 @@ namespace KyoS.Web.Migrations
 
                     b.Property<int?>("TCMSupervisorId")
                         .HasColumnType("int");
+
+                    b.Property<string>("ZipCode")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -1931,8 +2098,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int?>("ClientId")
                         .HasColumnType("int");
@@ -1990,8 +2158,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -2006,8 +2175,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("AdmisionDate")
                         .HasColumnType("datetime2");
@@ -2045,6 +2215,9 @@ namespace KyoS.Web.Migrations
                     b.Property<int?>("DoctorId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("DocumentsAssistantId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
 
@@ -2053,6 +2226,11 @@ namespace KyoS.Web.Migrations
 
                     b.Property<int>("Ethnicity")
                         .HasColumnType("int");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("FullAddress")
                         .HasColumnType("nvarchar(max)");
@@ -2078,6 +2256,11 @@ namespace KyoS.Web.Migrations
                     b.Property<DateTime?>("LastModifiedOn")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
                     b.Property<int?>("LegalGuardianId")
                         .HasColumnType("int");
 
@@ -2091,9 +2274,7 @@ namespace KyoS.Web.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("OnlyTCM")
                         .HasColumnType("bit");
@@ -2161,6 +2342,8 @@ namespace KyoS.Web.Migrations
 
                     b.HasIndex("DoctorId");
 
+                    b.HasIndex("DocumentsAssistantId");
+
                     b.HasIndex("EmergencyContactId");
 
                     b.HasIndex("GroupId");
@@ -2178,14 +2361,24 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("bit");
 
                     b.Property<int?>("ClientId")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("DateIdentify")
+                        .HasColumnType("datetime2");
+
                     b.Property<int?>("DiagnosticId")
                         .HasColumnType("int");
+
+                    b.Property<string>("Prescriber")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("Principal")
                         .HasColumnType("bit");
@@ -2203,8 +2396,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<bool>("Active")
                         .HasColumnType("bit");
@@ -2230,7 +2424,25 @@ namespace KyoS.Web.Migrations
                     b.Property<int>("DurationTime")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("EffectiveDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("EndCoverageDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("ExpiredDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<int?>("HealthInsuranceId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("InsuranceCoverage")
+                        .HasColumnType("int");
+
+                    b.Property<int>("InsurancePlan")
+                        .HasColumnType("int");
+
+                    b.Property<int>("InsuranceType")
                         .HasColumnType("int");
 
                     b.Property<string>("LastModifiedBy")
@@ -2243,6 +2455,9 @@ namespace KyoS.Web.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Units")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UsedUnits")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -2258,8 +2473,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int?>("ClientId")
                         .HasColumnType("int");
@@ -2289,8 +2505,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
@@ -2328,7 +2545,31 @@ namespace KyoS.Web.Migrations
                     b.Property<string>("CodePSRTherapy")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Company_AccountNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Company_Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Company_Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Company_Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Company_Phone")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Company_Routing")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Company_Zelle")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("FaxNo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Initials")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LogoPath")
@@ -2371,12 +2612,60 @@ namespace KyoS.Web.Migrations
                     b.ToTable("Clinics");
                 });
 
+            modelBuilder.Entity("KyoS.Web.Data.Entities.CourseEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("ClinicId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("LastModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("Role")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ValidPeriod")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClinicId");
+
+                    b.ToTable("Courses");
+                });
+
             modelBuilder.Entity("KyoS.Web.Data.Entities.DailySessionEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
@@ -2398,8 +2687,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Code")
                         .IsRequired()
@@ -2430,17 +2720,27 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Code")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DateIdentify")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("IdClient")
                         .HasColumnType("int");
+
+                    b.Property<string>("Prescriber")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("Principal")
                         .HasColumnType("bit");
@@ -2457,8 +2757,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<bool>("Administrative")
                         .HasColumnType("bit");
@@ -2635,8 +2936,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
@@ -2681,12 +2983,61 @@ namespace KyoS.Web.Migrations
                     b.ToTable("Doctors");
                 });
 
+            modelBuilder.Entity("KyoS.Web.Data.Entities.DocumentAssistantCertificationEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CertificateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CertificationNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("CourseId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("DocumentAssistantId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("ExpirationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("LastModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CourseId");
+
+                    b.HasIndex("DocumentAssistantId");
+
+                    b.ToTable("DocumentAssistantCertifications");
+                });
+
             modelBuilder.Entity("KyoS.Web.Data.Entities.DocumentDiagnosticEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
@@ -2720,8 +3071,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int?>("ClientId")
                         .HasColumnType("int");
@@ -2758,8 +3110,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
@@ -2788,8 +3141,27 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AccountNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("AccountType")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("AssignedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CAQH")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("City")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("ClinicId")
                         .HasColumnType("int");
@@ -2797,10 +3169,73 @@ namespace KyoS.Web.Migrations
                     b.Property<string>("Code")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("CompanyEIN")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CompanyName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CredentialExpirationDate")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Credentials")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DEALicense")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DateOfBirth")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FinancialInstitutionsName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Firm")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Gender")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("HiringDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("LastModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("LinkedUser")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MedicaidProviderID")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MedicareProviderID")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MiddleName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Money")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("NPI")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
@@ -2808,13 +3243,37 @@ namespace KyoS.Web.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<string>("PH")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PaymentMethod")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Phone")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("RaterEducation")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("RaterFMHCertification")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Routing")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SSN")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("SignaturePath")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("State")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ZipCode")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -2827,12 +3286,95 @@ namespace KyoS.Web.Migrations
                     b.ToTable("DocumentsAssistant");
                 });
 
+            modelBuilder.Entity("KyoS.Web.Data.Entities.EOBDetailsEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("DateService")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("EOBId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IdCLient")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IdTCMNotes")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IdWorkddayClient")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("MedicaidBill")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("NameClient")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("PaidDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("ServiceAgency")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StatusBill")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Unit")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EOBId");
+
+                    b.ToTable("EOBDetails");
+                });
+
+            modelBuilder.Entity("KyoS.Web.Data.Entities.EOBEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("DateBill")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateBillClose")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateBillPayment")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("StatusBill")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Units")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("EOBs");
+                });
+
             modelBuilder.Entity("KyoS.Web.Data.Entities.EligibilityEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("AdmissionedFor")
                         .HasColumnType("nvarchar(max)");
@@ -2878,8 +3420,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
@@ -2930,12 +3473,79 @@ namespace KyoS.Web.Migrations
                     b.ToTable("EmergencyContacts");
                 });
 
+            modelBuilder.Entity("KyoS.Web.Data.Entities.FacilitatorCertificationEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CertificateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CertificationNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("CourseId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("ExpirationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("FacilitatorId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("LastModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CourseId");
+
+                    b.HasIndex("FacilitatorId");
+
+                    b.ToTable("FacilitatorCertifications");
+                });
+
             modelBuilder.Entity("KyoS.Web.Data.Entities.FacilitatorEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AccountNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("AccountType")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("AssignedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CAQH")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("City")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("ClinicId")
                         .HasColumnType("int");
@@ -2943,7 +3553,70 @@ namespace KyoS.Web.Migrations
                     b.Property<string>("Codigo")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("CompanyEIN")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CompanyName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CredentialExpirationDate")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Credentials")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DEALicense")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DateOfBirth")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FinancialInstitutionsName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Gender")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("HiringDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("LastModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("LinkedUser")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MedicaidProviderID")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MedicareProviderID")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MiddleName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Money")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("NPI")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
@@ -2951,17 +3624,38 @@ namespace KyoS.Web.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<string>("PH")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PaymentMethod")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Phone")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("RaterEducation")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("RaterFMHCertification")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Routing")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SSN")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("SignaturePath")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("State")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
+
+                    b.Property<string>("ZipCode")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -2977,8 +3671,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("AbilityScale")
                         .HasColumnType("int");
@@ -3085,6 +3780,9 @@ namespace KyoS.Web.Migrations
                     b.Property<int>("MedicalScale")
                         .HasColumnType("int");
 
+                    b.Property<int?>("PayStubId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime?>("PaymentDate")
                         .HasColumnType("datetime2");
 
@@ -3152,6 +3850,8 @@ namespace KyoS.Web.Migrations
 
                     b.HasIndex("ClientId");
 
+                    b.HasIndex("PayStubId");
+
                     b.HasIndex("SupervisorId");
 
                     b.ToTable("FarsForm");
@@ -3161,8 +3861,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<bool>("Adequate")
                         .HasColumnType("bit");
@@ -3278,8 +3979,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int?>("GeneratedNoteId")
                         .HasColumnType("int");
@@ -3306,8 +4008,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int?>("AdendumId")
                         .HasColumnType("int");
@@ -3357,8 +4060,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("AdmissionDate")
                         .HasColumnType("datetime2");
@@ -3398,14 +4102,18 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<bool>("Am")
                         .HasColumnType("bit");
 
                     b.Property<int?>("FacilitatorId")
                         .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("Pm")
                         .HasColumnType("bit");
@@ -3432,8 +4140,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<bool>("Adequated")
                         .HasColumnType("bit");
@@ -3638,8 +4347,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int?>("ActivityId")
                         .HasColumnType("int");
@@ -3651,6 +4361,9 @@ namespace KyoS.Web.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("GroupNote2Id")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Minute")
                         .HasColumnType("int");
 
                     b.Property<int?>("ObjetiveId")
@@ -3676,8 +4389,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<bool>("Anxious")
                         .HasColumnType("bit");
@@ -3835,8 +4549,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int?>("ActivityId")
                         .HasColumnType("int");
@@ -3848,6 +4563,9 @@ namespace KyoS.Web.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("GroupNoteId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Minute")
                         .HasColumnType("int");
 
                     b.Property<int?>("ObjetiveId")
@@ -3873,11 +4591,36 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<bool>("Active")
                         .HasColumnType("bit");
+
+                    b.Property<string>("CPTcode_BIO")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CPTcode_FARS_MH")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CPTcode_Group")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CPTcode_Ind")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CPTcode_MTP")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CPTcode_MTPR")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CPTcode_PSR")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CPTcode_TCM")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("ClinicId")
                         .HasColumnType("int");
@@ -3904,6 +4647,9 @@ namespace KyoS.Web.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("NeedAuthorization")
+                        .HasColumnType("bit");
+
                     b.Property<DateTime>("SignedDate")
                         .HasColumnType("datetime2");
 
@@ -3918,8 +4664,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<bool>("Active")
                         .HasColumnType("bit");
@@ -3942,7 +4689,25 @@ namespace KyoS.Web.Migrations
                     b.Property<int>("DurationTime")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("EffectiveDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("EndCoverageDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("ExpiredDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("IdClient")
+                        .HasColumnType("int");
+
+                    b.Property<int>("InsuranceCoverage")
+                        .HasColumnType("int");
+
+                    b.Property<int>("InsurancePlan")
+                        .HasColumnType("int");
+
+                    b.Property<int>("InsuranceType")
                         .HasColumnType("int");
 
                     b.Property<string>("LastModifiedBy")
@@ -3972,8 +4737,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -4015,8 +4781,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("AdmissionFor")
                         .HasColumnType("nvarchar(max)");
@@ -4092,8 +4859,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<bool>("Anxious")
                         .HasColumnType("bit");
@@ -4162,6 +4930,9 @@ namespace KyoS.Web.Migrations
                     b.Property<bool>("Meticulous")
                         .HasColumnType("bit");
 
+                    b.Property<int>("Minute")
+                        .HasColumnType("int");
+
                     b.Property<string>("ObjectiveData")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -4199,6 +4970,9 @@ namespace KyoS.Web.Migrations
 
                     b.Property<bool>("Psychotic")
                         .HasColumnType("bit");
+
+                    b.Property<int>("RealUnits")
+                        .HasColumnType("int");
 
                     b.Property<bool>("Regressing")
                         .HasColumnType("bit");
@@ -4273,8 +5047,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("AdmissionedFor")
                         .HasColumnType("nvarchar(max)");
@@ -4306,8 +5081,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("AdmissionedFor")
                         .HasColumnType("nvarchar(max)");
@@ -4339,8 +5115,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("AdmissionedFor")
                         .HasColumnType("nvarchar(max)");
@@ -4390,8 +5167,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("AdmissionedFor")
                         .HasColumnType("nvarchar(max)");
@@ -4453,8 +5231,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("AdmissionedFor")
                         .HasColumnType("nvarchar(max)");
@@ -4540,8 +5319,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("AdmissionedFor")
                         .HasColumnType("nvarchar(max)");
@@ -4576,8 +5356,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("AdmissionedFor")
                         .HasColumnType("nvarchar(max)");
@@ -4630,8 +5411,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("AdmissionedFor")
                         .HasColumnType("nvarchar(max)");
@@ -4693,8 +5475,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("AdmissionedFor")
                         .HasColumnType("nvarchar(max)");
@@ -4729,8 +5512,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("AdmissionedFor")
                         .HasColumnType("nvarchar(max)");
@@ -4762,8 +5546,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("AdmissionedFor")
                         .HasColumnType("nvarchar(max)");
@@ -4807,8 +5592,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("AddressPhysician")
                         .HasColumnType("nvarchar(max)");
@@ -5185,6 +5971,9 @@ namespace KyoS.Web.Migrations
                     b.Property<bool>("PainfulUrination")
                         .HasColumnType("bit");
 
+                    b.Property<int?>("PayStubId")
+                        .HasColumnType("int");
+
                     b.Property<bool>("PerformingCertainMotions")
                         .HasColumnType("bit");
 
@@ -5286,6 +6075,8 @@ namespace KyoS.Web.Migrations
                     b.HasIndex("Client_FK")
                         .IsUnique();
 
+                    b.HasIndex("PayStubId");
+
                     b.ToTable("IntakeMedicalHistory");
                 });
 
@@ -5293,8 +6084,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("AdmissionedFor")
                         .HasColumnType("nvarchar(max)");
@@ -5322,12 +6114,44 @@ namespace KyoS.Web.Migrations
                     b.ToTable("IntakeNoDuplicateService");
                 });
 
+            modelBuilder.Entity("KyoS.Web.Data.Entities.IntakeNoHarmEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AdmissionedFor")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Client_FK")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("DateSignatureEmployee")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateSignaturePerson")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("Documents")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Client_FK")
+                        .IsUnique();
+
+                    b.ToTable("IntakeNoHarm");
+                });
+
             modelBuilder.Entity("KyoS.Web.Data.Entities.IntakeOrientationChecklistEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<bool>("Access")
                         .HasColumnType("bit");
@@ -5428,8 +6252,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("BehaviorIsStatus")
                         .HasColumnType("int");
@@ -5485,8 +6310,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("AdmissionedFor")
                         .HasColumnType("nvarchar(max)");
@@ -5518,8 +6344,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("AdmissionedFor")
                         .HasColumnType("nvarchar(max)");
@@ -5623,8 +6450,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
@@ -5682,8 +6510,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<bool>("Active")
                         .HasColumnType("bit");
@@ -5838,6 +6667,9 @@ namespace KyoS.Web.Migrations
                     b.Property<string>("PaintWhere")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("PayStubId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime?>("PaymentDate")
                         .HasColumnType("datetime2");
 
@@ -5889,6 +6721,8 @@ namespace KyoS.Web.Migrations
 
                     b.HasIndex("DocumentAssistantId");
 
+                    b.HasIndex("PayStubId");
+
                     b.HasIndex("SupervisorId");
 
                     b.ToTable("MTPs");
@@ -5898,8 +6732,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<bool>("ACopy")
                         .HasColumnType("bit");
@@ -5951,6 +6786,9 @@ namespace KyoS.Web.Migrations
 
                     b.Property<DateTime>("EndTime")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("FacilitatorId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Frecuency")
                         .HasColumnType("nvarchar(max)");
@@ -6040,8 +6878,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int?>("ClinicId")
                         .HasColumnType("int");
@@ -6071,8 +6910,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int?>("ClientId")
                         .HasColumnType("int");
@@ -6123,8 +6963,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime?>("Date")
                         .HasColumnType("datetime2");
@@ -6155,8 +6996,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("DateSign")
                         .HasColumnType("datetime2");
@@ -6186,8 +7028,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int?>("AddendumId")
                         .HasColumnType("int");
@@ -6268,8 +7111,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<bool>("Adequate")
                         .HasColumnType("bit");
@@ -6371,6 +7215,9 @@ namespace KyoS.Web.Migrations
                     b.Property<bool>("Present")
                         .HasColumnType("bit");
 
+                    b.Property<int>("RealUnits")
+                        .HasColumnType("int");
+
                     b.Property<bool>("Regression")
                         .HasColumnType("bit");
 
@@ -6394,6 +7241,9 @@ namespace KyoS.Web.Migrations
 
                     b.Property<int?>("SupervisorId")
                         .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("UnableToDetermine")
                         .HasColumnType("bit");
@@ -6421,8 +7271,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<bool>("AbleToGenerateAlternatives")
                         .HasColumnType("bit");
@@ -6561,12 +7412,58 @@ namespace KyoS.Web.Migrations
                     b.ToTable("NotesP");
                 });
 
+            modelBuilder.Entity("KyoS.Web.Data.Entities.NotePSYEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateService")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("EndTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("InitialTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("LastModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("NamePSY")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClientId");
+
+                    b.ToTable("NotesPSYs");
+                });
+
             modelBuilder.Entity("KyoS.Web.Data.Entities.NoteP_Activity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int?>("ActivityId")
                         .HasColumnType("int");
@@ -6588,6 +7485,9 @@ namespace KyoS.Web.Migrations
 
                     b.Property<bool>("EngagedActive")
                         .HasColumnType("bit");
+
+                    b.Property<int>("Minute")
+                        .HasColumnType("int");
 
                     b.Property<int?>("NotePId")
                         .HasColumnType("int");
@@ -6633,8 +7533,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int?>("ActivityId")
                         .HasColumnType("int");
@@ -6660,8 +7561,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int?>("ClassificationId")
                         .HasColumnType("int");
@@ -6682,8 +7584,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int?>("ActivityId")
                         .HasColumnType("int");
@@ -6694,11 +7597,17 @@ namespace KyoS.Web.Migrations
                     b.Property<string>("AnswerFacilitator")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("Minute")
+                        .HasColumnType("int");
+
                     b.Property<int?>("NoteId")
                         .HasColumnType("int");
 
                     b.Property<int?>("ObjetiveId")
                         .HasColumnType("int");
+
+                    b.Property<bool>("Present")
+                        .HasColumnType("bit");
 
                     b.Property<int?>("SubScheduleId")
                         .HasColumnType("int");
@@ -6720,8 +7629,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("DateOpened")
                         .HasColumnType("datetime2");
@@ -6758,8 +7668,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<bool>("Compliment")
                         .HasColumnType("bit");
@@ -6811,8 +7722,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int?>("ClassificationId")
                         .HasColumnType("int");
@@ -6829,12 +7741,102 @@ namespace KyoS.Web.Migrations
                     b.ToTable("Objetives_Classifications");
                 });
 
+            modelBuilder.Entity("KyoS.Web.Data.Entities.PayStubDetailsEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("ClientName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DateService")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DocumentName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("IdDocuAssisstant")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IdFacilitator")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IdWorkdayClient")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("TCMPayStubId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Unit")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TCMPayStubId");
+
+                    b.ToTable("PayStubDetails");
+                });
+
+            modelBuilder.Entity("KyoS.Web.Data.Entities.PayStubEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("CantClient")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("DatePayStub")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DatePayStubClose")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DatePayStubPayment")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("Doc_AssisstantId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("FacilitatorId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Role")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StatusPayStub")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Units")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Doc_AssisstantId");
+
+                    b.HasIndex("FacilitatorId");
+
+                    b.ToTable("PayStubs");
+                });
+
             modelBuilder.Entity("KyoS.Web.Data.Entities.PlanEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Text")
                         .IsRequired()
@@ -6849,8 +7851,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int?>("ClassificationId")
                         .HasColumnType("int");
@@ -6867,12 +7870,83 @@ namespace KyoS.Web.Migrations
                     b.ToTable("Plans_Classifications");
                 });
 
+            modelBuilder.Entity("KyoS.Web.Data.Entities.PromotionEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("CloseDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Contact")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LinkReferred")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Location")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("OpenDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("Precio")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Promotion")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Room")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Promotions");
+                });
+
+            modelBuilder.Entity("KyoS.Web.Data.Entities.PromotionPhotosEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhotoPath")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("PromotionId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PromotionId");
+
+                    b.ToTable("PromotionPhotos");
+                });
+
             modelBuilder.Entity("KyoS.Web.Data.Entities.PsychiatristEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
@@ -6921,8 +7995,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
@@ -7051,8 +8126,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
@@ -7104,8 +8180,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
@@ -7172,11 +8249,15 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("AdviceIwould")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("ClientId")
+                        .HasColumnType("int");
 
                     b.Property<int>("Client_FK")
                         .HasColumnType("int");
@@ -7234,8 +8315,7 @@ namespace KyoS.Web.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Client_FK")
-                        .IsUnique();
+                    b.HasIndex("ClientId");
 
                     b.HasIndex("DocumentAssisstantId");
 
@@ -7250,8 +8330,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int?>("ClinicId")
                         .HasColumnType("int");
@@ -7294,8 +8375,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<bool>("AvailableCreateNewWorkdays")
                         .HasColumnType("bit");
@@ -7318,6 +8400,9 @@ namespace KyoS.Web.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("DashBoardPrincipal")
+                        .HasColumnType("int");
+
                     b.Property<bool>("DischargeJoinCommission")
                         .HasColumnType("bit");
 
@@ -7332,6 +8417,15 @@ namespace KyoS.Web.Migrations
 
                     b.Property<DateTime?>("LastModifiedOn")
                         .HasColumnType("datetime2");
+
+                    b.Property<bool>("LockTCMNoteForAuth")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("LockTCMNoteForDx")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("LockTCMNoteForOneMonthIdle")
+                        .HasColumnType("bit");
 
                     b.Property<bool>("LockTCMNoteForUnits")
                         .HasColumnType("bit");
@@ -7348,6 +8442,18 @@ namespace KyoS.Web.Migrations
                     b.Property<bool>("MentalHealthClinic")
                         .HasColumnType("bit");
 
+                    b.Property<decimal>("PriceGroup")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("PriceInd")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("PricePSR")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("PriceTCM")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<bool>("SupervisorEdit")
                         .HasColumnType("bit");
 
@@ -7358,6 +8464,9 @@ namespace KyoS.Web.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("TCMInitialTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("TCMLockCreateNote")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("TCMPayStub_Filtro")
@@ -7384,8 +8493,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
@@ -7415,12 +8525,79 @@ namespace KyoS.Web.Migrations
                     b.ToTable("SubSchedule");
                 });
 
+            modelBuilder.Entity("KyoS.Web.Data.Entities.SupervisorCertificationEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CertificateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CertificationNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("CourseId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("ExpirationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("LastModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("SupervisorId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CourseId");
+
+                    b.HasIndex("SupervisorId");
+
+                    b.ToTable("SupervisorCertifications");
+                });
+
             modelBuilder.Entity("KyoS.Web.Data.Entities.SupervisorEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AccountNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("AccountType")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("AssignedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CAQH")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("City")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("ClinicId")
                         .HasColumnType("int");
@@ -7428,10 +8605,73 @@ namespace KyoS.Web.Migrations
                     b.Property<string>("Code")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("CompanyEIN")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CompanyName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CredentialExpirationDate")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Credentials")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DEALicense")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DateOfBirth")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FinancialInstitutionsName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Firm")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Gender")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("HiringDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("LastModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("LinkedUser")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MedicaidProviderID")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MedicareProviderID")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MiddleName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Money")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("NPI")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
@@ -7439,17 +8679,38 @@ namespace KyoS.Web.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<string>("PH")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PaymentMethod")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Phone")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("RaterEducation")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("RaterFMHCertification")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Routing")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SSN")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("SignaturePath")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("State")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
+
+                    b.Property<string>("ZipCode")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -7465,8 +8726,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("Approved")
                         .HasColumnType("int");
@@ -7520,8 +8782,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("Age")
                         .HasColumnType("int");
@@ -7564,8 +8827,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<bool>("AHomeVisit")
                         .HasColumnType("bit");
@@ -8706,8 +9970,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
@@ -8744,8 +10009,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("Age")
                         .HasColumnType("int");
@@ -8785,8 +10051,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Agency")
                         .HasColumnType("nvarchar(max)");
@@ -8823,8 +10090,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<bool>("Client")
                         .HasColumnType("bit");
@@ -8864,8 +10132,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
@@ -8908,8 +10177,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
@@ -8949,8 +10219,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
@@ -8958,8 +10229,8 @@ namespace KyoS.Web.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("Date")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Hospital")
                         .HasColumnType("nvarchar(max)");
@@ -8986,12 +10257,1139 @@ namespace KyoS.Web.Migrations
                     b.ToTable("TCMAssessmentSurgery");
                 });
 
+            modelBuilder.Entity("KyoS.Web.Data.Entities.TCMAssessmentTempEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("AHomeVisit")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("AHomeVisitOn")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("AbuseViolence")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("AcademicEelementary")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("AcademicHigh")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("AcademicMiddle")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("AcademicPreSchool")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("AdditionalInformation")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AdditionalInformationMigration")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Allergy")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("AllergySpecify")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AnyOther")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Appliances")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("Approved")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("AreAllImmunization")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("AreAllImmunizationExplain")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("AreChild")
+                        .HasColumnType("int");
+
+                    b.Property<string>("AreChildAddress")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AreChildCity")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AreChildName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AreChildPhone")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("AreYouPhysician")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("AreYouPhysicianSpecify")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("AttendanceEelementary")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("AttendanceHigh")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("AttendanceMiddle")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("AttendancePreSchool")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("BathingAssistive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("BathingIndependent")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("BathingPhysical")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("BathingSupervision")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("BathingTotal")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Bathtub")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("BehaviorEelementary")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("BehaviorHigh")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("BehaviorMiddle")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("BehaviorPreSchool")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Briefly")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("CantDoItAtAll")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Caregiver")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("CaseManagerWas")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("CaseManagerWasDueTo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ChildFather")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ChildMother")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Citizen")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("ClientInput")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ColonCancer")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CongredatedHowOften")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CongredatedProvider")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("CongredatedReceive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("ContinueToLive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("ContinueToLiveOnly")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("CookingAssistive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("CookingIndependent")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("CookingPhysical")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("CookingSupervision")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("CookingTotal")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("CountryOfBirth")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CurrentEmployer")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DateAssessment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DateMostRecent")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DateOfOnSetPresentingProblem")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DateSignatureCaseManager")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DateSignatureTCMSupervisor")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DentalExam")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DescribeAnyOther")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DescribeAnyRisk")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DescribeAnySchool")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DescribeClientCultural")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DescribeClientEducation")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DescribeClientLiving")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DescribeClientRelationship")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DescribeNeighborhood")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DescribeOtherNeedConcerns")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Divorced")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("DoesAggressiveness")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("DoesAnxiety")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("DoesClientBasicNeed")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("DoesClientCurrently")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("DoesClientCurrentlyExplain")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("DoesClientFeel")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("DoesClientFeelExplain")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("DoesClientNeedAssistance")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("DoesClientNeedAssistanceEducational")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("DoesClientNeedAssistanceEducationalExplain")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DoesClientNeedAssistanceExplain")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("DoesClientTranspotation")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("DoesClientTranspotationExplain")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("DoesDelusions")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("DoesDepression")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("DoesFearfulness")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("DoesHallucinations")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("DoesHelplessness")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("DoesHopelessness")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("DoesHyperactivity")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("DoesImpulsivity")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("DoesIrritability")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("DoesLoss")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("DoesLow")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("DoesMood")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("DoesNegative")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("DoesNervousness")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("DoesNotKnow")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("DoesObsessive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("DoesPanic")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("DoesParanoia")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("DoesPoor")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("DoesSadness")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("DoesSelfNeglect")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("DoesSheUnderstand")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("DoesSleep")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("DoesTheClientFeel")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("DoesWithdrawal")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("DoingAssistive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("DoingIndependent")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("DoingPhysical")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("DoingSupervision")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("DoingTotal")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("DressingAssistive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("DressingIndependent")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("DressingPhysical")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("DressingSupervision")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("DressingTotal")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Drives")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Electrical")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("EmployerAddress")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("EmployerCityState")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("EmployerContactPerson")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("EmployerPhone")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("EmploymentStatus")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("ExcessiveCluter")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("FailToEelementary")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("FailToHigh")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("FailToMiddle")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("FailToPreSchool")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Family")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("FeedingAssistive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("FeedingIndependent")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("FeedingPhysical")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("FeedingSupervision")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("FeedingTotal")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("FireHazards")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Flooring")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("FoodPantryHowOften")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FoodPantryProvider")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("FoodPantryReceive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("FoodStampHowOften")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FoodStampProvider")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("FoodStampReceive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("FriendOrFamily")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("GroomingAssistive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("GroomingIndependent")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("GroomingPhysical")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("GroomingSupervision")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("GroomingTotal")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("HasClientEverArrest")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("HasClientEverArrestLastTime")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("HasClientEverArrestManyTime")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("HasClientUndergone")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("HasDifficultySeeingLevel")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("HasDifficultySeeingObjetive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("HasNoImpairment")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("HasNoUsefull")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("HasTheClient")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("HaveYouEverBeenToAny")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("HaveYouEverUsedAlcohol")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("HearingDifficulty")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("HearingImpairment")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("HearingNotDetermined")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Hears")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("HomeDeliveredHowOften")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("HomeDeliveredProvider")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("HomeDeliveredReceive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Homicidal")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("HowActive")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("HowDoesByFollowing")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("HowDoesCalendar")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("HowDoesDaily")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("HowDoesElectronic")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("HowDoesFamily")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("HowDoesKeeping")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("HowDoesOther")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("HowDoesOtherExplain")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("HowDoesPill")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("HowDoesRNHHA")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("HowManyTimes")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("HowWeelEnable")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("HowWeelWithALot")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("HowWeelWithNo")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("HowWeelWithSome")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("HoweverOn")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("HoweverVisitScheduler")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("IfThereAnyHousing")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IfYesWereCriminal")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("IfYesWhatArea")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("ImmigrationOther")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ImmigrationOtherExplain")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Insect")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsClientCurrently")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsClientCurrentlyEmployed")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsClientCurrentlySchool")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("IsClientCurrentlySchoolExplain")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsClientInterested")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsClientInvolved")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("IsClientInvolvedSpecify")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("IsClientPregnancy")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsSheReceiving")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsTheClientAbleWork")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsTheClientAbleWorkLimitation")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsTheClientHavingFinancial")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("IsTheClientHavingFinancialExplain")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsThereAnyAide")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("IsThereAnyAideName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("IsThereAnyAidePhone")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsThereAnyCurrentLegalProcess")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Issues")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LabWorks")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("LearningEelementary")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("LearningHigh")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("LearningMiddle")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("LearningPreSchool")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("LegalDecisionAdLitem")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LegalDecisionAddress")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("LegalDecisionAttomey")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LegalDecisionCityStateZip")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("LegalDecisionLegal")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LegalDecisionName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("LegalDecisionNone")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("LegalDecisionOther")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LegalDecisionOtherExplain")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("LegalDecisionParent")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LegalDecisionPhone")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ListAnyNeed")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ListClientCurrentPotencialStrngths")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ListClientCurrentPotencialWeakness")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("MakingAssistive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("MakingIndependent")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("MakingPhysical")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("MakingSupervision")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("MakingTotal")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Mammogram")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Married")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("MayWe")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("MayWeLeaveSend")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("MentalHealth")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MonthlyFamilyIncome")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("NeedALot")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("NeedNoHelp")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("NeedOfSpecial")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("NeedOfSpecialSpecify")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("NeedSome")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("NeverMarried")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("NoAirCondition")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("NoHearing")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("NoTelephone")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("NoUseful")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("NotHot")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("NumberOfBedrooms")
+                        .HasColumnType("int");
+
+                    b.Property<int>("NumberOfPersonLiving")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Other")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("OtherExplain")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OtherFinancial")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OtherHowOften")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OtherProvider")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("OtherReceive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("OtherReceiveExplain")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Outcome")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PapAndHPV")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("ParticipationEelementary")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("ParticipationHigh")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("ParticipationMiddle")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("ParticipationPreSchool")
+                        .HasColumnType("bit");
+
+                    b.Property<float>("PersonPorBedrooms")
+                        .HasColumnType("real");
+
+                    b.Property<string>("PharmacyPhone")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhysicalExam")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhysicalOther")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Poor")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("PreferToLive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("PresentingProblemPrevious")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("PresentingProblems")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("ProbationOfficer")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ProbationOfficerName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ProbationOfficerPhone")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Provider")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("RecommendedActivities")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("RecommendedBasicNeed")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("RecommendedEconomic")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("RecommendedHousing")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("RecommendedLegalImmigration")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("RecommendedMentalHealth")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("RecommendedOther")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("RecommendedOtherSpecify")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("RecommendedPhysicalHealth")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("RecommendedRecreational")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("RecommendedSchool")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("RecommendedTransportation")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("RecommendedVocation")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Referring")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("RelationshipEelementary")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("RelationshipHigh")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("RelationshipMiddle")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("RelationshipPreSchool")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Resident")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("ResidentStatus")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Review")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("School")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("SchoolAddress")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SchoolCityState")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SchoolDistrict")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SchoolGrade")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SchoolName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("SchoolProgramEBD")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("SchoolProgramESE")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("SchoolProgramESOL")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("SchoolProgramHHIP")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("SchoolProgramOther")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("SchoolProgramRegular")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("SchoolProgramTeacherName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SchoolProgramTeacherPhone")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Separated")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("ShoppingAssistive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("ShoppingIndependent")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("ShoppingPhysical")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("ShoppingSupervision")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("ShoppingTotal")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Staff")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Stairs")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Structural")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Suicidal")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("TakesABus")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("TransferringAssistive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("TransferringIndependent")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("TransferringPhysical")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("TransferringSupervision")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("TransferringTotal")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("TransportationOther")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("TransportationOtherExplain")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Treating")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Tripping")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("TypeOfAssessmentAnnual")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("TypeOfAssessmentInitial")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("TypeOfAssessmentOther")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("TypeOfAssessmentOtherExplain")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("TypeOfAssessmentSignificant")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Unsanitary")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Url")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("VisionImpairment")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("VisionNotDetermined")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("VocationalEmployment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Walks")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("WhatActivityThings")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("WhatIsCollegeGraduated")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("WhatIsElementary")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("WhatIsGED")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("WhatIsGraduated")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("WhatIsGraduatedDegree")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("WhatIsHighSchool")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("WhatIsMiddle")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("WhatIsNoSchool")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("WhatIsSomeCollege")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("WhatIsSomeHigh")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("WhatIsTheMainSource")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("WhatIsTradeSchool")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("WhatIsUnknown")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("WhatPharmacy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("WhenWas")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("WouldLikeObtainJob")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("WouldLikeObtainJobNotAtThisTime")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("YearEnteredUsa")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TCMAssessmentTemp");
+                });
+
             modelBuilder.Entity("KyoS.Web.Data.Entities.TCMClientEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("CaseNumber")
                         .IsRequired()
@@ -9043,8 +11441,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int?>("ClinicId")
                         .HasColumnType("int");
@@ -9081,8 +11480,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<bool>("AdministrativeDischarge")
                         .HasColumnType("bit");
@@ -9167,8 +11567,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Address_Location")
                         .HasColumnType("nvarchar(max)");
@@ -9211,8 +11612,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("CodeService")
                         .HasColumnType("nvarchar(max)");
@@ -9249,8 +11651,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Code")
                         .HasColumnType("nvarchar(max)");
@@ -9311,8 +11714,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("AbilityScale")
                         .HasColumnType("int");
@@ -9471,8 +11875,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("AdmissionedFor")
                         .HasColumnType("nvarchar(max)");
@@ -9516,8 +11921,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("AdmissionedFor")
                         .HasColumnType("nvarchar(max)");
@@ -9567,8 +11973,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("AdmissionedFor")
                         .HasColumnType("nvarchar(max)");
@@ -9641,11 +12048,18 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("bit");
 
                     b.Property<string>("AdmissionedFor")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("AppendixType")
+                        .HasColumnType("int");
 
                     b.Property<int>("Approved")
                         .HasColumnType("int");
@@ -9657,6 +12071,9 @@ namespace KyoS.Web.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateExpired")
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("HasAMental2")
@@ -9710,6 +12127,9 @@ namespace KyoS.Web.Migrations
                     b.Property<DateTime>("SupervisorSignatureDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int?>("TcmClientId")
+                        .HasColumnType("int");
+
                     b.Property<int>("TcmClient_FK")
                         .HasColumnType("int");
 
@@ -9718,8 +12138,7 @@ namespace KyoS.Web.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TcmClient_FK")
-                        .IsUnique();
+                    b.HasIndex("TcmClientId");
 
                     b.HasIndex("TcmSupervisorId");
 
@@ -9730,8 +12149,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("AdmissionedFor")
                         .HasColumnType("nvarchar(max)");
@@ -9793,8 +12213,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("AdmissionedFor")
                         .HasColumnType("nvarchar(max)");
@@ -9832,8 +12253,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("AdmissionedFor")
                         .HasColumnType("nvarchar(max)");
@@ -9940,8 +12362,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
@@ -9995,6 +12418,12 @@ namespace KyoS.Web.Migrations
                         .HasColumnType("bit");
 
                     b.Property<bool>("HospitalRecord")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("InForm_AllofTheAbove")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("InForm_Electronic")
                         .HasColumnType("bit");
 
                     b.Property<bool>("InForm_Facsimile")
@@ -10065,8 +12494,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("AdmissionedFor")
                         .HasColumnType("nvarchar(max)");
@@ -10131,8 +12561,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("AdmissionedFor")
                         .HasColumnType("nvarchar(max)");
@@ -10179,8 +12610,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("AdmissionedFor")
                         .HasColumnType("nvarchar(max)");
@@ -10266,8 +12698,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("AdmissionedFor")
                         .HasColumnType("nvarchar(max)");
@@ -10311,8 +12744,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Agency")
                         .HasColumnType("nvarchar(max)");
@@ -10494,8 +12928,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Activity")
                         .HasColumnType("nvarchar(max)");
@@ -10529,8 +12964,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
@@ -10559,8 +12995,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("AddressPhysician")
                         .HasColumnType("nvarchar(max)");
@@ -11045,8 +13482,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("AdmissionedFor")
                         .HasColumnType("nvarchar(max)");
@@ -11120,8 +13558,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("AdmissionedFor")
                         .HasColumnType("nvarchar(max)");
@@ -11159,8 +13598,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("AdmissionedFor")
                         .HasColumnType("nvarchar(max)");
@@ -11303,8 +13743,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<bool>("Access")
                         .HasColumnType("bit");
@@ -11417,8 +13858,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("AdmissionedFor")
                         .HasColumnType("nvarchar(max)");
@@ -11492,8 +13934,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("AdmissionedFor")
                         .HasColumnType("nvarchar(max)");
@@ -11552,8 +13995,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("AdmissionedFor")
                         .HasColumnType("nvarchar(max)");
@@ -11588,8 +14032,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
@@ -11660,8 +14105,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<bool>("Billable")
                         .HasColumnType("bit");
@@ -11722,8 +14168,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<bool>("Billable")
                         .HasColumnType("bit");
@@ -11776,8 +14223,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime?>("ApprovedDate")
                         .HasColumnType("datetime2");
@@ -11802,6 +14250,9 @@ namespace KyoS.Web.Migrations
 
                     b.Property<bool>("DeniedBill")
                         .HasColumnType("bit");
+
+                    b.Property<int?>("EOBId")
+                        .HasColumnType("int");
 
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("nvarchar(max)");
@@ -11840,6 +14291,8 @@ namespace KyoS.Web.Migrations
 
                     b.HasIndex("BillDmsId");
 
+                    b.HasIndex("EOBId");
+
                     b.HasIndex("PayStubId");
 
                     b.HasIndex("TCMClientId");
@@ -11851,8 +14304,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
@@ -11910,8 +14364,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(18,2)");
@@ -11945,8 +14400,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(18,2)");
@@ -11980,8 +14436,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
@@ -12094,8 +14551,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("Approved")
                         .HasColumnType("int");
@@ -12143,8 +14601,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int?>("ClinicId")
                         .HasColumnType("int");
@@ -12193,8 +14652,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("Approved")
                         .HasColumnType("int");
@@ -12261,8 +14721,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ChangesUpdate")
                         .IsRequired()
@@ -12277,11 +14738,26 @@ namespace KyoS.Web.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime>("DateAccomplished")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateIdentified")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("LastModifiedOn")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("LongTerm")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NeedsIdentified")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
@@ -12308,12 +14784,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
 
-                    b.Property<string>("ChangesUpdate")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
@@ -12324,6 +14797,9 @@ namespace KyoS.Web.Migrations
                     b.Property<DateTime>("DateEndObjective")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool>("Finish")
+                        .HasColumnType("bit");
+
                     b.Property<int>("IdObjective")
                         .HasColumnType("int");
 
@@ -12333,11 +14809,26 @@ namespace KyoS.Web.Migrations
                     b.Property<DateTime?>("LastModifiedOn")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Origin")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Responsible")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("Status")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("TargetDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Task")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("tcmServicePlanReviewDomainId")
                         .HasColumnType("int");
@@ -12356,8 +14847,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("Approved")
                         .HasColumnType("int");
@@ -12387,6 +14879,12 @@ namespace KyoS.Web.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateAssessment")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateCertification")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("DateOpending")
@@ -12441,8 +14939,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int?>("ClinicId")
                         .HasColumnType("int");
@@ -12489,8 +14988,56 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Frecuency")
+                        .HasColumnType("int");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("LastModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int?>("TcmServiceId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Units")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TcmServiceId");
+
+                    b.ToTable("TCMSubServices");
+                });
+
+            modelBuilder.Entity("KyoS.Web.Data.Entities.TCMSubServiceStepEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<bool>("Active")
                         .HasColumnType("bit");
@@ -12515,22 +15062,29 @@ namespace KyoS.Web.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<int?>("TcmServiceId")
+                    b.Property<int>("Orden")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("TcmSubServiceId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Units")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TcmServiceId");
+                    b.HasIndex("TcmSubServiceId");
 
-                    b.ToTable("TCMSubServices");
+                    b.ToTable("TCMSubServiceSteps");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.TCMSupervisionTimeEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int?>("CaseManagerId")
                         .HasColumnType("int");
@@ -12574,17 +15128,90 @@ namespace KyoS.Web.Migrations
                     b.ToTable("TCMSupervisionTimes");
                 });
 
+            modelBuilder.Entity("KyoS.Web.Data.Entities.TCMSupervisorCertificationEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CertificateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CertificationNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("CourseId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("ExpirationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("LastModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("TCMSupervisorId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CourseId");
+
+                    b.HasIndex("TCMSupervisorId");
+
+                    b.ToTable("TCMSupervisorCertifications");
+                });
+
             modelBuilder.Entity("KyoS.Web.Data.Entities.TCMSupervisorEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AccountNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("AccountType")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("AssignedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CAQH")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("City")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("ClinicId")
                         .HasColumnType("int");
 
                     b.Property<string>("Code")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CompanyEIN")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CompanyName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CreatedBy")
@@ -12593,8 +15220,35 @@ namespace KyoS.Web.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("CredentialExpirationDate")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Credentials")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DEALicense")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DateOfBirth")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FinancialInstitutionsName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Firm")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Gender")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("HiringDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("nvarchar(max)");
@@ -12602,7 +15256,25 @@ namespace KyoS.Web.Migrations
                     b.Property<DateTime?>("LastModifiedOn")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("LinkedUser")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MedicaidProviderID")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MedicareProviderID")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MiddleName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Money")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("NPI")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
@@ -12610,17 +15282,38 @@ namespace KyoS.Web.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<string>("PH")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PaymentMethod")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Phone")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("RaterEducation")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("RaterFMHCertification")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Routing")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SSN")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("SignaturePath")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("State")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
+
+                    b.Property<string>("ZipCode")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -12636,8 +15329,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
@@ -12740,8 +15434,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int?>("ClinicId")
                         .HasColumnType("int");
@@ -12778,8 +15473,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int?>("ClinicId")
                         .HasColumnType("int");
@@ -12896,23 +15592,36 @@ namespace KyoS.Web.Migrations
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
-                    b.ToTable("AspNetUsers");
+                    b.ToTable("AspNetUsers", (string)null);
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.WeekEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int?>("ClinicId")
                         .HasColumnType("int");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime>("FinalDate")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("InitDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("LastModifiedOn")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("WeekOfYear")
@@ -12929,10 +15638,23 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("LastModifiedOn")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("Service")
@@ -12952,8 +15674,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<bool>("AM")
                         .HasColumnType("bit");
@@ -13018,8 +15741,9 @@ namespace KyoS.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int?>("BillDmsId")
                         .HasColumnType("int");
@@ -13039,6 +15763,9 @@ namespace KyoS.Web.Migrations
                     b.Property<bool>("DeniedBill")
                         .HasColumnType("bit");
 
+                    b.Property<int?>("EOBId")
+                        .HasColumnType("int");
+
                     b.Property<int?>("FacilitatorId")
                         .HasColumnType("int");
 
@@ -13047,6 +15774,9 @@ namespace KyoS.Web.Migrations
 
                     b.Property<bool>("Hold")
                         .HasColumnType("bit");
+
+                    b.Property<int?>("PayStubId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("PaymentDate")
                         .HasColumnType("datetime2");
@@ -13072,7 +15802,11 @@ namespace KyoS.Web.Migrations
 
                     b.HasIndex("ClientId");
 
+                    b.HasIndex("EOBId");
+
                     b.HasIndex("FacilitatorId");
+
+                    b.HasIndex("PayStubId");
 
                     b.HasIndex("ScheduleId");
 
@@ -13105,15 +15839,16 @@ namespace KyoS.Web.Migrations
                         .HasDatabaseName("RoleNameIndex")
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
-                    b.ToTable("AspNetRoles");
+                    b.ToTable("AspNetRoles", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ClaimType")
                         .HasColumnType("nvarchar(max)");
@@ -13129,15 +15864,16 @@ namespace KyoS.Web.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("AspNetRoleClaims");
+                    b.ToTable("AspNetRoleClaims", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ClaimType")
                         .HasColumnType("nvarchar(max)");
@@ -13153,7 +15889,7 @@ namespace KyoS.Web.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("AspNetUserClaims");
+                    b.ToTable("AspNetUserClaims", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
@@ -13175,7 +15911,7 @@ namespace KyoS.Web.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("AspNetUserLogins");
+                    b.ToTable("AspNetUserLogins", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
@@ -13190,7 +15926,7 @@ namespace KyoS.Web.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("AspNetUserRoles");
+                    b.ToTable("AspNetUserRoles", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -13209,7 +15945,7 @@ namespace KyoS.Web.Migrations
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 
-                    b.ToTable("AspNetUserTokens");
+                    b.ToTable("AspNetUserTokens", (string)null);
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.ActivityEntity", b =>
@@ -13291,6 +16027,10 @@ namespace KyoS.Web.Migrations
                         .WithMany()
                         .HasForeignKey("DocumentsAssistantId");
 
+                    b.HasOne("KyoS.Web.Data.Entities.PayStubEntity", "PayStub")
+                        .WithMany("Bios")
+                        .HasForeignKey("PayStubId");
+
                     b.HasOne("KyoS.Web.Data.Entities.SupervisorEntity", "Supervisor")
                         .WithMany()
                         .HasForeignKey("SupervisorId");
@@ -13298,6 +16038,8 @@ namespace KyoS.Web.Migrations
                     b.Navigation("Client");
 
                     b.Navigation("DocumentsAssistant");
+
+                    b.Navigation("PayStub");
 
                     b.Navigation("Supervisor");
                 });
@@ -13324,6 +16066,10 @@ namespace KyoS.Web.Migrations
                         .WithMany()
                         .HasForeignKey("DocumentsAssistantId");
 
+                    b.HasOne("KyoS.Web.Data.Entities.PayStubEntity", "PayStub")
+                        .WithMany("Brief")
+                        .HasForeignKey("PayStubId");
+
                     b.HasOne("KyoS.Web.Data.Entities.SupervisorEntity", "Supervisor")
                         .WithMany()
                         .HasForeignKey("SupervisorId");
@@ -13332,7 +16078,24 @@ namespace KyoS.Web.Migrations
 
                     b.Navigation("DocumentsAssistant");
 
+                    b.Navigation("PayStub");
+
                     b.Navigation("Supervisor");
+                });
+
+            modelBuilder.Entity("KyoS.Web.Data.Entities.CaseManagerCertificationEntity", b =>
+                {
+                    b.HasOne("KyoS.Web.Data.Entities.CourseEntity", "Course")
+                        .WithMany("TCMCertifications")
+                        .HasForeignKey("CourseId");
+
+                    b.HasOne("KyoS.Web.Data.Entities.CaseMannagerEntity", "TCM")
+                        .WithMany("TCMCertifications")
+                        .HasForeignKey("TCMId");
+
+                    b.Navigation("Course");
+
+                    b.Navigation("TCM");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.CaseMannagerEntity", b =>
@@ -13387,6 +16150,10 @@ namespace KyoS.Web.Migrations
                         .WithMany("Clients")
                         .HasForeignKey("DoctorId");
 
+                    b.HasOne("KyoS.Web.Data.Entities.DocumentsAssistantEntity", "DocumentsAssistant")
+                        .WithMany()
+                        .HasForeignKey("DocumentsAssistantId");
+
                     b.HasOne("KyoS.Web.Data.Entities.EmergencyContactEntity", "EmergencyContact")
                         .WithMany("Clients")
                         .HasForeignKey("EmergencyContactId");
@@ -13411,6 +16178,8 @@ namespace KyoS.Web.Migrations
 
                     b.Navigation("Doctor");
 
+                    b.Navigation("DocumentsAssistant");
+
                     b.Navigation("EmergencyContact");
 
                     b.Navigation("Group");
@@ -13430,7 +16199,7 @@ namespace KyoS.Web.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("KyoS.Web.Data.Entities.DiagnosticEntity", "Diagnostic")
-                        .WithMany()
+                        .WithMany("Client_Diagnostics")
                         .HasForeignKey("DiagnosticId");
 
                     b.Navigation("Client");
@@ -13445,7 +16214,7 @@ namespace KyoS.Web.Migrations
                         .HasForeignKey("ClientId");
 
                     b.HasOne("KyoS.Web.Data.Entities.HealthInsuranceEntity", "HealthInsurance")
-                        .WithMany()
+                        .WithMany("Client_HealthInsurances")
                         .HasForeignKey("HealthInsuranceId");
 
                     b.Navigation("Client");
@@ -13467,6 +16236,15 @@ namespace KyoS.Web.Migrations
                     b.Navigation("Client");
 
                     b.Navigation("Referred");
+                });
+
+            modelBuilder.Entity("KyoS.Web.Data.Entities.CourseEntity", b =>
+                {
+                    b.HasOne("KyoS.Web.Data.Entities.ClinicEntity", "Clinic")
+                        .WithMany("Courses")
+                        .HasForeignKey("ClinicId");
+
+                    b.Navigation("Clinic");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.DailySessionEntity", b =>
@@ -13492,6 +16270,21 @@ namespace KyoS.Web.Migrations
                     b.Navigation("Client");
 
                     b.Navigation("Supervisor");
+                });
+
+            modelBuilder.Entity("KyoS.Web.Data.Entities.DocumentAssistantCertificationEntity", b =>
+                {
+                    b.HasOne("KyoS.Web.Data.Entities.CourseEntity", "Course")
+                        .WithMany("DocumentAssistantCertifications")
+                        .HasForeignKey("CourseId");
+
+                    b.HasOne("KyoS.Web.Data.Entities.DocumentsAssistantEntity", "DocumentAssistant")
+                        .WithMany("DocumentAssistantCertifications")
+                        .HasForeignKey("DocumentAssistantId");
+
+                    b.Navigation("Course");
+
+                    b.Navigation("DocumentAssistant");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.DocumentDiagnosticEntity", b =>
@@ -13522,6 +16315,15 @@ namespace KyoS.Web.Migrations
                     b.Navigation("Clinic");
                 });
 
+            modelBuilder.Entity("KyoS.Web.Data.Entities.EOBDetailsEntity", b =>
+                {
+                    b.HasOne("KyoS.Web.Data.Entities.EOBEntity", "EOB")
+                        .WithMany("EOBDetails")
+                        .HasForeignKey("EOBId");
+
+                    b.Navigation("EOB");
+                });
+
             modelBuilder.Entity("KyoS.Web.Data.Entities.EligibilityEntity", b =>
                 {
                     b.HasOne("KyoS.Web.Data.Entities.ClientEntity", "Client")
@@ -13529,6 +16331,21 @@ namespace KyoS.Web.Migrations
                         .HasForeignKey("ClientId");
 
                     b.Navigation("Client");
+                });
+
+            modelBuilder.Entity("KyoS.Web.Data.Entities.FacilitatorCertificationEntity", b =>
+                {
+                    b.HasOne("KyoS.Web.Data.Entities.CourseEntity", "Course")
+                        .WithMany("FacilitatorCertifications")
+                        .HasForeignKey("CourseId");
+
+                    b.HasOne("KyoS.Web.Data.Entities.FacilitatorEntity", "Facilitator")
+                        .WithMany("FacilitatorCertifications")
+                        .HasForeignKey("FacilitatorId");
+
+                    b.Navigation("Course");
+
+                    b.Navigation("Facilitator");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.FacilitatorEntity", b =>
@@ -13546,11 +16363,17 @@ namespace KyoS.Web.Migrations
                         .WithMany("FarsFormList")
                         .HasForeignKey("ClientId");
 
+                    b.HasOne("KyoS.Web.Data.Entities.PayStubEntity", "PayStub")
+                        .WithMany("Fars")
+                        .HasForeignKey("PayStubId");
+
                     b.HasOne("KyoS.Web.Data.Entities.SupervisorEntity", "Supervisor")
                         .WithMany()
                         .HasForeignKey("SupervisorId");
 
                     b.Navigation("Client");
+
+                    b.Navigation("PayStub");
 
                     b.Navigation("Supervisor");
                 });
@@ -13733,11 +16556,11 @@ namespace KyoS.Web.Migrations
                         .WithMany()
                         .HasForeignKey("clientId");
 
-                    b.Navigation("client");
-
                     b.Navigation("UserAsigned");
 
                     b.Navigation("UserCreatedBy");
+
+                    b.Navigation("client");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.IncidentReportEntity", b =>
@@ -13926,7 +16749,13 @@ namespace KyoS.Web.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("KyoS.Web.Data.Entities.PayStubEntity", "PayStub")
+                        .WithMany("MedicalHistory")
+                        .HasForeignKey("PayStubId");
+
                     b.Navigation("Client");
+
+                    b.Navigation("PayStub");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.IntakeNoDuplicateServiceEntity", b =>
@@ -13934,6 +16763,17 @@ namespace KyoS.Web.Migrations
                     b.HasOne("KyoS.Web.Data.Entities.ClientEntity", "Client")
                         .WithOne("IntakeNoDuplicateService")
                         .HasForeignKey("KyoS.Web.Data.Entities.IntakeNoDuplicateServiceEntity", "Client_FK")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Client");
+                });
+
+            modelBuilder.Entity("KyoS.Web.Data.Entities.IntakeNoHarmEntity", b =>
+                {
+                    b.HasOne("KyoS.Web.Data.Entities.ClientEntity", "Client")
+                        .WithOne("IntakeNoHarm")
+                        .HasForeignKey("KyoS.Web.Data.Entities.IntakeNoHarmEntity", "Client_FK")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -13994,6 +16834,10 @@ namespace KyoS.Web.Migrations
                         .WithMany()
                         .HasForeignKey("DocumentAssistantId");
 
+                    b.HasOne("KyoS.Web.Data.Entities.PayStubEntity", "PayStub")
+                        .WithMany("MTPs")
+                        .HasForeignKey("PayStubId");
+
                     b.HasOne("KyoS.Web.Data.Entities.SupervisorEntity", "Supervisor")
                         .WithMany()
                         .HasForeignKey("SupervisorId");
@@ -14001,6 +16845,8 @@ namespace KyoS.Web.Migrations
                     b.Navigation("Client");
 
                     b.Navigation("DocumentAssistant");
+
+                    b.Navigation("PayStub");
 
                     b.Navigation("Supervisor");
                 });
@@ -14115,9 +16961,9 @@ namespace KyoS.Web.Migrations
 
                     b.Navigation("Incident");
 
-                    b.Navigation("Mtp");
-
                     b.Navigation("MTPReview");
+
+                    b.Navigation("Mtp");
 
                     b.Navigation("Workday_Client");
                 });
@@ -14154,6 +17000,15 @@ namespace KyoS.Web.Migrations
                     b.Navigation("Supervisor");
 
                     b.Navigation("Workday_Cient");
+                });
+
+            modelBuilder.Entity("KyoS.Web.Data.Entities.NotePSYEntity", b =>
+                {
+                    b.HasOne("KyoS.Web.Data.Entities.ClientEntity", "Client")
+                        .WithMany("NotePSY")
+                        .HasForeignKey("ClientId");
+
+                    b.Navigation("Client");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.NoteP_Activity", b =>
@@ -14271,6 +17126,30 @@ namespace KyoS.Web.Migrations
                     b.Navigation("Objetive");
                 });
 
+            modelBuilder.Entity("KyoS.Web.Data.Entities.PayStubDetailsEntity", b =>
+                {
+                    b.HasOne("KyoS.Web.Data.Entities.PayStubEntity", "TCMPayStub")
+                        .WithMany("PayStubDetails")
+                        .HasForeignKey("TCMPayStubId");
+
+                    b.Navigation("TCMPayStub");
+                });
+
+            modelBuilder.Entity("KyoS.Web.Data.Entities.PayStubEntity", b =>
+                {
+                    b.HasOne("KyoS.Web.Data.Entities.DocumentsAssistantEntity", "Doc_Assisstant")
+                        .WithMany()
+                        .HasForeignKey("Doc_AssisstantId");
+
+                    b.HasOne("KyoS.Web.Data.Entities.FacilitatorEntity", "Facilitator")
+                        .WithMany()
+                        .HasForeignKey("FacilitatorId");
+
+                    b.Navigation("Doc_Assisstant");
+
+                    b.Navigation("Facilitator");
+                });
+
             modelBuilder.Entity("KyoS.Web.Data.Entities.Plan_Classification", b =>
                 {
                     b.HasOne("KyoS.Web.Data.Entities.ClassificationEntity", "Classification")
@@ -14285,6 +17164,15 @@ namespace KyoS.Web.Migrations
                     b.Navigation("Classification");
 
                     b.Navigation("Plan");
+                });
+
+            modelBuilder.Entity("KyoS.Web.Data.Entities.PromotionPhotosEntity", b =>
+                {
+                    b.HasOne("KyoS.Web.Data.Entities.PromotionEntity", "Promotion")
+                        .WithMany("Photos")
+                        .HasForeignKey("PromotionId");
+
+                    b.Navigation("Promotion");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.ReferralFormEntity", b =>
@@ -14313,10 +17201,8 @@ namespace KyoS.Web.Migrations
             modelBuilder.Entity("KyoS.Web.Data.Entities.SafetyPlanEntity", b =>
                 {
                     b.HasOne("KyoS.Web.Data.Entities.ClientEntity", "Client")
-                        .WithOne("SafetyPlan")
-                        .HasForeignKey("KyoS.Web.Data.Entities.SafetyPlanEntity", "Client_FK")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("SafetyPlanList")
+                        .HasForeignKey("ClientId");
 
                     b.HasOne("KyoS.Web.Data.Entities.DocumentsAssistantEntity", "DocumentAssisstant")
                         .WithMany()
@@ -14368,6 +17254,21 @@ namespace KyoS.Web.Migrations
                     b.Navigation("Schedule");
                 });
 
+            modelBuilder.Entity("KyoS.Web.Data.Entities.SupervisorCertificationEntity", b =>
+                {
+                    b.HasOne("KyoS.Web.Data.Entities.CourseEntity", "Course")
+                        .WithMany("SupervisorCertifications")
+                        .HasForeignKey("CourseId");
+
+                    b.HasOne("KyoS.Web.Data.Entities.SupervisorEntity", "Supervisor")
+                        .WithMany("SupervisorCertifications")
+                        .HasForeignKey("SupervisorId");
+
+                    b.Navigation("Course");
+
+                    b.Navigation("Supervisor");
+                });
+
             modelBuilder.Entity("KyoS.Web.Data.Entities.SupervisorEntity", b =>
                 {
                     b.HasOne("KyoS.Web.Data.Entities.ClinicEntity", "Clinic")
@@ -14414,9 +17315,9 @@ namespace KyoS.Web.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("TcmClient");
-
                     b.Navigation("TCMSupervisor");
+
+                    b.Navigation("TcmClient");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.TCMAssessmentHospitalEntity", b =>
@@ -14525,9 +17426,9 @@ namespace KyoS.Web.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("TcmServicePlan");
-
                     b.Navigation("TCMSupervisor");
+
+                    b.Navigation("TcmServicePlan");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.TCMDischargeFollowUpEntity", b =>
@@ -14618,10 +17519,8 @@ namespace KyoS.Web.Migrations
             modelBuilder.Entity("KyoS.Web.Data.Entities.TCMIntakeAppendixJEntity", b =>
                 {
                     b.HasOne("KyoS.Web.Data.Entities.TCMClientEntity", "TcmClient")
-                        .WithOne("TcmIntakeAppendixJ")
-                        .HasForeignKey("KyoS.Web.Data.Entities.TCMIntakeAppendixJEntity", "TcmClient_FK")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("TcmIntakeAppendixJ")
+                        .HasForeignKey("TcmClientId");
 
                     b.HasOne("KyoS.Web.Data.Entities.TCMSupervisorEntity", "TcmSupervisor")
                         .WithMany()
@@ -14912,6 +17811,10 @@ namespace KyoS.Web.Migrations
                         .WithMany("TCMNotes")
                         .HasForeignKey("BillDmsId");
 
+                    b.HasOne("KyoS.Web.Data.Entities.EOBEntity", "EOB")
+                        .WithMany("TCMNotes")
+                        .HasForeignKey("EOBId");
+
                     b.HasOne("KyoS.Web.Data.Entities.TCMPayStubEntity", "PayStub")
                         .WithMany("TCMNotes")
                         .HasForeignKey("PayStubId");
@@ -14921,6 +17824,8 @@ namespace KyoS.Web.Migrations
                         .HasForeignKey("TCMClientId");
 
                     b.Navigation("BillDms");
+
+                    b.Navigation("EOB");
 
                     b.Navigation("PayStub");
 
@@ -15001,9 +17906,9 @@ namespace KyoS.Web.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("TcmClient");
-
                     b.Navigation("TCMSupervisor");
+
+                    b.Navigation("TcmClient");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.TCMServicePlanReviewDomainEntity", b =>
@@ -15042,9 +17947,9 @@ namespace KyoS.Web.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("TcmServicePlan");
-
                     b.Navigation("TCMSupervisor");
+
+                    b.Navigation("TcmServicePlan");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.TCMStageEntity", b =>
@@ -15072,6 +17977,15 @@ namespace KyoS.Web.Migrations
                     b.Navigation("TcmService");
                 });
 
+            modelBuilder.Entity("KyoS.Web.Data.Entities.TCMSubServiceStepEntity", b =>
+                {
+                    b.HasOne("KyoS.Web.Data.Entities.TCMSubServiceEntity", "TcmSubService")
+                        .WithMany("TCMSubServiceSteps")
+                        .HasForeignKey("TcmSubServiceId");
+
+                    b.Navigation("TcmSubService");
+                });
+
             modelBuilder.Entity("KyoS.Web.Data.Entities.TCMSupervisionTimeEntity", b =>
                 {
                     b.HasOne("KyoS.Web.Data.Entities.CaseMannagerEntity", "CaseManager")
@@ -15083,6 +17997,21 @@ namespace KyoS.Web.Migrations
                         .HasForeignKey("TCMSupervisorId");
 
                     b.Navigation("CaseManager");
+
+                    b.Navigation("TCMSupervisor");
+                });
+
+            modelBuilder.Entity("KyoS.Web.Data.Entities.TCMSupervisorCertificationEntity", b =>
+                {
+                    b.HasOne("KyoS.Web.Data.Entities.CourseEntity", "Course")
+                        .WithMany()
+                        .HasForeignKey("CourseId");
+
+                    b.HasOne("KyoS.Web.Data.Entities.TCMSupervisorEntity", "TCMSupervisor")
+                        .WithMany("TCMCertifications")
+                        .HasForeignKey("TCMSupervisorId");
+
+                    b.Navigation("Course");
 
                     b.Navigation("TCMSupervisor");
                 });
@@ -15199,9 +18128,17 @@ namespace KyoS.Web.Migrations
                         .WithMany("Workdays_Clients")
                         .HasForeignKey("ClientId");
 
+                    b.HasOne("KyoS.Web.Data.Entities.EOBEntity", "EOB")
+                        .WithMany("Workday_Clients")
+                        .HasForeignKey("EOBId");
+
                     b.HasOne("KyoS.Web.Data.Entities.FacilitatorEntity", "Facilitator")
                         .WithMany("Workdays_Clients")
                         .HasForeignKey("FacilitatorId");
+
+                    b.HasOne("KyoS.Web.Data.Entities.PayStubEntity", "PayStub")
+                        .WithMany("WordayClients")
+                        .HasForeignKey("PayStubId");
 
                     b.HasOne("KyoS.Web.Data.Entities.ScheduleEntity", "Schedule")
                         .WithMany()
@@ -15215,7 +18152,11 @@ namespace KyoS.Web.Migrations
 
                     b.Navigation("Client");
 
+                    b.Navigation("EOB");
+
                     b.Navigation("Facilitator");
+
+                    b.Navigation("PayStub");
 
                     b.Navigation("Schedule");
 
@@ -15310,6 +18251,8 @@ namespace KyoS.Web.Migrations
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.CaseMannagerEntity", b =>
                 {
+                    b.Navigation("TCMCertifications");
+
                     b.Navigation("TCMClients");
                 });
 
@@ -15372,6 +18315,8 @@ namespace KyoS.Web.Migrations
 
                     b.Navigation("IntakeNoDuplicateService");
 
+                    b.Navigation("IntakeNoHarm");
+
                     b.Navigation("IntakeOrientationChecklist");
 
                     b.Navigation("IntakeScreening");
@@ -15382,13 +18327,15 @@ namespace KyoS.Web.Migrations
 
                     b.Navigation("List_BehavioralHistory");
 
+                    b.Navigation("MTPs");
+
                     b.Navigation("MedicationList");
 
-                    b.Navigation("MTPs");
+                    b.Navigation("NotePSY");
 
                     b.Navigation("ReferralForm");
 
-                    b.Navigation("SafetyPlan");
+                    b.Navigation("SafetyPlanList");
 
                     b.Navigation("Workdays_Clients");
                 });
@@ -15398,6 +18345,8 @@ namespace KyoS.Web.Migrations
                     b.Navigation("CaseManagers");
 
                     b.Navigation("Clients");
+
+                    b.Navigation("Courses");
 
                     b.Navigation("Facilitators");
 
@@ -15416,6 +18365,22 @@ namespace KyoS.Web.Migrations
                     b.Navigation("Weeks");
                 });
 
+            modelBuilder.Entity("KyoS.Web.Data.Entities.CourseEntity", b =>
+                {
+                    b.Navigation("DocumentAssistantCertifications");
+
+                    b.Navigation("FacilitatorCertifications");
+
+                    b.Navigation("SupervisorCertifications");
+
+                    b.Navigation("TCMCertifications");
+                });
+
+            modelBuilder.Entity("KyoS.Web.Data.Entities.DiagnosticEntity", b =>
+                {
+                    b.Navigation("Client_Diagnostics");
+                });
+
             modelBuilder.Entity("KyoS.Web.Data.Entities.DischargeEntity", b =>
                 {
                     b.Navigation("Messages");
@@ -15424,6 +18389,20 @@ namespace KyoS.Web.Migrations
             modelBuilder.Entity("KyoS.Web.Data.Entities.DoctorEntity", b =>
                 {
                     b.Navigation("Clients");
+                });
+
+            modelBuilder.Entity("KyoS.Web.Data.Entities.DocumentsAssistantEntity", b =>
+                {
+                    b.Navigation("DocumentAssistantCertifications");
+                });
+
+            modelBuilder.Entity("KyoS.Web.Data.Entities.EOBEntity", b =>
+                {
+                    b.Navigation("EOBDetails");
+
+                    b.Navigation("TCMNotes");
+
+                    b.Navigation("Workday_Clients");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.EmergencyContactEntity", b =>
@@ -15436,6 +18415,8 @@ namespace KyoS.Web.Migrations
                     b.Navigation("CiteList");
 
                     b.Navigation("ClientsFromIndividualTherapy");
+
+                    b.Navigation("FacilitatorCertifications");
 
                     b.Navigation("Groups");
 
@@ -15476,6 +18457,11 @@ namespace KyoS.Web.Migrations
             modelBuilder.Entity("KyoS.Web.Data.Entities.GroupNoteEntity", b =>
                 {
                     b.Navigation("GroupNotes_Activities");
+                });
+
+            modelBuilder.Entity("KyoS.Web.Data.Entities.HealthInsuranceEntity", b =>
+                {
+                    b.Navigation("Client_HealthInsurances");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.LegalGuardianEntity", b =>
@@ -15523,20 +18509,42 @@ namespace KyoS.Web.Migrations
                 {
                     b.Navigation("Classifications");
 
-                    b.Navigation("GroupNote_Activity");
-
                     b.Navigation("GroupNote2_Activity");
+
+                    b.Navigation("GroupNote_Activity");
 
                     b.Navigation("IndividualNotes");
 
-                    b.Navigation("Note_Activity");
-
                     b.Navigation("NoteP_Activity");
+
+                    b.Navigation("Note_Activity");
+                });
+
+            modelBuilder.Entity("KyoS.Web.Data.Entities.PayStubEntity", b =>
+                {
+                    b.Navigation("Bios");
+
+                    b.Navigation("Brief");
+
+                    b.Navigation("Fars");
+
+                    b.Navigation("MTPs");
+
+                    b.Navigation("MedicalHistory");
+
+                    b.Navigation("PayStubDetails");
+
+                    b.Navigation("WordayClients");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.PlanEntity", b =>
                 {
                     b.Navigation("Classifications");
+                });
+
+            modelBuilder.Entity("KyoS.Web.Data.Entities.PromotionEntity", b =>
+                {
+                    b.Navigation("Photos");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.PsychiatristEntity", b =>
@@ -15560,6 +18568,8 @@ namespace KyoS.Web.Migrations
                     b.Navigation("NotesP");
 
                     b.Navigation("ReferralList");
+
+                    b.Navigation("SupervisorCertifications");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.TCMAdendumEntity", b =>
@@ -15594,25 +18604,13 @@ namespace KyoS.Web.Migrations
 
                     b.Navigation("TCMFarsFormList");
 
-                    b.Navigation("TcmIntakeAcknowledgementHipa");
-
                     b.Navigation("TCMIntakeAdvancedDirective");
-
-                    b.Navigation("TcmIntakeAppendixI");
-
-                    b.Navigation("TcmIntakeAppendixJ");
 
                     b.Navigation("TCMIntakeClientIdDocumentVerification");
 
                     b.Navigation("TCMIntakeClientSignatureVerification");
 
                     b.Navigation("TCMIntakeColumbiaSuicide");
-
-                    b.Navigation("TcmIntakeConsentForRelease");
-
-                    b.Navigation("TcmIntakeConsentForTreatment");
-
-                    b.Navigation("TcmIntakeConsumerRights");
 
                     b.Navigation("TCMIntakeCoordinationCare");
 
@@ -15636,24 +18634,36 @@ namespace KyoS.Web.Migrations
 
                     b.Navigation("TCMIntakeWelcome");
 
-                    b.Navigation("TcmInterventionLog");
-
                     b.Navigation("TCMNote");
 
                     b.Navigation("TCMReferralForm");
 
-                    b.Navigation("TcmServicePlan");
-
                     b.Navigation("TCMTransferList");
+
+                    b.Navigation("TcmIntakeAcknowledgementHipa");
+
+                    b.Navigation("TcmIntakeAppendixI");
+
+                    b.Navigation("TcmIntakeAppendixJ");
+
+                    b.Navigation("TcmIntakeConsentForRelease");
+
+                    b.Navigation("TcmIntakeConsentForTreatment");
+
+                    b.Navigation("TcmIntakeConsumerRights");
+
+                    b.Navigation("TcmInterventionLog");
+
+                    b.Navigation("TcmServicePlan");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.TCMDischargeEntity", b =>
                 {
+                    b.Navigation("TCMMessages");
+
                     b.Navigation("TcmDischargeFollowUp");
 
                     b.Navigation("TcmDischargeServiceStatus");
-
-                    b.Navigation("TCMMessages");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.TCMDomainEntity", b =>
@@ -15721,9 +18731,16 @@ namespace KyoS.Web.Migrations
                     b.Navigation("TCMServicePlanRevDomain");
                 });
 
+            modelBuilder.Entity("KyoS.Web.Data.Entities.TCMSubServiceEntity", b =>
+                {
+                    b.Navigation("TCMSubServiceSteps");
+                });
+
             modelBuilder.Entity("KyoS.Web.Data.Entities.TCMSupervisorEntity", b =>
                 {
                     b.Navigation("CaseManagerList");
+
+                    b.Navigation("TCMCertifications");
                 });
 
             modelBuilder.Entity("KyoS.Web.Data.Entities.ThemeEntity", b =>

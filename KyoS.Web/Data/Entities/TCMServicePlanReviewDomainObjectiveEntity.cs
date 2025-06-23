@@ -16,16 +16,31 @@ namespace KyoS.Web.Data.Entities
 
         [Display(Name = "Start Time")]
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{mm/dd/yyyy}", ApplyFormatInEditMode = false)]
+        //[DisplayFormat(DataFormatString = "{mm/dd/yyyy}", ApplyFormatInEditMode = false)]
         public DateTime DateEndObjective { get; set; }
 
         public StatusType Status { get; set; }
 
         public string Origin { get; set; }
 
-        [Required(ErrorMessage = "The field {0} is mandatory.")]
-        public string ChangesUpdate { get; set; }
-
         public TCMServicePlanReviewDomainEntity tcmServicePlanReviewDomain { get; set; }
+
+        public string Name { get; set; }
+
+        public string Task { get; set; }
+        public string Responsible { get; set; }
+        public bool Finish { get; set; }
+
+        [Display(Name = "Start Date")]
+        [DataType(DataType.Date)]
+        [Required(ErrorMessage = "The field {0} is mandatory.")]
+        public DateTime StartDate { get; set; }
+
+        [Display(Name = "Target Date")]
+        [DataType(DataType.Date)]
+        [Required(ErrorMessage = "The field {0} is mandatory.")]
+        public DateTime TargetDate { get; set; }
+
+        
     }
 }

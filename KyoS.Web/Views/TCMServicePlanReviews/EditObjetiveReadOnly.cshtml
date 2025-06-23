@@ -11,40 +11,72 @@
             <input type="hidden" asp-for="Idd" />
             <input type="hidden" asp-for="Origin" />
             <input type="hidden" asp-for="Id_Domain" />
+            <input type="hidden" asp-for="CreatedBy" />
+            <input type="hidden" asp-for="CreatedOn" />
             <div class="">
-                <div class="form-group col-md-3">
+                <div class="form-group col-md-12">
                     <b>Service code:</b>
                     <i>@Html.DisplayFor(modelItem => Model.TcmDomain.Code)</i>
-                </div>
-                <div class="form-group col-md-9">
                     <b>Service name:</b>
                     <i>@Html.DisplayFor(modelItem => Model.TcmDomain.Name)</i>
                 </div>
             </div>
-
             <div class="">
                 <div class="form-group col-md-6">
                     <label asp-for="IdObjetive" class="control-label">Objetive Number</label>&nbsp;*
                     <input asp-for="IdObjetive" class="form-control" readonly />
                     <span asp-validation-for="IdObjetive" class="text-danger"></span>
                 </div>
-                <div class="form-group col-md-6">
-                    <label asp-for="StartDate" class="control-label">Start Date</label>&nbsp;*
-                    <input asp-for="StartDate" class="form-control" readonly />
-                    <span asp-validation-for="StartDate" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="">
-                <div class="form-group col-md-6">
-                    <label asp-for="TargetDate" class="control-label"></label>&nbsp;
-                    <input asp-for="TargetDate" class="form-control" readonly />
-                    <span asp-validation-for="TargetDate" class="text-danger"></span>
-                </div>
-                <div class="form-group col-md-6">
-                    <label asp-for="EndDate" class="control-label">End date</label>&nbsp;
-                    <input asp-for="EndDate" class="form-control" readonly />
-                    <span asp-validation-for="EndDate" class="text-danger"></span>
-                </div>
+                @if (ViewData["origi"].ToString() != "5")
+                {
+                    <div class="form-group col-md-6">
+                        <label asp-for="IdStatus" class="control-label">Status</label>
+                        <select asp-for="IdStatus" asp-items="Model.StatusList" class="form-control"></select>
+                        <span asp-validation-for="IdStatus" class="text-danger"></span>
+                    </div>
+                    <div class="">
+                        <div class="form-group col-md-4">
+                            <label asp-for="StartDate" class="control-label">Start Date</label>&nbsp;*
+                            <input asp-for="StartDate" class="form-control"  />
+                            <span asp-validation-for="StartDate" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label asp-for="TargetDate" class="control-label"></label>&nbsp;
+                            <input asp-for="TargetDate" class="form-control"  />
+                            <span asp-validation-for="TargetDate" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label asp-for="EndDate" class="control-label">End date</label>&nbsp;
+                            <input asp-for="EndDate" class="form-control"  />
+                            <span asp-validation-for="EndDate" class="text-danger"></span>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="form-group col-md-6">
+                        <label asp-for="IdStatus" class="control-label">Status</label>
+                        <select asp-for="IdStatus" asp-items="Model.StatusList" class="form-control" disabled></select>
+                        <span asp-validation-for="IdStatus" class="text-danger"></span>
+                    </div>
+                    <div class="">
+                        <div class="form-group col-md-4">
+                            <label asp-for="StartDate" class="control-label">Start Date</label>&nbsp;*
+                            <input asp-for="StartDate" class="form-control" readonly />
+                            <span asp-validation-for="StartDate" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label asp-for="TargetDate" class="control-label"></label>&nbsp;
+                            <input asp-for="TargetDate" class="form-control" readonly />
+                            <span asp-validation-for="TargetDate" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label asp-for="EndDate" class="control-label">End date</label>&nbsp;
+                            <input asp-for="EndDate" class="form-control" readonly />
+                            <span asp-validation-for="EndDate" class="text-danger"></span>
+                        </div>
+                    </div>
+                }
             </div>
             <div class="col-md-12">
                 <div class="form-group">
@@ -70,29 +102,19 @@
             <div class="col-md-12">
                 <div class="form-group">
                     <label asp-for="task" class="control-label">Task/Case Management Strategy</label>&nbsp;*
-                    <input asp-for="task" class="form-control" readonly />
+                    <textarea asp-for="task" class="form-control" readonly ></textarea>
+                    <span asp-validation-for="task" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label asp-for="task" class="control-label">Responsible</label>&nbsp;*
+                    <textarea asp-for="Responsible" class="form-control" readonly></textarea>
                     <span asp-validation-for="task" class="text-danger"></span>
                 </div>
             </div>
             @if (ViewData["origi"].ToString() != "5")
             {
-                <div class="col-md-12">
-                    <div class="form-group">
-                        <label asp-for="IdStatus" class="control-label">Status</label>
-                        <select asp-for="IdStatus" asp-items="Model.StatusList" class="form-control"></select>
-                        <span asp-validation-for="IdStatus" class="text-danger"></span>
-                    </div>
-                </div>
-                <div class="col-md-12">
-                    <div class="form-group">
-                        <label asp-for="ChangesUpdates" class="control-label">Objectives Changes/Updates</label>&nbsp;*
-                        <input asp-for="ChangesUpdates" class="form-control" />
-                        <span asp-validation-for="ChangesUpdates" class="text-danger"></span>
-                    </div>
-                </div>
-                <div class="col-md-12">
-                    &nbsp;
-                </div>
                 <div>
                     <div class="col-md-offset-9">
                         <input type="submit" value="Submit" class="btn btn-primary" asp-all-route-id="model.tCMservice.Id" />
@@ -102,23 +124,6 @@
             }
             else
             {
-                <div class="col-md-12">
-                    <div class="form-group">
-                        <label asp-for="IdStatus" class="control-label">Status</label>
-                        <select asp-for="IdStatus" asp-items="Model.StatusList" class="form-control" disabled></select>
-                        <span asp-validation-for="IdStatus" class="text-danger"></span>
-                    </div>
-                </div>
-                <div class="col-md-12">
-                    <div class="form-group">
-                        <label asp-for="ChangesUpdates" class="control-label">Objectives Changes/Updates</label>&nbsp;*
-                        <input asp-for="ChangesUpdates" class="form-control" disabled/>
-                        <span asp-validation-for="ChangesUpdates" class="text-danger"></span>
-                    </div>
-                </div>
-                <div class="col-md-12">
-                    &nbsp;
-                </div>
                 <div>
                     <div class="col-md-offset-10">
                         <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>

@@ -66,5 +66,8 @@ namespace KyoS.Web.Data.Entities
         public string OtherPurposeRequest { get; set; }
         public string OtherAutorizedInformation { get; set; }
         public ConsentType ConsentType { get; set; }
+
+        public bool InForm_Electronic { get; set; }
+        public bool InForm_AllofTheAbove { get; set; }
     }
 }

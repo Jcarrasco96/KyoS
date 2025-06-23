@@ -1,4 +1,5 @@
 ﻿ using KyoS.Common.Enums;
+using KyoS.Common.Helpers;
 using KyoS.Web.Data;
 using KyoS.Web.Data.Entities;
 using KyoS.Web.Helpers;
@@ -102,7 +103,7 @@ namespace KyoS.Web.Controllers
 
             TCMSupervisorViewModel model;
 
-            if (!User.IsInRole("Admin"))
+            if (User.IsInRole("Manager"))
             {
                 UserEntity user_logged = _context.Users
                                                  .Include(u => u.Clinic)
@@ -126,7 +127,16 @@ namespace KyoS.Web.Controllers
                          CreatedBy = user_logged.UserName,
                          CreatedOn = DateTime.Now,
                          RaterEducation = string.Empty,
-                         RaterFMHCertification = string.Empty
+                         RaterFMHCertification = string.Empty,
+                         IdGender = 0,
+                         GenderList = _combosHelper.GetComboGender(),
+                         IdAccountType = 0,
+                         AccountTypeList = _combosHelper.GetComboAccountType(),
+                         IdPaymentMethod = 0,
+                         PaymentMethodList = _combosHelper.GetComboPaymentMethod(),
+                         Name = "1",
+                         DateOfBirth = DateTime.Now,
+                         HiringDate = DateTime.Now
                      };
                      return View(model);
                 }
@@ -201,7 +211,7 @@ namespace KyoS.Web.Controllers
                                                                                 .ThenInclude(f => f.TCMClients)
                                                                                 .ThenInclude(f => f.Client)
 
-                                                                                .OrderBy(t => t.Name)
+                                                                                .Where(s => s.Clinic.Id == user_logged.Clinic.Id)
                                                                                 .ToListAsync();
                         return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewTCMSupervisors", tcmSupervisor) });
                     }
@@ -220,6 +230,9 @@ namespace KyoS.Web.Controllers
                         tcmSupervisorViewModel.IdStatus = 1;
                         tcmSupervisorViewModel.StatusList = _combosHelper.GetComboClientStatus();
                         tcmSupervisorViewModel.UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.TCMSupervisor, 0);
+                        tcmSupervisorViewModel.GenderList = _combosHelper.GetComboGender();
+                        tcmSupervisorViewModel.AccountTypeList = _combosHelper.GetComboAccountType();
+                        tcmSupervisorViewModel.PaymentMethodList = _combosHelper.GetComboPaymentMethod();
                     }
                     else
                     {
@@ -234,6 +247,9 @@ namespace KyoS.Web.Controllers
                         tcmSupervisorViewModel.IdStatus = 1;
                         tcmSupervisorViewModel.StatusList = _combosHelper.GetComboClientStatus();
                         tcmSupervisorViewModel.UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.TCMSupervisor, user_logged.Clinic.Id);
+                        tcmSupervisorViewModel.GenderList = _combosHelper.GetComboGender();
+                        tcmSupervisorViewModel.AccountTypeList = _combosHelper.GetComboAccountType();
+                        tcmSupervisorViewModel.PaymentMethodList = _combosHelper.GetComboPaymentMethod();
                     }
                     return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Create", tcmSupervisorViewModel) });
                 }
@@ -246,6 +262,9 @@ namespace KyoS.Web.Controllers
                 tcmSupervisorViewModel.IdStatus = 1;
                 tcmSupervisorViewModel.StatusList = _combosHelper.GetComboClientStatus();
                 tcmSupervisorViewModel.UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.TCMSupervisor, 0);
+                tcmSupervisorViewModel.GenderList = _combosHelper.GetComboGender();
+                tcmSupervisorViewModel.AccountTypeList = _combosHelper.GetComboAccountType();
+                tcmSupervisorViewModel.PaymentMethodList = _combosHelper.GetComboPaymentMethod();
             }
             else
             {
@@ -260,6 +279,9 @@ namespace KyoS.Web.Controllers
                 tcmSupervisorViewModel.IdStatus = 1;
                 tcmSupervisorViewModel.StatusList = _combosHelper.GetComboClientStatus();
                 tcmSupervisorViewModel.UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.TCMSupervisor, user_logged.Clinic.Id);
+                tcmSupervisorViewModel.GenderList = _combosHelper.GetComboGender();
+                tcmSupervisorViewModel.AccountTypeList = _combosHelper.GetComboAccountType();
+                tcmSupervisorViewModel.PaymentMethodList = _combosHelper.GetComboPaymentMethod();
             }
 
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Create", tcmSupervisorViewModel) });
@@ -300,7 +322,11 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("Home/Error404");
             }
 
-            TCMSupervisorEntity tcmSupervisorEntity = await _context.TCMSupervisors.Include(s => s.Clinic).FirstOrDefaultAsync(s => s.Id == id);
+            TCMSupervisorEntity tcmSupervisorEntity = await _context.TCMSupervisors
+                                                                    .Include(s => s.Clinic)
+                                                                    .Include(s => s.TCMCertifications)
+                                                                    .ThenInclude(s => s.Course)
+                                                                    .FirstOrDefaultAsync(s => s.Id == id);
             if (tcmSupervisorEntity == null)
             {
                 return RedirectToAction("Home/Error404");
@@ -312,7 +338,7 @@ namespace KyoS.Web.Controllers
 
             TCMSupervisorViewModel tcmSupervisorViewModel;
 
-            if (!User.IsInRole("Admin"))
+            if (User.IsInRole("Manager"))
             {
                 tcmSupervisorViewModel = _converterHelper.ToTCMsupervisorViewModel(tcmSupervisorEntity, user_logged.Clinic.Id);
 
@@ -324,7 +350,40 @@ namespace KyoS.Web.Controllers
                 });
 
                 tcmSupervisorViewModel.Clinics = list;
-                tcmSupervisorViewModel.IdClinic = user_logged.Clinic.Id;             
+                tcmSupervisorViewModel.IdClinic = user_logged.Clinic.Id;
+
+                List<TCMSupervisorCertificationEntity> CertificationList = new List<TCMSupervisorCertificationEntity>();
+                TCMSupervisorCertificationEntity Certification = new TCMSupervisorCertificationEntity();
+                List<CourseEntity> coursList = _context.Courses.Where(n => n.Role == UserType.TCMSupervisor).ToList();
+
+                foreach (var item in coursList)
+                {
+                    if (tcmSupervisorEntity.TCMCertifications.Where(n => n.Course.Id == item.Id).Count() > 0)
+                    {
+                        foreach (var value in tcmSupervisorEntity.TCMCertifications.Where(n => n.Course.Id == item.Id).ToList().OrderBy(c => c.ExpirationDate))
+                        {
+                            Certification.Name = item.Name;
+                            Certification.CertificationNumber = value.CertificationNumber;
+                            Certification.CertificateDate = value.CertificateDate;
+                            Certification.ExpirationDate = value.ExpirationDate;
+                            Certification.Id = value.Id;
+                            CertificationList.Add(Certification);
+                            Certification = new TCMSupervisorCertificationEntity();
+                        }
+                    }
+                    else
+                    {
+                        Certification.Name = item.Name;
+                        Certification.CertificationNumber = "-";
+                        Certification.CertificateDate = DateTime.Today;
+                        Certification.ExpirationDate = DateTime.Today;
+                        Certification.Id = 0;
+                        CertificationList.Add(Certification);
+                        Certification = new TCMSupervisorCertificationEntity();
+                    }
+
+                }
+                tcmSupervisorViewModel.TCMSupervisorCertificationIdealList = CertificationList;
             }
             else
             {
@@ -357,6 +416,9 @@ namespace KyoS.Web.Controllers
                         tcmSupervisorViewModel.Clinics = _combosHelper.GetComboClinics();
                         tcmSupervisorViewModel.UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.TCMSupervisor, 0);
                         tcmSupervisorViewModel.StatusList = _combosHelper.GetComboClientStatus();
+                        tcmSupervisorViewModel.GenderList = _combosHelper.GetComboGender();
+                        tcmSupervisorViewModel.AccountTypeList = _combosHelper.GetComboAccountType();
+                        tcmSupervisorViewModel.PaymentMethodList = _combosHelper.GetComboPaymentMethod();
                     }
                     else
                     {
@@ -369,6 +431,9 @@ namespace KyoS.Web.Controllers
                         tcmSupervisorViewModel.Clinics = list;
                         tcmSupervisorViewModel.UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.TCMSupervisor, user_logged.Clinic.Id);
                         tcmSupervisorViewModel.StatusList = _combosHelper.GetComboClientStatus();
+                        tcmSupervisorViewModel.GenderList = _combosHelper.GetComboGender();
+                        tcmSupervisorViewModel.AccountTypeList = _combosHelper.GetComboAccountType();
+                        tcmSupervisorViewModel.PaymentMethodList = _combosHelper.GetComboPaymentMethod();
                     }
 
                     ModelState.AddModelError(string.Empty, "You must select a linked user");
@@ -393,7 +458,8 @@ namespace KyoS.Web.Controllers
                                                                             .Include(f => f.CaseManagerList)
                                                                             .ThenInclude(f => f.TCMClients)
                                                                             .ThenInclude(f => f.Client)
-                                                                            .OrderBy(f => f.Name)
+
+                                                                            .Where(s => s.Clinic.Id == user_logged.Clinic.Id)
                                                                             .ToListAsync();
                     return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewTCMSupervisors", tcmSupervisor) });
                 }
@@ -416,6 +482,9 @@ namespace KyoS.Web.Controllers
                 tcmSupervisorViewModel.Clinics = _combosHelper.GetComboClinics();                
                 tcmSupervisorViewModel.StatusList = _combosHelper.GetComboClientStatus();
                 tcmSupervisorViewModel.UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.TCMSupervisor, 0);
+                tcmSupervisorViewModel.GenderList = _combosHelper.GetComboGender();
+                tcmSupervisorViewModel.AccountTypeList = _combosHelper.GetComboAccountType();
+                tcmSupervisorViewModel.PaymentMethodList = _combosHelper.GetComboPaymentMethod();
             }
             else
             {
@@ -429,6 +498,9 @@ namespace KyoS.Web.Controllers
                 tcmSupervisorViewModel.Clinics = list;                
                 tcmSupervisorViewModel.StatusList = _combosHelper.GetComboClientStatus();
                 tcmSupervisorViewModel.UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.TCMSupervisor, user_logged.Clinic.Id);
+                tcmSupervisorViewModel.GenderList = _combosHelper.GetComboGender();
+                tcmSupervisorViewModel.AccountTypeList = _combosHelper.GetComboAccountType();
+                tcmSupervisorViewModel.PaymentMethodList = _combosHelper.GetComboPaymentMethod();
             }
             
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Edit", tcmSupervisorViewModel) });
@@ -1014,6 +1086,331 @@ namespace KyoS.Web.Controllers
             events.AddRange(notes);
 
             return new JsonResult(events);
+        }
+
+        [Authorize(Roles = "Manager")]
+        public IActionResult CreatTCMSupervisorCertification(int id = 0)
+        {
+            if (id == 1)
+            {
+                ViewBag.Creado = "Y";
+            }
+            else
+            {
+                if (id == 2)
+                {
+                    ViewBag.Creado = "E";
+                }
+                else
+                {
+                    ViewBag.Creado = "N";
+                }
+            }
+
+            TCMSupervisorCertificationViewModel model = new TCMSupervisorCertificationViewModel();
+
+            if (User.IsInRole("Manager"))
+            {
+                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                       .FirstOrDefault(u => u.UserName == User.Identity.Name);
+                if (user_logged.Clinic != null)
+                {
+                    model = new TCMSupervisorCertificationViewModel
+                    {
+                        CertificateDate = DateTime.Today,
+                        ExpirationDate = DateTime.Today,
+                        CertificationNumber = string.Empty,
+                        Name = user_logged.Clinic.Name,
+                        IdCourse = 0,
+                        IdTCM = 0,
+                        TCMSupervisors = _combosHelper.GetComboTCMSupervisorByClinic(user_logged.Clinic.Id),
+                        Courses = _combosHelper.GetComboCourseByRole(UserType.TCMSupervisor)
+                    };
+                    return View(model);
+                }
+            }
+
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Manager")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreatTCMSupervisorCertification(TCMSupervisorCertificationViewModel  tcmSupervisorCertificationViewModel)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (ModelState.IsValid)
+            {
+                TCMSupervisorCertificationEntity tcmSupervisorCertification = new TCMSupervisorCertificationEntity();
+                tcmSupervisorCertification = _converterHelper.ToTCMSupervisorCertificationEntity(tcmSupervisorCertificationViewModel, true, user_logged.UserName);
+                _context.Add(tcmSupervisorCertification);
+                try
+                {
+                    await _context.SaveChangesAsync();
+
+                    List<TCMSupervisorCertificationEntity> certification_List = await _context.TCMSupervisorCertifications
+                                                                                              .Include(n => n.Course)
+                                                                                              .Include(n => n.TCMSupervisor)
+                                                                                              .ToListAsync();
+
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewTCMSupervisorCertifications", certification_List) });
+                }
+                catch (System.Exception ex)
+                {
+                    if (ex.InnerException.Message.Contains("duplicate"))
+                    {
+                        ModelState.AddModelError(string.Empty, $"Already exists the Case Mannager: {tcmSupervisorCertificationViewModel.Name}");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+
+            }
+
+            tcmSupervisorCertificationViewModel.Courses = _combosHelper.GetComboCourseByRole(UserType.TCMSupervisor);
+            tcmSupervisorCertificationViewModel.TCMSupervisors = _combosHelper.GetComboTCMSupervisorByClinic(user_logged.Clinic.Id);
+
+
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreatTCMSupervisorCertification", tcmSupervisorCertificationViewModel) });
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> EditTCMSupervisorCertification(int? id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            TCMSupervisorCertificationEntity tcmSupervisorCertification = await _context.TCMSupervisorCertifications
+                                                                                        .Include(f => f.Course)
+                                                                                        .Include(f => f.TCMSupervisor)
+                                                                                        .FirstOrDefaultAsync(f => f.Id == id);
+            UserEntity user_logged = _context.Users
+                                                 .Include(u => u.Clinic)
+                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (tcmSupervisorCertification == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            TCMSupervisorCertificationViewModel tcmSupervisorCertificationViewModel;
+            if (User.IsInRole("Manager"))
+            {
+                
+
+                tcmSupervisorCertificationViewModel = _converterHelper.ToTCMSupervisorCertificationViewModel(tcmSupervisorCertification, user_logged.Clinic.Id);
+
+
+            }
+            else
+                tcmSupervisorCertificationViewModel = _converterHelper.ToTCMSupervisorCertificationViewModel(tcmSupervisorCertification, user_logged.Clinic.Id);
+
+            return View(tcmSupervisorCertificationViewModel);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Manager")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditTCMSupervisorCertification(int id, TCMSupervisorCertificationViewModel tcmSupervisorCertificationViewModel)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (ModelState.IsValid)
+            {
+
+                TCMSupervisorCertificationEntity tcmSupervisorCertificationEntity = _converterHelper.ToTCMSupervisorCertificationEntity(tcmSupervisorCertificationViewModel, false, user_logged.UserName);
+                _context.Update(tcmSupervisorCertificationEntity);
+                try
+                {
+                    await _context.SaveChangesAsync();
+                    List<TCMSupervisorCertificationEntity> tcmSupervisorCertification_List = await _context.TCMSupervisorCertifications
+                                                                                                           .Include(n => n.Course)
+                                                                                                           .Include(n => n.TCMSupervisor)
+                                                                                                           .ToListAsync();
+
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewTCMSupervisorCertifications", tcmSupervisorCertification_List) });
+                }
+                catch (System.Exception ex)
+                {
+                    if (ex.InnerException.Message.Contains("duplicate"))
+                    {
+                        ModelState.AddModelError(string.Empty, $"Already exists the TCM Supervisor: {tcmSupervisorCertificationViewModel.Name}");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+            }
+
+            tcmSupervisorCertificationViewModel.TCMSupervisors = _combosHelper.GetComboTCMSupervisorByClinic(user_logged.Clinic.Id);
+            tcmSupervisorCertificationViewModel.Courses = _combosHelper.GetComboCourseByRole(UserType.TCMSupervisor);
+
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditTCMSupervisorCertification", tcmSupervisorCertificationViewModel) });
+        }
+
+        [Authorize(Roles = "Manager, TCMSupervisor")]
+        public async Task<IActionResult> TCMSupervisorCertification(int idError = 0)
+        {
+            UserEntity user_logged = await _context.Users
+                                                   .Include(u => u.Clinic)
+                                                   .ThenInclude(c => c.Setting)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.TCMClinic)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+            if (User.IsInRole("Manager"))
+            {
+                if (idError == 1) //Imposible to delete
+                {
+                    ViewBag.Delete = "N";
+                }
+
+                return View(await _context.TCMSupervisorCertifications
+                                          .Include(f => f.Course)
+                                          .Include(f => f.TCMSupervisor)
+                                          .AsSplitQuery()
+                                          .Where(f => f.TCMSupervisor.Clinic.Id == user_logged.Clinic.Id)
+                                          .OrderBy(f => f.TCMSupervisor.Name)
+                                          .ToListAsync());
+
+            }
+            else
+            {
+                if (User.IsInRole("TCMSupervisor"))
+                {
+                    TCMSupervisorEntity supervisorEntity = _context.TCMSupervisors.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
+
+                    if (idError == 1) //Imposible to delete
+                    {
+                        ViewBag.Delete = "N";
+                    }
+
+                    return View(await _context.TCMSupervisorCertifications
+                                              .Include(f => f.Course)
+                                              .Include(f => f.TCMSupervisor)
+                                              .AsSplitQuery()
+                                              .Where(f => f.TCMSupervisor.Clinic.Id == user_logged.Clinic.Id
+                                                       && f.TCMSupervisor.Id == supervisorEntity.Id)
+                                              .OrderBy(f => f.TCMSupervisor.Name)
+                                              .ToListAsync());
+
+                }
+                
+            }
+            return RedirectToAction("NotAuthorized", "Account");
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> DeleteCertification(int? id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            TCMSupervisorCertificationEntity tcmSupervisorCertificationEntity = await _context.TCMSupervisorCertifications.FirstOrDefaultAsync(t => t.Id == id);
+            if (tcmSupervisorCertificationEntity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            try
+            {
+                _context.TCMSupervisorCertifications.Remove(tcmSupervisorCertificationEntity);
+                await _context.SaveChangesAsync();
+            }
+            catch (System.Exception)
+            {
+                return RedirectToAction("Index", new { idError = 1 });
+            }
+
+            return RedirectToAction(nameof(TCMSupervisorCertification));
+        }
+
+        [Authorize(Roles = "Manager, TCMSupervisor")]
+        public IActionResult AuditCertification()
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(c => c.Setting)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic || !user_logged.Clinic.Setting.MHProblems)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+            List<AuditCertification> auditCertification_List = new List<AuditCertification>();
+            AuditCertification auditCertification = new AuditCertification();
+
+            List<TCMSupervisorEntity> tcmSupervisor_List = _context.TCMSupervisors
+                                                                   .Include(m => m.TCMCertifications)
+                                                                   .ToList();
+
+            List<CourseEntity> course_List = _context.Courses
+                                                    .Include(m => m.TCMCertifications)
+                                                    .Where(n => n.Role == UserType.TCMSupervisor
+                                                             && n.Active == true)
+                                                    .ToList();
+
+            foreach (var item in tcmSupervisor_List)
+            {
+                foreach (var course in course_List)
+                {
+                    if (item.TCMCertifications.Where(n => n.Course.Id == course.Id).Count() > 0)
+                    {
+                        if (item.TCMCertifications.Where(n => n.Course.Id == course.Id && n.ExpirationDate > DateTime.Today).Count() > 0)
+                        {
+                            if (item.TCMCertifications.Where(n => n.Course.Id == course.Id && n.ExpirationDate > DateTime.Today).Max(d => d.ExpirationDate).AddDays(-30) < DateTime.Today)
+                            {
+                                auditCertification.TCMName = item.Name;
+                                auditCertification.CourseName = course.Name;
+                                auditCertification.Description = "Expired soon";
+                                auditCertification.ExpirationDate = item.TCMCertifications.FirstOrDefault(n => n.Course.Id == course.Id && n.ExpirationDate.AddDays(-30) < DateTime.Today).ExpirationDate.ToShortDateString();
+                                auditCertification_List.Add(auditCertification);
+                                auditCertification = new AuditCertification();
+                            }
+                        }
+                        else
+                        {
+                            auditCertification.TCMName = item.Name;
+                            auditCertification.CourseName = course.Name;
+                            auditCertification.Description = "Expired";
+                            auditCertification.ExpirationDate = item.TCMCertifications.Where(n => n.Course.Id == course.Id).Max(m => m.ExpirationDate).ToShortDateString();
+                            auditCertification_List.Add(auditCertification);
+                            auditCertification = new AuditCertification();
+
+                        }
+                    }
+                    else
+                    {
+                        auditCertification.TCMName = item.Name;
+                        auditCertification.CourseName = course.Name;
+                        auditCertification.Description = "Not Exists";
+                        auditCertification.ExpirationDate = "-";
+                        auditCertification_List.Add(auditCertification);
+                        auditCertification = new AuditCertification();
+                    }
+
+                }
+
+            }
+
+            return View(auditCertification_List);
         }
     }
 }

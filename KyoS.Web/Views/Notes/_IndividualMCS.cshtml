@@ -15,27 +15,56 @@
     <hr />
 </div>
 <div class="col-md-push-12">
-    <div class="form-group col-md-4">
+    <div class="form-group col-md-3">
         <label asp-for="IdClient" class="control-label"></label> &nbsp;*
         <select asp-for="IdClient" asp-items="Model.Clients" class="form-control" id="cbClient"></select>
         <span asp-validation-for="IdClient" class="text-danger"></span>
-    </div>
-    <div class="form-group col-md-2">
-        <label asp-for="CodeBill" class="control-label">Bill Code</label>
-        <input asp-for="CodeBill" class="form-control" readonly />
-        <span asp-validation-for="CodeBill" class="text-danger"></span>
     </div>
     <div class="form-group col-md-1">
         <label asp-for="Setting" class="control-label">Setting</label>
         <input asp-for="Setting" class="form-control"/>
         <span asp-validation-for="Setting" class="text-danger"></span>
     </div>
-    <div class="form-group col-md-8">
-        &nbsp;
+    <div class="form-group col-md-1">
+        <label asp-for="Minute" class="control-label">Minutes</label>
+        <input asp-for="Minute" class="form-control" id="lbMinutes" onchange="getMinute();" />
+        <span asp-validation-for="Minute" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-1">
+        <label asp-for="RealUnits" class="control-label">Units</label>
+        <textarea asp-for="RealUnits" class="form-control" id="lbUnits"  rows="1" readonly></textarea>
+        <span asp-validation-for="RealUnits" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-1">
+        <label asp-for="CodeBill" class="control-label">Bill Code</label>
+        <input asp-for="CodeBill" class="form-control" readonly />
+        <span asp-validation-for="CodeBill" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-5">
+        @if (Model.IdClient == 0)
+        {
+            <label class="control-label">DX: Description</label>
+            <br />
+            @if (Model.Diagnostic == null)
+            {
+                <label id="cbDxDescription" style="font-weight:normal;">Select client</label>
+            }
+            else
+            {
+                <label id="cbDxDescription" style="font-weight:normal">@Model.Diagnostic</label>
+            }
+        }
+        else
+        {
+            <label asp-for="Diagnostic" class="control-label">DX: Description</label>
+            <input asp-for="Diagnostic" class="form-control" disabled/>
+            <span asp-validation-for="Diagnostic" class="text-danger"></span>
+        }
+        
     </div>
 </div>
 <div class="col-md-12">
-    @if (Model.Workday_Cient.Facilitator.Clinic.Setting.MHProblems == true)
+    @if (Model.Workday_Cient.Facilitator.Clinic.Setting.MHProblems == true && Model.IdClient != 0)
     {
         <a onclick="showInPopupLg('@Url.Action("AuditGoalsObjectiveInd", "Notes", new {idMtp = Model.MTPId}, Context.Request.Scheme)','Audit Goals')" class="btn btn-danger" title="Audit the goals"><i class="glyphicon glyphicon-alert"></i>&nbsp;&nbsp;Audit Goals</a>
     }

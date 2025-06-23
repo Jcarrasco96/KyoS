@@ -111,6 +111,7 @@ namespace KyoS.Web.Data
         public DbSet<TCMIntakeInterventionEntity> TCMIntakeIntervention { get; set; }
         public DbSet<TCMFarsFormEntity> TCMFarsForm { get; set; }
         public DbSet<TCMAssessmentEntity> TCMAssessment { get; set; }
+        public DbSet<TCMAssessmentTempEntity> TCMAssessmentTemp { get; set; }
         public DbSet<TCMAssessmentIndividualAgencyEntity> TCMAssessmentIndividualAgency { get; set; }
         public DbSet<TCMAssessmentHouseCompositionEntity> TCMAssessmentHouseComposition { get; set; }
         public DbSet<TCMAssessmentPastCurrentServiceEntity> TCMAssessmentPastCurrentService { get; set; }
@@ -164,6 +165,22 @@ namespace KyoS.Web.Data
         public DbSet<TCMPayStubEntity> TCMPayStubs { get; set; }
         public DbSet<TCMPayStubDetailsEntity> TCMPayStubDetails { get; set; }
         public DbSet<TCMIntakeMedicalHistoryEntity> TCMIntakeMedicalHistory { get; set; }
+        public DbSet<IntakeNoHarmEntity> IntakeNoHarm { get; set; }
+        public DbSet<CourseEntity> Courses { get; set; }
+        public DbSet<CaseManagerCertificationEntity> CaseManagerCertifications { get; set; }
+        public DbSet<TCMSupervisorCertificationEntity> TCMSupervisorCertifications { get; set; }
+        public DbSet<PromotionEntity> Promotions { get; set; }
+        public DbSet<PromotionPhotosEntity> PromotionPhotos { get; set; }
+        public DbSet<TCMSubServiceStepEntity> TCMSubServiceSteps { get; set; }
+        public DbSet<FacilitatorCertificationEntity> FacilitatorCertifications { get; set; }
+        public DbSet<DocumentAssistantCertificationEntity> DocumentAssistantCertifications { get; set; }
+        public DbSet<SupervisorCertificationEntity> SupervisorCertifications { get; set; }
+        public DbSet<NotePSYEntity> NotesPSYs { get; set; }
+        public DbSet<EOBEntity> EOBs { get; set; }
+        public DbSet<EOBDetailsEntity> EOBDetails { get; set; }
+        public DbSet<PayStubEntity> PayStubs { get; set; }
+        public DbSet<PayStubDetailsEntity> PayStubDetails { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -519,11 +536,6 @@ namespace KyoS.Web.Data
                         .OnDelete(DeleteBehavior.Cascade)
                         .HasForeignKey<TCMIntakeCoordinationCareEntity>(s => s.TcmClient_FK);
 
-            modelBuilder.Entity<TCMClientEntity>()
-                        .HasOne(c => c.TcmIntakeAppendixJ)
-                        .WithOne(s => s.TcmClient)
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .HasForeignKey<TCMIntakeAppendixJEntity>(s => s.TcmClient_FK);
 
             modelBuilder.Entity<TCMClientEntity>()
                         .HasOne(c => c.TcmInterventionLog)
@@ -711,12 +723,6 @@ namespace KyoS.Web.Data
                       .OnDelete(DeleteBehavior.Cascade)
                       .HasForeignKey<IntakeClientIdDocumentVerificationEntity>(s => s.Client_FK);
 
-            modelBuilder.Entity<ClientEntity>()
-                     .HasOne(c => c.SafetyPlan)
-                     .WithOne(s => s.Client)
-                     .OnDelete(DeleteBehavior.Cascade)
-                     .HasForeignKey<SafetyPlanEntity>(s => s.Client_FK);
-
             modelBuilder.Entity<IncidentReportEntity>()
                          .HasOne(g => g.Client)
                          .WithMany(m => m.IncidentReport)
@@ -732,6 +738,12 @@ namespace KyoS.Web.Data
                         .WithOne(s => s.TCMClient)
                         .OnDelete(DeleteBehavior.Cascade)
                         .HasForeignKey<TCMIntakeMedicalHistoryEntity>(s => s.TCMClient_FK);
+
+            modelBuilder.Entity<ClientEntity>()
+                       .HasOne(c => c.IntakeNoHarm)
+                       .WithOne(s => s.Client)
+                       .OnDelete(DeleteBehavior.Cascade)
+                       .HasForeignKey<IntakeNoHarmEntity>(s => s.Client_FK);
         }
     }
 }

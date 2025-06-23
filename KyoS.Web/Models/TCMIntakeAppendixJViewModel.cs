@@ -16,5 +16,13 @@ namespace KyoS.Web.Models
         public int IdTCMClient { get; set; }
 
         public IEnumerable<SelectListItem> TcmClients { get; set; }
+
+        [Display(Name = "Classification")]
+        [Required]
+        [Range(0, int.MaxValue, ErrorMessage = "You must select a Classification.")]
+
+        public int IdType { get; set; }
+
+        public IEnumerable<SelectListItem> AppendixJTypes { get; set; }
     }
 }

@@ -73,6 +73,87 @@
                     </strong>
                 </div>
             }
+            @if (ViewBag.DateBlocked == "Interval")
+            {
+                <div class="alert alert-block alert-danger">
+                    <button type="button" class="close" data-dismiss="alert">
+                        <i class="icon-remove"></i>
+                    </button>
+                    <strong class="red">
+                        Error. There are activities created in that time interval
+                    </strong>
+                </div>
+            }
+            @if (ViewBag.DateBlocked == "MH")
+            {
+                <div class="alert alert-block alert-danger">
+                    <button type="button" class="close" data-dismiss="alert">
+                        <i class="icon-remove"></i>
+                    </button>
+                    <strong class="red">
+                        Error. There are activities created in that time interval in other service (Mental Health)
+                    </strong>
+                </div>
+            }
+            @if (ViewBag.DateBlocked == "Supervision")
+            {
+                <div class="alert alert-block alert-danger">
+                    <button type="button" class="close" data-dismiss="alert">
+                        <i class="icon-remove"></i>
+                    </button>
+                    <strong class="red">
+                        Error. This time is scheduled for supervision.
+                    </strong>
+                </div>
+            }
+            @if (ViewBag.DateBlocked == "A")
+            {
+                <div class="alert alert-block alert-danger">
+                    <button type="button" class="close" data-dismiss="alert">
+                        <i class="icon-remove"></i>
+                    </button>
+                    <i class="icon-ok red"></i>
+                    <strong class="red">
+                        Error. The service has not been provided for more than 30 days. You must make a new appendixJ or make a note on a date earlier than the selected one.
+                    </strong>
+                </div>
+            }
+            @if (ViewBag.DateBlocked == "DX")
+            {
+                <div class="alert alert-block alert-danger">
+                    <button type="button" class="close" data-dismiss="alert">
+                        <i class="icon-remove"></i>
+                    </button>
+                    <i class="icon-ok red"></i>
+                    <strong class="red">
+                        Error. You cannot create notes for that client because they do not have a valid diagnosis.
+                    </strong>
+                </div>
+            }
+            @if (ViewBag.DateBlocked == "Auth")
+            {
+                <div class="alert alert-block alert-danger">
+                    <button type="button" class="close" data-dismiss="alert">
+                        <i class="icon-remove"></i>
+                    </button>
+                    <i class="icon-ok red"></i>
+                    <strong class="red">
+                        Error. You cannot create notes for that client because they do not have a valid authorization.
+                    </strong>
+                </div>
+            }
+            @if (ViewBag.DateBlocked == "locked")
+            {
+                <div class="alert alert-block alert-danger">
+                    <button type="button" class="close" data-dismiss="alert">
+                        <i class="icon-remove"></i>
+                    </button>
+                    <i class="icon-ok red"></i>
+                    <strong class="red">
+                        Error. This time is blocked by the manager.
+                    </strong>
+                </div>
+            }
         </div>
         <form asp-action="Edit" asp-route-id="@Model.Id" asp-route-origin="@ViewData["origin"]"  enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -88,6 +169,10 @@
             <input type="hidden" asp-for="PaymentDate" />
             <input type="hidden" asp-for="BillDms" />
             <input type="hidden" asp-for="CodeBill" />
+            <input type="hidden" asp-for="DateOfServiceReference" />
+            <input type="hidden" asp-for="TCMClient.Client.FirstName" />
+            <input type="hidden" asp-for="TCMClient.Client.LastName" />
+
             @if (User.IsInRole("TCMSupervisor") && Model.Status == KyoS.Common.Enums.NoteStatus.Approved)
             {
                 <input type="hidden" asp-for="Sign" />
@@ -97,6 +182,7 @@
             <div class="col-md-push-12">
                 <div class="col-md-12 form-group">
                     <a onclick="showInPopupLg('@Url.Action("CreateNoteActivity", "TCMNotes", new { idNote = Model.Id, idTCMClient = Model.IdTCMClient, unitsAvaliable = @ViewData["available"], billable = Model.Billable}, Context.Request.Scheme)','Add Service')" class="btn btn-success" title="Add service"><i class="glyphicon glyphicon-plus"></i> Add Service</a>
+                    <a onclick="showInPopupLg('@Url.Action("Info", "TCMNotes", new { idTCMClient = Model.IdTCMClient}, Context.Request.Scheme)','Client Information')" class="btn btn-info" title="Client Information"><i class="glyphicon glyphicon-list"></i> Client Information</a>
                 </div>
                 <div id="view-NoteActivity">
                     @await Html.PartialAsync("_ViewTCMNoteActivity", Model.TCMNoteActivity.ToList(), new ViewDataDictionary(ViewData) { { "Id", @ViewData["available"] } })

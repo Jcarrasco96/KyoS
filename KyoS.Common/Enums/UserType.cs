@@ -9,6 +9,7 @@
         CaseManager,
         TCMSupervisor,
         Documents_Assistant,
-        Frontdesk
+        Frontdesk,
+        Biller
     }
 }

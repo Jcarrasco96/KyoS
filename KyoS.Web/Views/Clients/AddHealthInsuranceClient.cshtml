@@ -10,22 +10,10 @@
             <input type="hidden" asp-for="Name" />
             <input type="hidden" asp-for="IdClient" />
             <div >
-                <div class="col-md-9 form-group">
+                <div class="col-md-8 form-group">
                     <label asp-for="IdhealthInsurance" class="control-label"></label>&nbsp;*
                     <select asp-for="IdhealthInsurance" class="form-control" asp-items="Model.HealthInsurance"></select>
                     <span asp-validation-for="IdhealthInsurance" class="text-danger"></span>
-                </div>
-                <div class="col-md-3 form-group">
-                    <label asp-for="IdAgencyService" class="control-label">Agency</label>&nbsp;*
-                    <select asp-for="IdAgencyService" class="form-control" asp-items="Model.AgencyServices"></select>
-                    <span asp-validation-for="IdAgencyService" class="text-danger"></span>
-                </div>
-            </div>
-            <div>
-                <div class="col-md-8 form-group">
-                    <label asp-for="ClientName" class="control-label"></label>&nbsp;*
-                    <input asp-for="ClientName" class="form-control" readonly />
-                    <span asp-validation-for="ClientName" class="text-danger"></span>
                 </div>
                 <div class="col-md-4 form-group">
                     <label asp-for="MemberId" class="control-label"></label>
@@ -34,35 +22,74 @@
                 </div>
             </div>
             <div>
-                <div class="col-md-6 form-group">
-                    <label asp-for="ApprovedDate" class="control-label"></label>&nbsp;*
-                    <input asp-for="ApprovedDate" class="form-control" />
-                    <span asp-validation-for="ApprovedDate" class="text-danger"></span>
+                <div class="col-md-4 form-group">
+                    <label asp-for="IdInsuranceType" class="control-label">Insurance Type</label>&nbsp;
+                    <select asp-for="IdInsuranceType" class="form-control" asp-items="Model.InsuranceTypes"></select>
+                    <span asp-validation-for="IdInsuranceType" class="text-danger"></span>
                 </div>
-                <div class="col-md-6 form-group">
-                    <label asp-for="DurationTime" class="control-label"></label>&nbsp;*
-                    <input asp-for="DurationTime" class="form-control" />
-                    <span asp-validation-for="DurationTime" class="text-danger"></span>
+                <div class="col-md-4 form-group">
+                    <label asp-for="IdInsurancePlanType" class="control-label">Insurance Plan</label>&nbsp;
+                    <select asp-for="IdInsurancePlanType" class="form-control" asp-items="Model.InsurancePlanTypes"></select>
+                    <span asp-validation-for="IdInsurancePlanType" class="text-danger"></span>
+                </div>
+                <div class="col-md-4 form-group">
+                    <label asp-for="IdInsuranceCoverageType" class="control-label"> Coverage</label>&nbsp;
+                    <select asp-for="IdInsuranceCoverageType" class="form-control" asp-items="Model.InsuranceCoverageTypes"></select>
+                    <span asp-validation-for="IdInsuranceCoverageType" class="text-danger"></span>
                 </div>
             </div>
             <div>
                 <div class="col-md-6 form-group">
-                    <label asp-for="Units" class="control-label"></label>&nbsp;*
-                    <input asp-for="Units" class="form-control" />
-                    <span asp-validation-for="Units" class="text-danger"></span>
+                    <label asp-for="EffectiveDate" class="control-label"></label>&nbsp;
+                    <input asp-for="EffectiveDate" class="form-control" />
+                    <span asp-validation-for="EffectiveDate" class="text-danger"></span>
                 </div>
                 <div class="col-md-6 form-group">
-                    <label asp-for="AuthorizationNumber" class="control-label"></label>&nbsp;*
-                    <input asp-for="AuthorizationNumber" class="form-control" />
-                    <span asp-validation-for="AuthorizationNumber" class="text-danger"></span>
+                    <label asp-for="EndCoverageDate" class="control-label"></label>&nbsp;
+                    <input asp-for="EndCoverageDate" class="form-control" />
+                    <span asp-validation-for="EndCoverageDate" class="text-danger"></span>
                 </div>
             </div>
             <div class="col-md-12">
-                @*<div class="alert alert-warning" role="alert">
-            <span class="sr-only"></span>*@
-                <strong>Note: </strong> If the client still has available units, they will be added to the new units created.
-                @*</div>*@
+                <div form-group">
+                    <hr />
+                </div>
             </div>
+            <div>
+                <div>
+                    <div class="col-md-3 form-group">
+                        <label asp-for="IdAgencyService" class="control-label">Service</label>&nbsp;
+                        <select asp-for="IdAgencyService" class="form-control" asp-items="Model.AgencyServices"></select>
+                        <span asp-validation-for="IdAgencyService" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6 form-group">
+                        <label asp-for="AuthorizationNumber" class="control-label">Auth. Number</label>&nbsp;
+                        <input asp-for="AuthorizationNumber" class="form-control" />
+                        <span asp-validation-for="AuthorizationNumber" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-3 form-group">
+                        <label asp-for="Units" class="control-label"></label>&nbsp;
+                        <input asp-for="Units" class="form-control" />
+                        <span asp-validation-for="Units" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6 form-group">
+                    <label asp-for="ApprovedDate" class="control-label"></label>&nbsp;
+                    <input asp-for="ApprovedDate" class="form-control" />
+                    <span asp-validation-for="ApprovedDate" class="text-danger"></span>
+                </div>
+                <div class="col-md-6 form-group">
+                    <label asp-for="ExpiredDate" class="control-label"></label>&nbsp;
+                    <input asp-for="ExpiredDate" class="form-control" />
+                    <span asp-validation-for="ExpiredDate" class="text-danger"></span>
+                </div>
+            </div>
+            @*<div class="col-md-12">
+                <div class="alert alert-warning" role="alert">
+            <span class="sr-only"></span>
+                <strong>Note: </strong> If the client still has available units, they will be added to the new units created.
+                </div>
+            </div>*@
             <div class="col-md-12">
                 <div form-group">
                     <hr />
@@ -72,7 +99,6 @@
                 <div class="col-md-offset-8">
                     &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <input type="submit" value="Submit" class="btn btn-primary" />
-
                     <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
                 </div>
             </div>

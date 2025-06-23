@@ -1,4 +1,4 @@
-﻿@model KyoS.Web.Data.Entities.TCMIntakeAppendixJEntity
+﻿@model IEnumerable<KyoS.Web.Data.Entities.TCMIntakeAppendixJEntity>
 
 @if (Model != null)
 {
@@ -34,36 +34,37 @@
                         </tr>
                     </thead>
                     <tbody>
-                       
+                        @foreach (var item in Model)
+                        {
                             <tr>
                                 <td>
-                                    @if (Model.TcmClient.Client.Gender == KyoS.Common.Enums.GenderType.Female)
+                                    @if (item.TcmClient.Client.Gender == KyoS.Common.Enums.GenderType.Female)
                                     {
                                         <i class="glyphicon glyphicon-user btn-danger"></i>
                                     }
-                                    @if (Model.TcmClient.Client.Gender == KyoS.Common.Enums.GenderType.Male)
+                                    @if (item.TcmClient.Client.Gender == KyoS.Common.Enums.GenderType.Male)
                                     {
                                         <i class="glyphicon glyphicon-user btn-primary"></i>
                                     }
                                     &nbsp;
-                                    @Html.DisplayFor(modelItem => Model.TcmClient.Client.Name)
+                                    @Html.DisplayFor(modelItem => item.TcmClient.Client.Name)
                                     |
-                                    @Html.DisplayFor(modelItem => Model.TcmClient.CaseNumber)
+                                    @Html.DisplayFor(modelItem => item.TcmClient.CaseNumber)
                                 </td>
                                 <td align="center">
-                                    @Html.DisplayFor(modelItem => Model.TcmClient.Client.AdmisionDate)
+                                    @Html.DisplayFor(modelItem => item.TcmClient.Client.AdmisionDate)
                                 </td>
                                 <td align="center">
-                                    @Html.DisplayFor(modelItem => Model.Date)
+                                    @Html.DisplayFor(modelItem => item.Date)
                                 </td>
                                 <td align="center">
-                                    @Html.DisplayFor(modelItem => Model.TcmClient.Casemanager.Name)
+                                    @Html.DisplayFor(modelItem => item.TcmClient.Casemanager.Name)
                                 </td>
                                 <td align="center">
-                                    @Html.DisplayFor(modelItem => Model.TcmClient.Status)
+                                    @Html.DisplayFor(modelItem => item.TcmClient.Status)
                                 </td>
                                 <td align="center">
-                                    @if (Model.Approved == 0)
+                                    @if (item.Approved == 0)
                                     {
                                         <span class="label label-warning">
                                             Edition
@@ -71,7 +72,7 @@
                                     }
                                     else
                                     {
-                                        if (Model.Approved == 1)
+                                        if (item.Approved == 1)
                                         {
                                             <span class="label label-info">
                                                 Pending
@@ -79,7 +80,7 @@
                                         }
                                         else
                                         {
-                                            if (Model.Approved == 2)
+                                            if (item.Approved == 2)
                                             {
                                                 <span class="label label-success">
                                                     Approved
@@ -91,45 +92,48 @@
                                 <td align="right">
                                     @if (User.IsInRole("Manager") || User.IsInRole("TCMSupervisor"))
                                     {
-                                        @if (Model.Approved == 2)
+                                        @if (item.Approved == 2)
                                         {
-                                            <a asp-action="AppendixJReturnTo" asp-controller="TCMIntakes" asp-route-id="@Model.Id" asp-route-tcmClientId="@Model.TcmClient_FK" class="btn btn-warning" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
-                                            <a asp-action="EditAppendixJReadOnly" asp-controller="TCMIntakes" asp-route-id="@Model.Id" asp-route-origi="1" class="btn btn-info" title="View Appendix I"><i class="glyphicon glyphicon-list"></i></a>
-                                            <a asp-action="PrintTCMAppendixJ" asp-controller="TCMIntakes" asp-route-id="@Model.TcmClient_FK" class="btn btn-success" title="Print Service Plan" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                            <a asp-action="AppendixJReturnTo" asp-controller="TCMIntakes" asp-route-id="@item.Id" asp-route-tcmClientId="@item.TcmClient_FK" class="btn btn-warning" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                            <a asp-action="EditAppendixJReadOnly" asp-controller="TCMIntakes" asp-route-id="@item.Id" asp-route-origi="1" class="btn btn-info" title="View Appendix I"><i class="glyphicon glyphicon-list"></i></a>
+                                            <a asp-action="PrintTCMAppendixJ" asp-controller="TCMIntakes" asp-route-id="@item.TcmClient_FK" class="btn btn-success" title="Print Service Plan" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                         }
                                         else
                                         {
-                                            @if (Model.Approved == 1)
+                                            @if (item.Approved == 1)
                                             {
-                                                <a asp-action="AppendixJReturnTo" asp-controller="TCMIntakes" asp-route-id="@Model.Id" asp-route-tcmClientId="@Model.TcmClient_FK" class="btn btn-warning" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
-                                                <a asp-action="EditAppendixJReadOnly" asp-controller="TCMIntakes" asp-route-id="@Model.Id" asp-route-origi="1" class="btn btn-info" title="View Appendix J"><i class="glyphicon glyphicon-list"></i></a>
-                                                <a asp-action="PrintTCMAppendixJ" asp-controller="TCMIntakes" asp-route-id="@Model.TcmClient_FK" class="btn btn-success disabled" title="Print Service Plan" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                                <a asp-action="AppendixJReturnTo" asp-controller="TCMIntakes" asp-route-id="@item.Id" asp-route-tcmClientId="@item.TcmClient_FK" class="btn btn-warning" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                                <a asp-action="EditAppendixJReadOnly" asp-controller="TCMIntakes" asp-route-id="@item.Id" asp-route-origi="1" class="btn btn-info" title="View Appendix J"><i class="glyphicon glyphicon-list"></i></a>
+                                                <a asp-action="PrintTCMAppendixJ" asp-controller="TCMIntakes" asp-route-id="@item.TcmClient_FK" class="btn btn-success disabled" title="Print Service Plan" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                             }
                                             else
                                             {
-                                                <a asp-action="AppendixJReturnTo" asp-controller="TCMIntakes" asp-route-id="@Model.Id" asp-route-tcmClientId="@Model.TcmClient_FK" class="btn btn-warning disabled" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
-                                                <a asp-action="EditAppendixJReadOnly" asp-controller="TCMIntakes" asp-route-id="@Model.Id" asp-route-origi="1" class="btn btn-info" title="View Appendix J"><i class="glyphicon glyphicon-list"></i></a>
-                                                <a asp-action="PrintTCMAppendixJ" asp-controller="TCMIntakes" asp-route-id="@Model.TcmClient_FK" class="btn btn-success disabled" title="Print Service Plan" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                                <a asp-action="AppendixJReturnTo" asp-controller="TCMIntakes" asp-route-id="@item.Id" asp-route-tcmClientId="@item.TcmClient_FK" class="btn btn-warning disabled" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                                <a asp-action="EditAppendixJReadOnly" asp-controller="TCMIntakes" asp-route-id="@item.Id" asp-route-origi="1" class="btn btn-info" title="View Appendix J"><i class="glyphicon glyphicon-list"></i></a>
+                                                <a asp-action="PrintTCMAppendixJ" asp-controller="TCMIntakes" asp-route-id="@item.TcmClient_FK" class="btn btn-success disabled" title="Print Service Plan" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                             }
                                         }
-                                        <a onclick="ConfirmDeleteAppendixJ(@Model.Id)" class="btn btn-danger" title="Delete Appendix J"><i class="glyphicon glyphicon-trash"></i></a>
+                                        <a onclick="ConfirmDeleteAppendixJ(@item.Id)" class="btn btn-danger" title="Delete Appendix J"><i class="glyphicon glyphicon-trash"></i></a>
                                     }
                                     else
                                     {
-                                        <a asp-action="AppendixJReturnTo" asp-controller="TCMIntakes" asp-route-id="@Model.Id" asp-route-clientId="@Model.TcmClient_FK" class="btn btn-warning disabled" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
-                                        <a asp-action="EditAppendixJReadOnly" asp-controller="TCMIntakes" asp-route-id="@Model.Id" asp-route-origi="1" class="btn btn-info" title="View Appendix J"><i class="glyphicon glyphicon-list"></i></a>
-                                        @if (Model.Approved == 2)
+                                        <a asp-action="AppendixJReturnTo" asp-controller="TCMIntakes" asp-route-id="@item.Id" asp-route-clientId="@item.TcmClient_FK" class="btn btn-warning disabled" title="Return to edition"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                        <a asp-action="EditAppendixJReadOnly" asp-controller="TCMIntakes" asp-route-id="@item.Id" asp-route-origi="1" class="btn btn-info" title="View Appendix J"><i class="glyphicon glyphicon-list"></i></a>
+                                        @if (item.Approved == 2)
                                         {
-                                            <a asp-action="PrintTCMAppendixJ" asp-controller="TCMIntakes" asp-route-id="@Model.TcmClient_FK" class="btn btn-success" title="Print Service Plan" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                            <a asp-action="PrintTCMAppendixJ" asp-controller="TCMIntakes" asp-route-id="@item.TcmClient_FK" class="btn btn-success" title="Print Service Plan" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                         }
                                         else
                                         {
-                                            <a asp-action="PrintTCMAppendixJ" asp-controller="TCMIntakes" asp-route-id="@Model.TcmClient_FK" class="btn btn-success disabled" title="Print Service Plan" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                            <a asp-action="PrintTCMAppendixJ" asp-controller="TCMIntakes" asp-route-id="@item.TcmClient_FK" class="btn btn-success disabled" title="Print Service Plan" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
                                         }
-                                        <a onclick="ConfirmDeleteAppendixJ(@Model.Id)" class="btn btn-danger disabled" title="Delete Appendix J"><i class="glyphicon glyphicon-trash"></i></a>
+                                        <a onclick="ConfirmDeleteAppendixJ(@item.Id)" class="btn btn-danger disabled" title="Delete Appendix J"><i class="glyphicon glyphicon-trash"></i></a>
                                     }
                                 </td>
                             </tr>
+                            
+                        }
+                       
                     </tbody>
                 </table>
             </div>

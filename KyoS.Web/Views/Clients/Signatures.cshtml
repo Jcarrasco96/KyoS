@@ -31,7 +31,7 @@
                             <th class="col-md-3">
                                 @Html.DisplayNameFor(model => model.Name)
                             </th>
-                            <th class="col-md-2" style="text-align:center;">
+                            <th class="col-md-3" style="text-align:left;">
                                 Health Insurance
                             </th>
                             <th class="col-md-1" style="text-align:center;">
@@ -46,7 +46,7 @@
                             <th class="col-md-1" style="text-align:center;">
                                 Sign
                             </th>
-                            <th class="col-md-2">
+                            <th class="col-md-1">
                             </th>
                         </tr>
                     </thead>
@@ -101,9 +101,9 @@
                                                 </table>
                                             </div>
                                         </td>
-                                    }
+                                    }     
                                     else
-                                    { 
+                                    {                                       
                                         <td></td>
                                     }
                                     <td>
@@ -120,7 +120,7 @@
                                         |
                                         @Html.DisplayFor(modelItem => item.Code)
                                     </td>
-                                    <td align="center">
+                                    <td align="left">
                                         @if (item.Clients_HealthInsurances.Count() > 0)
                                         {
                                             @if (item.Clients_HealthInsurances.Where(n => n.Active == true).Count() > 0)
@@ -222,7 +222,7 @@
                                         </td>
                                     }
                                     else
-                                    { 
+                                    {
                                         <td></td>
                                     }
                                     <td>
@@ -239,7 +239,7 @@
                                         |
                                         @Html.DisplayFor(modelItem => item.Code)
                                     </td>
-                                    <td align="center">
+                                    <td align="left">
                                         @if (item.Clients_HealthInsurances.Count() > 0)
                                         {
                                             @if (item.Clients_HealthInsurances.Where(n => n.Active == true).Count() > 0)

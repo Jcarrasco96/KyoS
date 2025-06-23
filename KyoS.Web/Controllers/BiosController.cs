@@ -343,8 +343,7 @@ namespace KyoS.Web.Controllers
                 if (model.Client.Client_Referred == null || model.Client.Client_Referred.Where(n => n.Service == ServiceAgency.CMH).Count() == 0)
                 {
                     Client_Referred client_referred = new Client_Referred();
-                    model.Client.Client_Referred = new List<Client_Referred>();
-                    model.Client.Client_Referred.Add(client_referred);
+                    model.Client.Client_Referred = [client_referred];
                     model.ReferralName = "Not have referred";
                 }
                 else
@@ -587,8 +586,7 @@ namespace KyoS.Web.Controllers
                 if (model.Client.Client_Referred == null || model.Client.Client_Referred.Where(n => n.Service == ServiceAgency.CMH).Count() == 0)
                 {
                     Client_Referred client_referred = new Client_Referred();
-                    model.Client.Client_Referred = new List<Client_Referred>();
-                    model.Client.Client_Referred.Add(client_referred);
+                    model.Client.Client_Referred = [client_referred];
                     model.ReferralName = "Not have referred";
                 }
                 else
@@ -1530,6 +1528,8 @@ namespace KyoS.Web.Controllers
                                        .ThenInclude(c => c.Client_Referred)
                                        .ThenInclude(cr => cr.Referred)
 
+                                       .AsSplitQuery()
+
                                        .FirstOrDefault(i => (i.Id == id));
             if (entity == null)
             {
@@ -1581,6 +1581,21 @@ namespace KyoS.Web.Controllers
                 Stream stream = _reportHelper.AlliedBioReport(entity);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
+            if (entity.Client.Clinic.Name == "YOUR NEIGHBOR MEDICAL GROUP")
+            {
+                Stream stream = _reportHelper.YourNeighborBioReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (entity.Client.Clinic.Name == "MEDISANA HEALTH CENTER")
+            {
+                Stream stream = _reportHelper.MedisanaBioReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (entity.Client.Clinic.Name == "BETTER YEARS AHEAD MEDICAL CENTER")
+            {
+                Stream stream = _reportHelper.ByaBioReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
             return null;
         }
 
@@ -1616,17 +1631,34 @@ namespace KyoS.Web.Controllers
             }
             else
             {
-                List<ClientEntity> ClientList = await _context.Clients
-                                                             .Include(n => n.Bio)
-                                                             .Where(n => n.Bio == null
-                                                               && n.Brief == null
-                                                               && n.Clinic.Id == user_logged.Clinic.Id
-                                                               && n.OnlyTCM == false)
-                                                             .ToListAsync();
+                if (User.IsInRole("Documents_Assistant"))
+                {
+                    List<ClientEntity> ClientList = await _context.Clients
+                                                                  .Include(n => n.Bio)
+                                                                  .Where(n => n.Bio == null
+                                                                           && n.Brief == null
+                                                                           && n.Clinic.Id == user_logged.Clinic.Id
+                                                                           && n.OnlyTCM == false
+                                                                           && ((n.DocumentsAssistant != null && n.DocumentsAssistant.LinkedUser == user_logged.UserName)
+                                                                             || n.DocumentsAssistant == null))
+                                                                  .ToListAsync();
 
-                return View(ClientList);
-            }
-               
+                    return View(ClientList);
+                }
+                else
+                {
+                    List<ClientEntity> ClientList = await _context.Clients
+                                                                  .Include(n => n.Bio)
+                                                                  .Where(n => n.Bio == null
+                                                                           && n.Brief == null
+                                                                           && n.Clinic.Id == user_logged.Clinic.Id
+                                                                           && n.OnlyTCM == false)
+                                                                  .ToListAsync();
+
+                    return View(ClientList);
+                }
+                                
+            }              
 
         }
 
@@ -1904,7 +1936,12 @@ namespace KyoS.Web.Controllers
                     model.EmergencyContactTelephone = model.Client.EmergencyContact.Telephone;
                     model.RelationShipOfEmergencyContact = model.Client.RelationShipOfEmergencyContact.ToString();
 
-                    ViewData["origi"] = origi;
+                    if (model.DateSignatureSupervisor.ToShortDateString() == "01/01/0001")
+                    {
+                        model.DateSignatureSupervisor = model.DateBio;
+                    }
+
+                ViewData["origi"] = origi;
                     return View(model);
                 }
 
@@ -2135,11 +2172,16 @@ namespace KyoS.Web.Controllers
                 UserEntity user_logged = _context.Users.Include(u => u.Clinic)
                                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
+                ClientEntity client = _context.Clients.Include(n => n.Psychiatrist).FirstOrDefault(m => m.Id == id);
+
                 Client_DiagnosticViewModel model = new Client_DiagnosticViewModel
                 {
                     IdDiagnostic = 0,
                     Diagnostics = _combosHelper.GetComboDiagnosticsByClient(id),
-                    IdClient = id
+                    IdClient = id, 
+                    DateIdentify = DateTime.Now,
+                    Active = true,
+                    Prescriber = (client.Psychiatrist != null)? client.Psychiatrist.Name : string.Empty
                 };
                 return View(model);
             }
@@ -2168,7 +2210,10 @@ namespace KyoS.Web.Controllers
                     Id = 0,
                     Client = client,
                     Diagnostic = diagnostic,
-                    Principal = client_diagnosticViewModel.Principal
+                    Principal = client_diagnosticViewModel.Principal,
+                    Active = client_diagnosticViewModel.Active,
+                    DateIdentify = client_diagnosticViewModel.DateIdentify,
+                    Prescriber = client_diagnosticViewModel.Prescriber
                    
                 };
                 
@@ -2422,7 +2467,7 @@ namespace KyoS.Web.Controllers
         }
 
         #region Bill week
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public async Task<IActionResult> BillBIOToday(int id = 0, int week = 0, int origin = 0)
         {
             if (id > 0)
@@ -2449,7 +2494,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("NotAuthorized", "Account");
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manage, Billerr")]
         public async Task<IActionResult> NotBill(int id = 0, int week = 0, int origin = 0)
         {
             if (id > 0)
@@ -2476,7 +2521,7 @@ namespace KyoS.Web.Controllers
 
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public async Task<IActionResult> DeniedBillToday(int idBio = 0, int week = 0, int origin = 0)
         {
             if (idBio >= 0)
@@ -2502,7 +2547,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("NotAuthorized", "Account");
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public async Task<IActionResult> NotDeniedBill(int idBio = 0, int client = 0, int week = 0)
         {
             if (idBio > 0)
@@ -2531,7 +2576,7 @@ namespace KyoS.Web.Controllers
 
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public async Task<IActionResult> NotPaymentReceivedBIO(int id = 0, int week = 0, int origin = 0)
         {
             if (id > 0)
@@ -2557,7 +2602,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("NotAuthorized", "Account");
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public async Task<IActionResult> PaymentReceivedTodayBIO(int id = 0, int week = 0, int origin = 0)
         {
             if (id > 0)
@@ -2589,7 +2634,6 @@ namespace KyoS.Web.Controllers
         public async Task<IActionResult> AutoSave(string jsonModel)
         {
             UserEntity user_logged = await _context.Users
-                                                   .Include(u => u.Clinic)
                                                    .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
 
             BioTempEntity model = JsonConvert.DeserializeObject<BioTempEntity>(jsonModel);
@@ -2811,6 +2855,125 @@ namespace KyoS.Web.Controllers
                     return Json(false);
                 }
             }
-        }        
+        }
+
+
+        [Authorize(Roles = "Supervisor, Documents_Assistant")]
+        public IActionResult DeleteMedicaBehavioral(int id = 0)
+        {
+            if (id > 0)
+            {
+                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                       .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                DeleteViewModel model = new DeleteViewModel
+                {
+                    Id_Element = id,
+                    Desciption = "Do you want to delete this record?"
+
+                };
+                return View(model);
+            }
+            else
+            {
+                //Edit
+                //return View(new Client_DiagnosticViewModel());
+                return null;
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Supervisor, Documents_Assistant")]
+        public async Task<IActionResult> DeleteMedicaBehavioral(DeleteViewModel model)
+        {
+            Bio_BehavioralHistoryEntity entity = await _context.Bio_BehavioralHistory
+                                                               .Include(n => n.Client)
+                                                               .FirstOrDefaultAsync(n => n.Id == model.Id_Element);
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Bio_BehavioralHistory.Remove(entity);
+                    await _context.SaveChangesAsync();
+
+                    List<Bio_BehavioralHistoryEntity> bio = await _context.Bio_BehavioralHistory
+                                                                          .Include(g => g.Client)
+                                                                          .Where(g => g.Client.Id == entity.Client.Id)
+                                                                          .ToListAsync();
+
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewBehavioralHealth", bio) });
+                }
+                catch (Exception)
+                {
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewBehavioralHealth", _context.Bio_BehavioralHistory.Include(n => n.Client).Where(n => n.Client.Id == entity.Client.Id).ToList()) });
+                }
+
+
+            }
+
+            return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewBehavioralHealth", _context.Bio_BehavioralHistory.Include(n => n.Client).Where(n => n.Client.Id == entity.Client.Id).ToList()) });
+        }
+
+        [Authorize(Roles = "Supervisor, Documents_Assistant")]
+        public IActionResult DeleteMedication1(int id = 0)
+        {
+            if (id > 0)
+            {
+                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                       .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                DeleteViewModel model = new DeleteViewModel
+                {
+                    Id_Element = id,
+                    Desciption = "Do you want to delete this record?"
+
+                };
+                return View(model);
+            }
+            else
+            {
+                //Edit
+                //return View(new Client_DiagnosticViewModel());
+                return null;
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Supervisor, Documents_Assistant")]
+        public async Task<IActionResult> DeleteMedication1(DeleteViewModel model)
+        {
+            MedicationEntity entity = await _context.Medication
+                                                    .Include(n => n.Client)
+                                                    .FirstOrDefaultAsync(n => n.Id == model.Id_Element);
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Medication.Remove(entity);
+                    await _context.SaveChangesAsync();
+
+                    List<MedicationEntity> salida = await _context.Medication
+                                                                  .Include(g => g.Client)
+                                                                  .Where(g => g.Client.Id == entity.Client.Id)
+                                                                  .ToListAsync();
+
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewMedication", salida) });
+                }
+                catch (Exception)
+                {
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewMedication", _context.Medication.Include(n => n.Client).Where(n => n.Client.Id == entity.Client.Id).ToList()) });
+                }
+
+
+            }
+
+            return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewMedication", _context.Medication.Include(n => n.Client).Where(n => n.Client.Id == entity.Client.Id).ToList()) });
+        }
+
+
     }
 }

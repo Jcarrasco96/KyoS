@@ -1,0 +1,87 @@
+﻿@model IEnumerable<KyoS.Common.Helpers.AuditCertification>
+@{
+    Layout = null;
+}
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="AuditCertification">
+            <div class="col-md-12">
+                @if (Model != null)
+                {
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">Audit (Document Assistant Certification)</h3>
+                                </div>
+                                <div class="panel-body">
+                                    <table class="table table-hover table-responsive table-striped" id="MyTableDiag">
+                                        <thead>
+                                            <tr>
+                                                <th class="col-md-4" >
+                                                    Document Assistant
+                                                </th>
+                                                <th class="col-md-4" >
+                                                    Course
+                                                </th>
+                                                <th class="col-md-2" style="text-align:center;">
+                                                    Exp.
+                                                </th>
+                                                <th class="col-md-2" style="text-align:center;">
+                                                    Status.
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var item in Model)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.TCMName)
+                                                    </td>
+                                                    <td >
+                                                        @Html.DisplayFor(modelItem => item.CourseName)
+                                                    </td>
+                                                    <td align="center">
+                                                        @Html.DisplayFor(modelItem => item.ExpirationDate)
+                                                    </td>
+                                                    <td align="center">
+                                                        @if (item.Description == "Not Exists")
+                                                        {
+                                                            <span class="label label-danger">
+                                                                Not Exists
+                                                            </span>
+                                                        }
+                                                        @if (item.Description == "Expired soon")
+                                                        {
+                                                            <span class="label label-warning">
+                                                                Expired soon
+                                                            </span>
+                                                        }
+                                                        @if (item.Description == "Expired")
+                                                        {
+                                                            <span class="label label-danger">
+                                                                Expired
+                                                            </span>
+                                                        }
+                                                       
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="col-md-offset-10">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+

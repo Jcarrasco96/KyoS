@@ -57,9 +57,29 @@
                                         @Html.DisplayFor(modelItem => item.ApprovedDate)
                                     </td>
                                     <td align="center">
-                                        <span class="label label-danger">
-                                            @item.ApprovedDate.Date.AddMonths(Convert.ToInt32(item.DurationTime)).ToShortDateString()
-                                        </span>
+                                        @if (item.ExpiredDate > DateTime.Today)
+                                        {
+                                            @if (item.ExpiredDate.AddDays(-30) < DateTime.Today)
+                                            {
+                                                <span class="label label-warning">
+                                                    @item.ExpiredDate.ToShortDateString()
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span class="label label-success">
+                                                    @item.ExpiredDate.ToShortDateString()
+                                                </span>
+                                            }
+
+                                        }
+                                        else
+                                        {
+                                            <span class="label label-danger">
+                                                @item.ExpiredDate.ToShortDateString()
+                                            </span>
+                                        }
+
                                     </td>
                                     <td align="center">
                                         @Html.DisplayFor(modelItem => item.AuthorizationNumber)
@@ -74,6 +94,7 @@
                                         @if (User.IsInRole("Manager"))
                                         {
                                             <a onclick="showInPopup('@Url.Action("EditHealthInsuranceClient", "Clients", new { id = item.Id }, Context.Request.Scheme)','Edit Health Insurance')" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i></a>
+                                            <a onclick="showInPopup('@Url.Action("DuplicateHealthInsuranceClient", "Clients", new { id = item.Id }, Context.Request.Scheme)','Duplicated authorization')" class="btn btn-primary"><i class="glyphicon glyphicon-duplicate"></i></a>
                                             <a onclick="showInPopup('@Url.Action("DeleteHealthInsuranceTempModal", "Clients", new { id = item.Id }, Context.Request.Scheme)','Delete Health Insurance')" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i></a>
                                             @*<button type="button" onclick="DeleteHealthInsuranceTemp(@item.Id)" class="btn btn-danger deleteItem" title="Delete Health Insurance"><i class="glyphicon glyphicon-trash"></i></button>*@
                                         }

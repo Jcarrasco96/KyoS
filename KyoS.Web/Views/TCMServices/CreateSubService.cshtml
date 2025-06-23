@@ -22,11 +22,21 @@
                     <input class="form-control" asp-for="@Model.TcmService.Name" readonly />
                 </div>
             </div>
-            <div class="col-md-12">
-                <div class="form-group">
+            <div>
+                <div class="col-md-7 form-group">
                     <label class="control-label">SubService Name</label>&nbsp;*
                     <input asp-for="Name" class="form-control" />
                     <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="col-md-3 form-group">
+                    <label class="control-label">Freq. (day)</label>
+                    <input asp-for="Frecuency" class="form-control" />
+                    <span asp-validation-for="Frecuency" class="text-danger"></span>
+                </div>
+                <div class="col-md-2 form-group">
+                    <label class="control-label">Units</label>
+                    <input asp-for="Units" class="form-control" />
+                    <span asp-validation-for="Units" class="text-danger"></span>
                 </div>
             </div>
             <div class="col-md-12">

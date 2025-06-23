@@ -25,17 +25,26 @@
                 <table class="table table-hover table-responsive table-striped" id="MyTable">
                     <thead>
                         <tr>
-                            <th class="col-md-5">
+                            <th class="col-md-4">
                                 @Html.DisplayNameFor(model => model.Name)
                             </th>
-                            <th class="col-md-2" style="text-align:center;">
-                                Signed date
+                            <th class="col-md-1" style="text-align:center;">
+                                Signed
                             </th>
-                            <th class="col-md-2" style="text-align:center;">
-                                @Html.DisplayNameFor(model => model.DurationTime)
+                            <th class="col-md-1" style="text-align:center;">
+                                Expired
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Need Auth.
                             </th>
                             <th class="col-md-1" style="text-align:center;">
                                 Active
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Open
+                            </th>
+                             <th class="col-md-1" style="text-align:center;">
+                                Close
                             </th>
                             <th class="col-md-2">
                             </th>
@@ -54,10 +63,61 @@
                                         @Html.DisplayFor(modelItem => item.SignedDate)
                                     </td>
                                     <td align="center">
-                                        @Html.DisplayFor(modelItem => item.DurationTime)
+                                        @if(item.SignedDate.AddMonths(item.DurationTime.Value).Date > DateTime.Today)
+                                        {
+                                            @if (item.SignedDate.AddMonths(item.DurationTime.Value - 1).Date < DateTime.Today)
+                                            {
+                                                <span class="label label-warning">
+                                                    @item.SignedDate.AddMonths(item.DurationTime.Value).Date.ToShortDateString()
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span class="label label-success">
+                                                    @item.SignedDate.AddMonths(item.DurationTime.Value).Date.ToShortDateString()
+                                                </span>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <span class="label label-danger">
+                                                @item.SignedDate.AddMonths(item.DurationTime.Value).Date.ToShortDateString()
+                                            </span>
+                                        }
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.NeedAuthorization)
                                     </td>
                                     <td align="center">
                                         @Html.DisplayFor(modelItem => item.Active)
+                                    </td>
+                                    <td align="center">
+                                       @if (@item.Client_HealthInsurances.Where(n => n.Client.Status == KyoS.Common.Enums.StatusType.Open).Count() > 0)
+                                       {
+                                          <a onclick="showInPopupLg('@Url.Action("ViewDetails","HealthInsurances",new {id = @item.Id, status = KyoS.Common.Enums.StatusType.Open},Context.Request.Scheme)','View Details')" class="btn btn-info" title="View Details">
+                                             @item.Client_HealthInsurances.Where(n => n.Client.Status == KyoS.Common.Enums.StatusType.Open && n.Active == true).Count()
+                                          </a>
+                                       }
+                                       else
+                                       {
+                                          <a onclick="showInPopupLg('@Url.Action("ViewDetails","HealthInsurances",new {id = @item.Id, status = KyoS.Common.Enums.StatusType.Open, principal = true },Context.Request.Scheme)','View Details')" class="btn btn-default disabled" title="View Details">
+                                            0
+                                          </a>
+                                       }
+                                    </td>
+                                    <td align="center">
+                                       @if (@item.Client_HealthInsurances.Where(n => n.Client.Status == KyoS.Common.Enums.StatusType.Close).Count() > 0)
+                                       {
+                                          <a onclick="showInPopupLg('@Url.Action("ViewDetails","HealthInsurances",new {id = @item.Id, status = KyoS.Common.Enums.StatusType.Close},Context.Request.Scheme)','View Details')" class="btn btn-info" title="View Details">
+                                             @item.Client_HealthInsurances.Where(n => n.Client.Status == KyoS.Common.Enums.StatusType.Close && n.Active == true).Count()
+                                          </a>
+                                       }
+                                       else
+                                       {
+                                          <a onclick="showInPopupLg('@Url.Action("ViewDetails","HealthInsurances",new {id = @item.Id, status = KyoS.Common.Enums.StatusType.Close, principal = true },Context.Request.Scheme)','View Details')" class="btn btn-default disabled" title="View Details">
+                                            0
+                                          </a>
+                                       }
                                     </td>
                                     <td align="right">
                                         @if (item.DocumentPath == string.Empty)
@@ -84,10 +144,64 @@
                                         @Html.DisplayFor(modelItem => item.SignedDate)
                                     </td>
                                     <td align="center">
-                                        @Html.DisplayFor(modelItem => item.DurationTime)
+                                        @if (item.DurationTime != null && item.DurationTime > 0)
+                                        {
+                                            @if (item.SignedDate.AddMonths(item.DurationTime.Value).Date > DateTime.Today)
+                                            {
+                                                @if (item.SignedDate.AddMonths(item.DurationTime.Value - 1).Date < DateTime.Today)
+                                                {
+                                                    <span class="label label-warning">
+                                                        @item.SignedDate.AddMonths(item.DurationTime.Value).Date.ToShortDateString()
+                                                    </span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="label label-success">
+                                                       @item.SignedDate.AddMonths(item.DurationTime.Value).Date.ToShortDateString()
+                                                    </span>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <span class="label label-danger">
+                                                    @item.SignedDate.AddMonths(item.DurationTime.Value).Date.ToShortDateString()
+                                                </span>
+                                            }
+                                        }                                        
+                                    </td>
+                                     <td align="center">
+                                        @Html.DisplayFor(modelItem => item.NeedAuthorization)
                                     </td>
                                     <td align="center">
                                         @Html.DisplayFor(modelItem => item.Active)
+                                    </td>
+                                    <td align="center">
+                                       @if (@item.Client_HealthInsurances.Where(n => n.Client.Status == KyoS.Common.Enums.StatusType.Open).Count() > 0)
+                                       {
+                                          <a onclick="showInPopupLg('@Url.Action("ViewDetails","HealthInsurances",new {id = @item.Id, status = KyoS.Common.Enums.StatusType.Open},Context.Request.Scheme)','View Details')" class="btn btn-info" title="View Details">
+                                             @item.Client_HealthInsurances.Where(n => n.Client.Status == KyoS.Common.Enums.StatusType.Open && n.Active == true).Count()
+                                          </a>
+                                       }
+                                       else
+                                       {
+                                          <a onclick="showInPopupLg('@Url.Action("ViewDetails","HealthInsurances",new {id = @item.Id, status = KyoS.Common.Enums.StatusType.Open, principal = true },Context.Request.Scheme)','View Details')" class="btn btn-default disabled" title="View Details">
+                                            0
+                                          </a>
+                                       }
+                                    </td>
+                                    <td align="center">
+                                       @if (@item.Client_HealthInsurances.Where(n => n.Client.Status == KyoS.Common.Enums.StatusType.Close).Count() > 0)
+                                       {
+                                          <a onclick="showInPopupLg('@Url.Action("ViewDetails","HealthInsurances",new {id = @item.Id, status = KyoS.Common.Enums.StatusType.Close},Context.Request.Scheme)','View Details')" class="btn btn-info" title="View Details">
+                                             @item.Client_HealthInsurances.Where(n => n.Client.Status == KyoS.Common.Enums.StatusType.Close && n.Active == true).Count()
+                                          </a>
+                                       }
+                                       else
+                                       {
+                                          <a onclick="showInPopupLg('@Url.Action("ViewDetails","HealthInsurances",new {id = @item.Id, status = KyoS.Common.Enums.StatusType.Close, principal = true },Context.Request.Scheme)','View Details')" class="btn btn-default disabled" title="View Details">
+                                            0
+                                          </a>
+                                       }
                                     </td>
                                     <td align="right">
                                         @if (item.DocumentPath == string.Empty)

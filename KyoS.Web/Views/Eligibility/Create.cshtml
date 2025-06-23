@@ -8,6 +8,8 @@
         <form asp-action="Create" asp-route-id="@Model.Id" asp-route-origin="@ViewData["origin"]" onsubmit="return jQueryAjaxPostEligibility(this);">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="IdClient" />
+            <input type="hidden" asp-for="Client.FirstName" />
+            <input type="hidden" asp-for="Client.LastName" />
             <div class="col-md-12">
                 <div class="form-group">
                     <label asp-for="DocumentFile" class="control-label"></label>&nbsp;*

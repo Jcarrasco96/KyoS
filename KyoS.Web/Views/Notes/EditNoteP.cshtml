@@ -7,7 +7,26 @@
     <ul class="breadcrumb">
         <li>
             <i class="icon-home"></i>
-            @Html.ActionLink("PSR Notes", "Index", "Notes")
+            @if (Model.Origin == 0)
+            {
+                @Html.ActionLink("PSR Notes", "Index", "Notes")
+            }
+            @if (Model.Origin == 1)
+            {
+                @Html.ActionLink("Not Started Notes", "NotStartedNotes", "Notes")
+            }
+            @if (Model.Origin == 2)
+            {
+                @Html.ActionLink("Notes in Edition", "NotesInEdit", "Notes")
+            }
+            @if (Model.Origin == 3)
+            {
+                @Html.ActionLink("Pending Notes", "PendingNotes", "Notes")
+            }
+            @if (Model.Origin == 4)
+            {
+                @Html.ActionLink("Notes with review", "NotesWithReview", "Notes")
+            }
         </li>
         <li class="active">PSR Note</li>
     </ul>
@@ -256,7 +275,12 @@
                     });
                 })
             });
-
+        function getMinute() {
+            var url = "@Url.Action("GetUnitsPSR", "Notes")";
+            $.get(url, { minute1: $("#minute1").val(), minute2: $("#minute2").val(), minute3: $("#minute3").val(), minute4: $("#minute4").val() }, function (data) { $("#lbUnits").text(data); });
+            var url = "@Url.Action("GetMinutesPSR", "Notes")";
+            $.get(url, { minute1: $("#minute1").val(), minute2: $("#minute2").val(), minute3: $("#minute3").val(), minute4: $("#minute4").val() }, function (data) { $("#lbTotalMinutes").text(data); });
+        }
             function Verifications() {
             
                 if ($("#PlanNote").val() != "")

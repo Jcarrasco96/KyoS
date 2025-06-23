@@ -27,5 +27,7 @@ namespace KyoS.Web.Data.Entities
 
         public bool FinishEdition { get; set; }
         public List<BillDmsPaidEntity> BillDmsPaids { get; set; }
+        public int UnitsMH { get; set; }
+        public int UnitsTCM { get; set; }
     }
 }

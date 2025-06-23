@@ -30,7 +30,7 @@
                             <th class="col-md-2">
                                 Case Manager
                             </th>
-                            <th class="col-md-2">
+                            <th class="col-md-3">
                                 Client Name
                             </th>
                             <th class="col-md-1" style="text-align: center;">
@@ -40,21 +40,17 @@
                                 Open Date
                             </th>
                             <th class="col-md-1" style="text-align: center;">
-                                Close Date
-                            </th>
-                            <th class="col-md-1" style="text-align: center;">
                                 Consent
                             </th>
                             <th class="col-md-1" style="text-align: center;">
                                 Assessment
                             </th>
-                            <th class="col-md-1" style="text-align: center;">
+                            <th class="col-md-2" style="text-align: center;">
                                 Service Plan
                             </th>
                             <th class="col-md-1" style="text-align: center;">
                                 Appendix J
-                            </th>
-                            
+                            </th>                            
                         </tr>
                     </thead>
                     <tbody>
@@ -95,9 +91,6 @@
                                 <td align="center">
                                     @Html.DisplayFor(modelItem => item.DataOpen)
                                 </td>
-                                <td align="center">
-                                    @Html.DisplayFor(modelItem => item.DataClose)
-                                </td>  
                                 <td align="center">
                                     @if (User.IsInRole("CaseManager"))
                                     {
@@ -226,13 +219,14 @@
                                 <td align="center">
                                     @if (User.IsInRole("CaseManager"))
                                     {
-                                        @if (item.TcmIntakeAppendixJ == null || item.TcmIntakeAppendixJ.Id == 0)
+                                        @if (item.TcmIntakeAppendixJ.Count() == 0)
                                         {
                                             <a asp-action="CreateTCMAppendixJ" asp-route-id="@item.Id" asp-controller="TCMIntakes" asp-route-origi="1" class="btn btn-default " title="Create"><i class="glyphicon glyphicon-plus"></i></a>
                                         }
                                         else
                                         {
-                                            @if (item.TcmIntakeAppendixJ.Approved == 0)
+                                                <a asp-action="CreateTCMAppendixJ" asp-route-id="@item.Id" asp-controller="TCMIntakes" asp-route-origi="1" class="btn btn-default " title="Create"><i class="glyphicon glyphicon-plus"></i></a>
+                                           @* @if (item.TcmIntakeAppendixJ.Approved == 0)
                                             {
                                                 <a asp-action="CreateTCMAppendixJ" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-warning" asp-route-origi="1" title="Edit"><i class="glyphicon glyphicon-pencil"></i></a>
                                             }
@@ -243,18 +237,19 @@
                                             @if (item.TcmIntakeAppendixJ.Approved == 2)
                                             {
                                                 <a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-success" title="Print"><i class="glyphicon glyphicon-print"></i></a>
-                                            }
+                                            }*@
                                         }
                                     }
                                     else
                                     {
-                                        @if (item.TcmIntakeAppendixJ == null || item.TcmIntakeAppendixJ.Id == 0)
+                                        @if (item.TcmIntakeAppendixJ.Count() == 0)
                                         {
                                             <a asp-action="CreateTCMAppendixJ" asp-route-id="@item.Id" asp-controller="TCMIntakes" asp-route-origi="1" class="btn btn-default disabled" title="Create"><i class="glyphicon glyphicon-plus"></i></a>
                                         }
                                         else
                                         {
-                                            @if (item.TcmIntakeAppendixJ.Approved == 0)
+                                                <a asp-action="CreateTCMAppendixJ" asp-route-id="@item.Id" asp-controller="TCMIntakes" asp-route-origi="1" class="btn btn-default disabled" title="Create"><i class="glyphicon glyphicon-plus"></i></a>
+                                            @*@if (item.TcmIntakeAppendixJ.Approved == 0)
                                             {
                                                 <a asp-action="CreateTCMAppendixJ" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-warning disabled" asp-route-origi="1" title="Edit"><i class="glyphicon glyphicon-pencil"></i></a>
                                             }
@@ -265,7 +260,7 @@
                                             @if (item.TcmIntakeAppendixJ.Approved == 2)
                                             {
                                                 <a asp-action="Print" asp-route-id="@item.Id" asp-controller="TCMIntakes" class="btn btn-success disabled" title="Print"><i class="glyphicon glyphicon-print"></i></a>
-                                            }
+                                            }*@
                                         }
                                     }
 

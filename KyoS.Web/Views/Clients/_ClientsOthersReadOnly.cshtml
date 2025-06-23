@@ -2,87 +2,174 @@
 <div class="col-md-push-12">
     &nbsp;
 </div>
-<div class="col-md-push-12">
-    <div class="form-group col-md-2">
-        <label asp-for="FullAddress" class="control-label"></label>
-        <input asp-for="FullAddress" class="form-control" readonly />        
+@if (User.IsInRole("CaseManager"))
+{
+    <div class="col-md-push-12">
+        <div class="form-group col-md-2">
+            <label asp-for="FullAddress" class="control-label"></label>
+            <input asp-for="FullAddress" class="form-control"  />
+        </div>
+        <div class="form-group col-md-2">
+            <label asp-for="AlternativeAddress" class="control-label"></label>
+            <input asp-for="AlternativeAddress" class="form-control"  />
+        </div>
+        <div class="form-group col-md-2">
+            <label asp-for="Telephone" class="control-label"></label>
+            <input asp-for="Telephone" class="form-control"  />
+        </div>
+        <div class="form-group col-md-2">
+            <label asp-for="TelephoneSecondary" class="control-label"></label>
+            <input asp-for="TelephoneSecondary" class="form-control"  />
+        </div>
+        <div class="form-group col-md-2">
+            <label asp-for="ZipCode" class="control-label"></label>
+            <input asp-for="ZipCode" class="form-control"  />
+        </div>
+        <div class="form-group col-md-2">
+            <label asp-for="Email" class="control-label"></label>
+            <input asp-for="Email" class="form-control"  />
+        </div>
     </div>
-    <div class="form-group col-md-2">
-        <label asp-for="AlternativeAddress" class="control-label"></label>
-        <input asp-for="AlternativeAddress" class="form-control" readonly />       
+    <div class="col-md-push-12">
+        <div class="form-group col-md-2">
+            <label asp-for="Country" class="control-label"></label>
+            <input asp-for="Country" class="form-control"  />
+        </div>
+        <div class="form-group col-md-2">
+            <label asp-for="City" class="control-label"></label>
+            <input asp-for="City" class="form-control"  />
+        </div>
+        <div class="form-group col-md-2">
+            <label asp-for="State" class="control-label"></label>
+            <input asp-for="State" class="form-control"  />
+        </div>
+        <div class="form-group col-md-2">
+            <label asp-for="Race" class="control-label"></label>
+            <select asp-for="IdRace" asp-items="Model.Races" class="form-control" ></select>
+        </div>
+        <div class="form-group col-md-2">
+            <label asp-for="PlaceOfBirth" class="control-label"></label>
+            <input asp-for="PlaceOfBirth" class="form-control"  />
+        </div>
+        <div class="form-group col-md-2">
+            <label asp-for="MaritalStatus" class="control-label"></label>
+            <select asp-for="IdMaritalStatus" asp-items="Model.Maritals" class="form-control" ></select>
+        </div>
     </div>
-    <div class="form-group col-md-2">
-        <label asp-for="Telephone" class="control-label"></label>
-        <input asp-for="Telephone" class="form-control" readonly />        
+    <div class="col-md-push-12">
+        <div class="form-group col-md-2">
+            <label asp-for="Ethnicity" class="control-label"></label>
+            <select asp-for="IdEthnicity" asp-items="Model.Ethnicities" class="form-control" ></select>
+        </div>
+        <div class="form-group col-md-2">
+            <label asp-for="PreferredLanguage" class="control-label"></label>
+            <select asp-for="IdPreferredLanguage" asp-items="Model.Languages" class="form-control" ></select>
+        </div>
+        <div class="form-group col-md-2">
+            <label asp-for="OtherLanguage" class="control-label"></label>
+            <input asp-for="OtherLanguage" class="form-control"  />
+        </div>
+        <div class="form-group col-md-1">
+            <label asp-for="OtherLanguage_Read" class="control-label">Read</label><br />
+            <input type="checkbox" asp-for="OtherLanguage_Read" class="form-check-input" >
+        </div>
+        <div class="form-group col-md-1">
+            <label asp-for="OtherLanguage_Speak" class="control-label">Speak</label><br />
+            <input type="checkbox" asp-for="OtherLanguage_Speak" class="form-check-input" >
+        </div>
+        <div class="form-group col-md-1">
+            <label asp-for="OtherLanguage_Understand" class="control-label">Understand</label><br />
+            <input type="checkbox" asp-for="OtherLanguage_Understand" class="form-check-input" >
+        </div>
+        <div class="form-group col-md-3">
+            &nbsp;
+        </div>
     </div>
-    <div class="form-group col-md-2">
-        <label asp-for="TelephoneSecondary" class="control-label"></label>
-        <input asp-for="TelephoneSecondary" class="form-control" readonly />        
+}
+else
+{
+    <div class="col-md-push-12">
+        <div class="form-group col-md-2">
+            <label asp-for="FullAddress" class="control-label"></label>
+            <input asp-for="FullAddress" class="form-control" readonly />
+        </div>
+        <div class="form-group col-md-2">
+            <label asp-for="AlternativeAddress" class="control-label"></label>
+            <input asp-for="AlternativeAddress" class="form-control" readonly />
+        </div>
+        <div class="form-group col-md-2">
+            <label asp-for="Telephone" class="control-label"></label>
+            <input asp-for="Telephone" class="form-control" readonly />
+        </div>
+        <div class="form-group col-md-2">
+            <label asp-for="TelephoneSecondary" class="control-label"></label>
+            <input asp-for="TelephoneSecondary" class="form-control" readonly />
+        </div>
+        <div class="form-group col-md-2">
+            <label asp-for="ZipCode" class="control-label"></label>
+            <input asp-for="ZipCode" class="form-control" readonly />
+        </div>
+        <div class="form-group col-md-2">
+            <label asp-for="Email" class="control-label"></label>
+            <input asp-for="Email" class="form-control" readonly />
+        </div>
     </div>
-    <div class="form-group col-md-2">
-        <label asp-for="ZipCode" class="control-label"></label>
-        <input asp-for="ZipCode" class="form-control" readonly />        
+    <div class="col-md-push-12">
+        <div class="form-group col-md-2">
+            <label asp-for="Country" class="control-label"></label>
+            <input asp-for="Country" class="form-control" readonly />
+        </div>
+        <div class="form-group col-md-2">
+            <label asp-for="City" class="control-label"></label>
+            <input asp-for="City" class="form-control" readonly />
+        </div>
+        <div class="form-group col-md-2">
+            <label asp-for="State" class="control-label"></label>
+            <input asp-for="State" class="form-control" readonly />
+        </div>
+        <div class="form-group col-md-2">
+            <label asp-for="Race" class="control-label"></label>
+            <select asp-for="IdRace" asp-items="Model.Races" class="form-control" disabled></select>
+        </div>
+        <div class="form-group col-md-2">
+            <label asp-for="PlaceOfBirth" class="control-label"></label>
+            <input asp-for="PlaceOfBirth" class="form-control" readonly />
+        </div>
+        <div class="form-group col-md-2">
+            <label asp-for="MaritalStatus" class="control-label"></label>
+            <select asp-for="IdMaritalStatus" asp-items="Model.Maritals" class="form-control" disabled></select>
+        </div>
     </div>
-    <div class="form-group col-md-2">
-        <label asp-for="Email" class="control-label"></label>
-        <input asp-for="Email" class="form-control" readonly />        
+    <div class="col-md-push-12">
+        <div class="form-group col-md-2">
+            <label asp-for="Ethnicity" class="control-label"></label>
+            <select asp-for="IdEthnicity" asp-items="Model.Ethnicities" class="form-control" disabled></select>
+        </div>
+        <div class="form-group col-md-2">
+            <label asp-for="PreferredLanguage" class="control-label"></label>
+            <select asp-for="IdPreferredLanguage" asp-items="Model.Languages" class="form-control" disabled></select>
+        </div>
+        <div class="form-group col-md-2">
+            <label asp-for="OtherLanguage" class="control-label"></label>
+            <input asp-for="OtherLanguage" class="form-control" readonly />
+        </div>
+        <div class="form-group col-md-1">
+            <label asp-for="OtherLanguage_Read" class="control-label">Read</label><br />
+            <input type="checkbox" asp-for="OtherLanguage_Read" class="form-check-input" disabled>
+        </div>
+        <div class="form-group col-md-1">
+            <label asp-for="OtherLanguage_Speak" class="control-label">Speak</label><br />
+            <input type="checkbox" asp-for="OtherLanguage_Speak" class="form-check-input" disabled>
+        </div>
+        <div class="form-group col-md-1">
+            <label asp-for="OtherLanguage_Understand" class="control-label">Understand</label><br />
+            <input type="checkbox" asp-for="OtherLanguage_Understand" class="form-check-input" disabled>
+        </div>
+        <div class="form-group col-md-3">
+            &nbsp;
+        </div>
     </div>
-</div>
-<div class="col-md-push-12">
-    <div class="form-group col-md-2">
-        <label asp-for="Country" class="control-label"></label>
-        <input asp-for="Country" class="form-control" readonly />        
-    </div>
-    <div class="form-group col-md-2">
-        <label asp-for="City" class="control-label"></label>
-        <input asp-for="City" class="form-control" readonly />        
-    </div>
-    <div class="form-group col-md-2">
-        <label asp-for="State" class="control-label"></label>
-        <input asp-for="State" class="form-control" readonly />       
-    </div>
-    <div class="form-group col-md-2">
-        <label asp-for="Race" class="control-label"></label>
-        <select asp-for="IdRace" asp-items="Model.Races" class="form-control" disabled></select>        
-    </div>
-    <div class="form-group col-md-2">
-        <label asp-for="PlaceOfBirth" class="control-label"></label>
-        <input asp-for="PlaceOfBirth" class="form-control" readonly />        
-    </div>
-    <div class="form-group col-md-2">
-        <label asp-for="MaritalStatus" class="control-label"></label>
-        <select asp-for="IdMaritalStatus" asp-items="Model.Maritals" class="form-control" disabled></select>        
-    </div>
-</div>
-<div class="col-md-push-12">
-    <div class="form-group col-md-2">
-        <label asp-for="Ethnicity" class="control-label"></label>
-        <select asp-for="IdEthnicity" asp-items="Model.Ethnicities" class="form-control" disabled></select>        
-    </div>
-    <div class="form-group col-md-2">
-        <label asp-for="PreferredLanguage" class="control-label"></label>
-        <select asp-for="IdPreferredLanguage" asp-items="Model.Languages" class="form-control" disabled></select>        
-    </div>
-    <div class="form-group col-md-2">
-        <label asp-for="OtherLanguage" class="control-label"></label>
-        <input asp-for="OtherLanguage" class="form-control" readonly />        
-    </div>
-    <div class="form-group col-md-1">
-        <label asp-for="OtherLanguage_Read" class="control-label">Read</label><br />
-        <input type="checkbox" asp-for="OtherLanguage_Read" class="form-check-input" disabled>
-    </div>
-    <div class="form-group col-md-1">
-        <label asp-for="OtherLanguage_Speak" class="control-label">Speak</label><br />
-        <input type="checkbox" asp-for="OtherLanguage_Speak" class="form-check-input" disabled>
-    </div>
-    <div class="form-group col-md-1">
-        <label asp-for="OtherLanguage_Understand" class="control-label">Understand</label><br />
-        <input type="checkbox" asp-for="OtherLanguage_Understand" class="form-check-input" disabled>
-    </div>
-    <div class="form-group col-md-3">
-        &nbsp;
-    </div>
-</div>
+}
 <div class="col-md-12">
     <hr />
 </div>

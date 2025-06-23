@@ -21,10 +21,10 @@
                                 Invoice Date
                             </th>
                             <th class="col-md-1" style="text-align:center;">
-                                CMH Notes
+                                CMH
                             </th>
                             <th class="col-md-1" style="text-align:center;">
-                                TCM Notes
+                                TCM
                             </th>
                             <th class="col-md-1" style="text-align:center;">
                                 Units
@@ -99,9 +99,13 @@
                                     </td>
                                     <td align="center">
                                         @item.BillDmsDetails.Where(n => n.ServiceAgency == KyoS.Common.Enums.ServiceAgency.CMH).Count()
+                                        |
+                                        @item.UnitsMH
                                     </td>
                                     <td align="center">
                                         @item.BillDmsDetails.Where(n => n.ServiceAgency == KyoS.Common.Enums.ServiceAgency.TCM).Count()
+                                        |
+                                        @item.UnitsTCM
                                     </td>
                                     <td align="center">
                                         @Html.DisplayFor(modelItem => item.Units)
@@ -185,9 +189,13 @@
                                     </td>
                                     <td align="center">
                                         @item.BillDmsDetails.Where(n => n.ServiceAgency == KyoS.Common.Enums.ServiceAgency.CMH).Count()
+                                        |
+                                        @item.UnitsMH
                                     </td>
                                     <td align="center">
                                         @item.BillDmsDetails.Where(n => n.ServiceAgency == KyoS.Common.Enums.ServiceAgency.TCM).Count()
+                                        |
+                                        @item.UnitsTCM
                                     </td>
                                     <td align="center">
                                         @Html.DisplayFor(modelItem => item.Units)

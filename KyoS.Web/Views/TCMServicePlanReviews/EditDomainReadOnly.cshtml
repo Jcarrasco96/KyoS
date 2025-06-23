@@ -1,4 +1,4 @@
-﻿@model KyoS.Web.Models.TCMDomainViewModel
+﻿@model KyoS.Web.Models.TCMServicePlanReviewDomainViewModel
 @{
     Layout = null;
 }
@@ -9,17 +9,11 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <input type="hidden" asp-for="Origin" />
-            <input type="hidden" asp-for="Id_ServicePlan" />
+            <input type="hidden" asp-for="Id_ServicePlanReview" />
             <input type="hidden" asp-for="Id_Service" />
+            <input type="hidden" asp-for="IdTcmDomain" />
             <div class="form-group">
-                <div class="col-md-6">
-                    <b>Case number:</b>
-                    <i>@Html.DisplayFor(modelItem => Model.TcmServicePlan.TcmClient.CaseNumber)</i>
-                    <br />
-                    <b>Client name:</b>
-                    <i>@Html.DisplayFor(modelItem => Model.TcmServicePlan.TcmClient.Client.Name)</i>
-                </div>
-                @if (User.IsInRole("TCMSupervisor") && Model.TcmServicePlan.TcmClient.Client.Clinic.Setting.TCMSupervisorEdit == true && ViewData["origi"].ToString() != "5" && Model.Origin == "Service Plan Review")
+                @if (User.IsInRole("TCMSupervisor") && Model.TcmServicePlanReview.TcmServicePlan.TcmClient.Client.Clinic.Setting.TCMSupervisorEdit == true && ViewData["origi"].ToString() != "5" && Model.Origin == "Service Plan Review")
                 {
                     <div class="col-md-6">
                         <label asp-for="DateIdentified" class="control-label">Identified Date</label>
@@ -35,45 +29,52 @@
                         <span asp-validation-for="DateIdentified" class="text-danger"></span>
                     </div>
                 }
-            </div>
-            <div class="col-md-12">
-                &nbsp;
-            </div>
-
-            <br />
+                <div class="container-fluid">
+                    &nbsp;
+                </div>                
+            </div>            
             <div class="form-group">
                 <div class="col-md-3">
-                    <label asp-for="Code" class="control-label"></label>&nbsp;*
-                    <input asp-for="Code" class="form-control" readonly />
-                    <span asp-validation-for="Code" class="text-danger"></span>
+                    <label asp-for="CodeDomain" class="control-label"></label>
+                    <input asp-for="CodeDomain" class="form-control" readonly />
+                    <span asp-validation-for="CodeDomain" class="text-danger"></span>
                 </div>
-
                 <div class="col-md-9">
-                    <label asp-for="Name" class="control-label"></label>&nbsp;*
+                    <label asp-for="Name" class="control-label"></label>
                     <input asp-for="Name" class="form-control" readonly />
                     <span asp-validation-for="Name" class="text-danger"></span>
                 </div>
             </div>
-            @if ((User.IsInRole("TCMSupervisor") && Model.TcmServicePlan.TcmClient.Client.Clinic.Setting.TCMSupervisorEdit == true && ViewData["origi"].ToString() != "5" && Model.Origin == "Service Plan Review")
+            <div class="container-fluid">
+                &nbsp;
+            </div>
+            @if ((User.IsInRole("TCMSupervisor") && Model.TcmServicePlanReview.TcmServicePlan.TcmClient.Client.Clinic.Setting.TCMSupervisorEdit == true && ViewData["origi"].ToString() != "5" && Model.Origin == "Service Plan Review")
               || ((User.IsInRole("CaseManager") && ViewData["origi"].ToString() != "5" && Model.Origin == "Service Plan Review")))
             {
                 <div class="col-md-12">
                     <div class="form-group">
-                        <label asp-for="Needs_Identified" class="control-label">Need Identified</label>
-                        <textarea asp-for="Needs_Identified" class="form-control" rows="4"></textarea>
-                        <span asp-validation-for="Needs_Identified" class="text-danger"></span>
+                        <label asp-for="NeedsIdentified" class="control-label">Need Identified</label>
+                        <textarea asp-for="NeedsIdentified" class="form-control" rows="4"></textarea>
+                        <span asp-validation-for="NeedsIdentified" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="col-md-12">
                     <div class="form-group">
-                        <label asp-for="Long_Term" class="control-label">Long Term</label>
-                        <textarea asp-for="Long_Term" class="form-control" rows="4"></textarea>
-                        <span asp-validation-for="Long_Term" class="text-danger"></span>
+                        <label asp-for="LongTerm" class="control-label">Long Term</label>
+                        <textarea asp-for="LongTerm" class="form-control" rows="4"></textarea>
+                        <span asp-validation-for="LongTerm" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label asp-for="ChangesUpdate" class="control-label">Changes/Update</label>
+                        <textarea asp-for="ChangesUpdate" class="form-control" rows="4"></textarea>
+                        <span asp-validation-for="ChangesUpdate" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="col-md-push-12">
                     <div class="form-group col-md-6">
-                        <input type="checkbox" asp-for="Status" class="form-check-input"> Domain complished<br />
+                        <input type="checkbox" asp-for="Status" class="form-check-input"> Domain complished                        
                     </div>
                     <div class="col-md-6">
                         <label asp-for="DateAccomplished" class="control-label"></label>&nbsp;*
@@ -95,23 +96,30 @@
             {
                 <div class="col-md-12">
                     <div class="form-group">
-                        <label asp-for="Needs_Identified" class="control-label">Need Identified</label>
-                        <textarea asp-for="Needs_Identified" class="form-control" rows="4" readonly></textarea>
-                        <span asp-validation-for="Needs_Identified" class="text-danger"></span>
+                        <label asp-for="NeedsIdentified" class="control-label">Need Identified</label>
+                        <textarea asp-for="NeedsIdentified" class="form-control" rows="4" readonly></textarea>
+                        <span asp-validation-for="NeedsIdentified" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="col-md-12">
                     <div class="form-group">
-                        <label asp-for="Long_Term" class="control-label">Long Term</label>
-                        <textarea asp-for="Long_Term" class="form-control" rows="4" readonly></textarea>
-                        <span asp-validation-for="Long_Term" class="text-danger"></span>
+                        <label asp-for="LongTerm" class="control-label">Long Term</label>
+                        <textarea asp-for="LongTerm" class="form-control" rows="4" readonly></textarea>
+                        <span asp-validation-for="LongTerm" class="text-danger"></span>
                     </div>
                 </div>
                 @if (ViewData["origi"].ToString() == "5")
                 {
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label asp-for="ChangesUpdate" class="control-label">Changes/Update</label>
+                            <textarea asp-for="ChangesUpdate" class="form-control" rows="4" disabled></textarea>
+                            <span asp-validation-for="ChangesUpdate" class="text-danger"></span>
+                        </div>
+                    </div>
                     <div class="col-md-push-12">
                         <div class="form-group col-md-6">
-                            <input type="checkbox" asp-for="Status" class="form-check-input" disabled> Domain complished<br />
+                            <input type="checkbox" asp-for="Status" class="form-check-input" disabled> Domain complished
                         </div>
                         <div class="col-md-6">
                             <label asp-for="DateAccomplished" class="control-label"></label>&nbsp;*
@@ -130,9 +138,16 @@
                 }
                 else
                 {
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label asp-for="ChangesUpdate" class="control-label">Changes/Update</label>
+                            <textarea asp-for="ChangesUpdate" class="form-control" rows="4"></textarea>
+                            <span asp-validation-for="ChangesUpdate" class="text-danger"></span>
+                        </div>
+                    </div>
                     <div class="col-md-push-12">
                         <div class="form-group col-md-6">
-                            <input type="checkbox" asp-for="Status" class="form-check-input"> Domain complished<br />
+                            <input type="checkbox" asp-for="StatusBool" class="form-check-input"> Domain complished<br />
                         </div>
                         <div class="col-md-6">
                             <label asp-for="DateAccomplished" class="control-label"></label>&nbsp;*

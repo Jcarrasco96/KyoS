@@ -229,8 +229,9 @@ namespace KyoS.Web.Controllers
         public async Task<IActionResult> Create(GroupViewModel model, IFormCollection form, int all = 0)
         {
             UserEntity user_logged = _context.Users
-                                                .Include(u => u.Clinic)
-                                                .FirstOrDefault(u => u.UserName == User.Identity.Name);
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(u => u.Setting)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
             if (ModelState.IsValid)
             {
@@ -350,6 +351,15 @@ namespace KyoS.Web.Controllers
                                         return RedirectToAction(nameof(Create), new { error = 1, idFacilitator = group.Facilitator.Id });
                                     }
 
+                                    //verifico que el Cliente tenga ese tiempo disponible en el TCM
+                                    if (user_logged.Clinic.Setting.TCMClinic == true)
+                                    {
+                                        if (this.VerifyTCMNotesAtSameTime(client.Id, item.Date, schedule.InitialTime, schedule.EndTime))
+                                        {
+                                            return RedirectToAction(nameof(Create), new { error = 2, idClient = client.Id });
+                                        }
+                                    }
+
                                     workday_client.Add(new Workday_Client
                                     {
                                         Workday = item,
@@ -399,7 +409,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Manager")]
-        public async Task<IActionResult> Edit(int? id, int error = 0, int idFacilitator = 0, int idClient = 0, int all = 0)
+        public async Task<IActionResult> Edit(int? id, int error = 0, int idFacilitator = 0, int idClient = 0, int all = 0, string test = "")
         {
             if (id == null)
             {
@@ -420,7 +430,7 @@ namespace KyoS.Web.Controllers
                 FacilitatorEntity facilitator = _context.Facilitators
                                                         .FirstOrDefault(f => f.Id == idFacilitator);
                 ViewBag.Error = "0";
-                ViewBag.errorText = $"Error. The facilitator {facilitator.Name} has another therapy already at that time";
+                ViewBag.errorText = $"Error. The facilitator {facilitator.Name} has another therapy already at that time" + test;
             }
 
             //One client has a created note from another service at that time.
@@ -429,7 +439,7 @@ namespace KyoS.Web.Controllers
                 ClientEntity client = _context.Clients
                                               .FirstOrDefault(f => f.Id == idClient);
                 ViewBag.Error = "1";
-                ViewBag.errorText = $"Error. The client {client.Name} has a created note from another therapy at that time";
+                ViewBag.errorText = $"Error. The client {client.Name} has a created note from another therapy at that time" + test;
             }
 
             MultiSelectList client_list;
@@ -478,6 +488,7 @@ namespace KyoS.Web.Controllers
         {
             UserEntity user_logged = _context.Users
                                              .Include(u => u.Clinic)
+                                             .ThenInclude(u => u.Setting)
                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
             if (ModelState.IsValid)
@@ -540,6 +551,8 @@ namespace KyoS.Web.Controllers
                     {
                         client = await _context.Clients
                                                .Include(c => c.MTPs)
+                                               .ThenInclude(c => c.Goals)
+                                               .ThenInclude(c => c.Objetives)
                                                .FirstOrDefaultAsync(c => c.Id == Convert.ToInt32(value));
 
                         DateTime developed_date;
@@ -599,18 +612,28 @@ namespace KyoS.Web.Controllers
                             foreach (WorkdayEntity item in workdays)
                             {
                                 //si el cliente no tiene asistencia en un dia laborable en Workdays_Clients entonces se crea
-                                if (!item.Workdays_Clients.Any(wc => wc.Client.Id == client.Id))
+                                if (!item.Workdays_Clients.Any(wc => wc.Client.Id == client.Id) && client.MTPs.Where(n => n.Goals.Where(g => g.Service == ServiceType.PSR && g.Objetives.Where(o => o.DateOpened <= item.Date && o.DateResolved >= item.Date).Count() > 0).Count() > 0).Count() > 0)
                                 {
                                     //Verify the client is not present in other services of notes at the same time
                                     if (this.VerifyNotesAtSameTime(client.Id, group.Meridian, item.Date, original_group.Schedule.InitialTime, original_group.Schedule.EndTime, ServiceType.PSR))
                                     {
-                                        return RedirectToAction(nameof(Edit), new { id = model.Id, error = 2, idClient = client.Id });
+                                        string test = ", review date (" + item.Date.ToShortDateString() + "). Individual Therapy";
+                                        return RedirectToAction(nameof(Edit), new { id = model.Id, error = 2, idClient = client.Id, test = test });
                                     }
 
                                     //verifico que el facilitator tenga disponibilidad para dar la terapia en el dia correspondiente                            
                                     if (this.VerifyFreeTimeOfFacilitator(group.Facilitator.Id, ServiceType.PSR, group.Meridian, item.Date))
                                     {
                                         return RedirectToAction(nameof(Edit), new { id = model.Id, error = 1, idFacilitator = group.Facilitator.Id });
+                                    }
+
+                                    //verifico que el Cliente tenga ese tiempo disponible en el TCM
+                                    if (user_logged.Clinic.Setting.TCMClinic == true)
+                                    {
+                                        if (this.VerifyTCMNotesAtSameTime(client.Id, item.Date, original_group.Schedule.InitialTime, original_group.Schedule.EndTime))
+                                        {
+                                            return RedirectToAction(nameof(Edit), new { id = model.Id, error = 2, idClient = client.Id });
+                                        }
                                     }
 
                                     workday_client.Add(new Workday_Client
@@ -880,6 +903,7 @@ namespace KyoS.Web.Controllers
         {
             UserEntity user_logged = _context.Users
                                              .Include(u => u.Clinic)
+                                             .ThenInclude(u => u.Setting)
                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
             if (ModelState.IsValid)
@@ -990,7 +1014,16 @@ namespace KyoS.Web.Controllers
                                          return RedirectToAction(nameof(CreateGT), new { error = 1, idFacilitator = group.Facilitator.Id });
                                      }
 
-                                     workday_client.Add(new Workday_Client
+                                    //verifico que el Cliente tenga ese tiempo disponible en el TCM
+                                    if (user_logged.Clinic.Setting.TCMClinic == true)
+                                    {
+                                        if (this.VerifyTCMNotesAtSameTime(client.Id, item.Date, schedule.InitialTime, schedule.EndTime))
+                                        {
+                                            return RedirectToAction(nameof(CreateGT), new { error = 1, idFacilitator = group.Facilitator.Id });
+                                        }
+                                    }
+
+                                    workday_client.Add(new Workday_Client
                                      {
                                          Workday = item,
                                          Client = client,
@@ -1064,7 +1097,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Manager")]
-        public async Task<IActionResult> EditGT(int? id, int error = 0, int idFacilitator = 0, int idClient = 0, int all = 0)
+        public async Task<IActionResult> EditGT(int? id, int error = 0, int idFacilitator = 0, int idClient = 0, int all = 0, string test = "")
         {
             if (id == null)
             {
@@ -1087,7 +1120,7 @@ namespace KyoS.Web.Controllers
                 FacilitatorEntity facilitator = _context.Facilitators
                                                         .FirstOrDefault(f => f.Id == idFacilitator);
                 ViewBag.Error = "0";
-                ViewBag.errorText = $"Error. The facilitator {facilitator.Name} has another therapy already at that time";
+                ViewBag.errorText = $"Error. The facilitator {facilitator.Name} has another therapy already at that time" + test;
             }
 
             //One client has a created note from another service at that time.
@@ -1096,7 +1129,7 @@ namespace KyoS.Web.Controllers
                 ClientEntity client = _context.Clients
                                               .FirstOrDefault(f => f.Id == idClient);
                 ViewBag.Error = "1";
-                ViewBag.errorText = $"Error. The client {client.Name} has a created note from another therapy at that time";
+                ViewBag.errorText = $"Error. The client {client.Name} has a created note from another therapy at that time" + test;
             }
 
             MultiSelectList client_list;
@@ -1145,6 +1178,7 @@ namespace KyoS.Web.Controllers
         {
             UserEntity user_logged = _context.Users
                                              .Include(u => u.Clinic)
+                                             .ThenInclude(u => u.Setting)
                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
             if (ModelState.IsValid)
@@ -1191,6 +1225,8 @@ namespace KyoS.Web.Controllers
                     {
                         client = await _context.Clients
                                                .Include(c => c.MTPs)
+                                               .ThenInclude(c => c.Goals)
+                                               .ThenInclude(c => c.Objetives)
                                                .FirstOrDefaultAsync(c => c.Id == Convert.ToInt32(value));
 
                         DateTime developed_date;
@@ -1207,6 +1243,7 @@ namespace KyoS.Web.Controllers
                             _context.Update(client);
                            //verifico que las notas de group se generen a partir de la fecha de los goals y objetivos de group Therapy, sino tiene objetivos se generan a aprtir de hoy
                             List<ObjetiveEntity> listObjetive = _context.Objetives.Where(n => n.Goal.MTP.Client.Id == client.Id
+                                                                                           && n.Goal.MTP.Active == true
                                                                                            && n.Goal.Service == ServiceType.Group)
                                                                                   .ToList();
                             DateTime initialgoal = new DateTime();
@@ -1249,12 +1286,13 @@ namespace KyoS.Web.Controllers
                             foreach (WorkdayEntity item in workdays)
                             {
                                 //si el cliente no tiene asistencia en un dia laborable en Workdays_Clients entonces se crea
-                                if (!item.Workdays_Clients.Any(wc => wc.Client.Id == client.Id))
+                                if (!item.Workdays_Clients.Any(wc => wc.Client.Id == client.Id) && client.MTPs.Where(n => n.Goals.Where(g => g.Service == ServiceType.Group && g.Objetives.Where(o => o.DateOpened <= item.Date && o.DateResolved >= item.Date).Count() > 0).Count() > 0).Count() > 0)
                                 {
                                     //Verify the client is not present in other services of notes at the same time
                                      if (this.VerifyNotesAtSameTime(client.Id, group.Meridian, item.Date, original_group.Schedule.InitialTime, original_group.Schedule.EndTime, ServiceType.Group))
                                      {
-                                         return RedirectToAction(nameof(EditGT), new { id = model.Id, error = 2, idClient = client.Id, all });
+                                         string test = ", review date (" + item.Date.ToShortDateString() + "). Individual Therapy";
+                                         return RedirectToAction(nameof(EditGT), new { id = model.Id, error = 2, idClient = client.Id, all, test = test });
                                      }
 
                                      //verifico que el facilitator tenga disponibilidad para dar la terapia en el dia correspondiente                            
@@ -1263,7 +1301,16 @@ namespace KyoS.Web.Controllers
                                          return RedirectToAction(nameof(EditGT), new { id = model.Id, error = 1, idFacilitator = group.Facilitator.Id, all });
                                      }
 
-                                     workday_client.Add(new Workday_Client
+                                    //verifico que el Cliente tenga ese tiempo disponible en el TCM
+                                    if (user_logged.Clinic.Setting.TCMClinic == true)
+                                    {
+                                        if (this.VerifyTCMNotesAtSameTime(client.Id, item.Date, original_group.Schedule.InitialTime, original_group.Schedule.EndTime))
+                                        {
+                                            return RedirectToAction(nameof(EditGT), new { id = model.Id, error = 2, idClient = client.Id, all });
+                                        }
+                                    }
+
+                                    workday_client.Add(new Workday_Client
                                      {
                                          Workday = item,
                                          Client = client,
@@ -1951,6 +1998,38 @@ namespace KyoS.Web.Controllers
 
             return true;
         }
+
+        [Authorize(Roles = "Manager")]
+        private bool VerifyTCMNotesAtSameTime(int idClient, DateTime date, DateTime initialTime, DateTime endTime)
+        {
+            TCMClientEntity tcmclient = _context.TCMClient
+                                                .Include(n => n.TCMNote)
+                                                .ThenInclude(n => n.TCMNoteActivity)
+                                                .Include(n => n.Client)
+                                                .AsSplitQuery()
+                                                .FirstOrDefault(c => c.Client.Id == idClient);
+            if (tcmclient != null)
+            {
+                if (tcmclient.TCMNote.Count() > 0)
+                {
+                    if (tcmclient.TCMNote.Where(n => (n.DateOfService == date
+                                       && n.TCMNoteActivity.Where(m => (m.StartTime.TimeOfDay <= initialTime.TimeOfDay && m.EndTime.TimeOfDay >= initialTime.TimeOfDay)
+                                           || (m.StartTime.TimeOfDay <= endTime.TimeOfDay && m.EndTime.TimeOfDay >= endTime.TimeOfDay)
+                                           || (m.StartTime.TimeOfDay > initialTime.TimeOfDay && m.EndTime.TimeOfDay > initialTime.TimeOfDay && m.StartTime.TimeOfDay < endTime.TimeOfDay && m.EndTime.TimeOfDay < endTime.TimeOfDay))
+                                       .Count() > 0))
+                                     .Count() > 0)
+                        return true;
+                    else return false;
+                }
+                else
+                {
+                    return false;
+                }                 
+            }          
+
+            return false;
+        }
+
         #endregion
     }
 }

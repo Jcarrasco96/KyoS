@@ -26,7 +26,7 @@
                    data-language="en"
                    class="form-control datepicker-here" />
         </div>
-        @if (User.IsInRole("Manager") || User.IsInRole("TCMSupervisor"))
+        @if (User.IsInRole("Manager") || User.IsInRole("TCMSupervisor") || User.IsInRole("Biller"))
         {
             <div class="form-group col-md-3">
                 <label asp-for="IdCaseManager" class="control-label">Select case manager</label>
@@ -46,12 +46,13 @@
             <button type="submit" asp-route-billed="2" class="btn btn-success"><i class="icon-usd"></i> Billed</button>
             <button type="submit" asp-route-billed="1" class="btn btn-danger"><i class="icon-usd "></i> No Billed</button>
             <button type="submit" asp-route-billed="3" class="btn btn-info"><i class="icon-usd "></i> Payment Pending</button>
+            <button type="submit" asp-route-billed="4" class="btn btn-success"><i class="icon-usd "></i> Paid</button>
         </div>
     </form>
     <div class="col-md-12">
         <hr/>
     </div>
-    @if (User.IsInRole("Manager"))
+    @if (User.IsInRole("Manager") || User.IsInRole("Biller"))
     {
         <div class="col-md-12">
             <div class="col-md-3">
@@ -189,50 +190,100 @@
             }
             else
             {
-                <div class="col-md-1">
-                    <div class="thumbnail list-group-item list-group-item-info">
-                        <p style="text-align:center">Clients</p>
-                        <h4 style="text-align:center; font-weight:bold;">@ViewBag.Clients</h4>
+                @if (ViewData["billed"].ToString() == "3")
+                {
+                    <div class="col-md-1">
+                        <div class="thumbnail list-group-item list-group-item-info">
+                            <p style="text-align:center">Clients</p>
+                            <h4 style="text-align:center; font-weight:bold;">@ViewBag.Clients</h4>
+                        </div>
                     </div>
-                </div>
-                <div class="col-md-1">
-                    <div class="thumbnail list-group-item list-group-item-info">
-                        <p style="text-align:center">Notes</p>
-                        <h4 style="text-align:center; font-weight:bold;">@ViewBag.Notes</h4>
+                    <div class="col-md-1">
+                        <div class="thumbnail list-group-item list-group-item-info">
+                            <p style="text-align:center">Notes</p>
+                            <h4 style="text-align:center; font-weight:bold;">@ViewBag.Notes</h4>
+                        </div>
                     </div>
-                </div>
-                <div class="col-md-1">
-                    <div class="thumbnail list-group-item list-group-item-info">
-                        <p style="text-align:center">Services</p>
-                        <h4 style="text-align:center; font-weight:bold;">@ViewBag.Services</h4>
+                    <div class="col-md-1">
+                        <div class="thumbnail list-group-item list-group-item-info">
+                            <p style="text-align:center">Services</p>
+                            <h4 style="text-align:center; font-weight:bold;">@ViewBag.Services</h4>
+                        </div>
                     </div>
-                </div>
-                <div class="col-md-1">
-                    <div class="thumbnail list-group-item list-group-item-info">
-                        <p style="text-align:center">Units</p>
-                        <h4 style="text-align:center; font-weight:bold;">@ViewBag.Units</h4>
+                    <div class="col-md-1">
+                        <div class="thumbnail list-group-item list-group-item-info">
+                            <p style="text-align:center">Units</p>
+                            <h4 style="text-align:center; font-weight:bold;">@ViewBag.Units</h4>
+                        </div>
                     </div>
-                </div>
-                <div class="col-md-2">
-                    <div class="thumbnail list-group-item list-group-item-warning">
-                        <p style="text-align:center">Estimated Income</p>
-                        @if (User.IsInRole("CaseManager"))
-                        {
-                            <h4 style="text-align:center; font-weight:bold;"> $@ViewBag.Money</h4>
-                        }
-                        else
-                        {
-                            @if (ViewBag.Money == "0")
+                    <div class="col-md-2">
+                        <div class="thumbnail list-group-item list-group-item-warning">
+                            <p style="text-align:center">Estimated Income</p>
+                            @if (User.IsInRole("CaseManager"))
                             {
-                                <h4 style="text-align:center; font-weight:bold;">$0.00</h4>
+                                <h4 style="text-align:center; font-weight:bold;"> $@ViewBag.Money</h4>
                             }
                             else
-                            { 
-                                <h4 style="text-align:center; font-weight:bold;"> $@string.Concat(ViewBag.Money, ".00")</h4>
+                            {
+                                @if (ViewBag.Money == "0")
+                                {
+                                    <h4 style="text-align:center; font-weight:bold;">$0.00</h4>
+                                }
+                                else
+                                {
+                                    <h4 style="text-align:center; font-weight:bold;"> $@string.Concat(ViewBag.Money, ".00")</h4>
+                                }
                             }
-                        }
+                        </div>
                     </div>
-                </div>
+                }
+                else
+                {
+                    <div class="col-md-1">
+                        <div class="thumbnail list-group-item list-group-item-info">
+                            <p style="text-align:center">Clients</p>
+                            <h4 style="text-align:center; font-weight:bold;">@ViewBag.Clients</h4>
+                        </div>
+                    </div>
+                    <div class="col-md-1">
+                        <div class="thumbnail list-group-item list-group-item-info">
+                            <p style="text-align:center">Notes</p>
+                            <h4 style="text-align:center; font-weight:bold;">@ViewBag.Notes</h4>
+                        </div>
+                    </div>
+                    <div class="col-md-1">
+                        <div class="thumbnail list-group-item list-group-item-info">
+                            <p style="text-align:center">Services</p>
+                            <h4 style="text-align:center; font-weight:bold;">@ViewBag.Services</h4>
+                        </div>
+                    </div>
+                    <div class="col-md-1">
+                        <div class="thumbnail list-group-item list-group-item-info">
+                            <p style="text-align:center">Units</p>
+                            <h4 style="text-align:center; font-weight:bold;">@ViewBag.Units</h4>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="thumbnail list-group-item list-group-item-warning">
+                            <p style="text-align:center">Estimated Income</p>
+                            @if (User.IsInRole("CaseManager"))
+                            {
+                                <h4 style="text-align:center; font-weight:bold;"> $@ViewBag.Money</h4>
+                            }
+                            else
+                            {
+                                @if (ViewBag.Money == "0")
+                                {
+                                    <h4 style="text-align:center; font-weight:bold;">$0.00</h4>
+                                }
+                                else
+                                {
+                                    <h4 style="text-align:center; font-weight:bold;"> $@string.Concat(ViewBag.Money, ".00")</h4>
+                                }
+                            }
+                        </div>
+                    </div>
+                }
             }
 
         }
@@ -243,6 +294,7 @@
     <div class="col-md-12">
         &nbsp;
     </div>
+
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
@@ -264,23 +316,14 @@
                             <th class="col-md-1" style="text-align:center;">
                                 Diagnostic
                             </th>
-                            @if (User.IsInRole("Manager"))
-                            {
-                                <th class="col-md-1" style="text-align:center;">
-                                    Service
-                                </th>
-                            }
-                            else
-                            {
-                                <th class="col-md-1" style="text-align:center;">
-                                    Approved
-                                </th>
-                            }
                             <th class="col-md-1" style="text-align:center;">
-                                Units
+                                Service
                             </th>
                             <th class="col-md-1" style="text-align:center;">
-                                Amount
+                                Approved
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Units <a>|</a> $
                             </th>
                             <th class="col-md-1" style="text-align:center;">
                                 Billed
@@ -293,11 +336,13 @@
                     <tbody>
                         @foreach (var item in Model.TCMNotes.OrderBy(t => t.DateOfService))
                         {
+                            var date = DateTime.Today;
+                            date = item.DateOfService;
                             var @valor = (@item.TCMNoteActivity.ToList().Sum(n => n.Minutes) / 15);
                             var @residuo = (@item.TCMNoteActivity.ToList().Sum(n => n.Minutes) % 15);
                             var @valorAumentado = valor + 1;
                             var @unit = 0;
-                            if(@residuo > 7)
+                            if (@residuo > 7)
                             {
                                 unit = valorAumentado;
                             }
@@ -307,17 +352,17 @@
                             }
                             /*foreach (var activity in item.TCMNoteActivity)
                             {
-                                valor = (activity.Minutes) / 15;
-                                residuo = (activity.Minutes) % 15;
-                                valorAumentado = valor + 1;
-                                @if (@residuo > 7)
-                                {
-                                    unit = unit + valorAumentado;
-                                }
-                                else
-                                {
-                                    unit = unit + valor;
-                                }
+                            valor = (activity.Minutes) / 15;
+                            residuo = (activity.Minutes) % 15;
+                            valorAumentado = valor + 1;
+                            @if (@residuo > 7)
+                            {
+                            unit = unit + valorAumentado;
+                            }
+                            else
+                            {
+                            unit = unit + valor;
+                            }
                             }*/
                             <tr>
                                 <td>
@@ -334,16 +379,22 @@
                                     }
                                     &nbsp;
                                     @Html.DisplayFor(modelItem => item.TCMClient.Client.Name)
-                                    |
+                                    <a>|</a>
                                     @Html.DisplayFor(modelItem => item.TCMClient.CaseNumber)
                                 </td>
                                 <td align="center">
-                                    @if (item.TCMClient.Client.Clients_HealthInsurances.Where(n => n.Active == true).Count() > 0)
+                                    @if (item.TCMClient.Client.Clients_HealthInsurances.Where(n => n.ApprovedDate <= date).Count() > 0)
                                     {
-                                        @Html.DisplayFor(modelItem => item.TCMClient.Client.Clients_HealthInsurances.First(n => n.Active == true).HealthInsurance.Name)
-                                        <a>|</a>
-                                        @Html.DisplayFor(modelItem => item.TCMClient.Client.Clients_HealthInsurances.First(n => n.Active == true).AuthorizationNumber)
+                                        @item.TCMClient.Client.Clients_HealthInsurances.Where(n => n.ApprovedDate <= date).OrderByDescending(n => n.ApprovedDate).ElementAtOrDefault(0).HealthInsurance.Name
+                                        <a> | </a>
+                                        @item.TCMClient.Client.Clients_HealthInsurances.Where(n => n.ApprovedDate <= date).OrderByDescending(n => n.ApprovedDate).ElementAtOrDefault(0).MemberId
                                     }
+                                    @*@if (item.TCMClient.Client.Clients_HealthInsurances.Where(n => n.Active == true).Count() > 0)
+                                {
+                                @Html.DisplayFor(modelItem => item.TCMClient.Client.Clients_HealthInsurances.First(n => n.Active == true).HealthInsurance.Name)
+                                <a>|</a>
+                                @Html.DisplayFor(modelItem => item.TCMClient.Client.Clients_HealthInsurances.First(n => n.Active == true).AuthorizationNumber)
+                                }*@
                                 </td>
                                 <td align="center">
                                     @if (item.TCMClient.Client.Clients_Diagnostics.Count() > 0)
@@ -352,20 +403,14 @@
                                     }
                                 </td>
                                 <td align="center">
-                                    @if (User.IsInRole("Manager"))
-                                    {
-                                        @Html.DisplayFor(modelItem => item.DateOfService)
-                                    }
-                                    else
-                                    {
-                                        @Html.DisplayFor(modelItem => item.ApprovedDate)
-                                    }
+                                    @Html.DisplayFor(modelItem => item.DateOfService)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.ApprovedDate)
                                 </td>
                                 <td align="center">
                                     @unit
-                                </td>
-                                <td align="center">
-                                    @(unit * 12)
+                                    <a>|</a>@(unit * 12)
                                 </td>
                                 <td align="center">
                                     @if (item.BilledDate == null)
@@ -397,7 +442,7 @@
                                         }
                                         else
                                         {
-                                            @Html.DisplayFor(modelItem => item.PaymentDate)
+                                            <a onclick="showInPopup('@Url.Action("UpdateDatePaid", "TCMBilling", new {id = item.Id, dateInterval = Model.DateIterval, idCaseManager = Model.IdCaseManager, idClient = Model.IdClient, billed = ViewData["billed"]}, Context.Request.Scheme)','Update Date')" class="btn btn-success title="Update date">@Html.DisplayFor(modelItem => item.PaymentDate)</a>
                                         }
                                     }
                                 </td>
@@ -409,8 +454,10 @@
             </div>
         </div>
     </div>
+
 </div>
 
+<partial name="_ModalPopup" />
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

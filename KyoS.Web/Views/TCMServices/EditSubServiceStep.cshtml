@@ -1,0 +1,114 @@
+﻿@model KyoS.Web.Models.TCMSubServiceStepViewModel
+@{
+    Layout = null;
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="EditSubServiceStep" asp-route-id="@Model.Id" onsubmit="return QueryAjaxPostTCMSubService(this);">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id_TCMSubService" />
+            <input type="hidden" asp-for="Id_TCMService" />
+            <input type="hidden" asp-for="CreatedOn" />
+            <input type="hidden" asp-for="CreatedBy" />
+            <div>
+                <div class="form-group col-md-3">
+                    <label class="control-label">Service Code</label>
+                    <input class="form-control" asp-for="@Model.TcmSubService.TcmService.Code" readonly />
+
+                </div>
+                <div class="form-group col-md-9">
+                    <label class="control-label">Service Name</label>
+                    <input class="form-control" asp-for="@Model.TcmSubService.TcmService.Name" readonly />
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label class="control-label">SubService Name</label>&nbsp;*
+                    <input class="form-control" asp-for="@Model.TcmSubService.Name" readonly />
+                </div>
+            </div>
+            <div>
+                <div class="form-group col-md-2">
+                    <label class="control-label">Order</label>&nbsp;*
+                    <input asp-for="Orden" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-8">
+                    <label class="control-label">Step Name</label>&nbsp;*
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-2">
+                    <label class="control-label">Units</label>&nbsp;*
+                    <input asp-for="Units" class="form-control" />
+                    <span asp-validation-for="Units" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label asp-for="Description" class="control-label"></label>
+                    <textarea asp-for="Description" class="form-control" rows="5"></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label asp-for="Active" class="control-label"></label>
+                    <input type="checkbox" asp-for="Active" class="checkbox" />
+                    <span asp-validation-for="Active" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-12">
+                &nbsp;
+            </div>
+            <div>
+                <div class="col-md-offset-9">
+                    <input type="submit" value="Submit" class="btn btn-primary" />
+                    <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script src="~/js/jquery.dataTables.min.js"></script>
+
+    <script type="text/javascript">
+        //    jQueryAjaxPost = form => {
+        //        try {
+        //            $.ajax({
+        //                type: 'POST',
+        //                url: form.action,
+        //                data: new FormData(form),
+        //                contentType: false,
+        //                processData: false,
+        //                success: function (res) {
+        //                    if (res.isValid) {
+        //                        $('#view-all').html(res.html)
+        //                        $('#form-modal .modal-body').html('');
+        //                        $('#form-modal .modal-title').html('');
+        //                        $('#form-modal').modal('hide');
+        //                    }
+        //                    else
+        //                        $('#form-modal .modal-body').html(res.html);
+        //                },
+        //                error: function (err) {
+        //                    console.log(err)
+        //                }
+        //            })
+        //            //to prevent default form submit event
+        //            return false;
+        //        } catch (ex) {
+        //            console.log(ex)
+        //        }
+        //}
+    </script>
+}
+
+

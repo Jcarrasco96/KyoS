@@ -14,5 +14,7 @@ namespace KyoS.Web.Models
         public int IdClinic { get; set; }
 
         public IEnumerable<SelectListItem> Clinics { get; set; }
+
+        public int year { get; set; }
     }
 }

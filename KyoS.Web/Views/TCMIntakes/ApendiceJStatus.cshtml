@@ -116,7 +116,7 @@
                                         }
                                         @if (item.Approved == 1)
                                         {
-                                            <a asp-action="CreateTCMAppendixJ" asp-route-id="@item.TcmClient.Id" class="btn btn-warning" title="Edit Appendix J"><i class="glyphicon glyphicon-pencil"></i></a>
+                                            <a asp-action="EditAppendixJ" asp-route-id="@item.Id" class="btn btn-warning" title="Edit Appendix J"><i class="glyphicon glyphicon-pencil"></i></a>
                                             <i title="Approved" class="btn btn-success disabled glyphicon glyphicon-ok"></i>
                                             <i title="Approved" class="btn btn-success disabled glyphicon glyphicon-print"></i>
                                         }
@@ -139,7 +139,7 @@
                                         @if (item.Approved == 1)
                                         {
                                             <i title="Approved" class="btn btn-warning disabled glyphicon glyphicon-pencil"></i>
-                                            <a asp-action="CreateTCMAppendixJReadOnly" asp-route-id="@item.TcmClient.Id" class="btn btn-success" title="Pending Approval"><i class="glyphicon glyphicon-ok"></i></a>
+                                            <a asp-action="CreateTCMAppendixJReadOnly" asp-route-id="@item.Id" class="btn btn-success" title="Pending Approval"><i class="glyphicon glyphicon-ok"></i></a>
                                             <i title="Approved" class="btn btn-success disabled glyphicon glyphicon-print"></i>
                                         }
                                         @if (item.Approved == 2)

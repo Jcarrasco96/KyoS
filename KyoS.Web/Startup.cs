@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
 using System.Globalization;
 
 namespace KyoS.Web
@@ -79,6 +80,7 @@ namespace KyoS.Web
             services.AddScoped<IExportExcellHelper, ExportExcellHelper>();
             services.AddScoped<IFileHelper, FileHelper>();
             services.AddScoped<IOverlapindHelper, OverlapindHelper>();
+            services.AddFastReport();
 
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
             services.AddRazorPages();
@@ -99,7 +101,7 @@ namespace KyoS.Web
             app.UseStatusCodePagesWithReExecute("/error/{0}");
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            app.UseFastReport();
+            app.UseFastReport();            
 
             app.UseRouting();
 

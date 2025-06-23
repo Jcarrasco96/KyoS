@@ -23,6 +23,10 @@
                 {
                     @Html.ActionLink("Not started cases", "GetCaseNotServicePlan", "TCMClients")
                 }
+                @if (ViewData["origi"].ToString() == "2")
+                {
+                    @Html.ActionLink("TCM AppendixJ List", "ListAppendixJForTCMClient", "TCMIntakes", new { id = Model.IdTCMClient, origi = ViewData["origi"] })
+                }
             </li>
             <li class="active">TCM Appendix J</li>
         </ul><!--.breadcrumb-->
@@ -39,6 +43,11 @@
             <input type="hidden" asp-for="CreatedOn" />
             <input type="hidden" asp-for="CreatedBy" />
             <input type="hidden" asp-for="Approved" />
+            <input type="hidden" asp-for="Active" />
+            <input type="hidden" asp-for="DateExpired" />
+            <input type="hidden" asp-for="TcmClient.Client.FirstName" />
+            <input type="hidden" asp-for="TcmClient.Client.LastName" />
+            <input type="hidden" asp-for="TcmClient.CaseNumber" />
             <partial name="_TCMIntakeAppendixJ" />
             <div class="form-group col-md-12">
                 <input type="submit" value="Sign and Submit" class="btn btn-primary" />
@@ -49,6 +58,10 @@
                 @if (ViewData["origi"].ToString() == "1")
                 {
                     <a asp-action="GetCaseNotServicePlan" asp-controller="TCMClients" class="btn btn-success">Back</a>
+                }
+                @if (ViewData["origi"].ToString() == "2")
+                {
+                    <a asp-action="ListAppendixJForTCMClient" asp-route-id="@Model.IdTCMClient" asp-route-origi="0" class="btn btn-success">Back</a>
                 }
             </div>
         </form>

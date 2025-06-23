@@ -1,0 +1,180 @@
+﻿@model KyoS.Web.Data.Entities.PayStubEntity
+@{
+    ViewData["Title"] = "Paystub Details";
+}
+
+<link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
+
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home"></i>
+            @Html.ActionLink("Paystubs", "Index", "PayStubs")
+        </li>
+        <li class="active">Paystub Details</li>
+    </ul><!--.breadcrumb-->
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="col-md-3">
+            &nbsp;
+        </div>
+        <div class="col-md-1">
+            <div class="thumbnail list-group-item list-group-item-warning">
+                <p style="text-align:center">Clients</p>
+                <h4 style="text-align:center; font-weight:bold;">@Model.PayStubDetails.GroupBy(n => n.ClientName).Count()</h4>
+            </div>
+        </div>
+        <div class="col-md-1">
+            <div class="thumbnail list-group-item list-group-item-warning">
+                <p style="text-align:center">Documents</p>
+                <h4 style="text-align:center; font-weight:bold;">@Model.PayStubDetails.Count()</h4>
+            </div>
+        </div>
+        <div class="col-md-1">
+            <div class="thumbnail list-group-item list-group-item-warning">
+                <p style="text-align:center">Units</p>
+                <h4 style="text-align:center; font-weight:bold;">@Model.Units</h4>
+            </div>
+        </div>
+        @if (Model.StatusPayStub == KyoS.Common.Enums.StatusTCMPaystub.Pending)
+        {
+            <div class="col-md-2">
+                <div class="thumbnail list-group-item list-group-item-info">
+                    <p style="text-align:center">Estimated Income</p>
+                    <h4 style="text-align:center; font-weight:bold;">$ @Model.Amount</h4>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="col-md-2">
+                <div class="thumbnail list-group-item list-group-item-success">
+                    <p style="text-align:center">Estimated Income</p>
+                    <h4 style="text-align:center; font-weight:bold;">$ @Model.Amount</h4>
+                </div>
+            </div>
+        }
+        <div class="col-md-4">
+            &nbsp;
+        </div>
+    </div>
+    <div class="col-md-12">
+        <hr />
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Paystub Details </h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-hover table-responsive table-striped" id="MyTable">
+                    <thead>
+                        <tr>
+                            <th class="col-md-2">
+                                Employee
+                            </th>
+                            <th class="col-md-3">
+                                Client Name
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Doc.
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Service
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Close
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Paystub
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Paid
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Units
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Amount
+                            </th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.PayStubDetails.OrderBy(n => n.ClientName).ThenBy(m => m.DateService))
+                        {
+                            <tr style="color: darkgrey;">
+                                <td>
+                                    @if (Model.Facilitator != null)
+                                    {
+                                        @Model.Facilitator.Name
+                                    }
+                                    @if (Model.Doc_Assisstant != null)
+                                    {
+                                        @Model.Doc_Assisstant.Name
+                                    }                                    
+                                </td>
+                                <td>
+                                    @item.ClientName
+                                </td>
+                                <td align="center">
+                                    @item.DocumentName
+                                </td>
+                                <td align="center">
+                                    @item.DateService.ToShortDateString()
+                                </td>
+                                <td align="center">
+                                    @Model.DatePayStubClose.ToShortDateString()
+                                </td>
+                                <td align="center">
+                                    @Model.DatePayStub.ToShortDateString()
+                                </td>
+                                <td align="center">
+                                    @Model.DatePayStubPayment.ToShortDateString()
+                                </td>
+                                <td align="center">
+                                    @item.Unit
+                                </td>
+                                <td align="center">
+                                    @item.Amount
+                                </td>
+                                
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script src="~/js/jquery.dataTables.min.js"></script>
+    <script src="~/js/moment.min.js"></script>
+    <script src="~/js/datetime-moment.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $.fn.dataTable.moment('MM/DD/YYYY');
+
+            $('#MyTable').DataTable({
+                "order": [[3, "asc"]],
+                "pageLength": 100
+            });
+
+
+        })
+    </script>
+}
+

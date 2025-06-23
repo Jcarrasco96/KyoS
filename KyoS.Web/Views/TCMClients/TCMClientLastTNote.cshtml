@@ -1,0 +1,59 @@
+﻿@model IEnumerable<KyoS.Web.Models.TCMClientLastNoteViewModel>
+@{
+    ViewData["Title"] = "TCM Cases";
+    ViewData["origin"] = 0;
+}
+
+<link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
+
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home"></i>
+            @Html.ActionLink("Dashboard", "Index", "Desktop")
+        </li>
+        <li class="active">TCM Cases</li>
+    </ul><!--.breadcrumb-->
+</div>
+
+<div class="row">
+    <div id="view-tcmClient">
+        @await Html.PartialAsync("_ViewTCMClientLastNote", Model.ToList())
+    </div>
+</div>
+
+
+<partial name="_ModalPopup" />
+<partial name="_DeleteDialog" />
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script src="~/js/jquery.dataTables.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#MyTable').DataTable({
+                "order": [[0, "asc"]],
+                "pageLength": 100
+            });
+        });
+        function ConfirmDelete(e) {
+            Swal.fire({
+                title: 'Do you want to delete?',
+                text: "Note: All data related to this element will be deleted.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var url = "@Url.Action("Delete", "TCMClients")";
+                    window.location.href = url + '/' + e;
+                }
+            });
+        }
+    </script>
+}

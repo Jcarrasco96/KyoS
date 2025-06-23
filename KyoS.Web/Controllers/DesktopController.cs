@@ -8,6 +8,7 @@ using KyoS.Web.Data.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace KyoS.Web.Controllers
 {
@@ -15,9 +16,11 @@ namespace KyoS.Web.Controllers
     public class DesktopController : Controller
     {
         private readonly DataContext _context;
-        public DesktopController(DataContext context)
+        public IConfiguration Configuration { get; }
+        public DesktopController(DataContext context, IConfiguration configuration)
         {
-            _context = context;           
+            _context = context;
+            Configuration = configuration;
         }
 
         public async Task<IActionResult> Index()
@@ -233,11 +236,11 @@ namespace KyoS.Web.Controllers
                                                                         && m.SignIndTherapy == false));                
                 ViewBag.MTPReviewPending = await _context.MTPReviews
                                                          .CountAsync(m => (m.Mtp.Client.Clinic.Id == user_logged.Clinic.Id
-                                                                        && m.Status == AdendumStatus.Pending
+                                                                        && (m.Status == AdendumStatus.Pending || (m.SignTherapy == true && m.Status == AdendumStatus.Edition))
                                                                         && m.CreatedBy == user_logged.UserName)
                                                                         ||
                                                                           (m.Mtp.Client.Clinic.Id == user_logged.Clinic.Id
-                                                                        && m.Status == AdendumStatus.Pending
+                                                                        && (m.Status == AdendumStatus.Pending)
                                                                         && m.IndFacilitator.LinkedUser == user_logged.UserName));
 
                 ViewBag.ClientWithoutFARS = await _context.Clients                                                    
@@ -263,7 +266,7 @@ namespace KyoS.Web.Controllers
                                                                        && m.FacilitatorSign == false));
                 ViewBag.SafetyPlan = await _context.Clients
                                                    .CountAsync(c => (c.Clinic.Id == user_logged.Clinic.Id && c.OnlyTCM == false
-                                                                  && c.SafetyPlan == null
+                                                                  && c.SafetyPlanList.Count() == 0
                                                                   && c.IndividualTherapyFacilitator.Id == facilitator.Id));
                 ViewBag.PendingMeetingSign = await _context.MeetingNotes
                                                            .CountAsync(m => (m.Supervisor.Clinic.Id == user_logged.Clinic.Id
@@ -392,6 +395,9 @@ namespace KyoS.Web.Controllers
                                                                       || wc.GroupNote.Status == NoteStatus.Approved
                                                                       || wc.GroupNote2.Status == NoteStatus.Approved
                                                                       || wc.NoteP.Status == NoteStatus.Approved)));
+
+                ViewBag.PendingSafetyPlans = await _context.SafetyPlan
+                                                           .CountAsync(m => (m.Status == SafetyPlanStatus.Pending));
             }
             if (User.IsInRole("Manager"))
             {
@@ -399,223 +405,102 @@ namespace KyoS.Web.Controllers
 
                                                        .Include(u => u.Clinic)
                                                             .ThenInclude(c => c.Setting)
+                                                       .AsSplitQuery()
 
                                                        .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
                 
                 //CMH Dashboard
                 if (user_logged.Clinic.Setting.MentalHealthClinic)
                 {
-                    ViewBag.PendingNotes = await _context.Workdays_Clients
-                                                         .CountAsync(wc => (wc.Facilitator.Clinic.Id == user_logged.Clinic.Id
-                                                                        && (wc.Note.Status == NoteStatus.Pending 
-                                                                         || wc.IndividualNote.Status == NoteStatus.Pending
-                                                                         || wc.GroupNote.Status == NoteStatus.Pending
-                                                                         || wc.GroupNote2.Status == NoteStatus.Pending
-                                                                         || wc.NoteP.Status == NoteStatus.Pending)));
+                    Task<int> PendingNotes = MHPendingNotes(user_logged.Clinic.Id);
+                    Task<int> InProgressNotes = MHInProgressNotes(user_logged.Clinic.Id);
+                    Task<int> NotStartedNotes = MHNotStartedNotes(user_logged.Clinic.Id);
+                    Task<int> MTPMissing = MHMTPMissing(user_logged.Clinic.Id);
+                    Task<int> NotesWithReview = MHNotesWithReview(user_logged.Clinic.Id);                    
+                    Task<int> ApprovedNotes = MHApprovedNotes(user_logged.Clinic.Id);
+                    Task<int> NotPresentNotes = MHNotPresentNotes(user_logged.Clinic.Id);
+                    Task<int> ExpiredMTPs = MHExpiredMTPs(user_logged.Clinic.Id);
+                    Task<int> PendingBIO = MHPendingBIO(user_logged.Clinic.Id);
+                    Task<int> PendingInitialFars = MHPendingInitialFars(user_logged.Clinic.Id);
+                    Task<int> MedicalHistoryMissing = MHMedicalHistoryMissing(user_logged.Clinic.Id);
+                    Task<int> IntakeMissing = MHIntakeMissing(user_logged.Clinic.Id);
+                    Task<int> FarsMissing = MHFarsMissing(user_logged.Clinic.Id);
+                    Task<int> ClientAuthorization = MHClientAuthorization(user_logged.Clinic.Id);
+                    Task<int> ClientBirthday = MHClientBirthday(user_logged.Clinic.Id);
+                    Task<int> ClientEligibility = MHClientEligibility(user_logged.Clinic.Id);
+                    Task<int> SafetyPlan = MHSafetyPlan(user_logged.Clinic.Id);
+                    Task<int> ClientWithoutPSYNotes = TCMClientWithoutPSYNotes(user_logged.Clinic.Id);
 
-                    ViewBag.InProgressNotes = await _context.Workdays_Clients
-                                                            .CountAsync(wc => (wc.Facilitator.Clinic.Id == user_logged.Clinic.Id
-                                                                           && (wc.Note.Status == NoteStatus.Edition 
-                                                                            || wc.IndividualNote.Status == NoteStatus.Edition
-                                                                            || wc.GroupNote.Status == NoteStatus.Edition
-                                                                            || wc.GroupNote2.Status == NoteStatus.Edition
-                                                                            || wc.NoteP.Status == NoteStatus.Edition)));
+                    await Task.WhenAll(PendingNotes, InProgressNotes, NotStartedNotes, MTPMissing, NotesWithReview,
+                                        ApprovedNotes, NotPresentNotes, ExpiredMTPs, PendingBIO, PendingInitialFars, MedicalHistoryMissing,
+                                        IntakeMissing, FarsMissing, ClientAuthorization, ClientBirthday, ClientEligibility,
+                                        SafetyPlan, ClientWithoutPSYNotes);
 
-                    ViewBag.NotStartedNotes = await _context.Workdays_Clients
-                                                            .CountAsync(wc => (wc.Facilitator.Clinic.Id == user_logged.Clinic.Id
-                                                                            && wc.Note == null 
-                                                                            && wc.IndividualNote == null
-                                                                            && wc.GroupNote == null 
-                                                                            && wc.GroupNote2 == null 
-                                                                            && wc.NoteP == null 
-                                                                            && wc.Present == true));
-
-                    ViewBag.MTPMissing = await _context.Clients
-                                                       .CountAsync(c => (c.Clinic.Id == user_logged.Clinic.Id && c.OnlyTCM == false
-                                                                      && c.MTPs.Count == 0));
-
-                    ViewBag.NotesWithReview = await _context.Workdays_Clients
-                                                            .CountAsync(wc => (wc.Facilitator.Clinic.Id == user_logged.Clinic.Id &&
-                                                                              (wc.Note.Status == NoteStatus.Pending 
-                                                                            || wc.IndividualNote.Status == NoteStatus.Pending 
-                                                                            || wc.GroupNote.Status == NoteStatus.Pending
-                                                                            || wc.GroupNote2.Status == NoteStatus.Pending
-                                                                            || wc.NoteP.Status == NoteStatus.Pending) 
-                                                                            && wc.Messages.Count() > 0));
-
-                    ViewBag.AllDocumentsForClient = await this.AmountOfDocumentsCMH(user_logged.Clinic.Id);
-
-                    ViewBag.ApprovedNotes = await _context.Workdays_Clients
-                                                          .CountAsync(wc => (wc.Facilitator.Clinic.Id == user_logged.Clinic.Id &&
-                                                                            (wc.Note.Status == NoteStatus.Approved 
-                                                                          || wc.IndividualNote.Status == NoteStatus.Approved 
-                                                                          || wc.GroupNote.Status == NoteStatus.Approved
-                                                                          || wc.GroupNote2.Status == NoteStatus.Approved
-                                                                          || wc.NoteP.Status == NoteStatus.Approved)));
-
-                    ViewBag.NotPresentNotes = await _context.Workdays_Clients
-                                                            .CountAsync(wc => (wc.Facilitator.Clinic.Id == user_logged.Clinic.Id &&
-                                                                               wc.Present == false));
-
-                    ViewBag.ExpiredMTPs = await _context.MTPs
-                                                        .CountAsync(m => (m.Client.Clinic.Id == user_logged.Clinic.Id
-                                                                       && m.Client.Status == StatusType.Open
-                                                                       && m.Active == true
-                                                                       && m.Goals.Where(n => n.Objetives.Where(o => o.DateResolved.Date > DateTime.Today.Date
-                                                                                                            && o.Goal.Service == m.Client.Service
-                                                                                                            && o.Compliment == false).Count() > 0).Count() == 0));          
-
-                    ViewBag.PendingBIO = await _context.Clients
-                                                       .CountAsync(wc => (wc.Clinic.Id == user_logged.Clinic.Id
-                                                                       && wc.Bio == null && wc.Brief == null
-                                                                       && wc.OnlyTCM == false));
-
-                    ViewBag.PendingInitialFars = await _context.Clients
-                                                               .CountAsync(wc => (wc.Clinic.Id == user_logged.Clinic.Id
-                                                                               && wc.FarsFormList.Where(n => n.Type == FARSType.Initial).Count() == 0
-                                                                               && wc.OnlyTCM == false));
-
-                    ViewBag.MedicalHistoryMissing = await _context.Clients
-                                                                  .CountAsync(wc => (wc.Clinic.Id == user_logged.Clinic.Id
-                                                                           && wc.IntakeMedicalHistory == null
-                                                                           && wc.OnlyTCM == false));
-
-                    ViewBag.IntakeMissing = await _context.Clients
-                                                          .CountAsync(wc => (wc.Clinic.Id == user_logged.Clinic.Id
-                                                                          && wc.IntakeScreening == null
-                                                                          && wc.IntakeConsentForTreatment == null 
-                                                                          && wc.IntakeConsentForRelease == null
-                                                                          && wc.IntakeConsumerRights == null 
-                                                                          && wc.IntakeAcknowledgementHipa == null 
-                                                                          && wc.IntakeAccessToServices == null
-                                                                          && wc.IntakeOrientationChecklist == null
-                                                                          && wc.IntakeTransportation == null
-                                                                          && wc.IntakeConsentPhotograph == null 
-                                                                          && wc.IntakeFeeAgreement == null 
-                                                                          && wc.IntakeTuberculosis == null
-                                                                          && wc.OnlyTCM == false));
-
-                    ViewBag.FarsMissing = await _context.Clients
-                                                        .CountAsync(n => n.Clinic.Id == user_logged.Clinic.Id
-                                                                    && ((n.MTPs.FirstOrDefault(m => m.Active == true).MtpReviewList.Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.MtpReview).Count() == 0)
-                                                                    || (n.DischargeList.Where(d => d.TypeService == ServiceType.PSR).Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.Discharge_PSR).Count() == 0)
-                                                                    || (n.DischargeList.Where(d => d.TypeService == ServiceType.Individual).Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.Discharge_Ind).Count() == 0)
-                                                                    || (n.DischargeList.Where(d => d.TypeService == ServiceType.Group).Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.Discharge_Group).Count() == 0)
-                                                                    || (n.MTPs.Where(m => m.AdendumList.Count() > n.FarsFormList.Where(f => f.Type == FARSType.Addendums).Count()).Count() > 0))
-                                                                    && n.OnlyTCM == false);                                                  
-
-                    int clientListPSR = await _context.Clients
-                                                      .CountAsync(m => (m.Clinic.Id == user_logged.Clinic.Id
-                                                                     && m.Status == StatusType.Close
-                                                                     && m.Workdays_Clients.Where(w => w.Workday.Service == ServiceType.PSR).Count() > 0
-                                                                     && m.DischargeList.Where(d => d.TypeService == ServiceType.PSR).Count() == 0));
-                    int clientListIND = await _context.Clients
-                                                      .CountAsync(m => (m.Clinic.Id == user_logged.Clinic.Id
-                                                                     && m.Status == StatusType.Close
-                                                                     && m.Workdays_Clients.Where(w => w.Workday.Service == ServiceType.Individual).Count() > 0
-                                                                     && m.DischargeList.Where(d => d.TypeService == ServiceType.Individual).Count() == 0));
-                    int clientListGroup = await _context.Clients
-                                                        .CountAsync(m => (m.Clinic.Id == user_logged.Clinic.Id
-                                                                       && m.Status == StatusType.Close
-                                                                       && m.Workdays_Clients.Where(w => w.Workday.Service == ServiceType.Group).Count() > 0
-                                                                       && m.DischargeList.Where(d => d.TypeService == ServiceType.Group).Count() == 0));                                                                       
-
-                    ViewBag.ClientDischarge = (clientListPSR + clientListIND + clientListGroup).ToString();
-
-                    ViewBag.ClientAuthorization = await _context.Clients
-                                                                .CountAsync(n => n.Status == StatusType.Open
-                                                                              && n.Service == ServiceType.PSR
-                                                                              && n.Clinic.Id == user_logged.Clinic.Id
-                                                                              && (n.Clients_HealthInsurances == null
-                                                                                || n.Clients_HealthInsurances.Where(m => m.Active == true
-                                                                                && m.ApprovedDate.AddMonths(m.DurationTime) > DateTime.Today.AddDays(15)).Count() == 0));
-
-                    ViewBag.ClientBirthday = await _context.Clients
-                                                           .CountAsync(n => n.DateOfBirth.Month == DateTime.Today.Month && n.Status == StatusType.Open);
-
-                    ViewBag.ClientEligibility = await _context.Clients
-                                                              .CountAsync(n => n.EligibilityList.Where(m => m.EligibilityDate.Year == DateTime.Today.Year 
-                                                                                                         && m.EligibilityDate.Month == DateTime.Today.Month).Count() == 0
-                                                                                                         && n.Status == StatusType.Open
-                                                                                                         && n.Clinic.Id == user_logged.Clinic.Id);
-
-                    ViewBag.SafetyPlan = await _context.Clients
-                                                       .CountAsync(c => (c.Clinic.Id == user_logged.Clinic.Id && c.OnlyTCM == false
-                                                                     && c.SafetyPlan == null));
+                    ViewBag.PendingNotes = await PendingNotes;
+                    ViewBag.InProgressNotes = await InProgressNotes;
+                    ViewBag.NotStartedNotes = await NotStartedNotes;
+                    ViewBag.MTPMissing = await MTPMissing;
+                    ViewBag.NotesWithReview = await NotesWithReview;                    
+                    ViewBag.ApprovedNotes = await ApprovedNotes;
+                    ViewBag.NotPresentNotes = await NotPresentNotes;
+                    ViewBag.ExpiredMTPs = await ExpiredMTPs;
+                    ViewBag.PendingBIO = await PendingBIO;
+                    ViewBag.PendingInitialFars = await PendingInitialFars;
+                    ViewBag.MedicalHistoryMissing = await MedicalHistoryMissing;
+                    ViewBag.IntakeMissing = await IntakeMissing;
+                    ViewBag.FarsMissing = await FarsMissing;
+                    ViewBag.ClientAuthorization = await ClientAuthorization;
+                    ViewBag.ClientBirthday = await ClientBirthday;
+                    ViewBag.ClientEligibility = await ClientEligibility;
+                    ViewBag.SafetyPlan = await SafetyPlan;
+                    ViewBag.ClientWithoutPSYNote = await ClientWithoutPSYNotes;
                 }          
 
                 //TCM Dashboard
                 if (user_logged.Clinic.Setting.TCMClinic)
                 {
-                    ViewBag.NotStartedCases = await _context.TCMClient
-                                                            .CountAsync(s => (s.Client.Clinic.Id == user_logged.Clinic.Id
-                                                                           && s.Status == StatusType.Open
-                                                                           && (s.TcmServicePlan == null
-                                                                                || s.TCMAssessment == null
-                                                                                || (s.TcmIntakeAppendixJ == null
-                                                                                 && s.TcmIntakeAppendixI == null))));
+                    Task<int> NotStartedCases = TCMNotStartedCases(user_logged.Clinic.Id);
+                    Task<int> OpenBinder = TCMOpenBinder(user_logged.Clinic.Id);
+                    Task<int> ServicePlanPending = TCMServicePlanPending(user_logged.Clinic.Id);
+                    Task<int> AdendumPending = TCMAdendumPending(user_logged.Clinic.Id);
+                    Task<int> ServicePlanReviewPending = TCMServicePlanReviewPending(user_logged.Clinic.Id);
+                    Task<int> DischargePending = TCMDischargePending(user_logged.Clinic.Id);
+                    Task<int> CaseManager = TCMCaseManager(user_logged.Clinic.Id);
+                    Task<int> FarsPending = TCMFarsPending(user_logged.Clinic.Id);
+                    Task<int> AssesmentPending = TCMAssesmentPending(user_logged.Clinic.Id);
+                    Task<int> NotesEdition = TCMNotesEdition(user_logged.Clinic.Id);
+                    Task<int> NotesPending = TCMNotesPending(user_logged.Clinic.Id);
+                    Task<int> NotesApproved = TCMNotesApproved(user_logged.Clinic.Id);
+                    Task<int> NotesWithReview = TCMNotesWithReview(user_logged.Clinic.Id);
+                    Task<int> Supervisor = TCMSupervisor(user_logged.Clinic.Id);
+                    Task<int> Billing = TCMBilling(user_logged.Clinic.Id);
+                    Task<int> ClientAuthorizationTCM = TCMClientAuthorization(user_logged.Clinic.Id);
+                    Task<int> ClientWithoutCase = TCMClientWithoutCase(user_logged.Clinic.Id);
                     
-                    ViewBag.OpenBinder = await _context.TCMClient
-                                                       .CountAsync(g => (g.Status == StatusType.Open
-                                                                      && g.Client.Clinic.Id == user_logged.Clinic.Id));
 
-                    ViewBag.ServicePlanPending = await _context.TCMClient                                                         
-                                                               .CountAsync(g => (g.Status == StatusType.Open
-                                                                              && g.Client.Clinic.Id == user_logged.Clinic.Id
-                                                                              && g.TcmServicePlan.Approved == 1));
 
-                    ViewBag.AdendumPending = await _context.TCMClient                                                     
-                                                           .CountAsync(g => (g.Status == StatusType.Open
-                                                                          && g.Client.Clinic.Id == user_logged.Clinic.Id
-                                                                          && g.TcmServicePlan.TCMAdendum.Where(n => n.Approved == 1).Count() > 0));
+                    await Task.WhenAll(NotStartedCases, OpenBinder, ServicePlanPending, AdendumPending, ServicePlanReviewPending,
+                                        DischargePending, CaseManager, FarsPending, AssesmentPending, NotesEdition,
+                                        NotesPending, NotesApproved, NotesWithReview, Supervisor, Billing, ClientAuthorizationTCM, ClientWithoutCase);
+
+                    ViewBag.NotStartedCases = await NotStartedCases;
+                    ViewBag.OpenBinder = await OpenBinder;
+                    ViewBag.ServicePlanPending = await ServicePlanPending;
+                    ViewBag.AdendumPending = await AdendumPending;
+                    ViewBag.ServicePlanReviewPending = await ServicePlanReviewPending;
+                    ViewBag.DischargePending = await DischargePending;
+                    ViewBag.TCMCaseManager = await CaseManager;
+                    ViewBag.TCMFarsPending = await FarsPending;
+                    ViewBag.AssesmentPending = await AssesmentPending;                   
+                    ViewBag.TCMNotesEdition = await NotesEdition;
+                    ViewBag.TCMNotesPending = await NotesPending;
+                    ViewBag.TCMNotesApproved = await NotesApproved;
+                    ViewBag.TCMNotesWithReview = await NotesWithReview;
+                    ViewBag.TCMSupervisor = await Supervisor;
+                    ViewBag.Billing = await Billing;
+                    ViewBag.TCMClientAuthorization = await ClientAuthorizationTCM;
+                    ViewBag.ClientWithoutCase = await ClientWithoutCase;
                     
-                    ViewBag.ServicePlanReviewPending = await _context.TCMClient                                                               
-                                                                     .CountAsync(g => (g.Status == StatusType.Open
-                                                                                    && g.Client.Clinic.Id == user_logged.Clinic.Id
-                                                                                    && g.TcmServicePlan.TCMServicePlanReview.Approved == 1));
-                    
-                    ViewBag.DischargePending = await _context.TCMClient                                                       
-                                                             .CountAsync(g => (g.Status == StatusType.Open
-                                                                            && g.Client.Clinic.Id == user_logged.Clinic.Id
-                                                                            && g.TcmServicePlan.TCMDischarge.Approved == 1));
-
-                    ViewBag.TCMCaseManager = await _context.CaseManagers
-                                                           .CountAsync(g => (g.Status == StatusType.Open
-                                                                          && g.Clinic.Id == user_logged.Clinic.Id));
-
-                    ViewBag.TCMFarsPending = await _context.TCMFarsForm
-                                                           .CountAsync(g => (g.Status == FarsStatus.Pending
-                                                                          && g.TCMClient.Client.Clinic.Id == user_logged.Clinic.Id));
-
-                    ViewBag.AssesmentPending = await _context.TCMAssessment
-                                                       .CountAsync(g => (g.Approved == 1
-                                                                      && g.TcmClient.Client.Clinic.Id == user_logged.Clinic.Id));
-
-                    ViewBag.AllDocuments = await _context.TCMClient
-                                                         .CountAsync(g => g.Client.Clinic.Id == user_logged.Clinic.Id);
-
-                    ViewBag.TCMNotesEdition = await _context.TCMNote
-                                                            .CountAsync(g => (g.Status == NoteStatus.Edition
-                                                                           && g.TCMClient.Client.Clinic.Id == user_logged.Clinic.Id));
-
-                    ViewBag.TCMNotesPending = await _context.TCMNote
-                                                            .CountAsync(g => (g.Status == NoteStatus.Pending
-                                                                           && g.TCMClient.Client.Clinic.Id == user_logged.Clinic.Id));
-
-                    ViewBag.TCMNotesApproved = await _context.TCMNote
-                                                             .CountAsync(g => (g.Status == NoteStatus.Approved
-                                                                            && g.TCMClient.Client.Clinic.Id == user_logged.Clinic.Id));
-
-                    ViewBag.TCMNotesWithReview = await _context.TCMNote
-                                                               .CountAsync(wc => (wc.TCMClient.Casemanager.Clinic.Id == user_logged.Clinic.Id &&
-                                                                                  wc.Status == NoteStatus.Pending &&
-                                                                                  wc.TCMMessages.Count() > 0));
-                    ViewBag.TCMSupervisor = await _context.TCMSupervisors
-                                                          .CountAsync(g => (g.Status == StatusType.Open
-                                                                         && g.Clinic.Id == user_logged.Clinic.Id));
-                    ViewBag.Billing = await _context.TCMClient
-                                                    .CountAsync(g => (g.Status == StatusType.Open
-                                                                   && g.Client.Clinic.Id == user_logged.Clinic.Id));
                 }
             }
             if (User.IsInRole("Admin"))
@@ -757,29 +642,39 @@ namespace KyoS.Web.Controllers
 
                 List<ClientEntity> client = await _context.Clients
                                                           .Include(c => c.MTPs)
+                                                          .Include(c => c.DocumentsAssistant)
                                                           .Where(c => (c.Clinic.Id == user_logged.Clinic.Id
                                                                     && c.OnlyTCM == false)).ToListAsync();
-                client = client.Where(wc => wc.MTPs.Count == 0).ToList();
+                client = client.Where(wc => wc.MTPs.Count == 0 
+                                        && ((wc.DocumentsAssistant != null && wc.DocumentsAssistant.LinkedUser == user_logged.UserName
+                                            ||wc.DocumentsAssistant == null)))
+                               .ToList();
                 ViewBag.MTPMissing = client.Count.ToString();
 
                 ViewBag.PendingBIO = await _context.Clients
-                                             .CountAsync(wc => (wc.Clinic.Id == user_logged.Clinic.Id
-                                                            && (wc.Bio == null && wc.Brief == null)
-                                                            && wc.OnlyTCM == false));
+                                                   .CountAsync(wc => (wc.Clinic.Id == user_logged.Clinic.Id
+                                                                  && (wc.Bio == null && wc.Brief == null)
+                                                                  && wc.OnlyTCM == false)
+                                                                  && ((wc.DocumentsAssistant != null && wc.DocumentsAssistant.LinkedUser == user_logged.UserName)
+                                                                     ||wc.DocumentsAssistant == null));
 
                 ViewBag.PendingInitialFars = await _context.Clients
                                                            .CountAsync(wc => (wc.Clinic.Id == user_logged.Clinic.Id
                                                                            && (wc.FarsFormList.Where(n => n.Type == FARSType.Initial).Count() == 0)
                                                                            && (wc.Bio.CreatedBy == User.Identity.Name
                                                                             || wc.Bio == null)
-                                                                           && wc.OnlyTCM == false));
+                                                                           && wc.OnlyTCM == false)
+                                                                           && ((wc.DocumentsAssistant != null && wc.DocumentsAssistant.LinkedUser == user_logged.UserName)
+                                                                             || wc.DocumentsAssistant == null));
 
                 ViewBag.MedicalHistoryMissing = await _context.Clients
                                                               .CountAsync(wc => (wc.Clinic.Id == user_logged.Clinic.Id
                                                                               && wc.IntakeMedicalHistory == null
                                                                               && (wc.Bio.CreatedBy == User.Identity.Name
                                                                                || wc.Bio == null)
-                                                                              && wc.OnlyTCM == false));
+                                                                              && wc.OnlyTCM == false)
+                                                                              && ((wc.DocumentsAssistant != null && wc.DocumentsAssistant.LinkedUser == user_logged.UserName)
+                                                                                || wc.DocumentsAssistant == null));
 
                 List<MTPEntity> MtpPending = await _context.MTPs                                                           
                                                            .Where(n => (n.Status == MTPStatus.Pending
@@ -803,9 +698,9 @@ namespace KyoS.Web.Controllers
                 ViewBag.BriefPending = BriefPending.Count().ToString();
 
                 List<MTPReviewEntity> MTPrPending = await _context.MTPReviews
-                                                                 .Where(n => (n.Status == AdendumStatus.Pending
-                                                                           && n.CreatedBy == user_logged.UserName))
-                                                                 .ToListAsync();
+                                                                  .Where(n => (n.Status == AdendumStatus.Pending
+                                                                            && n.CreatedBy == user_logged.UserName))
+                                                                  .ToListAsync();
                 ViewBag.MTPrPending = MTPrPending.Count().ToString();
 
                 ViewBag.ExpiredMTPs = await _context.MTPs
@@ -861,7 +756,15 @@ namespace KyoS.Web.Controllers
                                                                           && wc.IntakeConsentPhotograph == null
                                                                           && wc.IntakeFeeAgreement == null
                                                                           && wc.IntakeTuberculosis == null
-                                                                          && wc.OnlyTCM == false));
+                                                                          && wc.OnlyTCM == false)
+                                                                          && ((wc.DocumentsAssistant != null && wc.DocumentsAssistant.LinkedUser == user_logged.UserName)
+                                                                             || wc.DocumentsAssistant == null));
+
+                ViewBag.ClientWithoutFARS = await _context.Clients
+                                                          .CountAsync(n => n.Clinic.Id == user_logged.Clinic.Id
+                                                            && ((n.MTPs.FirstOrDefault(m => m.Active == true).MtpReviewList.Where(r => r.CreatedBy == user_logged.UserName).Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.MtpReview && f.CreatedBy == user_logged.UserName).Count() == 0)
+                                                              || (n.MTPs.Where(m => m.AdendumList.Where(a => a.CreatedBy == user_logged.UserName).Count() > n.FarsFormList.Where(f => f.Type == FARSType.Addendums && f.CreatedBy == user_logged.UserName).Count()).Count() > 0))
+                                                               && n.OnlyTCM == false);
             }
             if (User.IsInRole("TCMSupervisor"))
             {
@@ -989,47 +892,645 @@ namespace KyoS.Web.Controllers
             {
                 return RedirectToAction("Schedule", "Calendar");
             }
+            if (User.IsInRole("Biller"))
+            {
+               
+            }
             return View();
         }
 
         private async Task<int> AmountOfDocumentsCMH(int idClinic)
         {
             int total = 0;
-            total += await _context.IntakeAcknowledgement
-                                   .CountAsync(i => (i.Client.Clinic.Id == idClinic && i.Client.OnlyTCM == false));
-            total += await _context.IntakeConsentForRelease
-                                   .CountAsync(i => (i.Client.Clinic.Id == idClinic && i.Client.OnlyTCM == false));
-            total += await _context.IntakeConsentForTreatment
-                                   .CountAsync(i => (i.Client.Clinic.Id == idClinic && i.Client.OnlyTCM == false));
-            total += await _context.IntakeConsumerRights
-                                   .CountAsync(i => (i.Client.Clinic.Id == idClinic && i.Client.OnlyTCM == false));
-            total += await _context.IntakeOrientationCheckList
-                                   .CountAsync(i => (i.Client.Clinic.Id == idClinic && i.Client.OnlyTCM == false));            
-            total += await _context.IntakeAccessToServices
-                                   .CountAsync(i => (i.Client.Clinic.Id == idClinic && i.Client.OnlyTCM == false));
-            total += await _context.IntakeConsentPhotograph
-                                   .CountAsync(i => (i.Client.Clinic.Id == idClinic && i.Client.OnlyTCM == false));
-            total += await _context.IntakeFeeAgreement
-                                   .CountAsync(i => (i.Client.Clinic.Id == idClinic && i.Client.OnlyTCM == false));
-            total += await _context.IntakeMedicalHistory
-                                   .CountAsync(i => (i.Client.Clinic.Id == idClinic && i.Client.OnlyTCM == false));
-            total += await _context.IntakeScreenings
-                                   .CountAsync(i => (i.Client.Clinic.Id == idClinic && i.Client.OnlyTCM == false));
-            total += await _context.IntakeTransportation
-                                   .CountAsync(i => (i.Client.Clinic.Id == idClinic && i.Client.OnlyTCM == false));
-            total += await _context.Bio
-                                   .CountAsync(b => (b.Client.Clinic.Id == idClinic && b.Client.OnlyTCM == false));
-            total += await _context.MTPs
-                                   .CountAsync(m => (m.Client.Clinic.Id == idClinic && m.Client.OnlyTCM == false));
-            total += await _context.MTPReviews
-                                   .CountAsync(m => (m.Mtp.Client.Clinic.Id == idClinic && m.Mtp.Client.OnlyTCM == false));
-            total += await _context.Adendums
-                                   .CountAsync(a => (a.Mtp.Client.Clinic.Id == idClinic && a.Mtp.Client.OnlyTCM == false));
-            total += await _context.Discharge
-                                   .CountAsync(d => (d.Client.Clinic.Id == idClinic && d.Client.OnlyTCM == false));
-            total += await _context.FarsForm
-                                   .CountAsync(f => (f.Client.Clinic.Id == idClinic && f.Client.OnlyTCM == false));
+            var options = new DbContextOptionsBuilder<DataContext>().UseSqlServer(Configuration.GetConnectionString("KyoSConnection")).Options;
+            using (DataContext db = new DataContext(options))
+            {
+                total += await db.IntakeAcknowledgement
+                                 .AsNoTracking()
+                                 .CountAsync(i => (i.Client.Clinic.Id == idClinic && i.Client.OnlyTCM == false));
+                total += await db.IntakeConsentForRelease
+                                 .AsNoTracking()
+                                 .CountAsync(i => (i.Client.Clinic.Id == idClinic && i.Client.OnlyTCM == false));
+                total += await db.IntakeConsentForTreatment
+                                 .AsNoTracking()
+                                 .CountAsync(i => (i.Client.Clinic.Id == idClinic && i.Client.OnlyTCM == false));
+                total += await db.IntakeConsumerRights
+                                 .AsNoTracking()
+                                 .CountAsync(i => (i.Client.Clinic.Id == idClinic && i.Client.OnlyTCM == false));
+                total += await db.IntakeOrientationCheckList
+                                 .AsNoTracking()
+                                 .CountAsync(i => (i.Client.Clinic.Id == idClinic && i.Client.OnlyTCM == false));
+                total += await db.IntakeAccessToServices
+                                 .AsNoTracking()
+                                 .CountAsync(i => (i.Client.Clinic.Id == idClinic && i.Client.OnlyTCM == false));
+                total += await db.IntakeConsentPhotograph
+                                 .AsNoTracking()
+                                 .CountAsync(i => (i.Client.Clinic.Id == idClinic && i.Client.OnlyTCM == false));
+                total += await db.IntakeFeeAgreement
+                                 .AsNoTracking()
+                                 .CountAsync(i => (i.Client.Clinic.Id == idClinic && i.Client.OnlyTCM == false));
+                total += await db.IntakeMedicalHistory
+                                 .AsNoTracking()
+                                 .CountAsync(i => (i.Client.Clinic.Id == idClinic && i.Client.OnlyTCM == false));
+                total += await db.IntakeScreenings
+                                 .AsNoTracking()
+                                 .CountAsync(i => (i.Client.Clinic.Id == idClinic && i.Client.OnlyTCM == false));
+                total += await db.IntakeTransportation
+                                 .AsNoTracking()
+                                 .CountAsync(i => (i.Client.Clinic.Id == idClinic && i.Client.OnlyTCM == false));
+                total += await db.Bio
+                                 .AsNoTracking()
+                                 .CountAsync(b => (b.Client.Clinic.Id == idClinic && b.Client.OnlyTCM == false));
+                total += await db.MTPs
+                                 .AsNoTracking()
+                                 .CountAsync(m => (m.Client.Clinic.Id == idClinic && m.Client.OnlyTCM == false));
+                total += await db.MTPReviews
+                                 .AsNoTracking()
+                                 .CountAsync(m => (m.Mtp.Client.Clinic.Id == idClinic && m.Mtp.Client.OnlyTCM == false));
+                total += await db.Adendums
+                                 .AsNoTracking()
+                                 .CountAsync(a => (a.Mtp.Client.Clinic.Id == idClinic && a.Mtp.Client.OnlyTCM == false));
+                total += await db.Discharge
+                                 .AsNoTracking()
+                                 .CountAsync(d => (d.Client.Clinic.Id == idClinic && d.Client.OnlyTCM == false));
+                total += await db.FarsForm
+                                 .AsNoTracking()
+                                 .CountAsync(f => (f.Client.Clinic.Id == idClinic && f.Client.OnlyTCM == false));
+            }
             return total;
+        }
+
+        private async Task<int> MHPendingNotes(int clinicId)
+        {
+            var options = new DbContextOptionsBuilder<DataContext>().UseSqlServer(Configuration.GetConnectionString("KyoSConnection")).Options;
+            using (DataContext db = new DataContext(options))
+            {
+                return await db.Workdays_Clients
+                               .AsNoTracking()
+                               .CountAsync(wc => (wc.Facilitator.Clinic.Id == clinicId
+                                                && (wc.Note.Status == NoteStatus.Pending
+                                                || wc.IndividualNote.Status == NoteStatus.Pending
+                                                || wc.GroupNote.Status == NoteStatus.Pending
+                                                || wc.GroupNote2.Status == NoteStatus.Pending
+                                                || wc.NoteP.Status == NoteStatus.Pending)));
+            }
+        }
+
+        private async Task<int> MHInProgressNotes(int clinicId)
+        {
+            var options = new DbContextOptionsBuilder<DataContext>().UseSqlServer(Configuration.GetConnectionString("KyoSConnection")).Options;
+            using (DataContext db = new DataContext(options))
+            {
+                return await db.Workdays_Clients
+                               .AsNoTracking()
+                               .CountAsync(wc => (wc.Facilitator.Clinic.Id == clinicId
+                                                && (wc.Note.Status == NoteStatus.Edition
+                                                || wc.IndividualNote.Status == NoteStatus.Edition
+                                                || wc.GroupNote.Status == NoteStatus.Edition
+                                                || wc.GroupNote2.Status == NoteStatus.Edition
+                                                || wc.NoteP.Status == NoteStatus.Edition)));
+            }
+        }
+
+        private async Task<int> MHNotStartedNotes(int clinicId)
+        {
+            var options = new DbContextOptionsBuilder<DataContext>().UseSqlServer(Configuration.GetConnectionString("KyoSConnection")).Options;
+            using (DataContext db = new DataContext(options))
+            {
+                return await db.Workdays_Clients
+                               .AsNoTracking()
+                               .CountAsync(wc => (wc.Facilitator.Clinic.Id == clinicId
+                                                && wc.Note == null
+                                                && wc.IndividualNote == null
+                                                && wc.GroupNote == null
+                                                && wc.GroupNote2 == null
+                                                && wc.NoteP == null
+                                                && wc.Present == true));
+            }
+        }
+
+        private async Task<int> MHMTPMissing(int clinicId)
+        {
+            var options = new DbContextOptionsBuilder<DataContext>().UseSqlServer(Configuration.GetConnectionString("KyoSConnection")).Options;
+            using (DataContext db = new DataContext(options))
+            {
+                return await db.Clients
+                               .AsNoTracking()
+                               .CountAsync(c => (c.Clinic.Id == clinicId && c.OnlyTCM == false
+                                              && c.MTPs.Count == 0));
+            }
+        }
+
+        private async Task<int> MHNotesWithReview(int clinicId)
+        {
+            var options = new DbContextOptionsBuilder<DataContext>().UseSqlServer(Configuration.GetConnectionString("KyoSConnection")).Options;
+            using (DataContext db = new DataContext(options))
+            {
+                return await db.Workdays_Clients
+                               .AsNoTracking()
+                               .CountAsync(wc => (wc.Facilitator.Clinic.Id == clinicId &&
+                                                 (wc.Note.Status == NoteStatus.Pending
+                                                 || wc.IndividualNote.Status == NoteStatus.Pending
+                                                 || wc.GroupNote.Status == NoteStatus.Pending
+                                                 || wc.GroupNote2.Status == NoteStatus.Pending
+                                                 || wc.NoteP.Status == NoteStatus.Pending)
+                                                 && wc.Messages.Count() > 0));
+            }
+        }
+
+        private async Task<int> MHApprovedNotes(int clinicId)
+        {
+            var options = new DbContextOptionsBuilder<DataContext>().UseSqlServer(Configuration.GetConnectionString("KyoSConnection")).Options;
+            using (DataContext db = new DataContext(options))
+            {
+                return await db.Workdays_Clients
+                               .AsNoTracking()
+                               .CountAsync(wc => (wc.Facilitator.Clinic.Id == clinicId &&
+                                                 (wc.Note.Status == NoteStatus.Approved
+                                                 || wc.IndividualNote.Status == NoteStatus.Approved
+                                                 || wc.GroupNote.Status == NoteStatus.Approved
+                                                 || wc.GroupNote2.Status == NoteStatus.Approved
+                                                 || wc.NoteP.Status == NoteStatus.Approved)));
+            }
+        }
+
+        private async Task<int> MHNotPresentNotes(int clinicId)
+        {
+            var options = new DbContextOptionsBuilder<DataContext>().UseSqlServer(Configuration.GetConnectionString("KyoSConnection")).Options;
+            using (DataContext db = new DataContext(options))
+            {
+                return await db.Workdays_Clients
+                               .AsNoTracking()
+                               .CountAsync(wc => (wc.Facilitator.Clinic.Id == clinicId &&
+                                                  wc.Present == false));
+            }
+        }
+
+        private async Task<int> MHExpiredMTPs(int clinicId)
+        {
+            var options = new DbContextOptionsBuilder<DataContext>().UseSqlServer(Configuration.GetConnectionString("KyoSConnection")).Options;
+            using (DataContext db = new DataContext(options))
+            {
+                return await db.MTPs
+                               .AsNoTracking()
+                               .CountAsync(m => (m.Client.Clinic.Id == clinicId
+                                                && m.Client.Status == StatusType.Open
+                                                && m.Active == true
+                                                && m.Goals.Where(n => n.Objetives.Where(o => o.DateResolved.Date > DateTime.Today.Date
+                                                                                     && o.Goal.Service == m.Client.Service
+                                                                                     && o.Compliment == false).Count() > 0).Count() == 0));
+            }
+        }
+
+        private async Task<int> MHPendingBIO(int clinicId)
+        {
+            var options = new DbContextOptionsBuilder<DataContext>().UseSqlServer(Configuration.GetConnectionString("KyoSConnection")).Options;
+            using (DataContext db = new DataContext(options))
+            {
+                return await db.Clients
+                               .AsNoTracking()
+                               .CountAsync(wc => (wc.Clinic.Id == clinicId
+                                                 && wc.Bio == null && wc.Brief == null
+                                                 && wc.OnlyTCM == false));
+            }
+        }
+
+        private async Task<int> MHPendingInitialFars(int clinicId) 
+        {
+            var options = new DbContextOptionsBuilder<DataContext>().UseSqlServer(Configuration.GetConnectionString("KyoSConnection")).Options;
+            using (DataContext db = new DataContext(options))
+            {
+                return await db.Clients
+                               .AsNoTracking()
+                               .CountAsync(wc => (wc.Clinic.Id == clinicId
+                                                 && wc.FarsFormList.Where(n => n.Type == FARSType.Initial).Count() == 0
+                                                 && wc.OnlyTCM == false));
+            }
+        }
+
+        private async Task<int> MHMedicalHistoryMissing(int clinicId)
+        {
+            var options = new DbContextOptionsBuilder<DataContext>().UseSqlServer(Configuration.GetConnectionString("KyoSConnection")).Options;
+            using (DataContext db = new DataContext(options))
+            {
+                return await db.Clients
+                               .AsNoTracking()
+                               .CountAsync(wc => (wc.Clinic.Id == clinicId
+                                          && wc.IntakeMedicalHistory == null
+                                          && wc.OnlyTCM == false));
+            }
+        }
+
+        private async Task<int> MHIntakeMissing(int clinicId)
+        {
+            var options = new DbContextOptionsBuilder<DataContext>().UseSqlServer(Configuration.GetConnectionString("KyoSConnection")).Options;
+            using (DataContext db = new DataContext(options))
+            {
+                return await db.Clients
+                               .AsNoTracking()
+                               .CountAsync(wc => (wc.Clinic.Id == clinicId
+                                                 && wc.IntakeScreening == null
+                                                 && wc.IntakeConsentForTreatment == null
+                                                 && wc.IntakeConsentForRelease == null
+                                                 && wc.IntakeConsumerRights == null
+                                                 && wc.IntakeAcknowledgementHipa == null
+                                                 && wc.IntakeAccessToServices == null
+                                                 && wc.IntakeOrientationChecklist == null
+                                                 && wc.IntakeTransportation == null
+                                                 && wc.IntakeConsentPhotograph == null
+                                                 && wc.IntakeFeeAgreement == null
+                                                 && wc.IntakeTuberculosis == null
+                                                 && wc.OnlyTCM == false));
+            }
+        }
+
+        private async Task<int> MHFarsMissing(int clinicId)
+        {
+            var options = new DbContextOptionsBuilder<DataContext>().UseSqlServer(Configuration.GetConnectionString("KyoSConnection")).Options;
+            using (DataContext db = new DataContext(options))
+            {
+                return await db.Clients
+                               .AsNoTracking()
+                               .CountAsync(n => n.Clinic.Id == clinicId
+                                             && ((n.MTPs.FirstOrDefault(m => m.Active == true).MtpReviewList.Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.MtpReview).Count() == 0)
+                                             || (n.DischargeList.Where(d => d.TypeService == ServiceType.PSR).Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.Discharge_PSR).Count() == 0)
+                                             || (n.DischargeList.Where(d => d.TypeService == ServiceType.Individual).Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.Discharge_Ind).Count() == 0)
+                                             || (n.DischargeList.Where(d => d.TypeService == ServiceType.Group).Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.Discharge_Group).Count() == 0)
+                                             || (n.MTPs.Where(m => m.AdendumList.Count() > n.FarsFormList.Where(f => f.Type == FARSType.Addendums).Count()).Count() > 0))
+                                             && n.OnlyTCM == false);
+            }
+        }
+
+        private async Task<int> MHClientDischarge(int clinicId)
+        {
+            var options = new DbContextOptionsBuilder<DataContext>().UseSqlServer(Configuration.GetConnectionString("KyoSConnection")).Options;
+            using (DataContext db = new DataContext(options))
+            {
+                int clientListPSR = await db.Clients
+                                            .AsNoTracking()
+                                            .CountAsync(m => (m.Clinic.Id == clinicId
+                                                             && m.Status == StatusType.Close
+                                                             && m.Workdays_Clients.Where(w => w.Workday.Service == ServiceType.PSR).Count() > 0
+                                                             && m.DischargeList.Where(d => d.TypeService == ServiceType.PSR).Count() == 0));
+                int clientListIND = await db.Clients
+                                            .AsNoTracking()
+                                            .CountAsync(m => (m.Clinic.Id == clinicId
+                                                                 && m.Status == StatusType.Close
+                                                                 && m.Workdays_Clients.Where(w => w.Workday.Service == ServiceType.Individual).Count() > 0
+                                                                 && m.DischargeList.Where(d => d.TypeService == ServiceType.Individual).Count() == 0));
+                int clientListGroup = await db.Clients
+                                              .AsNoTracking()
+                                              .CountAsync(m => (m.Clinic.Id == clinicId
+                                                                   && m.Status == StatusType.Close
+                                                                   && m.Workdays_Clients.Where(w => w.Workday.Service == ServiceType.Group).Count() > 0
+                                                                   && m.DischargeList.Where(d => d.TypeService == ServiceType.Group).Count() == 0));
+
+                return clientListPSR + clientListIND + clientListGroup;
+            }
+        }
+
+        private async Task<int> MHClientAuthorization(int clinicId)
+        {
+            var options = new DbContextOptionsBuilder<DataContext>().UseSqlServer(Configuration.GetConnectionString("KyoSConnection")).Options;
+            using (DataContext db = new DataContext(options))
+            {
+                return await db.Clients
+                               .AsNoTracking()
+                               .CountAsync(n => n.Status == StatusType.Open
+                                               // && n.Service == ServiceType.PSR
+                                               && n.Clinic.Id == clinicId
+                                               && n.OnlyTCM == false
+                                               && (n.Clients_HealthInsurances.Where(g => g.Agency == ServiceAgency.CMH).Count() == 0
+                                                || n.Clients_HealthInsurances.Where(m => m.Active == true
+                                                                                      && m.ExpiredDate > DateTime.Today.AddDays(30)
+                                                                                      && m.Agency == ServiceAgency.CMH
+                                                                                      && m.HealthInsurance.NeedAuthorization == true).Count() == 0)) ;
+            }
+        }
+
+        private async Task<int> MHClientBirthday(int clinicId)
+        {
+            var options = new DbContextOptionsBuilder<DataContext>().UseSqlServer(Configuration.GetConnectionString("KyoSConnection")).Options;
+            using (DataContext db = new DataContext(options))
+            {
+                return await db.Clients
+                               .AsNoTracking()
+                               .CountAsync(n => n.DateOfBirth.Month == DateTime.Today.Month && n.Status == StatusType.Open);
+            }
+        }
+
+        private async Task<int> MHClientEligibility(int clinicId)
+        {
+            var options = new DbContextOptionsBuilder<DataContext>().UseSqlServer(Configuration.GetConnectionString("KyoSConnection")).Options;
+            using (DataContext db = new DataContext(options))
+            {
+                return await db.Clients
+                               .AsNoTracking()
+                               .CountAsync(n => n.EligibilityList.Where(m => m.EligibilityDate.Year == DateTime.Today.Year
+                                                                            && m.EligibilityDate.Month == DateTime.Today.Month).Count() == 0
+                                                                            && n.Status == StatusType.Open
+                                                                            && n.Clinic.Id == clinicId);
+            }
+        }
+
+        private async Task<int> MHSafetyPlan(int clinicId)
+        {
+            var options = new DbContextOptionsBuilder<DataContext>().UseSqlServer(Configuration.GetConnectionString("KyoSConnection")).Options;
+            using (DataContext db = new DataContext(options))
+            {
+                return await db.Clients
+                               .AsNoTracking()
+                               .CountAsync(c => (c.Clinic.Id == clinicId && c.OnlyTCM == false
+                                                && c.SafetyPlanList.Count() == 0));
+            }
+        }
+
+        private async Task<int> TCMNotStartedCases(int clinicId)
+        {
+            var options = new DbContextOptionsBuilder<DataContext>().UseSqlServer(Configuration.GetConnectionString("KyoSConnection")).Options;
+            using (DataContext db = new DataContext(options))
+            {
+                return await db.TCMClient
+                               .AsNoTracking()
+                               .CountAsync(s => (s.Client.Clinic.Id == clinicId
+                                                    && s.Status == StatusType.Open
+                                                    && (s.TcmServicePlan == null
+                                                        || s.TCMAssessment == null
+                                                        || (s.TcmIntakeAppendixJ == null
+                                                            && s.TcmIntakeAppendixI == null))));
+            }
+        }
+
+        private async Task<int> TCMOpenBinder(int clinicId)
+        {
+            var options = new DbContextOptionsBuilder<DataContext>().UseSqlServer(Configuration.GetConnectionString("KyoSConnection")).Options;
+            using (DataContext db = new DataContext(options))
+            {
+                return await db.TCMClient
+                               .AsNoTracking()
+                               .CountAsync(g => (g.Status == StatusType.Open
+                                                    && g.Client.Clinic.Id == clinicId));
+            }
+        }
+
+        private async Task<int> TCMServicePlanPending(int clinicId)
+        {
+            var options = new DbContextOptionsBuilder<DataContext>().UseSqlServer(Configuration.GetConnectionString("KyoSConnection")).Options;
+            using (DataContext db = new DataContext(options))
+            {
+                return await db.TCMClient
+                               .AsNoTracking()
+                               .CountAsync(g => (g.Status == StatusType.Open
+                                                    && g.Client.Clinic.Id == clinicId
+                                                    && g.TcmServicePlan.Approved == 1));
+            }
+        }
+
+        private async Task<int> TCMAdendumPending(int clinicId)
+        {
+            var options = new DbContextOptionsBuilder<DataContext>().UseSqlServer(Configuration.GetConnectionString("KyoSConnection")).Options;
+            using (DataContext db = new DataContext(options))
+            {
+                return await db.TCMClient
+                               .AsNoTracking()
+                               .CountAsync(g => (g.Status == StatusType.Open
+                                                    && g.Client.Clinic.Id == clinicId
+                                                    && g.TcmServicePlan.TCMAdendum.Where(n => n.Approved == 1).Count() > 0));
+            }
+        }
+
+        private async Task<int> TCMServicePlanReviewPending(int clinicId)
+        {
+            var options = new DbContextOptionsBuilder<DataContext>().UseSqlServer(Configuration.GetConnectionString("KyoSConnection")).Options;
+            using (DataContext db = new DataContext(options))
+            {
+                return await db.TCMClient
+                               .AsNoTracking()
+                               .CountAsync(g => (g.Status == StatusType.Open
+                                                && g.Client.Clinic.Id == clinicId
+                                                && g.TcmServicePlan.TCMServicePlanReview.Approved == 1));
+            }
+        }
+
+        private async Task<int> TCMDischargePending(int clinicId)
+        {
+            var options = new DbContextOptionsBuilder<DataContext>().UseSqlServer(Configuration.GetConnectionString("KyoSConnection")).Options;
+            using (DataContext db = new DataContext(options))
+            {
+                return await db.TCMClient
+                               .AsNoTracking()
+                               .CountAsync(g => (g.Status == StatusType.Open
+                                                && g.Client.Clinic.Id == clinicId
+                                                && g.TcmServicePlan.TCMDischarge.Approved == 1));
+            }
+        }
+
+        private async Task<int> TCMCaseManager(int clinicId)
+        {
+            var options = new DbContextOptionsBuilder<DataContext>().UseSqlServer(Configuration.GetConnectionString("KyoSConnection")).Options;
+            using (DataContext db = new DataContext(options))
+            {
+                return await db.CaseManagers
+                               .AsNoTracking()
+                               .CountAsync(g => (g.Status == StatusType.Open
+                                                    && g.Clinic.Id == clinicId));
+            }
+        }
+
+        private async Task<int> TCMFarsPending(int clinicId)
+        {
+            var options = new DbContextOptionsBuilder<DataContext>().UseSqlServer(Configuration.GetConnectionString("KyoSConnection")).Options;
+            using (DataContext db = new DataContext(options))
+            {
+                return await db.TCMFarsForm
+                               .AsNoTracking()
+                               .CountAsync(g => (g.Status == FarsStatus.Pending
+                                                    && g.TCMClient.Client.Clinic.Id == clinicId));
+            }
+        }
+
+        private async Task<int> TCMAssesmentPending(int clinicId)
+        {
+            var options = new DbContextOptionsBuilder<DataContext>().UseSqlServer(Configuration.GetConnectionString("KyoSConnection")).Options;
+            using (DataContext db = new DataContext(options))
+            {
+                return await db.TCMAssessment
+                               .AsNoTracking()
+                               .CountAsync(g => (g.Approved == 1
+                                                && g.TcmClient.Client.Clinic.Id == clinicId));
+            }
+        }
+
+        private async Task<int> TCMAllDocuments(int clinicId)
+        {
+            var options = new DbContextOptionsBuilder<DataContext>().UseSqlServer(Configuration.GetConnectionString("KyoSConnection")).Options;
+            using (DataContext db = new DataContext(options))
+            {
+                return await db.TCMClient
+                               .AsNoTracking()
+                               .CountAsync(g => g.Client.Clinic.Id == clinicId);
+            }
+        }
+
+        private async Task<int> TCMNotesEdition(int clinicId)
+        {
+            var options = new DbContextOptionsBuilder<DataContext>().UseSqlServer(Configuration.GetConnectionString("KyoSConnection")).Options;
+            using (DataContext db = new DataContext(options))
+            {
+                return await db.TCMNote
+                               .AsNoTracking()
+                               .CountAsync(g => (g.Status == NoteStatus.Edition
+                                                    && g.TCMClient.Client.Clinic.Id == clinicId));
+            }
+        }
+
+        private async Task<int> TCMNotesPending(int clinicId)
+        {
+            var options = new DbContextOptionsBuilder<DataContext>().UseSqlServer(Configuration.GetConnectionString("KyoSConnection")).Options;
+            using (DataContext db = new DataContext(options))
+            {
+                return await db.TCMNote
+                               .AsNoTracking()
+                               .CountAsync(g => (g.Status == NoteStatus.Pending
+                                                    && g.TCMClient.Client.Clinic.Id == clinicId));
+            }
+        }
+
+        private async Task<int> TCMNotesApproved(int clinicId)
+        {
+            var options = new DbContextOptionsBuilder<DataContext>().UseSqlServer(Configuration.GetConnectionString("KyoSConnection")).Options;
+            using (DataContext db = new DataContext(options))
+            {
+                return await db.TCMNote
+                               .AsNoTracking()
+                               .CountAsync(g => (g.Status == NoteStatus.Approved
+                                                && g.TCMClient.Client.Clinic.Id == clinicId));
+            }
+        }
+
+        private async Task<int> TCMNotesWithReview(int clinicId)
+        {
+            var options = new DbContextOptionsBuilder<DataContext>().UseSqlServer(Configuration.GetConnectionString("KyoSConnection")).Options;
+            using (DataContext db = new DataContext(options))
+            {
+                return await db.TCMNote
+                               .AsNoTracking()
+                               .CountAsync(wc => (wc.TCMClient.Casemanager.Clinic.Id == clinicId &&
+                                                        wc.Status == NoteStatus.Pending &&
+                                                        wc.TCMMessages.Count() > 0));
+            }
+        }
+
+        private async Task<int> TCMSupervisor(int clinicId)
+        {
+            var options = new DbContextOptionsBuilder<DataContext>().UseSqlServer(Configuration.GetConnectionString("KyoSConnection")).Options;
+            using (DataContext db = new DataContext(options))
+            {
+                return await db.TCMSupervisors
+                               .AsNoTracking()
+                               .CountAsync(g => (g.Status == StatusType.Open
+                                                    && g.Clinic.Id == clinicId));
+            }
+        }
+
+        private async Task<int> TCMBilling(int clinicId)
+        {
+            var options = new DbContextOptionsBuilder<DataContext>().UseSqlServer(Configuration.GetConnectionString("KyoSConnection")).Options;
+            using (DataContext db = new DataContext(options))
+            {
+                return await db.TCMClient
+                               .AsNoTracking()
+                               .CountAsync(g => (g.Status == StatusType.Open
+                                                    && g.Client.Clinic.Id == clinicId));
+            }
+        }
+
+        private async Task<int> TCMClientAuthorization(int clinicId)
+        {
+            var options = new DbContextOptionsBuilder<DataContext>().UseSqlServer(Configuration.GetConnectionString("KyoSConnection")).Options;
+            using (DataContext db = new DataContext(options))
+            {
+                return await db.TCMClient
+                               .AsNoTracking()
+                               .CountAsync(n => n.Status == StatusType.Open
+                                               // && n.Service == ServiceType.PSR
+                                               && n.Client.Clinic.Id == clinicId
+                                               && (n.Client.Clients_HealthInsurances == null
+                                               || n.Client.Clients_HealthInsurances.Where(m => m.Active == true
+                                                                && m.Agency == ServiceAgency.TCM
+                                                                && m.ExpiredDate > DateTime.Today.AddDays(30)).Count() == 0));
+            }
+        }
+
+        private async Task<int> TCMClientWithoutPSYNotes(int clinicId)
+        {
+            var options = new DbContextOptionsBuilder<DataContext>().UseSqlServer(Configuration.GetConnectionString("KyoSConnection")).Options;
+            using (DataContext db = new DataContext(options))
+            {
+                List<ClientEntity> clients = await _context.Clients
+                                                           .Include(wc => wc.NotePSY)
+                                                           .Include(wc => wc.Psychiatrist)
+                                                           .AsSplitQuery()
+                                                           .Where(n => n.Status == StatusType.Open
+                                                                    && n.Clinic.Id == clinicId)
+                                                           .ToListAsync();
+
+                List<ClientEntity> salida = new List<ClientEntity>();
+                ClientEntity temp = new ClientEntity();
+
+                foreach (var item in clients)
+                {
+                    if (item.NotePSY.Count() == 0)
+                    {
+                        temp = item;
+                        salida.Add(temp);
+                        temp = new ClientEntity();
+                    }
+                    else
+                    {
+                        if (item.NotePSY.MaxBy(n => n.DateService).DateService.AddDays(80.0) < DateTime.Today)
+                        {
+                            temp = item;
+                            salida.Add(temp);
+                            temp = new ClientEntity();
+                        }
+                    }
+                }
+
+                return (salida.Count());
+            }
+        }
+
+        private async Task<int> TCMClientWithoutCase(int clinicId)
+        {
+            var options = new DbContextOptionsBuilder<DataContext>().UseSqlServer(Configuration.GetConnectionString("KyoSConnection")).Options;
+            using (DataContext db = new DataContext(options))
+            {
+                List<ClientEntity> clients_Total = await _context.Clients
+                                                                 .AsSplitQuery()
+                                                                 .Where(c => (c.Clinic.Id == clinicId
+                                                                           && c.Status == StatusType.Open
+                                                                           && c.OnlyTCM == true))
+                                                                 .OrderBy(c => c.Name)
+                                                                 .ToListAsync();
+                List<TCMClientEntity> clients_Open = await _context.TCMClient
+                                                                   .Include(n => n.Client)
+                                                                   .AsSplitQuery()
+                                                                   .Where(c => (c.Client.Clinic.Id == clinicId
+                                                                             && c.Status == StatusType.Open))
+                                                                   .ToListAsync();
+
+                foreach (var item in clients_Open)
+                {
+                    if (item.Client != null)
+                    {
+                        if (clients_Total.Exists(c => c.Id == item.Client.Id))
+                            clients_Total.Remove(item.Client);
+                    }
+                }
+
+                return (clients_Total.Count());
+            }
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="01/10/2024 09:39:52" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="04/16/2024 12:44:50" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3U66Xa9FdgI84V82jxMzgWg==">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhvmKnFZl+oHldqYdI44FXwTmXGtdYL9PBQdNEMMM+pZMUeDzwRdneTHbRyYzh/rOVxBbdlwki0az1mGchjG2u3tZBznaKFLo5sWE5lKk//Og==">
       <TableDataSource Name="Clinics" DataType="System.Int32" Enabled="true" TableName="Clinics">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -458,18 +458,18 @@
       <TextObject Name="Text277" Left="387.45" Top="513.3" Width="387.45" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" CanGrow="true" Text="[TCMIntakeForms.NeedSpecial_Specify]" VertAlign="Center" Font="Arial, 9pt"/>
       <TextObject Name="Text278" Top="538.65" Width="160.65" Height="18.9" Text="Case Manager’s notes: " VertAlign="Center" Font="Arial, 9pt"/>
       <TextObject Name="Text279" Left="1" Top="557.55" Width="774.9" Height="56.7" Border.Lines="Bottom" Fill.Color="LightBlue" CanGrow="true" Text="[TCMIntakeForms.CaseManagerNotes]" VertAlign="Center" Font="Arial, 9pt"/>
-      <TextObject Name="Text280" Left="-0.45" Top="722.65" Width="245.32" Height="24.57" CanGrow="true" Text="Case Manager Print Name" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
-      <TextObject Name="Text281" Top="700.3" Width="245.7" Height="18.9" Text="[CaseManagers.Name]" VertAlign="Center" Font="Arial, 9pt"/>
-      <LineObject Name="Line9" Left="248.15" Top="720.2" Width="-249.48"/>
-      <TextObject Name="Text282" Left="273.05" Top="721.65" Width="84.67" Height="24.57" CanGrow="true" Text="Credentials" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
-      <TextObject Name="Text283" Left="273.5" Top="700.3" Width="94.5" Height="18.9" Text="[CaseManagers.Credentials]" VertAlign="Center" Font="Arial, 9pt"/>
-      <LineObject Name="Line10" Left="369.55" Top="720.2" Width="-98.28"/>
-      <TextObject Name="Text284" Left="393.9" Top="721.65" Width="153.09" Height="24.57" CanGrow="true" Text="Signature" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 8pt"/>
-      <LineObject Name="Line11" Left="549.1" Top="720.2" Width="-154.98"/>
-      <TextObject Name="Text285" Left="576.45" Top="721.65" Width="153.09" Height="24.57" CanGrow="true" Text="Date" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 8pt"/>
-      <LineObject Name="Line12" Left="731.65" Top="720.2" Width="-154.98"/>
-      <TextObject Name="Text286" Left="574.45" Top="699.85" Width="160.65" Height="18.9" Text="[TCMIntakeForms.IntakeDate]" Format="Date" Format.Format="d" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
-      <PictureObject Name="Picture3" Left="425.25" Top="661.5" Width="95" Height="63.45" DataColumn="Signatures.facilitatorSignature"/>
+      <TextObject Name="Text280" Left="-0.45" Top="722.65" Width="226.42" Height="24.57" CanGrow="true" Text="Case Manager Print Name" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
+      <TextObject Name="Text281" Top="700.3" Width="226.8" Height="18.9" Text="[CaseManagers.Name]" VertAlign="Center" Font="Arial, 9pt"/>
+      <LineObject Name="Line9" Left="229.25" Top="720.2" Width="-249.48"/>
+      <TextObject Name="Text282" Left="267.6" Top="721.65" Width="131.92" Height="24.57" CanGrow="true" Text="Credentials" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
+      <TextObject Name="Text283" Left="268.05" Top="700.3" Width="132.3" Height="18.9" Text="[CaseManagers.Credentials]" VertAlign="Center" Font="Arial, 9pt"/>
+      <LineObject Name="Line10" Left="401.9" Top="720.2" Width="-136.08"/>
+      <TextObject Name="Text284" Left="440.15" Top="721.65" Width="153.09" Height="24.57" CanGrow="true" Text="Signature" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 8pt"/>
+      <LineObject Name="Line11" Left="595.35" Top="720.2" Width="-154.98"/>
+      <TextObject Name="Text285" Left="631.15" Top="721.65" Width="96.39" Height="24.57" CanGrow="true" Text="Date" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 8pt"/>
+      <LineObject Name="Line12" Left="727.65" Top="720.2" Width="-98.28"/>
+      <TextObject Name="Text286" Left="631.15" Top="699.85" Width="94.5" Height="18.9" Text="[TCMIntakeForms.IntakeDate]" Format="Date" Format.Format="d" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+      <PictureObject Name="Picture3" Left="471.5" Top="666.5" Width="95" Height="63.45" DataColumn="Signatures.facilitatorSignature"/>
     </DataBand>
     <PageFooterBand Name="PageFooter2" Top="853.41" Width="778.3" Height="31.35">
       <TextObject Name="Text201" Left="15.9" Top="7.35" Width="283.5" Height="18.9" Text="Case Management Intake Form © 12.2020" VertAlign="Center" Font="Arial, 8pt, style=Italic"/>

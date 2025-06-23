@@ -1,0 +1,193 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="02/28/2024 12:06:37" ReportInfo.CreatorVersion="2021.1.0.0">
+  <Dictionary>
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pKiygLNrR2GSkUua6CZa7zWuDzNGOn7cjq7mn0WTOnccDkyyV5BLvtFa1BRlcYFBrVxpbfGbY9ZOlVTU0x7DTCA==">
+      <TableDataSource Name="Clinics" DataType="System.Int32" Enabled="true" TableName="Clinics">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Name" DataType="System.String"/>
+        <Column Name="LogoPath" DataType="System.String"/>
+        <Column Name="Schema" DataType="System.Int32"/>
+        <Column Name="Address" DataType="System.String"/>
+        <Column Name="CEO" DataType="System.String"/>
+        <Column Name="City" DataType="System.String"/>
+        <Column Name="FaxNo" DataType="System.String"/>
+        <Column Name="Phone" DataType="System.String"/>
+        <Column Name="State" DataType="System.String"/>
+        <Column Name="ZipCode" DataType="System.String"/>
+        <Column Name="ClinicalDirector" DataType="System.String"/>
+        <Column Name="ProviderTaxId" DataType="System.String"/>
+        <Column Name="ProviderMedicaidId" DataType="System.String"/>
+      </TableDataSource>
+      <TableDataSource Name="Clients" DataType="System.Int32" Enabled="true" TableName="Clients">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Name" DataType="System.String"/>
+        <Column Name="Gender" DataType="System.Int32"/>
+        <Column Name="Code" DataType="System.String"/>
+        <Column Name="ClinicId" DataType="System.Int32"/>
+        <Column Name="DateOfBirth" DataType="System.DateTime"/>
+        <Column Name="ZipCode" DataType="System.String"/>
+        <Column Name="Status" DataType="System.Int32"/>
+        <Column Name="GroupId" DataType="System.Int32"/>
+        <Column Name="AlternativeAddress" DataType="System.String"/>
+        <Column Name="City" DataType="System.String"/>
+        <Column Name="Country" DataType="System.String"/>
+        <Column Name="CreatedBy" DataType="System.String"/>
+        <Column Name="CreatedOn" DataType="System.DateTime"/>
+        <Column Name="DoctorId" DataType="System.Int32"/>
+        <Column Name="Email" DataType="System.String"/>
+        <Column Name="EmergencyContactId" DataType="System.Int32"/>
+        <Column Name="Ethnicity" DataType="System.Int32"/>
+        <Column Name="FullAddress" DataType="System.String"/>
+        <Column Name="LastModifiedBy" DataType="System.String"/>
+        <Column Name="LastModifiedOn" DataType="System.DateTime"/>
+        <Column Name="LegalGuardianId" DataType="System.Int32"/>
+        <Column Name="MaritalStatus" DataType="System.Int32"/>
+        <Column Name="MedicaidID" DataType="System.String"/>
+        <Column Name="OtherLanguage" DataType="System.String"/>
+        <Column Name="PhotoPath" DataType="System.String"/>
+        <Column Name="PreferredLanguage" DataType="System.Int32"/>
+        <Column Name="PsychiatristId" DataType="System.Int32"/>
+        <Column Name="Race" DataType="System.Int32"/>
+        <Column Name="SSN" DataType="System.String"/>
+        <Column Name="SignPath" DataType="System.String"/>
+        <Column Name="State" DataType="System.String"/>
+        <Column Name="Telephone" DataType="System.String"/>
+        <Column Name="TelephoneSecondary" DataType="System.String"/>
+        <Column Name="RelationShipOfLegalGuardian" DataType="System.Int32"/>
+        <Column Name="Service" DataType="System.Int32"/>
+        <Column Name="IndividualTherapyFacilitatorId" DataType="System.Int32"/>
+        <Column Name="AdmisionDate" DataType="System.DateTime"/>
+        <Column Name="PlaceOfBirth" DataType="System.String"/>
+        <Column Name="RelationShipOfEmergencyContact" DataType="System.Int32"/>
+        <Column Name="IdFacilitatorPSR" DataType="System.Int32"/>
+        <Column Name="OtherLanguage_Read" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="OtherLanguage_Speak" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="OtherLanguage_Understand" DataType="System.Boolean" BindableControl="CheckBox"/>
+        <Column Name="MedicareId" DataType="System.String"/>
+        <Column Name="DateOfClose" DataType="System.DateTime"/>
+        <Column Name="OnlyTCM" DataType="System.Boolean" BindableControl="CheckBox"/>
+      </TableDataSource>
+      <TableDataSource Name="CaseManagers" DataType="System.Int32" Enabled="true" TableName="CaseManagers">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Name" DataType="System.String"/>
+        <Column Name="ProviderNumber" DataType="System.String"/>
+        <Column Name="Status" DataType="System.Int32"/>
+        <Column Name="LinkedUser" DataType="System.String"/>
+        <Column Name="SignaturePath" DataType="System.String"/>
+        <Column Name="ClinicId" DataType="System.Int32"/>
+        <Column Name="Email" DataType="System.String"/>
+        <Column Name="Phone" DataType="System.String"/>
+        <Column Name="Credentials" DataType="System.String"/>
+        <Column Name="Money" DataType="System.Decimal"/>
+      </TableDataSource>
+      <TableDataSource Name="TCMClient" DataType="System.Int32" Enabled="true" TableName="TCMClient">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="CasemanagerId" DataType="System.Int32"/>
+        <Column Name="CaseNumber" DataType="System.String"/>
+        <Column Name="ClientId" DataType="System.Int32"/>
+        <Column Name="DataClose" DataType="System.DateTime"/>
+        <Column Name="DataOpen" DataType="System.DateTime"/>
+        <Column Name="Period" DataType="System.Int32"/>
+        <Column Name="Status" DataType="System.Int32"/>
+        <Column Name="CreatedBy" DataType="System.String"/>
+        <Column Name="CreatedOn" DataType="System.DateTime"/>
+        <Column Name="LastModifiedBy" DataType="System.String"/>
+        <Column Name="LastModifiedOn" DataType="System.DateTime"/>
+      </TableDataSource>
+      <TableDataSource Name="Classifications" Alias="Signatures" DataType="System.Int32" Enabled="true" TableName="Classifications">
+        <Column Name="supervisorSignature" DataType="System.Byte[]" PropName="Id"/>
+        <Column Name="facilitatorSignature" DataType="System.Byte[]" PropName="Name"/>
+      </TableDataSource>
+      <TableDataSource Name="TCMIntakeMiniMental" DataType="System.Int32" Enabled="true" TableName="TCMIntakeMiniMental">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="TcmClient_FK" DataType="System.Int32"/>
+        <Column Name="Date" DataType="System.DateTime"/>
+        <Column Name="AdmissionedFor" DataType="System.String"/>
+        <Column Name="OrientationWhat" DataType="System.Int32"/>
+        <Column Name="OrientationWhere" DataType="System.Int32"/>
+        <Column Name="RegistrationName" DataType="System.Int32"/>
+        <Column Name="Attention" DataType="System.Int32"/>
+        <Column Name="Recall" DataType="System.Int32"/>
+        <Column Name="LanguageName" DataType="System.Int32"/>
+        <Column Name="LanguageRepeat" DataType="System.Int32"/>
+        <Column Name="LanguageFollow" DataType="System.Int32"/>
+        <Column Name="LanguageRead" DataType="System.Int32"/>
+        <Column Name="LanguageWrite" DataType="System.Int32"/>
+        <Column Name="LanguageCopy" DataType="System.Int32"/>
+        <Column Name="TotalScore" DataType="System.Int32"/>
+        <Column Name="Trials" DataType="System.Int32"/>
+        <Column Name="CreatedBy" DataType="System.String"/>
+        <Column Name="CreatedOn" DataType="System.DateTime"/>
+        <Column Name="LastModifiedBy" DataType="System.String"/>
+        <Column Name="LastModifiedOn" DataType="System.DateTime"/>
+      </TableDataSource>
+    </MsSqlDataConnection>
+    <Parameter Name="session1" DataType="System.String"/>
+  </Dictionary>
+  <ReportPage Name="Page1" PaperWidth="215.9" PaperHeight="279.4" RawPaperSize="1" LeftMargin="5" TopMargin="5" RightMargin="5" BottomMargin="5" Watermark.Enabled="true" Watermark.Font="Arial, 60pt">
+    <ReportTitleBand Name="ReportTitle1" Width="778.3" Height="89.6">
+      <TextObject Name="Textbox12" Left="132.75" Top="23.35" Width="535.1" Height="20" CanGrow="true" Text="[Clinics.Name]" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 12pt, style=Bold"/>
+      <TextObject Name="Textbox64" Left="131.75" Top="45.23" Width="535.1" Height="22" CanGrow="true" Text="The Mini Mental State Exam" Padding="2, 2, 2, 2" HorzAlign="Center" Font="Arial, 11pt, style=Bold"/>
+      <LineObject Name="Line3" Left="132.3" Top="12.45" Height="65.55"/>
+      <PictureObject Name="Picture1" Left="18.9" Top="10.9" Width="103.95" Height="66.15"/>
+      <LineObject Name="Line6" Left="131.3" Top="11.45" Height="66.15"/>
+    </ReportTitleBand>
+    <DataBand Name="Data1" Top="93.45" Width="778.3" Height="875.72">
+      <TextObject Name="Text40" Top="28.35" Width="106.6" Height="18.9" Text="Client Name:" VertAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text41" Left="462.05" Top="28.35" Width="113.4" Height="18.9" Text="Case Number:" HorzAlign="Right" VertAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text44" Left="86.05" Top="28.35" Width="340.2" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Clients.Name]" VertAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text45" Left="575.45" Top="28.35" Width="194.67" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[TCMClient.CaseNumber]" VertAlign="Center" Font="Arial, 10pt"/>
+      <PictureObject Name="Picture3" Left="284.95" Top="795.45" Width="95" Height="63.45" DataColumn="Signatures.facilitatorSignature"/>
+      <TextObject Name="Text290" Left="47.25" Top="851.15" Width="228.69" Height="24.57" CanGrow="true" Text="Examiner Name" Padding="2, 2, 2, 2" Font="Arial, 9pt"/>
+      <TextObject Name="Text291" Left="532.2" Top="851.05" Width="86.94" Height="24.57" CanGrow="true" Text="Date" Padding="2, 2, 2, 2" Font="Arial, 9pt"/>
+      <TextObject Name="Text292" Left="532.2" Top="831.25" Width="92.61" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[TCMIntakeMiniMental.Date]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text324" Left="47.25" Top="830.6" Width="243.81" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[CaseManagers.Name]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text327" Top="59.7" Width="774.9" Height="56.7" Text="The Mini Mental State Examination (MMSE) is a tool that can be used to systematically and thoroughly assess mental status. It is an 11-question measure that tests five areas of cognitive function: orientation, registration, attention and calculation, recall, and language. The maximum score is 30. A score of 23 or lower is indicative of cognitive impairment." HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text328" Left="1" Top="127.85" Width="75.6" Height="18.9" Text="Maximum" HorzAlign="Center" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text329" Left="100.5" Top="127.85" Width="75.6" Height="18.9" Text="Score" HorzAlign="Center" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text330" Left="207.9" Top="141.75" Width="94.5" Height="18.9" Text="Orientation" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text331" Left="207.9" Top="160.65" Width="519.75" Height="18.9" Text="What is the (year) (season) (date) (day) (month)?" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text332" Left="207.9" Top="179.55" Width="519.75" Height="18.9" Text="Where are we (state) (country) (town) (hospital) (home) (office) (floor)?" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text333" Left="28.35" Top="160.65" Width="18.9" Height="18.9" Text="5" HorzAlign="Center" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text334" Left="28.35" Top="179.55" Width="18.9" Height="18.9" Text="5" HorzAlign="Center" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text335" Left="125.85" Top="160.65" Width="26.46" Height="18.9" Text="([TCMIntakeMiniMental.OrientationWhat])" HorzAlign="Center" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text336" Left="125.85" Top="179.55" Width="26.46" Height="18.9" Text="([TCMIntakeMiniMental.OrientationWhere])" HorzAlign="Center" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text337" Left="207.9" Top="207.9" Width="103.95" Height="18.9" Text="Registration" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text338" Left="207.9" Top="226.8" Width="557.55" Height="66.15" Text="Name 3 objects: 1 second to say each. Then ask the patient all 3 after you have said them. Give 1 point for each correct answer.&#13;&#10;Then repeat them until he/she learns all 3. Count trials and record.&#13;&#10;Trials &lt;u&gt;[TCMIntakeMiniMental.Trials]&lt;/u&gt;" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text339" Left="28.35" Top="226.8" Width="18.9" Height="18.9" Text="3" HorzAlign="Center" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text340" Left="125.85" Top="226.8" Width="26.46" Height="18.9" Text="([TCMIntakeMiniMental.RegistrationName])" HorzAlign="Center" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text341" Left="207.9" Top="301.4" Width="292.95" Height="18.9" Text="Attention and Calculation" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text342" Left="207.9" Top="320.3" Width="557.55" Height="37.8" Text="Serial 7’s. 1 point for each correct answer. Stop after 5 answers.&#13;&#10;Alternatively spell “world” backward. Give 1 point for each letter spelled correctly." Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text343" Left="28.35" Top="320.3" Width="18.9" Height="18.9" Text="5" HorzAlign="Center" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text344" Left="125.85" Top="320.3" Width="26.46" Height="18.9" Text="([TCMIntakeMiniMental.Attention])" HorzAlign="Center" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text345" Left="207.9" Top="367.55" Width="292.95" Height="18.9" Text="Recall" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text346" Left="207.9" Top="386.45" Width="557.55" Height="18.9" Text="Ask for the 3 objects repeated above. Give 1 point for each correct answer." Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text347" Left="28.35" Top="386.45" Width="18.9" Height="18.9" Text="3" HorzAlign="Center" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text348" Left="125.85" Top="386.45" Width="26.46" Height="18.9" Text="([TCMIntakeMiniMental.Recall])" HorzAlign="Center" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text349" Left="207.9" Top="413.8" Width="94.5" Height="18.9" Text="Language" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text350" Left="207.9" Top="432.7" Width="519.75" Height="18.9" Text="Name a pencil and watch." Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text351" Left="207.9" Top="451.6" Width="519.75" Height="18.9" Text="Repeat the following: “No ifs, ands, or buts”" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text352" Left="28.35" Top="432.7" Width="18.9" Height="18.9" Text="2" HorzAlign="Center" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text353" Left="28.35" Top="451.6" Width="18.9" Height="18.9" Text="1" HorzAlign="Center" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text354" Left="125.85" Top="432.7" Width="26.46" Height="18.9" Text="([TCMIntakeMiniMental.LanguageName])" HorzAlign="Center" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text355" Left="125.85" Top="451.6" Width="26.46" Height="18.9" Text="([TCMIntakeMiniMental.LanguageRepeat])" HorzAlign="Center" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text356" Left="207.9" Top="470.5" Width="567" Height="18.9" Text="Follow a 3-stage command: “Take a paper in your hand, fold it in half, and put it on the floor.”" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text357" Left="207.9" Top="489.4" Width="519.75" Height="18.9" Text="Read and obey the following: &quot;Close your eyes&quot;" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text358" Left="28.35" Top="470.5" Width="18.9" Height="18.9" Text="3" HorzAlign="Center" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text359" Left="28.35" Top="489.4" Width="18.9" Height="18.9" Text="1" HorzAlign="Center" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text360" Left="125.85" Top="470.5" Width="26.46" Height="18.9" Text="([TCMIntakeMiniMental.LanguageFollow])" HorzAlign="Center" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text361" Left="125.85" Top="489.4" Width="26.46" Height="18.9" Text="([TCMIntakeMiniMental.LanguageRead])" HorzAlign="Center" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text362" Left="207.9" Top="508.3" Width="226.8" Height="18.9" Text="Write a sentence." Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text363" Left="207.9" Top="527.2" Width="519.75" Height="18.9" Text="Copy the design shown:" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text364" Left="28.35" Top="508.3" Width="18.9" Height="18.9" Text="1" HorzAlign="Center" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text365" Left="28.35" Top="527.2" Width="18.9" Height="18.9" Text="1" HorzAlign="Center" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text366" Left="125.85" Top="508.3" Width="26.46" Height="18.9" Text="([TCMIntakeMiniMental.LanguageWrite])" HorzAlign="Center" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text367" Left="125.85" Top="527.2" Width="26.46" Height="18.9" Text="([TCMIntakeMiniMental.LanguageCopy])" HorzAlign="Center" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <PolygonObject Name="Polygon1" Left="204.45" Top="560" Width="118.8" Height="105.29" PolyPoints_v2="106.5194/31.5667|85.9653/107.0286|12.5422/107.7761|-12.2816/30.5118|48.7295/2.484" CenterX="12.28165" CenterY="-2.483986"/>
+      <PolygonObject Name="Polygon2" Left="283.87" Top="560.23" Width="112.88" Height="104.87" PolyPoints_v2="89.5708/107.1667|35.7245/135.3786|-23.3066/107.7761|-11.3328/30.5118|79.8451/30.834" CenterX="23.30663" CenterY="-30.5118"/>
+      <TextObject Name="Text368" Left="121.87" Top="699.3" Width="37.8" Height="18.9" Text="[TCMIntakeMiniMental.TotalScore]" Padding="0, 0, 0, 0" HorzAlign="Center" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
+      <TextObject Name="Text369" Left="170.1" Top="699.3" Width="94.5" Height="18.9" Text="Total Score" Font="Arial, 10pt, style=Bold" TextRenderType="HtmlTags"/>
+      <LineObject Name="Line15" Left="162.65" Top="718.2" Width="-41.58"/>
+    </DataBand>
+  </ReportPage>
+</Report>

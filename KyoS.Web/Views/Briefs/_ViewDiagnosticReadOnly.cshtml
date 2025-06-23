@@ -12,12 +12,21 @@
                         <thead>
                             <tr>
                                 <th class="col-md-1">
-                                    @Html.DisplayNameFor(model => model.Diagnostic.Code)
+                                   Code
                                 </th>
-                                <th class="col-md-8">
-                                    @Html.DisplayNameFor(model => model.Diagnostic.Description)
+                                <th class="col-md-4">
+                                   Description
                                 </th>
-                                <th class="col-md-2" style="text-align:center;">
+                                <th class="col-md-3">
+                                    @Html.DisplayNameFor(model => model.Prescriber)
+                                </th>
+                                <th class="col-md-1" style="text-align:center;">
+                                    Date
+                                </th>
+                                <th class="col-md-1" style="text-align:center;">
+                                    Active
+                                </th>
+                                <th class="col-md-1" style="text-align:center;">
                                     @Html.DisplayNameFor(model => model.Principal)
                                 </th>
                                 <th class="col-md-1" style="text-align:center;">
@@ -28,11 +37,20 @@
                             @foreach (var item in Model)
                             {
                                 <tr>
-                                    <td>
+                                   <td>
                                         @Html.DisplayFor(modelItem => item.Diagnostic.Code)
                                     </td>
                                     <td>
                                         @Html.DisplayFor(modelItem => item.Diagnostic.Description)
+                                    </td>
+                                    <td >
+                                        @Html.DisplayFor(modelItem => item.Prescriber)
+                                    </td>
+                                    <td align="center">
+                                        @item.DateIdentify.ToShortDateString()
+                                    </td>
+                                    <td align="center">
+                                        @Html.DisplayFor(modelItem => item.Active)
                                     </td>
                                     <td align="center">
                                         @Html.DisplayFor(modelItem => item.Principal)

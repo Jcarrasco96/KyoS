@@ -107,5 +107,22 @@ namespace KyoS.Web.Helpers
         IEnumerable<SelectListItem> GetComboFiltroTCMPayStubByClinic();
         IEnumerable<SelectListItem> GetComboPaystubStatus();
         IEnumerable<SelectListItem> GetComboDocumentsAssistantByClinic(int idClinic, bool blank = false, bool all = false);
+
+        IEnumerable<SelectListItem> GetComboTCMActivityByService(int idService);
+        IEnumerable<SelectListItem> GetComboAccountType();
+        IEnumerable<SelectListItem> GetComboPaymentMethod();
+        IEnumerable<SelectListItem> GetComboAppendixJType();
+        IEnumerable<SelectListItem> GetComboCourseByRole(UserType userTypr);
+        IEnumerable<SelectListItem> GetComboDashboardType();
+        IEnumerable<SelectListItem> GetComboInsuranceType();
+        IEnumerable<SelectListItem> GetComboInsurancePlanType();
+        IEnumerable<SelectListItem> GetComboTCMDomainName();
+
+        IEnumerable<SelectListItem> GetComboInsuranceCoverageType();
+        IEnumerable<SelectListItem> GetComboClientsByTCM(string userName, int idClinic, bool blank = false);
+        IEnumerable<SelectListItem> GetComboClientsByCaseManagerByTCMSupervisor(string user, int allClient);
+        IEnumerable<SelectListItem> GetComboTCMClientsByClinic_ClientId(int idClinic);
+        IEnumerable<SelectListItem> GetComboClientsByFacilitator(FacilitatorEntity facilitator, int idClinic = 0);
+        IEnumerable<SelectListItem> GetComboRolesNotRelationed(string name);
     }
 }

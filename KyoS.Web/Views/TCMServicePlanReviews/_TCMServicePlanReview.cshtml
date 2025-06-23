@@ -1,7 +1,7 @@
 ﻿@model KyoS.Web.Models.TCMServicePlanReviewViewModel
 
 <div class="col-md-push-12">
-    <div class="col-md-3">
+    <div class="col-md-5">
         <div class="form-group">
             <label asp-for="TcmServicePlan.TcmClient.Client.Name" class="control-label">Client Name</label>
             <input asp-for="TcmServicePlan.TcmClient.Client.Name" class="form-control" readonly />
@@ -15,11 +15,32 @@
             <span asp-validation-for="TcmServicePlan.TcmClient.CaseNumber" class="text-danger"></span>
         </div>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-5">
         <div class="form-group">
             <label asp-for="TcmServicePlan.TcmClient.Casemanager.Name" class="control-label">Case Manager</label>
             <input asp-for="TcmServicePlan.TcmClient.Casemanager.Name" class="form-control" readonly />
             <span asp-validation-for="TcmServicePlan.TcmClient.Casemanager.Name" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="form-group">
+            <label asp-for="DateOpending" class="control-label">Intake Date</label>
+            <input asp-for="DateOpending" class="form-control" readonly />
+            <span asp-validation-for="DateOpending" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="form-group">
+            <label asp-for="DateInitialCertification" class="control-label">Initial Certification Date</label>
+            <input asp-for="DateInitialCertification" class="form-control" readonly />
+            <span asp-validation-for="DateInitialCertification" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="form-group">
+            <label asp-for="DateAssessment" class="control-label">Assessment Date</label>
+            <input asp-for="DateAssessment" class="form-control" readonly />
+            <span asp-validation-for="DateAssessment" class="text-danger"></span>
         </div>
     </div>
     <div class="col-md-2">
@@ -31,11 +52,12 @@
     </div>
     <div class="col-md-2">
         <div class="form-group">
-            <label asp-for="TcmServicePlan.DateIntake" class="control-label">Opening Date</label>
-            <input asp-for="TcmServicePlan.DateIntake" class="form-control" readonly />
-            <span asp-validation-for="TcmServicePlan.DateIntake" class="text-danger"></span>
+            <label asp-for="DateCertification" class="control-label">Certification Date</label>
+            <input asp-for="DateCertification" class="form-control" readonly />
+            <span asp-validation-for="DateCertification" class="text-danger"></span>
         </div>
-    </div>    
+    </div>
+   
 </div>
 <div class="col-md-push-12">
     @if (ViewData["origi"].ToString() != "5")
@@ -89,17 +111,18 @@
         </div>
          <div class="col-md-12">
          <pre>
-        <strong>CASE MANAGEMENT UTILIZATION REVIEW</strong>
-            <input type="checkbox" asp-for="ClientHasBeen1" class="form-check-input"> <strong> Client has been receiving Mental Health Targeted Case Management services for less than 12 months.</strong>
-                <input type="checkbox" asp-for="ClientContinue" class="form-check-input"> Client continues to meet criteria for Mental Health Targeted Case Management services as outlined in SECTION V.
-                                                                    <strong>OR</strong>
-                <input type="checkbox" asp-for="ClientNoLonger1" class="form-check-input"> Client no longer meets criteria for Mental Health Targeted Case Management services.<br />
-            <input type="checkbox" asp-for="ClientHasBeen1" class="form-check-input"> <strong> Client has been receiving Mental Health Targeted Case Management services for at least 12 months.</strong>
-                <input type="checkbox" asp-for="ClientWillContinue" class="form-check-input"> Client will continue Mental Health Targeted Case Management services.
-                <input type="checkbox" asp-for="ClientWillHave" class="form-check-input"> Client will have an Assessment completed to determine need for continued services.
-                <input type="checkbox" asp-for="ClientNoLonger2" class="form-check-input"> Client no longer meets criteria for Mental Health Targeted Case Management services.
+    <strong>CASE MANAGEMENT UTILIZATION REVIEW</strong>
 
-         <strong>The expected review date of the current Service Plan should be no later than:</strong>       <input asp-for="TheExpertedReviewDate" class="form-check-input">
+    <input type="checkbox" asp-for="ClientHasBeen1" class="form-check-input"> <strong> Client has been receiving Mental Health Targeted Case Management services for less than 12 months.</strong>
+        <input type="checkbox" asp-for="ClientContinue" class="form-check-input"> Client continues to meet criteria for Mental Health Targeted Case Management services as outlined in SECTION V.
+                                                            <strong>OR</strong>
+        <input type="checkbox" asp-for="ClientNoLonger1" class="form-check-input"> Client no longer meets criteria for Mental Health Targeted Case Management services.<br />
+    <input type="checkbox" asp-for="ClientHasBeen2" class="form-check-input"> <strong> Client has been receiving Mental Health Targeted Case Management services for at least 12 months.</strong>
+        <input type="checkbox" asp-for="ClientWillContinue" class="form-check-input"> Client will continue Mental Health Targeted Case Management services.
+        <input type="checkbox" asp-for="ClientWillHave" class="form-check-input"> Client will have an Assessment completed to determine need for continued services.
+        <input type="checkbox" asp-for="ClientNoLonger2" class="form-check-input"> Client no longer meets criteria for Mental Health Targeted Case Management services.
+
+        <strong>The expected review date of the current Service Plan should be no later than:</strong>       <input asp-for="TheExpertedReviewDate" class="form-check-input">
         </pre>
         </div>
         
@@ -128,17 +151,18 @@
         </div>
          <div class="col-md-12">
          <pre>
-        <strong>CASE MANAGEMENT UTILIZATION REVIEW</strong>
-            <input type="checkbox" asp-for="ClientHasBeen1" class="form-check-input" disabled> <strong> Client has been receiving Mental Health Targeted Case Management services for less than 12 months.</strong>
-                <input type="checkbox" asp-for="ClientContinue" class="form-check-input" disabled> Client continues to meet criteria for Mental Health Targeted Case Management services as outlined in SECTION V.
-                                                                    <strong>OR</strong>
-                <input type="checkbox" asp-for="ClientNoLonger1" class="form-check-input" disabled> Client continues to meet criteria for Mental Health Targeted Case Management services as outlined in SECTION V<br />
-            <input type="checkbox" asp-for="ClientHasBeen1" class="form-check-input" disabled> <strong> Client has been receiving Mental Health Targeted Case Management services for at least 12 months.</strong>
-                <input type="checkbox" asp-for="ClientWillContinue" class="form-check-input" disabled> Client will continue Mental Health Targeted Case Management services.
-                <input type="checkbox" asp-for="ClientWillHave" class="form-check-input" disabled> Client will have an Assessment completed to determine need for continued services.
-                <input type="checkbox" asp-for="ClientNoLonger2" class="form-check-input" disabled> Client no longer meets criteria for Mental Health Targeted Case Management services.
+    <strong>CASE MANAGEMENT UTILIZATION REVIEW</strong>
 
-        <strong>The expected review date of the current Service Plan should be no later than:</strong>       <input asp-for="TheExpertedReviewDate" class="form-check-input" disabled>
+        <input type="checkbox" asp-for="ClientHasBeen1" class="form-check-input" disabled> <strong> Client has been receiving Mental Health Targeted Case Management services for less than 12 months.</strong>
+            <input type="checkbox" asp-for="ClientContinue" class="form-check-input" disabled> Client continues to meet criteria for Mental Health Targeted Case Management services as outlined in SECTION V.
+                                                                <strong>OR</strong>
+            <input type="checkbox" asp-for="ClientNoLonger1" class="form-check-input" disabled> Client continues to meet criteria for Mental Health Targeted Case Management services as outlined in SECTION V<br />
+        <input type="checkbox" asp-for="ClientHasBeen1" class="form-check-input" disabled> <strong> Client has been receiving Mental Health Targeted Case Management services for at least 12 months.</strong>
+            <input type="checkbox" asp-for="ClientWillContinue" class="form-check-input" disabled> Client will continue Mental Health Targeted Case Management services.
+            <input type="checkbox" asp-for="ClientWillHave" class="form-check-input" disabled> Client will have an Assessment completed to determine need for continued services.
+            <input type="checkbox" asp-for="ClientNoLonger2" class="form-check-input" disabled> Client no longer meets criteria for Mental Health Targeted Case Management services.
+
+    <strong>The expected review date of the current Service Plan should be no later than:</strong>       <input asp-for="TheExpertedReviewDate" class="form-check-input" disabled>
         </pre>
         </div>
         

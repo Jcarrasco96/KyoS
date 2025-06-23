@@ -117,7 +117,7 @@ namespace KyoS.Web.Controllers
                 if (BillDms == null)
                 {
                     model.StatusBill = StatusBill.Billed;
-                    BillDmsEntity billDmsEntity = await _converterHelper.ToBillDMSEntity(model, true);
+                    BillDmsEntity billDmsEntity = _converterHelper.ToBillDMSEntity(model, true);
 
                     _context.Add(billDmsEntity);
                     try
@@ -261,9 +261,11 @@ namespace KyoS.Web.Controllers
                                                                .Where(n => n.BillDms == null
                                                                      && n.DateOfService <= dateBillclose)
                                                                .ToList();
+                int UnitMH = UnitTotal;
                 int minutesTCM = 0;
                 int residuoTCM = 0;
                 int unitTCM = 0;
+                int unitTCMEnd = 0;
                 foreach (var item in tcmNotesUnbilled)
                 {
                     minutesTCM = item.TCMNoteActivity.Sum(n => n.Minutes);
@@ -293,6 +295,7 @@ namespace KyoS.Web.Controllers
 
                     };
                     UnitTotal += Unit;
+                    unitTCMEnd += Unit;
                     billDmsDetailsList.Add(billDmsDetailsTemp);
                 }
                 model = new BillDmsViewModel
@@ -307,7 +310,9 @@ namespace KyoS.Web.Controllers
                     StatusBill = StatusBill.Unbilled,
                     Workday_Clients = workdayClientUnbilled,
                     TCMNotes = tcmNotesUnbilled,
-                    BillDmsDetails = billDmsDetailsList
+                    BillDmsDetails = billDmsDetailsList,
+                    UnitsMH = UnitMH,
+                    UnitsTCM = unitTCMEnd
 
                 };
                 return model;
@@ -516,7 +521,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                BillDmsPaidEntity billDmsPaidEntity = await _converterHelper.ToBillDMSPaidEntity(billDmsPaidViewModel, true);
+                BillDmsPaidEntity billDmsPaidEntity = _converterHelper.ToBillDMSPaidEntity(billDmsPaidViewModel, true);
 
                 _context.Add(billDmsPaidEntity);
                 try
@@ -631,7 +636,7 @@ namespace KyoS.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                BillDmsPaidEntity billDmsPaidEntity = await _converterHelper.ToBillDMSPaidEntity(billDmsPaidViewModel, false);
+                BillDmsPaidEntity billDmsPaidEntity = _converterHelper.ToBillDMSPaidEntity(billDmsPaidViewModel, false);
                               
                 _context.BillDmsPaid.Update(billDmsPaidEntity);
                
@@ -798,7 +803,7 @@ namespace KyoS.Web.Controllers
             string ReportName = "Invoice "+ user_logged.Clinic.Name + " "+ billDms.DateBillClose.ToShortDateString() + ".xlsx";
             string data = "BILL";
           
-            byte[] content = _exportExcelHelper.ExportBillDmsHelper(billDms, Periodo, _context.Clinics.FirstOrDefault().Name, data);
+            byte[] content = _exportExcelHelper.ExportBillDmsHelper(billDms, Periodo, _context.Clinics.FirstOrDefault().Name, data, user_logged.Clinic);
 
             return File(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", ReportName);
             
@@ -862,6 +867,86 @@ namespace KyoS.Web.Controllers
             }
             return RedirectToAction("BillDetails", new { id = billDmsEntity.Id });
         }
+
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> InternalAccount(int idError = 0)
+        {
+            UserEntity user_logged = await _context.Users
+                                                   .Include(u => u.Clinic)
+                                                   .ThenInclude(c => c.Setting)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+            if (User.IsInRole("Admin"))
+            {
+                List<BillDmsEntity> salida = await _context.BillDms
+                                                            .Include(c => c.BillDmsDetails)
+                                                            .Include(c => c.BillDmsPaids)
+                                                            .ToListAsync();
+                return View(salida);
+            }
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || (!user_logged.Clinic.Setting.MentalHealthClinic && !user_logged.Clinic.Setting.TCMClinic))
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+            if (idError == 1) //Imposible to delete
+            {
+                ViewBag.Delete = "N";
+            }
+            if (User.IsInRole("Manager"))
+            {
+                List<BillDmsEntity> salida = await _context.BillDms
+                                                           .Include(c => c.BillDmsDetails)
+                                                           .Include(c => c.BillDmsPaids)
+                                                           .ToListAsync();
+                return View(salida);
+            }
+
+
+
+            return RedirectToAction("NotAuthorized", "Account");
+        }
+
+        [Authorize(Roles = "Admin")]
+       
+        public async Task<IActionResult> UpdateUnits(int id = 0)
+        {
+            if (id == 0)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            BillDmsEntity billDmsEntity = await _context.BillDms
+                                                        .Include(n => n.BillDmsDetails)
+                                                        .FirstOrDefaultAsync(f => f.Id == id);
+            if (billDmsEntity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            int unitTcm = 0;
+            int unitMH = 0;
+            if (User.IsInRole("Admin"))
+            {
+                unitTcm = billDmsEntity.BillDmsDetails.Where(n => n.ServiceAgency == ServiceAgency.TCM).Sum(m => m.Unit);
+                unitMH = billDmsEntity.BillDmsDetails.Where(n => n.ServiceAgency == ServiceAgency.CMH).Sum(m => m.Unit);
+            }
+            billDmsEntity.UnitsMH = unitMH;
+            billDmsEntity.UnitsTCM = unitTcm;
+            _context.Update(billDmsEntity);
+
+            try
+            {
+                await _context.SaveChangesAsync();
+                
+            }
+            catch (System.Exception ex)
+            {
+               
+            }
+            return RedirectToAction(nameof(InternalAccount));
+        }
+
 
     }
 }

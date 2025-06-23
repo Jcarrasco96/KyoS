@@ -33,5 +33,29 @@ namespace KyoS.Web.Data.Entities
         public string AuthorizationNumber { get; set; }
 
         public ServiceAgency Agency { get; set; }
+
+        [Display(Name = "Expired Date")]
+        [DataType(DataType.Date)]
+        [Required(ErrorMessage = "The field {0} is mandatory.")]
+        public DateTime ExpiredDate { get; set; }
+
+        [Display(Name = "Insurance Effective Date")]
+        [DataType(DataType.Date)]
+        [Required(ErrorMessage = "The field {0} is mandatory.")]
+        public DateTime EffectiveDate { get; set; }
+        
+        [Display(Name = "Insurance End Coverage Date")]
+        [DataType(DataType.Date)]
+        [Required(ErrorMessage = "The field {0} is mandatory.")]
+        public DateTime EndCoverageDate { get; set; }
+
+        [Display(Name = "Insurance Type")]
+        public InsuranceType InsuranceType { get; set; }
+
+        [Display(Name = "Plan")]
+        public InsurancePlanType InsurancePlan { get; set; }
+
+        [Display(Name = "Coverage")]
+        public InsuranceCoverageType InsuranceCoverage { get; set; }
     }
 }

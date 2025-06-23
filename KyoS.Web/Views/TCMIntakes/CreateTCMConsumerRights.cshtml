@@ -39,6 +39,9 @@
             <input type="hidden" asp-for="ServedOf" />
             <input type="hidden" asp-for="CreatedOn" />
             <input type="hidden" asp-for="CreatedBy" />
+            <input type="hidden" asp-for="TcmClient.Client.FirstName" />
+            <input type="hidden" asp-for="TcmClient.Client.LastName" />
+            <input type="hidden" asp-for="TcmClient.CaseNumber" />
             <partial name="_TCMIntakesConsumerRights" />
             <div class="form-group col-md-12">
                 @if (User.IsInRole("CaseManager"))

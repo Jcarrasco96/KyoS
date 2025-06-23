@@ -612,6 +612,28 @@ namespace KyoS.Web.Controllers
 
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
+            if (entity.Client.Clinic.Name == "YOUR NEIGHBOR MEDICAL GROUP")
+            {
+                Stream stream;
+
+                if (!entity.JoinCommission)
+                    stream = _reportHelper.YourNeighborDischargeReport(entity);
+                else
+                    stream = _reportHelper.YourNeighborDischargeJCReport(entity);
+
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (entity.Client.Clinic.Name == "BETTER YEARS AHEAD MEDICAL CENTER")
+            {
+                Stream stream;
+
+                if (!entity.JoinCommission)
+                    stream = _reportHelper.ByaDischargeReport(entity);
+                else
+                    stream = _reportHelper.ByaDischargeJCReport(entity);
+
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
             return null;
         }
 

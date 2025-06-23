@@ -1,4 +1,5 @@
-﻿using KyoS.Web.Data;
+﻿using KyoS.Common.Enums;
+using KyoS.Web.Data;
 using KyoS.Web.Data.Entities;
 using KyoS.Web.Helpers;
 using KyoS.Web.Models;
@@ -50,7 +51,9 @@ namespace KyoS.Web.Controllers
 
             if (clinic != null)
             {
-                List<PsychiatristEntity> psychiatrists = await _context.Psychiatrists.OrderBy(d => d.Name).ToListAsync();
+                List<PsychiatristEntity> psychiatrists = await _context.Psychiatrists
+                                                                       .Include(n => n.Clients)
+                                                                       .OrderBy(d => d.Name).ToListAsync();
                 List<PsychiatristEntity> psychiatrists_by_clinic = new List<PsychiatristEntity>();
                 UserEntity user;
                 foreach (PsychiatristEntity item in psychiatrists)
@@ -382,5 +385,31 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateModal", psychiatristViewModel) });
         }
 
+        public async Task<IActionResult> ViewDetails(int id = 0, StatusType status = StatusType.Open)
+        {
+            List<ClientEntity> clients = new List<ClientEntity>();
+            if (id > 0)
+            {
+                UserEntity user_logged = await _context.Users
+                                                       .Include(u => u.Clinic)
+                                                       .ThenInclude(c => c.Setting)
+                                                       .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+                if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
+                {
+                    return RedirectToAction("NotAuthorized", "Account");
+                }
+
+                clients = await _context.Clients
+                                        .Include(n => n.Psychiatrist)
+
+                                        .Where(n => n.Status == status && n.Psychiatrist.Id == id)
+                                        .OrderBy(d => d.Name)
+                                        .ToListAsync();
+            }
+
+
+            return View(clients);
+        }
     }
 }

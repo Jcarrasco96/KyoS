@@ -28,10 +28,16 @@ namespace KyoS.Web.Models
 
         public string Intervention1 { get; set; }
 
-        public int IdActivity2 { get; set; }
+        //Assistance of client for activity # 1
+        public bool Present1 { get; set; }
 
+        //-------------------------------
+        public int IdActivity2 { get; set; }
+        [Required(ErrorMessage = "The field {0} is mandatory.")]
+       
         [Display(Name = "Client Answer #2")]
         public string AnswerClient2 { get; set; }
+        [Required(ErrorMessage = "The field {0} is mandatory.")]
 
         [Display(Name = "Facilitator Answer #2")]
         public string AnswerFacilitator2 { get; set; }
@@ -46,10 +52,15 @@ namespace KyoS.Web.Models
 
         public string Intervention2 { get; set; }
 
+        //Assistance of client for activity # 2
+        public bool Present2 { get; set; }
+        //---------------------------------------------
         public int IdActivity3 { get; set; }
+        [Required(ErrorMessage = "The field {0} is mandatory.")]
 
         [Display(Name = "Client Answer #3")]
         public string AnswerClient3 { get; set; }
+        [Required(ErrorMessage = "The field {0} is mandatory.")]
 
         [Display(Name = "Facilitator Answer #3")]
         public string AnswerFacilitator3 { get; set; }
@@ -63,10 +74,16 @@ namespace KyoS.Web.Models
         public IEnumerable<SelectListItem> Objetives3 { get; set; }
         public string Intervention3 { get; set; }
 
+        //Assistance of client for activity # 3
+        public bool Present3 { get; set; }
+
+        //-------------------------------------------------
         public int IdActivity4 { get; set; }
+        [Required(ErrorMessage = "The field {0} is mandatory.")]
 
         [Display(Name = "Client Answer #4")]
         public string AnswerClient4 { get; set; }
+        [Required(ErrorMessage = "The field {0} is mandatory.")]
 
         [Display(Name = "Facilitator Answer #4")]
         public string AnswerFacilitator4 { get; set; }
@@ -79,6 +96,10 @@ namespace KyoS.Web.Models
         public int IdObjetive4 { get; set; }
         public IEnumerable<SelectListItem> Objetives4 { get; set; }
         public string Intervention4 { get; set; }
+
+        //Assistance of client for activity # 4
+        public bool Present4 { get; set; }
+
 
         //este campo lo uso para saber de que pagina se viene
         public int Origin { get; set; }
@@ -102,5 +123,14 @@ namespace KyoS.Web.Models
         public string Objetive4 { get; set; }
 
         public string CodeBill { get; set; }
+
+        public int Minute1 { get; set; }
+        public int Minute2 { get; set; }
+        public int Minute3 { get; set; }
+        public int Minute4 { get; set; }
+        public int TotalMinutes { get; set; }
+
+        public string Dx { get; set; }
+
     }
 }

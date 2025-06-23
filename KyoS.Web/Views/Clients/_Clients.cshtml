@@ -3,21 +3,26 @@
     &nbsp;
 </div>
 <div class="col-md-push-12">
-    <div class="form-group col-md-3">
-        <label asp-for="Name" class="control-label"></label>&nbsp;*
-        <input asp-for="Name" class="form-control" />
-        <span asp-validation-for="Name" class="text-danger"></span>
+    <div class="form-group col-md-2">
+        <label asp-for="FirstName" class="control-label">First Name</label>&nbsp;*
+        <input asp-for="FirstName" class="form-control" id="Name" />
+        <span asp-validation-for="FirstName" class="text-danger"></span>
     </div>
     <div class="form-group col-md-2">
+        <label asp-for="LastName" class="control-label">Last Name</label>&nbsp;*
+        <input asp-for="LastName" class="form-control" id="Name" />
+        <span asp-validation-for="LastName" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-1">
         <label asp-for="IdGender" class="control-label"></label>&nbsp;*
-        <select asp-for="IdGender" asp-items="Model.GenderList" class="form-control"></select>
+        <select asp-for="IdGender" asp-items="Model.GenderList" class="form-control" id="IdGender"></select>
         <span asp-validation-for="IdGender" class="text-danger"></span>
     </div>
     @if (User.IsInRole("CaseManager") == true || User.IsInRole("TCMSupervisor") == true || Model.OnlyTCM == true)
     {
         <div class="form-group col-md-2">
             <label asp-for="AdmisionDateTCM" class="control-label"></label>&nbsp;*
-            <input asp-for="AdmisionDateTCM" class="form-control" />
+            <input asp-for="AdmisionDateTCM" class="form-control" id="AdmisionDate" />
             <span asp-validation-for="AdmisionDateTCM" class="text-danger"></span>
         </div>
     }
@@ -25,19 +30,19 @@
     {
         <div class="form-group col-md-2">
             <label asp-for="AdmisionDate" class="control-label"></label>&nbsp;*
-            <input asp-for="AdmisionDate" class="form-control" />
+            <input asp-for="AdmisionDate" class="form-control" id="AdmisionDate" />
             <span asp-validation-for="AdmisionDate" class="text-danger"></span>
         </div>
     }
 
     <div class="form-group col-md-2">
         <label asp-for="DateOfBirth" class="control-label"></label>&nbsp;*
-        <input asp-for="DateOfBirth" class="form-control" />
+        <input asp-for="DateOfBirth" class="form-control" id="DateOfBirth" />
         <span asp-validation-for="DateOfBirth" class="text-danger"></span>
     </div>
     <div class="form-group col-md-1">
         <label asp-for="IdStatus" class="control-label"></label>&nbsp;*
-        <select asp-for="IdStatus" asp-items="Model.StatusList" class="form-control"></select>
+        <select asp-for="IdStatus" asp-items="Model.StatusList" class="form-control" id="IdStatus"></select>
         <span asp-validation-for="IdStatus" class="text-danger"></span>
     </div>
     <div class="form-group col-md-2">
@@ -64,7 +69,7 @@
         </div>
     }
     <div class="form-group col-md-2">
-        <label asp-for="Code" class="control-label">Case Number MH</label>
+        <label asp-for="Code" class="control-label">MH Case Number</label>
         <input asp-for="Code" class="form-control" />
         <span asp-validation-for="Code" class="text-danger"></span>
     </div>

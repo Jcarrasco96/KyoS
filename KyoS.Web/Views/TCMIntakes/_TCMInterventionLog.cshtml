@@ -1,6 +1,6 @@
 ﻿@model KyoS.Web.Models.TCMIntakeInterventionLogViewModel
 
-<div class="row col-md-12">
+<div class="col-md-push-12">
     <div class="row">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <input type="hidden" asp-for="IdTCMClient" />
@@ -19,7 +19,13 @@
             <span asp-validation-for="TcmClient.CaseNumber" class="text-danger"></span>
         </div>
     </div>
-
+    <div class="col-md-2">
+        <div class="form-group">
+            <label asp-for="TcmClient.DataOpen" class="control-label">Date Open</label>
+            <input asp-for="TcmClient.DataOpen" class="form-control" readonly />
+            <span asp-validation-for="TcmClient.DataOpen" class="text-danger"></span>
+        </div>
+    </div>
     <div class="col-md-4">
         <div class="form-group">
             <label asp-for="TcmClient.Casemanager.Name" class="control-label">Case Manager</label>

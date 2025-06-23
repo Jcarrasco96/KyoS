@@ -1,4 +1,4 @@
-﻿@model KyoS.Web.Data.Entities.TCMClientEntity
+﻿        @model KyoS.Web.Data.Entities.TCMClientEntity
 
 @{
     ViewData["Title"] = "Open Binder Section 1";
@@ -31,6 +31,18 @@
         }
     </ul><!--.breadcrumb-->
 </div>
+@if (ViewBag.Creado == "SPR")
+{
+    <div class="alert alert-block alert-danger">
+        <button type="button" class="close" data-dismiss="alert">
+            <i class="icon-remove"></i>
+        </button>
+        <i class="icon-ok red"></i>
+        <strong class="red">
+            Error. You can’t make a SPR without an approved certification.
+        </strong>
+    </div>
+}
 <div>
 
     @if (ViewData["Section"].ToString() == "1" || ViewBag.Section == "1")
@@ -108,7 +120,7 @@
                 }
                 else
                 {
-                    <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-action="CreateTCMConsentForRelease" asp-route-origi="@ViewData["origin"]" role="button">
+                    <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-action="ListConsentForrelease" asp-route-origi="@ViewData["origin"]" role="button">
                         <div class="thumbnail list-group-item list-group-item-text">
                             <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Consent for<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Release</h4>
                         </div>
@@ -141,7 +153,7 @@
                 {                    
                     <div class="thumbnail list-group-item list-group-item-success">
                         <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-action="CreateTCMAcknowledgementHippa" asp-route-origi="@ViewData["origin"]" role="button">
-                            <h4 style="align-content: end; color: #3c763d"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Acknowled.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Hippa</h4>
+                            <h4 style="align-content: end; color: #3c763d"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>HIPAA<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
                         </a>
                         <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-action="PrintTCMAcknowledgementHippa" role="button" title="Print Acknowledgement Hippa" target="_blank">
                             <i class="glyphicon glyphicon-print" style="position: absolute; right: 12px; top: 12px; color: #3c763d;"></i>
@@ -152,7 +164,7 @@
                 {
                     <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-action="CreateTCMAcknowledgementHippa" asp-route-origi="@ViewData["origin"]" role="button">
                         <div class="thumbnail list-group-item list-group-item-text">
-                            <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Acknowled.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Hippa</h4>
+                            <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>HIPAA<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
                         </div>
                     </a>
                 }
@@ -487,11 +499,14 @@
             <div class="col-sm-3 col-md-2">
                 @if (Model.TCMIntakeMiniMental != null)
                 {
-                    <a style="text-decoration: none;" asp-action="CreateTCMMiniMental" asp-route-id="@Model.Id" role="button">
-                        <div class="thumbnail list-group-item list-group-item-success">
-                            <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Mini Mental<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;State Exam</h4>
-                        </div>
-                    </a>
+                    <div class="thumbnail list-group-item list-group-item-success">
+                        <a style="text-decoration: none;" asp-action="CreateTCMMiniMental" asp-route-id="@Model.Id" role="button">
+                            <h4 style="align-content: end; color: #3c763d"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Mini Mental<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;State Exam</h4>
+                        </a>
+                        <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-action="PrintTCMIntakeMiniMental" role="button" title="Print Mini Mental State Exam" target="_blank">
+                            <i class="glyphicon glyphicon-print" style="position: absolute; right: 12px; top: 12px; color: #3c763d;"></i>
+                        </a>
+                    </div>                    
                 }
                 else
                 {
@@ -505,11 +520,14 @@
             <div class="col-sm-3 col-md-2">
                 @if (Model.TCMIntakeMedicalHistory != null)
                 {
-                    <a style="text-decoration: none;" asp-action="CreateTCMMedicalhistory" asp-route-id="@Model.Client.Id" asp-route-idTCMClient="@Model.Id" role="button">
-                        <div class="thumbnail list-group-item list-group-item-success">
-                            <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Medical<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;History</h4>
-                        </div>
-                    </a>
+                    <div class="thumbnail list-group-item list-group-item-success">
+                        <a style="text-decoration: none;" asp-action="CreateTCMMedicalhistory" asp-route-id="@Model.Client.Id" asp-route-idTCMClient="@Model.Id" role="button">
+                            <h4 style="align-content: end; color: #3c763d"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Medical<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;History</h4>
+                        </a>
+                        <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-action="PrintTCMMedicalHistory" role="button" title="Print Medical History" target="_blank">
+                            <i class="glyphicon glyphicon-print" style="position: absolute; right: 12px; top: 12px; color: #3c763d;"></i>
+                        </a>
+                    </div>                    
                 }
                 else
                 {
@@ -521,21 +539,33 @@
                 }
             </div>
             <div class="col-sm-3 col-md-2">
-                @if (Model.Client.MedicationList.Count() > 0)
+                @if (Model.TCMAssessment != null)
                 {
-                    <a style="text-decoration: none;" asp-action="CreateTCMMedication" asp-route-id="@Model.Client.Id" asp-route-idTCMClient="@Model.Id" role="button">
-                        <div class="thumbnail list-group-item list-group-item-success">
-                            <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Medication<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
-                            <span class="message-counter-success">@Model.Client.MedicationList.Count()</span>
-                        </div>
-                    </a>
+                    @if (Model.TCMAssessment != null && Model.TCMAssessment.MedicationList.Count() > 0)
+                    {
+                        <a style="text-decoration: none;" asp-action="TCMMedicationList" asp-route-id="@Model." asp-route-idTCMClient="@Model.Id" role="button">
+                            <div class="thumbnail list-group-item list-group-item-success">
+                                <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Medication<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
+                                <span class="message-counter-success">@Model.TCMAssessment.MedicationList.Count()</span>
+                            </div>
+                        </a>
+                    }
+                    else
+                    {
+                        <a style="text-decoration: none;" asp-action="TCMMedicationList" asp-route-id="@Model.Client.Id" asp-route-idTCMClient="@Model.Id" role="button">
+                            <div class="thumbnail list-group-item list-group-item-text">
+                                <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Medication<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
+                                <span class="message-counter-cero">@Model.TCMAssessment.MedicationList.Count()</span>
+                            </div>
+                        </a>
+                    }
                 }
                 else
                 {
-                    <a style="text-decoration: none;" asp-action="CreateTCMMedication" asp-route-id="@Model.Client.Id" asp-route-idTCMClient="@Model.Id" role="button">
+                    <a style="text-decoration: none;" role="button">
                         <div class="thumbnail list-group-item list-group-item-text">
                             <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Medication<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
-                            <span class="message-counter-cero">@Model.Client.MedicationList.Count()</span>
+                            <span class="message-counter-cero"></span>
                         </div>
                     </a>
                 }
@@ -543,11 +573,14 @@
             <div class="col-sm-3 col-md-2">
                 @if (Model.TCMIntakeCoordinationCare != null)
                 {
-                    <a style="text-decoration: none;" asp-action="CreateTCMCoordinationCare" asp-route-id="@Model.Id" role="button">
-                        <div class="thumbnail list-group-item list-group-item-success">
-                            <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Coordination<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;of Care</h4>
-                        </div>
-                    </a>
+                    <div class="thumbnail list-group-item list-group-item-success">
+                        <a style="text-decoration: none;" asp-action="CreateTCMCoordinationCare" asp-route-id="@Model.Id" role="button">
+                            <h4 style="align-content: end; color: #3c763d"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Coordination<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;of Care</h4>
+                        </a>
+                        <a style="text-decoration: none;" asp-route-id="@Model.Id" asp-action="PrintTCMIntakeCoordinationCare" role="button" title="Print Coordination of Care" target="_blank">
+                            <i class="glyphicon glyphicon-print" style="position: absolute; right: 12px; top: 12px; color: #3c763d;"></i>
+                        </a>
+                    </div>      
                 }
                 else
                 {
@@ -668,36 +701,26 @@
                 }
                 else
                 {
-                    @if (Model.TcmIntakeAppendixJ != null)
+                    @if (Model.TcmIntakeAppendixJ.Count() > 0)
                     {
-                        @if (Model.TcmIntakeAppendixJ.Approved == 2)
-                        {
-                            <div class="thumbnail list-group-item list-group-item-success">
-                                <a style="text-decoration: none;" asp-action="PrintTCMAppendixJ" asp-controller="TCMIntakes" asp-route-id="@Model.Id" role="button" title="Print AppendixJ" target="_blank">
-                                    <h4 style="align-content: end; color: #3c763d"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Appendix J<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
-                                </a>
-                                <a style="text-decoration: none;" asp-controller="TCMIntakes" asp-route-id="@Model.Id" asp-action="PrintTCMAppendixJ" role="button" title="Print AppendixJ" target="_blank">
-                                    <i class="glyphicon glyphicon-print" style="position: absolute; right: 12px; top: 12px; color: #3c763d;"></i>
-                                </a>
-                            </div>
-                        }
-                        @if (Model.TcmIntakeAppendixJ.Approved == 0)
-                        {
-                            <a style="text-decoration: none;" asp-action="CreateTCMAppendixJ" asp-controller="TCMIntakes" asp-route-id="@Model.Id" role="button">
-                                <div class="thumbnail list-group-item list-group-item-warning">
-                                    <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Appendix J<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
+                         @if (Model.TcmIntakeAppendixJ.Where(n => n.Active == true && n.Approved > 1).Count() > 0)
+                         {
+                            <a style="text-decoration: none;" asp-action="ListAppendixJForTCMClient" asp-controller="TCMIntakes" asp-route-id="@Model.Id" role="button">
+                                <div class="thumbnail list-group-item list-group-item-success">
+                                    <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>AppendixJ<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
                                 </div>
                             </a>
-                        }
-                        @if (Model.TcmIntakeAppendixJ.Approved == 1)
+                         }
+                         else
                         {
-                            <a style="text-decoration: none;" asp-action="CreateTCMAppendixJ" asp-controller="TCMIntakes" asp-route-id="@Model.Id" role="button">
-                                <div class="thumbnail list-group-item list-group-item-info">
-                                    <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Appendix J<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
+                            <a style="text-decoration: none;" asp-action="ListAppendixJForTCMClient" asp-controller="TCMIntakes" asp-route-id="@Model.Id" role="button">
+                                <div class="thumbnail list-group-item list-group-item-danger">
+                                    <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>AppendixJ<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
                                 </div>
                             </a>
-                        }
 
+                        }
+                      
                     }
                     else
                     {
@@ -868,7 +891,7 @@
                 }
             </div>
             <div class="col-sm-3 col-md-2">
-                @if (Model.TcmServicePlan == null || Model.TcmServicePlan.Approved < 2)
+                @if (Model.TcmServicePlan == null || Model.TcmServicePlan.Approved < 2 )
                 {                    
                     <div class="thumbnail list-group-item list-group-item-text">
                         <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Discharge<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
@@ -955,6 +978,7 @@
                     <a style="text-decoration: none;" asp-action="EditTCMInterventionLog" asp-controller="TCMIntakes" asp-route-id="@Model.TcmInterventionLog.Id" role="button">
                         <div class="thumbnail list-group-item list-group-item-success">
                             <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Intervention<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Log</h4>
+                            <span class="message-counter-success">@Model.TcmInterventionLog.InterventionList.Count()</span>
                         </div>
                     </a>
                 }

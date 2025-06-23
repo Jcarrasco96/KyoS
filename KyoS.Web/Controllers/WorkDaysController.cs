@@ -1,4 +1,4 @@
-﻿ using KyoS.Common.Enums;
+﻿   using KyoS.Common.Enums;
 using KyoS.Web.Data;
 using KyoS.Web.Data.Entities;
 using KyoS.Web.Helpers;
@@ -55,6 +55,7 @@ namespace KyoS.Web.Controllers
 
             return View(await _context.Weeks
                                       .Include(w => w.Days)
+                                      .AsSplitQuery()
                                       .Where(w => (w.Clinic.Id == user_logged.Clinic.Id && w.Days.Where(d => d.Service == ServiceType.PSR).Count() > 0))
                                       .ToListAsync());
         }
@@ -81,6 +82,7 @@ namespace KyoS.Web.Controllers
             return View(await _context.Weeks.Include(w => w.Days)
                                             .ThenInclude(n => n.Workdays_Clients)
                                             .ThenInclude(f => f.Facilitator)
+                                            .AsSplitQuery()
                                             .Where(w => (w.Clinic.Id == user_logged.Clinic.Id 
                                                       && w.Days.Where(d => d.Service == ServiceType.Individual).Count() > 0))
                                             .ToListAsync());
@@ -107,6 +109,7 @@ namespace KyoS.Web.Controllers
 
             return View(await _context.Weeks
                                       .Include(w => w.Days)
+                                      .AsSplitQuery()
                                       .Where(w => (w.Clinic.Id == user_logged.Clinic.Id && w.Days.Where(d => d.Service == ServiceType.Group).Count() > 0))
                                       .ToListAsync());
         }
@@ -183,8 +186,9 @@ namespace KyoS.Web.Controllers
                 if (!string.IsNullOrEmpty(entity.Workdays))
                 {
                     UserEntity user_logged = _context.Users
-                                             .Include(u => u.Clinic)
-                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+                                                     .Include(u => u.Clinic)
+                                                     .ThenInclude(u => u.Setting)
+                                                     .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
                     //Unable to create new week due to the settings
                     SettingEntity setting = await _context.Settings
@@ -207,19 +211,19 @@ namespace KyoS.Web.Controllers
                     //verificar que cada cliente no haya tenido terapia en ese mismo tiempo y posteriormente generarles la asistencia de los dias que se desean crear
                     List<ClientEntity> clients = await _context.Clients
 
-                                                .Include(c => c.Group)
-                                                .ThenInclude(g => g.Facilitator)
+                                                               .Include(c => c.Group)
+                                                               .ThenInclude(g => g.Facilitator)
 
-                                                .Include(c => c.Group)
-                                                .ThenInclude(g => g.Schedule)
+                                                               .Include(c => c.Group)
+                                                               .ThenInclude(g => g.Schedule)
 
-                                                .Include(c => c.MTPs)
+                                                               .Include(c => c.MTPs)
 
-                                                .Where(c => (c.Group.Facilitator.Clinic.Id == user_logged.Clinic.Id
-                                                          && c.Status == StatusType.Open
-                                                          && c.Group.Facilitator.Status == StatusType.Open
-                                                          && c.Group.Service == ServiceType.PSR
-                                                          && c.Service == ServiceType.PSR)).ToListAsync();
+                                                               .Where(c => (c.Group.Facilitator.Clinic.Id == user_logged.Clinic.Id
+                                                                         && c.Status == StatusType.Open
+                                                                         && c.Group.Facilitator.Status == StatusType.Open
+                                                                         && c.Group.Service == ServiceType.PSR
+                                                                         && c.Service == ServiceType.PSR)).ToListAsync();
 
                     int numofweek;
                     DateTime initdate;
@@ -247,6 +251,15 @@ namespace KyoS.Web.Controllers
                             {
                                 return RedirectToAction(nameof(Create), new { error = 1, idFacilitator = client.Group.Facilitator.Id });
                             }
+
+                            //verifico que el Cliente tenga ese tiempo disponible en el TCM
+                            if (user_logged.Clinic.Setting.TCMClinic == true)
+                            {
+                                if (this.VerifyTCMNotesAtSameTime(client.Id, date, client.Group.Schedule.InitialTime, client.Group.Schedule.EndTime))
+                                {
+                                    return RedirectToAction(nameof(Create), new { error = 2, idClient = client.Id });
+                                }
+                            }
                         }
                     }
 
@@ -259,7 +272,9 @@ namespace KyoS.Web.Controllers
                             InitDate = initdate,
                             FinalDate = finaldate,
                             Clinic = _context.Clinics.FirstOrDefault(c => c.Id == entity.IdClinic),
-                            WeekOfYear = item.Key
+                            WeekOfYear = item.Key,
+                            CreatedBy = user_logged.UserName,
+                            CreatedOn = DateTime.Now
                         };
 
                         week_entity = await _context.Weeks
@@ -277,8 +292,8 @@ namespace KyoS.Web.Controllers
                             {
                                 workday_entity = await _context.Workdays
                                                                .FirstOrDefaultAsync(w => (w.Date == item1
-                                                                                                && w.Week.Clinic.Id == entity.IdClinic
-                                                                                                && w.Service == ServiceType.PSR));
+                                                                                       && w.Week.Clinic.Id == entity.IdClinic
+                                                                                       && w.Service == ServiceType.PSR));
                                 if (workday_entity == null)
                                 {
                                     WorkdayEntity workday;
@@ -288,7 +303,9 @@ namespace KyoS.Web.Controllers
                                         {
                                             Date = item1,
                                             Week = week,
-                                            Service = ServiceType.PSR
+                                            Service = ServiceType.PSR,
+                                            CreatedBy = user_logged.UserName,
+                                            CreatedOn = DateTime.Now
                                         };
                                         clinic_entity = week.Clinic;
                                     }
@@ -298,7 +315,9 @@ namespace KyoS.Web.Controllers
                                         {
                                             Date = item1,
                                             Week = week_entity,
-                                            Service = ServiceType.PSR
+                                            Service = ServiceType.PSR,
+                                            LastModifiedBy = user_logged.UserName,
+                                            LastModifiedOn = DateTime.Now
                                         };
                                         clinic_entity = week_entity.Clinic;
                                     }
@@ -532,7 +551,9 @@ namespace KyoS.Web.Controllers
                             InitDate = initdate,
                             FinalDate = finaldate,
                             Clinic = _context.Clinics.FirstOrDefault(c => c.Id == entity.IdClinic),
-                            WeekOfYear = item.Key
+                            WeekOfYear = item.Key,
+                            CreatedOn = DateTime.Now,
+                            CreatedBy = user_logged.UserName
                         };
 
                         week_entity = await _context.Weeks
@@ -561,7 +582,9 @@ namespace KyoS.Web.Controllers
                                         {
                                             Date = item1,
                                             Week = week,
-                                            Service = ServiceType.Individual
+                                            Service = ServiceType.Individual,
+                                            CreatedOn = DateTime.Now,
+                                            CreatedBy = user_logged.UserName
                                         };
                                         clinic_entity = week.Clinic;
                                     }
@@ -571,7 +594,9 @@ namespace KyoS.Web.Controllers
                                         {
                                             Date = item1,
                                             Week = week_entity,
-                                            Service = ServiceType.Individual
+                                            Service = ServiceType.Individual,
+                                            LastModifiedOn = DateTime.Now,
+                                            LastModifiedBy = user_logged.UserName
                                         };
                                         clinic_entity = week_entity.Clinic;
                                     }
@@ -756,8 +781,9 @@ namespace KyoS.Web.Controllers
                 if (!string.IsNullOrEmpty(entity.Workdays))
                 {
                     UserEntity user_logged = _context.Users
-                                             .Include(u => u.Clinic)
-                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+                                                     .Include(u => u.Clinic)
+                                                     .ThenInclude(u => u.Setting)
+                                                     .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
                     //Unable to create new week due to the settings
                     SettingEntity setting = await _context.Settings
@@ -819,6 +845,15 @@ namespace KyoS.Web.Controllers
                             {
                                 return RedirectToAction(nameof(CreateGroup), new { error = 1, idFacilitator = client.Group.Facilitator.Id });
                             }
+
+                            //verifico que el Cliente tenga ese tiempo disponible en el TCM
+                            if (user_logged.Clinic.Setting.TCMClinic == true)
+                            {
+                                if (this.VerifyTCMNotesAtSameTime(client.Id, date, client.Group.Schedule.InitialTime, client.Group.Schedule.EndTime))
+                                {
+                                    return RedirectToAction(nameof(CreateGroup), new { error = 2, idClient = client.Id });
+                                }
+                            }
                         }
                     }
 
@@ -831,7 +866,9 @@ namespace KyoS.Web.Controllers
                             InitDate = initdate,
                             FinalDate = finaldate,
                             Clinic = _context.Clinics.FirstOrDefault(c => c.Id == entity.IdClinic),
-                            WeekOfYear = item.Key
+                            WeekOfYear = item.Key,
+                            CreatedOn = DateTime.Now,
+                            CreatedBy = user_logged.UserName
                         };
 
                         week_entity = await _context.Weeks
@@ -860,7 +897,9 @@ namespace KyoS.Web.Controllers
                                         {
                                             Date = item1,
                                             Week = week,
-                                            Service = ServiceType.Group
+                                            Service = ServiceType.Group,
+                                            CreatedOn = DateTime.Now,
+                                            CreatedBy = user_logged.UserName
                                         };
                                         clinic_entity = week.Clinic;
                                     }
@@ -870,7 +909,9 @@ namespace KyoS.Web.Controllers
                                         {
                                             Date = item1,
                                             Week = week_entity,
-                                            Service = ServiceType.Group
+                                            Service = ServiceType.Group,
+                                            LastModifiedOn = DateTime.Now,
+                                            LastModifiedBy = user_logged.UserName
                                         };
                                         clinic_entity = week_entity.Clinic;
                                     }
@@ -1169,6 +1210,38 @@ namespace KyoS.Web.Controllers
 
             }            
         }
+
+
+        [Authorize(Roles = "Manager")]
+        private bool VerifyTCMNotesAtSameTime(int idClient, DateTime date, DateTime initialTime, DateTime endTime)
+        {
+            TCMClientEntity tcmclient = _context.TCMClient
+                                                .Include(n => n.TCMNote)
+                                                .ThenInclude(n => n.TCMNoteActivity)
+                                                .Include(n => n.Client)
+                                                .AsSplitQuery()
+                                                .FirstOrDefault(c => c.Client.Id == idClient);
+            if (tcmclient != null)
+            {
+                if (tcmclient.TCMNote.Count() > 0)
+                {
+                    if (tcmclient.TCMNote.Where(n => (n.DateOfService == date
+                                       && n.TCMNoteActivity.Where(m => (m.StartTime.TimeOfDay <= initialTime.TimeOfDay && m.EndTime.TimeOfDay >= initialTime.TimeOfDay)
+                                           || (m.StartTime.TimeOfDay <= endTime.TimeOfDay && m.EndTime.TimeOfDay >= endTime.TimeOfDay)
+                                           || (m.StartTime.TimeOfDay > initialTime.TimeOfDay && m.EndTime.TimeOfDay > initialTime.TimeOfDay && m.StartTime.TimeOfDay < endTime.TimeOfDay && m.EndTime.TimeOfDay < endTime.TimeOfDay))
+                                       .Count() > 0))
+                                     .Count() > 0)
+                        return true;
+                    else return false;
+                }
+
+                return false;
+            }
+
+            return false;
+        }
+
+
         #endregion
 
         public IActionResult CreateModal(int error = 0, int idFacilitator = 0, int idClient = 0)
@@ -1319,7 +1392,9 @@ namespace KyoS.Web.Controllers
                             InitDate = initdate,
                             FinalDate = finaldate,
                             Clinic = _context.Clinics.FirstOrDefault(c => c.Id == entity.IdClinic),
-                            WeekOfYear = item.Key
+                            WeekOfYear = item.Key,
+                            CreatedOn = DateTime.Now,
+                            CreatedBy = user_logged.UserName
                         };
 
                         week_entity = await _context.Weeks
@@ -1348,7 +1423,9 @@ namespace KyoS.Web.Controllers
                                         {
                                             Date = item1,
                                             Week = week,
-                                            Service = ServiceType.PSR
+                                            Service = ServiceType.PSR,
+                                            CreatedOn = DateTime.Now,
+                                            CreatedBy = user_logged.UserName
                                         };
                                         clinic_entity = week.Clinic;
                                     }
@@ -1358,7 +1435,9 @@ namespace KyoS.Web.Controllers
                                         {
                                             Date = item1,
                                             Week = week_entity,
-                                            Service = ServiceType.PSR
+                                            Service = ServiceType.PSR,
+                                            LastModifiedOn = DateTime.Now,
+                                            LastModifiedBy = user_logged.UserName
                                         };
                                         clinic_entity = week_entity.Clinic;
                                     }

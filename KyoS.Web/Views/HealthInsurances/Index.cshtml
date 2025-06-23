@@ -15,8 +15,7 @@
     </ul><!--.breadcrumb-->
 </div>
 
-<p>
-    @*<a asp-action="Create" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Create Health Insurance</a>*@
+<p>    
     <a onclick="showInPopup('@Url.Action("CreateModal","HealthInsurances",null,Context.Request.Scheme)','Create Health Insurance')" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Create Health Insurance</a>
 </p>
 
@@ -24,10 +23,11 @@
     <div id="view-healthInsurance">
         @await Html.PartialAsync("_ViewHealthInsurances", Model)
     </div>
-</div>
+</div>  
+
 
 <partial name="_ModalPopup" />
-
+<partial name="_ModalPopupLg" />
 <partial name="_DeleteDialog" />
 
 @section Scripts {
@@ -58,6 +58,19 @@
                 }
             });
         }
+        $(function () {
+
+            //Assign Click event to Plus Image.
+            $("body").on("click", "a[class*='icon-plus-sign-alt']", function () {
+                $(this).closest("tr").after("<tr><td></td><td colspan = '999'>" + $(this).next().html() + "</td></tr>");
+                $(this).attr("class", "icon-minus-sign-alt");
+            });
+            //Assign Click event to Minus Image.
+            $("body").on("click", "a[class*='icon-minus-sign-alt']", function () {
+                $(this).attr("class", "icon-plus-sign-alt");
+                $(this).closest("tr").next().remove();
+            });
+        });
     </script>
 }
 

@@ -1,4 +1,5 @@
-﻿using KyoS.Common.Enums;
+﻿using DocumentFormat.OpenXml.Drawing;
+using KyoS.Common.Enums;
 using KyoS.Common.Helpers;
 using KyoS.Web.Data;
 using KyoS.Web.Data.Entities;
@@ -138,101 +139,101 @@ namespace KyoS.Web.Controllers
             //this.DeleteGoalsTemp(idClient);    //decide where to delete the temp
 
             MTPViewModel model = new MTPViewModel();
-
-            if (!User.IsInRole("Admin"))
+                        
+            UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                    .FirstOrDefault(u => u.UserName == User.Identity.Name);
+            if (user_logged.Clinic != null)
             {
-                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
-                                                       .FirstOrDefault(u => u.UserName == User.Identity.Name);
-                if (user_logged.Clinic != null)
+                List<SelectListItem> list = _context.Clients.Where(c => c.Id == idClient).Select(c => new SelectListItem
                 {
-                    List<SelectListItem> list = _context.Clients.Where(c => c.Id == idClient).Select(c => new SelectListItem
+                    Text = $"{c.Name}",
+                    Value = $"{c.Id}"
+                }).ToList();
+
+                if (list.Count() > 0)
+                {
+                    model = new MTPViewModel
                     {
-                        Text = $"{c.Name}",
-                        Value = $"{c.Id}"
-                    }).ToList();
+                        IdClient = idClient,
+                        Clients = list,
+                        MTPDevelopedDate = DateTime.Today,
+                        NumberOfMonths = 6,
+                        Modality = "PSR",
+                        Frecuency = "Four times per week",
+                        Setting = "53",
+                        Review = review,
 
-                    if (list.Count() > 0)
-                    {
-                        model = new MTPViewModel
-                        {
-                            IdClient = idClient,
-                            Clients = list,
-                            MTPDevelopedDate = DateTime.Today,
-                            NumberOfMonths = 6,
-                            Modality = "PSR",
-                            Frecuency = "Four times per week",
-                            Setting = "53",
-                            Review = review,
-
-                            AdmissionDateMTP = DateTime.Now,
-                            DateOfUpdate = DateTime.Now,
-                            Psychosocial = true,
-                            MedicationCode = "T1015",
-                            IndividualCode = "H2019 HR",
-                            FamilyCode = "H2019 HR",
-                            GroupCode = "90853",
-                            PsychosocialCode = "H2017",
-                            PsychosocialUnits = 16,
-                            PsychosocialFrecuency = "4 times for week",
-                            PsychosocialDuration = 6,
-                            Substance = false,
-                            Legal = false,
-                            Health = false,
-                            Paint = false,
-                            Other = false,
-                            Client = _context.Clients
-                                             .Include(c => c.Clients_Diagnostics)
-                                             .ThenInclude(cd => cd.Diagnostic)
-                                             .First(n => n.Id == idClient),
-                            AdmissionedFor = user_logged.FullName,
-                            GoalTempList = _context.GoalsTemp.Include(m => m.ObjetiveTempList).Where(m => m.IdClient == idClient && m.UserName == user_logged.UserName).ToList(),
-                            CodeBill = user_logged.Clinic.CodeMTP,
-                            StartTime = DateTime.Now,
-                            EndTime = DateTime.Now.AddMinutes(60)
-                        };
-                    }
-                    else
-                    {
-                        model = new MTPViewModel
-                        {
-                            Clients = _combosHelper.GetComboClientsByClinic(user_logged.Clinic.Id),
-                            MTPDevelopedDate = DateTime.Today,
-                            NumberOfMonths = 6,
-                            Modality = "PSR",
-                            Frecuency = "Four times per week",
-                            Setting = "53",
-                            Review = review,
-
-                            AdmissionDateMTP = DateTime.Now,
-                            DateOfUpdate = DateTime.Now,
-                            Psychosocial = true,
-                            MedicationCode = "T1015",
-                            IndividualCode = "H2019 HR",
-                            FamilyCode = "H2019 HR",
-                            GroupCode = "90853",
-                            PsychosocialCode = "H2017",
-                            PsychosocialUnits = 16,
-                            PsychosocialFrecuency = "4 times for week",
-                            PsychosocialDuration = 6,
-                            Substance = false,
-                            Legal = false,
-                            Health = false,
-                            Paint = false,
-                            Other = false,
-                            Client = new ClientEntity(),
-                            AdmissionedFor = user_logged.FullNameWithDocument,
-                            GoalTempList = new List<GoalsTempEntity>(),
-                            StartTime = DateTime.Now,
-                            EndTime = DateTime.Now.AddMinutes(60)
-
-                        };
-                        model.Client.Clients_Diagnostics = new List<Client_Diagnostic>();
-                        model.Client.Name = "null";
-                    }
-                    ViewData["origin"] = origin;
-                    return View(model);
+                        AdmissionDateMTP = DateTime.Now,
+                        DateOfUpdate = DateTime.Now,
+                        Psychosocial = true,
+                        MedicationCode = "T1015",
+                        IndividualCode = "H2019 HR",
+                        FamilyCode = "H2019 HR",
+                        GroupCode = "90853",
+                        PsychosocialCode = "H2017",
+                        PsychosocialUnits = 16,
+                        PsychosocialFrecuency = "4 times for week",
+                        PsychosocialDuration = 6,
+                        Substance = false,
+                        Legal = false,
+                        Health = false,
+                        Paint = false,
+                        Other = false,
+                        Client = _context.Clients
+                                            .Include(c => c.Clients_Diagnostics)
+                                            .ThenInclude(cd => cd.Diagnostic)
+                                            .First(n => n.Id == idClient),
+                        AdmissionedFor = user_logged.FullName,
+                        GoalTempList = _context.GoalsTemp.Include(m => m.ObjetiveTempList).Where(m => m.IdClient == idClient && m.UserName == user_logged.UserName).ToList(),
+                        CodeBill = user_logged.Clinic.CodeMTP,
+                        StartTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, DateTime.Now.Minute, 0),
+                        EndTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, DateTime.Now.Minute, 0)
+                                                .AddMinutes(60)
+                    };
                 }
+                else
+                {
+                    model = new MTPViewModel
+                    {
+                        Clients = _combosHelper.GetComboClientsByClinic(user_logged.Clinic.Id),
+                        MTPDevelopedDate = DateTime.Today,
+                        NumberOfMonths = 6,
+                        Modality = "PSR",
+                        Frecuency = "Four times per week",
+                        Setting = "53",
+                        Review = review,
+
+                        AdmissionDateMTP = DateTime.Now,
+                        DateOfUpdate = DateTime.Now,
+                        Psychosocial = true,
+                        MedicationCode = "T1015",
+                        IndividualCode = "H2019 HR",
+                        FamilyCode = "H2019 HR",
+                        GroupCode = "90853",
+                        PsychosocialCode = "H2017",
+                        PsychosocialUnits = 16,
+                        PsychosocialFrecuency = "4 times for week",
+                        PsychosocialDuration = 6,
+                        Substance = false,
+                        Legal = false,
+                        Health = false,
+                        Paint = false,
+                        Other = false,
+                        Client = new ClientEntity(),
+                        AdmissionedFor = user_logged.FullNameWithDocument,
+                        GoalTempList = new List<GoalsTempEntity>(),
+                        StartTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, DateTime.Now.Minute, 0),
+                        EndTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, DateTime.Now.Minute, 0)
+                                                .AddMinutes(60)
+
+                    };
+                    model.Client.Clients_Diagnostics = new List<Client_Diagnostic>();
+                    model.Client.Name = "null";
+                }
+                ViewData["origin"] = origin;
+                return View(model);
             }
+            
 
             model = new MTPViewModel
             {
@@ -264,8 +265,9 @@ namespace KyoS.Web.Controllers
                 }
 
                 //calcular las unidades a partir del tiempo de desarrollo del MTP
-                int units = (mtpViewModel.EndTime.TimeOfDay - mtpViewModel.StartTime.TimeOfDay).Minutes/15;
-                if ((mtpViewModel.EndTime.TimeOfDay - mtpViewModel.StartTime.TimeOfDay).Minutes % 15 > 7)
+                double minutes = (mtpViewModel.EndTime.TimeOfDay - mtpViewModel.StartTime.TimeOfDay).TotalMinutes;
+                int units = (int)(minutes / 15);
+                if (minutes % 15 > 7)
                 {
                     units++;
                     mtpViewModel.Units = units;
@@ -275,7 +277,7 @@ namespace KyoS.Web.Controllers
                     mtpViewModel.Units = units;
                 }
 
-                mtpViewModel.Units = 0;
+                //mtpViewModel.Units = 0;
                 DateTime start = new DateTime(mtpViewModel.AdmissionDateMTP.Year, mtpViewModel.AdmissionDateMTP.Month, mtpViewModel.AdmissionDateMTP.Day, mtpViewModel.StartTime.Hour, mtpViewModel.StartTime.Minute, mtpViewModel.StartTime.Second);
                 mtpViewModel.StartTime = start;
                 DateTime end = new DateTime(mtpViewModel.AdmissionDateMTP.Year, mtpViewModel.AdmissionDateMTP.Month, mtpViewModel.AdmissionDateMTP.Day, mtpViewModel.EndTime.Hour, mtpViewModel.EndTime.Minute, mtpViewModel.EndTime.Second);
@@ -403,6 +405,8 @@ namespace KyoS.Web.Controllers
                     }
                 }
             }
+
+            ViewData["origin"] = origin;
             return View(mtpViewModel);
         }
 
@@ -522,8 +526,10 @@ namespace KyoS.Web.Controllers
                 }
 
                 //calcular las unidades a partir del tiempo de desarrollo del MTP
-                int units = (mtpViewModel.EndTime.TimeOfDay - mtpViewModel.StartTime.TimeOfDay).Minutes / 15;
-                if ((mtpViewModel.EndTime.TimeOfDay - mtpViewModel.StartTime.TimeOfDay).Minutes % 15 > 7)
+
+                double minutes = (mtpViewModel.EndTime.TimeOfDay - mtpViewModel.StartTime.TimeOfDay).TotalMinutes;
+                int units = (int)(minutes / 15);
+                if (minutes % 15 > 7)
                 {
                     units++;
                     mtpViewModel.Units = units;
@@ -1427,10 +1433,12 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("Home/Error404");
             }
 
-            GoalEntity goalEntity = await _context.Goals.Include(g => g.MTP)
-                                                        .ThenInclude(m => m.Client)
-                                                        .Include(g => g.Objetives)
-                                                        .FirstOrDefaultAsync(m => m.Id == id);
+            GoalEntity goalEntity = await _context.Goals
+                                                  .Include(g => g.Adendum)
+                                                  .Include(g => g.MTP)
+                                                  .ThenInclude(m => m.Client)
+                                                  .Include(g => g.Objetives)
+                                                  .FirstOrDefaultAsync(m => m.Id == id);
             if (goalEntity == null)
             {
                 return RedirectToAction("Home/Error404");
@@ -1441,8 +1449,8 @@ namespace KyoS.Web.Controllers
             {
                 Goal = goalEntity,
                 IdGoal = goalEntity.Id,
-                DateOpened = goalEntity.MTP.AdmissionDateMTP,
-                DateResolved = goalEntity.MTP.AdmissionDateMTP.AddMonths(Convert.ToInt32(goalEntity.MTP.NumberOfMonths)),
+                DateOpened = (goalEntity.Adendum != null) ? goalEntity.Adendum.Dateidentified : goalEntity.MTP.AdmissionDateMTP,
+                DateResolved = (goalEntity.Adendum != null) ? goalEntity.Adendum.Dateidentified.AddMonths(Convert.ToInt32(goalEntity.Adendum.Duration)) : goalEntity.MTP.AdmissionDateMTP.AddMonths(Convert.ToInt32(goalEntity.MTP.NumberOfMonths)),
                 DateTarget = goalEntity.MTP.AdmissionDateMTP.AddMonths(Convert.ToInt32(goalEntity.MTP.NumberOfMonths)),
                 Objetive = objetive
             };
@@ -2238,6 +2246,8 @@ namespace KyoS.Web.Controllers
 
                                                .Include(m => m.Supervisor)
 
+                                               .AsSplitQuery()
+
                                                .FirstOrDefault(m => (m.Id == id));
             if (mtpEntity == null)
             {
@@ -2297,6 +2307,21 @@ namespace KyoS.Web.Controllers
             if (mtpEntity.Client.Clinic.Name == "ALLIED HEALTH GROUP LLC")
             {
                 Stream stream = _reportHelper.AlliedMTPReport(mtpEntity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (mtpEntity.Client.Clinic.Name == "YOUR NEIGHBOR MEDICAL GROUP")
+            {
+                Stream stream = _reportHelper.YourNeighborMTPReport(mtpEntity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (mtpEntity.Client.Clinic.Name == "MEDISANA HEALTH CENTER")
+            {
+                Stream stream = _reportHelper.MedisanaMTPReport(mtpEntity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (mtpEntity.Client.Clinic.Name == "BETTER YEARS AHEAD MEDICAL CENTER")
+            {
+                Stream stream = _reportHelper.ByaMTPReport(mtpEntity);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
             return null;
@@ -2911,6 +2936,8 @@ namespace KyoS.Web.Controllers
                                            .ThenInclude(c => c.Clients_Diagnostics)
                                            .ThenInclude(cd => cd.Diagnostic)
 
+                                           .AsSplitQuery()
+
                                            .FirstOrDefault(a => (a.Id == id));
 
             if (entity == null)
@@ -2961,6 +2988,16 @@ namespace KyoS.Web.Controllers
             if (entity.Mtp.Client.Clinic.Name == "ALLIED HEALTH GROUP LLC")
             {
                 Stream stream = _reportHelper.AlliedAddendumReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (entity.Mtp.Client.Clinic.Name == "YOUR NEIGHBOR MEDICAL GROUP")
+            {
+                Stream stream = _reportHelper.YourNeighborAddendumReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (entity.Mtp.Client.Clinic.Name == "BETTER YEARS AHEAD MEDICAL CENTER")
+            {
+                Stream stream = _reportHelper.ByaAddendumReport(entity);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
             return null;
@@ -3127,10 +3164,32 @@ namespace KyoS.Web.Controllers
                 {
                     if (User.IsInRole("Facilitator"))
                     {
-                        if (mtpReviewEntity.SignIndTherapy == true && mtpReviewViewModel.SignTherapy == true)
+                        if (mtpReviewViewModel.IdIndFacilitator == mtpReviewViewModel.IdFacilitator && mtpReviewViewModel.IdIndFacilitator != 0)
                         {
-                            mtpReviewEntity.Status = AdendumStatus.Pending;
+                            if (mtpReviewViewModel.SignTherapy == true)
+                            {
+                                mtpReviewEntity.Status = AdendumStatus.Pending;
+                            }
                         }
+                        else
+                        {
+                            if (mtpReviewViewModel.IdIndFacilitator == 0)
+                            {
+                                if (mtpReviewEntity.SignTherapy == true)
+                                {
+                                    mtpReviewEntity.Status = AdendumStatus.Pending;
+                                }
+                            }
+                            else
+                            {
+                                if (mtpReviewEntity.SignIndTherapy == true && mtpReviewEntity.SignTherapy == true)
+                                {
+                                    mtpReviewEntity.Status = AdendumStatus.Pending;
+                                }
+                            }
+                           
+                        }
+                        
                     }
                 }
 
@@ -3204,7 +3263,7 @@ namespace KyoS.Web.Controllers
                         }
                         else
                         {
-                            if (User.IsInRole("Documents_Assistant") || (item.MTP.Client.IndividualTherapyFacilitator.LinkedUser == user_logged.UserName))
+                            if (User.IsInRole("Documents_Assistant") || (item.MTP.Client.IndividualTherapyFacilitator != null && item.MTP.Client.IndividualTherapyFacilitator.LinkedUser == user_logged.UserName))
                             {
                                 foreach (var obj in item.Objetives)
                                 {
@@ -3290,6 +3349,7 @@ namespace KyoS.Web.Controllers
                 SupervisorEntity supervisor = _context.Supervisors.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
                 MtpReview.Status = AdendumStatus.Approved;
                 MtpReview.LicensedPractitioner = supervisor.Name;
+                MtpReview.DateClinicalDirector = MtpReview.DateLicensedPractitioner;
             }
             else
             {
@@ -3414,6 +3474,7 @@ namespace KyoS.Web.Controllers
                 mtpReviewEntity.Status = AdendumStatus.Approved;
                 mtpReviewEntity.LicensedPractitioner = _context.Supervisors.FirstOrDefault(n => n.LinkedUser == user_logged.UserName).Name;
                 mtpReviewEntity.DateLicensedPractitioner = mtpReviewViewModel.DateLicensedPractitioner;
+                mtpReviewEntity.DateClinicalDirector = mtpReviewViewModel.DateLicensedPractitioner;
 
                 _context.Update(mtpReviewEntity);
                 try
@@ -3472,6 +3533,7 @@ namespace KyoS.Web.Controllers
             mtpReview.Status = AdendumStatus.Approved;
             mtpReview.LicensedPractitioner = _context.Supervisors.FirstOrDefault(n => n.LinkedUser == user_logged.UserName).Name;
             mtpReview.DateLicensedPractitioner = DateTime.Today;
+            mtpReview.DateClinicalDirector = DateTime.Today;
 
             _context.Update(mtpReview);
 
@@ -3528,27 +3590,52 @@ namespace KyoS.Web.Controllers
                                                   .Include(f => f.Messages.Where(m => m.Notification == false))
 
                                                   .Where(m => (m.Mtp.Client.Clinic.Id == clinic.Id
-                                                            && m.Status == AdendumStatus.Pending) 
-                                                            && (m.CreatedBy == user_logged.UserName
-                                                             || m.IndFacilitator.LinkedUser == user_logged.UserName))
+                                                            && (m.Status == AdendumStatus.Pending || (m.Status == AdendumStatus.Edition && m.SignTherapy == true)) 
+                                                            && (m.CreatedBy == user_logged.UserName))
+                                                             ||
+                                                             (m.Mtp.Client.Clinic.Id == clinic.Id
+                                                             && m.Status == AdendumStatus.Pending 
+                                                             && m.IndFacilitator.LinkedUser == user_logged.UserName))
                                                   .ToListAsync());
                     }
                     else
                     {
-                        return View(await _context.MTPReviews
+                        if (User.IsInRole("Documents_Assistant"))
+                        {
+                            return View(await _context.MTPReviews
 
-                                                  .Include(m => m.Mtp)
-                                                  .ThenInclude(m => m.Client)
-                                                  .ThenInclude(m => m.Clinic)
+                                                    .Include(m => m.Mtp)
+                                                    .ThenInclude(m => m.Client)
+                                                    .ThenInclude(m => m.Clinic)
 
-                                                  .Include(m => m.Mtp.Goals)
-                                                  .ThenInclude(m => m.Objetives)
+                                                    .Include(m => m.Mtp.Goals)
+                                                    .ThenInclude(m => m.Objetives)
 
-                                                  .Include(f => f.Messages.Where(m => m.Notification == false))
+                                                    .Include(f => f.Messages.Where(m => m.Notification == false))
 
-                                                  .Where(m => (m.Mtp.Client.Clinic.Id == clinic.Id)
-                                                      && m.Status == AdendumStatus.Pending)
-                                                  .ToListAsync());
+                                                    .Where(m => (m.Mtp.Client.Clinic.Id == clinic.Id)
+                                                        && m.Status == AdendumStatus.Pending
+                                                        && m.CreatedBy == user_logged.UserName)
+                                                    .ToListAsync());
+                        }
+                        else
+                        {
+                            return View(await _context.MTPReviews
+
+                                                    .Include(m => m.Mtp)
+                                                    .ThenInclude(m => m.Client)
+                                                    .ThenInclude(m => m.Clinic)
+
+                                                    .Include(m => m.Mtp.Goals)
+                                                    .ThenInclude(m => m.Objetives)
+
+                                                    .Include(f => f.Messages.Where(m => m.Notification == false))
+
+                                                    .Where(m => (m.Mtp.Client.Clinic.Id == clinic.Id)
+                                                        && m.Status == AdendumStatus.Pending)
+                                                    .ToListAsync());
+                        }
+                           
                     }
                 }
             }
@@ -3643,6 +3730,7 @@ namespace KyoS.Web.Controllers
             
             if (User.IsInRole("Facilitator"))
             {
+                FacilitatorEntity facilitator = _context.Facilitators.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
                 model = new MTPReviewViewModel
                 {
                     CreatedOn = DateTime.Now,
@@ -3679,7 +3767,9 @@ namespace KyoS.Web.Controllers
                     Origin = origin,
                     DateIndFacilitator = DateTime.Now,
                     IndFacilitator = (mtp.Client.IndividualTherapyFacilitator != null) ? _context.Facilitators.FirstOrDefault(n => n.Id == mtp.Client.IndividualTherapyFacilitator.Id) : null,
-                    IdIndFacilitator = (mtp.Client.IndividualTherapyFacilitator != null) ? mtp.Client.IndividualTherapyFacilitator.Id : 0
+                    IdIndFacilitator = (mtp.Client.IndividualTherapyFacilitator != null) ? mtp.Client.IndividualTherapyFacilitator.Id : 0,
+                    FacilitatorId = facilitator.Id,
+                    IdFacilitator = facilitator.Id
                 };
 
             }
@@ -3766,7 +3856,7 @@ namespace KyoS.Web.Controllers
                             }
                             else
                             {
-                                if (User.IsInRole("Documents_Assistant") || (item.MTP.Client.IndividualTherapyFacilitator.LinkedUser == user_logged.UserName))
+                                if (User.IsInRole("Documents_Assistant") || (item.MTP.Client.IndividualTherapyFacilitator != null && item.MTP.Client.IndividualTherapyFacilitator.LinkedUser == user_logged.UserName))
                                 {
                                     foreach (var obj in item.Objetives)
                                     {
@@ -3840,6 +3930,10 @@ namespace KyoS.Web.Controllers
                                              .ThenInclude(c => c.Clients_Diagnostics)
                                              .ThenInclude(cd => cd.Diagnostic)
 
+                                             .Include(m => m.IndFacilitator)
+
+                                             .AsSplitQuery()
+
                                              .FirstOrDefault(a => (a.Id == id));
 
             if (entity == null)
@@ -3890,6 +3984,16 @@ namespace KyoS.Web.Controllers
             if (entity.Mtp.Client.Clinic.Name == "ALLIED HEALTH GROUP LLC")
             {
                 Stream stream = _reportHelper.AlliedMTPReviewReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (entity.Mtp.Client.Clinic.Name == "YOUR NEIGHBOR MEDICAL GROUP")
+            {
+                Stream stream = _reportHelper.YourNeighborMTPReviewReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (entity.Mtp.Client.Clinic.Name == "BETTER YEARS AHEAD MEDICAL CENTER")
+            {
+                Stream stream = _reportHelper.ByaMTPReviewReport(entity);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
             return null;
@@ -4291,6 +4395,11 @@ namespace KyoS.Web.Controllers
                 if (mtpViewModel.Goals == null)
                     mtpViewModel.Goals = new List<GoalEntity>();
 
+                if (mtpViewModel.SupervisorDate.ToShortDateString() == "01/01/0001")
+                {
+                    mtpViewModel.SupervisorDate = mtpEntity.AdmissionDateMTP;
+                }
+                
                 ViewData["origi"] = origi;
                 return View(mtpViewModel);
             }
@@ -4329,7 +4438,15 @@ namespace KyoS.Web.Controllers
 
 
             mtp.Status = MTPStatus.Approved;
-            mtp.SupervisorDate = model.SupervisorDate;
+            if (mtp.SupervisorDate < mtp.AdmissionDateMTP)
+            {
+                mtp.SupervisorDate = mtp.AdmissionDateMTP;
+            }
+            else
+            {
+                mtp.SupervisorDate = model.SupervisorDate;
+            }
+            
             mtp.Supervisor = await _context.Supervisors.FirstOrDefaultAsync(s => s.LinkedUser == User.Identity.Name);
             _context.Update(mtp);
 
@@ -4908,9 +5025,9 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("Create", new { idClient = goalTemp.IdClient, origin = origin });
         }
 
-        public JsonResult Translate(string text)
+        public async Task<JsonResult> Translate(string text)
         {
-            return Json(text = _translateHelper.TranslateText("es", "en", text));
+            return Json(text = await _translateHelper.TranslateText("es", "en", text));
         }
 
         [Authorize(Roles = "Manager")]
@@ -5377,7 +5494,7 @@ namespace KyoS.Web.Controllers
         #endregion
 
         #region Bill week MTPR
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public async Task<IActionResult> BillMTPRToday(int id = 0, int week = 0, int origin = 0)
         {
             if (id > 0)
@@ -5405,7 +5522,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("NotAuthorized", "Account");
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public async Task<IActionResult> NotBillMTPR(int id = 0, int week = 0, int origin = 0)
         {
             if (id > 0)
@@ -5433,7 +5550,7 @@ namespace KyoS.Web.Controllers
 
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public async Task<IActionResult> DeniedBillTodayMTPR(int idMtpr = 0, int week = 0, int origin = 0)
         {
             if (idMtpr >= 0)
@@ -5460,7 +5577,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("NotAuthorized", "Account");
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public async Task<IActionResult> NotDeniedBillMTPR(int idMtpr = 0, int client = 0, int week = 0)
         {
             if (idMtpr > 0)
@@ -5489,7 +5606,7 @@ namespace KyoS.Web.Controllers
 
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public async Task<IActionResult> NotPaymentReceivedMTPR(int id = 0, int week = 0, int origin = 0)
         {
             if (id > 0)
@@ -5517,7 +5634,7 @@ namespace KyoS.Web.Controllers
 
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public async Task<IActionResult> PaymentReceivedTodayMTPR(int id = 0, int week = 0, int origin = 0)
         {
             if (id > 0)
@@ -5790,10 +5907,19 @@ namespace KyoS.Web.Controllers
             {
                 return RedirectToAction("Home/Error404");
             }
-
+           
             _context.Adendums.Remove(addendum);
-            await _context.SaveChangesAsync();
-            return RedirectToAction("ClientHistory", "Clients", new { idClient = addendum.Mtp.Client.Id });
+
+            try
+            {
+                await _context.SaveChangesAsync();
+                return RedirectToAction("ClientHistory", "Clients", new { idClient = addendum.Mtp.Client.Id, idError = 0 });
+            }
+            catch (System.Exception ex)
+            {
+                return RedirectToAction("ClientHistory", "Clients", new { idClient = addendum.Mtp.Client.Id, idError = 2 });
+            }
+           
         }
 
         [Authorize(Roles = "Manager, Frontdesk")]
@@ -6099,6 +6225,66 @@ namespace KyoS.Web.Controllers
             return View();
         }
 
-       
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> DeleteMTPR(int? id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            MTPReviewEntity mtpr = await _context.MTPReviews
+                                                 .Include(n => n.Mtp)
+                                                 .ThenInclude(n => n.Goals)
+                                                 .ThenInclude(n => n.Objetives)
+                                                 .Include(n => n.Mtp)
+                                                 .ThenInclude(n => n.Client)
+
+                                                 .FirstOrDefaultAsync(t => t.Id == id);
+
+            if (mtpr == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+            
+            if (_context.Goals.Where(n => n.IdMTPReview == id).Count() > 0)
+            {
+                return RedirectToAction("ClientHistory", "Clients", new { idClient = mtpr.Mtp.Client.Id, idError = 1 });
+            }
+
+            ObjetiveEntity objective = new ObjetiveEntity();
+            List<ObjetiveEntity> list = new List<ObjetiveEntity>();
+
+            if (mtpr.Mtp.Goals.Count() > 0)
+            {
+                foreach (var item in mtpr.Mtp.Goals)
+                {
+                    if (item.Objetives.Count() > 0)
+                    {
+                        foreach (var obj in item.Objetives)
+                        {
+                            objective = obj;
+                            objective.DateResolved = mtpr.Mtp.AdmissionDateMTP.AddMonths(mtpr.Mtp.NumberOfMonths.Value);
+                            objective.DateTarget = mtpr.Mtp.AdmissionDateMTP.AddMonths(mtpr.Mtp.NumberOfMonths.Value);
+                        }
+                    }                 
+
+                }
+            }
+            
+            _context.MTPReviews.Remove(mtpr);
+            try
+            {
+                await _context.SaveChangesAsync();
+                return RedirectToAction("ClientHistory", "Clients", new { idClient = mtpr.Mtp.Client.Id, idError = 0 });
+            }
+            catch
+            {
+                return RedirectToAction("ClientHistory", "Clients", new { idClient = mtpr.Mtp.Client.Id, idError = 1 });
+            }
+           
+        }
+
+
     }
 }

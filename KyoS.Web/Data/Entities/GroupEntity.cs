@@ -24,5 +24,7 @@ namespace KyoS.Web.Data.Entities
         }
         public bool SharedSession { get; set; }
         public ScheduleEntity Schedule { get; set; }
+
+        public string Name { get; set; }
     }
 }

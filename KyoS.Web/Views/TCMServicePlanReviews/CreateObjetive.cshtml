@@ -5,7 +5,7 @@
 
 <div class="row">
     <div class="col-md-12">
-        <form asp-action="CreateObjetive" onsubmit="return jQueryAjaxPostTCMServicePlanReview(this);">
+        <form asp-action="CreateObjetive" asp-route-idTCMServicePlanRDoamin="@ViewData["sprDomainID"]" onsubmit="return jQueryAjaxPostTCMServicePlanReview(this);">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Origin" />
             <input type="hidden" asp-for="Id_Domain" />
@@ -15,12 +15,12 @@
             <div class="">
                 <div class="form-group col-md-12">
                     <b>Service:</b>
-                    <i>@Html.DisplayFor(modelItem => Model.TcmDomain.Code) - @Html.DisplayFor(modelItem => Model.TcmDomain.Name)</i>
+                    @Html.DisplayFor(modelItem => Model.TcmDomain.Code) - @Html.DisplayFor(modelItem => Model.TcmDomain.Name)
                 </div>               
             </div>
             <div class="">
                 <div class="form-group col-md-6">
-                    <label asp-for="IdObjetive" class="control-label">Objetive Number</label>&nbsp;*
+                    <label asp-for="IdObjetive" class="control-label">Objetive Number</label>
                     <input asp-for="IdObjetive" class="form-control" readonly />
                     <span asp-validation-for="IdObjetive" class="text-danger"></span>
                 </div>
@@ -51,7 +51,7 @@
             </div>
             <div class="col-md-12">
                 <div class="form-group">
-                    <label asp-for="name" class="control-label">Name</label>&nbsp;*
+                    <label asp-for="name" class="control-label">Name</label>
                     <input asp-for="name" id="GetName" class="form-control" readonly />
                     <span asp-validation-for="name" class="text-danger"></span>
                 </div>
@@ -59,20 +59,20 @@
             <div class="col-md-12">
                 <div class="form-group">
                     <label asp-for="descriptionStages" class="control-label">Description of Stage</label>
-                    <textarea asp-for="descriptionStages" id="lbDescription" class="form-control" rows="4" readonly />
+                    <textarea asp-for="descriptionStages" id="lbDescription" class="form-control" rows="3" readonly />
                     <span asp-validation-for="descriptionStages" class="text-danger"></span>
                 </div>
             </div>
             <div class="col-md-12">
                 <div class="form-group">
                     <label asp-for="task" class="control-label">Task/Case Management Strategy</label>&nbsp;*
-                    <textarea asp-for="task" class="form-control" />
+                    <textarea asp-for="task" class="form-control" ></textarea>
                     <span asp-validation-for="task" class="text-danger"></span>
                 </div>
             </div> <div class="col-md-12">
                 <div class="form-group">
                     <label asp-for="Responsible" class="control-label">Responsible Provider and Resources</label>&nbsp;*
-                    <textarea asp-for="Responsible" class="form-control" />
+                    <textarea asp-for="Responsible" class="form-control" ></textarea>
                     <span asp-validation-for="Responsible" class="text-danger"></span>
                 </div>
             </div>

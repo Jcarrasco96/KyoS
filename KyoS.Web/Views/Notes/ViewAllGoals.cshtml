@@ -9,8 +9,15 @@
     <ul class="breadcrumb">
         <li>
             <i class="icon-home"></i>
-            @Html.ActionLink("MTPs", "Index", "MTPs")
-        </li>
+            @if (ViewData["origin"].ToString() == "0")
+            {
+                @Html.ActionLink("MTPs", "Index", "MTPs")
+            }
+            @if (ViewData["origin"].ToString() == "1")
+            {
+                @Html.ActionLink("Expired MTPs", "ExpiredMTP", "MTPs")
+            }
+            </li>
         <li class="active">All Goals</li>
     </ul><!--.breadcrumb-->
 </div>
@@ -68,9 +75,11 @@
                                         <table class="table table-striped">
                                             <tr>
                                                 <th class="col-md-1">Objective</th>
-                                                <th class="col-md-5">Description</th>
-                                                <th class="col-md-4">Intervention</th>
-                                                <th class="col-md-1">Active Until</th>
+                                                <th class="col-md-4">Description</th>
+                                                <th class="col-md-3">Intervention</th>
+                                                <th class="col-md-1" style="text-align:center;">Open</th>
+                                                <th class="col-md-1" style="text-align:center;">Target</th>
+                                                <th class="col-md-1" style="text-align:center;">Active Until</th>
                                                 <th class="col-md-1"></th>
                                             </tr>
                                             @foreach (var objective in item.AllObjectives)
@@ -85,17 +94,23 @@
                                                     <td>
                                                         @Html.DisplayFor(modelItem => objective.Intervention)
                                                     </td>
-                                                    <td >
+                                                    <td align="center">
+                                                        @Html.DisplayFor(modelItem => objective.DateOpen)
+                                                    </td>
+                                                    <td align="center">
                                                         @Html.DisplayFor(modelItem => objective.DateTarget)
+                                                    </td>
+                                                    <td align="center">
+                                                        @Html.DisplayFor(modelItem => objective.DateResolved)
                                                     </td>
                                                      <td align="right">
                                                          @if (User.IsInRole("Manager"))
                                                          {
-                                                            <a onclick="showInPopup('@Url.Action("UpdateDateUntilObjective", "MTPs", new { dateUntil = objective.DateTarget, idObj = objective.IdObjective, idMtp = item.IdMtp }, Context.Request.Scheme)','Edit Active Until')" class="btn btn-warning" title="Edit Active Until"><i class="glyphicon glyphicon-pencil"></i></a> 
+                                                            <a onclick="showInPopup('@Url.Action("UpdateDateUntilObjective", "MTPs", new { dateUntil = objective.DateResolved, idObj = objective.IdObjective, idMtp = item.IdMtp }, Context.Request.Scheme)','Edit Active Until')" class="btn btn-warning" title="Edit Active Until"><i class="glyphicon glyphicon-pencil"></i></a> 
                                                          }
                                                          else
                                                          { 
-                                                            <a onclick="showInPopup('@Url.Action("UpdateDateUntilObjective", "MTPs", new { dateUntil = objective.DateTarget, idObj = objective.IdObjective, idMtp = item.IdMtp}, Context.Request.Scheme)','Edit Active Until')" class="btn btn-warning disabled" title="Edit date"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                            <a onclick="showInPopup('@Url.Action("UpdateDateUntilObjective", "MTPs", new { dateUntil = objective.DateResolved, idObj = objective.IdObjective, idMtp = item.IdMtp}, Context.Request.Scheme)','Edit Active Until')" class="btn btn-warning disabled" title="Edit date"><i class="glyphicon glyphicon-pencil"></i></a>
                                                          }
                                                     </td>
                                                 </tr>

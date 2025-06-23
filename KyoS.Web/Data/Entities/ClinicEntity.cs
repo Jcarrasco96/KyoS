@@ -83,5 +83,25 @@ namespace KyoS.Web.Data.Entities
 
         [Display(Name = "Bill code of TCM")]
         public string CPTCode_TCM { get; set; }
+
+        public string Initials { get; set; }
+
+        public ICollection<CourseEntity> Courses { get; set; }
+
+        //Datos de pagos
+        [Display(Name = "Account Number")]
+        public string Company_AccountNumber { get; set; }
+        [Display(Name = "Routing")]
+        public string Company_Routing { get; set; }
+        [Display(Name = "Company Name")]
+        public string Company_Name { get; set; }
+        [Display(Name = "Company Address")]
+        public string Company_Address { get; set; }
+        [Display(Name = "Company Phone")]
+        public string Company_Phone { get; set; }
+        [Display(Name = "Company Zelle")]
+        public string Company_Zelle { get; set; }
+        [Display(Name = "Company Email")]
+        public string Company_Email { get; set; }
     }
 }

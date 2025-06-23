@@ -39,5 +39,19 @@ namespace KyoS.Web.Data.Entities
         public TCMPayStubFiltro TCMPayStub_Filtro { get; set; }
 
         public bool MTPmultipleSignatures { get; set; }
+
+        [DataType(DataType.Date)]
+        public DateTime TCMLockCreateNote { get; set; }
+
+        public DashboardType DashBoardPrincipal { get; set; }
+
+        public bool LockTCMNoteForOneMonthIdle { get; set; }
+        public bool LockTCMNoteForDx { get; set; }
+        public bool LockTCMNoteForAuth { get; set; }
+
+        public decimal PricePSR { get; set; }
+        public decimal PriceGroup { get; set; }
+        public decimal PriceInd { get; set; }
+        public decimal PriceTCM { get; set; }
     }
 }

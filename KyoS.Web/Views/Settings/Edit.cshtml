@@ -27,7 +27,14 @@
                                 <select asp-for="IdClinic" class="form-control" asp-items="Model.Clinics"></select>
                                 <span asp-validation-for="IdClinic" class="text-danger"></span>
                             </div>
-                        </div>                        
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label asp-for="IdDashboard" class="control-label"></label>
+                                <select asp-for="IdDashboard" class="form-control" asp-items="Model.Dashboards"></select>
+                                <span asp-validation-for="IdDashboard" class="text-danger"></span>
+                            </div>
+                        </div>
                     </div>
                     <div role="tabpanel" class="tab-pane" id="mh">
                         <div class="col-md-12">
@@ -88,6 +95,18 @@
                         <div class="col-md-12">
                             &nbsp;
                         </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <input type="checkbox" asp-for="TCMClinic" /> Enable TCM Clinic
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label asp-for="TCMLockCreateNote" class="control-label">Create notes until</label>
+                                <input asp-for="TCMLockCreateNote" class="form-control" />
+                                <span asp-validation-for="TCMLockCreateNote" class="text-danger"></span>
+                            </div>
+                        </div>
                         <div>
                             <div class=" col-md-6 ">
                                 <label asp-for="TCMInitialTime" class="control-label">Start Time</label>&nbsp;*
@@ -120,11 +139,6 @@
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
-                                <input type="checkbox" asp-for="TCMClinic" /> Enable TCM Clinic
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="form-group">
                                 <input type="checkbox" asp-for="TCMSupervisorEdit" /> Enable edit documents by TCM supervisor
                             </div>
                         </div>
@@ -146,6 +160,21 @@
                         <div class="col-md-push-12">
                             <div class="form-group col-md-12">
                                 <input type="checkbox" asp-for="CreateTCMNotesWithoutDomain" class="form-check-input"> Create initials notes without Service Plan Domains<br />
+                            </div>
+                        </div>
+                        <div class="col-md-push-12">
+                            <div class="form-group col-md-12">
+                                <input type="checkbox" asp-for="LockTCMNoteForOneMonthIdle" class="form-check-input"> Unable create TCM notes for idle cases (1 month)<br />
+                            </div>
+                        </div>
+                        <div class="col-md-push-12">
+                            <div class="form-group col-md-12">
+                                <input type="checkbox" asp-for="LockTCMNoteForDx" class="form-check-input"> Unable create TCM notes without a valid diagnosis<br />
+                            </div>
+                        </div>
+                        <div class="col-md-push-12">
+                            <div class="form-group col-md-12">
+                                <input type="checkbox" asp-for="LockTCMNoteForAuth" class="form-check-input"> Unable create TCM notes without a valid authorization<br />
                             </div>
                         </div>
                     </div>

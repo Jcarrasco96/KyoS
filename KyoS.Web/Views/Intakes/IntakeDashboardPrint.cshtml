@@ -226,8 +226,124 @@
                 </a>
             }
         </div>
-        <div class="col-sm-3 col-md-1">
+        <div class="col-md-12">
             &nbsp;
+        </div>
+        <div class="col-md-12">
+            &nbsp;
+        </div>
+        <div class="col-sm-3 col-md-2">
+            @if (Model.IntakeClientIdDocumentVerification == null)
+            {
+                <a style="text-decoration: none;"  role="button">
+                    <div class="thumbnail list-group-item list-group-item-text">
+                        <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>ID Documents <br>&nbsp;&nbsp;&nbsp;&nbsp;Verification Form</h4>
+                    </div>
+                </a>
+            }
+            else
+            {
+                <div class="thumbnail list-group-item list-group-item-success">
+                    <a style="text-decoration: none;"  role="button">
+                        <h4 style="align-content: end; color: #3c763d"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>ID Documents <br>&nbsp;&nbsp;&nbsp;&nbsp;Verification Form</h4>
+                    </a>
+                   
+                </div>
+            }
+        </div>
+        <div class="col-sm-3 col-md-2">
+            @if (Model.IntakeForeignLanguage == null)
+            {
+                <a style="text-decoration: none;" role="button">
+                    <div class="thumbnail list-group-item list-group-item-text">
+                        <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Foreign Lang. <br>&nbsp;&nbsp;&nbsp;&nbsp;Acknowledgement</h4>
+                    </div>
+                </a>
+            }
+            else
+            {
+                <div class="thumbnail list-group-item list-group-item-success">
+                    <a style="text-decoration: none;" role="button">
+                        <h4 style="align-content: end; color: #3c763d"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Foreign Lang.  <br>&nbsp;&nbsp;&nbsp;&nbsp;Acknowledgement</h4>
+                    </a>
+                   
+                </div>
+            }
+        </div>
+        <div class="col-sm-3 col-md-2">
+            @if (Model.IntakeConsentForTelehealth == null)
+            {
+                <a style="text-decoration: none;" role="button">
+                    <div class="thumbnail list-group-item list-group-item-text">
+                        <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Telehealth <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Consent</h4>
+                    </div>
+                </a>
+            }
+            else
+            {
+                <div class="thumbnail list-group-item list-group-item-success">
+                    <a style="text-decoration: none;" role="button">
+                        <h4 style="align-content: end; color: #3c763d"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Telehealth <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Consent</h4>
+                    </a>
+                  
+                </div>
+            }
+        </div>
+        <div class="col-sm-3 col-md-2">
+            @if (Model.IntakeNoDuplicateService == null)
+            {
+                <a style="text-decoration: none;"  role="button">
+                    <div class="thumbnail list-group-item list-group-item-text">
+                        <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>No Duplicate <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Service</h4>
+                    </div>
+                </a>
+            }
+            else
+            {
+                <div class="thumbnail list-group-item list-group-item-success">
+                    <a style="text-decoration: none;"  role="button">
+                        <h4 style="align-content: end; color: #3c763d"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>No Duplicate <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Service</h4>
+                    </a>
+                  
+                </div>
+            }
+        </div>
+        <div class="col-sm-3 col-md-2">
+            @if (Model.IntakeAdvancedDirective == null)
+            {
+                <a style="text-decoration: none;" role="button">
+                    <div class="thumbnail list-group-item list-group-item-text">
+                        <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Advanced <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Directive</h4>
+                    </div>
+                </a>
+            }
+            else
+            {
+                <div class="thumbnail list-group-item list-group-item-success">
+                    <a style="text-decoration: none;" role="button">
+                        <h4 style="align-content: end; color: #3c763d"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>Advanced <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Directive</h4>
+                    </a>
+                   
+                </div>
+            }
+        </div>
+        <div class="col-sm-3 col-md-2">
+            @if (Model.IntakeNoHarm == null)
+            {
+                <a style="text-decoration: none;" asp-route-id="@Model.Id" role="button">
+                    <div class="thumbnail list-group-item list-group-item-text">
+                        <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>No Harm <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Contract</h4>
+                    </div>
+                </a>
+            }
+            else
+            {
+                <a style="text-decoration: none;" asp-route-id="@Model.Id" role="button">
+                    <div class="thumbnail list-group-item list-group-item-success">
+                        <h4 style="align-content:end;"><i class="icon-file-alt" style="padding-right: 10px !important;"></i>No Harm<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Contract</h4>
+                    </div>
+                </a>
+            }
         </div>
        
     </div>

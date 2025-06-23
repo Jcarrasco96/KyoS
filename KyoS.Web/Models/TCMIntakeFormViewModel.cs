@@ -35,7 +35,7 @@ namespace KyoS.Web.Models
         public string LegalGuardianState { get; set; }
         public string LegalGuardianZipCode { get; set; }
 
-        [Display(Name = "Relationship with legal guardian")]
+        [Display(Name = "Relationship with L.G")]
         public int IdRelationshipLG { get; set; }
         public IEnumerable<SelectListItem> RelationshipsLG { get; set; }
 

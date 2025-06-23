@@ -78,27 +78,34 @@
             <input type="hidden" asp-for="LastModifiedOn" />
             <input type="hidden" asp-for="Origin" />
             <input type="hidden" asp-for="ClinicalDirector" />
+            <input type="hidden" asp-for="IdIndFacilitator" />
+            <input type="hidden" asp-for="IdFacilitator" />
+
             @if (User.IsInRole("Supervisor") == false)
             {
                 <input type="hidden" asp-for="DateClinicalDirector" />
                 <input type="hidden" asp-for="DateLicensedPractitioner" />
             }
-            @if (User.IsInRole("Supervisor") == false && Model.Mtp.Client.IndividualTherapyFacilitator.LinkedUser != User.Identity.Name)
+            @if (User.IsInRole("Supervisor") == false && (Model.Mtp.Client.IndividualTherapyFacilitator != null && Model.Mtp.Client.IndividualTherapyFacilitator.LinkedUser != User.Identity.Name))
             {
                 <input type="hidden" asp-for="DateIndFacilitator" />
             }
             @if (User.IsInRole("Facilitator"))
             {
-                @if (Model.IndFacilitator != null && Model.IndFacilitator.LinkedUser == User.Identity.Name)
+                @if (Model.IdIndFacilitator != Model.IdFacilitator )
                 {
-                    <input type="hidden" asp-for="SignTherapy" />
-                    <input type="hidden" asp-for="DateTherapist" />
+                    @if (Model.IndFacilitator != null && Model.IndFacilitator.LinkedUser == User.Identity.Name)
+                    {
+                        <input type="hidden" asp-for="SignTherapy" />
+                        <input type="hidden" asp-for="DateTherapist" />
+                    }
+                    else
+                    {
+                        <input type="hidden" asp-for="SignIndTherapy" />
+                        <input type="hidden" asp-for="DateIndFacilitator" />
+                    }
                 }
-                else
-                {
-                    <input type="hidden" asp-for="SignIndTherapy" />
-                    <input type="hidden" asp-for="DateIndFacilitator" />
-                }
+               
             }
             <partial name="_MTPReviews" />
             <div class="col-md-push-12">
@@ -117,20 +124,42 @@
                 <pre>
         @if (User.IsInRole("Facilitator") == true)
         {
-            @if (Model.IndFacilitator != null && Model.IndFacilitator.LinkedUser == User.Identity.Name)
+            @if (Model.IdIndFacilitator == Model.IdFacilitator && Model.IdIndFacilitator != 0)
             {
-                @Html.DisplayFor(modelItem => Model.Mtp.Client.Name)  <input asp-for="DateSignaturePerson">      @Html.DisplayFor(modelItem => Model.Therapist)  <input asp-for="DateTherapist" disabled>       @Html.DisplayFor(modelItem => Model.IndFacilitator.Name)  <input asp-for="DateIndFacilitator">          @Html.DisplayFor(modelItem => Model.Mtp.Client.Clinic.ClinicalDirector)  <input asp-for="DateClinicalDirector" disabled>
+@Html.DisplayFor(modelItem => Model.Mtp.Client.Name)  <input asp-for="DateSignaturePerson">      @Html.DisplayFor(modelItem => Model.Therapist)  <input asp-for="DateTherapist" >       @Html.DisplayFor(modelItem => Model.IndFacilitator.Name)  <input asp-for="DateIndFacilitator">          @Html.DisplayFor(modelItem => Model.Mtp.Client.Clinic.ClinicalDirector)  <input asp-for="DateClinicalDirector" disabled>
+<strong>____________________________</strong>                 <strong>__________________________</strong>           <strong>_____________________________________</strong>           <strong>_____________________________________________</strong>    
+<strong>Person served signature date</strong>                 <strong>Therapist Name / Signature</strong>           <strong>Therapist Individual Name / Signature</strong>           <strong>Clinical Director / Reviewer Name / Signature</strong>    
+            
+            }
+            else
+            {
+                @if (Model.IndFacilitator != null && Model.IndFacilitator.LinkedUser == User.Identity.Name)
+                {
+@Html.DisplayFor(modelItem => Model.Mtp.Client.Name)  <input asp-for="DateSignaturePerson">      @Html.DisplayFor(modelItem => Model.Therapist)  <input asp-for="DateTherapist" disabled>       @Html.DisplayFor(modelItem => Model.IndFacilitator.Name)  <input asp-for="DateIndFacilitator">          @Html.DisplayFor(modelItem => Model.Mtp.Client.Clinic.ClinicalDirector)  <input asp-for="DateClinicalDirector" disabled>
 <strong>____________________________</strong>                 <strong>__________________________</strong>           <strong>_____________________________________</strong>           <strong>_____________________________________________</strong>    
 <strong>Person served signature date</strong>                 <strong>Therapist Name / Signature</strong>           <strong>Therapist Individual Name / Signature</strong>           <strong>Clinical Director / Reviewer Name / Signature</strong>    
 
-            }
-            else
-            { 
+                }
+                else
+                { 
+                     @if (Model.IndFacilitator != null)
+                     {
  @Html.DisplayFor(modelItem => Model.Mtp.Client.Name)  <input asp-for="DateSignaturePerson">      @Html.DisplayFor(modelItem => Model.Therapist)  <input asp-for="DateTherapist">       @Html.DisplayFor(modelItem => Model.IndFacilitator.Name)  <input asp-for="DateIndFacilitator" disabled>          @Html.DisplayFor(modelItem => Model.Mtp.Client.Clinic.ClinicalDirector)  <input asp-for="DateClinicalDirector" disabled>
 <strong>____________________________</strong>                 <strong>__________________________</strong>            <strong>_____________________________________</strong>           <strong>_____________________________________________</strong>    
 <strong>Person served signature date</strong>                 <strong>Therapist Name / Signature</strong>            <strong>Therapist Individual Name / Signature</strong>           <strong>Clinical Director / Reviewer Name / Signature</strong>    
+                     
+                     }
+                     else
+                     {
+@Html.DisplayFor(modelItem => Model.Mtp.Client.Name)  <input asp-for="DateSignaturePerson">      @Html.DisplayFor(modelItem => Model.Therapist)  <input asp-for="DateTherapist">       @Html.DisplayFor(modelItem => Model.Mtp.Client.Clinic.ClinicalDirector)  <input asp-for="DateClinicalDirector" disabled>
+<strong>____________________________</strong>                 <strong>__________________________</strong>            <strong>_____________________________________________</strong>    
+<strong>Person served signature date</strong>                 <strong>Therapist Name / Signature</strong>            <strong>Clinical Director / Reviewer Name / Signature</strong>    
+                      
+                     }
                  
+                }
             }
+           
         }
         else
         { 
@@ -175,17 +204,34 @@
 
         @if (User.IsInRole("Facilitator"))
         {
-            @if (Model.IndFacilitator != null && Model.IndFacilitator.LinkedUser == User.Identity.Name)
+            @if (Model.IdIndFacilitator == Model.IdFacilitator && Model.IdIndFacilitator != 0)
             {
-    <input asp-for="SignTherapy" type="checkbox" disabled> <i> Sign Here (Therapist)</i>
+    <input asp-for="SignTherapy" type="checkbox"> <i> Sign Here (Therapist)</i>
     <input asp-for="SignIndTherapy" type="checkbox"> <i> Sign Here (Indivudual Therapist)</i>
             }
             else
-            { 
+            {
+                @if (Model.IndFacilitator != null && Model.IndFacilitator.LinkedUser == User.Identity.Name)
+                {
+    <input asp-for="SignTherapy" type="checkbox" disabled> <i> Sign Here (Therapist)</i>
+    <input asp-for="SignIndTherapy" type="checkbox"> <i> Sign Here (Indivudual Therapist)</i>
+                }
+                else
+                {       
+                    @if (Model.IndFacilitator == null)
+                    {
     <input asp-for="SignTherapy" type="checkbox"> <i> Sign Here (Therapist)</i>
-    <input asp-for="SignIndTherapy" type="checkbox" disabled> <i> Sign Here (Indivudual Therapist)</i>
     
+                    }
+                    else
+                    {
+    <input asp-for="SignTherapy" type="checkbox"> <i> Sign Here (Therapist)</i>
+    <input asp-for="SignIndTherapy" type="checkbox" disabled> <i> Sign Here (Indivudual Therapist)</i>             
+                    }
+    
+                }
             }
+            
         }
         </pre>
             </div>

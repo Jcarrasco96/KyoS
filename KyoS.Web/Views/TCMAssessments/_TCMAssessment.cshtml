@@ -100,7 +100,7 @@
 <div class="col-md-push-12">
     <div class="form-group col-md-2">
         <label asp-for="DateAssessment" class="control-label">Assessment Date</label>
-        <input asp-for="DateAssessment" class="form-control">
+        <input asp-for="DateAssessment" class="form-control" id="DateAssessment">
         <span asp-validation-for="DateAssessment" class="text-danger"></span>
     </div>
     <div class="container-fluid">
@@ -113,7 +113,7 @@
 
     <strong>Legal Decision-Maker or Authorized Representative (if applicable)</strong>
 
-    <input asp-for="LegalDecisionNone"> None         <input asp-for="LegalDecisionLegal"> Legal Guardian         <input asp-for="LegalDecisionAdLitem"> Guardian-ad-Litem          <input asp-for="LegalDecisionParent"> Parent         <input asp-for="LegalDecisionAttomey"> Attomey-in-fact        <input asp-for="LegalDecisionOther"> Other <input asp-for="LegalDecisionOtherExplain"  style="width:20%" />
+    <input asp-for="LegalDecisionNone" id="LegalDecisionNone"> None         <input asp-for="LegalDecisionLegal" id="LegalDecisionLegal"> Legal Guardian         <input asp-for="LegalDecisionAdLitem" id="LegalDecisionAdLitem"> Guardian-ad-Litem          <input asp-for="LegalDecisionParent" id="LegalDecisionParent"> Parent         <input asp-for="LegalDecisionAttomey" id="LegalDecisionAttomey"> Attomey-in-fact        <input asp-for="LegalDecisionOther" id="LegalDecisionOther"> Other <input asp-for="LegalDecisionOtherExplain" style="width:20%" id="LegalDecisionOtherExplain" />
     
     <label asp-for="LegalDecisionName" class="control-label">Name</label>                           <label asp-for="LegalDecisionPhone" class="control-label">Phone No</label>                        <label asp-for="LegalDecisionAddress" class="control-label">Address</label>                          <label asp-for="LegalDecisionCityStateZip" class="control-label">City, State, Zip</label>
     <input asp-for="LegalDecisionName" readonly>         <input asp-for="LegalDecisionPhone"  readonly>          <input asp-for="LegalDecisionAddress"  readonly>           <input asp-for="LegalDecisionCityStateZip"  readonly>
@@ -123,12 +123,12 @@
 <div class="col-md-push-12">
     <div class="col-md-12">
     <pre>
-    Need of Special Accommodations?     <input type="checkbox" class="form-check-input" id="check101"> No        <input asp-for="LegalDecisionNone" class="form-check-input" id="check1"> Yes       Specify:  <input asp-for="NeedOfSpecialSpecify"  style="width:30%">
+    Need of Special Accommodations?     <input type="checkbox" class="form-check-input" id="check101"> No        <input asp-for="NeedOfSpecial" class="form-check-input" id="check1"> Yes       Specify:  <input asp-for="NeedOfSpecialSpecify" style="width:30%" id="NeedOfSpecialSpecify">
     
     <strong>TYPE OF ASSESSMENT </strong>
-    <input asp-for="TypeOfAssessmentInitial"> Initial       <input asp-for="TypeOfAssessmentAnnual"> Annual          <input asp-for="TypeOfAssessmentSignificant"> Significant Change    <input asp-for="TypeOfAssessmentOther"> Other:  <input asp-for="TypeOfAssessmentOtherExplain"  style="width:30%">
+    <input asp-for="TypeOfAssessmentInitial" id="TypeOfAssessmentInitial"> Initial       <input asp-for="TypeOfAssessmentAnnual" id="TypeOfAssessmentAnnual"> Annual          <input asp-for="TypeOfAssessmentSignificant" id="TypeOfAssessmentSignificant"> Significant Change    <input asp-for="TypeOfAssessmentOther" id="TypeOfAssessmentOther"> Other:  <input asp-for="TypeOfAssessmentOtherExplain"  style="width:30%" id="TypeOfAssessmentOtherExplain">
         
-    <strong>Is client currently receiving Case Management services through another provider?</strong>    <input asp-for="NeedOfSpecial" class="form-check-input" id="check2"> Yes       <input type="checkbox" class="form-check-input" id="check102"> No
+    <strong>Is client currently receiving Case Management services through another provider?</strong>    <input asp-for="IsClientCurrently" class="form-check-input" id="check2"> Yes       <input type="checkbox" class="form-check-input" id="check102"> No
     </pre>
     </div>
 </div>

@@ -34,12 +34,38 @@
                 <input type="hidden" asp-for="TcmClient_FK" />
                 <input type="hidden" asp-for="CreatedOn" />
                 <input type="hidden" asp-for="CreatedBy" />
+                <input type="hidden" asp-for="TcmClient.Client.FirstName" />
+                <input type="hidden" asp-for="TcmClient.Client.LastName" />
+                <input type="hidden" asp-for="TcmClient.CaseNumber" />
                 <partial name="_TCMInterventionLog" />
 
-                <div class="form-group col-md-12">
-                    <input type="submit" value="Save" class="btn btn-primary" />
-                    <a asp-action="TCMIntakeSectionDashboard" asp-route-id="@Model.IdTCMClient" asp-route-section="5" asp-controller="TCMIntakes" class="btn btn-success">Back</a>
-                </div>
+                @if (Model.Id == 0)
+                {
+                    <div class="form-group col-md-12">
+                        <input type="submit" value="Create" class="btn btn-primary" />
+                        <a asp-action="TCMIntakeSectionDashboard" asp-route-id="@Model.IdTCMClient" asp-route-section="5" asp-controller="TCMIntakes" class="btn btn-success">Back</a>
+                    </div>                    
+                }
+                else
+                {
+                    <br />
+                    <div class="col-md-push-12">
+                        <div class="col-md-12 form-group">
+                            <a onclick="showInPopup('@Url.Action("CreateTCMIntervention", "TCMIntakes", new { id = @Model.Id}, Context.Request.Scheme)','Create Intervention Log')" class="btn btn-success" title="Create Intervention Log"><i class="glyphicon glyphicon-plus"></i> Create Intervention Log</a>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div id="view-tcmServicePlanReview">
+                            @await Html.PartialAsync("_ViewTCMIntakeInterventionLIst", Model.InterventionList.ToList())
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div id="view-tcmServicePlanReview">
+                            <a asp-action="TCMIntakeSectionDashboard" asp-route-id="@Model.TcmClient.Id" asp-route-section="5" asp-controller="TCMIntakes" class="btn btn-success">Back</a>
+                        </div>
+                    </div>
+                }
+               
             </div>
         </form>
 
@@ -54,5 +80,29 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script src="~/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#MyTable').DataTable({
+                "order": [[0, "asc"]],
+                "pageLength": 100
+            });
+        });
 
+        function ConfirmDelete(e) {
+            Swal.fire({
+                title: 'Do you want to delete?',
+                text: "Note: All data related to this element will be deleted.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var url = "@Url.Action("DeleteTCMIntervention", "TCMIntakes")";
+                    window.location.href = url + '/' + e;
+                }
+            });
+        }
+    </script>
 }

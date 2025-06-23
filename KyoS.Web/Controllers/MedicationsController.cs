@@ -86,7 +86,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("NotAuthorized", "Account");
         }
 
-        [Authorize(Roles = "Supervisor, Documents_Assistant")]
+        [Authorize(Roles = "Supervisor, Documents_Assistant, Manager")]
         public IActionResult Create(int id = 0)
         {
 
@@ -140,7 +140,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Supervisor, Documents_Assistant")]
+        [Authorize(Roles = "Supervisor, Documents_Assistant, Manager")]
         public async Task<IActionResult> Create(MedicationViewModel MedicationViewModel)
         {
             UserEntity user_logged = _context.Users
@@ -285,7 +285,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "Edit", medicationViewModel) });
         }
 
-        [Authorize(Roles = "Supervisor, Documents_Assistant")]
+        [Authorize(Roles = "Supervisor, Documents_Assistant, Manager")]
         public async Task<IActionResult> Delete(int? id, int origin = 0)
         {
             if (id == null)

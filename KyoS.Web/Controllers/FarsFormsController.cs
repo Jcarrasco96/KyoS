@@ -98,11 +98,11 @@ namespace KyoS.Web.Controllers
         {
 
             UserEntity user_logged = _context.Users
-                                                 .Include(u => u.Clinic)
-                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
             ClientEntity client = _context.Clients.Include(n => n.FarsFormList)
                                                   .Include(n => n.Clinic)
-                                                    .FirstOrDefault(n => n.Id == id);
+                                                  .FirstOrDefault(n => n.Id == id);
             FarsFormViewModel model;
 
             if (user_logged.Clinic != null)
@@ -156,7 +156,8 @@ namespace KyoS.Web.Controllers
                    IdType = 0,
                    FarsType = _combosHelper.GetComboFARSType(),
                    StartTime = DateTime.Now,
-                   EndTime = DateTime.Now.AddMinutes(15)
+                   EndTime = DateTime.Now.AddMinutes(15),
+                   CodeBill = user_logged.Clinic.CodeFARS
                 };
 
                 SupervisorEntity supervisor = _context.Supervisors.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
@@ -516,6 +517,8 @@ namespace KyoS.Web.Controllers
                                             .Include(i => i.Client)
                                             .ThenInclude(c => c.LegalGuardian)
 
+                                            .AsSplitQuery()
+
                                             .FirstOrDefault(f => (f.Id == id));
             if (entity == null)
             {
@@ -567,6 +570,16 @@ namespace KyoS.Web.Controllers
                 Stream stream = _reportHelper.AlliedFarsReport(entity);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
+            if (entity.Client.Clinic.Name == "YOUR NEIGHBOR MEDICAL GROUP")
+            {
+                Stream stream = _reportHelper.YourNeighborFarsReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (entity.Client.Clinic.Name == "BETTER YEARS AHEAD MEDICAL CENTER")
+            {
+                Stream stream = _reportHelper.ByaFarsReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
             return null;
         }
 
@@ -602,7 +615,23 @@ namespace KyoS.Web.Controllers
             }
             else
             {
-                List<ClientEntity> ClientList = await _context.Clients
+                if (User.IsInRole("Documents_Assistant"))
+                {
+                    List<ClientEntity> ClientList = await _context.Clients
+                                                                  .Include(n => n.FarsFormList)
+                                                                  .Include(n => n.Bio)
+                                                                  .Where(n => n.FarsFormList.Where(f => f.Type == FARSType.Initial).Count() == 0
+                                                                           && n.Clinic.Id == user_logged.Clinic.Id
+                                                                           && n.OnlyTCM == false
+                                                                           && ((n.DocumentsAssistant != null && n.DocumentsAssistant.LinkedUser == user_logged.UserName)
+                                                                             || n.DocumentsAssistant == null))
+                                                                  .ToListAsync();
+
+                    return View(ClientList);
+                }
+                else
+                {
+                    List<ClientEntity> ClientList = await _context.Clients
                                                               .Include(n => n.FarsFormList)
                                                               .Include(n => n.Bio)
                                                               .Where(n => n.FarsFormList.Where(f => f.Type == FARSType.Initial).Count() == 0
@@ -610,10 +639,12 @@ namespace KyoS.Web.Controllers
                                                                        && n.OnlyTCM == false)
                                                               .ToListAsync();
 
-                return View(ClientList);
-            }
-            
+                    return View(ClientList);
 
+                }
+                
+            }
+           
         }
 
         [Authorize(Roles = "Supervisor, Facilitator, Documents_Assistant")]
@@ -861,7 +892,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("ClientHistory", "Clients", new { idClient = clientId });
         }
 
-        [Authorize(Roles = "Manager, Supervisor, Facilitator, Frondesk")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Frondesk, Documents_Assistant")]
         public async Task<IActionResult> AuditFARS()
         {
             UserEntity user_logged = _context.Users
@@ -881,7 +912,7 @@ namespace KyoS.Web.Controllers
 
             List<ClientEntity> client_List = new List<ClientEntity>();
 
-            if (User.IsInRole("Manager") || User.IsInRole("Supervisor"))
+            if (User.IsInRole("Manager") || User.IsInRole("Supervisor") || User.IsInRole("Documents_Assistant"))
             {
                 client_List = _context.Clients
                                       .Include(m => m.MTPs)
@@ -995,7 +1026,7 @@ namespace KyoS.Web.Controllers
             return View(auditClient_List);
         }
 
-        [Authorize(Roles = "Manager, Supervisor, Facilitator, Frondesk")]
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Frondesk, Documents_Assistant")]
         public async Task<IActionResult> ClientswithoutFARS(int idError = 0)
         {
             UserEntity user_logged = await _context.Users
@@ -1030,19 +1061,37 @@ namespace KyoS.Web.Controllers
             }
             else
             {
-                List<ClientEntity> ClientList = await _context.Clients
-                                                          .Include(n => n.FarsFormList)
-                                                          .Where(n => n.FarsFormList.Count == 0
-                                                              && n.Clinic.Id == user_logged.Clinic.Id
-                                                              && ((n.MTPs.FirstOrDefault(m => m.Active == true).MtpReviewList.Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.MtpReview).Count() == 0)
-                                                                  || (n.DischargeList.Where(d => d.TypeService == ServiceType.PSR).Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.Discharge_PSR).Count() == 0)
-                                                                  || (n.DischargeList.Where(d => d.TypeService == ServiceType.Individual).Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.Discharge_Ind).Count() == 0)
-                                                                  || (n.DischargeList.Where(d => d.TypeService == ServiceType.Group).Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.Discharge_Group).Count() == 0)
-                                                                  || (n.MTPs.Where(m => m.AdendumList.Count() > n.FarsFormList.Where(f => f.Type == FARSType.Addendums).Count()).Count() > 0))
-                                                              && n.OnlyTCM == false)
-                                                          .ToListAsync();
+                if (User.IsInRole("Documents_Assistant"))
+                {
 
-                return View(ClientList);
+                    List<ClientEntity> ClientList = await _context.Clients
+                                                                  .Include(n => n.FarsFormList)
+                                                                  .Include(n => n.MTPs)
+                                                                  .ThenInclude(n => n.MtpReviewList)
+                                                                  .Where(n => n.Clinic.Id == user_logged.Clinic.Id
+                                                                     && ((n.MTPs.FirstOrDefault(m => m.Active == true).MtpReviewList.Where(m => m.CreatedBy == user_logged.UserName).Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.MtpReview && f.CreatedBy == user_logged.UserName).Count() == 0)
+                                                                      || (n.MTPs.Where(m => m.AdendumList.Where(a => a.CreatedBy == user_logged.UserName).Count() > n.FarsFormList.Where(f => f.Type == FARSType.Addendums && f.CreatedBy == user_logged.UserName).Count()).Count() > 0))
+                                                                     && n.OnlyTCM == false)
+                                                                  .ToListAsync();
+
+                    return View(ClientList);
+                }
+                else
+                {
+                    List<ClientEntity> ClientList = await _context.Clients
+                                                              .Include(n => n.FarsFormList)
+                                                              .Where(n => n.FarsFormList.Count == 0
+                                                                  && n.Clinic.Id == user_logged.Clinic.Id
+                                                                  && ((n.MTPs.FirstOrDefault(m => m.Active == true).MtpReviewList.Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.MtpReview).Count() == 0)
+                                                                      || (n.DischargeList.Where(d => d.TypeService == ServiceType.PSR).Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.Discharge_PSR).Count() == 0)
+                                                                      || (n.DischargeList.Where(d => d.TypeService == ServiceType.Individual).Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.Discharge_Ind).Count() == 0)
+                                                                      || (n.DischargeList.Where(d => d.TypeService == ServiceType.Group).Count() > 0 && n.FarsFormList.Where(f => f.Type == FARSType.Discharge_Group).Count() == 0)
+                                                                      || (n.MTPs.Where(m => m.AdendumList.Count() > n.FarsFormList.Where(f => f.Type == FARSType.Addendums).Count()).Count() > 0))
+                                                                  && n.OnlyTCM == false)
+                                                              .ToListAsync();
+
+                    return View(ClientList);
+                }
             }
 
 
@@ -1084,7 +1133,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("NotAuthorized", "Account");
         }
 
-        [Authorize(Roles = "Manager, Facilitator, Frondesk")]
+        [Authorize(Roles = "Manager, Facilitator, Frondesk, Documents_Assistant")]
         public async Task<IActionResult> AuditFARSforId(int id = 0)
         {
             UserEntity user_logged = _context.Users
@@ -1104,7 +1153,7 @@ namespace KyoS.Web.Controllers
 
             ClientEntity client = new ClientEntity();
 
-            if (User.IsInRole("Manager") || User.IsInRole("Facilitator"))
+            if (User.IsInRole("Manager") || User.IsInRole("Facilitator") || User.IsInRole("Documents_Assistant"))
             {
                 client = await _context.Clients
                                        .Include(m => m.MTPs)
@@ -1184,7 +1233,7 @@ namespace KyoS.Web.Controllers
                             auditClient.NameClient = client.Name;
                             auditClient.AdmissionDate = element.DataOfService.ToShortDateString();
                             auditClient.Description = "Missing FARS MTPR";
-                            auditClient.Responsible = element.Therapist;
+                            auditClient.Responsible = element.CreatedBy;
                             auditClient.Active = 0;
 
                             auditClient_List.Add(auditClient);
@@ -1290,7 +1339,7 @@ namespace KyoS.Web.Controllers
         }
 
         #region Bill week FARS
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public async Task<IActionResult> BillFARSToday(int id = 0, int week = 0, int origin = 0)
         {
             if (id > 0)
@@ -1317,7 +1366,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("NotAuthorized", "Account");
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public async Task<IActionResult> NotBillFARS(int id = 0, int week = 0, int origin = 0)
         {
             if (id > 0)
@@ -1344,7 +1393,7 @@ namespace KyoS.Web.Controllers
 
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public async Task<IActionResult> DeniedBillTodayFARS(int idFars = 0, int week = 0, int origin = 0)
         {
             if (idFars >= 0)
@@ -1370,7 +1419,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("NotAuthorized", "Account");
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public async Task<IActionResult> NotDeniedBillFARS(int idFars = 0, int client = 0, int week = 0)
         {
             if (idFars > 0)
@@ -1398,7 +1447,7 @@ namespace KyoS.Web.Controllers
 
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public async Task<IActionResult> NotPaymentReceivedFARS(int id = 0, int week = 0, int origin = 0)
         {
             if (id > 0)
@@ -1425,7 +1474,7 @@ namespace KyoS.Web.Controllers
 
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public async Task<IActionResult> PaymentReceivedTodayFARS(int id = 0, int week = 0, int origin = 0)
         {
             if (id > 0)

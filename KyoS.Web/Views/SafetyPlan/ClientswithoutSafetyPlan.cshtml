@@ -16,7 +16,13 @@
             <li class="active">Clients without Safety Plan</li>
         </ul><!--.breadcrumb-->
     </div>
+    <p>
+        <a asp-action="ClientswithoutSafetyPlan" asp-controller="SafetyPlan" asp-route-all="0" class="btn btn-info"><i class="glyphicon glyphicon-globe"></i> All Clients</a>
 
+        <a asp-action="ClientswithoutSafetyPlan" asp-controller="SafetyPlan" asp-route-all="1" class="btn btn-success"><i class="glyphicon glyphicon-folder-open"></i>  Open Clients</a>
+
+        <a asp-action="ClientswithoutSafetyPlan" asp-controller="SafetyPlan" asp-route-all="2" class="btn btn-default"><i class="glyphicon glyphicon-folder-close"></i> Closed Clients</a>
+    </p>
     <div class="panel panel-default">
         <div class="panel-heading">
             <h3 class="panel-title">Clients without  Safety Plan</h3>
@@ -94,7 +100,7 @@
                                 }
                             </td>
                             <td align="right">
-                                @if (User.IsInRole("Facilitator"))
+                                @if (User.IsInRole("Facilitator") || User.IsInRole("Supervisor") || User.IsInRole("Documents_Assistant"))
                                 {
                                     <a asp-action="Create" asp-controller="SafetyPlan" asp-route-id="@item.Id" class="btn btn-primary" title="Create Safety Plan"><i class="glyphicon glyphicon-plus"></i></a>
                                 }

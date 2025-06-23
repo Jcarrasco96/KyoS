@@ -31,7 +31,7 @@
                 </button>
                 <i class="icon-ok green"></i>
                 <strong class="green">
-                    MTP been successfully created
+                    MTP has been successfully created
                 </strong>
 
             </div>
@@ -79,7 +79,12 @@
             <input type="hidden" asp-for="Review" />
             <input type="hidden" asp-for="Client.Name" />
             <input type="hidden" asp-for="AdmissionedFor" />
-            <input type="hidden" asp-for="IdClient" />
+            <input type="hidden" asp-for="Client.FirstName" />
+            <input type="hidden" asp-for="Client.LastName" />
+            @if (ViewData["origin"].ToString() == "1")
+            {
+                <input type="hidden" asp-for="IdClient" />
+            }
             <partial name="_MTPs" />
             @if (ViewData["origin"].ToString() == "1")
             {
@@ -95,7 +100,7 @@
                 </div>
             }
             <div class="form-group col-md-12">
-                <input onclick="GenderVerification()" type="submit" value="Create MTP" class="btn btn-primary" />
+                <input onclick="GenderVerification()" type="submit" value="Create MTP" class="btn btn-primary" id="btnSave" />
                 @if (ViewData["origin"].ToString() == "0")
                 {
                     <a asp-action="Index" asp-controller="Mtps" class="btn btn-success">Back</a>
@@ -157,6 +162,7 @@
                     });
                 })
             });
+            
             $(function () {
                 //Assign Click event to Plus Image.
                 $("body").on("click", "a[class*='icon-plus-sign-alt']", function () {
@@ -171,6 +177,8 @@
             });
 
             function GenderVerification() {
+
+                $("#btnSave").prop('disabled', true);
                 
                 var url = "@Url.Action("GetGenderByClient", "MTPs")";
                 
@@ -211,8 +219,11 @@
                                 cancelButtonColor: '#3085d6',
                                 confirmButtonText: 'Yes, continue!'
                             }).then((result) => {
-                                if (result.isConfirmed) {                                    
+                                if (result.isConfirmed) {
                                     form1.submit();
+                                }
+                                else { 
+                                    $("#btnSave").prop('disabled', false);
                                 }
                             });
                         }
@@ -252,6 +263,9 @@
                                 }).then((result) => {
                                     if (result.isConfirmed) {
                                         form1.submit();
+                                    }
+                                    else {
+                                        $("#btnSave").prop('disabled', false);
                                     }
                                 });
                             }

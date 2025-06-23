@@ -49,20 +49,22 @@
                 <table class="table table-hover table-responsive table-striped" id="MyTable">
                     <thead>
                         <tr>
+                            <th class="col-md-1">
+                            </th>
                             <th class="col-md-3">
                                 @Html.DisplayNameFor(model => model.Name)
                             </th>
-                            <th class="col-md-2" style="text-align:center;">
-                                @Html.DisplayNameFor(model => model.Code)
-                            </th>
-                            <th class="col-md-2" style="text-align:center;">
+                           <th class="col-md-2" style="text-align:center;">
                                 Admission Date
                             </th>
-                            <th class="col-md-1" style="text-align:center;">
+                            <th class="col-md-2" style="text-align:center;">
                                 Status
                             </th>
-                            <th class="col-md-2" style="text-align:center;">
+                            <th class="col-md-1" style="text-align:center;">
                                 MH Therapy
+                            </th>
+                            <th class="col-md-1" style="text-align:right;">
+                                Count
                             </th>
                             <th class="col-md-2" align="right">
                             </th>
@@ -72,6 +74,67 @@
                         @foreach (var item in Model)
                         {
                             <tr>
+                                <td align="center">
+                                    @if (item.SafetyPlanList.Count() > 0)
+                                    {
+                                        <a class="icon-plus-sign-alt"></a>
+                                    }
+                                    <div style="display:none">
+                                        <table class="table table-striped">
+                                            <tr>
+                                                <th class="col-md-2">Date</th>
+                                                <th class="col-md-6">Pescribe</th>
+                                                <th class="col-md-2"> Status</th>
+                                                <th class ="col-md-2"></th>
+                                            </tr>
+                                            @foreach (var value in item.SafetyPlanList.OrderBy(n => n.DateDocument))
+                                            {
+                                                <tr >
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => value.DateDocument)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => value.CreatedBy)
+                                                    </td>
+                                                    <td>
+                                                        @if (value.Status == KyoS.Common.Enums.SafetyPlanStatus.Edition)
+                                                        {
+                                                            <span class="label label-warning">
+                                                                Edition
+                                                            </span>
+                                                        }
+                                                        else
+                                                        {
+                                                            @if (value.Status == KyoS.Common.Enums.SafetyPlanStatus.Pending)
+                                                            {
+                                                                <span class="label label-info">
+                                                                    Pending
+                                                                </span>
+                                                            }
+                                                            else
+                                                            {
+                                                                <span class="label label-success">
+                                                                    Approved
+                                                                </span>
+                                                            }
+                                                        }
+                                                    </td>
+                                                    <td align="right">
+                                                        @if (User.Identity.Name == value.CreatedBy)
+                                                        {
+                                                            <a asp-action="Edit" asp-route-id="@value.Id" asp-route-origin="1" class="btn btn-warning" title="Edit Safety Plan"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                        }
+                                                        else
+                                                        {
+                                                            <a asp-action="EditReadOnly" asp-route-id="@value.Id" class="btn btn-info" title="View Safety Plan"><i class="glyphicon glyphicon-search"></i></a>
+                                                        }
+                                                        <a class="btn btn-success" asp-action="PrintSafetyPlan" asp-route-id="@value.Id" title="Print Safety Plan" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </table>
+                                    </div>
+                                </td>
                                 <td>
                                     @if (item.Gender == KyoS.Common.Enums.GenderType.Female)
                                     {
@@ -83,8 +146,7 @@
                                     }
                                     &nbsp;
                                     @Html.DisplayFor(modelItem => item.Name)
-                                </td>
-                                <td align="center">
+                                    |
                                     @Html.DisplayFor(modelItem => item.Code)
                                 </td>
                                 <td align="center">
@@ -108,8 +170,17 @@
                                     @Html.DisplayFor(modelItem => item.Service)
                                 </td>
                                 <td align="right">
-                                    <a asp-action="EditReadOnly" asp-route-id="@item.SafetyPlan.Id" class="btn btn-info" title="View Safety Plan"><i class="glyphicon glyphicon-search"></i></a>
-                                    <a class="btn btn-success" asp-action="PrintSafetyPlan" asp-route-id="@item.SafetyPlan.Id" title="Print Safety Plan" target="_blank"><i class="glyphicon glyphicon-print"></i></a>
+                                    @Html.DisplayFor(modelItem => item.SafetyPlanList.Count)
+                                </td>
+                                <td align="right">
+                                    @if (User.IsInRole("Facilitator") || User.IsInRole("Supervisor") || User.IsInRole("Documents_Assistant"))
+                                    {
+                                        <a asp-action="Create" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-primary" title="Create Safety Plan"><i class="glyphicon glyphicon-plus"></i></a>
+                                    }
+                                    else
+                                    {
+                                        <a asp-action="Create" asp-route-id="@item.Id" asp-route-origin="1" class="btn btn-primary disabled" title="Create Safety Plan"><i class="glyphicon glyphicon-plus"></i></a>
+                                    }
                                 </td>
                             </tr>
                         }

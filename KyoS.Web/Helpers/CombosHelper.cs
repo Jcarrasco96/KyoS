@@ -1,12 +1,15 @@
-﻿using KyoS.Common.Enums;
+﻿using AspNetCore.ReportingServices.ReportProcessing.ReportObjectModel;
+using KyoS.Common.Enums;
 using KyoS.Web.Data;
 using KyoS.Web.Data.Entities;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using System.Net.Sockets;
+
 
 namespace KyoS.Web.Helpers
 {
@@ -29,12 +32,13 @@ namespace KyoS.Web.Helpers
                                   new SelectListItem { Text = UserType.TCMSupervisor.ToString(), Value = "5"},
                                   new SelectListItem { Text = UserType.Manager.ToString(), Value = "6"},
                                   new SelectListItem { Text = UserType.Admin.ToString(), Value = "7"},
-                                  new SelectListItem { Text = UserType.Frontdesk.ToString(), Value = "8"}
+                                  new SelectListItem { Text = UserType.Frontdesk.ToString(), Value = "8"},
+                                  new SelectListItem { Text = UserType.Biller.ToString(), Value = "9"}
             };
             
             list.Insert(0, new SelectListItem
             {
-                Text = "[Select rol...]",
+                Text = "[Select role...]",
                 Value = "0"
             });
 
@@ -49,12 +53,6 @@ namespace KyoS.Web.Helpers
                     Text = $"{u.UserName}",
                     Value = $"{u.Id}"
             }).ToList();            
-
-            //list.Insert(0, new SelectListItem
-            //{
-            //    Text = "[Select user...]",
-            //    Value = "0"
-            //});
 
             return list;
         }
@@ -346,6 +344,11 @@ namespace KyoS.Web.Helpers
 
         public IEnumerable<SelectListItem> GetComboClientsForIndNotes(int idClinic, int idWeek, int idFacilitator, int idWorkday)
         {
+            FacilitatorEntity facilitator = _context.Facilitators
+                                                    .Include(u => u.Clinic)
+                                                    .ThenInclude(u => u.Setting)
+                                                    .FirstOrDefault(u => u.Id == idFacilitator);
+
             List<ClientEntity> clients = _context.Clients
                                                  .Include(n => n.DischargeList)
                                                  .Include(wc => wc.MTPs)
@@ -416,27 +419,88 @@ namespace KyoS.Web.Helpers
 
             }
 
-            foreach (var item in clients)
+            if (facilitator.Clinic.Setting.TCMClinic == false)
             {
-                temp = _context.Workdays_Clients.Where(n => n.Workday.Date == workday_client.Workday.Date
-                                                               && ((n.Schedule.InitialTime.TimeOfDay >= subScheduleEntity.InitialTime.TimeOfDay
-                                                               && n.Schedule.InitialTime.TimeOfDay <= subScheduleEntity.EndTime.TimeOfDay)
-                                                                   || (n.Schedule.EndTime.TimeOfDay >= subScheduleEntity.InitialTime.TimeOfDay
-                                                                      && n.Schedule.EndTime.TimeOfDay <= subScheduleEntity.EndTime.TimeOfDay)
-                                                                   || (n.Schedule.InitialTime.TimeOfDay <= subScheduleEntity.InitialTime.TimeOfDay
-                                                                      && n.Schedule.EndTime.TimeOfDay >= subScheduleEntity.InitialTime.TimeOfDay)
-                                                                   || (n.Schedule.InitialTime.TimeOfDay <= subScheduleEntity.EndTime.TimeOfDay
-                                                                      && n.Schedule.EndTime.TimeOfDay >= subScheduleEntity.EndTime.TimeOfDay))
-                                                              && n.Id != workday_client.Id
-                                                              && n.Client.Id == item.Id
-                                                              && n.Present == true)
-                                                           .ToList();
-                if (temp.Count() == 0)
+                foreach (var item in clients)
                 {
-                    salida.Add(item);
-                    temp = new List<Workday_Client>();
+                    temp = _context.Workdays_Clients.Where(n => n.Workday.Date == workday_client.Workday.Date
+                                                                   && ((n.Schedule.InitialTime.TimeOfDay >= subScheduleEntity.InitialTime.TimeOfDay
+                                                                   && n.Schedule.InitialTime.TimeOfDay <= subScheduleEntity.EndTime.TimeOfDay)
+                                                                       || (n.Schedule.EndTime.TimeOfDay >= subScheduleEntity.InitialTime.TimeOfDay
+                                                                          && n.Schedule.EndTime.TimeOfDay <= subScheduleEntity.EndTime.TimeOfDay)
+                                                                       || (n.Schedule.InitialTime.TimeOfDay <= subScheduleEntity.InitialTime.TimeOfDay
+                                                                          && n.Schedule.EndTime.TimeOfDay >= subScheduleEntity.InitialTime.TimeOfDay)
+                                                                       || (n.Schedule.InitialTime.TimeOfDay <= subScheduleEntity.EndTime.TimeOfDay
+                                                                          && n.Schedule.EndTime.TimeOfDay >= subScheduleEntity.EndTime.TimeOfDay))
+                                                                  && n.Id != workday_client.Id
+                                                                  && n.Client.Id == item.Id
+                                                                  && n.Present == true)
+                                                               .ToList();
+                    if (temp.Count() == 0)
+                    {
+                        salida.Add(item);
+                        temp = new List<Workday_Client>();
+                    }
                 }
             }
+            else
+            {
+                foreach (var item in clients)
+                {
+                    temp = _context.Workdays_Clients.Where(n => n.Workday.Date == workday_client.Workday.Date
+                                                                   && ((n.Schedule.InitialTime.TimeOfDay >= subScheduleEntity.InitialTime.TimeOfDay
+                                                                   && n.Schedule.InitialTime.TimeOfDay <= subScheduleEntity.EndTime.TimeOfDay)
+                                                                       || (n.Schedule.EndTime.TimeOfDay >= subScheduleEntity.InitialTime.TimeOfDay
+                                                                          && n.Schedule.EndTime.TimeOfDay <= subScheduleEntity.EndTime.TimeOfDay)
+                                                                       || (n.Schedule.InitialTime.TimeOfDay <= subScheduleEntity.InitialTime.TimeOfDay
+                                                                          && n.Schedule.EndTime.TimeOfDay >= subScheduleEntity.InitialTime.TimeOfDay)
+                                                                       || (n.Schedule.InitialTime.TimeOfDay <= subScheduleEntity.EndTime.TimeOfDay
+                                                                          && n.Schedule.EndTime.TimeOfDay >= subScheduleEntity.EndTime.TimeOfDay))
+                                                                  && n.Id != workday_client.Id
+                                                                  && n.Client.Id == item.Id
+                                                                  && n.Present == true)
+                                                               .ToList();
+                    if (temp.Count() == 0)
+                    {
+                        TCMClientEntity tcmclient = _context.TCMClient
+                                                            .Include(n => n.TCMNote)
+                                                            .ThenInclude(n => n.TCMNoteActivity)
+                                                            .Include(n => n.Client)
+                                                            .AsSplitQuery()
+                                                            .FirstOrDefault(c => c.Client.Id == item.Id);
+                        if (tcmclient != null)
+                        {
+                            if (tcmclient.TCMNote.Where(n => n.DateOfService == workday_client.Workday.Date).Count() > 0)
+                            {
+                                if (tcmclient.TCMNote.Where(n => (n.DateOfService == workday_client.Workday.Date
+                                                   && n.TCMNoteActivity.Where(m => (m.StartTime.TimeOfDay <= subScheduleEntity.InitialTime.TimeOfDay && m.EndTime.TimeOfDay >= subScheduleEntity.InitialTime.TimeOfDay)
+                                                       || (m.StartTime.TimeOfDay <= subScheduleEntity.EndTime.TimeOfDay && m.EndTime.TimeOfDay >= subScheduleEntity.EndTime.TimeOfDay)
+                                                       || (m.StartTime.TimeOfDay >= subScheduleEntity.InitialTime.TimeOfDay && m.StartTime.TimeOfDay <= subScheduleEntity.EndTime.TimeOfDay)
+                                                       || (m.EndTime.TimeOfDay >= subScheduleEntity.InitialTime.TimeOfDay && m.EndTime.TimeOfDay <= subScheduleEntity.EndTime.TimeOfDay))
+                                                   .Count() > 0))
+                                                 .Count() == 0)
+                                {
+                                    salida.Add(item);
+                                    temp = new List<Workday_Client>();
+                                }
+                            }
+                            else
+                            {
+                                salida.Add(item);
+                                temp = new List<Workday_Client>();
+                            }
+
+                        }
+                        else
+                        {
+                            salida.Add(item);
+                            temp = new List<Workday_Client>();
+                        }
+                       
+                    }
+                }
+            }
+           
 
             List<SelectListItem> list = salida.Select(c => new SelectListItem
                                                 {
@@ -1090,7 +1154,7 @@ namespace KyoS.Web.Helpers
 
             list.Insert(0, new SelectListItem
             {
-                Text = "[Select Casemanager...]",
+                Text = "[Select Case Manager...]",
                 Value = "0"
             });
 
@@ -1567,20 +1631,20 @@ namespace KyoS.Web.Helpers
             {
                 List<SelectListItem> list = _context.TCMClient
 
-                                                .Include(c => c.Client)
+                                                    .Include(c => c.Client)
 
-                                                .Where(c => (c.TcmServicePlan != null
-                                                          && c.TcmIntakeAppendixJ.Approved == 2
-                                                          && c.Casemanager.LinkedUser == user
-                                                          && c.DataOpen.Date <= dateTCMNote.Date
-                                                          && c.DataClose.Date >= dateTCMNote.Date))
-                                                .OrderBy(c => c.Client.Name)
+                                                    .Where(c => (c.TcmServicePlan != null
+                                                              && c.TcmIntakeAppendixJ.Where(n => n.Approved == 2).Count() > 0
+                                                              && c.Casemanager.LinkedUser == user
+                                                              && c.DataOpen.Date <= dateTCMNote.Date
+                                                              && c.DataClose.Date >= dateTCMNote.Date))
+                                                    .OrderBy(c => c.Client.Name)
 
-                                                .Select(c => new SelectListItem
-                                                {
-                                                    Text = $"{c.Client.Name} | {c.CaseNumber}",
-                                                    Value = $"{c.Id}"
-                                                }).ToList();
+                                                    .Select(c => new SelectListItem
+                                                    {
+                                                        Text = $"{c.Client.Name} | {c.CaseNumber}",
+                                                        Value = $"{c.Id}"
+                                                    }).ToList();
 
                 list.Insert(0, new SelectListItem
                 {
@@ -1598,7 +1662,7 @@ namespace KyoS.Web.Helpers
 
                                                     .Where(c => (c.TCMAssessment.Approved == 2
                                                               && c.TcmServicePlan.Approved == 2
-                                                              && c.TcmIntakeAppendixJ.Approved == 2
+                                                              && c.TcmIntakeAppendixJ.Where(n => n.Approved == 2).Count() > 0
                                                               && c.Casemanager.LinkedUser == user
                                                               && c.DataOpen <= dateTCMNote
                                                               && c.DataClose >= dateTCMNote))
@@ -1617,8 +1681,7 @@ namespace KyoS.Web.Helpers
                 });
 
                 return list;
-            }
-            
+            }            
         }
 
         public IEnumerable<SelectListItem> GetComboServiceAgency()
@@ -1834,7 +1897,14 @@ namespace KyoS.Web.Helpers
                                                         && n.Client.Id == idClient
                                                         && n.Id != idWorkdayClient)
                                                     .ToList();
-           
+
+            TCMClientEntity tcmclient = _context.TCMClient
+                                                .Include(n => n.TCMNote)
+                                                .ThenInclude(n => n.TCMNoteActivity)
+                                                .Include(n => n.Client)
+                                                .AsSplitQuery()
+                                                .FirstOrDefault(c => c.Client.Id == idClient);
+
             List<ScheduleEntity> listSchedulesSalida = new List<ScheduleEntity>();
             if (allNotes.Count() > 0)
             {
@@ -1849,7 +1919,16 @@ namespace KyoS.Web.Helpers
                         && !allNotes.Exists(n => ((n.IndividualNote.SubSchedule.InitialTime.TimeOfDay >= item.InitialTime.TimeOfDay && n.IndividualNote.SubSchedule.InitialTime.TimeOfDay <= item.EndTime.TimeOfDay)
                                                && (n.IndividualNote.SubSchedule.EndTime.TimeOfDay >= item.InitialTime.TimeOfDay && n.IndividualNote.SubSchedule.EndTime.TimeOfDay <= item.EndTime.TimeOfDay))))
                     {
-                        listSchedulesSalida.Add(item);
+                        if (tcmclient.TCMNote.Where(n => (n.DateOfService == worday.Date
+                                          && n.TCMNoteActivity.Where(m => (m.StartTime.TimeOfDay <= item.InitialTime.TimeOfDay && m.EndTime.TimeOfDay >= item.InitialTime.TimeOfDay)
+                                              || (m.StartTime.TimeOfDay <= item.EndTime.TimeOfDay && m.EndTime.TimeOfDay >= item.EndTime.TimeOfDay)
+                                              || (m.StartTime.TimeOfDay > item.InitialTime.TimeOfDay && m.EndTime.TimeOfDay > item.InitialTime.TimeOfDay && m.StartTime.TimeOfDay < item.EndTime.TimeOfDay && m.EndTime.TimeOfDay < item.EndTime.TimeOfDay))
+                                          .Count() > 0))
+                                        .Count() == 0)
+                        {
+                            listSchedulesSalida.Add(item);
+                        }
+                       
                     }
                 }
             }
@@ -1897,6 +1976,13 @@ namespace KyoS.Web.Helpers
                                                                     && n.Workday.Id == idWorkday
                                                                     && n.Client == null).ToList();
 
+            TCMClientEntity tcmclient = _context.TCMClient
+                                                .Include(n => n.TCMNote)
+                                                .ThenInclude(n => n.TCMNoteActivity)
+                                                .Include(n => n.Client)
+                                                .AsSplitQuery()
+                                                .FirstOrDefault(c => c.Client.Id == idClient);
+
             foreach (var item in workday_Clients)
             {
                 if (item.Schedule != null)
@@ -1939,7 +2025,19 @@ namespace KyoS.Web.Helpers
                         (allNotes.Exists(n => (n.Schedule.InitialTime.TimeOfDay < item.InitialTime.TimeOfDay && n.Schedule.EndTime.TimeOfDay > item.InitialTime.TimeOfDay || n.Schedule.InitialTime.TimeOfDay < item.EndTime.TimeOfDay && n.Schedule.EndTime.TimeOfDay > item.EndTime.TimeOfDay) && n.Present == false)
                         || allNotes.Exists(n => (n.Schedule.InitialTime.TimeOfDay < item.InitialTime.TimeOfDay && n.Schedule.InitialTime.TimeOfDay < item.EndTime.TimeOfDay && n.Schedule.EndTime.TimeOfDay > item.InitialTime.TimeOfDay && n.Schedule.EndTime.TimeOfDay > item.EndTime.TimeOfDay && n.Present == false))))
                     {
-                        listSubSchedulesSalida.Add(item);
+                        if (tcmclient != null)
+                        {
+                            if (tcmclient.TCMNote.Where(n => (n.DateOfService == worday.Date
+                                             && n.TCMNoteActivity.Where(m => (m.StartTime.TimeOfDay <= item.InitialTime.TimeOfDay && m.EndTime.TimeOfDay >= item.InitialTime.TimeOfDay)
+                                                 || (m.StartTime.TimeOfDay <= item.EndTime.TimeOfDay && m.EndTime.TimeOfDay >= item.EndTime.TimeOfDay)
+                                                 || (m.StartTime.TimeOfDay > item.InitialTime.TimeOfDay && m.EndTime.TimeOfDay > item.InitialTime.TimeOfDay && m.StartTime.TimeOfDay < item.EndTime.TimeOfDay && m.EndTime.TimeOfDay < item.EndTime.TimeOfDay))
+                                             .Count() > 0))
+                                           .Count() == 0)
+                            {
+                                listSubSchedulesSalida.Add(item);
+                            }
+                        }
+
                     }
                 }
             }
@@ -2095,6 +2193,7 @@ namespace KyoS.Web.Helpers
             List<SelectListItem> list = _context.TCMClient
                                                 .Include(n => n.Client)
                                                 .Where(c => c.Client.Clinic.Id == idClinic)
+                                                .OrderBy(n => n.Client.Name)
                                                 .Select(c => new SelectListItem
                                                 {
                                                     Text = $"{c.Client.Name} ",
@@ -2266,7 +2365,7 @@ namespace KyoS.Web.Helpers
 
             list.Insert(0, new SelectListItem
             {
-                Text = "[Select Paid origi...]",
+                Text = "[Select Paid initial...]",
                 Value = "0"
             });
 
@@ -2442,7 +2541,7 @@ namespace KyoS.Web.Helpers
                                                 .Include(c => c.Client)
 
                                                 .Where(c => (c.TcmServicePlan != null
-                                                          && c.TcmIntakeAppendixJ.Approved == 2
+                                                          && c.TcmIntakeAppendixJ.Where(n => n.Approved == 2).Count() > 0
                                                           && c.Casemanager.LinkedUser == user))
                                                 .OrderBy(c => c.Client.Name)
 
@@ -2474,7 +2573,7 @@ namespace KyoS.Web.Helpers
 
             list.Insert(0, new SelectListItem
             {
-                Text = "[All TCM...]",
+                Text = "[All TCMs...]",
                 Value = "0"
             });
 
@@ -2496,7 +2595,7 @@ namespace KyoS.Web.Helpers
             {
                 list.Insert(0, new SelectListItem
                 {
-                    Text = "[All Supervisor...]",
+                    Text = "[All Supervisors...]",
                     Value = "0"
                 });
             }
@@ -2526,8 +2625,8 @@ namespace KyoS.Web.Helpers
         public IEnumerable<SelectListItem> GetComboPaystubStatus()
         {
             List<SelectListItem> list = new List<SelectListItem>
-                                { new SelectListItem { Text = StatusBill.Unbilled.ToString(), Value = "0"},
-                                  new SelectListItem { Text = StatusBill.Billed.ToString(), Value = "1"}};
+                                { new SelectListItem { Text = StatusTCMPaystub.Pending.ToString(), Value = "0"},
+                                  new SelectListItem { Text = StatusTCMPaystub.Paid.ToString(), Value = "1"}};
 
             return list;
         }
@@ -2554,7 +2653,7 @@ namespace KyoS.Web.Helpers
                 {
                     list.Insert(0, new SelectListItem
                     {
-                        Text = "[Select documents assistants...]",
+                        Text = "[Select document assistant...]",
                         Value = "0"
                     });
                 }
@@ -2568,7 +2667,315 @@ namespace KyoS.Web.Helpers
                 }
             }
 
+            return list;
+        }
 
+        public IEnumerable<SelectListItem> GetComboTCMActivityByService(int idService = 0)
+        {
+            List<TCMServiceActivityEntity> tcmSeriviceActivities = _context.TCMServiceActivity
+                                                                           .Where(g => g.TcmService.Id == idService)
+                                                                           .OrderBy(g => g.Name)
+                                                                           .ToList();
+
+            List<SelectListItem> list = tcmSeriviceActivities.Select(c => new SelectListItem
+            {
+                Text = $"{c.Name}",
+                Value = $"{c.Id}"
+            })
+            .ToList();
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Select Activity...]",
+                Value = "0"
+
+            });
+
+            return list;
+        }
+
+        public IEnumerable<SelectListItem> GetComboAccountType()
+        {
+            List<SelectListItem> list = new List<SelectListItem>
+                                { new SelectListItem { Text = AccountType.Personal_Checking.ToString(), Value = "1"},
+                                  new SelectListItem { Text = AccountType.Personal_Saving.ToString(), Value = "2"},
+                                  new SelectListItem { Text = AccountType.Company_Checking.ToString(), Value = "3"},
+                                  new SelectListItem { Text = AccountType.Company_Saving.ToString(), Value = "4"}};
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Select Account type...]",
+                Value = "0"
+            });
+
+            return list;
+        }
+
+        public IEnumerable<SelectListItem> GetComboPaymentMethod()
+        {
+            List<SelectListItem> list = new List<SelectListItem>
+                                { new SelectListItem { Text = PaymentMethod.Check.ToString(), Value = "1"},
+                                  new SelectListItem { Text = PaymentMethod.Direct_Deposit.ToString(), Value = "2"},
+                                  new SelectListItem { Text = PaymentMethod.Zelle.ToString(), Value = "3"}};
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Select payment method...]",
+                Value = "0"
+            });
+
+            return list;
+        }
+
+        public IEnumerable<SelectListItem> GetComboAppendixJType()
+        {
+            List<SelectListItem> list = new List<SelectListItem>
+                                { new SelectListItem { Text = AppendixJType.Initial.ToString(), Value = "0"},
+                                  new SelectListItem { Text = AppendixJType.Review.ToString(), Value = "1"},
+                                  new SelectListItem { Text = AppendixJType.Discontinuity.ToString(), Value = "2"}};
+
+
+            return list;
+        }
+
+        public IEnumerable<SelectListItem> GetComboCourseByRole(UserType userType)
+        {
+            List<SelectListItem> list = _context.Courses
+
+                                                 .Where(c => c.Role == userType)
+                                                 .Select(c => new SelectListItem
+                                                 {
+                                                     Text = $"{c.Name} ",
+                                                     Value = $"{c.Id}"
+                                                 }).ToList();
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Select Course...]",
+                Value = "0"
+            });
+
+            return list;
+        }
+
+        public IEnumerable<SelectListItem> GetComboDashboardType()
+        {
+            List<SelectListItem> list = new List<SelectListItem>
+                                { new SelectListItem { Text = DashboardType.MH.ToString(), Value = "0"},
+                                  new SelectListItem { Text = DashboardType.TCM.ToString(), Value = "1"}
+            };
+
+            return list;
+        }
+
+        public IEnumerable<SelectListItem> GetComboInsuranceType()
+        {
+            List<SelectListItem> list = new List<SelectListItem>
+                                { new SelectListItem { Text = InsuranceType.Medicare.ToString(), Value = "0"},
+                                  new SelectListItem { Text = InsuranceType.Medicaid.ToString(), Value = "1"},
+                                  new SelectListItem { Text = InsuranceType.Comercial.ToString(), Value = "2"},
+                                  new SelectListItem { Text = InsuranceType.Self_Pay.ToString(), Value = "3"}
+            };
+
+            return list;
+        }
+
+        public IEnumerable<SelectListItem> GetComboInsurancePlanType()
+        {
+            List<SelectListItem> list = new List<SelectListItem>
+                                { new SelectListItem { Text = InsurancePlanType.Full_Medicaid.ToString(), Value = "0"},
+                                  new SelectListItem { Text = InsurancePlanType.Medicare_Part_AB.ToString(), Value = "1"},
+                                  new SelectListItem { Text = InsurancePlanType.Medicare_Part_B.ToString(), Value = "2"}
+            };
+
+            return list;
+        }
+
+        public IEnumerable<SelectListItem> GetComboTCMDomainName()
+        {
+            List<SelectListItem> list = new List<SelectListItem>
+                                { new SelectListItem { Text = "Mental Health Behavioral Substance Abuse", Value = "0"},
+                                  new SelectListItem { Text = "Physical Health Medical/Dental", Value = "1"},
+                                  new SelectListItem { Text = "Vocational Emplymen job Training", Value = "2"},
+                                  new SelectListItem { Text = "School Education", Value = "3"},
+                                  new SelectListItem { Text = "Environmental Recreational Social Support", Value = "4"},
+                                  new SelectListItem { Text = "Activities of Daily Living", Value = "5"},
+                                  new SelectListItem { Text = "Housing Shelter", Value = "6"},
+                                  new SelectListItem { Text = "Economic Financial", Value = "7"},
+                                  new SelectListItem { Text = "Basic Needs(food, clothing, furniture,etc.)", Value = "8"},
+                                  new SelectListItem { Text = "Transportation", Value = "9"},
+                                  new SelectListItem { Text = "Legal Immigration", Value = "10"},
+                                  new SelectListItem { Text = "Other(specify)", Value = "11"}
+            };
+
+           return list;
+        }
+
+        public IEnumerable<SelectListItem> GetComboInsuranceCoverageType()
+        {
+            List<SelectListItem> list = new List<SelectListItem>
+                                { new SelectListItem { Text = InsuranceCoverageType.Full_Medicaid.ToString(), Value = "0"},
+                                  new SelectListItem { Text = InsuranceCoverageType.MMA_Capitated.ToString(), Value = "1"},
+                                  new SelectListItem { Text = InsuranceCoverageType.Dual_Special_Needs_Plan.ToString(), Value = "2"},
+                                  new SelectListItem { Text = InsuranceCoverageType.Medicare_Special_Needs.ToString(), Value = "3"},
+                                  new SelectListItem { Text = InsuranceCoverageType.Medicare_Advantage_Plan.ToString(), Value = "4"},
+                                  new SelectListItem { Text = InsuranceCoverageType.HMO.ToString(), Value = "5"},
+                                  new SelectListItem { Text = InsuranceCoverageType.PPO.ToString(), Value = "6"},
+                                  new SelectListItem { Text = InsuranceCoverageType.EPO.ToString(), Value = "7"},
+                                  new SelectListItem { Text = InsuranceCoverageType.POS.ToString(), Value = "8"}
+            };
+
+            return list;
+        }
+
+        public IEnumerable<SelectListItem> GetComboClientsByTCM(string userName, int idClinic, bool blank)
+        {
+            List<TCMClientEntity> TCMClient = _context.TCMClient
+                                                      .Include(n => n.Client)
+                                                      .Where(c => (c.Client.Clinic.Id == idClinic
+                                                                && c.Casemanager.LinkedUser == userName))
+                                                      .OrderBy(c => c.Client.Name)
+                                                      .ToList();
+            List<ClientEntity> clientList = new List<ClientEntity>();
+            foreach (var item in TCMClient)
+            {
+                clientList.Add(item.Client);
+            }
+                                                      
+
+            List<SelectListItem> list = clientList.OrderBy(c => c.Name)
+                                                  .Select(c => new SelectListItem
+                                                  {
+                                                     Text = $"{c.Name}",
+                                                     Value = $"{c.Id}"
+                                                  }).ToList();
+
+            if (!blank)
+            {
+                list.Insert(0, new SelectListItem
+                {
+                    Text = "[Select client...]",
+                    Value = "0"
+                });
+            }
+            else
+            {
+                list.Insert(0, new SelectListItem
+                {
+                    Text = string.Empty,
+                    Value = "0"
+                });
+            }
+
+            return list;
+        }
+
+        public IEnumerable<SelectListItem> GetComboClientsByCaseManagerByTCMSupervisor(string user, int allClient = 0)
+        {
+            List<SelectListItem> list = _context.TCMClient
+                                                .Include(n => n.Client)
+                                                .Where(c => (c.Casemanager.TCMSupervisor.LinkedUser == user))
+                                                .OrderBy(n => n.Client.Name)
+                                                .Select(c => new SelectListItem
+                                                {
+                                                    Text = $"{c.Client.Name}",
+                                                    Value = $"{c.Client.Id}"
+                                                })
+                                                .ToList();
+            if (allClient == 0)
+            {
+                list.Insert(0, new SelectListItem
+                {
+                    Text = "[All Clients...]",
+                    Value = "0"
+                });
+            }
+            else
+            {
+                list.Insert(0, new SelectListItem
+                {
+                    Text = "[Select Client...]",
+                    Value = "0"
+                });
+            }
+
+
+            return list;
+        }
+
+        public IEnumerable<SelectListItem> GetComboTCMClientsByClinic_ClientId(int idClinic = 0)
+        {
+            List<SelectListItem> list = _context.TCMClient
+                                                .Include(n => n.Client)
+                                                .Where(c => c.Client.Clinic.Id == idClinic)
+                                                .OrderBy(n => n.Client.Name)
+                                                .Select(c => new SelectListItem
+                                                {
+                                                    Text = $"{c.Client.Name}",
+                                                    Value = $"{c.Client.Id}"
+                                                }).ToList();
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[All Clients...]",
+                Value = "0"
+            });
+
+            return list;
+        }
+
+        public IEnumerable<SelectListItem> GetComboClientsByFacilitator(FacilitatorEntity facilitator, int idClinic = 0)
+        {
+
+            List<SelectListItem> list = _context.Clients
+                                                
+                                                .Where(c => c.Clinic.Id == idClinic
+                                                        && (c.IndividualTherapyFacilitator == facilitator
+                                                         || c.IdFacilitatorGroup == facilitator.Id
+                                                         || c.IdFacilitatorPSR == facilitator.Id))
+                                                .OrderBy(n => n.Name)
+                                                .Select(c => new SelectListItem
+                                                {
+                                                    Text = $"{c.Name}",
+                                                    Value = $"{c.Id}"
+                                                }).ToList();
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[All Clients...]",
+                Value = "0"
+            });
+
+            return list;
+        }
+
+        public IEnumerable<SelectListItem> GetComboRolesNotRelationed(string name = "")
+        {
+            List<SelectListItem> list = new List<SelectListItem>
+                                { new SelectListItem { Text = UserType.Documents_Assistant.ToString(), Value = "1"},
+                                  new SelectListItem { Text = UserType.Facilitator.ToString(), Value = "2"},
+                                  new SelectListItem { Text = UserType.Supervisor.ToString(), Value = "3"},
+                                  new SelectListItem { Text = UserType.CaseManager.ToString(), Value = "4"},
+                                  new SelectListItem { Text = UserType.TCMSupervisor.ToString(), Value = "5"},
+                                  new SelectListItem { Text = UserType.Manager.ToString(), Value = "6"},
+                                  new SelectListItem { Text = UserType.Frontdesk.ToString(), Value = "8"},
+                                  new SelectListItem { Text = UserType.Biller.ToString(), Value = "9"}
+            };
+
+            List<CourseEntity> courses = _context.Courses.Where(n => n.Name == name).ToList();
+
+            SelectListItem value = new SelectListItem();
+
+            foreach (var item in courses)
+            {
+                value  = list.FirstOrDefault(n => n.Text == item.Role.ToString());
+                list.Remove(value);
+            }
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Select role...]",
+                Value = "0"
+            });
 
             return list;
         }

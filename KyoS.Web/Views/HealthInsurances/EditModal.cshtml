@@ -39,11 +39,73 @@
                     <span asp-validation-for="DurationTime" class="text-danger"></span>
                 </div>
             </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label asp-for="CPTcode_PSR" class="control-label">CPT Code PSR</label>
+                    <input asp-for="CPTcode_PSR" class="form-control" />
+                    <span asp-validation-for="CPTcode_PSR" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label asp-for="CPTcode_Ind" class="control-label">CPT Code Ind.</label>
+                    <input asp-for="CPTcode_Ind" class="form-control" />
+                    <span asp-validation-for="CPTcode_Ind" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label asp-for="CPTcode_Group" class="control-label">CPT Code Group</label>
+                    <input asp-for="CPTcode_Group" class="form-control" />
+                    <span asp-validation-for="CPTcode_Group" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label asp-for="CPTcode_BIO" class="control-label">CPT Code BIO</label>
+                    <input asp-for="CPTcode_BIO" class="form-control" />
+                    <span asp-validation-for="CPTcode_BIO" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label asp-for="CPTcode_MTP" class="control-label">CPT Code MTP</label>
+                    <input asp-for="CPTcode_MTP" class="form-control" />
+                    <span asp-validation-for="CPTcode_MTP" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label asp-for="CPTcode_MTPR" class="control-label">CPT Code MTPR</label>
+                    <input asp-for="CPTcode_MTPR" class="form-control" />
+                    <span asp-validation-for="CPTcode_MTPR" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label asp-for="CPTcode_FARS_MH" class="control-label">CPT Code FARS</label>
+                    <input asp-for="CPTcode_FARS_MH" class="form-control" />
+                    <span asp-validation-for="CPTcode_FARS_MH" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label asp-for="CPTcode_TCM" class="control-label">CPT Code MH</label>
+                    <input asp-for="CPTcode_TCM" class="form-control" />
+                    <span asp-validation-for="CPTcode_TCM" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <input type="checkbox" asp-for="NeedAuthorization" /> Need Authorization
+                </div>
+            </div>
             <div class="col-md-12">
                 <div class="form-group">
                     <input type="checkbox" asp-for="Active" /> Active
                 </div>
             </div>
+           
             <div class="col-md-12">
                 <div form-group">
                     <hr />
@@ -52,7 +114,7 @@
             <div>
                 <div class="col-md-offset-9 form-group">
                     <input type="submit" value="Save" class="btn btn-primary" />
-                    <a asp-action="Index" class="btn btn-success">Back</a>
+                    <button type="button" class="btn btn-success" data-dismiss="modal">Back</button>
                 </div>
             </div>
         </form>

@@ -42,6 +42,8 @@
             <input type="hidden" asp-for="LastModifiedBy" />
             <input type="hidden" asp-for="LastModifiedOn" />
             <input type="hidden" asp-for="TCMClient.CaseNumber" />
+            <input type="hidden" asp-for="TCMClient.Client.FirstName" />
+            <input type="hidden" asp-for="TCMClient.Client.LastName" />
             <partial name="_TCMFarsForms" />
             <div class="form-group col-md-12">
                 <input type="submit" value="Create" class="btn btn-primary" />

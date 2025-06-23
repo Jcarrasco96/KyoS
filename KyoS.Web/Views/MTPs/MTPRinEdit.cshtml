@@ -92,7 +92,7 @@
                                                         <th class="col-md-1" style="text-align:center;">Status</th>
                                                         <th class="col-md-2" style="text-align:center"></th>
                                                     </tr>
-                                                    @foreach (var element in item.MtpReviewList)
+                                                    @foreach (var element in item.MtpReviewList.Where(n => n.Status == KyoS.Common.Enums.AdendumStatus.Edition))
                                                     {
                                                         <tr>
                                                             <td align="center">@Html.DisplayFor(modelItem => element.DataOfService)</td>
@@ -150,7 +150,7 @@
                                                                 }
                                                                 else
                                                                 {
-                                                                    @if (@element.Status != KyoS.Common.Enums.AdendumStatus.Approved && (@element.CreatedBy == User.Identity.Name || element.IndFacilitator.LinkedUser == User.Identity.Name))
+                                                                    @if (@element.Status != KyoS.Common.Enums.AdendumStatus.Approved && (@element.CreatedBy == User.Identity.Name || (element.IndFacilitator != null && element.IndFacilitator.LinkedUser == User.Identity.Name)))
                                                                     {
                                                                         <a asp-action="EditMTPReview" asp-route-id="@element.Id" asp-route-origin="2"  class="btn btn-warning" title="Edit MTP Review"><i class="glyphicon glyphicon-pencil"></i></a>
                                                                         @if (@element.Status == KyoS.Common.Enums.AdendumStatus.Pending)
@@ -239,15 +239,15 @@
                                             }
                                         </td>
                                         <td align="center">
-                                            @if (User.IsInRole("Facilitator") || User.IsInRole("Supervisor"))
+                                            @*@if (User.IsInRole("Facilitator") || User.IsInRole("Supervisor"))
                                             {
                                                 <a asp-action="CreateMTPReview" asp-route-id="@item.Id" asp-route-origin="2" class="btn btn-success" title="Create Review"><i class="glyphicon glyphicon-plus"></i></a>
                                             }
                                             else
                                             {
                                                 <a class="btn btn-success disabled" title="Create MTP Review"><i class="glyphicon glyphicon-plus"></i></a>
-                                            }
-
+                                            }*@
+                                            <a class="btn btn-success disabled" title="Create MTP Review"><i class="glyphicon glyphicon-plus"></i></a>
                                         </td>
                                         <td align="center">
                                             @if (!User.IsInRole("Supervisor"))
@@ -330,15 +330,15 @@
                                             }
                                         </td>
                                         <td align="center">
-                                            @if (User.IsInRole("Facilitator") || User.IsInRole("Supervisor"))
+                                            @*@if (User.IsInRole("Facilitator") || User.IsInRole("Supervisor"))
                                             {
                                                 <a asp-action="CreateMTPReview" asp-route-id="@item.Id" asp-route-origin="2" class="btn btn-success" title="Create Review"><i class="glyphicon glyphicon-plus"></i></a>
                                             }
                                             else
                                             {
                                                 <a class="btn btn-success disabled" title="Create MTP Review"><i class="glyphicon glyphicon-plus"></i></a>
-                                            }
-
+                                            }*@
+                                            <a class="btn btn-success disabled" title="Create MTP Review"><i class="glyphicon glyphicon-plus"></i></a>
                                         </td>
                                         <td align="center">
                                             @if (!User.IsInRole("Supervisor"))
@@ -384,17 +384,44 @@
                                                     <tr>
                                                         <th class="col-md-1" style="text-align:center">Date</th>
                                                         <th class="col-md-2" style="text-align:center">Date Review On</th>
-                                                        <th class="col-md-3" style="text-align:center">Admitted by</th>
-                                                        <th class="col-md-2" style="text-align:center">Frecuency</th>
+                                                        <th class="col-md-4" style="text-align:center">Admitted by</th>
+                                                        <th class="col-md-2" style="text-align:center">Month</th>
+                                                        <th class="col-md-1" style="text-align:center;">Status</th>
                                                         <th class="col-md-2" style="text-align:center"></th>
                                                     </tr>
-                                                    @foreach (var element in item.MtpReviewList)
+                                                    @foreach (var element in item.MtpReviewList.Where(n => n.Status == KyoS.Common.Enums.AdendumStatus.Edition))
                                                     {
                                                         <tr>
                                                             <td align="center">@Html.DisplayFor(modelItem => element.DataOfService)</td>
                                                             <td align="center">@Html.DisplayFor(modelItem => element.ReviewedOn)</td>
                                                             <td align="center">@Html.DisplayFor(modelItem => element.Therapist)</td>
-                                                            <td align="center">@Html.DisplayFor(modelItem => element.Frecuency)</td>
+                                                            <td align="center">@Html.DisplayFor(modelItem => element.MonthOfTreatment)</td>
+                                                            <td align="center">
+                                                                @if (element.Status == KyoS.Common.Enums.AdendumStatus.Edition)
+                                                                {
+                                                                    <span class="label label-default">
+                                                                        Edition
+                                                                    </span>
+                                                                }
+                                                                else
+                                                                {
+                                                                    if (element.Status == KyoS.Common.Enums.AdendumStatus.Pending)
+                                                                    {
+                                                                        <span class="label label-info">
+                                                                            Pending
+                                                                        </span>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        if (element.Status == KyoS.Common.Enums.AdendumStatus.Approved)
+                                                                        {
+                                                                            <span class="label label-success">
+                                                                                Approved
+                                                                            </span>
+                                                                        }
+                                                                    }
+                                                                }
+                                                            </td>
                                                             <td align="center">
                                                                 @if (User.IsInRole("Supervisor"))
                                                                 {
@@ -423,7 +450,7 @@
                                                                 {
                                                                     @if (@element.Status == KyoS.Common.Enums.AdendumStatus.Edition && @element.CreatedBy == User.Identity.Name)
                                                                     {
-                                                                        <a asp-action="EditMTPReview" asp-route-id="@element.Id" class="btn btn-warning" title="Edit MTP Review"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                                        <a asp-action="EditMTPReview" asp-route-id="@element.Id" asp-route-origin="2" class="btn btn-warning" title="Edit MTP Review"><i class="glyphicon glyphicon-pencil"></i></a>
                                                                         <a asp-action="FinishEditingMtpReview" asp-route-id="@element.Id" asp-route-origin="2" class="btn btn-success" title="Finish edition of MTP Review"><i class="glyphicon glyphicon-ok"></i></a>
                                                                         <a class="btn btn-success disabled" title="Print MTP Review"><i class="glyphicon glyphicon-print"></i></a>
                                                                     }

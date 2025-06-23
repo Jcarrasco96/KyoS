@@ -23,5 +23,19 @@ namespace KyoS.Web.Data.Entities
         public string CodeDomain { get; set; }
 
         public TCMServicePlanReviewEntity TcmServicePlanReview { get; set; }
+
+        public string Name { get; set; }
+        public string NeedsIdentified { get; set; }
+        public string LongTerm { get; set; }
+
+        [Display(Name = "Date Identified")]
+        [DataType(DataType.Date)]
+        [Required(ErrorMessage = "The field {0} is mandatory.")]
+        public DateTime DateIdentified { get; set; }
+
+        [Display(Name = "Date Accomplished")]
+        [DataType(DataType.Date)]
+        public DateTime DateAccomplished { get; set; }
+
     }
 }

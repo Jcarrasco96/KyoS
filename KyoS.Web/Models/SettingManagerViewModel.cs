@@ -1,4 +1,5 @@
 ﻿using KyoS.Web.Data.Entities;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
@@ -74,6 +75,9 @@ namespace KyoS.Web.Models
         public bool IndNoteForAppointment { get; set; }
         public bool DischargeJoinCommission { get; set; }
 
+        [Display(Name = "Signature Clinical Director")]
+        public IFormFile SignatureFile { get; set; }
+
         //TCM
         [DataType(DataType.Time)]
         public DateTime TCMInitialTime { get; set; }
@@ -96,5 +100,21 @@ namespace KyoS.Web.Models
 
         public IEnumerable<SelectListItem> FiltroPayStubs { get; set; }
         public bool MTPmultipleSignatures { get; set; }
+
+        [DataType(DataType.Date)]
+        public DateTime TCMLockCreateNote { get; set; }
+
+        [Display(Name = "Dashboard Principal")]
+        public int IdDashboard { get; set; }
+
+        public IEnumerable<SelectListItem> Dashboards { get; set; }
+        public bool LockTCMNoteForOneMonthIdle { get; set; }
+        public bool LockTCMNoteForDx { get; set; }
+        public bool LockTCMNoteForAuth { get; set; }
+
+        public decimal PricePSR { get; set; }
+        public decimal PriceGroup { get; set; }
+        public decimal PriceInd { get; set; }
+        public decimal PriceTCM { get; set; }
     }
 }

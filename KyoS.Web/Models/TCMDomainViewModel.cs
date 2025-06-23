@@ -20,5 +20,7 @@ namespace KyoS.Web.Models
 
         public int Id_SubService { get; set; }
         public IEnumerable<SelectListItem> SubServices { get; set; }
+
+        public string ChangeUpdate { get; set; }
     }
 }

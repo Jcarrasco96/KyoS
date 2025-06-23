@@ -1,4 +1,4 @@
-﻿@model IEnumerable<KyoS.Web.Data.Entities.ClientEntity>
+﻿@model IEnumerable<KyoS.Web.Models.AuthorizationViewModel>
 @{
     ViewData["Title"] = "Authorization";
 }
@@ -24,7 +24,7 @@
                     <i class="icon-remove"></i>
                 </button>
                 <strong class="red">
-                    Error. It is not posible delete the client
+                    Error. It is not posible delete the TCM client
                 </strong>
             </div>
         }
@@ -38,167 +38,78 @@
                 <table class="table table-hover table-responsive table-striped" id="MyTable">
                     <thead>
                         <tr>
-                            <th class="col-md-4">
-                                @Html.DisplayNameFor(model => model.Name)
-                            </th>
-                            <th class="col-md-1" style="text-align:center;">
-                                Admission
+                            <th class="col-md-3">
+                                Client Name
                             </th>
                             <th class="col-md-3" style="text-align:left;">
                                 Health Insurance
                             </th>
                             <th class="col-md-1" style="text-align:center;">
-                                Therapy
+                                Open
                             </th>
                             <th class="col-md-1" style="text-align:center;">
                                 Status
                             </th>
-                            <th class="col-md-2" style="text-align:center;">
-                                Expired days
+                            <th class="col-md-1" style="text-align:center;">
+                                Service
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Effective
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Expired
                             </th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (var item in Model)
                         {
-                            @if (item.Status == KyoS.Common.Enums.StatusType.Close)
-                            {
-                                <tr style="color: darkgrey;">
-                                    <td>
-                                        @if (item.Gender == KyoS.Common.Enums.GenderType.Female)
-                                        {
-                                            <i class="glyphicon glyphicon-user btn-danger"></i>
-                                        }
-                                        @if (item.Gender == KyoS.Common.Enums.GenderType.Male)
-                                        {
-                                            <i class="glyphicon glyphicon-user btn-primary"></i>
-                                        }
-                                        &nbsp;
-                                        @Html.DisplayFor(modelItem => item.Name)
-                                        |
-                                        @Html.DisplayFor(modelItem => item.Code)
-                                    </td>
-                                    <td align="center">
-                                        @Html.DisplayFor(modelItem => item.AdmisionDate)
-                                    </td>
-                                    <td align="left">
-                                        @if (item.Clients_HealthInsurances.Count() > 0)
-                                        {
-                                            @if (item.Clients_HealthInsurances.Where(n => n.Active == true).Count() > 0)
-                                            {
-                                                @Html.DisplayFor(modelItem => item.Clients_HealthInsurances.FirstOrDefault(n => n.Active == true).HealthInsurance.Name)
-                                            }
-                                        }
-                                    </td>
-                                    <td align="center">
-                                        @Html.DisplayFor(modelItem => item.Service)
-                                    </td>
-                                    <td align="center">
-                                        @if (item.Status == KyoS.Common.Enums.StatusType.Open)
-                                        {
-                                            <span class="label label-success">
-                                                Open
-                                            </span>
-                                        }
-                                        @if (item.Status == KyoS.Common.Enums.StatusType.Close)
-                                        {
-                                            <span class="label label-default">
-                                                Close
-                                            </span>
-                                        }
-                                    </td>
-                                    <td align="center">
-                                        @if (item.Clients_HealthInsurances.Count() > 0)
-                                        {
-                                            @if (item.Clients_HealthInsurances.Where(n => n.Active == true).Count() > 0)
-                                            {
-                                                @if (((DateTime.Now - item.Clients_HealthInsurances.FirstOrDefault(n => n.Active == true).ApprovedDate.Date.AddMonths(Convert.ToInt32(item.Clients_HealthInsurances.FirstOrDefault(n => n.Active == true).DurationTime))).Days) < 0)
-                                                {
-                                                    <span class="label label-warning">
-                                                        @((DateTime.Now - item.Clients_HealthInsurances.FirstOrDefault(n => n.Active == true).ApprovedDate.Date.AddMonths(Convert.ToInt32(item.Clients_HealthInsurances.FirstOrDefault(n => n.Active == true).DurationTime))).Days)
-                                                    </span>
-                                                }
-                                                else
-                                                {
-                                                    <span class="label label-danger">
-                                                        @((DateTime.Now - item.Clients_HealthInsurances.FirstOrDefault(n => n.Active == true).ApprovedDate.Date.AddMonths(Convert.ToInt32(item.Clients_HealthInsurances.FirstOrDefault(n => n.Active == true).DurationTime))).Days)
-                                                    </span>
-                                                }
+                            <tr>
+                                <td>
+                                    @item.TCMClientName
+                                </td>
+                                <td>
+                                    @item.HealthInsurance
+                                </td>
+                                <td align="center">
+                                    @item.DateOpen.Date.ToShortDateString()
+                                </td>
+                                <td align="center">
+                                    @if (@item.Status == KyoS.Common.Enums.StatusType.Open)
+                                    {
+                                        <span class="label label-success">
+                                            Open
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="label label-default">
+                                            Close
+                                        </span>
+                                    }
+                                </td>
+                                <td align="center">
+                                    @item.Agency
+                                </td>
+                                <td align="center">
+                                    @item.EffectiveDate.Date.ToShortDateString()
+                                </td>
+                                <td align="center">
+                                    @if (item.Info == 0)
+                                    {
+                                        <span class="label label-danger">
+                                            @item.ExpiratedDate.Date.ToShortDateString()
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="label label-warning">
+                                            @item.ExpiratedDate.Date.ToShortDateString()
+                                        </span>
+                                    }
+                                </td>
 
-                                            }
-                                        }
-                                    </td>
-                                </tr>
-                            }
-                            @if (item.Status == KyoS.Common.Enums.StatusType.Open)
-                            {
-                                <tr>
-                                    <td>
-                                        @if (item.Gender == KyoS.Common.Enums.GenderType.Female)
-                                        {
-                                            <i class="glyphicon glyphicon-user btn-danger"></i>
-                                        }
-                                        @if (item.Gender == KyoS.Common.Enums.GenderType.Male)
-                                        {
-                                            <i class="glyphicon glyphicon-user btn-primary"></i>
-                                        }
-                                        &nbsp;
-                                        @Html.DisplayFor(modelItem => item.Name)
-                                        |
-                                        @Html.DisplayFor(modelItem => item.Code)
-                                    </td>
-                                    <td align="center">
-                                        @Html.DisplayFor(modelItem => item.AdmisionDate)
-                                    </td>
-                                    <td align="left">
-                                        @if (item.Clients_HealthInsurances.Count() > 0)
-                                        {
-                                            @if (item.Clients_HealthInsurances.Where(n => n.Active == true).Count() > 0)
-                                            {
-                                                @Html.DisplayFor(modelItem => item.Clients_HealthInsurances.FirstOrDefault(n => n.Active == true).HealthInsurance.Name)
-                                            }
-                                        }
-                                    </td>
-                                    <td align="center">
-                                        @Html.DisplayFor(modelItem => item.Service)
-                                    </td>
-                                    <td align="center">
-                                        @if (item.Status == KyoS.Common.Enums.StatusType.Open)
-                                        {
-                                            <span class="label label-success">
-                                                Open
-                                            </span>
-                                        }
-                                        @if (item.Status == KyoS.Common.Enums.StatusType.Close)
-                                        {
-                                            <span class="label label-default">
-                                                Close
-                                            </span>
-                                        }
-                                    </td>
-                                    <td align="center">
-                                        @if (item.Clients_HealthInsurances.Count() > 0)
-                                        {
-                                            @if (item.Clients_HealthInsurances.Where(n => n.Active == true).Count() > 0)
-                                            {
-                                                @if (((DateTime.Now - item.Clients_HealthInsurances.FirstOrDefault(n => n.Active == true).ApprovedDate.Date.AddMonths(Convert.ToInt32(item.Clients_HealthInsurances.FirstOrDefault(n => n.Active == true).DurationTime))).Days) < 0)
-                                                {
-                                                    <span class="label label-warning">
-                                                        @((DateTime.Now - item.Clients_HealthInsurances.FirstOrDefault(n => n.Active == true).ApprovedDate.Date.AddMonths(Convert.ToInt32(item.Clients_HealthInsurances.FirstOrDefault(n => n.Active == true).DurationTime))).Days)
-                                                    </span>
-                                                }
-                                                else
-                                                {
-                                                    <span class="label label-danger">
-                                                        @((DateTime.Now - item.Clients_HealthInsurances.FirstOrDefault(n => n.Active == true).ApprovedDate.Date.AddMonths(Convert.ToInt32(item.Clients_HealthInsurances.FirstOrDefault(n => n.Active == true).DurationTime))).Days)
-                                                    </span>
-                                                }
-
-                                            }
-                                        }
-                                    </td>
-                                </tr>
-                            }
+                            </tr>
                         }
                     </tbody>
                 </table>
@@ -211,7 +122,9 @@
 <partial name="_DeleteDialog" />
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
     <script src="~/js/jquery.dataTables.min.js"></script>
 
     <script type="text/javascript">
@@ -219,7 +132,7 @@
             $('#MyTable').DataTable({
                 "order": [[0, "asc"]],
                 "pageLength": 100
-            });            
+            });
         });
 
         function ConfirmDelete(e) {
@@ -240,6 +153,7 @@
         }
     </script>
 }
+
 
 
 

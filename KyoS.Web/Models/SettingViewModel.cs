@@ -18,5 +18,10 @@ namespace KyoS.Web.Models
         public int IdFiltroPayStub { get; set; }
 
         public IEnumerable<SelectListItem> FiltroPayStubs { get; set; }
+
+        [Display(Name = "Dashboard Principal")]
+        public int IdDashboard { get; set; }
+
+        public IEnumerable<SelectListItem> Dashboards { get; set; }
     }
 }

@@ -1,0 +1,77 @@
+﻿@model KyoS.Web.Models.Workday_Activity_FacilitatorSkillViewModel
+
+@{
+    Layout = null;
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="EditSkill" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="am" />
+            <input type="hidden" asp-for="pm" />
+            <div class="form-group">
+                <div class="col-md-12">
+                    <strong>Update skill sets addressed</strong>
+                </div>
+            </div>     
+            <div class="form-group">
+                <div class="col-md-12">
+                    <br />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-6">
+                    <input type="checkbox" asp-for="coping" /> Coping Skills
+                </div>
+                <div class="col-md-6">
+                    <input type="checkbox" asp-for="stress" /> Stress Management
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-6">
+                    <input type="checkbox" asp-for="healthy" /> Healthy Living
+                </div>
+                <div class="col-md-6">
+                    <input type="checkbox" asp-for="relaxation" /> Relaxation Training
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-6">
+                    <input type="checkbox" asp-for="disease" /> Disease Management
+                </div>
+                <div class="col-md-6">
+                    <input type="checkbox" asp-for="community" /> Community Resources
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-6">
+                    <input type="checkbox" asp-for="activities" /> Activities of Daily Living
+                </div>
+                <div class="col-md-6">
+                    <input type="checkbox" asp-for="social" /> Social Skills
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-6">
+                    <input type="checkbox" asp-for="life" /> Life Skills
+                </div>
+                <div class="container-fluid">
+                    &nbsp;
+                </div>
+           </div>
+           <div class="form-group">
+                 <hr />
+            </div>
+            <div>
+                <div class="col-md-offset-9">
+                    <input type="submit" value="Update" class="btn btn-primary" />
+                    <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+

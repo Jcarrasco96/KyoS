@@ -10,8 +10,7 @@ namespace KyoS.Web.Data.Entities
     {
         public int Id { get; set; }
 
-        [MaxLength(100, ErrorMessage = "The {0} field can not have more than {1} characters.")]
-        [Required(ErrorMessage = "The field {0} is mandatory.")]
+       
         public string Name { get; set; }
 
         [Required(ErrorMessage = "The field {0} is mandatory.")]
@@ -220,7 +219,17 @@ namespace KyoS.Web.Data.Entities
         public ReferralFormEntity ReferralForm { get; set; }
         public IntakeForeignLanguageEntity IntakeForeignLanguage { get; set; }
         public IntakeClientIdDocumentVerificationEntity IntakeClientIdDocumentVerification { get; set; }
-        public SafetyPlanEntity SafetyPlan { get; set; }
+        public List<SafetyPlanEntity> SafetyPlanList { get; set; }
         public List<IncidentReportEntity> IncidentReport { get; set; }
+        public DocumentsAssistantEntity DocumentsAssistant { get; set; }
+        public IntakeNoHarmEntity IntakeNoHarm { get; set; }
+
+        public List<NotePSYEntity> NotePSY { get; set; }
+        [MaxLength(100, ErrorMessage = "The {0} field can not have more than {1} characters.")]
+        [Required(ErrorMessage = "The field {0} is mandatory.")]
+        public string FirstName { get; set; }
+        [MaxLength(100, ErrorMessage = "The {0} field can not have more than {1} characters.")]
+        [Required(ErrorMessage = "The field {0} is mandatory.")]
+        public string LastName { get; set; }
     }
 }

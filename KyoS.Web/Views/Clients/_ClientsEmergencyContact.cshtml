@@ -14,6 +14,10 @@
         <select asp-for="IdRelationshipEC" asp-items="Model.RelationshipsEC" class="form-control" id="cbREC"></select>
         <span asp-validation-for="IdRelationshipEC" class="text-danger"></span>
     </div>
+    <div class="form-group col-md-1">
+        </br>
+        <a onclick="showInPopup('@Url.Action("DetailsEC", "Clients", new {id = Model.IdEmergencyContact}, Context.Request.Scheme)','Details Emergency Contact')" class="btn btn-info" title="Detail Emergency Contact"><i class="glyphicon glyphicon-th-list"></i></a>
+    </div>
 </div>
 <div class="col-md-12">
     <hr />
@@ -79,6 +83,7 @@
         <span asp-validation-for="EmailEmergencyContact" class="text-danger"></span>
     </div>
 </div>
+
 
 <script type="text/javascript">
     chkNewEC.addEventListener('change', (e) => {

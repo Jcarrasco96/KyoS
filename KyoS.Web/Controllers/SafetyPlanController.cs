@@ -56,12 +56,12 @@ namespace KyoS.Web.Controllers
                 if (User.IsInRole("Manager") || User.IsInRole("Supervisor") || User.IsInRole("Frontdesk"))
                     return View(await _context.Clients
 
-                                              .Include(f => f.SafetyPlan)
+                                              .Include(f => f.SafetyPlanList)
                                               .Include(f => f.Clinic)
                                               .ThenInclude(f => f.Setting)
 
                                               .Where(n => n.Clinic.Id == user_logged.Clinic.Id
-                                                       && n.SafetyPlan != null)
+                                                       && n.SafetyPlanList.Count() > 0)
                                               .OrderBy(f => f.Name)
                                               .ToListAsync());
 
@@ -70,14 +70,14 @@ namespace KyoS.Web.Controllers
                     FacilitatorEntity facilitator = _context.Facilitators.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
 
                     List<ClientEntity> clientList = await _context.Clients
-                                                                  .Include(f => f.SafetyPlan)
+                                                                  .Include(f => f.SafetyPlanList)
                                                                   .Include(f => f.Clinic)
                                                                   .ThenInclude(f => f.Setting)
-                                                                  .Where(n => (n.SafetyPlan.Facilitator.Id == facilitator.Id
+                                                                  .Where(n => (n.SafetyPlanList.Where(m => m.Facilitator.Id == facilitator.Id).Count() > 0
                                                                            || n.IdFacilitatorGroup == facilitator.Id
                                                                            || n.IdFacilitatorPSR == facilitator.Id
                                                                            || n.IndividualTherapyFacilitator.Id == facilitator.Id)
-                                                                           && n.SafetyPlan != null)
+                                                                           && n.SafetyPlanList.Count() > 0)
                                                                   .OrderBy(f => f.Name)
                                                                   .ToListAsync();
 
@@ -89,11 +89,11 @@ namespace KyoS.Web.Controllers
                                                                           .FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
 
                     List<ClientEntity> clientList = await _context.Clients
-                                                                  .Include(f => f.SafetyPlan)
+                                                                  .Include(f => f.SafetyPlanList)
                                                                   .Include(f => f.Clinic)
                                                                   .ThenInclude(f => f.Setting)
                                                                   .Where(n => n.Bio.DocumentsAssistant.Id == documentAssisstant.Id
-                                                                           && n.SafetyPlan != null)
+                                                                           && n.SafetyPlanList.Count() > 0)
                                                                   .OrderBy(f => f.Name)
                                                                   .ToListAsync();
 
@@ -104,7 +104,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Facilitator, Documents_Assistant")]
-        public IActionResult Create(int id = 0)
+        public IActionResult Create(int id = 0, int origin = 0)
         {
 
             UserEntity user_logged = _context.Users
@@ -144,7 +144,7 @@ namespace KyoS.Web.Controllers
                         DateDocument = DateTime.Today
 
                     };
-                   
+                    ViewData["origin"] = origin;
                     return View(model);
                 }
             }
@@ -177,19 +177,19 @@ namespace KyoS.Web.Controllers
                         IdDocumentAssisstant = documentsAssistant.Id
 
                     };
-
+                    ViewData["origin"] = origin;
                     return View(model);
                 }
             }
-
+            ViewData["origin"] = origin;
             return View();
 
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Facilitator, Documents_Assistant")]
-        public async Task<IActionResult> Create(SafetyPlanViewModel safetyViewModel)
+        [Authorize(Roles = "Facilitator, Supervisor, Documents_Assistant")]
+        public async Task<IActionResult> Create(SafetyPlanViewModel safetyViewModel, int origin = 0)
         {
             UserEntity user_logged = _context.Users
                                              .Include(u => u.Clinic)
@@ -201,14 +201,22 @@ namespace KyoS.Web.Controllers
                 if (safetyPlanEntity == null)
                 {
                     safetyPlanEntity = await _converterHelper.ToSafetyPlanEntity(safetyViewModel, true, user_logged.UserName);
-                    safetyPlanEntity.Client = null;
+                   // safetyPlanEntity.Client = null;
                     _context.SafetyPlan.Add(safetyPlanEntity);
 
                     try
                     {
                         await _context.SaveChangesAsync();
 
-                        return RedirectToAction("ClientswithoutSafetyPlan");
+                        if (origin == 0)
+                        {
+                            return RedirectToAction("ClientswithoutSafetyPlan");
+                        }
+                        else
+                        {
+                            return RedirectToAction("Index");
+                        }
+                        
                     }
                     catch (System.Exception ex)
                     {
@@ -246,7 +254,7 @@ namespace KyoS.Web.Controllers
                     WaysToKeepmyselfSafe = safetyViewModel.WaysToKeepmyselfSafe
 
                 };
-
+                ViewData["origin"] = origin;
                 return View(model);
             }
 
@@ -255,7 +263,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Facilitator, Supervisor, Documents_Assistant")]
-        public IActionResult Edit(int id = 0)
+        public IActionResult Edit(int id = 0, int origin = 0)
         {
             if (id == 0)
             {
@@ -273,15 +281,16 @@ namespace KyoS.Web.Controllers
                                                   .Include(n => n.Supervisor)
                                                   .FirstOrDefault(n => n.Id == id);
 
-            SafetyPlanViewModel model = _converterHelper.ToSafetyPlanViewModel(safetyPlan); 
-           
+            SafetyPlanViewModel model = _converterHelper.ToSafetyPlanViewModel(safetyPlan);
+
+            ViewData["origin"] = origin;
             return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Facilitator, Supervisor, Documents_Assistant")]
-        public async Task<IActionResult> Edit(SafetyPlanViewModel safetyViewModel)
+        [Authorize(Roles = "Facilitator, , Documents_Assistant")]
+        public async Task<IActionResult> Edit(SafetyPlanViewModel safetyViewModel, int origin = 0)
         {
             UserEntity user_logged = _context.Users
                                              .Include(u => u.Clinic)
@@ -296,8 +305,14 @@ namespace KyoS.Web.Controllers
                 try
                 {
                     await _context.SaveChangesAsync();
-
-                    return RedirectToAction("EditionSafetyPlan");
+                    if (origin == 0)
+                    {
+                        return RedirectToAction("EditionSafetyPlan");
+                    }
+                    if (origin == 1)
+                    {
+                        return RedirectToAction("Index");
+                    }
                 }
                 catch (System.Exception ex)
                 {
@@ -321,7 +336,7 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Manager, Supervisor, Facilitator, Frontdesk, Documents_Assistant")]
-        public async Task<IActionResult> ClientswithoutSafetyPlan(int idError = 0)
+        public async Task<IActionResult> ClientswithoutSafetyPlan(int idError = 0, int all = 0)
         {
             UserEntity user_logged = await _context.Users
 
@@ -339,38 +354,142 @@ namespace KyoS.Web.Controllers
 
             if (User.IsInRole("Manager") || User.IsInRole("Supervisor") || User.IsInRole("Frontdesk"))
             {
-                clientlist = await _context.Clients
-                                           .Include(n => n.IndividualTherapyFacilitator)
-                                           .Where(n => n.SafetyPlan == null)
-                                           .ToListAsync();
+                if (all == 0)
+                {
+                    clientlist = await _context.Clients
+                                               .Include(n => n.IndividualTherapyFacilitator)
+                                               .Where(n => n.SafetyPlanList.Count() == 0 
+                                                        && n.OnlyTCM == false
+                                                        && n.Clinic.Id == user_logged.Clinic.Id)
+                                               .AsSplitQuery()
+                                               .ToListAsync();
 
-                return View(clientlist);
+                    return View(clientlist);
+                }
+                else
+                {
+                    if (all == 1)
+                    {
+                        clientlist = await _context.Clients
+                                                   .Include(n => n.IndividualTherapyFacilitator)
+                                                   .Where(n => n.SafetyPlanList.Count() == 0
+                                                            && n.Status == StatusType.Open
+                                                            && n.OnlyTCM == false
+                                                            && n.Clinic.Id == user_logged.Clinic.Id)
+                                                   .AsSplitQuery()
+                                                   .ToListAsync();
+
+                        return View(clientlist);
+                    }
+                    else
+                    {
+                        clientlist = await _context.Clients
+                                                 .Include(n => n.IndividualTherapyFacilitator)
+                                                 .Where(n => n.SafetyPlanList.Count() == 0
+                                                          && n.Status == StatusType.Close
+                                                          && n.OnlyTCM == false
+                                                          && n.Clinic.Id == user_logged.Clinic.Id)
+                                                 .AsSplitQuery()
+                                                 .ToListAsync();
+
+                        return View(clientlist);
+                    }
+                }
+               
             }
             if (User.IsInRole("Facilitator"))
             {
                 FacilitatorEntity facilitator = _context.Facilitators
                                                         .FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
-                clientlist = await _context.Clients
+                if (all == 0)
+                {
+                    clientlist = await _context.Clients
                                            .Include(n => n.IndividualTherapyFacilitator)
-                                           .Where(n => n.SafetyPlan == null
-                                           && n.OnlyTCM == false
-                                           && n.IndividualTherapyFacilitator.Id == facilitator.Id)
+                                           .Where(n => n.SafetyPlanList.Count() == 0
+                                                    && n.OnlyTCM == false
+                                                    && n.IndividualTherapyFacilitator.Id == facilitator.Id)
+                                           .AsSplitQuery()
                                            .ToListAsync();
 
-                return View(clientlist);
+                    return View(clientlist);
+                }
+                else
+                {
+                    if (all == 1)
+                    {
+                        clientlist = await _context.Clients
+                                               .Include(n => n.IndividualTherapyFacilitator)
+                                               .Where(n => n.SafetyPlanList.Count() == 0
+                                                        && n.OnlyTCM == false
+                                                        && n.IndividualTherapyFacilitator.Id == facilitator.Id
+                                                        && n.Status == StatusType.Open)
+                                               .AsSplitQuery()
+                                               .ToListAsync();
+
+                        return View(clientlist);
+                    }
+                    else
+                    {
+                        clientlist = await _context.Clients
+                                                   .Include(n => n.IndividualTherapyFacilitator)
+                                                   .Where(n => n.SafetyPlanList.Count() == 0
+                                                            && n.OnlyTCM == false
+                                                            && n.IndividualTherapyFacilitator.Id == facilitator.Id
+                                                            && n.Status == StatusType.Close)
+                                                   .AsSplitQuery()
+                                                   .ToListAsync();
+
+                        return View(clientlist);
+                    }
+                }
+                
             }
             if (User.IsInRole("Documents_Assistant"))
             {
                 DocumentsAssistantEntity documentAssisstant = _context.DocumentsAssistant
                                                                       .FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
-                clientlist = await _context.Clients
-                                           .Include(n => n.IndividualTherapyFacilitator)
-                                           .Where(n => n.SafetyPlan == null
-                                           && n.OnlyTCM == false
-                                           && n.Bio.DocumentsAssistant.Id == documentAssisstant.Id)
-                                           .ToListAsync();
+                if (all == 0)
+                {
+                    clientlist = await _context.Clients
+                                               .Include(n => n.IndividualTherapyFacilitator)
+                                               .Where(n => n.SafetyPlanList.Count() == 0
+                                                        && n.OnlyTCM == false
+                                                        && n.Bio.DocumentsAssistant.Id == documentAssisstant.Id)
+                                               .AsSplitQuery()
+                                               .ToListAsync();
 
-                return View(clientlist);
+                    return View(clientlist);
+                }
+                else
+                {
+                    if (all == 1)
+                    {
+                        clientlist = await _context.Clients
+                                                   .Include(n => n.IndividualTherapyFacilitator)
+                                                   .Where(n => n.SafetyPlanList.Count() == 0
+                                                            && n.OnlyTCM == false
+                                                            && n.Bio.DocumentsAssistant.Id == documentAssisstant.Id
+                                                            && n.Status == StatusType.Open)
+                                                   .AsSplitQuery()
+                                                   .ToListAsync();
+
+                        return View(clientlist);
+                    }
+                    else
+                    {
+                        clientlist = await _context.Clients
+                                                   .Include(n => n.IndividualTherapyFacilitator)
+                                                   .Where(n => n.SafetyPlanList.Count() == 0
+                                                            && n.OnlyTCM == false
+                                                            && n.Bio.DocumentsAssistant.Id == documentAssisstant.Id
+                                                            && n.Status == StatusType.Close)
+                                                   .AsSplitQuery()
+                                                   .ToListAsync();
+
+                        return View(clientlist);
+                    }
+                }
+                
             }
 
             return View(clientlist);
@@ -491,5 +610,120 @@ namespace KyoS.Web.Controllers
             Stream stream = _reportHelper.SafetyPlanReport(entity);
             return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);         
         }
+
+        [Authorize(Roles = "Supervisor, Manager, Facilitator, Documents_Assistant, Frontdesk")]
+        public async Task<IActionResult> PendingSafetyPlan(int idError = 0)
+        {
+            UserEntity user_logged = await _context.Users
+                                                  .Include(u => u.Clinic)
+                                                  .ThenInclude(c => c.Setting)
+                                                  .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+            else
+            {
+                ClinicEntity clinic = await _context.Clinics.FirstOrDefaultAsync(c => c.Id == user_logged.Clinic.Id);
+                if (clinic != null)
+                {
+                    if (User.IsInRole("Manager") || User.IsInRole("Supervisor") || User.IsInRole("Frontdesk"))
+                    {
+                        return View(await _context.SafetyPlan
+                                                  .Include(f => f.Client)
+                                                  .ThenInclude(f => f.Clinic)
+                                                  .Include(f => f.Facilitator)
+                                                  .Include(f => f.Supervisor)
+
+                                                  .Where(f => (f.Client.Clinic.Id == clinic.Id)
+                                                            && f.Status == SafetyPlanStatus.Pending)
+                                                  .ToListAsync());
+                    }
+                    else
+                    {
+                        return View(await _context.SafetyPlan
+                                                  .Include(f => f.Client)
+                                                  .ThenInclude(f => f.Clinic)
+                                                  .Include(f => f.Facilitator)
+                                                  .Include(f => f.Supervisor)
+                                                  .Where(f => (f.Client.Clinic.Id == clinic.Id)
+                                                            && f.Status == SafetyPlanStatus.Pending
+                                                            && f.CreatedBy == user_logged.UserName)
+                                                  .ToListAsync());
+                    }
+
+                }
+            }
+            return RedirectToAction("NotAuthorized", "Account");
+        }
+
+        [Authorize(Roles = "Supervisor")]
+        public IActionResult Approve(int id = 0)
+        {
+            if (id == 0)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(u => u.Setting)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            SafetyPlanEntity safetyPlan = _context.SafetyPlan
+                                                  .Include(n => n.Client)
+                                                  .Include(n => n.Facilitator)
+                                                  .Include(n => n.Supervisor)
+                                                  .FirstOrDefault(n => n.Id == id);
+
+            SafetyPlanViewModel model = _converterHelper.ToSafetyPlanViewModel(safetyPlan);
+
+            
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Supervisor")]
+        public async Task<IActionResult> Approve(SafetyPlanViewModel safetyViewModel)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (ModelState.IsValid)
+            {
+                SafetyPlanEntity safetyPlanEntity = await _converterHelper.ToSafetyPlanEntity(safetyViewModel, false, user_logged.UserName);
+                safetyPlanEntity.Client = null;
+                safetyPlanEntity.Status = SafetyPlanStatus.Approved;
+                _context.SafetyPlan.Update(safetyPlanEntity);
+
+                try
+                {
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction("PendingSafetyPlan");
+                }
+                catch (System.Exception ex)
+                {
+                    ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                }
+            }
+            else
+            {
+                safetyViewModel.Client = _context.Clients
+                                                 .FirstOrDefault(n => n.Id == safetyViewModel.IdClient);
+
+                safetyViewModel.Facilitator = await _context.Facilitators.FirstOrDefaultAsync(n => n.Id == safetyViewModel.IdFacilitator);
+                safetyViewModel.Supervisor = await _context.Supervisors.FirstOrDefaultAsync(n => n.Id == safetyViewModel.IdSupervisor);
+
+
+                return View(safetyViewModel);
+            }
+
+            return RedirectToAction("Approve", "SafetyPlan");
+
+        }
+
     }
 }

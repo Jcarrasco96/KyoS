@@ -1,4 +1,4 @@
-﻿@model KyoS.Web.Models.MedicationViewModel
+﻿@model KyoS.Web.Models.TCMAssessmentMedicationViewModel
 @{
     ViewData["Title"] = "Create Medications";
 }
@@ -17,11 +17,11 @@
                 <i class="icon-home"></i>
                 @if (User.IsInRole("CaseManager"))
                 {
-                    @Html.ActionLink("TCM Intake Section 3", "TCMIntakeSectionDashboard", "TCMIntakes", new { id = @Model.IdTCMClient, section = 3 })
+                    @Html.ActionLink("TCM Intake Section 3", "TCMIntakeSectionDashboard", "TCMIntakes", new { id = Model.TcmAssessment.TcmClient_FK, section = 3 })
                 }
                 else
                 {
-                    @Html.ActionLink("TCM Intake Section 3", "TCMIntakeSectionDashboardReadOnly", "TCMIntakes", new { id = @Model.IdTCMClient, section = 3 })
+                    @Html.ActionLink("TCM Intake Section 3", "TCMIntakeSectionDashboardReadOnly", "TCMIntakes", new { id = Model.TcmAssessment.TcmClient_FK, section = 3 })
                 }
             </li>
             <li class="active">Create Medications List</li>
@@ -30,85 +30,35 @@
     <h4>Create Medications</h4>
     <hr />
     <div class="row">
-        <form asp-action="CreateTCMMedication" asp-route-id="@Model.Id" enctype="multipart/form-data">
+        <form asp-action="CreateTCMMedication" asp-route-id="@Model.Id" onsubmit="return jQueryAjaxTCMMedicationList(this);">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="IdClient" />
+            <input type="hidden" asp-for="IdTCMAssessment" />
             
-            <input type="hidden" asp-for="IdTCMClient" />
+            <input type="hidden" asp-for="Id" />
             <partial name="_TCMMedications" />
             <div class="col-md-12">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Add Medication" class="btn btn-primary" />
                 @if (User.IsInRole("CaseManager"))
                 {
-                    <a asp-action="TCMIntakeSectionDashboard" asp-route-id="@Model.IdTCMClient" asp-route-section="3" class="btn btn-success">Back</a>
+                    <a asp-action="TCMIntakeSectionDashboard" asp-route-id="@Model.IdTCMAssessment" asp-route-section="3" class="btn btn-success">Back</a>
                 }
                 else
                 {
-                    <a asp-action="TCMIntakeSectionDashboardReadOnly" asp-route-id="@Model.IdTCMClient" asp-route-section="3" class="btn btn-success">Back</a>
+                    <a asp-action="TCMIntakeSectionDashboardReadOnly" asp-route-id="@Model.IdTCMAssessment" asp-route-section="3" class="btn btn-success">Back</a>
                 }
             </div>
         </form>
     </div>
     <hr />
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h3 class="panel-title">Medications List</h3>
+    <div class="row">
+        <div id="view-medications">
+            @await Html.PartialAsync("_ViewTCMMedicationList", Model)
         </div>
-        <div class="panel-body">
-            <table class="table table-hover table-responsive table-striped" id="MyTable">
-                <thead>
-                    <tr>
-                        <th class="col-md-3">
-                            Drug Name
-                        </th>
-                        <th class="col-md-2" style="text-align:center;">
-                            @Html.DisplayNameFor(model => model.Dosage)
-                        </th>
-                        <th class="col-md-2" style="text-align:center;">
-                            @Html.DisplayNameFor(model => model.Frequency)
-                        </th>
-                        <th class="col-md-3">
-                            @Html.DisplayNameFor(model => model.Prescriber)
-                        </th>
-                        <th class="col-md-1" style="text-align:center;">
-
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model.Client.MedicationList)
-                    {
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Name)
-                            </td>
-                            <td align="center">
-                                @Html.DisplayFor(modelItem => item.Dosage)
-                            </td>
-                            <td align="center">
-                                @Html.DisplayFor(modelItem => item.Frequency)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Prescriber)
-                            </td>
-                            <td align="center">
-                                <a asp-action="EditTCMMedication" asp-route-id="@item.Id" class="btn btn-warning" title="Edit Medication"><i class="glyphicon glyphicon-pencil"></i></a>
-                                @if (Model.Id == 0)
-                                {
-                                    <button data-id="@item.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog" title="Delete Medication"><i class="glyphicon glyphicon-trash"></i></button>
-                                }
-
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
-    </div>
+    </div>    
 </body>
 </html>
 
-<partial name="_DeleteDialog" />
+<partial name="_ModalPopup" />
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
@@ -120,19 +70,24 @@
                 "order": [[0, "asc"]],
                 "pageLength": 100
             });
-
-            // Delete item
-            var item_to_delete;
-
-            $('.deleteItem').click((e) => {
-                item_to_delete = e.currentTarget.dataset.id;
-            });
-
-            $("#btnYesDelete").click(function () {
-                var url = "@Url.Action("DeleteTCMMedication", "TCMIntakes")";
-                window.location.href = url + '/' + item_to_delete;
-            });
         });
+
+        function ConfirmDelete(e) {
+            Swal.fire({
+                title: 'Do you want to delete?',
+                text: "Note: All data related to this element will be deleted.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var url = "@Url.Action("DeleteMedicatList", "TCMIntake")";
+                    window.location.href = url + '/' + e;
+                }
+            });
+        }
     </script>
 }
 

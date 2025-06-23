@@ -1,0 +1,51 @@
+﻿@model KyoS.Web.Models.IntakeNoHarmViewModel
+<div class="col-md-12">
+    <pre>
+    <strong>NO HARM CONTRACT</strong>
+   
+    I <u><strong>@Html.DisplayFor(modelItem => Model.Client.Name)</strong></u>, agree to not harm myself or others in any way, attempt to kill myself or others during the duration of counseling services.
+
+    I agree that, for any reason, if the appointment session is postponed, canceled, etc., that this time period is extended until the next direct meeting with my counselor.
+    In this period, I agree to care for myself, to eat well, and to get enough sleep each night.
+
+    I agree to rid my presence of all things i could use to harm or kill myself and others. I agree that, if I am having a rough time and come to a point where I may break
+    any of these promises, I will call and make significant contact with any of the following individuals:
+
+    <strong>Suicide Crisis Hotline at#
+    1-800-SUICIDE    (1-800-784-2433)
+    1-800-273-TALK  (1-800-273-8255)
+    OR  911</strong>
+
+    I agree that these conditions are important, worth doing, and that this is a contract I am willing to make and keep. By my word and honor, I intend to keep this contract.
+    </pre>
+</div>
+ <div class="col-md-12">
+    <pre>
+        
+    @if (Model.Id == 0)
+    {
+    <input type="checkbox" class="form-check-input" disabled> <i>Signed</i>
+    }
+    else
+    {
+    <input type="checkbox" class="form-check-input" checked disabled> <i>Signed</i>
+    }
+    <strong>Employee signature date</strong>         <input asp-for="DateSignatureEmployee">
+    <strong>(@Html.DisplayFor(modelItem => Model.AdmissionedFor))</strong>
+    </pre>
+</div>
+    <div class="col-md-12">
+        &nbsp;
+    </div>
+    <div>
+        <div class="form-group col-md-12">
+            <input type="checkbox" asp-for="Documents" class="form-check-input" id="Documents"> Documents were verbally translated to me in my native language.<br />
+            <label asp-for="Documents" class="forgot">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>@Html.DisplayFor(modelItem => Model.Client.Clinic.Name)</strong>
+            </label>
+        </div>
+    </div>
+    <br />
+
+
+

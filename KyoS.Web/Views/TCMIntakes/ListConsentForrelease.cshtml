@@ -10,11 +10,11 @@
             <i class="icon-home"></i>
             @if (User.IsInRole("CaseManager"))
             {
-                @Html.ActionLink("TCM Intake Section 1", "TCMIntakeSectionDashboard", "TCMIntakes", new { id = @Model.First().TcmClient_FK, section = 1, origin = ViewData["origi"] })
+                @Html.ActionLink("TCM Intake Section 1", "TCMIntakeSectionDashboard", "TCMIntakes", new { id = @ViewData["idTCMCliente"], section = 1, origin = ViewData["origi"] })
             }
             else
             {
-                @Html.ActionLink("TCM Intake Section 1", "TCMIntakeSectionDashboardReadOnly", "TCMIntakes", new { id = @Model.First().TcmClient_FK, section = 1, origin = ViewData["origi"] })
+                @Html.ActionLink("TCM Intake Section 1", "TCMIntakeSectionDashboardReadOnly", "TCMIntakes", new { id = @ViewData["idTCMCliente"], section = 1, origin = ViewData["origi"] })
             }
         </li>
         <li class="active">TCM Consent for Release List</li>
@@ -26,13 +26,14 @@
         <p>
             @if (User.IsInRole("CaseManager"))
             {
-                <a asp-action="CreateTCMConsentForRelease" asp-route-id="@Model.First().TcmClient.Id" asp-route-origi="@ViewData["origi"]" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Create TCM Consent for Release</a>
-                <a onclick="showInPopupLg('@Url.Action("AuditConsentForRelease", "TCMIntakes", new { idTCMClient = Model.ElementAtOrDefault(0).TcmClient_FK}, Context.Request.Scheme)','Audit Consent')" class="btn btn-danger" title="Audit Consent"><i class="glyphicon glyphicon-alert"></i>&nbsp;&nbsp;Audit Consent</a>
+                @*<a asp-action="CreateTCMConsentForRelease" asp-route-id="@Model.First().TcmClient.Id" asp-route-origi="@ViewData["origi"]" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Create TCM Consent for Release</a>*@
+                <a onclick="showInPopup('@Url.Action("SelectTypeConsentForRelease", "TCMIntakes", new { idTcmClient = @ViewData["idTCMCliente"], origi = @ViewData["origi"]}, Context.Request.Scheme)',' Create TCM Consent for Release')" class="btn btn-primary" title=" Create TCM Consent for Release"><i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp; Create TCM Consent for Release</a>
+                <a onclick="showInPopupLg('@Url.Action("AuditConsentForRelease", "TCMIntakes", new { idTCMClient = @ViewData["idTCMCliente"]}, Context.Request.Scheme)','Audit Consent')" class="btn btn-danger" title="Audit Consent"><i class="glyphicon glyphicon-alert"></i>&nbsp;&nbsp;Audit Consent</a>
             }
             else
             {
                 <a asp-action="CreateTCMConsentForRelease" asp-route-id="@Model.First().TcmClient.Id" asp-route-origi="@ViewData["origi"]" class="btn btn-primary disabled"><i class="glyphicon glyphicon-plus"></i> Create TCM Consent for Release</a>
-                <a onclick="showInPopupLg('@Url.Action("AuditConsentForRelease", "TCMIntakes", new { idTCMClient = Model.ElementAtOrDefault(0).TcmClient_FK}, Context.Request.Scheme)','Audit Consent')" class="btn btn-danger" title="Audit Consent"><i class="glyphicon glyphicon-alert"></i>&nbsp;&nbsp;Audit Consent</a>
+                <a onclick="showInPopupLg('@Url.Action("AuditConsentForRelease", "TCMIntakes", new { idTCMClient = @ViewData["idTCMCliente"]}, Context.Request.Scheme)','Audit Consent')" class="btn btn-danger" title="Audit Consent"><i class="glyphicon glyphicon-alert"></i>&nbsp;&nbsp;Audit Consent</a>
             }
 
         </p>       
@@ -118,6 +119,7 @@
 </div>
 
 <partial name="_ModalPopupLg" />
+<partial name="_ModalPopup" />
 <partial name="_DeleteDialog" />
 
 @section Scripts {

@@ -47,5 +47,15 @@ namespace KyoS.Web.Data.Entities
         public bool IsNotReceiving { get; set; }
         public bool Meets { get; set; }
         public bool HasRecolated { get; set; }
+
+        public bool Active { get; set; }
+
+        [Display(Name = "Date")]
+        [DataType(DataType.Date)]
+
+        public DateTime DateExpired { get; set; }
+
+        [Display(Name = "Classification")]
+        public AppendixJType AppendixType { get; set; }
     }
 }

@@ -56,7 +56,8 @@
                                         @Html.DisplayFor(modelItem => item.Referred.Email)
                                     </td>
                                     <td align="right">
-                                         <button type="button" onclick="DeleteReferredTemp(@item.Id)" class="btn btn-danger deleteItem" title="Delete referred"><i class="glyphicon glyphicon-trash"></i></button>
+                                        <a onclick="showInPopup('@Url.Action("DeleteReferred1", "TCMAssessments",new { id = @item.Id}, Context.Request.Scheme)','Confirmation')" class="btn btn-danger" title="Delete Referred"><i class="glyphicon glyphicon-trash"></i></a>
+                                        @*<button type="button" onclick="DeleteReferredTemp(@item.Id)" class="btn btn-danger deleteItem" title="Delete referred"><i class="glyphicon glyphicon-trash"></i></button>*@
                                     </td>
                                 </tr>
                             }

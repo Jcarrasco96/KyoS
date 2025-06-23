@@ -116,5 +116,6 @@ namespace KyoS.Web.Data.Entities
 
         public bool SignIndTherapy { get; set; }
         public bool SignTherapy { get; set; }
+        public int FacilitatorId { get; set; }
     }
 }

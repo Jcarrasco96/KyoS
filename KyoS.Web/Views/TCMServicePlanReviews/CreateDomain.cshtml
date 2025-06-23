@@ -13,20 +13,13 @@
             <input type="hidden" asp-for="Id_ServicePlan" />
             <div class="form-group">
                 <div class="col-md-6">
-                    <b>Case number:</b>
-                    <i>@Html.DisplayFor(modelItem => Model.TcmServicePlan.TcmClient.CaseNumber)</i>
-                    <br />
-                    <b>Client name:</b>
-                    <i>@Html.DisplayFor(modelItem => Model.TcmServicePlan.TcmClient.Client.Name)</i>
-                </div>
-                <div class="col-md-6">
                     <label asp-for="DateIdentified" class="control-label">Identified Date</label>
                     <input asp-for="DateIdentified" class="form-control" />
                     <span asp-validation-for="DateIdentified" class="text-danger"></span>
                 </div>
-            </div>
-            <div class="col-md-12">
-                &nbsp;
+                <div class="container-fluid">
+                    &nbsp;
+                </div>
             </div>
             <div class="form-group col-md-12">
                 <div class="">
@@ -35,20 +28,7 @@
                     <span asp-validation-for="Id_Service" class="text-danger"></span>
                 </div>
             </div>
-            <br />
-            <div class="form-group">
-                <div class="form-group col-md-3">
-                    <label asp-for="Code" class="control-label">Service Code</label>&nbsp;*
-                    <input asp-for="Code" id="GetCode" class="form-control" readonly />
-                    <span asp-validation-for="Code" class="text-danger"></span>
-                </div>
-
-                <div class="form-group col-md-9">
-                    <label asp-for="Name" class="control-label">Service Name</label>&nbsp;*
-                    <input asp-for="Name" id="GetName" class="form-control" readonly />
-                    <span asp-validation-for="Name" class="text-danger"></span>
-                </div>
-            </div>
+            <br />            
             <div class="col-md-12">
                 <div class="form-group">
                     <label asp-for="Needs_Identified" class="control-label">Identified Needs</label>
@@ -61,6 +41,13 @@
                     <label asp-for="Long_Term" class="control-label">Long Term</label>
                     <textarea asp-for="Long_Term" class="form-control" rows="5" />
                     <span asp-validation-for="Long_Term" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="container-fluid">
+                    <label asp-for="ChangeUpdate" class="control-label">Changes/Update</label>
+                    <textarea asp-for="ChangeUpdate" class="form-control" rows="4"></textarea>
+                    <span asp-validation-for="ChangeUpdate" class="text-danger"></span>
                 </div>
             </div>
             <div class="col-md-12">

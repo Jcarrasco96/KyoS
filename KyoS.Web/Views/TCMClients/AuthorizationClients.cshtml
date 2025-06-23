@@ -1,0 +1,162 @@
+﻿@model IEnumerable<KyoS.Web.Models.AuthorizationViewModel>
+@{
+    ViewData["Title"] = "Authorization";
+}
+
+<link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
+
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home"></i>
+            @Html.ActionLink("Dashboard", "Index", "Desktop")
+        </li>
+        <li class="active">Authorization</li>
+    </ul><!--.breadcrumb-->
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        @if (ViewBag.Delete == "N")
+        {
+            <div class="alert alert-block alert-danger">
+                <button type="button" class="close" data-dismiss="alert">
+                    <i class="icon-remove"></i>
+                </button>
+                <strong class="red">
+                    Error. It is not posible delete the TCM client
+                </strong>
+            </div>
+        }
+    </div>
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Clients without authorization </h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-hover table-responsive table-striped" id="MyTable">
+                    <thead>
+                        <tr>
+                            <th class="col-md-2">
+                                Client Name
+                            </th>
+                            <th class="col-md-2">
+                                Case Manager
+                            </th>
+                            <th class="col-md-2" style="text-align:left;">
+                                Health Insurance
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Open
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Status
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Service
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Effective
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Expired
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @item.TCMClientName
+                                </td>
+                                <td >
+                                    @item.CaseManagerName
+                                </td>
+                                <td>
+                                    @item.HealthInsurance
+                                </td>
+                                <td align="center">
+                                    @item.DateOpen.Date.ToShortDateString()
+                                </td>
+                                <td align="center">
+                                    @if (@item.Status == KyoS.Common.Enums.StatusType.Open)
+                                    {
+                                        <span class="label label-success">
+                                            Open
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="label label-default">
+                                            Close
+                                        </span>
+                                    }
+                                </td>
+                                <td align="center">
+                                    @item.Agency
+                                </td>
+                                <td align="center">
+                                    @item.EffectiveDate.Date.ToShortDateString()
+                                </td>
+                                <td align="center">
+                                    @if (item.Info == 0)
+                                    {
+                                        <span class="label label-danger">
+                                            @item.ExpiratedDate.Date.ToShortDateString()
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="label label-warning">
+                                            @item.ExpiratedDate.Date.ToShortDateString()
+                                        </span>
+                                    }
+                                </td>
+                               
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<partial name="_ModalPopupLg" />
+<partial name="_DeleteDialog" />
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/jquery.dataTables.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#MyTable').DataTable({
+                "order": [[0, "asc"]],
+                "pageLength": 100
+            });            
+        });
+
+        function ConfirmDelete(e) {
+            Swal.fire({
+                title: 'Do you want to delete?',
+                text: "Note: All data related to this element will be deleted.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var url = "@Url.Action("Delete", "Clients")";
+                    window.location.href = url + '/' + e;
+                }
+            });
+        }
+    </script>
+}
+
+
+

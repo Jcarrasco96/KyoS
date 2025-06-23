@@ -9,8 +9,6 @@ using KyoS.Web.Data.Entities;
 using KyoS.Web.Helpers;
 using KyoS.Web.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.IO;
 using KyoS.Common.Helpers;
@@ -746,9 +744,6 @@ namespace KyoS.Web.Controllers
                                                    .ThenInclude(c => c.LegalGuardian)
 
                                                    .Include(i => i.Client)
-                                                   .ThenInclude(c => c.IntakeScreening)
-
-                                                   .Include(i => i.Client)
                                                    .ThenInclude(c => c.IntakeConsentForTreatment)
 
                                                    .Include(i => i.Client)
@@ -783,6 +778,8 @@ namespace KyoS.Web.Controllers
 
                                                    .Include(i => i.Client)
                                                    .ThenInclude(c => c.DischargeList)
+
+                                                   .AsSplitQuery()
 
                                                    .FirstOrDefault(i => (i.Id == id));
             if (entity == null)
@@ -835,6 +832,16 @@ namespace KyoS.Web.Controllers
                 Stream stream = _reportHelper.AlliedIntakeReport(entity);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
+            if (entity.Client.Clinic.Name == "YOUR NEIGHBOR MEDICAL GROUP")
+            {
+                Stream stream = _reportHelper.YourNeighborIntakeReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (entity.Client.Clinic.Name == "BETTER YEARS AHEAD MEDICAL CENTER")
+            {
+                Stream stream = _reportHelper.ByaIntakeReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
             return null;
         }
 
@@ -849,6 +856,8 @@ namespace KyoS.Web.Controllers
                                                             .ThenInclude(c => c.IntakeTuberculosis)
                                                         .Include(i => i.Client)
                                                             .ThenInclude(c => c.MedicationList)
+
+                                                        .AsSplitQuery()
 
                                                         .FirstOrDefault(i => (i.Client.Id == id));
             if (entity == null)
@@ -899,6 +908,16 @@ namespace KyoS.Web.Controllers
             if (entity.Client.Clinic.Name == "ALLIED HEALTH GROUP LLC")
             {
                 Stream stream = _reportHelper.AlliedMedicalHistoryReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (entity.Client.Clinic.Name == "YOUR NEIGHBOR MEDICAL GROUP")
+            {
+                Stream stream = _reportHelper.YourNeighborMedicalHistoryReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (entity.Client.Clinic.Name == "BETTER YEARS AHEAD MEDICAL CENTER")
+            {
+                Stream stream = _reportHelper.ByaMedicalHistoryReport(entity);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
             return null;
@@ -1022,7 +1041,26 @@ namespace KyoS.Web.Controllers
 
             Stream stream = _reportHelper.IntakeNoDuplicateService(entity);
             return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
-        }        
+        }
+
+        [Authorize(Roles = "Manager, Supervisor, Facilitator, Documents_Assistant, Frontdesk")]
+        public async Task<IActionResult> PrintNoHarm(int id)
+        {
+            IntakeNoHarmEntity entity = await _context.IntakeNoHarm
+
+                                                      .Include(c => c.Client)
+                                                      .ThenInclude(cm => cm.Clinic)                                                      
+
+                                                      .FirstOrDefaultAsync(c => c.Client.Id == id);
+
+            if (entity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            Stream stream = _reportHelper.IntakeNoHarmContract(entity);
+            return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+        }
 
         [Authorize(Roles = "Manager, Frontdesk, Documents_Assistant")]
         public IActionResult CreateAcknowledgementHippa(int id = 0)
@@ -2129,6 +2167,7 @@ namespace KyoS.Web.Controllers
                                                       .Include(n => n.IntakeAdvancedDirective)
                                                       .Include(n => n.IntakeClientIdDocumentVerification)
                                                       .Include(n => n.IntakeForeignLanguage)
+                                                      .Include(n => n.IntakeNoHarm)
 
                                                       .FirstOrDefaultAsync(c => c.Id == id);
             if (clientEntity == null)
@@ -2154,15 +2193,48 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("NotAuthorized", "Account");
             }
 
-            List<ClientEntity> ClientList = await _context.Clients
-                                                          .Include(n => n.IntakeMedicalHistory)
-                                                          .Include(n => n.Bio)
-                                                          .Where(n => n.IntakeMedicalHistory == null 
-                                                            && n.Clinic.Id == user_logged.Clinic.Id
-                                                            && n.OnlyTCM == false)
-                                                          .ToListAsync();
+            if (User.IsInRole("Facilitator"))
+            {
+                FacilitatorEntity facilitator = await _context.Facilitators.FirstOrDefaultAsync(n => n.LinkedUser == user_logged.UserName);
+                List<ClientEntity> ClientList = await _context.Clients
+                                                              .Include(n => n.IntakeMedicalHistory)
+                                                              .Where(n => n.IntakeMedicalHistory == null
+                                                                       && n.Clinic.Id == user_logged.Clinic.Id
+                                                                       && n.OnlyTCM == false
+                                                                       && (n.IdFacilitatorPSR == facilitator.Id
+                                                                        || n.IdFacilitatorGroup == facilitator.Id
+                                                                        || n.IndividualTherapyFacilitator.Id == facilitator.Id))
+                                                              .ToListAsync();
 
-            return View(ClientList);
+                return View(ClientList);
+            }
+            else
+            {
+                if (User.IsInRole("Documents_Assistant"))
+                {
+                    List<ClientEntity> ClientList = await _context.Clients
+                                                                  .Include(n => n.IntakeMedicalHistory)
+                                                                  .Where(n => n.IntakeMedicalHistory == null
+                                                                           && n.Clinic.Id == user_logged.Clinic.Id
+                                                                           && n.OnlyTCM == false
+                                                                           && ((n.DocumentsAssistant != null && n.DocumentsAssistant.LinkedUser == user_logged.UserName)
+                                                                             || n.DocumentsAssistant == null))
+                                                                  .ToListAsync();
+                    return View(ClientList);
+                }
+                else
+                {
+                    List<ClientEntity> ClientList = await _context.Clients
+                                                                  .Include(n => n.IntakeMedicalHistory)
+                                                                  .Where(n => n.IntakeMedicalHistory == null
+                                                                           && n.Clinic.Id == user_logged.Clinic.Id
+                                                                           && n.OnlyTCM == false)
+                                                                  .ToListAsync();
+                    return View(ClientList);
+                }
+            
+            }
+           
 
         }
 
@@ -2229,6 +2301,13 @@ namespace KyoS.Web.Controllers
                                                       .Include(c => c.IntakeTuberculosis)
                                                       .Include(c => c.IntakeMedicalHistory)
                                                       .Include(c => c.Clinic)
+                                                      .Include(c => c.IntakeNoHarm)
+                                                      .Include(n => n.IntakeConsentForTelehealth)
+                                                      .Include(n => n.IntakeNoDuplicateService)
+                                                      .Include(n => n.IntakeAdvancedDirective)
+                                                      .Include(n => n.IntakeClientIdDocumentVerification)
+                                                      .Include(n => n.IntakeForeignLanguage)
+                                                      .Include(n => n.IntakeNoHarm)
 
                                                       .FirstOrDefaultAsync(c => c.Id == id);
             if (clientEntity == null)
@@ -2443,23 +2522,51 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("NotAuthorized", "Account");
             }
 
-            List<ClientEntity> ClientList = await _context.Clients
-                                                          .Where(n => n.Clinic.Id == user_logged.Clinic.Id
-                                                             && n.IntakeScreening == null
-                                                             && n.IntakeConsentForTreatment == null
-                                                             && n.IntakeConsentForRelease == null
-                                                             && n.IntakeConsumerRights == null
-                                                             && n.IntakeAcknowledgementHipa == null
-                                                             && n.IntakeAccessToServices == null
-                                                             && n.IntakeOrientationChecklist == null
-                                                             && n.IntakeTransportation == null
-                                                             && n.IntakeConsentPhotograph == null
-                                                             && n.IntakeFeeAgreement == null
-                                                             && n.IntakeTuberculosis == null
-                                                             && n.OnlyTCM == false)
-                                                          .ToListAsync();
+            if (User.IsInRole("Documents_Assistant"))
+            {
+                List<ClientEntity> ClientList = await _context.Clients
+                                                              .Where(n => n.Clinic.Id == user_logged.Clinic.Id
+                                                                       && n.IntakeScreening == null
+                                                                       && n.IntakeConsentForTreatment == null
+                                                                       && n.IntakeConsentForRelease == null
+                                                                       && n.IntakeConsumerRights == null
+                                                                       && n.IntakeAcknowledgementHipa == null
+                                                                       && n.IntakeAccessToServices == null
+                                                                       && n.IntakeOrientationChecklist == null
+                                                                       && n.IntakeTransportation == null
+                                                                       && n.IntakeConsentPhotograph == null
+                                                                       && n.IntakeFeeAgreement == null
+                                                                       && n.IntakeTuberculosis == null
+                                                                       && n.OnlyTCM == false
+                                                                       && ((n.DocumentsAssistant != null && n.DocumentsAssistant.LinkedUser == user_logged.UserName)
+                                                                         || n.DocumentsAssistant == null))
+                                                             .ToListAsync();
 
-            return View(ClientList);
+                return View(ClientList);
+
+            }
+            else
+            {
+                List<ClientEntity> ClientList = await _context.Clients
+                                                              .Where(n => n.Clinic.Id == user_logged.Clinic.Id
+                                                                       && n.IntakeScreening == null
+                                                                       && n.IntakeConsentForTreatment == null
+                                                                       && n.IntakeConsentForRelease == null
+                                                                       && n.IntakeConsumerRights == null
+                                                                       && n.IntakeAcknowledgementHipa == null
+                                                                       && n.IntakeAccessToServices == null
+                                                                       && n.IntakeOrientationChecklist == null
+                                                                       && n.IntakeTransportation == null
+                                                                       && n.IntakeConsentPhotograph == null
+                                                                       && n.IntakeFeeAgreement == null
+                                                                       && n.IntakeTuberculosis == null
+                                                                       && n.OnlyTCM == false)
+                                                              .ToListAsync();
+
+                return View(ClientList);
+            }
+            
+            
 
         }
 
@@ -3172,6 +3279,102 @@ namespace KyoS.Web.Controllers
             IntakeViewModel.Client = _context.Clients.Find(IntakeViewModel.Id);
 
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateForeignLanguage", IntakeViewModel) });
+        }
+
+        [Authorize(Roles = "Manager, Frontdesk, Documents_Assistant")]
+        public IActionResult CreateIntakeNoHarm(int id = 0)
+        {
+
+            UserEntity user_logged = _context.Users
+                                                 .Include(u => u.Clinic)
+                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            IntakeNoHarmViewModel model;
+            ClientEntity client = _context.Clients.Include(n => n.LegalGuardian).FirstOrDefault(n => n.Id == id);
+
+            if (User.IsInRole("Manager") || User.IsInRole("Frontdesk") || User.IsInRole("Documents_Assistant"))
+            {
+                if (user_logged.Clinic != null)
+                {
+                    IntakeNoHarmEntity intakeNoHarm = _context.IntakeNoHarm
+                                                              .FirstOrDefault(n => n.Client.Id == id);
+                    if (intakeNoHarm == null)
+                    {
+                        model = new IntakeNoHarmViewModel
+                        {
+                            Client = client,
+                            IdClient = id,
+                            Client_FK = id,
+                            Id = 0,
+                            Documents = true,
+                            DateSignatureEmployee = client.AdmisionDate,
+                            DateSignaturePerson = client.AdmisionDate,
+                            AdmissionedFor = user_logged.FullName,
+
+                        };
+
+                      
+                        return View(model);
+                    }
+                    else
+                    {
+                        model = _converterHelper.ToIntakeNoHarmViewModel(intakeNoHarm);
+
+                        return View(model);
+                    }
+
+                }
+            }
+
+            return RedirectToAction("Index", "Intakes");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Manager, Frontdesk, Documents_Assistant")]
+        public async Task<IActionResult> CreateIntakeNoHarm(IntakeNoHarmViewModel IntakeViewModel)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (ModelState.IsValid)
+            {
+                IntakeNoHarmEntity IntakeNoHarmEntity = _converterHelper.ToIntakeNoHarmEntity(IntakeViewModel, false);
+
+                if (IntakeNoHarmEntity.Id == 0)
+                {
+                    IntakeNoHarmEntity.Client = null;
+                    _context.IntakeNoHarm.Add(IntakeNoHarmEntity);
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+                        return RedirectToAction("IntakeDashboard", new { id = IntakeViewModel.IdClient });
+                    }
+                    catch (System.Exception ex)
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+                else
+                {
+                    IntakeNoHarmEntity.Client = null;
+                    _context.IntakeNoHarm.Update(IntakeNoHarmEntity);
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+                        return RedirectToAction("IntakeDashboard", new { id = IntakeViewModel.IdClient });
+                    }
+                    catch (System.Exception ex)
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+            }
+            //Preparing Data
+            IntakeViewModel.Client = _context.Clients.Find(IntakeViewModel.Id);
+
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateIntakeNoHarm", IntakeViewModel) });
         }
 
     }

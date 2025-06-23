@@ -341,7 +341,14 @@
                     $("#PlanNote").val(data);
                 });
             })
+
         });
+        function getMinute() {
+            var url = "@Url.Action("GetUnitsPSR", "Notes")";
+            $.get(url, { minute1: $("#minute1").val(), minute2: $("#minute2").val(), minute3: $("#minute3").val(), minute4: $("#minute4").val() }, function (data) { $("#lbUnits").text(data); });
+            var url = "@Url.Action("GetMinutesPSR", "Notes")";
+            $.get(url, { minute1: $("#minute1").val(), minute2: $("#minute2").val(), minute3: $("#minute3").val(), minute4: $("#minute4").val() }, function (data) { $("#lbTotalMinutes").text(data); });
+        }
 </script>
 }
 

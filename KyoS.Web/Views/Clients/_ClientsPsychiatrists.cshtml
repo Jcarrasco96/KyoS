@@ -9,6 +9,10 @@
         <select asp-for="IdPsychiatrist" asp-items="Model.Psychiatrists" class="form-control" id="cbP"></select>
         <span asp-validation-for="IdPsychiatrist" class="text-danger"></span>
     </div>
+    <div class="form-group col-md-1">
+        </br>
+        <a onclick="showInPopup('@Url.Action("DetailsPSY", "Clients", new {id = Model.IdPsychiatrist}, Context.Request.Scheme)','Details PSY')" class="btn btn-info" title="Detail PSY"><i class="glyphicon glyphicon-th-list"></i></a>
+    </div>
 </div>
 <div class="col-md-12">
     <hr />
@@ -64,6 +68,7 @@
         <span asp-validation-for="EmailPsychiatrists" class="text-danger"></span>
     </div>
 </div>
+
 
 <script type="text/javascript">
     chkNewP.addEventListener('change', (e) => {

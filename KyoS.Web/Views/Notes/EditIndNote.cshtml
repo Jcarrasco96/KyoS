@@ -152,7 +152,14 @@
                     $("#cbObjetive1").append("<option value=0>[First select goal...]</option>")
 
                     $("#lbIntervention1").text('Select goal and objective');
+                   
                 });
+                //actualizo el label con el DX del cliente seleccionado
+                url = "@Url.Action("GetDx", "Notes")";
+                $.get(url, { idClient: $("#cbClient").val() }, function (data) {
+                    $("#cbDxDescription").text(data);
+                });
+               
             })
             $("#cbGoal1").change(function () {
                 var url = "@Url.Action("GetObjetiveList", "Notes")";
@@ -199,8 +206,13 @@
                     $("#PlanNote").val(data);
                 });
             })
+           
         });
+        function getMinute() {
+            var url = "@Url.Action("GetUnits", "Notes")";
+            $.get(url, { minutes: $("#lbMinutes").val() }, function (data) { $("#lbUnits").text(data); });
 
+        }
         function GenderVerification() {
 
                 if ($("#subjectiveData").val() != "" && $("#objectiveData").val() != "" && $("#assessment").val() != "" && $("#PlanNote").val() != "")

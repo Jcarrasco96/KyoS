@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="10/14/2023 13:31:59" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/28/2021 15:23:53" ReportInfo.Modified="03/01/2024 12:11:36" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
-    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhDFmP9T+uKfsJXu65Ovrj+A1YfN5dfPvLBg6EY9L3xBgdKTD3jWzkT9igQJx8b03+xne/09ApJovnvrIf1LG0B">
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqz3+0FciDykkVlk4gj3UkO71TVpad+CQj9Sh4YSgJpL7Bu2Vc6LzDYBRIsr9HU59F7K8vL4nzMgVqq3hBy9TfwUXSn6JjTVbO2+lFx8S+NVhDFmP9T+uKfsJXu65Ovrj+A1YfN5dfPvLBg6EY9L3xBgdKTD3jWzkT9igQJx8b038cTD1Q7J7IAsBM5BIcufaF">
       <TableDataSource Name="Clinics" DataType="System.Int32" Enabled="true" TableName="Clinics">
         <Column Name="Id" DataType="System.Int32"/>
         <Column Name="Name" DataType="System.String"/>
@@ -129,6 +129,12 @@
         <Column Name="LastModifiedOn" DataType="System.DateTime"/>
       </TableDataSource>
     </MsSqlDataConnection>
+    <MsSqlDataConnection Name="Connection1" ConnectionString="rijcmlqzP/32u1QtzIsUJqKG+Cmmn50HSkt3MAF9qwjdrGlSL6li/bfoettbHLVimvec8VTsTRdzGJZmXvnjtUJpUDEkyjyWrkhMeDhdXFpZIpDPUOoynb53AS1p/38Lgrg1h/pKiygLNrR2GSkUua6CZa7zWuDzNGOn7cjq7mn0WTOnccDkyyV5BLvtFa1BRlcYFBr6rnRafkcnI6Z37QOZPHUnQ==">
+      <TableDataSource Name="Classifications1" Alias="Signatures1" DataType="System.Int32" Enabled="true" TableName="Classifications">
+        <Column Name="supervisorSignature" DataType="System.Byte[]" PropName="Id"/>
+        <Column Name="facilitatorSignature" DataType="System.Byte[]" PropName="Name"/>
+      </TableDataSource>
+    </MsSqlDataConnection>
     <Parameter Name="session1" DataType="System.String"/>
   </Dictionary>
   <ReportPage Name="Page1" PaperWidth="215.9" PaperHeight="279.4" RawPaperSize="1" LeftMargin="5" TopMargin="5" RightMargin="5" BottomMargin="5" Watermark.Enabled="true" Watermark.Font="Arial, 60pt">
@@ -150,22 +156,19 @@
       <TextObject Name="Text305" Left="34.8" Top="51.7" Width="313.36" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[LegalGuardians.Name]" VertAlign="Center" Font="Arial, 9pt"/>
       <TextObject Name="Text307" Left="344.65" Top="54.25" Width="434.7" Height="26.46" Text=", custodio legal o representante autorizado &lt;i&gt;(en caso de ser aplicable)&lt;/i&gt;," HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
       <TextObject Name="Text48" Left="-1" Top="74.6" Width="774.9" Height="85.05" Text="mediante la presente reconozco que toda la información presentada ante mí, incluyendo formularios, consentimientos legales y cualquier otro tipo de documentación perteneciente a mi caso, fue debidamente explicada a mí en toda su extensión &lt;b&gt;en mi idioma primario&lt;b&gt; (Español) y en términos que yo puedo entender. Mi firma en cada uno de los documentos indica que yo no solo &lt;b&gt;entiendo&lt;/b&gt; sino que también &lt;b&gt;estoy de acuerdo&lt;/b&gt; con su contenido. Copias de los documentos disponibles en &lt;b&gt;mi idioma primario&lt;/b&gt; (Español) fueron ofrecidas a mí. " HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
-      <TextObject Name="Text284" Left="330.75" Top="766.45" Width="190.89" Height="24.57" CanGrow="true" Text="Case Manager's Signature" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
+      <TextObject Name="Text284" Left="330.75" Top="767.45" Width="190.89" Height="24.57" CanGrow="true" Text="Case Manager's Signature" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
       <LineObject Name="Line11" Left="523.75" Top="765" Width="-192.78"/>
-      <TextObject Name="Text285" Left="551.1" Top="766.45" Width="162.54" Height="24.57" CanGrow="true" Text="Fecha / Date" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
-      <LineObject Name="Line12" Left="744.1" Top="765" Width="-192.78"/>
-      <TextObject Name="Text286" Left="551.1" Top="746.65" Width="196.56" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[TCMIntakeForeignLanguage.DateSignatureEmployee]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
-      <TextObject Name="Text287" Left="28.35" Top="655.05" Width="274.05" Height="43.47" CanGrow="true" Text="Firma del Custodio Legal o Representante Autorizado&#13;&#10;Client’s Legal Guardian or Authorized Representative " Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
-      <LineObject Name="Line13" Left="296.95" Top="654.6" Width="-268.38"/>
-      <TextObject Name="Text288" Left="551.1" Top="656.05" Width="162.54" Height="24.57" CanGrow="true" Text="Fecha / Date" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
-      <LineObject Name="Line14" Left="744.1" Top="654.6" Width="-191.27"/>
-      <TextObject Name="Text289" Left="551.1" Top="635.25" Width="196.56" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[TCMIntakeForeignLanguage.DateSignatureLegalGuardian]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
-      <PictureObject Name="Picture3" Left="378" Top="704.85" Width="95" Height="63.45" DataColumn="Signatures.facilitatorSignature"/>
+      <TextObject Name="Text285" Left="551.1" Top="767.45" Width="134.19" Height="24.57" CanGrow="true" Text="Fecha / Date" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
+      <TextObject Name="Text286" Left="551.1" Top="746.65" Width="130.41" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[TCMIntakeForeignLanguage.DateSignatureEmployee]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text287" Left="28.35" Top="657.05" Width="198.45" Height="52.92" CanGrow="true" Text="Firma del Custodio Legal o Representante Autorizado&#13;&#10;Client’s Legal Guardian or Authorized Representative " Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
+      <LineObject Name="Line13" Left="230.8" Top="654.6" Width="-202.23"/>
+      <TextObject Name="Text288" Left="551.1" Top="656.05" Width="134.19" Height="24.57" CanGrow="true" Text="Fecha / Date" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
+      <TextObject Name="Text289" Left="551.1" Top="635.25" Width="130.41" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[IIf(Year([TCMIntakeForeignLanguage.DateSignatureLegalGuardian]) == 1,&quot;&quot;,[TCMIntakeForeignLanguage.DateSignatureLegalGuardian])]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
+      <PictureObject Name="Picture3" Left="378" Top="712.85" Width="95" Height="63.45" DataColumn="Signatures.facilitatorSignature"/>
       <TextObject Name="Text290" Left="28.35" Top="559.45" Width="198.45" Height="24.57" CanGrow="true" Text="Firma del Cliente / Client's Signature" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
-      <LineObject Name="Line15" Left="296.95" Top="558" Width="-268.38"/>
-      <TextObject Name="Text291" Left="551.1" Top="559.45" Width="162.54" Height="24.57" CanGrow="true" Text="Fecha / Date" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
-      <LineObject Name="Line16" Left="744.1" Top="558" Width="-192.78"/>
-      <TextObject Name="Text292" Left="551.1" Top="539.65" Width="196.56" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[TCMIntakeForeignLanguage.DateSignaturePerson]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
+      <LineObject Name="Line15" Left="230.8" Top="558" Width="-202.23"/>
+      <TextObject Name="Text291" Left="551.1" Top="560.45" Width="134.19" Height="24.57" CanGrow="true" Text="Fecha / Date" Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
+      <TextObject Name="Text292" Left="551.1" Top="539.65" Width="130.41" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[TCMIntakeForeignLanguage.DateSignaturePerson]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
       <TextObject Name="Text309" Left="1" Top="207.9" Width="17.01" Height="26.46" Text="I," HorzAlign="Justify" VertAlign="Center" Font="Arial, 10pt"/>
       <TextObject Name="Text310" Left="333.2" Top="212.9" Width="359.1" Height="17.01" Text=", recipient of services at &lt;b&gt;[Clinics.Name]&lt;/b&gt;" HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
       <TextObject Name="Text311" Left="14.45" Top="209.35" Width="321.3" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[Clients.Name]" VertAlign="Center" Font="Arial, 9pt"/>
@@ -173,9 +176,11 @@
       <TextObject Name="Text313" Left="40.25" Top="231.25" Width="313.36" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[LegalGuardians.Name]" VertAlign="Center" Font="Arial, 9pt"/>
       <TextObject Name="Text314" Left="350.65" Top="233.8" Width="434.7" Height="26.46" Text=", legal guardian or authorized representative &lt;i&gt;(if applicable)&lt;/i&gt;," HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
       <TextObject Name="Text315" Top="254.15" Width="774.9" Height="85.05" Text="do hereby acknowledge that all the information presented before me, including forms, legal consents and any other type documentation pertaining to my case, was duly explained to me in all its extent in &lt;b&gt;my primary language&lt;/b&gt; (Spanish) and in terms that I can understand. My signature on each of the documents indicates that I not only &lt;b&gt;understand&lt;/b&gt; but also &lt;b&gt;agree&lt;/b&gt; with all its content. Copy of documents available in &lt;b&gt;my primary language&lt;/b&gt; (Spanish) were offered to me." HorzAlign="Justify" Font="Arial, 10pt" TextRenderType="HtmlTags"/>
-      <TextObject Name="Text316" Left="25.8" Top="766.9" Width="274.05" Height="24.57" CanGrow="true" Text="Nombre del Empleado / Employee’s Name  " Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
+      <TextObject Name="Text316" Left="25.8" Top="766.9" Width="264.6" Height="24.57" CanGrow="true" Text="Nombre del Empleado / Employee’s Name  " Padding="2, 2, 2, 2" Font="Arial, 8pt"/>
       <LineObject Name="Line17" Left="294.4" Top="765.45" Width="-268.38"/>
       <TextObject Name="Text317" Left="25.35" Top="746.55" Width="268.38" Height="18.9" Border.Lines="Bottom" Fill.Color="LightBlue" Text="[CaseManagers.Name]" Format="Date" Format.Format="d" VertAlign="Center" Font="Arial, 10pt"/>
+      <PictureObject Name="Picture7" Left="78.6" Top="503.3" Width="95" Height="63.45" DataColumn="Signatures.supervisorSignature"/>
+      <PictureObject Name="Picture8" Left="78.6" Top="602.8" Width="95" Height="63.45" DataColumn="Signatures1.supervisorSignature"/>
     </DataBand>
   </ReportPage>
 </Report>

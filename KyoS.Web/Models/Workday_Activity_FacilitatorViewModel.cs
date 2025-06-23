@@ -63,5 +63,7 @@ namespace KyoS.Web.Models
 
         public bool AM { get; set; }
         public bool PM { get; set; }
+
+        public string TitleNote { get; set; }
     }
 }

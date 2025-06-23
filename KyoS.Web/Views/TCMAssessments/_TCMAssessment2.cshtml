@@ -4,19 +4,19 @@
     <div class="col-md-12">
     <pre>
     <strong>How does client remember to take his/her medications? <i>(Check all that apply)</i> </strong>
-    <input asp-for="HowDoesByFollowing" />  By following directions         <input asp-for="HowDoesPill" />  Pill Organizer                 <input asp-for="HowDoesFamily" /> Family/Caregiver
-    <input asp-for="HowDoesCalendar" />  Calendar reminder               <input asp-for="HowDoesElectronic" />  Electronic reminder            <input asp-for="HowDoesRNHHA" /> RN/HHA Set-up
-    <input asp-for="HowDoesKeeping" />  Keeping them visible            <input asp-for="HowDoesDaily" />  Daily task association         <input asp-for="HowDoesOther" /> Other:  <input asp-for="HowDoesOtherExplain" style="width:40%" />
+    <input asp-for="HowDoesByFollowing" id="HowDoesByFollowing"/>  By following directions         <input asp-for="HowDoesPill" id="HowDoesPill"/>  Pill Organizer                 <input asp-for="HowDoesFamily" id="HowDoesFamily"/> Family/Caregiver
+    <input asp-for="HowDoesCalendar" id="HowDoesCalendar"/>  Calendar reminder               <input asp-for="HowDoesElectronic" id="HowDoesElectronic"/>  Electronic reminder            <input asp-for="HowDoesRNHHA" id="HowDoesRNHHA"/> RN/HHA Set-up
+    <input asp-for="HowDoesKeeping" id="HowDoesKeeping"/>  Keeping them visible            <input asp-for="HowDoesDaily" id="HowDoesDaily"/>  Daily task association         <input asp-for="HowDoesOther" id="HowDoesOther"/> Other:  <input asp-for="HowDoesOtherExplain" style="width:40%" id="HowDoesOtherExplain"/>
 
     <strong>How well does client self-administer medication? </strong>
-    <input asp-for="HowWeelWithNo" />  With no help or supervision         <input asp-for="HowWeelWithALot" />  With a lot of help or constant supervision        
-    <input asp-for="HowWeelWithSome" /> With some help or occasional supervision               <input asp-for="HowWeelEnable" />  Unable to administer own medications/caregiver gives them            
+    <input asp-for="HowWeelWithNo" id="HowWeelWithNo"/>  With no help or supervision                            <input asp-for="HowWeelWithALot" id="HowWeelWithALot"/>  With a lot of help or constant supervision        
+    <input asp-for="HowWeelWithSome" id="HowWeelWithSome"/>  With some help or occasional supervision               <input asp-for="HowWeelEnable" id="HowWeelEnable"/>  Unable to administer own medications/caregiver gives them            
 
     Has the client had problems getting the medication dispensed or refilled on time?   <input asp-for="HasTheClient" class="form-check-input" id="check6"> Yes <input type="checkbox" class="form-check-input" id="check106"> No       
-    What pharmacy does client use? <input asp-for="WhatPharmacy" style="width:20%" >                  Phone #: <input asp-for="PharmacyPhone"style="width:15%" > 
+    What pharmacy does client use? <input asp-for="WhatPharmacy" style="width:20%" id="WhatPharmacy">                  Phone #: <input asp-for="PharmacyPhone" style="width:15%" id="PharmacyPhone"> 
         
     Any other significant medication issue or concern (e.g. medication side effect, drug interaction, adjustment, effectiveness, cost, etc.)? 
-    <textarea asp-for="AnyOther" rows="2" style="width:95%" > </textarea>
+    <textarea asp-for="AnyOther" rows="2" style="width:95%" id="AnyOther"> </textarea>
     </pre>
     </div>
 </div>
@@ -24,9 +24,10 @@
     <div class="col-md-12">
     <pre>
     <strong>SECTION VII: AREAS OF FUNCTIONING AND NEEDS ASSESSMENT  </strong>
+
     <strong>1. MENTAL HEALTH / BEHAVIORAL / SUBSTANCE ABUSE  </strong>
     <u>Mental Health / Psychiatric History</u><i>(include client and family history):</i>
-    <textarea asp-for="MentalHealth" rows="5" style="width:95%"> </textarea>
+    <textarea asp-for="MentalHealth" rows="5" style="width:95%" id="MentalHealth"> </textarea>
     </pre>
     </div>
 </div>

@@ -49,6 +49,11 @@ namespace KyoS.Web.Controllers
         [Authorize(Roles = "Manager, CaseManager")]
         public async Task<IActionResult> Index(int idError = 0)
         {
+            if (idError == 1) //Imposible to delete
+            {
+                ViewBag.Delete = "N";
+            }
+
             UserEntity user_logged = await _context.Users
                                                    .Include(u => u.Clinic)
                                                    .ThenInclude(c => c.Setting)
@@ -58,17 +63,14 @@ namespace KyoS.Web.Controllers
             {
                 return RedirectToAction("NotAuthorized", "Account");
             }
-
-            if (idError == 1) //Imposible to delete
-            {
-                ViewBag.Delete = "N";
-            }
+            
             if (User.IsInRole("Manager"))
             {
                 List<TCMPayStubEntity> salida = await _context.TCMPayStubs
                                                               .Include(c => c.TCMPayStubDetails)
                                                               .Include(c => c.TCMNotes)
                                                               .Include(c => c.CaseMannager)
+                                                              .AsSplitQuery()
                                                               .ToListAsync();
                 return View(salida);
             }
@@ -78,6 +80,7 @@ namespace KyoS.Web.Controllers
                                                               .Include(c => c.TCMPayStubDetails)
                                                               .Include(c => c.TCMNotes)
                                                               .Include(c => c.CaseMannager)
+                                                              .AsSplitQuery()
                                                               .Where(n => n.CaseMannager.LinkedUser == user_logged.UserName)
                                                               .ToListAsync();
                 return View(salida);
@@ -182,7 +185,7 @@ namespace KyoS.Web.Controllers
                         modelTemp.Amount = PaystubDetailsList.Sum(n => n.Amount);
 
 
-                        TCMPayStubEntity paystub = await _converterHelper.ToPayStubEntity(modelTemp, true);
+                        TCMPayStubEntity paystub = _converterHelper.ToTCMPayStubEntity(modelTemp, true);
                         _context.Add(paystub);
                     }
                     
@@ -467,6 +470,7 @@ namespace KyoS.Web.Controllers
 
             TCMPayStubEntity entity = await _context.TCMPayStubs
                                                     .Include(n => n.TCMPayStubDetails)
+                                                    .Include(n => n.CaseMannager)
                                                     .FirstOrDefaultAsync(f => f.Id == id);
             if (entity == null)
             {
@@ -482,8 +486,10 @@ namespace KyoS.Web.Controllers
                     Amount = entity.Amount,
                     IdStatus = Convert.ToInt32(entity.StatusPayStub),
                     StatusList = _combosHelper.GetComboPaystubStatus(),
-                    DatePayStubPayment = DateTime.Today
-
+                    DatePayStubPayment = entity.DatePayStubPayment,
+                    CaseMannager = entity.CaseMannager,
+                    DatePayStubClose = entity.DatePayStubClose,
+                    DatePayStub = entity.DatePayStub
                 };
             }
 
@@ -506,16 +512,8 @@ namespace KyoS.Web.Controllers
 
                 if (entity != null)
                 {
-                    if (entity.Amount <= model.Amount)
-                    {
-                        entity.StatusPayStub = StatusTCMPaystub.Paid;
-                        entity.DatePayStubPayment = model.DatePayStubPayment;
-                    }
-                    else
-                    {
-                        entity.StatusPayStub = StatusTCMPaystub.Pending;
-                        entity.DatePayStubPayment = model.DatePayStubPayment;
-                    }
+                    entity.StatusPayStub = StatusTCMPaystubUtils.GetStatusBillByIndex(model.IdStatus);
+                    entity.DatePayStubPayment = model.DatePayStubPayment;
 
                     _context.Update(entity);
                     try
@@ -546,6 +544,29 @@ namespace KyoS.Web.Controllers
 
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "UpdatePaid", model) });
         }
+
+        [Authorize(Roles = "Manager, CaseManager")]
+        public IActionResult EXCEL(int id)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            TCMPayStubEntity payStub = _context.TCMPayStubs
+                                               .Include(n => n.TCMPayStubDetails)
+                                               .Include(n => n.CaseMannager)
+                                               .FirstOrDefault(n => n.Id == id);
+
+            string Periodo = "Invoice until: " + payStub.DatePayStubClose.ToShortDateString();
+            string ReportName = "Invoice " + user_logged.Clinic.Name + " " + payStub.DatePayStubClose.ToShortDateString() + ".xlsx";
+            string data = "BILL";
+
+            byte[] content = _exportExcelHelper.ExportPayStubTCMHelper(payStub, Periodo, _context.Clinics.FirstOrDefault().Name, data);
+
+            return File(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", ReportName);
+
+        }
+
 
     }
 }

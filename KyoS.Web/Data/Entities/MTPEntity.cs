@@ -15,8 +15,7 @@ namespace KyoS.Web.Data.Entities
         public ClientEntity Client { get; set; }        
 
         [Display(Name = "Treatment plan developed date")]
-        [DataType(DataType.Date)]
-        
+        [DataType(DataType.Date)]        
         public DateTime MTPDevelopedDate { get; set; }
 
         [Display(Name = "Start Time")]
@@ -142,5 +141,7 @@ namespace KyoS.Web.Data.Entities
         public bool DeniedBill { get; set; }
 
         public int Units { get; set; }
+
+        public PayStubEntity PayStub { get; set; }
     }
 }

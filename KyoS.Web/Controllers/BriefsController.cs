@@ -949,6 +949,8 @@ namespace KyoS.Web.Controllers
                                             .ThenInclude(c => c.Client_Referred)
                                                 .ThenInclude(cr => cr.Referred)
 
+                                         .AsSplitQuery()
+
                                          .FirstOrDefault(i => (i.Id == id));
             if (entity == null)
             {
@@ -998,6 +1000,16 @@ namespace KyoS.Web.Controllers
             if (entity.Client.Clinic.Name == "ALLIED HEALTH GROUP LLC")
             {
                 Stream stream = _reportHelper.AlliedBriefReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (entity.Client.Clinic.Name == "YOUR NEIGHBOR MEDICAL GROUP")
+            {
+                Stream stream = _reportHelper.YourNeighborBriefReport(entity);
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            if (entity.Client.Clinic.Name == "BETTER YEARS AHEAD MEDICAL CENTER")
+            {
+                Stream stream = _reportHelper.ByaBriefReport(entity);
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
             }
             return null;
@@ -1478,11 +1490,16 @@ namespace KyoS.Web.Controllers
                 UserEntity user_logged = _context.Users.Include(u => u.Clinic)
                                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
+                ClientEntity client = _context.Clients.Include(n => n.Psychiatrist).FirstOrDefault(m => m.Id == id);
+
                 Client_DiagnosticViewModel model = new Client_DiagnosticViewModel
                 {
                     IdDiagnostic = 0,
                     Diagnostics = _combosHelper.GetComboDiagnosticsByClient(id),
-                    IdClient = id
+                    IdClient = id,
+                    DateIdentify = DateTime.Now,
+                    Active = true,
+                    Prescriber = (client.Psychiatrist != null) ? client.Psychiatrist.Name : string.Empty
                 };
                 return View(model);
             }
@@ -1511,7 +1528,10 @@ namespace KyoS.Web.Controllers
                     Id = 0,
                     Client = client,
                     Diagnostic = diagnostic,
-                    Principal = client_diagnosticViewModel.Principal
+                    Principal = client_diagnosticViewModel.Principal,
+                    Active = client_diagnosticViewModel.Active,
+                    DateIdentify = client_diagnosticViewModel.DateIdentify,
+                    Prescriber = client_diagnosticViewModel.Prescriber
 
                 };
 

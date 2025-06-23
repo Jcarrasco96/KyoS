@@ -80,21 +80,25 @@
             </div>
             <div class="collapse navbar-collapse" id="navbarNavDropdown">
                 <ul class="nav navbar-nav">
-                    @if (User.Identity.IsAuthenticated && (User.IsInRole("Admin")))
+                 @if (User.Identity.IsAuthenticated && (User.IsInRole("Admin")))
                     {
                         <li class="class=" dropdown open"">
                             <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
                                 Data Operation <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu">
-                                <li><a asp-area="" asp-controller="Clinics" asp-action="Index">Clinics</a></li>
+                                <li><a asp-area="" asp-controller="Clinics" asp-action="Index">Clinics</a></li>                                                 
+                            </ul>
+                        </li>
+                        <li class="class=" dropdown open"">
+                            <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
+                                Notes <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li>@Html.ActionLink("CMH", "Index", "Notes")</li>
                                 <li role="separator" class="divider"></li>
-                                <li>@Html.ActionLink("Managers", "Index", "Managers")</li>
-                                <li><a asp-area="" asp-controller="Supervisors" asp-action="Index">Supervisors</a></li>
-                                <li>@Html.ActionLink("Facilitators", "Index", "Facilitators")</li>
-                                <li role="separator" class="divider"></li>
-                                <li>@Html.ActionLink("Case Managers", "Index", "CaseMannager")</li>
-                                <li>@Html.ActionLink("TCM Supervisors", "Index", "TCMSupervisors")</li>
+                                <li>@Html.ActionLink("TCM", "Search", "TCMNotes", new { id = 0, idService = 0, idActivityService = 0 })</li>
+                                <li>@Html.ActionLink("SP", "SearchDomain", "TCMNotes", new { NameDomain = string.Empty, idTCMDomain = 0 })</li>
                             </ul>
                         </li>
                         <li>
@@ -120,8 +124,10 @@
                             <ul class="dropdown-menu">
                                 <li class="dropdown-submenu">
                                 <li>@Html.ActionLink("Invoice history", "Index", "BillDms")</li>
+                                <li>@Html.ActionLink("Internal Invoice", "InternalAccount", "BillDms")</li>
                             </ul>
                         </li>
+                        <li><a asp-area="" asp-controller="Promotion" asp-action="Index">Promotions</a></li>
                     }
                     else
                  if (User.Identity.IsAuthenticated && (User.IsInRole("Manager")))
@@ -132,6 +138,7 @@
                             </a>
                             <ul class="dropdown-menu" role="menu">
                                 <li><a asp-area="" asp-controller="Settings" asp-action="EditSettingManager">My Clinic</a></li>
+                                <li><a asp-area="" asp-controller="Course" asp-action="Index">Certification Courses</a></li>
                                 <li>@Html.ActionLink("Health Insurances", "Index", "HealthInsurances")</li>
                                 <li role="separator" class="divider"></li>
                                 @if (setting != null && (setting.MentalHealthClinic || setting.TCMClinic))
@@ -142,6 +149,7 @@
                                             <li><a asp-area="" asp-controller="Clients" asp-action="Create">Create Client</a></li>
                                             <li><a asp-area="" asp-controller="Clients" asp-action="Signatures">Clients' Signatures</a></li>
                                             <li><a asp-area="" asp-controller="IncidentReport" asp-action="Index">Incident Report</a></li>
+                                            <li><a asp-area="" asp-controller="Eligibility" asp-action="Index">Clients' Eligibility</a></li>
                                             <li><a asp-area="" asp-controller="Clients" asp-action="Index">All Clients</a></li>
                                         </ul>
                                     </li>
@@ -240,16 +248,22 @@
                                         <a class="test" tabindex="-1" href="#">Clients</a>
                                         <ul class="dropdown-menu">
                                             <li><a asp-area="" asp-controller="Clients" asp-action="ActiveClients">Active clients</a></li>
+                                            <li><a asp-area="" asp-controller="Notes" asp-action="IndexNotePSY">PSY Notes</a></li>
                                             <li><a asp-area="" asp-controller="Clients" asp-action="Documentation">Clients' Documentation</a></li>
-                                            <li><a asp-area="" asp-controller="Eligibility" asp-action="Index">Clients' Eligibility</a></li>
                                         </ul>
                                     </li>
                                     <li class="dropdown-submenu">
-                                        <a class="test" tabindex="-1" href="#">Calendar</a>
+                                        <a class="test" tabindex="-1" href="#">Calendars</a>
                                         <ul class="dropdown-menu">
                                             <li><a asp-area="" asp-controller="Calendar" asp-action="Index">Clients</a></li>
                                             <li><a asp-area="" asp-controller="Calendar" asp-action="IndexFacilitator">Facilitators</a></li>
                                             <li><a asp-area="" asp-controller="Calendar" asp-action="IndexDocumentsAssistant">Documents Assistant</a></li>
+                                        </ul>
+                                    </li>
+                                    <li class="dropdown-submenu">
+                                        <a class="test" tabindex="-1" href="#">Paystubs &nbsp;</a>
+                                        <ul class="dropdown-menu">
+                                            <li>@Html.ActionLink("Employees", "Index", "PayStubs")</li>
                                         </ul>
                                     </li>
                                     <li role="separator" class="divider"></li>
@@ -277,7 +291,7 @@
                                         <ul class="dropdown-menu">
                                             <li>@Html.ActionLink("Session changes", "ChangeNotes", "Notes")</li>
                                             <li>@Html.ActionLink("PSR Assistance modifications", "PSRAssistanceModifications", "Notes")</li>
-                                            <li>@Html.ActionLink("Select other facilitator", "ChangeFacilitator", "Notes")</li>
+                                            <li>@Html.ActionLink("Change facilitator", "ChangeFacilitator", "Notes")</li>
                                         </ul>
                                     </li>
                                     <li role="separator" class="divider"></li>
@@ -352,8 +366,6 @@
                                         </ul>
                                     </li>
                                     <li role="separator" class="divider"></li>
-                                    <li>@Html.ActionLink("Reports", "Index", "Themes")</li>
-                                    <li role="separator" class="divider"></li>
                                     <li class="dropdown-submenu">
                                         <a class="test" tabindex="-1" href="#">History</a>
                                         <ul class="dropdown-menu">
@@ -394,14 +406,6 @@
                                     </li>
                                     <li role="separator" class="divider"></li>
                                     <li class="dropdown-submenu">
-                                        <a class="test" tabindex="-1" href="#">Services &nbsp;</a>
-                                        <ul class="dropdown-menu">
-                                            <li>@Html.ActionLink("New Service / Objective", "Index", "TCMServices")</li>
-                                            <li>@Html.ActionLink("SubServices", "TCMSubServices", "TCMServices")</li>
-                                        </ul>
-                                    </li>
-                                    <li role="separator" class="divider"></li>
-                                    <li class="dropdown-submenu">
                                         <a class="test" tabindex="-1" href="#">Cases</a>
                                         <ul class="dropdown-menu">
                                             <li><a asp-area="" asp-controller="TCMClients" asp-action="TCMCaseActive">Active Cases</a></li>
@@ -410,6 +414,25 @@
                                             <li><a asp-area="" asp-controller="TCMClients" asp-action="Index">All TCM Cases</a></li>
                                         </ul>
                                     </li>
+                                    <li class="dropdown-submenu">
+                                        <a class="test" tabindex="-1" href="#">Calendar</a>
+                                        <ul class="dropdown-menu">
+                                            <li>@Html.ActionLink("TCM Client", "Index", "Calendar")</li>
+                                            <li>@Html.ActionLink("Case Manager", "TCMSupervisor", "TCMBilling")</li>
+                                            <li>@Html.ActionLink("Supervision", "TCMSupervisionTimeCalendar", "TCMSupervisors")</li>
+                                        </ul>
+                                    </li>
+
+
+                                    <li class="dropdown-submenu">
+                                        <a class="test" tabindex="-1" href="#">Services &nbsp;</a>
+                                        <ul class="dropdown-menu">
+                                            <li>@Html.ActionLink("New Service / Objective", "Index", "TCMServices")</li>
+                                            <li>@Html.ActionLink("SubServices", "TCMSubServices", "TCMServices")</li>
+                                        </ul>
+                                    </li>
+                                    <li role="separator" class="divider"></li>
+                                   
                                     <li class="dropdown-submenu">
                                         <a class="test" tabindex="-1" href="#">Assessments</a>
                                         <ul class="dropdown-menu">
@@ -583,6 +606,15 @@
                                 <li>@Html.ActionLink("Approve Group notes", "GroupNotesSupervision", "Notes")</li>
                             </ul>
                         </li>
+                        <li class="class=" dropdown open"">
+                            <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
+                                Human Resources <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li>@Html.ActionLink("My Information", "Index", "Supervisors")</li>
+                                <li>@Html.ActionLink("Paystubs", "Index", "TCMPayStub")</li>
+                            </ul>
+                        </li>
                         <li>
                             @if (counts_of_incidents == 0)
                             {
@@ -623,7 +655,14 @@
                                 <li>@Html.ActionLink("Activities / Facilitator's Interventions per PSR week", "ActivitiesPerWeek", "Activities")</li>
                                 <li>@Html.ActionLink("Activities / Facilitator's Interventions per Group week", "ActivitiesPerGroupWeek", "Activities")</li>
                                 <li role="separator" class="divider"></li>
-                                <li>@Html.ActionLink("My Calendar", "IndexFacilitator", "Calendar")</li>
+                                <li class="dropdown-submenu">
+                                    <a class="test" tabindex="-1" href="#">Calendars</a>
+                                    <ul class="dropdown-menu">
+                                        <li>@Html.ActionLink("Clients", "Index", "Calendar")</li>
+                                        <li>@Html.ActionLink("My Calendar", "IndexFacilitator", "Calendar")</li>
+                                    </ul>
+                                </li>
+                                
                             </ul>
                         </li>
                         <li class="class=" dropdown open"">
@@ -723,6 +762,20 @@
                                 </li>
                             </ul>
                         </li>
+                        <li class="class=" dropdown open"">
+                            <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
+                                Human Resources <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li>@Html.ActionLink("My Information", "Index", "Facilitators")</li>
+                                <li class="dropdown-submenu">
+                                    <a class="test" tabindex="-1" href="#">Paystubs &nbsp;</a>
+                                    <ul class="dropdown-menu">
+                                        <li>@Html.ActionLink("My PayStubs", "Index", "PayStubs")</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
                         <li>
                             @if (counts_of_incidents == 0)
                             {
@@ -736,10 +789,6 @@
                             <a asp-area="" style="background-color: transparent;" asp-controller="Incidents" asp-action="Index">
                                 &nbsp;Incidents&nbsp;&nbsp;
                             </a>
-                            @*<ul class="dropdown-menu" role="menu">
-                    <li><a asp-area="" asp-controller="Incidents" asp-action="Index">Incidents</a></li>
-                    <li role="separator" class="divider"></li>
-                </ul>*@
                         </li>
                         <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
                     }
@@ -770,7 +819,14 @@
                                     </ul>
                                 </li>
                                 <li class="divider"></li>
-                                <li>@Html.ActionLink("Supervision Calendar", "TCMSupervisionTimeCalendar", "TCMSupervisors")</li>
+                                <li class="dropdown-submenu">
+                                    <a class="test" tabindex="-1" href="#">Calendars</a>
+                                    <ul class="dropdown-menu">
+                                        <li>@Html.ActionLink("Clients", "Index", "Calendar")</li>
+                                        <li>@Html.ActionLink("Case Managers", "TCMSupervisor", "TCMBilling")</li>
+                                        <li>@Html.ActionLink("Supervision", "TCMSupervisionTimeCalendar", "TCMSupervisors")</li>
+                                    </ul>
+                                </li>
                             </ul>
                         </li>
                         <li class="class=" dropdown open"">
@@ -838,7 +894,7 @@
                                     <a class="test" tabindex="-1" href="#">Discharges</a>
                                     <ul class="dropdown-menu">
                                         <li>@Html.ActionLink("Pending", "TCMDischargeApproved", "TCMDischarges", new { approved = 1 })</li>
-                                        <li>@Html.ActionLink("Discharge all", "Index", "TCMDischarges")</li>
+                                        <li>@Html.ActionLink("All Discharges", "Index", "TCMDischarges")</li>
                                     </ul>
                                 </li>
                             </ul>
@@ -909,7 +965,7 @@
                                     </ul>
                                 </li>
                                 <li class="dropdown-submenu">
-                                    <a class="test" tabindex="-1" href="#">TC Clients</a>
+                                    <a class="test" tabindex="-1" href="#">TCM Clients</a>
                                     <ul class="dropdown-menu">
                                         <li>@Html.ActionLink("Active TCM Client", "TCMCaseActive", "TCMClients")</li>
                                         <li>@Html.ActionLink("Clients / Signatures", "Clients", "TCMClients")</li>
@@ -917,7 +973,14 @@
                                         <li>@Html.ActionLink("Transfers", "Transfers", "TCMClients")</li>
                                     </ul>
                                 </li>
-                                <li>@Html.ActionLink("Supervision", "TCMSupervisionTimeCalendar", "TCMSupervisors")</li>
+                                <li class="dropdown-submenu">
+                                    <a class="test" tabindex="-1" href="#">Calendars</a>
+                                    <ul class="dropdown-menu">
+                                        <li>@Html.ActionLink("Clients", "Index", "Calendar")</li>
+                                        <li>@Html.ActionLink("My calendar", "Index", "TCMBilling")</li>
+                                        <li>@Html.ActionLink("Supervision", "TCMSupervisionTimeCalendar", "TCMSupervisors")</li>
+                                    </ul>
+                                </li>
                             </ul>
                         </li>
                         <li class="class=" dropdown open"">
@@ -1009,7 +1072,16 @@
                                 <li>@Html.ActionLink("Disabled Dates", "Index", "TCMDateBlockeds")</li>
                             </ul>
                         </li>
-                        <li><a asp-area="" asp-controller="TCMPayStub" asp-action="Index">Paystub</a></li>
+                        <li class="class=" dropdown open"">
+                            <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
+                                Human Resources <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li>@Html.ActionLink("My Information", "Index", "CaseMannager")</li>
+                                <li>@Html.ActionLink("Certifications", "CaseManagerCertification", "CaseMannager")</li>
+                                <li>@Html.ActionLink("Paystubs", "Index", "TCMPayStub")</li>
+                            </ul>
+                        </li>
                         <li><a asp-area="" asp-controller="Incidents" asp-action="Index">Incidents</a></li>
                         <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>                        
                     }
@@ -1069,7 +1141,15 @@
                                 <li>@Html.ActionLink("All Documents", "Alldocuments", "Clients")</li>
                             </ul>
                         </li>
-
+                        <li class="class=" dropdown open"">
+                            <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
+                                Human Resources <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li>@Html.ActionLink("My Information", "Index", "DocumentsAssistants")</li>
+                                <li>@Html.ActionLink("Paystubs", "Index", "PayStubs")</li>
+                            </ul>
+                        </li>
                         <li><a asp-area="" asp-controller="Incidents" asp-action="Index">Incidents</a></li>
                         <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
                     }
@@ -1083,7 +1163,7 @@
                             <ul class="dropdown-menu" role="menu">
                                 <li>@Html.ActionLink("Clients", "Index", "Clients")</li>
                                 <li class="dropdown-submenu">
-                                    <a class="test" tabindex="-1" href="#">Calendar</a>
+                                    <a class="test" tabindex="-1" href="#">Calendars</a>
                                     <ul class="dropdown-menu">
                                         <li><a asp-area="" asp-controller="Calendar" asp-action="Index">Clients</a></li>
                                         <li><a asp-area="" asp-controller="Calendar" asp-action="IndexFacilitator">Facilitators</a></li>
@@ -1119,6 +1199,48 @@
 
                         <li><a asp-area="" asp-controller="Incidents" asp-action="Index">Incidents</a></li>
                         <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
+                    }
+                    else
+                 if (User.Identity.IsAuthenticated && (User.IsInRole("Biller")))
+                    {
+                        <li class="class=" dropdown open"">
+                            <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
+                                Clients <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li>@Html.ActionLink("All MH Cases", "Index", "Clients")</li>
+                                <li role="separator" class="divider"></li>
+                                <li>@Html.ActionLink("All TCM Cases", "Index", "TCMClients")</li>
+
+                            </ul>
+                        </li>
+                        <li class="class=" dropdown open"">
+                            <a asp-area="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true" style="background-color: #1e2833;">
+                                Billing Report <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li>@Html.ActionLink("CMH", "BillingReport1", "Notes")</li>
+                                <li role="separator" class="divider"></li>
+                                <li>@Html.ActionLink("TCM", "BillingForWeek", "TCMBilling")</li>
+                               
+                            </ul>
+                        </li>
+                        <li>
+                            @if (counts_of_incidents == 0)
+                            {
+                                <span class="notifications-counter-cero">@counts_of_incidents</span>
+                            }
+                            else
+                            {
+                                <span class="notifications-counter">@counts_of_incidents</span>
+                            }
+
+                            <a asp-area="" style="background-color: transparent;" asp-controller="Incidents" asp-action="Index">
+                                &nbsp;Incidents&nbsp;&nbsp;
+                            </a>
+                        </li>
+                        <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
+                        
                     }
                 </ul>
                     <ul class="nav navbar-nav navbar-right">
@@ -1654,6 +1776,12 @@
                                                     Front Desk
                                                 </span>
                                             }
+                                            @if (User.IsInRole("Biller"))
+                                            {
+                                                <span class="label label-default">
+                                                    Biller
+                                                </span>
+                                            }
                                         </a>
                                     </li>
                                     <li class="class=" dropdown open"">
@@ -1704,7 +1832,7 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; 2024 - DMS System</p>
+            <p style="text-align:left;display: block;font-size: 14px;color: #888da8;max-width: 100%;">&copy; 2024 DMS System. All Rights Reserved</p>
         </footer>
     </div>    
 

@@ -17,7 +17,7 @@ namespace KyoS.Web.Data.Entities
         public string TypeSurgery { get; set; }
 
         [DataType(DataType.Date)]
-        public DateTime Date { get; set; }
+        public string Date { get; set; }
 
         public string Hospital { get; set; }
 

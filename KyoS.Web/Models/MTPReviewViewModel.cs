@@ -17,5 +17,6 @@ namespace KyoS.Web.Models
        
         public int IdDocumentAssistant { get; set; }
         public int IdIndFacilitator { get; set; }
+        public int IdFacilitator { get; set; }
     }
 }

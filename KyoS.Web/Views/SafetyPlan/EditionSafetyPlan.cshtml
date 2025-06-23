@@ -105,7 +105,7 @@
                                     }
                                 </td>
                                 <td align="right">
-                                    @if (User.IsInRole("Facilitator"))
+                                    @if (User.Identity.Name == item.CreatedBy)
                                     {
                                         <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" title="Edit Safety Plan"><i class="glyphicon glyphicon-pencil"></i></a>
                                         <a asp-action="FinishEditingSafetyPlan" asp-route-id="@item.Id" class="btn btn-success" title="Finish edition Safety Plan"><i class="glyphicon glyphicon-ok"></i></a>

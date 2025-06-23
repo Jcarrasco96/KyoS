@@ -105,6 +105,10 @@ jQueryAjaxPostTem = form => {
                     $('#form-modal .modal-body').html('');
                     $('#form-modal .modal-title').html('');
                     $('#form-modal').modal('hide');
+
+                    $('#MyTable').DataTable({
+                        "pageLength": 100
+                    });   
                 }
                 else
                     $('#form-modal .modal-body').html(res.html);
@@ -208,19 +212,7 @@ jQueryAjaxPostGoal = form => {
                     $('#MyTable').DataTable({
                         "order": [[1, "asc"]],
                         "pageLength": 100
-                    });
-                    var item_to_delete;
-                    $('.deleteItem').click((e) => {
-                        item_to_delete = e.currentTarget.dataset.id;
-                    });
-                    $("#btnYesDelete").click(function () {
-                        var wwwUrlPath = window.document.location.href;
-                        var pathName = window.document.location.pathname;
-                        var pos = wwwUrlPath.indexOf(pathName);
-                        var localhostPath = wwwUrlPath.substring(0, pos);
-                        var url = 'MTPs/DeleteGoalOfAddendum';
-                        window.location.href = localhostPath + '/' + url + '/' + item_to_delete;
-                    });
+                    });                    
                 }
                 else
                     $('#form-modal .modal-body').html(res.html);
@@ -254,19 +246,7 @@ jQueryAjaxPostGoalMTPReview = form => {
                     $('#MyTable').DataTable({
                         "order": [[1, "asc"]],
                         "pageLength": 100
-                    });
-                    var item_to_delete;
-                    $('.deleteItem').click((e) => {
-                        item_to_delete = e.currentTarget.dataset.id;
-                    });
-                    $("#btnYesDelete").click(function () {
-                        var wwwUrlPath = window.document.location.href;
-                        var pathName = window.document.location.pathname;
-                        var pos = wwwUrlPath.indexOf(pathName);
-                        var localhostPath = wwwUrlPath.substring(0, pos);
-                        var url = 'MTPs/DeleteGoalOfMTPreview';
-                        window.location.href = localhostPath + '/' + url + '/' + item_to_delete;
-                    });
+                    });                    
                 }
                 else
                     $('#form-modal .modal-body').html(res.html);
@@ -292,26 +272,18 @@ jQueryAjaxPostTCMSupervisor = form => {
             processData: false,
             success: function (res) {
                 if (res.isValid) {
-                    $('#view-templates').html(res.html)
-                    $('#form-modal .modal-body').html('');
-                    $('#form-modal .modal-title').html('');
-                    $('#form-modal').modal('hide');
+                    $('#view-tcmsupervisor').html(res.html)
+                    $('#form-modal-lg .modal-body').html('');
+                    $('#form-modal-lg .modal-title').html('');
+                    $('#form-modal-lg').modal('hide');
 
                     $('#MyTable').DataTable({
-                        "order": [[0, "asc"]],
-                        "pageLength": 100
-                    });           
-                    var item_to_delete;
-                    $('.deleteItem').click((e) => {
-                        item_to_delete = e.currentTarget.dataset.id;
-                    });
-                    $("#btnYesDelete").click(function () {
-                        var url = 'TCMSupervisors/Delete';
-                        window.location.href = url + '/' + item_to_delete;
-                    });
+                        "order": [[1, "asc"]],
+                        "pageLength": 50
+                    });                               
                 }
                 else
-                    $('#form-modal .modal-body').html(res.html);
+                    $('#form-modal-lg .modal-body').html(res.html);
             },
             error: function (err) {
                 console.log(err)
@@ -342,15 +314,7 @@ jQueryAjaxPostTCMClient = form => {
                     $('#MyTable').DataTable({
                         "order": [[0, "asc"]],
                         "pageLength": 100
-                    });
-                    var item_to_delete;
-                    $('.deleteItem').click((e) => {
-                        item_to_delete = e.currentTarget.dataset.id;
-                    });
-                    $("#btnYesDelete").click(function () {
-                        var url = 'TCMClients/Delete';
-                        window.location.href = url + '/' + item_to_delete;
-                    });
+                    });                    
                 }
                 else
                     $('#form-modal .modal-body').html(res.html);
@@ -384,15 +348,7 @@ jQueryAjaxPostTCMService = form => {
                     $('#MyTable').DataTable({
                         "order": [[0, "asc"]],
                         "pageLength": 100
-                    });
-                    var item_to_delete;
-                    $('.deleteItem').click((e) => {
-                        item_to_delete = e.currentTarget.dataset.id;
-                    });
-                    $("#btnYesDelete").click(function () {
-                        var url = 'TCMServices/Delete';
-                        window.location.href = url + '/' + item_to_delete;
-                    });
+                    });                    
                 }
                 else
                     $('#form-modal .modal-body').html(res.html);
@@ -426,15 +382,7 @@ jQueryAjaxPostTCMAdendums = form => {
                     $('#MyTable').DataTable({
                         "order": [[0, "asc"]],
                         "pageLength": 100
-                    });
-                    var item_to_delete;
-                    $('.deleteItem').click((e) => {
-                        item_to_delete = e.currentTarget.dataset.id;
-                    });
-                    $("#btnYesDelete").click(function () {
-                        var url = 'TCMServicePlans/DeleteAdendum';
-                        window.location.href = url + '/' + item_to_delete;
-                    });
+                    });                    
                 }
                 else
                     $('#form-modal .modal-body').html(res.html);
@@ -468,19 +416,7 @@ jQueryAjaxPostTCMAdendumsLg = form => {
                     $('#MyTable').DataTable({
                         "order": [[0, "asc"]],
                         "pageLength": 100
-                    });
-                    var item_to_delete;
-                    $('.deleteItem').click((e) => {
-                        item_to_delete = e.currentTarget.dataset.id;
-                    });
-                    $("#btnYesDelete").click(function () {
-                        var wwwUrlPath = window.document.location.href;
-                        var pathName = window.document.location.pathname;
-                        var pos = wwwUrlPath.indexOf(pathName);
-                        var localhostPath = wwwUrlPath.substring(0, pos);
-                        var url = 'TCMServicePlan/DeleteAddendum';
-                        window.location.href = localhostPath + '/' + url + '/' + item_to_delete;
-                    });
+                    });                    
                 }
                 else
                     $('#form-modal-lg .modal-body').html(res.html);
@@ -514,15 +450,7 @@ jQueryAjaxPostTCMServicePlan = form => {
                     $('#MyTable').DataTable({
                         "order": [[0, "asc"]],
                         "pageLength": 100
-                    });
-                    var item_to_delete;
-                    $('.deleteItem').click((e) => {
-                        item_to_delete = e.currentTarget.dataset.id;
-                    });
-                    $("#btnYesDelete").click(function () {
-                        var url = 'TCMServicePlans/Delete';
-                        window.location.href = url + '/' + item_to_delete;
-                    });
+                    });                   
                 }
                 else
                     $('#form-modal .modal-body').html(res.html);
@@ -557,15 +485,7 @@ jQueryAjaxPostTCMDischarge = form => {
                     $('#MyTable').DataTable({
                         "order": [[0, "asc"]],
                         "pageLength": 100
-                    });
-                    var item_to_delete;
-                    $('.deleteItem').click((e) => {
-                        item_to_delete = e.currentTarget.dataset.id;
-                    });
-                    $("#btnYesDelete").click(function () {
-                        var url = 'TCMDischarges/Delete';
-                        window.location.href = url + '/' + item_to_delete;
-                    });
+                    });                    
                 }
                 else
                     $('#form-modal .modal-body').html(res.html);
@@ -595,20 +515,7 @@ jQueryAjaxPostBIOBehavioral = form => {
                     $('#view-BioBehavioral').html(res.html)
                     $('#form-modal .modal-body').html('');
                     $('#form-modal .modal-title').html('');
-                    $('#form-modal').modal('hide');
-
-                    var item_to_delete;
-                    $('.deleteItem').click((e) => {
-                        item_to_delete = e.currentTarget.dataset.id;
-                    });
-                    $("#btnYesDelete").click(function () {
-                        var wwwUrlPath = window.document.location.href;
-                        var pathName = window.document.location.pathname;
-                        var pos = wwwUrlPath.indexOf(pathName);
-                        var localhostPath = wwwUrlPath.substring(0, pos);
-                        var url = 'Bios/DeleteBehavioral';
-                        window.location.href = localhostPath + '/' + url + '/' + item_to_delete;
-                    });
+                    $('#form-modal').modal('hide');                    
                 }
                 else
                     $('#form-modal .modal-body').html(res.html);
@@ -638,20 +545,7 @@ jQueryAjaxPostMedication = form => {
                     $('#view-Medication').html(res.html)
                     $('#form-modal .modal-body').html('');
                     $('#form-modal .modal-title').html('');
-                    $('#form-modal').modal('hide');
-                    
-                    var item_to_delete;
-                    $('.deleteItem').click((e) => {
-                        item_to_delete = e.currentTarget.dataset.id;
-                    });
-                    $("#btnYesDelete").click(function () {
-                        var wwwUrlPath = window.document.location.href;
-                        var pathName = window.document.location.pathname;
-                        var pos = wwwUrlPath.indexOf(pathName);
-                        var localhostPath = wwwUrlPath.substring(0, pos);
-                        var url = 'Medication/Delete';
-                        window.location.href = localhostPath + '/' + url + '/' + item_to_delete;
-                    });
+                    $('#form-modal').modal('hide');               
                 }
                 else
                     $('#form-modal .modal-body').html(res.html);
@@ -688,16 +582,7 @@ jQueryAjaxPostChangeNote = form => {
                     $('#MyTable').DataTable({
                         "order": [[3, "asc"]],
                         "pageLength": 100
-                    });
-
-                    var item_to_delete;
-                    $('.deleteItem').click((e) => {
-                        item_to_delete = e.currentTarget.dataset.id;
-                    });
-                    $("#btnYesDelete").click(function () {
-                        var url = 'Notes/Delete';
-                        window.location.href = url + '/' + item_to_delete;
-                    });
+                    });                    
                 }
                 else
                     $('#form-modal .modal-body').html(res.html);
@@ -734,16 +619,7 @@ jQueryAjaxPostChangeSessionByManager = form => {
                     $('#MyTable').DataTable({
                         "order": [[3, "asc"]],
                         "pageLength": 100
-                    });
-
-                    var item_to_delete;
-                    $('.deleteItem').click((e) => {
-                        item_to_delete = e.currentTarget.dataset.id;
-                    });
-                    $("#btnYesDelete").click(function () {
-                        var url = 'Notes/Delete';
-                        window.location.href = url + '/' + item_to_delete;
-                    });
+                    });                    
                 }
                 else
                     $('#form-modal .modal-body').html(res.html);
@@ -778,15 +654,7 @@ jQueryAjaxPostTCMServicePlanReview = form => {
                     $('#MyTable').DataTable({
                         "order": [[0, "asc"]],
                         "pageLength": 100
-                    });
-                    var item_to_delete;
-                    $('.deleteItem').click((e) => {
-                        item_to_delete = e.currentTarget.dataset.id;
-                    });
-                    $("#btnYesDelete").click(function () {
-                        var url = 'TCMServicePlanReviews/DeleteDomain';
-                        window.location.href = url + '/' + item_to_delete;
-                    });
+                    });                    
                 }
                 else
                     $('#form-modal .modal-body').html(res.html);
@@ -816,20 +684,7 @@ jQueryAjaxPostTCMAssessmentIndividualAgency = form => {
                     $('#view-AssessmentIndividual').html(res.html)
                     $('#form-modal .modal-body').html('');
                     $('#form-modal .modal-title').html('');
-                    $('#form-modal').modal('hide');
-                    
-                    var item_to_delete;
-                    $('.deleteItem').click((e) => {
-                        item_to_delete = e.currentTarget.dataset.id;
-                    });
-                    $("#btnYesDelete").click(function () {
-                        var wwwUrlPath = window.document.location.href;
-                        var pathName = window.document.location.pathname;
-                        var pos = wwwUrlPath.indexOf(pathName);
-                        var localhostPath = wwwUrlPath.substring(0, pos);
-                        var url = 'TCMAssessment/Delete';
-                        window.location.href = localhostPath + '/' + url + '/' + item_to_delete;
-                    });
+                    $('#form-modal').modal('hide');                    
                 }
                 else
                     $('#form-modal .modal-body').html(res.html);
@@ -859,20 +714,7 @@ jQueryAjaxPostTCMAssessmentHouseComposition = form => {
                     $('#view-Assessmenthouse').html(res.html)
                     $('#form-modal .modal-body').html('');
                     $('#form-modal .modal-title').html('');
-                    $('#form-modal').modal('hide');
-                    
-                    var item_to_delete;
-                    $('.deleteItem').click((e) => {
-                        item_to_delete = e.currentTarget.dataset.id;
-                    });
-                    $("#btnYesDelete").click(function () {
-                        var wwwUrlPath = window.document.location.href;
-                        var pathName = window.document.location.pathname;
-                        var pos = wwwUrlPath.indexOf(pathName);
-                        var localhostPath = wwwUrlPath.substring(0, pos);
-                        var url = 'TCMAssessment/Delete';
-                        window.location.href = localhostPath + '/' + url + '/' + item_to_delete;
-                    });
+                    $('#form-modal').modal('hide');                    
                 }
                 else
                     $('#form-modal .modal-body').html(res.html);
@@ -902,20 +744,7 @@ jQueryAjaxPostTCMAssessmentPastCurrent = form => {
                     $('#view-AssessmentPast').html(res.html)
                     $('#form-modal .modal-body').html('');
                     $('#form-modal .modal-title').html('');
-                    $('#form-modal').modal('hide');
-                    
-                    var item_to_delete;
-                    $('.deleteItem').click((e) => {
-                        item_to_delete = e.currentTarget.dataset.id;
-                    });
-                    $("#btnYesDelete").click(function () {
-                        var wwwUrlPath = window.document.location.href;
-                        var pathName = window.document.location.pathname;
-                        var pos = wwwUrlPath.indexOf(pathName);
-                        var localhostPath = wwwUrlPath.substring(0, pos);
-                        var url = 'TCMAssessment/Delete';
-                        window.location.href = localhostPath + '/' + url + '/' + item_to_delete;
-                    });
+                    $('#form-modal').modal('hide');              
                 }
                 else
                     $('#form-modal .modal-body').html(res.html);
@@ -945,20 +774,7 @@ jQueryAjaxPostTCMAssessmentMedication = form => {
                     $('#view-AssessmentMedication').html(res.html)
                     $('#form-modal .modal-body').html('');
                     $('#form-modal .modal-title').html('');
-                    $('#form-modal').modal('hide');
-                    
-                    var item_to_delete;
-                    $('.deleteItem').click((e) => {
-                        item_to_delete = e.currentTarget.dataset.id;
-                    });
-                    $("#btnYesDelete").click(function () {
-                        var wwwUrlPath = window.document.location.href;
-                        var pathName = window.document.location.pathname;
-                        var pos = wwwUrlPath.indexOf(pathName);
-                        var localhostPath = wwwUrlPath.substring(0, pos);
-                        var url = 'TCMAssessment/Delete';
-                        window.location.href = localhostPath + '/' + url + '/' + item_to_delete;
-                    });
+                    $('#form-modal').modal('hide');             
                 }
                 else
                     $('#form-modal .modal-body').html(res.html);
@@ -988,20 +804,7 @@ jQueryAjaxPostTCMAssessmenHospital = form => {
                     $('#view-AssessmentHospital').html(res.html)
                     $('#form-modal .modal-body').html('');
                     $('#form-modal .modal-title').html('');
-                    $('#form-modal').modal('hide');
-                    
-                    var item_to_delete;
-                    $('.deleteItem').click((e) => {
-                        item_to_delete = e.currentTarget.dataset.id;
-                    });
-                    $("#btnYesDelete").click(function () {
-                        var wwwUrlPath = window.document.location.href;
-                        var pathName = window.document.location.pathname;
-                        var pos = wwwUrlPath.indexOf(pathName);
-                        var localhostPath = wwwUrlPath.substring(0, pos);
-                        var url = 'TCMAssessment/Delete';
-                        window.location.href = localhostPath + '/' + url + '/' + item_to_delete;
-                    });
+                    $('#form-modal').modal('hide');                    
                 }
                 else
                     $('#form-modal .modal-body').html(res.html);
@@ -1031,20 +834,7 @@ jQueryAjaxPostTCMAssessmenDrug = form => {
                     $('#view-AssessmentDrug').html(res.html)
                     $('#form-modal .modal-body').html('');
                     $('#form-modal .modal-title').html('');
-                    $('#form-modal').modal('hide');
-                    
-                    var item_to_delete;
-                    $('.deleteItem').click((e) => {
-                        item_to_delete = e.currentTarget.dataset.id;
-                    });
-                    $("#btnYesDelete").click(function () {
-                        var wwwUrlPath = window.document.location.href;
-                        var pathName = window.document.location.pathname;
-                        var pos = wwwUrlPath.indexOf(pathName);
-                        var localhostPath = wwwUrlPath.substring(0, pos);
-                        var url = 'TCMAssessment/Delete';
-                        window.location.href = localhostPath + '/' + url + '/' + item_to_delete;
-                    });
+                    $('#form-modal').modal('hide');              
                 }
                 else
                     $('#form-modal .modal-body').html(res.html);
@@ -1074,20 +864,7 @@ jQueryAjaxPostTCMAssessmenMedicalProblem = form => {
                     $('#view-AssessmentMedicalProblem').html(res.html)
                     $('#form-modal .modal-body').html('');
                     $('#form-modal .modal-title').html('');
-                    $('#form-modal').modal('hide');
-                    
-                    var item_to_delete;
-                    $('.deleteItem').click((e) => {
-                        item_to_delete = e.currentTarget.dataset.id;
-                    });
-                    $("#btnYesDelete").click(function () {
-                        var wwwUrlPath = window.document.location.href;
-                        var pathName = window.document.location.pathname;
-                        var pos = wwwUrlPath.indexOf(pathName);
-                        var localhostPath = wwwUrlPath.substring(0, pos);
-                        var url = 'TCMAssessment/Delete';
-                        window.location.href = localhostPath + '/' + url + '/' + item_to_delete;
-                    });
+                    $('#form-modal').modal('hide');              
                 }
                 else
                     $('#form-modal .modal-body').html(res.html);
@@ -1117,20 +894,7 @@ jQueryAjaxPostTCMAssessmenSurgery = form => {
                     $('#view-AssessmentSurgery').html(res.html)
                     $('#form-modal .modal-body').html('');
                     $('#form-modal .modal-title').html('');
-                    $('#form-modal').modal('hide');
-                    
-                    var item_to_delete;
-                    $('.deleteItem').click((e) => {
-                        item_to_delete = e.currentTarget.dataset.id;
-                    });
-                    $("#btnYesDelete").click(function () {
-                        var wwwUrlPath = window.document.location.href;
-                        var pathName = window.document.location.pathname;
-                        var pos = wwwUrlPath.indexOf(pathName);
-                        var localhostPath = wwwUrlPath.substring(0, pos);
-                        var url = 'TCMAssessment/Delete';
-                        window.location.href = localhostPath + '/' + url + '/' + item_to_delete;
-                    });
+                    $('#form-modal').modal('hide');             
                 }
                 else
                     $('#form-modal .modal-body').html(res.html);
@@ -1160,20 +924,7 @@ jQueryAjaxPostTCMNoteActivity = form => {
                     $('#view-NoteActivity').html(res.html)
                     $('#form-modal-lg .modal-body').html('');
                     $('#form-modal-lg .modal-title').html('');
-                    $('#form-modal-lg').modal('hide');
-                    
-                    var item_to_delete;
-                    $('.deleteItem').click((e) => {
-                        item_to_delete = e.currentTarget.dataset.id;
-                    });
-                    $("#btnYesDelete").click(function () {
-                        var wwwUrlPath = window.document.location.href;
-                        var pathName = window.document.location.pathname;
-                        var pos = wwwUrlPath.indexOf(pathName);
-                        var localhostPath = wwwUrlPath.substring(0, pos);
-                        var url = 'TCMNotes/Delete';
-                        window.location.href = localhostPath + '/' + url + '/' + item_to_delete;
-                    });
+                    $('#form-modal-lg').modal('hide');           
                 }
                 else
                     $('#form-modal-lg .modal-body').html(res.html);
@@ -1203,20 +954,7 @@ jQueryAjaxPostTCMNoteActivityTemp = form => {
                     $('#view-NoteActivityTemp').html(res.html)
                     $('#form-modal-lg .modal-body').html('');
                     $('#form-modal-lg .modal-title').html('');
-                    $('#form-modal-lg').modal('hide');
-                    
-                    var item_to_delete;
-                    $('.deleteItem').click((e) => {
-                        item_to_delete = e.currentTarget.dataset.id;
-                    });
-                    $("#btnYesDelete").click(function () {
-                        var wwwUrlPath = window.document.location.href;
-                        var pathName = window.document.location.pathname;
-                        var pos = wwwUrlPath.indexOf(pathName);
-                        var localhostPath = wwwUrlPath.substring(0, pos);
-                        var url = 'TCMNotes/Delete';
-                        window.location.href = localhostPath + '/' + url + '/' + item_to_delete;
-                    });
+                    $('#form-modal-lg').modal('hide');              
                 }
                 else
                     $('#form-modal-lg .modal-body').html(res.html);
@@ -1251,19 +989,7 @@ jQueryAjaxPostTCMDomain = form => {
                     $('#MyTable').DataTable({
                         "order": [[1, "asc"]],
                         "pageLength": 100
-                    });
-                    var item_to_delete;
-                    $('.deleteItem').click((e) => {
-                        item_to_delete = e.currentTarget.dataset.id;
-                    });
-                    $("#btnYesDelete").click(function () {
-                        var wwwUrlPath = window.document.location.href;
-                        var pathName = window.document.location.pathname;
-                        var pos = wwwUrlPath.indexOf(pathName);
-                        var localhostPath = wwwUrlPath.substring(0, pos);
-                        var url = 'TCMServicePlans/Delete';
-                        window.location.href = localhostPath + '/' + url + '/' + item_to_delete;
-                    });
+                    });                    
                 }
                 else
                     $('#form-modal .modal-body').html(res.html);
@@ -1298,19 +1024,7 @@ jQueryAjaxPostTCMDomainLg = form => {
                     $('#MyTable').DataTable({
                         "order": [[1, "asc"]],
                         "pageLength": 100
-                    });
-                    var item_to_delete;
-                    $('.deleteItem').click((e) => {
-                        item_to_delete = e.currentTarget.dataset.id;
-                    });
-                    $("#btnYesDelete").click(function () {
-                        var wwwUrlPath = window.document.location.href;
-                        var pathName = window.document.location.pathname;
-                        var pos = wwwUrlPath.indexOf(pathName);
-                        var localhostPath = wwwUrlPath.substring(0, pos);
-                        var url = 'TCMServicePlans/Delete';
-                        window.location.href = localhostPath + '/' + url + '/' + item_to_delete;
-                    });
+                    });                    
                 }
                 else
                     $('#form-modal-lg .modal-body').html(res.html);
@@ -1403,19 +1117,7 @@ jQueryAjaxPostGoalTemp = form => {
                     $('#MyTable').DataTable({
                         "order": [[1, "asc"]],
                         "pageLength": 100
-                    });
-                    var item_to_delete;
-                    $('.deleteItem').click((e) => {
-                        item_to_delete = e.currentTarget.dataset.id;
-                    });
-                    $("#btnYesDelete").click(function () {
-                        var wwwUrlPath = window.document.location.href;
-                        var pathName = window.document.location.pathname;
-                        var pos = wwwUrlPath.indexOf(pathName);
-                        var localhostPath = wwwUrlPath.substring(0, pos);
-                        var url = 'MTPs/DeleteGoalTemp';
-                        window.location.href = localhostPath + '/' + url + '/' + item_to_delete;
-                    });
+                    });                    
                 }
                 else
                     $('#form-modal .modal-body').html(res.html);
@@ -1445,6 +1147,11 @@ jQueryAjaxPostHealthInsurance = form => {
                     $('#form-modal .modal-body').html('');
                     $('#form-modal .modal-title').html('');
                     $('#form-modal').modal('hide');
+
+                    $('#MyTable').DataTable({
+                        "order": [[0, "asc"]],
+                        "pageLength": 100
+                    });  
                 }
                 else
                     $('#form-modal .modal-body').html(res.html);
@@ -1508,8 +1215,7 @@ jQueryAjaxPostDeleteClientDiagnostic = form => {
                     $('#view-ClientDiagnostics').html(res.html)
                     $('#form-modal .modal-body').html('');
                     $('#form-modal .modal-title').html('');
-                    $('#form-modal').modal('hide');
-          
+                    $('#form-modal').modal('hide');          
                 }
                 else
                     $('#form-modal .modal-body').html(res.html);
@@ -1538,20 +1244,7 @@ jQueryAjaxPostAddClientDiagnostic = form => {
                     $('#view-ClientDiagnostics').html(res.html)
                     $('#form-modal .modal-body').html('');
                     $('#form-modal .modal-title').html('');
-                    $('#form-modal').modal('hide');
-                    
-                    var item_to_delete;
-                    $('.deleteItem').click((e) => {
-                        item_to_delete = e.currentTarget.dataset.id;
-                    });
-                    $("#btnYesDelete").click(function () {
-                        var wwwUrlPath = window.document.location.href;
-                        var pathName = window.document.location.pathname;
-                        var pos = wwwUrlPath.indexOf(pathName);
-                        var localhostPath = wwwUrlPath.substring(0, pos);
-                        var url = 'ClientDiagnostics/Add';
-                        window.location.href = localhostPath + '/' + url + '/' + item_to_delete;
-                    });
+                    $('#form-modal').modal('hide');                   
                 }
                 else
                     $('#form-modal .modal-body').html(res.html);
@@ -1616,19 +1309,7 @@ jQueryAjaxPostSchedules = form => {
                     $('#MyTable').DataTable({
                         "order": [[1, "asc"]],
                         "pageLength": 100
-                    });
-                    var item_to_delete;
-                    $('.deleteItem').click((e) => {
-                        item_to_delete = e.currentTarget.dataset.id;
-                    });
-                    $("#btnYesDelete").click(function () {
-                        var wwwUrlPath = window.document.location.href;
-                        var pathName = window.document.location.pathname;
-                        var pos = wwwUrlPath.indexOf(pathName);
-                        var localhostPath = wwwUrlPath.substring(0, pos);
-                        var url = 'Schedules/Delete';
-                        window.location.href = localhostPath + '/' + url + '/' + item_to_delete;
-                    });
+                    });                    
                 }
                 else
                     $('#form-modal .modal-body').html(res.html);
@@ -1662,19 +1343,7 @@ jQueryAjaxPostGroupIndividual = form => {
                     $('#MyTable').DataTable({
                         "order": [[1, "asc"]],
                         "pageLength": 100
-                    });
-                    var item_to_delete;
-                    $('.deleteItem').click((e) => {
-                        item_to_delete = e.currentTarget.dataset.id;
-                    });
-                    $("#btnYesDelete").click(function () {
-                        var wwwUrlPath = window.document.location.href;
-                        var pathName = window.document.location.pathname;
-                        var pos = wwwUrlPath.indexOf(pathName);
-                        var localhostPath = wwwUrlPath.substring(0, pos);
-                        var url = 'Group/DeleteIndividual';
-                        window.location.href = localhostPath + '/' + url + '/' + item_to_delete;
-                    });
+                    });                    
                 }
                 else
                     $('#form-modal .modal-body').html(res.html);
@@ -1708,19 +1377,7 @@ jQueryAjaxPostEligibility = form => {
                     $('#MyTable').DataTable({
                         "order": [[1, "asc"]],
                         "pageLength": 100
-                    });
-                    var item_to_delete;
-                    $('.deleteItem').click((e) => {
-                        item_to_delete = e.currentTarget.dataset.id;
-                    });
-                    $("#btnYesDelete").click(function () {
-                        var wwwUrlPath = window.document.location.href;
-                        var pathName = window.document.location.pathname;
-                        var pos = wwwUrlPath.indexOf(pathName);
-                        var localhostPath = wwwUrlPath.substring(0, pos);
-                        var url = 'Schedules/Delete';
-                        window.location.href = localhostPath + '/' + url + '/' + item_to_delete;
-                    });
+                    });                    
                 }
                 else
                     $('#form-modal .modal-body').html(res.html);
@@ -1754,19 +1411,7 @@ jQueryAjaxPostTheme = form => {
                     $('#MyTable').DataTable({
                         "order": [[1, "asc"]],
                         "pageLength": 100
-                    });
-                    var item_to_delete;
-                    $('.deleteItem').click((e) => {
-                        item_to_delete = e.currentTarget.dataset.id;
-                    });
-                    $("#btnYesDelete").click(function () {
-                        var wwwUrlPath = window.document.location.href;
-                        var pathName = window.document.location.pathname;
-                        var pos = wwwUrlPath.indexOf(pathName);
-                        var localhostPath = wwwUrlPath.substring(0, pos);
-                        var url = 'Schedules/Delete';
-                        window.location.href = localhostPath + '/' + url + '/' + item_to_delete;
-                    });
+                    });                    
                 }
                 else
                     $('#form-modal .modal-body').html(res.html);
@@ -1822,29 +1467,17 @@ jQueryAjaxPostAssistant = form => {
             success: function (res) {
                 if (res.isValid) {
                     $('#view-assistant').html(res.html)
-                    $('#form-modal .modal-body').html('');
-                    $('#form-modal .modal-title').html('');
-                    $('#form-modal').modal('hide');
+                    $('#form-modal-lg .modal-body').html('');
+                    $('#form-modal-lg .modal-title').html('');
+                    $('#form-modal-lg').modal('hide');
 
                     $('#MyTable').DataTable({
                         "order": [[1, "asc"]],
                         "pageLength": 100
-                    });
-                    var item_to_delete;
-                    $('.deleteItem').click((e) => {
-                        item_to_delete = e.currentTarget.dataset.id;
-                    });
-                    $("#btnYesDelete").click(function () {
-                        var wwwUrlPath = window.document.location.href;
-                        var pathName = window.document.location.pathname;
-                        var pos = wwwUrlPath.indexOf(pathName);
-                        var localhostPath = wwwUrlPath.substring(0, pos);
-                        var url = 'Assistant/Delete';
-                        window.location.href = localhostPath + '/' + url + '/' + item_to_delete;
-                    });
+                    });                    
                 }
                 else
-                    $('#form-modal .modal-body').html(res.html);
+                    $('#form-modal-lg .modal-body').html(res.html);
             },
             error: function (err) {
                 console.log(err)
@@ -1875,19 +1508,7 @@ jQueryAjaxPostDiagnostics = form => {
                     $('#MyTable').DataTable({
                         "order": [[1, "asc"]],
                         "pageLength": 100
-                    });
-                    var item_to_delete;
-                    $('.deleteItem').click((e) => {
-                        item_to_delete = e.currentTarget.dataset.id;
-                    });
-                    $("#btnYesDelete").click(function () {
-                        var wwwUrlPath = window.document.location.href;
-                        var pathName = window.document.location.pathname;
-                        var pos = wwwUrlPath.indexOf(pathName);
-                        var localhostPath = wwwUrlPath.substring(0, pos);
-                        var url = 'Diagnostics/Delete';
-                        window.location.href = localhostPath + '/' + url + '/' + item_to_delete;
-                    });
+                    });                    
                 }
                 else
                     $('#form-modal .modal-body').html(res.html);
@@ -1919,21 +1540,9 @@ jQueryAjaxPostReferreds = form => {
                     $('#form-modal').modal('hide');
 
                     $('#MyTable').DataTable({
-                        "order": [[1, "asc"]],
+                        "order": [[0, "asc"]],
                         "pageLength": 100
-                    });
-                    var item_to_delete;
-                    $('.deleteItem').click((e) => {
-                        item_to_delete = e.currentTarget.dataset.id;
-                    });
-                    $("#btnYesDelete").click(function () {
-                        var wwwUrlPath = window.document.location.href;
-                        var pathName = window.document.location.pathname;
-                        var pos = wwwUrlPath.indexOf(pathName);
-                        var localhostPath = wwwUrlPath.substring(0, pos);
-                        var url = 'Referreds/Delete';
-                        window.location.href = localhostPath + '/' + url + '/' + item_to_delete;
-                    });
+                    });                    
                 }
                 else
                     $('#form-modal .modal-body').html(res.html);
@@ -1965,21 +1574,9 @@ jQueryAjaxPostPsychiatrists = form => {
                     $('#form-modal').modal('hide');
 
                     $('#MyTable').DataTable({
-                        "order": [[1, "asc"]],
+                        "order": [[0, "asc"]],
                         "pageLength": 100
-                    });
-                    var item_to_delete;
-                    $('.deleteItem').click((e) => {
-                        item_to_delete = e.currentTarget.dataset.id;
-                    });
-                    $("#btnYesDelete").click(function () {
-                        var wwwUrlPath = window.document.location.href;
-                        var pathName = window.document.location.pathname;
-                        var pos = wwwUrlPath.indexOf(pathName);
-                        var localhostPath = wwwUrlPath.substring(0, pos);
-                        var url = 'Psychiatrists/Delete';
-                        window.location.href = localhostPath + '/' + url + '/' + item_to_delete;
-                    });
+                    });                   
                 }
                 else
                     $('#form-modal .modal-body').html(res.html);
@@ -2013,19 +1610,7 @@ jQueryAjaxPostDoctors = form => {
                     $('#MyTable').DataTable({
                         "order": [[1, "asc"]],
                         "pageLength": 100
-                    });
-                    var item_to_delete;
-                    $('.deleteItem').click((e) => {
-                        item_to_delete = e.currentTarget.dataset.id;
-                    });
-                    $("#btnYesDelete").click(function () {
-                        var wwwUrlPath = window.document.location.href;
-                        var pathName = window.document.location.pathname;
-                        var pos = wwwUrlPath.indexOf(pathName);
-                        var localhostPath = wwwUrlPath.substring(0, pos);
-                        var url = 'Doctors/Delete';
-                        window.location.href = localhostPath + '/' + url + '/' + item_to_delete;
-                    });
+                    });                    
                 }
                 else
                     $('#form-modal .modal-body').html(res.html);
@@ -2059,19 +1644,7 @@ jQueryAjaxPostLegalGuardians = form => {
                     $('#MyTable').DataTable({
                         "order": [[1, "asc"]],
                         "pageLength": 100
-                    });
-                    var item_to_delete;
-                    $('.deleteItem').click((e) => {
-                        item_to_delete = e.currentTarget.dataset.id;
-                    });
-                    $("#btnYesDelete").click(function () {
-                        var wwwUrlPath = window.document.location.href;
-                        var pathName = window.document.location.pathname;
-                        var pos = wwwUrlPath.indexOf(pathName);
-                        var localhostPath = wwwUrlPath.substring(0, pos);
-                        var url = 'LegalGuardians/Delete';
-                        window.location.href = localhostPath + '/' + url + '/' + item_to_delete;
-                    });
+                    });                    
                 }
                 else
                     $('#form-modal .modal-body').html(res.html);
@@ -2103,21 +1676,9 @@ jQueryAjaxPostEmergencyContacts = form => {
                     $('#form-modal').modal('hide');
 
                     $('#MyTable').DataTable({
-                        "order": [[1, "asc"]],
+                        "order": [[0, "asc"]],
                         "pageLength": 100
-                    });
-                    var item_to_delete;
-                    $('.deleteItem').click((e) => {
-                        item_to_delete = e.currentTarget.dataset.id;
-                    });
-                    $("#btnYesDelete").click(function () {
-                        var wwwUrlPath = window.document.location.href;
-                        var pathName = window.document.location.pathname;
-                        var pos = wwwUrlPath.indexOf(pathName);
-                        var localhostPath = wwwUrlPath.substring(0, pos);
-                        var url = 'EmergencyContacts/Delete';
-                        window.location.href = localhostPath + '/' + url + '/' + item_to_delete;
-                    });
+                    });                    
                 }
                 else
                     $('#form-modal .modal-body').html(res.html);
@@ -2144,29 +1705,17 @@ jQueryAjaxPostFacilitators = form => {
             success: function (res) {
                 if (res.isValid) {
                     $('#view-facilitators').html(res.html)
-                    $('#form-modal .modal-body').html('');
-                    $('#form-modal .modal-title').html('');
-                    $('#form-modal').modal('hide');
+                    $('#form-modal-lg .modal-body').html('');
+                    $('#form-modal-lg .modal-title').html('');
+                    $('#form-modal-lg').modal('hide');
 
                     $('#MyTable').DataTable({
                         "order": [[1, "asc"]],
                         "pageLength": 100
-                    });
-                    var item_to_delete;
-                    $('.deleteItem').click((e) => {
-                        item_to_delete = e.currentTarget.dataset.id;
-                    });
-                    $("#btnYesDelete").click(function () {
-                        var wwwUrlPath = window.document.location.href;
-                        var pathName = window.document.location.pathname;
-                        var pos = wwwUrlPath.indexOf(pathName);
-                        var localhostPath = wwwUrlPath.substring(0, pos);
-                        var url = 'Facilitators/Delete';
-                        window.location.href = localhostPath + '/' + url + '/' + item_to_delete;
-                    });
+                    });                    
                 }
                 else
-                    $('#form-modal .modal-body').html(res.html);
+                    $('#form-modal-lg .modal-body').html(res.html);
             },
             error: function (err) {
                 console.log(err)
@@ -2190,29 +1739,17 @@ jQueryAjaxPostSupervisors = form => {
             success: function (res) {
                 if (res.isValid) {
                     $('#view-supervisors').html(res.html)
-                    $('#form-modal .modal-body').html('');
-                    $('#form-modal .modal-title').html('');
-                    $('#form-modal').modal('hide');
+                    $('#form-modal-lg .modal-body').html('');
+                    $('#form-modal-lg .modal-title').html('');
+                    $('#form-modal-lg').modal('hide');
 
                     $('#MyTable').DataTable({
                         "order": [[1, "asc"]],
                         "pageLength": 100
-                    });
-                    var item_to_delete;
-                    $('.deleteItem').click((e) => {
-                        item_to_delete = e.currentTarget.dataset.id;
-                    });
-                    $("#btnYesDelete").click(function () {
-                        var wwwUrlPath = window.document.location.href;
-                        var pathName = window.document.location.pathname;
-                        var pos = wwwUrlPath.indexOf(pathName);
-                        var localhostPath = wwwUrlPath.substring(0, pos);
-                        var url = 'Supervisors/Delete';
-                        window.location.href = localhostPath + '/' + url + '/' + item_to_delete;
-                    });
+                    });                    
                 }
                 else
-                    $('#form-modal .modal-body').html(res.html);
+                    $('#form-modal-lg .modal-body').html(res.html);
             },
             error: function (err) {
                 console.log(err)
@@ -2243,19 +1780,7 @@ jQueryAjaxPostManagers = form => {
                     $('#MyTable').DataTable({
                         "order": [[1, "asc"]],
                         "pageLength": 100
-                    });
-                    var item_to_delete;
-                    $('.deleteItem').click((e) => {
-                        item_to_delete = e.currentTarget.dataset.id;
-                    });
-                    $("#btnYesDelete").click(function () {
-                        var wwwUrlPath = window.document.location.href;
-                        var pathName = window.document.location.pathname;
-                        var pos = wwwUrlPath.indexOf(pathName);
-                        var localhostPath = wwwUrlPath.substring(0, pos);
-                        var url = 'Managers/Delete';
-                        window.location.href = localhostPath + '/' + url + '/' + item_to_delete;
-                    });
+                    });                    
                 }
                 else
                     $('#form-modal .modal-body').html(res.html);
@@ -2289,19 +1814,7 @@ jQueryAjaxPostIncidents = form => {
                     $('#MyTable').DataTable({
                         "order": [[1, "asc"]],
                         "pageLength": 100
-                    });
-                    var item_to_delete;
-                    $('.deleteItem').click((e) => {
-                        item_to_delete = e.currentTarget.dataset.id;
-                    });
-                    $("#btnYesDelete").click(function () {
-                        var wwwUrlPath = window.document.location.href;
-                        var pathName = window.document.location.pathname;
-                        var pos = wwwUrlPath.indexOf(pathName);
-                        var localhostPath = wwwUrlPath.substring(0, pos);
-                        var url = 'Incidents/Delete';
-                        window.location.href = localhostPath + '/' + url + '/' + item_to_delete;
-                    });
+                    });                    
                 }
                 else
                     $('#form-modal .modal-body').html(res.html);
@@ -2328,75 +1841,17 @@ jQueryAjaxPostCaseManagers = form => {
             success: function (res) {
                 if (res.isValid) {
                     $('#view-casemanagers').html(res.html)
-                    $('#form-modal .modal-body').html('');
-                    $('#form-modal .modal-title').html('');
-                    $('#form-modal').modal('hide');
-
+                    $('#form-modal-lg .modal-body').html('');
+                    $('#form-modal-lg .modal-title').html('');
+                    $('#form-modal-lg').modal('hide');
+                    
                     $('#MyTable').DataTable({
                         "order": [[1, "asc"]],
-                        "pageLength": 100
-                    });
-                    var item_to_delete;
-                    $('.deleteItem').click((e) => {
-                        item_to_delete = e.currentTarget.dataset.id;
-                    });
-                    $("#btnYesDelete").click(function () {
-                        var wwwUrlPath = window.document.location.href;
-                        var pathName = window.document.location.pathname;
-                        var pos = wwwUrlPath.indexOf(pathName);
-                        var localhostPath = wwwUrlPath.substring(0, pos);
-                        var url = 'CaseMannager/Delete';
-                        window.location.href = localhostPath + '/' + url + '/' + item_to_delete;
-                    });
+                        "pageLength": 50
+                    });                    
                 }
                 else
-                    $('#form-modal .modal-body').html(res.html);
-            },
-            error: function (err) {
-                console.log(err)
-            }
-        })
-        //to prevent default form submit event
-        return false;
-    } catch (ex) {
-        console.log(ex)
-    }
-}
-
-jQueryAjaxPostHealthInsurance = form => {
-    try {
-        $.ajax({
-            type: 'POST',
-            url: form.action,
-            data: new FormData(form),
-            contentType: false,
-            processData: false,
-            success: function (res) {
-                if (res.isValid) {
-                    $('#view-healthInsurance').html(res.html)
-                    $('#form-modal .modal-body').html('');
-                    $('#form-modal .modal-title').html('');
-                    $('#form-modal').modal('hide');
-
-                    $('#MyTable').DataTable({
-                        "order": [[1, "asc"]],
-                        "pageLength": 100
-                    });
-                    var item_to_delete;
-                    $('.deleteItem').click((e) => {
-                        item_to_delete = e.currentTarget.dataset.id;
-                    });
-                    $("#btnYesDelete").click(function () {
-                        var wwwUrlPath = window.document.location.href;
-                        var pathName = window.document.location.pathname;
-                        var pos = wwwUrlPath.indexOf(pathName);
-                        var localhostPath = wwwUrlPath.substring(0, pos);
-                        var url = 'HealthInsurances/Delete';
-                        window.location.href = localhostPath + '/' + url + '/' + item_to_delete;
-                    });
-                }
-                else
-                    $('#form-modal .modal-body').html(res.html);
+                    $('#form-modal-lg .modal-body').html(res.html);
             },
             error: function (err) {
                 console.log(err)
@@ -2427,19 +1882,7 @@ jQueryAjaxPostWorkDay = form => {
                     $('#MyTable').DataTable({
                         "order": [[1, "asc"]],
                         "pageLength": 100
-                    });
-                    var item_to_delete;
-                    $('.deleteItem').click((e) => {
-                        item_to_delete = e.currentTarget.dataset.id;
-                    });
-                    $("#btnYesDelete").click(function () {
-                        var wwwUrlPath = window.document.location.href;
-                        var pathName = window.document.location.pathname;
-                        var pos = wwwUrlPath.indexOf(pathName);
-                        var localhostPath = wwwUrlPath.substring(0, pos);
-                        var url = 'Workdays/Delete';
-                        window.location.href = localhostPath + '/' + url + '/' + item_to_delete;
-                    });
+                    });                    
                 }
                 else
                     $('#form-modal .modal-body').html(res.html);
@@ -2473,19 +1916,7 @@ jQueryAjaxPostWorkdayClient = form => {
                     $('#MyTable').DataTable({
                         "order": [[1, "asc"]],
                         "pageLength": 100
-                    });
-                    var item_to_delete;
-                    $('.deleteItem').click((e) => {
-                        item_to_delete = e.currentTarget.dataset.id;
-                    });
-                    $("#btnYesDelete").click(function () {
-                        var wwwUrlPath = window.document.location.href;
-                        var pathName = window.document.location.pathname;
-                        var pos = wwwUrlPath.indexOf(pathName);
-                        var localhostPath = wwwUrlPath.substring(0, pos);
-                        var url = 'Notes/Delete';
-                        window.location.href = localhostPath + '/' + url + '/' + item_to_delete;
-                    });
+                    });                    
                 }
                 else
                     $('#form-modal .modal-body').html(res.html);
@@ -2519,19 +1950,7 @@ jQueryAjaxBillTCMNotes = form => {
                     $('#MyTable').DataTable({
                         "order": [[1, "asc"]],
                         "pageLength": 100
-                    });
-                    var item_to_delete;
-                    $('.deleteItem').click((e) => {
-                        item_to_delete = e.currentTarget.dataset.id;
-                    });
-                    $("#btnYesDelete").click(function () {
-                        var wwwUrlPath = window.document.location.href;
-                        var pathName = window.document.location.pathname;
-                        var pos = wwwUrlPath.indexOf(pathName);
-                        var localhostPath = wwwUrlPath.substring(0, pos);
-                        var url = 'TCMBilling/Delete';
-                        window.location.href = localhostPath + '/' + url + '/' + item_to_delete;
-                    });
+                    });                    
                 }
                 else
                     $('#form-modal .modal-body').html(res.html);
@@ -2565,19 +1984,7 @@ jQueryAjaxAccounts = form => {
                     $('#MyTable').DataTable({
                         "order": [[1, "asc"]],
                         "pageLength": 100
-                    });
-                    var item_to_delete;
-                    $('.deleteItem').click((e) => {
-                        item_to_delete = e.currentTarget.dataset.id;
-                    });
-                    $("#btnYesDelete").click(function () {
-                        var wwwUrlPath = window.document.location.href;
-                        var pathName = window.document.location.pathname;
-                        var pos = wwwUrlPath.indexOf(pathName);
-                        var localhostPath = wwwUrlPath.substring(0, pos);
-                        var url = 'Accounts/Delete';
-                        window.location.href = localhostPath + '/' + url + '/' + item_to_delete;
-                    });
+                    });                    
                 }
                 else
                     $('#form-modal .modal-body').html(res.html);
@@ -2611,19 +2018,7 @@ jQueryAjaxTCMDateBlocked = form => {
                     $('#MyTable').DataTable({
                         "order": [[1, "asc"]],
                         "pageLength": 100
-                    });
-                    var item_to_delete;
-                    $('.deleteItem').click((e) => {
-                        item_to_delete = e.currentTarget.dataset.id;
-                    });
-                    $("#btnYesDelete").click(function () {
-                        var wwwUrlPath = window.document.location.href;
-                        var pathName = window.document.location.pathname;
-                        var pos = wwwUrlPath.indexOf(pathName);
-                        var localhostPath = wwwUrlPath.substring(0, pos);
-                        var url = 'TCMDateBlockeds/Delete';
-                        window.location.href = localhostPath + '/' + url + '/' + item_to_delete;
-                    });
+                    });                   
                 }
                 else
                     $('#form-modal .modal-body').html(res.html);
@@ -2657,19 +2052,7 @@ jQueryAjaxTCMActivities = form => {
                     $('#MyTable').DataTable({
                         "order": [[1, "asc"]],
                         "pageLength": 100
-                    });
-                    var item_to_delete;
-                    $('.deleteItem').click((e) => {
-                        item_to_delete = e.currentTarget.dataset.id;
-                    });
-                    $("#btnYesDelete").click(function () {
-                        var wwwUrlPath = window.document.location.href;
-                        var pathName = window.document.location.pathname;
-                        var pos = wwwUrlPath.indexOf(pathName);
-                        var localhostPath = wwwUrlPath.substring(0, pos);
-                        var url = 'Activities/Delete';
-                        window.location.href = localhostPath + '/' + url + '/' + item_to_delete;
-                    });
+                    });                    
                 }
                 else
                     $('#form-modal .modal-body').html(res.html);
@@ -2703,8 +2086,7 @@ jQueryAjaxSelectFacilitator = form => {
                     $('#MyTable').DataTable({
                         "order": [[1, "asc"]],
                         "pageLength": 100
-                    });
-                   
+                    });                   
                 }
                 else
                     $('#form-modal .modal-body').html(res.html);
@@ -2739,7 +2121,6 @@ jQueryAjaxBillDms = form => {
                         "order": [[1, "asc"]],
                         "pageLength": 100
                     });
-
                 }
                 else
                     $('#form-modal .modal-body').html(res.html);
@@ -2774,7 +2155,6 @@ jQueryAjaxBillDmsPaid = form => {
                         "order": [[1, "asc"]],
                         "pageLength": 100
                     });
-
                 }
                 else
                     $('#form-modal .modal-body').html(res.html);
@@ -2809,7 +2189,6 @@ jQueryAjaxTCMSupervicionTime = form => {
                         "order": [[1, "asc"]],
                         "pageLength": 100
                     });
-
                 }
                 else
                     $('#form-modal .modal-body').html(res.html);
@@ -2843,15 +2222,7 @@ QueryAjaxPostTCMSubService = form => {
                     $('#MyTable').DataTable({
                         "order": [[0, "asc"]],
                         "pageLength": 100
-                    });
-                    var item_to_delete;
-                    $('.deleteItem').click((e) => {
-                        item_to_delete = e.currentTarget.dataset.id;
-                    });
-                    $("#btnYesDelete").click(function () {
-                        var url = 'TCMSubServices/Delete';
-                        window.location.href = url + '/' + item_to_delete;
-                    });
+                    });                    
                 }
                 else
                     $('#form-modal .modal-body').html(res.html);
@@ -2886,7 +2257,406 @@ jQueryAjaxTCMPaystubPaid = form => {
                         "order": [[1, "asc"]],
                         "pageLength": 100
                     });
+                }
+                else
+                    $('#form-modal .modal-body').html(res.html);
+            },
+            error: function (err) {
+                console.log(err)
+            }
+        })
+        //to prevent default form submit event
+        return false;
+    } catch (ex) {
+        console.log(ex)
+    }
+}
 
+jQueryAjaxTCMMedicationList = form => {
+    try {
+        $.ajax({
+            type: 'POST',
+            url: form.action,
+            data: new FormData(form),
+            contentType: false,
+            processData: false,
+            success: function (res) {
+                if (res.isValid) {
+                    $('#view-medications').html(res.html)
+                    $('#form-modal .modal-body').html('');
+                    $('#form-modal .modal-title').html('');
+                    $('#form-modal').modal('hide');
+
+                    $('#MyTable').DataTable({
+                        "order": [[1, "asc"]],
+                        "pageLength": 100
+                    });                    
+                }
+                else
+                    $('#form-modal .modal-body').html(res.html);
+            },
+            error: function (err) {
+                console.log(err)
+            }
+        })
+        //to prevent default form submit event
+        return false;
+    } catch (ex) {
+        console.log(ex)
+    }
+}
+
+jQueryAjaxCourseList = form => {
+    try {
+        $.ajax({
+            type: 'POST',
+            url: form.action,
+            data: new FormData(form),
+            contentType: false,
+            processData: false,
+            success: function (res) {
+                if (res.isValid) {
+                    $('#view-course').html(res.html)
+                    $('#form-modal .modal-body').html('');
+                    $('#form-modal .modal-title').html('');
+                    $('#form-modal').modal('hide');
+
+                    $('#MyTable').DataTable({
+                        "order": [[1, "asc"]],
+                        "pageLength": 100
+                    });
+                }
+                else
+                    $('#form-modal .modal-body').html(res.html);
+            },
+            error: function (err) {
+                console.log(err)
+            }
+        })
+        //to prevent default form submit event
+        return false;
+    } catch (ex) {
+        console.log(ex)
+    }
+}
+
+jQueryAjaxCaseManagerCertificationList = form => {
+    try {
+        $.ajax({
+            type: 'POST',
+            url: form.action,
+            data: new FormData(form),
+            contentType: false,
+            processData: false,
+            success: function (res) {
+                if (res.isValid) {
+                    $('#view-casemanagerCertification').html(res.html)
+                    $('#form-modal .modal-body').html('');
+                    $('#form-modal .modal-title').html('');
+                    $('#form-modal').modal('hide');
+
+                    $('#MyTable').DataTable({
+                        "order": [[1, "asc"]],
+                        "pageLength": 100
+                    });
+                }
+                else
+                    $('#form-modal .modal-body').html(res.html);
+            },
+            error: function (err) {
+                console.log(err)
+            }
+        })
+        //to prevent default form submit event
+        return false;
+    } catch (ex) {
+        console.log(ex)
+    }
+}
+
+jQueryAjaxTCMSupervisorCertificationList = form => {
+    try {
+        $.ajax({
+            type: 'POST',
+            url: form.action,
+            data: new FormData(form),
+            contentType: false,
+            processData: false,
+            success: function (res) {
+                if (res.isValid) {
+                    $('#view-tcmSupervisorCertification').html(res.html)
+                    $('#form-modal .modal-body').html('');
+                    $('#form-modal .modal-title').html('');
+                    $('#form-modal').modal('hide');
+
+                    $('#MyTable').DataTable({
+                        "order": [[1, "asc"]],
+                        "pageLength": 100
+                    });
+                }
+                else
+                    $('#form-modal .modal-body').html(res.html);
+            },
+            error: function (err) {
+                console.log(err)
+            }
+        })
+        //to prevent default form submit event
+        return false;
+    } catch (ex) {
+        console.log(ex)
+    }
+}
+
+jQueryAjaxPromotion = form => {
+    try {
+        $.ajax({
+            type: 'POST',
+            url: form.action,
+            data: new FormData(form),
+            contentType: false,
+            processData: false,
+            success: function (res) {
+                if (res.isValid) {
+                    $('#view-promotion').html(res.html)
+                    $('#form-modal .modal-body').html('');
+                    $('#form-modal .modal-title').html('');
+                    $('#form-modal').modal('hide');
+
+                    $('#MyTable').DataTable({
+                        "order": [[1, "asc"]],
+                        "pageLength": 100
+                    });
+                }
+                else
+                    $('#form-modal .modal-body').html(res.html);
+            },
+            error: function (err) {
+                console.log(err)
+            }
+        })
+        //to prevent default form submit event
+        return false;
+    } catch (ex) {
+        console.log(ex)
+    }
+}
+
+jQueryAjaxTCMAssessmentIndividualAgency = form => {
+    try {
+        $.ajax({
+            type: 'POST',
+            url: form.action,
+            data: new FormData(form),
+            contentType: false,
+            processData: false,
+            success: function (res) {
+                if (res.isValid) {
+                    $('#view-AssessmentIndividual').html(res.html)
+                    $('#form-modal .modal-body').html('');
+                    $('#form-modal .modal-title').html('');
+                    $('#form-modal').modal('hide');
+
+                }
+                else
+                    $('#form-modal .modal-body').html(res.html);
+            },
+            error: function (err) {
+                console.log(err)
+            }
+        })
+        //to prevent default form submit event
+        return false;
+    } catch (ex) {
+        console.log(ex)
+    }
+}
+
+jQueryAjaxTCMAssessmentReferred = form => {
+    try {
+        $.ajax({
+            type: 'POST',
+            url: form.action,
+            data: new FormData(form),
+            contentType: false,
+            processData: false,
+            success: function (res) {
+                if (res.isValid) {
+                    $('#view-referreds').html(res.html)
+                    $('#form-modal .modal-body').html('');
+                    $('#form-modal .modal-title').html('');
+                    $('#form-modal').modal('hide');
+
+                }
+                else
+                    $('#form-modal .modal-body').html(res.html);
+            },
+            error: function (err) {
+                console.log(err)
+            }
+        })
+        //to prevent default form submit event
+        return false;
+    } catch (ex) {
+        console.log(ex)
+    }
+}
+
+jQueryAjaxFacilitatorCertificationList = form => {
+    try {
+        $.ajax({
+            type: 'POST',
+            url: form.action,
+            data: new FormData(form),
+            contentType: false,
+            processData: false,
+            success: function (res) {
+                if (res.isValid) {
+                    $('#view-facilitatorCertification').html(res.html)
+                    $('#form-modal .modal-body').html('');
+                    $('#form-modal .modal-title').html('');
+                    $('#form-modal').modal('hide');
+
+                    $('#MyTable').DataTable({
+                        "order": [[1, "asc"]],
+                        "pageLength": 100
+                    });
+                }
+                else
+                    $('#form-modal .modal-body').html(res.html);
+            },
+            error: function (err) {
+                console.log(err)
+            }
+        })
+        //to prevent default form submit event
+        return false;
+    } catch (ex) {
+        console.log(ex)
+    }
+}
+
+jQueryAjaxDocumentAssistantCertificationList = form => {
+    try {
+        $.ajax({
+            type: 'POST',
+            url: form.action,
+            data: new FormData(form),
+            contentType: false,
+            processData: false,
+            success: function (res) {
+                if (res.isValid) {
+                    $('#view-documentCertification').html(res.html)
+                    $('#form-modal .modal-body').html('');
+                    $('#form-modal .modal-title').html('');
+                    $('#form-modal').modal('hide');
+
+                    $('#MyTable').DataTable({
+                        "order": [[1, "asc"]],
+                        "pageLength": 100
+                    });
+                }
+                else
+                    $('#form-modal .modal-body').html(res.html);
+            },
+            error: function (err) {
+                console.log(err)
+            }
+        })
+        //to prevent default form submit event
+        return false;
+    } catch (ex) {
+        console.log(ex)
+    }
+}
+
+jQueryAjaxSupervisorCertificationList = form => {
+    try {
+        $.ajax({
+            type: 'POST',
+            url: form.action,
+            data: new FormData(form),
+            contentType: false,
+            processData: false,
+            success: function (res) {
+                if (res.isValid) {
+                    $('#view-supervisorCertification').html(res.html)
+                    $('#form-modal .modal-body').html('');
+                    $('#form-modal .modal-title').html('');
+                    $('#form-modal').modal('hide');
+
+                    $('#MyTable').DataTable({
+                        "order": [[1, "asc"]],
+                        "pageLength": 100
+                    });
+                }
+                else
+                    $('#form-modal .modal-body').html(res.html);
+            },
+            error: function (err) {
+                console.log(err)
+            }
+        })
+        //to prevent default form submit event
+        return false;
+    } catch (ex) {
+        console.log(ex)
+    }
+}
+
+jQueryAjaxNotePSY = form => {
+    try {
+        $.ajax({
+            type: 'POST',
+            url: form.action,
+            data: new FormData(form),
+            contentType: false,
+            processData: false,
+            success: function (res) {
+                if (res.isValid) {
+                    $('#view-notesPSY').html(res.html)
+                    $('#form-modal .modal-body').html('');
+                    $('#form-modal .modal-title').html('');
+                    $('#form-modal').modal('hide');
+
+                    $('#MyTable').DataTable({
+                        "order": [[1, "asc"]],
+                        "pageLength": 100
+                    });
+                }
+                else
+                    $('#form-modal .modal-body').html(res.html);
+            },
+            error: function (err) {
+                console.log(err)
+            }
+        })
+        //to prevent default form submit event
+        return false;
+    } catch (ex) {
+        console.log(ex)
+    }
+}
+
+jQueryAjaxPostUpdatePaid = form => {
+    try {
+        $.ajax({
+            type: 'POST',
+            url: form.action,
+            data: new FormData(form),
+            contentType: false,
+            processData: false,
+            success: function (res) {
+                if (res.isValid) {
+                    $('#view-tcmbilling').html(res.html)
+                    $('#form-modal .modal-body').html('');
+                    $('#form-modal .modal-title').html('');
+                    $('#form-modal').modal('hide');
+
+                    $('#MyTable').DataTable({
+                        "order": [[1, "asc"]],
+                        "pageLength": 100
+                    });
                 }
                 else
                     $('#form-modal .modal-body').html(res.html);

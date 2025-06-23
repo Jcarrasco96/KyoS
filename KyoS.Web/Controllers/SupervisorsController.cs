@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
+using KyoS.Common.Helpers;
 
 namespace KyoS.Web.Controllers
 {
@@ -34,7 +35,7 @@ namespace KyoS.Web.Controllers
             _renderHelper = renderHelper;
         }
 
-        [Authorize(Roles = "Admin, Manager")]
+        [Authorize(Roles = "Admin, Manager, Supervisor")]
         public async Task<IActionResult> Index(int idError = 0)
         {
             if (idError == 1) //Imposible to delete
@@ -46,23 +47,48 @@ namespace KyoS.Web.Controllers
                 return View(await _context.Supervisors.Include(f => f.Clinic).OrderBy(f => f.Name).ToListAsync());
             else
             {
-                UserEntity user_logged = _context.Users
+                if (User.IsInRole("Manager"))
+                {
+                    UserEntity user_logged = _context.Users
 
                                                  .Include(u => u.Clinic)
                                                  .ThenInclude(c => c.Setting)
 
                                                  .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
-                if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
+                    if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
+                    {
+                        return RedirectToAction("NotAuthorized", "Account");
+                    }
+
+                    return View(await _context.Supervisors
+                                              .Include(f => f.Clinic)
+                                              .Where(s => s.Clinic.Id == user_logged.Clinic.Id)
+                                              .OrderBy(f => f.Name).ToListAsync());
+                }
+                if (User.IsInRole("Supervisor"))
                 {
-                    return RedirectToAction("NotAuthorized", "Account");
-                }               
-                         
-                return View(await _context.Supervisors
-                                          .Include(f => f.Clinic)
-                                          .Where(s => s.Clinic.Id == user_logged.Clinic.Id)
-                                          .OrderBy(f => f.Name).ToListAsync());             
+                    UserEntity user_logged = _context.Users
+
+                                                 .Include(u => u.Clinic)
+                                                 .ThenInclude(c => c.Setting)
+
+                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                    if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
+                    {
+                        return RedirectToAction("NotAuthorized", "Account");
+                    }
+
+                    return View(await _context.Supervisors
+                                              .Include(f => f.Clinic)
+                                              .Where(s => s.Clinic.Id == user_logged.Clinic.Id
+                                                       && s.LinkedUser == user_logged.UserName)
+                                              .OrderBy(f => f.Name).ToListAsync());
+                }
             }
+
+            return RedirectToAction("NotAuthorized", "Account");
         }
 
         [Authorize(Roles = "Admin, Manager")]
@@ -368,7 +394,22 @@ namespace KyoS.Web.Controllers
                     {
                         Clinics = list,
                         IdClinic = clinic.Id,
-                        UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.Supervisor, user_logged.Clinic.Id)
+                        UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.Supervisor, user_logged.Clinic.Id),
+
+                
+                        StatusList = _combosHelper.GetComboClientStatus(),
+                        Money = 0,
+                        RaterEducation = string.Empty,
+                        RaterFMHCertification = string.Empty,
+                        IdGender = 0,
+                        GenderList = _combosHelper.GetComboGender(),
+                        IdAccountType = 0,
+                        AccountTypeList = _combosHelper.GetComboAccountType(),
+                        IdPaymentMethod = 0,
+                        PaymentMethodList = _combosHelper.GetComboPaymentMethod(),
+                        Name = "-",
+                        DateOfBirth = DateTime.Today,
+                        HiringDate = DateTime.Today
                     };
                     return View(model);
                 }
@@ -377,7 +418,20 @@ namespace KyoS.Web.Controllers
             model = new SupervisorViewModel
             {
                 Clinics = _combosHelper.GetComboClinics(),
-                UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.Supervisor, 0)
+                UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.Supervisor, 0),
+                StatusList = _combosHelper.GetComboClientStatus(),
+                Money = 0,
+                RaterEducation = string.Empty,
+                RaterFMHCertification = string.Empty,
+                IdGender = 0,
+                GenderList = _combosHelper.GetComboGender(),
+                IdAccountType = 0,
+                AccountTypeList = _combosHelper.GetComboAccountType(),
+                IdPaymentMethod = 0,
+                PaymentMethodList = _combosHelper.GetComboPaymentMethod(),
+                Name = "-",
+                DateOfBirth = DateTime.Today,
+                HiringDate = DateTime.Today
             };
             return View(model);
         }
@@ -412,6 +466,12 @@ namespace KyoS.Web.Controllers
                         supervisorViewModel.IdClinic = clinic.Id;
                         supervisorViewModel.UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.Supervisor, user_logged.Clinic.Id);
 
+                        supervisorViewModel.StatusList = _combosHelper.GetComboClientStatus();
+                        supervisorViewModel.GenderList = _combosHelper.GetComboGender();
+                        supervisorViewModel.PaymentMethodList = _combosHelper.GetComboPaymentMethod();
+                        supervisorViewModel.AccountTypeList = _combosHelper.GetComboAccountType();
+                        supervisorViewModel.Clinics = _combosHelper.GetComboClinics();
+
                         return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateModal", supervisorViewModel) });
                     }
 
@@ -430,6 +490,7 @@ namespace KyoS.Web.Controllers
 
                         List<SupervisorEntity> supervisors_List = await _context.Supervisors
                                                                                   .Include(n => n.Clinic)
+                                                                                  .Where(s => s.Clinic.Id == user_logged.Clinic.Id)
                                                                                   .ToListAsync();
 
                         return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewSupervisors", supervisors_List) });
@@ -464,7 +525,13 @@ namespace KyoS.Web.Controllers
                 supervisorViewModel.Clinics = list;
                 supervisorViewModel.IdClinic = clinic.Id;
                 supervisorViewModel.UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.Supervisor, user_logged.Clinic.Id);
-                
+
+                supervisorViewModel.StatusList = _combosHelper.GetComboClientStatus();
+                supervisorViewModel.GenderList = _combosHelper.GetComboGender();
+                supervisorViewModel.PaymentMethodList = _combosHelper.GetComboPaymentMethod();
+                supervisorViewModel.AccountTypeList = _combosHelper.GetComboAccountType();
+                supervisorViewModel.Clinics = _combosHelper.GetComboClinics();
+
             }
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateModal", supervisorViewModel) });
         }
@@ -477,7 +544,12 @@ namespace KyoS.Web.Controllers
                 return RedirectToAction("Home/Error404");
             }
 
-            SupervisorEntity supervisorEntity = await _context.Supervisors.Include(s => s.Clinic).FirstOrDefaultAsync(s => s.Id == id);
+            SupervisorEntity supervisorEntity = await _context.Supervisors
+                                                              .Include(s => s.Clinic)
+                                                              .Include(s => s.SupervisorCertifications)
+                                                              .ThenInclude(f => f.Course)
+                                                              .FirstOrDefaultAsync(s => s.Id == id);
+
             if (supervisorEntity == null)
             {
                 return RedirectToAction("Home/Error404");
@@ -488,8 +560,10 @@ namespace KyoS.Web.Controllers
             if (!User.IsInRole("Admin"))
             {
                 UserEntity user_logged = _context.Users.Include(u => u.Clinic)
-                                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+                                                       .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
                 supervisorViewModel = _converterHelper.ToSupervisorViewModel(supervisorEntity, user_logged.Clinic.Id);
+
                 if (user_logged.Clinic != null)
                 {
                     List<SelectListItem> list = new List<SelectListItem>();
@@ -499,6 +573,41 @@ namespace KyoS.Web.Controllers
                         Value = $"{user_logged.Clinic.Id}"
                     });
                     supervisorViewModel.Clinics = list;
+
+                    List<SupervisorCertificationEntity> CertificationList = new List<SupervisorCertificationEntity>();
+                    SupervisorCertificationEntity Certification = new SupervisorCertificationEntity();
+                    List<CourseEntity> coursList = _context.Courses.Where(n => n.Role == UserType.Supervisor).ToList();
+
+                    foreach (var item in coursList)
+                    {
+                        if (supervisorEntity.SupervisorCertifications.Where(n => n.Course.Id == item.Id).Count() > 0)
+                        {
+                            foreach (var value in supervisorEntity.SupervisorCertifications.Where(n => n.Course.Id == item.Id).ToList().OrderBy(c => c.ExpirationDate))
+                            {
+                                Certification.Name = item.Name;
+                                Certification.CertificationNumber = value.CertificationNumber;
+                                Certification.CertificateDate = value.CertificateDate;
+                                Certification.ExpirationDate = value.ExpirationDate;
+                                Certification.Id = value.Id;
+                                CertificationList.Add(Certification);
+                                Certification = new SupervisorCertificationEntity();
+                            }
+                        }
+                        else
+                        {
+                            Certification.Name = item.Name;
+                            Certification.CertificationNumber = "-";
+                            Certification.CertificateDate = DateTime.Today;
+                            Certification.ExpirationDate = DateTime.Today;
+                            Certification.Id = 0;
+                            CertificationList.Add(Certification);
+                            Certification = new SupervisorCertificationEntity();
+                        }
+
+                    }
+
+                    supervisorViewModel.SupervisorCertificationIdealList = CertificationList;
+
                 }
             }
             else
@@ -540,6 +649,13 @@ namespace KyoS.Web.Controllers
                     supervisorViewModel.IdClinic = clinic.Id;
                     supervisorViewModel.UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.Supervisor, supervisorViewModel.IdClinic);
 
+                    supervisorViewModel.UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.Supervisor, user_logged.Clinic.Id);
+                    supervisorViewModel.StatusList = _combosHelper.GetComboClientStatus();
+                    supervisorViewModel.GenderList = _combosHelper.GetComboGender();
+                    supervisorViewModel.PaymentMethodList = _combosHelper.GetComboPaymentMethod();
+                    supervisorViewModel.AccountTypeList = _combosHelper.GetComboAccountType();
+                    supervisorViewModel.Clinics = _combosHelper.GetComboClinics();
+
                     return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditModal", supervisorViewModel) });
                 }
 
@@ -556,6 +672,7 @@ namespace KyoS.Web.Controllers
 
                     List<SupervisorEntity> supervisors_List = await _context.Supervisors
                                                                                  .Include(n => n.Clinic)
+                                                                                 .Where(s => s.Clinic.Id == user_logged.Clinic.Id)
                                                                                  .ToListAsync();
 
                     return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewSupervisors", supervisors_List) });
@@ -582,6 +699,13 @@ namespace KyoS.Web.Controllers
             supervisorViewModel.Clinics = list;
             supervisorViewModel.IdClinic = clinic.Id;
             supervisorViewModel.UserList = _combosHelper.GetComboUserNamesByRolesClinic(UserType.Supervisor, supervisorViewModel.IdClinic);
+
+            supervisorViewModel.StatusList = _combosHelper.GetComboClientStatus();
+            supervisorViewModel.GenderList = _combosHelper.GetComboGender();
+            supervisorViewModel.PaymentMethodList = _combosHelper.GetComboPaymentMethod();
+            supervisorViewModel.AccountTypeList = _combosHelper.GetComboAccountType();
+            supervisorViewModel.Clinics = _combosHelper.GetComboClinics();
+
 
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditModal", supervisorViewModel) });
         }
@@ -718,7 +842,8 @@ namespace KyoS.Web.Controllers
                 {
                    Id = 0,
                    Date = DateTime.Today,
-                   IdSupervisor = _context.Supervisors.FirstOrDefault(n => n.LinkedUser == user_logged.UserName).Id
+                   IdSupervisor = _context.Supervisors.FirstOrDefault(n => n.LinkedUser == user_logged.UserName).Id,
+                   FacilitatorList = new List<MeetingNotes_Facilitator>()
                    
                 };
 
@@ -771,7 +896,7 @@ namespace KyoS.Web.Controllers
                 model.FacilitatorList = list;
                 SupervisorEntity supervisor = _context.Supervisors.FirstOrDefault(n => n.Id == model.IdSupervisor);
                 model.Supervisor = supervisor;
-                supervisorNotes = await _converterHelper.ToMeetingNoteEntity(model, true);
+                supervisorNotes = _converterHelper.ToMeetingNoteEntity(model, true);
                 _context.Add(supervisorNotes);
                 try
                 {
@@ -801,9 +926,10 @@ namespace KyoS.Web.Controllers
         public async Task<IActionResult> EditNote(int id = 0)
         {
             MeetingNoteEntity supervisorNote = _context.MeetingNotes
-                                                          .Include(n => n.FacilitatorList)
-                                                          .ThenInclude(n => n.Facilitator)
-                                                          .FirstOrDefault(n => n.Id == id);
+                                                       .Include(n => n.FacilitatorList)
+                                                       .ThenInclude(n => n.Facilitator)
+                                                       .AsSplitQuery()
+                                                       .FirstOrDefault(n => n.Id == id);
             if (supervisorNote != null)
             {
                 MeetingNotesViewModel model = _converterHelper.ToMeetingNoteViewModel(supervisorNote);
@@ -814,9 +940,9 @@ namespace KyoS.Web.Controllers
                                                        .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
                 facilitators = await _context.Facilitators
-                                                .Where(c => (c.Clinic.Id == user_logged.Clinic.Id
-                                                          && c.Status == Common.Enums.StatusType.Open))
-                                                .OrderBy(c => c.Name).ToListAsync();
+                                             .Where(c => (c.Clinic.Id == user_logged.Clinic.Id
+                                                       && c.Status == Common.Enums.StatusType.Open))
+                                             .OrderBy(c => c.Name).ToListAsync();
 
                 facilitator_list = new MultiSelectList(facilitators, "Id", "Name", model.FacilitatorList.Select(c => c.Facilitator.Id));
                 ViewData["facilitators"] = facilitator_list;
@@ -841,9 +967,9 @@ namespace KyoS.Web.Controllers
             {
                 //delete SuperisorNotes_Facilitators
                 List<MeetingNotes_Facilitator> listFacilitators = _context.MeetingNotes_Facilitators
-                                                                             .Include(n => n.Facilitator)
-                                                                             .Where(n => n.MeetingNoteEntity.Id == model.Id)
-                                                                             .ToList();
+                                                                          .Include(n => n.Facilitator)
+                                                                          .Where(n => n.MeetingNoteEntity.Id == model.Id)
+                                                                          .ToList();
                 //_context.SupervisorNotes_Facilitators.RemoveRange(listFacilitators);
 
                 MeetingNoteEntity supervisorNotes = new MeetingNoteEntity();
@@ -871,7 +997,7 @@ namespace KyoS.Web.Controllers
                 model.FacilitatorList = list;
                 SupervisorEntity supervisor = _context.Supervisors.FirstOrDefault(n => n.Id == model.IdSupervisor);
                 model.Supervisor = supervisor;
-                supervisorNotes = await _converterHelper.ToMeetingNoteEntity(model, false);
+                supervisorNotes = _converterHelper.ToMeetingNoteEntity(model, false);
                 _context.Update(supervisorNotes);
                 try
                 {
@@ -897,10 +1023,11 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Facilitator")]
-        public async Task<IActionResult> EditNoteFacilitator(int id = 0)
+        public IActionResult EditNoteFacilitator(int id = 0)
         {
-            UserEntity user_logged = _context.Users.Include(u => u.Clinic)
-                                                   .FirstOrDefault(u => u.UserName == User.Identity.Name);
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
             MeetingNotes_Facilitator entity = _context.MeetingNotes_Facilitators
                                                       .Include(n => n.MeetingNoteEntity)
@@ -931,7 +1058,7 @@ namespace KyoS.Web.Controllers
             if (ModelState.IsValid)
             {
                 MeetingNotes_Facilitator noteFacilitator;
-                noteFacilitator = await _converterHelper.ToMeetingNoteFacilitatorEntity(model, false);
+                noteFacilitator = _converterHelper.ToMeetingNoteFacilitatorEntity(model, false);
                 _context.Update(noteFacilitator);
                 
                 
@@ -1000,6 +1127,429 @@ namespace KyoS.Web.Controllers
 
             return View(null);
         }
+
+        [Authorize(Roles = "Manager")]
+        public IActionResult CreateSupervisorCertification(int id = 0)
+        {
+            if (id == 1)
+            {
+                ViewBag.Creado = "Y";
+            }
+            else
+            {
+                if (id == 2)
+                {
+                    ViewBag.Creado = "E";
+                }
+                else
+                {
+                    ViewBag.Creado = "N";
+                }
+            }
+
+            SupervisorCertificationViewModel model = new SupervisorCertificationViewModel();
+
+            if (User.IsInRole("Manager"))
+            {
+                UserEntity user_logged = _context.Users
+                                                 .Include(u => u.Clinic)
+                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                if (user_logged.Clinic != null)
+                {
+                    model = new SupervisorCertificationViewModel
+                    {
+                        CertificateDate = DateTime.Today,
+                        ExpirationDate = DateTime.Today,
+                        CertificationNumber = string.Empty,
+                        Name = user_logged.Clinic.Name,
+                        IdCourse = 0,
+                        IdSupervisor = 0,
+                        Supervisors = _combosHelper.GetComboSupervisorByClinic(user_logged.Clinic.Id, true),
+                        Courses = _combosHelper.GetComboCourseByRole(UserType.Supervisor)
+                    };
+                    return View(model);
+                }
+            }
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Manager")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateSupervisorCertification(SupervisorCertificationViewModel CertificationViewModel)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (ModelState.IsValid)
+            {
+                SupervisorCertificationEntity Certification = new SupervisorCertificationEntity();
+                Certification = _converterHelper.ToSupervisorCertificationEntity(CertificationViewModel, true, user_logged.UserName);
+                _context.Add(Certification);
+                try
+                {
+                    await _context.SaveChangesAsync();
+
+                    List<SupervisorCertificationEntity> Supervisor_List = await _context.SupervisorCertifications
+                                                                                        .Include(n => n.Course)
+                                                                                        .Include(n => n.Supervisor)
+                                                                                        .ToListAsync();
+
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewSupervisorCertifications", Supervisor_List) });
+                }
+                catch (System.Exception ex)
+                {
+                    if (ex.InnerException.Message.Contains("duplicate"))
+                    {
+                        ModelState.AddModelError(string.Empty, $"Already exists the Supervisor: {Certification.Name}");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+
+            }
+
+            CertificationViewModel.Courses = _combosHelper.GetComboCourseByRole(UserType.Documents_Assistant);
+            CertificationViewModel.Supervisors = _combosHelper.GetComboSupervisorByClinic(user_logged.Clinic.Id, true);
+
+
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "CreateSupervisorCertification", CertificationViewModel) });
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> EditSupervisorCertification(int? id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            SupervisorCertificationEntity Certification = await _context.SupervisorCertifications
+                                                                        .Include(f => f.Course)
+                                                                        .Include(f => f.Supervisor)
+                                                                        .FirstOrDefaultAsync(f => f.Id == id);
+            if (Certification == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            SupervisorCertificationViewModel CertificationViewModel;
+            if (User.IsInRole("Manager"))
+            {
+                CertificationViewModel = _converterHelper.ToSupervisorCertificationViewModel(Certification, user_logged.Clinic.Id);
+            }
+            else
+                CertificationViewModel = _converterHelper.ToSupervisorCertificationViewModel(Certification, user_logged.Clinic.Id);
+
+            return View(CertificationViewModel);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Manager")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditSupervisorCertification(int id, SupervisorCertificationViewModel CertificationViewModel)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (ModelState.IsValid)
+            {
+
+                SupervisorCertificationEntity CertificationEntity = _converterHelper.ToSupervisorCertificationEntity(CertificationViewModel, false, user_logged.UserName);
+                _context.Update(CertificationEntity);
+                try
+                {
+                    await _context.SaveChangesAsync();
+                    List<SupervisorCertificationEntity> Certification_List = await _context.SupervisorCertifications
+                                                                                           .Include(n => n.Course)
+                                                                                           .Include(n => n.Supervisor)
+                                                                                           .ToListAsync();
+
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "_ViewSupervisorCertifications", Certification_List) });
+                }
+                catch (System.Exception ex)
+                {
+                    if (ex.InnerException.Message.Contains("duplicate"))
+                    {
+                        ModelState.AddModelError(string.Empty, $"Already exists the Supervisor: {CertificationEntity.Name}");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+            }
+
+            CertificationViewModel.Supervisors = _combosHelper.GetComboSupervisorByClinic(user_logged.Clinic.Id, true);
+            CertificationViewModel.Courses = _combosHelper.GetComboCourseByRole(UserType.Supervisor);
+
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "EditSupervisorCertification", CertificationViewModel) });
+        }
+
+        [Authorize(Roles = "Manager, Supervisor")]
+        public async Task<IActionResult> SupervisorCertifications(int idError = 0)
+        {
+            UserEntity user_logged = await _context.Users
+                                                   .Include(u => u.Clinic)
+                                                   .ThenInclude(c => c.Setting)
+                                                   .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+            if (User.IsInRole("Manager"))
+            {
+                if (idError == 1) //Imposible to delete
+                {
+                    ViewBag.Delete = "N";
+                }
+
+                return View(await _context.SupervisorCertifications
+                                          .Include(f => f.Course)
+                                          .Include(f => f.Supervisor)
+                                          .AsSplitQuery()
+                                          .Where(f => f.Supervisor.Clinic.Id == user_logged.Clinic.Id)
+                                          .OrderBy(f => f.Supervisor.Name)
+                                          .ToListAsync());
+
+            }
+            else
+            {
+                if (User.IsInRole("Supervisor"))
+                {
+                    SupervisorEntity supervisor = _context.Supervisors.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
+
+                    if (idError == 1) //Imposible to delete
+                    {
+                        ViewBag.Delete = "N";
+                    }
+
+                    return View(await _context.SupervisorCertifications
+                                              .Include(f => f.Course)
+                                              .Include(f => f.Supervisor)
+                                              .AsSplitQuery()
+                                              .Where(f => f.Supervisor.Clinic.Id == user_logged.Clinic.Id
+                                                       && f.Supervisor.Id == supervisor.Id)
+                                              .OrderBy(f => f.Name)
+                                              .ToListAsync());
+
+                }
+            }
+            return RedirectToAction("NotAuthorized", "Account");
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> DeleteCertification(int? id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            SupervisorCertificationEntity CertificationEntity = await _context.SupervisorCertifications.FirstOrDefaultAsync(t => t.Id == id);
+            if (CertificationEntity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            try
+            {
+                _context.SupervisorCertifications.Remove(CertificationEntity);
+                await _context.SaveChangesAsync();
+            }
+            catch (System.Exception)
+            {
+                return RedirectToAction("Index", new { idError = 1 });
+            }
+
+            return RedirectToAction(nameof(SupervisorCertifications));
+        }
+
+        [Authorize(Roles = "Manager, Supervisor")]
+        public IActionResult AuditCertification()
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .ThenInclude(c => c.Setting)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (user_logged.Clinic == null || user_logged.Clinic.Setting == null || !user_logged.Clinic.Setting.MentalHealthClinic || !user_logged.Clinic.Setting.MHProblems)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
+            List<AuditCertification> auditCertification_List = new List<AuditCertification>();
+            AuditCertification auditCertification = new AuditCertification();
+            List<SupervisorEntity> supervisor_List = new List<SupervisorEntity>();
+            List<CourseEntity> course_List = new List<CourseEntity>();
+
+            if (User.IsInRole("Manager"))
+            {
+                supervisor_List = _context.Supervisors
+                                          .Include(m => m.SupervisorCertifications)
+                                          .ToList();
+
+                course_List = _context.Courses
+                                      .Include(m => m.SupervisorCertifications)
+                                      .Where(n => n.Role == UserType.Supervisor
+                                               && n.Active == true)
+                                      .ToList();
+            }
+            else
+            {
+                if (User.IsInRole("Supervisor"))
+                {
+                    SupervisorEntity supervisor = _context.Supervisors.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
+                    supervisor_List = _context.Supervisors
+                                              .Include(m => m.SupervisorCertifications)
+                                              .Where(n => n.Id == supervisor.Id)
+                                              .ToList();
+
+                    course_List = _context.Courses
+                                          .Include(m => m.SupervisorCertifications)
+                                          .Where(n => n.Role == UserType.Supervisor
+                                                   && n.Active == true)
+                                          .ToList();
+                }
+            }
+
+            foreach (var item in supervisor_List)
+            {
+                foreach (var course in course_List)
+                {
+                    if (item.SupervisorCertifications.Where(n => n.Course.Id == course.Id).Count() > 0)
+                    {
+                        if (item.SupervisorCertifications.Where(n => n.Course.Id == course.Id && n.ExpirationDate > DateTime.Today).Count() > 0)
+                        {
+                            if (item.SupervisorCertifications.Where(n => n.Course.Id == course.Id && n.ExpirationDate > DateTime.Today).Max(d => d.ExpirationDate).AddDays(-30) < DateTime.Today)
+                            {
+                                auditCertification.TCMName = item.Name;
+                                auditCertification.CourseName = course.Name;
+                                auditCertification.Description = "Expired soon";
+                                auditCertification.ExpirationDate = item.SupervisorCertifications.FirstOrDefault(n => n.Course.Id == course.Id && n.ExpirationDate.AddDays(-30) < DateTime.Today).ExpirationDate.ToShortDateString();
+                                auditCertification_List.Add(auditCertification);
+                                auditCertification = new AuditCertification();
+                            }
+                        }
+                        else
+                        {
+                            auditCertification.TCMName = item.Name;
+                            auditCertification.CourseName = course.Name;
+                            auditCertification.Description = "Expired";
+                            auditCertification.ExpirationDate = item.SupervisorCertifications.Where(n => n.Course.Id == course.Id).Max(m => m.ExpirationDate).ToShortDateString();
+                            auditCertification_List.Add(auditCertification);
+                            auditCertification = new AuditCertification();
+
+                        }
+                    }
+                    else
+                    {
+                        auditCertification.TCMName = item.Name;
+                        auditCertification.CourseName = course.Name;
+                        auditCertification.Description = "Not Exists";
+                        auditCertification.ExpirationDate = "-";
+                        auditCertification_List.Add(auditCertification);
+                        auditCertification = new AuditCertification();
+                    }
+
+                }
+
+            }
+
+
+            return View(auditCertification_List);
+        }
+
+        [Authorize(Roles = "Supervisor")]
+        public async Task<IActionResult> EditModalReadOnly(int? id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            SupervisorEntity entity = await _context.Supervisors
+                                                    .Include(f => f.Clinic)
+                                                    .Include(f => f.SupervisorCertifications)
+                                                    .ThenInclude(f => f.Course)
+                                                    .FirstOrDefaultAsync(f => f.Id == id);
+            if (entity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            SupervisorViewModel model;
+            if (User.IsInRole("Supervisor"))
+            {
+                UserEntity user_logged = _context.Users
+                                                 .Include(u => u.Clinic)
+                                                 .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                model = _converterHelper.ToSupervisorViewModel(entity, user_logged.Clinic.Id);
+                if (user_logged.Clinic != null)
+                {
+                    List<SelectListItem> list = new List<SelectListItem>();
+                    list.Insert(0, new SelectListItem
+                    {
+                        Text = user_logged.Clinic.Name,
+                        Value = $"{user_logged.Clinic.Id}"
+                    });
+                    model.Clinics = list;
+
+                    List<SupervisorCertificationEntity> CertificationList = new List<SupervisorCertificationEntity>();
+                    SupervisorCertificationEntity Certification = new SupervisorCertificationEntity();
+                    List<CourseEntity> coursList = _context.Courses.Where(n => n.Role == UserType.Supervisor).ToList();
+
+                    foreach (var item in coursList)
+                    {
+                        if (entity.SupervisorCertifications.Where(n => n.Course.Id == item.Id).Count() > 0)
+                        {
+                            foreach (var value in entity.SupervisorCertifications.Where(n => n.Course.Id == item.Id).ToList().OrderBy(c => c.ExpirationDate))
+                            {
+                                Certification.Name = item.Name;
+                                Certification.CertificationNumber = value.CertificationNumber;
+                                Certification.CertificateDate = value.CertificateDate;
+                                Certification.ExpirationDate = value.ExpirationDate;
+                                Certification.Id = value.Id;
+                                CertificationList.Add(Certification);
+                                Certification = new SupervisorCertificationEntity();
+                            }
+                        }
+                        else
+                        {
+                            Certification.Name = item.Name;
+                            Certification.CertificationNumber = "-";
+                            Certification.CertificateDate = DateTime.Today;
+                            Certification.ExpirationDate = DateTime.Today;
+                            Certification.Id = 0;
+                            CertificationList.Add(Certification);
+                            Certification = new SupervisorCertificationEntity();
+                        }
+
+                    }
+
+                    model.SupervisorCertificationIdealList = CertificationList;
+                }
+
+            }
+            else
+                return RedirectToAction("Home/Error404");
+
+            return View(model);
+        }
+
 
     }
 }

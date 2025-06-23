@@ -2,9 +2,6 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System;
-using System.Data;
-using KyoS.Common.Enums;
 
 namespace KyoS.Web.Models
 {

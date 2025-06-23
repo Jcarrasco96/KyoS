@@ -1,0 +1,134 @@
+﻿@model IEnumerable<KyoS.Web.Data.Entities.BillDmsEntity>
+
+@if (Model != null)
+{
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">DMS Invoices</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-hover table-responsive table-striped" id="MyTable">
+                    <thead>
+                        <tr>
+                            <th class="col-md-1" style="text-align:center;">
+                                Close Date
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Invoice Date
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                CMH Notes
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                CMH Units
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                CMH Amount
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                TCM Notes
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                TCM Units 
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                TCM Amount
+                            </th>
+                            <th class="col-md-1" style="text-align:center;">
+                                Pending
+                            </th>
+                            <th class="col-md-2" style="text-align:center;">
+                                $Total Amount
+                            </th>
+                            <th class="col-md-1" >
+                                
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            var notesMH = @item.BillDmsDetails.Where(n => n.ServiceAgency == KyoS.Common.Enums.ServiceAgency.CMH).Count();
+                            var amountMH = @notesMH * (0.4);
+                            var notesTCM = @item.BillDmsDetails.Where(n => n.ServiceAgency == KyoS.Common.Enums.ServiceAgency.TCM).Count();
+                            var amountTCM = @item.UnitsTCM * (0.05);
+                            <tr style="color: darkgrey;">
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.DateBillClose)
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.DateBill)
+                                </td>
+                                <td align="center">
+                                    @notesMH
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.UnitsMH)
+                                </td>
+                                <td align="center">
+                                    @Math.Round(amountMH,2)
+                                </td>
+                                <td align="center">
+                                    @item.BillDmsDetails.Where(n => n.ServiceAgency == KyoS.Common.Enums.ServiceAgency.TCM).Count()
+                                </td>
+                                <td align="center">
+                                    @Html.DisplayFor(modelItem => item.UnitsTCM)
+                                </td>
+                                <td align="center">
+                                    @Math.Round(amountTCM,2)
+                                </td>
+                                <td align="center">
+                                    @if (item.StatusBill == KyoS.Common.Enums.StatusBill.Unbilled)
+                                    {
+                                        @if (item.DateBillPayment.ToShortDateString() == "01/01/0001")
+                                        {
+                                            <a> - </a>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        @if (item.StatusBill == KyoS.Common.Enums.StatusBill.Billed)
+                                        {
+                                            <span class="label label-warning">
+                                                @item.DateBillPayment.ToShortDateString()
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            @if (item.StatusBill == KyoS.Common.Enums.StatusBill.Pending)
+                                            {
+                                                <span class="label label-info">
+                                                    @item.DateBillPayment.ToShortDateString()
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                @if (item.StatusBill == KyoS.Common.Enums.StatusBill.Paid)
+                                                {
+                                                    <span class="label label-success">
+                                                        @item.DateBillPayment.ToShortDateString()
+                                                    </span>
+                                                }
+
+                                            }
+                                        }
+                                    }
+                                </td>
+                                <td align="center">
+                                    @Math.Round(amountMH + amountTCM,2)
+                                </td>
+                                <td align="center">
+                                    <a asp-action="UpdateUnits" asp-route-id="@item.Id" class="btn btn-warning"><i class="glyphicon glyphicon-check" title="Update Units"></i></a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}
+
+
+

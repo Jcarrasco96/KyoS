@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace KyoS.Web.Helpers
 {
@@ -36,7 +37,7 @@ namespace KyoS.Web.Helpers
                 {
                     currentRow++;
                     worksheet.Cell(currentRow, 4).Value = item.Name;
-                    worksheet.Cell(currentRow, 5).Value = item.Status;
+                    worksheet.Cell(currentRow, 5).Value = item.Status.ToString();
                     worksheet.Cell(currentRow, 6).Value = item.LinkedUser;
 
                 }
@@ -62,7 +63,7 @@ namespace KyoS.Web.Helpers
             using (var workbook = new XLWorkbook())
             {
                 var worksheet = workbook.Worksheets.Add("All Services (" + aworkday_Clients.Count() + " Services)");
-                worksheet.Cells("A1").Value = "COMMUNITY HEALTH THERAPY CENTER. INC";
+                worksheet.Cells("A1").Value = "";
                 worksheet.Cell(2, 1).Value = ClinicName;
                 worksheet.Cell(3, 2).Value = Periodo;
                 worksheet.Cell(3, 13).Value = data;
@@ -244,8 +245,6 @@ namespace KyoS.Web.Helpers
                             }
                         }
                     }
-
-
                 }
 
                 worksheet.ColumnsUsed().AdjustToContents();
@@ -300,7 +299,7 @@ namespace KyoS.Web.Helpers
 
                     count = 0;
 
-                    worksheet.Cells("A1").Value = "COMMUNITY HEALTH THERAPY CENTER. INC";
+                    worksheet.Cells("A1").Value = "";
                     worksheet.Cell(2, 1).Value = ClinicName;
                     worksheet.Cell(3, 2).Value = Periodo;
                     worksheet.Cell(3, 13).Value = data;
@@ -554,7 +553,7 @@ namespace KyoS.Web.Helpers
                     worksheet.Cell(currentRow, 1).Value = item.Name;
                     worksheet.Cell(currentRow, 2).Value = item.Code;
                     worksheet.Cell(currentRow, 3).Value = item.DateOfBirth.ToShortDateString();
-                    worksheet.Cell(currentRow, 4).Value = item.Gender;
+                    worksheet.Cell(currentRow, 4).Value = item.Gender.ToString();
                     worksheet.Cell(currentRow, 5).Value = item.MedicaidID;
                     worksheet.Cell(currentRow, 6).Value = item.MedicareId;
 
@@ -579,7 +578,7 @@ namespace KyoS.Web.Helpers
                     }
 
                     worksheet.Cell(currentRow, 9).Value = item.AdmisionDate;
-                    worksheet.Cell(currentRow, 10).Value = item.Status;
+                    worksheet.Cell(currentRow, 10).Value = item.Status.ToString();
                     if (item.Status == Common.Enums.StatusType.Open)
                     {
                         worksheet.Cell(currentRow, 10).Style.Fill.SetBackgroundColor(XLColor.Green);
@@ -593,8 +592,8 @@ namespace KyoS.Web.Helpers
                     worksheet.Cell(currentRow, 12).Value = item.City;
                     worksheet.Cell(currentRow, 13).Value = item.ZipCode;
                     worksheet.Cell(currentRow, 14).Value = item.Telephone;
-                    worksheet.Cell(currentRow, 15).Value = item.Race;
-                    worksheet.Cell(currentRow, 16).Value = item.PreferredLanguage;
+                    worksheet.Cell(currentRow, 15).Value = item.Race.ToString();
+                    worksheet.Cell(currentRow, 16).Value = item.PreferredLanguage.ToString();
                     worksheet.Cell(currentRow, 17).Value = item.DateOfClose.ToShortDateString();
 
                     if (item.DateOfClose.DayOfYear == 1 && item.Status == Common.Enums.StatusType.Close)
@@ -1024,7 +1023,7 @@ namespace KyoS.Web.Helpers
 
                         worksheet.Cell(currentRow, 1).Value = item.Referred.Name;
                         worksheet.Cell(currentRow, 2).Value = item.Referred.Address;
-                        worksheet.Cell(currentRow, 3).Value = item.type;
+                        worksheet.Cell(currentRow, 3).Value = item.type.ToString();
                         if (item.type == Common.Enums.ReferredType.In)
                         {
                             worksheet.Cell(currentRow, 3).Style.Fill.SetBackgroundColor(XLColor.Green);
@@ -1033,11 +1032,11 @@ namespace KyoS.Web.Helpers
                         {
                             worksheet.Cell(currentRow, 3).Style.Fill.SetBackgroundColor(XLColor.Gray);
                         }
-                        worksheet.Cell(currentRow, 4).Value = item.Service;
+                        worksheet.Cell(currentRow, 4).Value = item.Service.ToString();
                         worksheet.Cell(currentRow, 5).Value = item.Client.Name;
                         worksheet.Cell(currentRow, 6).Value = item.Client.Code;
                         worksheet.Cell(currentRow, 7).Value = item.Client.AdmisionDate;
-                        worksheet.Cell(currentRow, 8).Value = item.Client.Status;
+                        worksheet.Cell(currentRow, 8).Value = item.Client.Status.ToString();
                         if (item.Client.Status == Common.Enums.StatusType.Open)
                         {
                             worksheet.Cell(currentRow, 8).Style.Fill.SetBackgroundColor(XLColor.Green);
@@ -1152,14 +1151,11 @@ namespace KyoS.Web.Helpers
                     worksheet.Cell(currentRow, 2).Value = item.TCMClient.Client.Code;
                     worksheet.Cell(currentRow, 3).Value = item.TCMClient.Client.DateOfBirth.ToShortDateString();
                     worksheet.Cell(currentRow, 4).Value = item.TCMClient.Client.MedicaidID;
-                    if (item.TCMClient.Client.Clients_HealthInsurances.Where(n => n.Active == true).Count() > 0)
+                 
+                    if (item.TCMClient.Client.Clients_HealthInsurances.Where(n => n.ApprovedDate <= item.DateOfService).Count() > 0)
                     {
-                        worksheet.Cell(currentRow, 5).Value = item.TCMClient.Client.Clients_HealthInsurances.First(n => n.Active == true).HealthInsurance.Name;
-                        worksheet.Cell(currentRow, 5).Value += " | " + item.TCMClient.Client.Clients_HealthInsurances.First(n => n.Active == true).MemberId;
-                    }
-                    else
-                    {
-                        worksheet.Cell(currentRow, 5).Value = "-";
+                        worksheet.Cell(currentRow, 5).Value = item.TCMClient.Client.Clients_HealthInsurances.Where(n => n.ApprovedDate <= item.DateOfService).OrderByDescending(n => n.ApprovedDate).ElementAtOrDefault(0).HealthInsurance.Name;
+                        worksheet.Cell(currentRow, 5).Value += " | " + item.TCMClient.Client.Clients_HealthInsurances.Where(n => n.ApprovedDate <= item.DateOfService).OrderByDescending(n => n.ApprovedDate).ElementAtOrDefault(0).MemberId;
                     }
                     if (item.TCMClient.Client.Clients_Diagnostics.Count() > 0)
                     {
@@ -1291,8 +1287,6 @@ namespace KyoS.Web.Helpers
                 int count = 0;
                 foreach (var item in tcmNotes.GroupBy(n => n.TCMClient))
                 {
-                    int amount1 = 0;
-                    int unit_total1 = 0;
                     if (item.Key.Client.Name.ToString().Length > 24)
                     {
                         count = workbook.Worksheets.Where(n => n.Name.Contains(item.Key.Client.Name.Substring(0, 24).ToString()) == true).Count();
@@ -1401,10 +1395,10 @@ namespace KyoS.Web.Helpers
                             worksheet.Cell(currentRow, 2).Value = product.TCMClient.Client.Code;
                             worksheet.Cell(currentRow, 3).Value = product.TCMClient.Client.DateOfBirth.ToShortDateString();
                             worksheet.Cell(currentRow, 4).Value = product.TCMClient.Client.MedicaidID;
-                            if (product.TCMClient.Client.Clients_HealthInsurances.Where(n => n.Active == true).Count() > 0)
+                            if (product.TCMClient.Client.Clients_HealthInsurances.Where(n => n.ApprovedDate <= product.DateOfService).Count() > 0)
                             {
-                                worksheet.Cell(currentRow, 5).Value = product.TCMClient.Client.Clients_HealthInsurances.First(n => n.Active == true).HealthInsurance.Name;
-                                worksheet.Cell(currentRow, 5).Value += " | " + product.TCMClient.Client.Clients_HealthInsurances.First(n => n.Active == true).MemberId;
+                                worksheet.Cell(currentRow, 5).Value = product.TCMClient.Client.Clients_HealthInsurances.Where(n => n.ApprovedDate <= product.DateOfService).OrderByDescending(n => n.ApprovedDate).ElementAtOrDefault(0).HealthInsurance.Name;
+                                worksheet.Cell(currentRow, 5).Value += " | " + product.TCMClient.Client.Clients_HealthInsurances.Where(n => n.ApprovedDate <= product.DateOfService).OrderByDescending(n => n.ApprovedDate).ElementAtOrDefault(0).MemberId;
                             }
                             else
                             {
@@ -1496,18 +1490,15 @@ namespace KyoS.Web.Helpers
                 using (var stream = new MemoryStream())
                 {
                     workbook.SaveAs(stream);
-                    var content = ConvertStreamToByteArray(stream);
-                    //return File(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Facilitator.xlsx");
+                    var content = ConvertStreamToByteArray(stream);                    
                     return stream.ToArray();
                 }
             }
         }
 
-        public byte[] ExportBillDmsHelper(BillDmsEntity abillDms, string Periodo, string ClinicName, string data)
+        public byte[] ExportBillDmsHelper(BillDmsEntity abillDms, string Periodo, string ClinicName, string data, ClinicEntity clinic)
         {
-            var billDms = abillDms;
-            int amount = 0;
-            int unit_total = 0;
+            var billDms = abillDms;            
 
             using (var workbook = new XLWorkbook())
             {
@@ -1519,6 +1510,7 @@ namespace KyoS.Web.Helpers
                 worksheet.Cells("A1").Style.Font.FontColor = XLColor.Gold;
                 worksheet.Cells("A1").Style.Fill.SetBackgroundColor(XLColor.Black);
                 worksheet.Cell("A1").Style.Font.FontSize = 20;
+                worksheet.Cell("A1").Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
                 worksheet.Cell("A3").Value = ClinicName;
                 worksheet.Cell("A3").Style.Font.FontColor = XLColor.Black;
                 worksheet.Cell("A3").Style.Font.Bold = true;
@@ -1533,7 +1525,7 @@ namespace KyoS.Web.Helpers
                 worksheet.Cell(currentRow, 1).Value = "ITEM DESCRIPTION";
                 worksheet.Cell(currentRow, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Left;
                 worksheet.Cell(currentRow, 2).Value = "SERVICES";
-                worksheet.Cell(currentRow, 2).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Left;
+                worksheet.Cell(currentRow, 2).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
                 worksheet.Cell(currentRow, 3).Value = "NOTES";
                 worksheet.Cell(currentRow, 3).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
                 worksheet.Cell(currentRow, 4).Value = "UNITS";
@@ -1546,9 +1538,7 @@ namespace KyoS.Web.Helpers
                 IXLRange range0 = worksheet.Range(worksheet.Cell(11, 1).Address, worksheet.Cell(11, 6).Address);
                 range0.Style.Fill.SetBackgroundColor(XLColor.LightGray);
                 range0.Style.Font.Bold = true;
-                currentRow++;
-                unit_total = 0;
-                amount = 0;
+                currentRow++;                
                 worksheet.ColumnsUsed().AdjustToContents();
 
                 worksheet.Cell(currentRow, 1).Value = "(* Units to be invoiced)";
@@ -1680,17 +1670,76 @@ namespace KyoS.Web.Helpers
                 range71.Style.Fill.SetBackgroundColor(XLColor.LightGray);
                 range71.Merge();
 
-                worksheet.Cells("A35").Value = "(*) Total units are calculated based on Medicaid codes. ";
-                worksheet.Cells("A36").Value = "Documents that are not notes are not included in the total units.";
+                currentRow++;
+                currentRow++;
+                currentRow++;
+                
+                //aqui conformo los datos de pagos
+                worksheet.Cell(currentRow, 1).Value = "Direct deposit:";
+                worksheet.Cell(currentRow, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
+                worksheet.Cell(currentRow, 1).Style.Font.FontSize = 12;
+                worksheet.Cell(currentRow, 1).Style.Font.Bold = true;
+                
+                currentRow++;
+                worksheet.Cell(currentRow, 2).Value = "Account number:";
+                worksheet.Cell(currentRow, 2).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
+                worksheet.Cell(currentRow, 3).Value = clinic.Company_AccountNumber.ToString();
+                IXLRange range73 = worksheet.Range(worksheet.Cell(currentRow, 3).Address, worksheet.Cell(currentRow, 6).Address);
+                range73.Merge();
 
-                IXLRange range110 = worksheet.Range(worksheet.Cell(35, 1).Address, worksheet.Cell(35, 6).Address);
+                currentRow++;
+                worksheet.Cell(currentRow, 2).Value = "Routing:";
+                worksheet.Cell(currentRow, 2).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
+                worksheet.Cell(currentRow, 3).Value = clinic.Company_Routing.ToString();
+                IXLRange range75 = worksheet.Range(worksheet.Cell(currentRow, 3).Address, worksheet.Cell(currentRow, 6).Address);
+                range75.Merge();
+
+                currentRow++;
+                worksheet.Cell(currentRow, 1).Value = "Check:";
+                worksheet.Cell(currentRow, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
+                worksheet.Cell(currentRow, 1).Style.Font.FontSize = 12;
+                worksheet.Cell(currentRow, 1).Style.Font.Bold = true;
+
+                currentRow++;
+                worksheet.Cell(currentRow, 2).Value = "Company:";
+                worksheet.Cell(currentRow, 2).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
+                worksheet.Cell(currentRow, 3).Value = clinic.Company_Name.ToString();
+                IXLRange range77 = worksheet.Range(worksheet.Cell(currentRow, 3).Address, worksheet.Cell(currentRow, 6).Address);
+                range77.Merge();
+
+                currentRow++;
+                worksheet.Cell(currentRow, 2).Value = "Address:";
+                worksheet.Cell(currentRow, 2).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
+                worksheet.Cell(currentRow, 3).Value = clinic.Company_Address.ToString();
+                IXLRange range79 = worksheet.Range(worksheet.Cell(currentRow, 3).Address, worksheet.Cell((currentRow + 1), 6).Address);
+                range79.Merge();
+                range79.Style.Alignment.Vertical = XLAlignmentVerticalValues.Top;
+                
+                currentRow++;
+                currentRow++;
+                worksheet.Cell(currentRow, 1).Value = "Zelle:";
+                worksheet.Cell(currentRow, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
+                worksheet.Cell(currentRow, 1).Style.Font.FontSize = 12;
+                worksheet.Cell(currentRow, 1).Style.Font.Bold = true;
+
+                currentRow++;
+                worksheet.Cell(currentRow, 2).Value = "Email:";
+                worksheet.Cell(currentRow, 2).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
+                worksheet.Cell(currentRow, 3).Value = clinic.Company_Zelle.ToString();
+                IXLRange range81 = worksheet.Range(worksheet.Cell(currentRow, 3).Address, worksheet.Cell(currentRow, 6).Address);
+                range81.Merge();
+
+                worksheet.Cells("A40").Value = "(*) Total units are calculated based on Medicaid codes. ";
+                worksheet.Cells("A41").Value = "Documents that are not notes are not included in the total units.";
+
+                IXLRange range110 = worksheet.Range(worksheet.Cell(40, 1).Address, worksheet.Cell(40, 6).Address);
                 range110.Style.Font.FontSize = 10;
                 range110.Style.Font.Bold = false;
                 range110.Style.Alignment.Vertical = XLAlignmentVerticalValues.Top;
                 range110.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
                 range110.Merge();
 
-                IXLRange range111 = worksheet.Range(worksheet.Cell(36, 1).Address, worksheet.Cell(36, 6).Address);
+                IXLRange range111 = worksheet.Range(worksheet.Cell(41, 1).Address, worksheet.Cell(41, 6).Address);
                 range111.Style.Font.FontSize = 10;
                 range111.Style.Font.Bold = false;
                 range111.Style.Alignment.Vertical = XLAlignmentVerticalValues.Top;
@@ -1762,7 +1811,7 @@ namespace KyoS.Web.Helpers
                     worksheet.Cell(currentRow, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Left;
                     worksheet.Cell(currentRow, 2).Value = item.DateService;
                     worksheet.Cell(currentRow, 2).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
-                    worksheet.Cell(currentRow, 3).Value = item.ServiceAgency;
+                    worksheet.Cell(currentRow, 3).Value = item.ServiceAgency.ToString();
                     worksheet.Cell(currentRow, 3).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
                     worksheet.Cell(currentRow, 4).Value = item.Unit;
                     worksheet.Cell(currentRow, 4).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
@@ -1824,6 +1873,653 @@ namespace KyoS.Web.Helpers
             }
         }
 
+        public byte[] ExportPayStubTCMHelper(TCMPayStubEntity paystub, string Periodo, string ClinicName, string data)
+        {
+            var payST = paystub;
+
+            using (var workbook = new XLWorkbook())
+            {
+                var worksheet = workbook.Worksheets.Add("DMS Invoice");
+                var currentRow = 4;
+
+                worksheet.Cells("A1").Value = ClinicName + "           " + "Paystub : " + payST.Id;
+                worksheet.Cells("A1").Style.Font.Bold = true;
+                worksheet.Cells("A1").Style.Font.FontColor = XLColor.Black;
+                worksheet.Cells("A1").Style.Fill.SetBackgroundColor(XLColor.BlueGray);
+                worksheet.Cell("A1").Style.Font.FontSize = 16;
+                worksheet.Cell("A1").Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                worksheet.Cell("A3").Value = payST.CaseMannager.Name + "             Employee ID: " + payST.CaseMannager.ProviderNumber;
+                worksheet.Cell("A3").Style.Font.FontColor = XLColor.Black;
+                worksheet.Cell("A3").Style.Font.Bold = true;
+                worksheet.Cell("A3").Style.Font.FontSize = 15;
+                worksheet.Cell("A3").Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                worksheet.Cell("A5").Value = "Invoice Date: " + payST.DatePayStub.ToShortDateString();
+                worksheet.Cell("A5").Style.Font.FontColor = XLColor.Black;
+                worksheet.Cell("A6").Value = Periodo;
+                worksheet.Cell("A6").Style.Font.FontColor = XLColor.Black;
+                worksheet.ColumnsUsed().AdjustToContents();
+                currentRow = 8;
+               
+                worksheet.Cell(currentRow, 1).Value = "BANK";
+                worksheet.Cell(currentRow, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Left;
+                worksheet.Cell(currentRow, 2).Value = "ACCOUNT TYPE";
+                worksheet.Cell(currentRow, 2).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                worksheet.Cell(currentRow, 3).Value = "ACCOUNT NUMBER";
+                worksheet.Cell(currentRow, 3).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                worksheet.Cell(currentRow, 4).Value = "ROUTING";
+                worksheet.Cell(currentRow, 4).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                worksheet.Cell(currentRow, 5).Value = "NOTES";
+                worksheet.Cell(currentRow, 5).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                worksheet.Cell(currentRow, 6).Value = "UNITS";
+                worksheet.Cell(currentRow, 6).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                worksheet.Cell(currentRow, 7).Value = "RATE";
+                worksheet.Cell(currentRow, 7).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                worksheet.Cell(currentRow, 8).Value = "AMOUNT";
+                worksheet.Cell(currentRow, 8).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
+
+                IXLRange range0 = worksheet.Range(worksheet.Cell(8, 1).Address, worksheet.Cell(8, 8).Address);
+                range0.Style.Fill.SetBackgroundColor(XLColor.LightGray);
+                range0.Style.Font.Bold = true;
+                currentRow++;
+                //worksheet.ColumnsUsed().AdjustToContents();
+
+                worksheet.Cell(currentRow, 1).Value = paystub.CaseMannager.FinancialInstitutionsName.ToString();
+                worksheet.Cell(currentRow, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Left;
+                worksheet.Cell(currentRow, 2).Value = paystub.CaseMannager.AccountType.ToString();
+                worksheet.Cell(currentRow, 2).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                worksheet.Cell(currentRow, 3).Value = paystub.CaseMannager.AccountNumber.ToString();
+                worksheet.Cell(currentRow, 3).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                worksheet.Cell(currentRow, 4).Value = paystub.CaseMannager.Routing.ToString();
+                worksheet.Cell(currentRow, 4).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                worksheet.Cell(currentRow, 5).Value = paystub.TCMPayStubDetails.Count();
+                worksheet.Cell(currentRow, 5).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                worksheet.Cell(currentRow, 6).Value = paystub.TCMPayStubDetails.Sum(n => n.Unit).ToString();
+                worksheet.Cell(currentRow, 6).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                worksheet.Cell(currentRow, 7).Value = (payST.CaseMannager.Money/4);
+                worksheet.Cell(currentRow, 7).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                worksheet.Cell(currentRow, 8).Value = "$ " + payST.TCMPayStubDetails.Sum(n => n.Amount);
+                worksheet.Cell(currentRow, 8).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
+
+                currentRow++;
+                              
+
+                IXLRange range11 = worksheet.Range(worksheet.Cell(1, 1).Address, worksheet.Cell(1, 8).Address);
+                range11.Style.Font.FontSize = 16;
+                range11.Style.Font.Bold = true;
+                range11.Style.Alignment.Vertical = XLAlignmentVerticalValues.Top;
+                range11.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                range11.Merge();
+                IXLRange range21 = worksheet.Range(worksheet.Cell(3, 1).Address, worksheet.Cell(3, 8).Address);
+                range21.Style.Font.FontSize = 15;
+                range21.Style.Font.Bold = true;
+                range21.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                range21.Merge();
+                IXLRange range31 = worksheet.Range(worksheet.Cell(5, 1).Address, worksheet.Cell(5, 8).Address);
+                range31.Style.Font.FontSize = 14;
+                range31.Style.Font.Bold = false;
+                range31.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
+                range31.Merge();
+                IXLRange range41 = worksheet.Range(worksheet.Cell(6, 1).Address, worksheet.Cell(6, 8).Address);
+                range41.Style.Font.FontSize = 14;
+                range41.Style.Font.Bold = false;
+                range41.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
+                range41.Merge();
+
+               
+                worksheet.Cells("A12").Value = "(*) Total units are calculated based on Medicaid codes. ";
+                worksheet.Cells("A13").Value = "Documents that are not notes are not included in the total units.";
+
+                IXLRange range110 = worksheet.Range(worksheet.Cell(12, 1).Address, worksheet.Cell(12, 8).Address);
+                range110.Style.Font.FontSize = 10;
+                range110.Style.Font.Bold = false;
+                range110.Style.Alignment.Vertical = XLAlignmentVerticalValues.Top;
+                range110.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                range110.Merge();
+
+                IXLRange range111 = worksheet.Range(worksheet.Cell(13, 1).Address, worksheet.Cell(13, 8).Address);
+                range111.Style.Font.FontSize = 10;
+                range111.Style.Font.Bold = false;
+                range111.Style.Alignment.Vertical = XLAlignmentVerticalValues.Top;
+                range111.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                range111.Merge();
+
+                worksheet.ColumnsUsed().AdjustToContents();
+
+                //-----------------------------------------------
+
+                worksheet = workbook.Worksheets.Add("Invoice Details");
+                worksheet.Cells("A1").Value = ClinicName + "           " + "Paystub : " + payST.Id;
+                worksheet.Cells("A1").Style.Font.Bold = true;
+                worksheet.Cells("A1").Style.Font.FontColor = XLColor.Black;
+                worksheet.Cells("A1").Style.Fill.SetBackgroundColor(XLColor.BlueGray);
+                worksheet.Cell("A1").Style.Font.FontSize = 16;
+                worksheet.Cell("A1").Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                worksheet.Cell("A3").Value = payST.CaseMannager.Name + "             Employee ID: " + payST.CaseMannager.ProviderNumber;
+                worksheet.Cell("A3").Style.Font.FontColor = XLColor.Black;
+                worksheet.Cell("A3").Style.Font.Bold = true;
+                worksheet.Cell("A3").Style.Font.FontSize = 15;
+                worksheet.Cell("A3").Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                worksheet.Cell("A5").Value = "Invoice Date: " + payST.DatePayStub.ToShortDateString();
+                worksheet.Cell("A5").Style.Font.FontColor = XLColor.Black;
+                worksheet.Cell("A6").Value = Periodo;
+                worksheet.Cell("A6").Style.Font.FontColor = XLColor.Black;
+                worksheet.ColumnsUsed().AdjustToContents();
+                currentRow = 8;
+
+                currentRow = 5;
+                worksheet.Cell(currentRow, 1).Value = "Client Name";
+                worksheet.Cell(currentRow, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Left;
+                worksheet.Cell(currentRow, 2).Value = "Service Date";
+                worksheet.Cell(currentRow, 2).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+               
+                worksheet.Cell(currentRow, 3).Value = "Units";
+                worksheet.Cell(currentRow, 3).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                worksheet.Cell(currentRow, 4).Value = "Amount";
+                worksheet.Cell(currentRow, 4).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
+               
+
+                worksheet.Style.Font.Bold = true;
+                IXLRange range = worksheet.Range(worksheet.Cell(5, 1).Address, worksheet.Cell(5, 4).Address);
+                range.Style.Fill.SetBackgroundColor(XLColor.LightGray);
+                range.SetAutoFilter();
+                currentRow++;
+
+                //Totales
+                worksheet.Cell(currentRow, 1).Value = "CLients (" + payST.TCMPayStubDetails.GroupBy(n => n.NameClient).Count() + ")";
+                worksheet.Cell(currentRow, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Left;
+                worksheet.Cell(currentRow, 2).Value = "Notes (" + payST.TCMPayStubDetails.Count() + ")";
+                worksheet.Cell(currentRow, 2).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                
+                worksheet.Cell(currentRow, 3).Value = "Units (" + payST.TCMPayStubDetails.Sum(n => n.Unit) + ")";
+                worksheet.Cell(currentRow, 3).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                worksheet.Cell(currentRow, 4).Value = "$ " + payST.TCMPayStubDetails.Sum(n => n.Amount);
+                worksheet.Cell(currentRow, 4).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
+              
+                IXLRange rangeTotal = worksheet.Range(worksheet.Cell(6, 1).Address, worksheet.Cell(6, 4).Address);
+                rangeTotal.Style.Font.FontColor = XLColor.GoldenBrown;
+                rangeTotal.Style.Font.FontSize = 12;
+                range.Style.Font.Bold = true;
+                currentRow++;
+
+                foreach (var item in payST.TCMPayStubDetails.OrderBy(n => n.NameClient).ThenBy(m => m.DateService))
+                {
+                    currentRow++;
+                    worksheet.Cell(currentRow, 1).Value = item.NameClient;
+                    worksheet.Cell(currentRow, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Left;
+                    worksheet.Cell(currentRow, 2).Value = item.DateService;
+                    worksheet.Cell(currentRow, 2).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                    worksheet.Cell(currentRow, 3).Value = item.Unit;
+                    worksheet.Cell(currentRow, 3).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                    worksheet.Cell(currentRow, 4).Value = "$ " + item.Amount;
+                    worksheet.Cell(currentRow, 4).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
+
+                }
+
+                worksheet.ColumnsUsed().AdjustToContents();
+
+                IXLRange range1 = worksheet.Range(worksheet.Cell(1, 1).Address, worksheet.Cell(1, 4).Address);
+                range1.Style.Font.FontSize = 17;
+                range1.Style.Font.Bold = true;
+                range1.Style.Alignment.Vertical = XLAlignmentVerticalValues.Top;
+                range1.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                range1.Merge();
+                IXLRange range2 = worksheet.Range(worksheet.Cell(2, 1).Address, worksheet.Cell(2, 4).Address);
+                range2.Style.Font.FontSize = 15;
+                range2.Style.Font.Bold = false;
+                range2.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                range2.Merge();
+                IXLRange range3 = worksheet.Range(worksheet.Cell(3, 1).Address, worksheet.Cell(3, 4).Address);
+                range3.Style.Font.FontSize = 14;
+                range3.Style.Font.Bold = false;
+                range3.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
+                range3.Merge();
+                IXLRange range4 = worksheet.Range(worksheet.Cell(4, 1).Address, worksheet.Cell(4, 4).Address);
+                range4.Style.Font.FontSize = 14;
+                range4.Style.Font.Bold = false;
+                range4.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
+                range4.Merge();
+
+                using (var stream = new MemoryStream())
+                {
+                    workbook.SaveAs(stream);
+                    var content = ConvertStreamToByteArray(stream);
+                    //return File(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Facilitator.xlsx");
+                    return stream.ToArray();
+                }
+            }
+        }
+
+        public byte[] ExportPayStubFacilitatorHelper(PayStubEntity paystub, string Periodo, string ClinicName, string data)
+        {
+            var payST = paystub;
+
+            using (var workbook = new XLWorkbook())
+            {
+                var worksheet = workbook.Worksheets.Add("DMS Invoice");
+                var currentRow = 4;
+
+                worksheet.Cells("A1").Value = ClinicName + "           " + "Paystub : " + payST.Id;
+                worksheet.Cells("A1").Style.Font.Bold = true;
+                worksheet.Cells("A1").Style.Font.FontColor = XLColor.Black;
+                worksheet.Cells("A1").Style.Fill.SetBackgroundColor(XLColor.BlueGray);
+                worksheet.Cell("A1").Style.Font.FontSize = 16;
+                worksheet.Cell("A1").Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                worksheet.Cell("A3").Value = payST.Facilitator.Name + "             Employee ID: " + payST.Facilitator.Codigo;
+                worksheet.Cell("A3").Style.Font.FontColor = XLColor.Black;
+                worksheet.Cell("A3").Style.Font.Bold = true;
+                worksheet.Cell("A3").Style.Font.FontSize = 15;
+                worksheet.Cell("A3").Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                worksheet.Cell("A5").Value = "Invoice Date: " + payST.DatePayStub.ToShortDateString();
+                worksheet.Cell("A5").Style.Font.FontColor = XLColor.Black;
+                worksheet.Cell("A6").Value = Periodo;
+                worksheet.Cell("A6").Style.Font.FontColor = XLColor.Black;
+                worksheet.ColumnsUsed().AdjustToContents();
+                currentRow = 8;
+
+                worksheet.Cell(currentRow, 1).Value = "BANK";
+                worksheet.Cell(currentRow, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Left;
+                worksheet.Cell(currentRow, 2).Value = "ACCOUNT TYPE";
+                worksheet.Cell(currentRow, 2).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                worksheet.Cell(currentRow, 3).Value = "ACCOUNT NUMBER";
+                worksheet.Cell(currentRow, 3).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                worksheet.Cell(currentRow, 4).Value = "ROUTING";
+                worksheet.Cell(currentRow, 4).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                worksheet.Cell(currentRow, 5).Value = "NOTES";
+                worksheet.Cell(currentRow, 5).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                worksheet.Cell(currentRow, 6).Value = "UNITS";
+                worksheet.Cell(currentRow, 6).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                worksheet.Cell(currentRow, 7).Value = "RATE";
+                worksheet.Cell(currentRow, 7).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                worksheet.Cell(currentRow, 8).Value = "AMOUNT";
+                worksheet.Cell(currentRow, 8).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
+
+                IXLRange range0 = worksheet.Range(worksheet.Cell(8, 1).Address, worksheet.Cell(8, 8).Address);
+                range0.Style.Fill.SetBackgroundColor(XLColor.LightGray);
+                range0.Style.Font.Bold = true;
+                currentRow++;
+                //worksheet.ColumnsUsed().AdjustToContents();
+
+                worksheet.Cell(currentRow, 1).Value = (paystub.Facilitator.FinancialInstitutionsName != null) ? paystub.Facilitator.FinancialInstitutionsName.ToString():"Not Select ";
+                worksheet.Cell(currentRow, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Left;
+                worksheet.Cell(currentRow, 2).Value = paystub.Facilitator.AccountType.ToString();
+                worksheet.Cell(currentRow, 2).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                worksheet.Cell(currentRow, 3).Value = (paystub.Facilitator.AccountNumber != null)? paystub.Facilitator.AccountNumber.ToString() : "Not Select";
+                worksheet.Cell(currentRow, 3).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                worksheet.Cell(currentRow, 4).Value = (paystub.Facilitator.Routing != null)? paystub.Facilitator.Routing.ToString() : "Not Select";
+                worksheet.Cell(currentRow, 4).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                worksheet.Cell(currentRow, 5).Value = paystub.PayStubDetails.Count();
+                worksheet.Cell(currentRow, 5).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                worksheet.Cell(currentRow, 6).Value = paystub.PayStubDetails.Sum(n => n.Unit).ToString();
+                worksheet.Cell(currentRow, 6).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                worksheet.Cell(currentRow, 7).Value = (payST.Facilitator.Money > 0)? (payST.Facilitator.Money / 4) : 0;
+                worksheet.Cell(currentRow, 7).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                worksheet.Cell(currentRow, 8).Value = "$ " + payST.PayStubDetails.Sum(n => n.Amount);
+                worksheet.Cell(currentRow, 8).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
+
+                currentRow++;
+
+
+                IXLRange range11 = worksheet.Range(worksheet.Cell(1, 1).Address, worksheet.Cell(1, 8).Address);
+                range11.Style.Font.FontSize = 16;
+                range11.Style.Font.Bold = true;
+                range11.Style.Alignment.Vertical = XLAlignmentVerticalValues.Top;
+                range11.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                range11.Merge();
+                IXLRange range21 = worksheet.Range(worksheet.Cell(3, 1).Address, worksheet.Cell(3, 8).Address);
+                range21.Style.Font.FontSize = 15;
+                range21.Style.Font.Bold = true;
+                range21.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                range21.Merge();
+                IXLRange range31 = worksheet.Range(worksheet.Cell(5, 1).Address, worksheet.Cell(5, 8).Address);
+                range31.Style.Font.FontSize = 14;
+                range31.Style.Font.Bold = false;
+                range31.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
+                range31.Merge();
+                IXLRange range41 = worksheet.Range(worksheet.Cell(6, 1).Address, worksheet.Cell(6, 8).Address);
+                range41.Style.Font.FontSize = 14;
+                range41.Style.Font.Bold = false;
+                range41.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
+                range41.Merge();
+
+
+                worksheet.Cells("A12").Value = "(*) Total units are calculated based on Medicaid codes. ";
+                worksheet.Cells("A13").Value = "Documents that are not notes are not included in the total units.";
+
+                IXLRange range110 = worksheet.Range(worksheet.Cell(12, 1).Address, worksheet.Cell(12, 8).Address);
+                range110.Style.Font.FontSize = 10;
+                range110.Style.Font.Bold = false;
+                range110.Style.Alignment.Vertical = XLAlignmentVerticalValues.Top;
+                range110.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                range110.Merge();
+
+                IXLRange range111 = worksheet.Range(worksheet.Cell(13, 1).Address, worksheet.Cell(13, 8).Address);
+                range111.Style.Font.FontSize = 10;
+                range111.Style.Font.Bold = false;
+                range111.Style.Alignment.Vertical = XLAlignmentVerticalValues.Top;
+                range111.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                range111.Merge();
+
+                worksheet.ColumnsUsed().AdjustToContents();
+
+                //-----------------------------------------------
+
+                worksheet = workbook.Worksheets.Add("Invoice Details");
+                worksheet.Cells("A1").Value = ClinicName + "           " + "Paystub : " + payST.Id;
+                worksheet.Cells("A1").Style.Font.Bold = true;
+                worksheet.Cells("A1").Style.Font.FontColor = XLColor.Black;
+                worksheet.Cells("A1").Style.Fill.SetBackgroundColor(XLColor.BlueGray);
+                worksheet.Cell("A1").Style.Font.FontSize = 16;
+                worksheet.Cell("A1").Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                worksheet.Cell("A3").Value = payST.Facilitator.Name + "             Employee ID: " + payST.Facilitator.Codigo;
+                worksheet.Cell("A3").Style.Font.FontColor = XLColor.Black;
+                worksheet.Cell("A3").Style.Font.Bold = true;
+                worksheet.Cell("A3").Style.Font.FontSize = 15;
+                worksheet.Cell("A3").Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                worksheet.Cell("A5").Value = "Invoice Date: " + payST.DatePayStub.ToShortDateString();
+                worksheet.Cell("A5").Style.Font.FontColor = XLColor.Black;
+                worksheet.Cell("A6").Value = Periodo;
+                worksheet.Cell("A6").Style.Font.FontColor = XLColor.Black;
+                worksheet.ColumnsUsed().AdjustToContents();
+                currentRow = 8;
+
+                currentRow = 5;
+                worksheet.Cell(currentRow, 1).Value = "Client Name";
+                worksheet.Cell(currentRow, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Left;
+                worksheet.Cell(currentRow, 2).Value = "Service Date";
+                worksheet.Cell(currentRow, 2).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+
+                worksheet.Cell(currentRow, 3).Value = "Units";
+                worksheet.Cell(currentRow, 3).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                worksheet.Cell(currentRow, 4).Value = "Amount";
+                worksheet.Cell(currentRow, 4).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
+
+
+                worksheet.Style.Font.Bold = true;
+                IXLRange range = worksheet.Range(worksheet.Cell(5, 1).Address, worksheet.Cell(5, 4).Address);
+                range.Style.Fill.SetBackgroundColor(XLColor.LightGray);
+                range.SetAutoFilter();
+                currentRow++;
+
+                //Totales
+                worksheet.Cell(currentRow, 1).Value = "CLients (" + payST.PayStubDetails.GroupBy(n => n.ClientName).Count() + ")";
+                worksheet.Cell(currentRow, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Left;
+                worksheet.Cell(currentRow, 2).Value = "Notes (" + payST.PayStubDetails.Count() + ")";
+                worksheet.Cell(currentRow, 2).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+
+                worksheet.Cell(currentRow, 3).Value = "Units (" + payST.PayStubDetails.Sum(n => n.Unit) + ")";
+                worksheet.Cell(currentRow, 3).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                worksheet.Cell(currentRow, 4).Value = "$ " + payST.PayStubDetails.Sum(n => n.Amount);
+                worksheet.Cell(currentRow, 4).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
+
+                IXLRange rangeTotal = worksheet.Range(worksheet.Cell(6, 1).Address, worksheet.Cell(6, 4).Address);
+                rangeTotal.Style.Font.FontColor = XLColor.GoldenBrown;
+                rangeTotal.Style.Font.FontSize = 12;
+                rangeTotal.Style.Font.Bold = true;
+                currentRow++;
+
+                foreach (var item in payST.PayStubDetails.OrderBy(n => n.ClientName).ThenBy(m => m.DateService))
+                {
+                    currentRow++;
+                    worksheet.Cell(currentRow, 1).Value = item.ClientName;
+                    worksheet.Cell(currentRow, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Left;
+                    worksheet.Cell(currentRow, 2).Value = item.DateService;
+                    worksheet.Cell(currentRow, 2).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                    worksheet.Cell(currentRow, 3).Value = item.Unit;
+                    worksheet.Cell(currentRow, 3).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                    worksheet.Cell(currentRow, 4).Value = "$ " + item.Amount;
+                    worksheet.Cell(currentRow, 4).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
+
+                }
+
+                worksheet.ColumnsUsed().AdjustToContents();
+
+                IXLRange range1 = worksheet.Range(worksheet.Cell(1, 1).Address, worksheet.Cell(1, 4).Address);
+                range1.Style.Font.FontSize = 17;
+                range1.Style.Font.Bold = true;
+                range1.Style.Alignment.Vertical = XLAlignmentVerticalValues.Top;
+                range1.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                range1.Merge();
+                IXLRange range2 = worksheet.Range(worksheet.Cell(2, 1).Address, worksheet.Cell(2, 4).Address);
+                range2.Style.Font.FontSize = 15;
+                range2.Style.Font.Bold = false;
+                range2.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                range2.Merge();
+                IXLRange range3 = worksheet.Range(worksheet.Cell(3, 1).Address, worksheet.Cell(3, 4).Address);
+                range3.Style.Font.FontSize = 14;
+                range3.Style.Font.Bold = false;
+                range3.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
+                range3.Merge();
+                IXLRange range4 = worksheet.Range(worksheet.Cell(4, 1).Address, worksheet.Cell(4, 4).Address);
+                range4.Style.Font.FontSize = 14;
+                range4.Style.Font.Bold = false;
+                range4.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
+                range4.Merge();
+
+                using (var stream = new MemoryStream())
+                {
+                    workbook.SaveAs(stream);
+                    var content = ConvertStreamToByteArray(stream);
+                    //return File(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Facilitator.xlsx");
+                    return stream.ToArray();
+                }
+            }
+        }
+
+        public byte[] ExportPayStubDocAssisstantHelper(PayStubEntity paystub, string Periodo, string ClinicName, string data)
+        {
+            var payST = paystub;
+
+            using (var workbook = new XLWorkbook())
+            {
+                var worksheet = workbook.Worksheets.Add("DMS Invoice");
+                var currentRow = 4;
+
+                worksheet.Cells("A1").Value = ClinicName + "           " + "Paystub : " + payST.Id;
+                worksheet.Cells("A1").Style.Font.Bold = true;
+                worksheet.Cells("A1").Style.Font.FontColor = XLColor.Black;
+                worksheet.Cells("A1").Style.Fill.SetBackgroundColor(XLColor.BlueGray);
+                worksheet.Cell("A1").Style.Font.FontSize = 16;
+                worksheet.Cell("A1").Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                worksheet.Cell("A3").Value = payST.Doc_Assisstant.Name + "             Employee ID: " + payST.Doc_Assisstant.Code;
+                worksheet.Cell("A3").Style.Font.FontColor = XLColor.Black;
+                worksheet.Cell("A3").Style.Font.Bold = true;
+                worksheet.Cell("A3").Style.Font.FontSize = 15;
+                worksheet.Cell("A3").Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                worksheet.Cell("A5").Value = "Invoice Date: " + payST.DatePayStub.ToShortDateString();
+                worksheet.Cell("A5").Style.Font.FontColor = XLColor.Black;
+                worksheet.Cell("A6").Value = Periodo;
+                worksheet.Cell("A6").Style.Font.FontColor = XLColor.Black;
+                worksheet.ColumnsUsed().AdjustToContents();
+                currentRow = 8;
+
+                worksheet.Cell(currentRow, 1).Value = "BANK";
+                worksheet.Cell(currentRow, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Left;
+                worksheet.Cell(currentRow, 2).Value = "ACCOUNT TYPE";
+                worksheet.Cell(currentRow, 2).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                worksheet.Cell(currentRow, 3).Value = "ACCOUNT NUMBER";
+                worksheet.Cell(currentRow, 3).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                worksheet.Cell(currentRow, 4).Value = "ROUTING";
+                worksheet.Cell(currentRow, 4).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                worksheet.Cell(currentRow, 5).Value = "NOTES";
+                worksheet.Cell(currentRow, 5).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                worksheet.Cell(currentRow, 6).Value = "UNITS";
+                worksheet.Cell(currentRow, 6).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                worksheet.Cell(currentRow, 7).Value = "RATE";
+                worksheet.Cell(currentRow, 7).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                worksheet.Cell(currentRow, 8).Value = "AMOUNT";
+                worksheet.Cell(currentRow, 8).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
+
+                IXLRange range0 = worksheet.Range(worksheet.Cell(8, 1).Address, worksheet.Cell(8, 8).Address);
+                range0.Style.Fill.SetBackgroundColor(XLColor.LightGray);
+                range0.Style.Font.Bold = true;
+                currentRow++;
+                //worksheet.ColumnsUsed().AdjustToContents();
+
+                worksheet.Cell(currentRow, 1).Value = (paystub.Doc_Assisstant.FinancialInstitutionsName != null) ? paystub.Doc_Assisstant.FinancialInstitutionsName.ToString() : "Not Select ";
+                worksheet.Cell(currentRow, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Left;
+                worksheet.Cell(currentRow, 2).Value = paystub.Doc_Assisstant.AccountType.ToString();
+                worksheet.Cell(currentRow, 2).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                worksheet.Cell(currentRow, 3).Value = (paystub.Doc_Assisstant.AccountNumber != null) ? paystub.Doc_Assisstant.AccountNumber.ToString() : "Not Select";
+                worksheet.Cell(currentRow, 3).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                worksheet.Cell(currentRow, 4).Value = (paystub.Doc_Assisstant.Routing != null) ? paystub.Doc_Assisstant.Routing.ToString() : "Not Select";
+                worksheet.Cell(currentRow, 4).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                worksheet.Cell(currentRow, 5).Value = paystub.PayStubDetails.Count();
+                worksheet.Cell(currentRow, 5).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                worksheet.Cell(currentRow, 6).Value = paystub.PayStubDetails.Sum(n => n.Unit).ToString();
+                worksheet.Cell(currentRow, 6).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                worksheet.Cell(currentRow, 7).Value = (payST.Doc_Assisstant.Money > 0) ? (payST.Doc_Assisstant.Money / 4) : 0;
+                worksheet.Cell(currentRow, 7).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                worksheet.Cell(currentRow, 8).Value = "$ " + payST.PayStubDetails.Sum(n => n.Amount);
+                worksheet.Cell(currentRow, 8).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
+
+                currentRow++;
+
+
+                IXLRange range11 = worksheet.Range(worksheet.Cell(1, 1).Address, worksheet.Cell(1, 8).Address);
+                range11.Style.Font.FontSize = 16;
+                range11.Style.Font.Bold = true;
+                range11.Style.Alignment.Vertical = XLAlignmentVerticalValues.Top;
+                range11.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                range11.Merge();
+                IXLRange range21 = worksheet.Range(worksheet.Cell(3, 1).Address, worksheet.Cell(3, 8).Address);
+                range21.Style.Font.FontSize = 15;
+                range21.Style.Font.Bold = true;
+                range21.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                range21.Merge();
+                IXLRange range31 = worksheet.Range(worksheet.Cell(5, 1).Address, worksheet.Cell(5, 8).Address);
+                range31.Style.Font.FontSize = 14;
+                range31.Style.Font.Bold = false;
+                range31.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
+                range31.Merge();
+                IXLRange range41 = worksheet.Range(worksheet.Cell(6, 1).Address, worksheet.Cell(6, 8).Address);
+                range41.Style.Font.FontSize = 14;
+                range41.Style.Font.Bold = false;
+                range41.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
+                range41.Merge();
+
+
+                worksheet.Cells("A12").Value = "(*) Total units are calculated based on Medicaid codes. ";
+                worksheet.Cells("A13").Value = "Documents that are not notes are not included in the total units.";
+
+                IXLRange range110 = worksheet.Range(worksheet.Cell(12, 1).Address, worksheet.Cell(12, 8).Address);
+                range110.Style.Font.FontSize = 10;
+                range110.Style.Font.Bold = false;
+                range110.Style.Alignment.Vertical = XLAlignmentVerticalValues.Top;
+                range110.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                range110.Merge();
+
+                IXLRange range111 = worksheet.Range(worksheet.Cell(13, 1).Address, worksheet.Cell(13, 8).Address);
+                range111.Style.Font.FontSize = 10;
+                range111.Style.Font.Bold = false;
+                range111.Style.Alignment.Vertical = XLAlignmentVerticalValues.Top;
+                range111.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                range111.Merge();
+
+                worksheet.ColumnsUsed().AdjustToContents();
+
+                //-----------------------------------------------
+
+                worksheet = workbook.Worksheets.Add("Invoice Details");
+                worksheet.Cells("A1").Value = ClinicName + "           " + "Paystub : " + payST.Id;
+                worksheet.Cells("A1").Style.Font.Bold = true;
+                worksheet.Cells("A1").Style.Font.FontColor = XLColor.Black;
+                worksheet.Cells("A1").Style.Fill.SetBackgroundColor(XLColor.BlueGray);
+                worksheet.Cell("A1").Style.Font.FontSize = 16;
+                worksheet.Cell("A1").Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                worksheet.Cell("A3").Value = payST.Doc_Assisstant.Name + "             Employee ID: " + payST.Doc_Assisstant.Code;
+                worksheet.Cell("A3").Style.Font.FontColor = XLColor.Black;
+                worksheet.Cell("A3").Style.Font.Bold = true;
+                worksheet.Cell("A3").Style.Font.FontSize = 15;
+                worksheet.Cell("A3").Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                worksheet.Cell("A5").Value = "Invoice Date: " + payST.DatePayStub.ToShortDateString();
+                worksheet.Cell("A5").Style.Font.FontColor = XLColor.Black;
+                worksheet.Cell("A6").Value = Periodo;
+                worksheet.Cell("A6").Style.Font.FontColor = XLColor.Black;
+                worksheet.ColumnsUsed().AdjustToContents();
+                currentRow = 8;
+
+                currentRow = 5;
+                worksheet.Cell(currentRow, 1).Value = "Client Name";
+                worksheet.Cell(currentRow, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Left;
+                worksheet.Cell(currentRow, 2).Value = "Service Date";
+                worksheet.Cell(currentRow, 2).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+
+                worksheet.Cell(currentRow, 3).Value = "Units";
+                worksheet.Cell(currentRow, 3).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                worksheet.Cell(currentRow, 4).Value = "Amount";
+                worksheet.Cell(currentRow, 4).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
+
+
+                worksheet.Style.Font.Bold = true;
+                IXLRange range = worksheet.Range(worksheet.Cell(5, 1).Address, worksheet.Cell(5, 4).Address);
+                range.Style.Fill.SetBackgroundColor(XLColor.LightGray);
+                range.SetAutoFilter();
+                currentRow++;
+
+                //Totales
+                worksheet.Cell(currentRow, 1).Value = "CLients (" + payST.PayStubDetails.GroupBy(n => n.ClientName).Count() + ")";
+                worksheet.Cell(currentRow, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Left;
+                worksheet.Cell(currentRow, 2).Value = "Notes (" + payST.PayStubDetails.Count() + ")";
+                worksheet.Cell(currentRow, 2).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+
+                worksheet.Cell(currentRow, 3).Value = "Units (" + payST.PayStubDetails.Sum(n => n.Unit) + ")";
+                worksheet.Cell(currentRow, 3).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                worksheet.Cell(currentRow, 4).Value = "$ " + payST.PayStubDetails.Sum(n => n.Amount);
+                worksheet.Cell(currentRow, 4).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
+
+                IXLRange rangeTotal = worksheet.Range(worksheet.Cell(6, 1).Address, worksheet.Cell(6, 4).Address);
+                rangeTotal.Style.Font.FontColor = XLColor.GoldenBrown;
+                rangeTotal.Style.Font.FontSize = 12;
+                range.Style.Font.Bold = true;
+                currentRow++;
+
+                foreach (var item in payST.PayStubDetails.OrderBy(n => n.ClientName).ThenBy(m => m.DateService))
+                {
+                    currentRow++;
+                    worksheet.Cell(currentRow, 1).Value = item.ClientName;
+                    worksheet.Cell(currentRow, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Left;
+                    worksheet.Cell(currentRow, 2).Value = item.DateService;
+                    worksheet.Cell(currentRow, 2).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                    worksheet.Cell(currentRow, 3).Value = item.Unit;
+                    worksheet.Cell(currentRow, 3).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                    worksheet.Cell(currentRow, 4).Value = "$ " + item.Amount;
+                    worksheet.Cell(currentRow, 4).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
+
+                }
+
+                worksheet.ColumnsUsed().AdjustToContents();
+
+                IXLRange range1 = worksheet.Range(worksheet.Cell(1, 1).Address, worksheet.Cell(1, 4).Address);
+                range1.Style.Font.FontSize = 17;
+                range1.Style.Font.Bold = true;
+                range1.Style.Alignment.Vertical = XLAlignmentVerticalValues.Top;
+                range1.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                range1.Merge();
+                IXLRange range2 = worksheet.Range(worksheet.Cell(2, 1).Address, worksheet.Cell(2, 4).Address);
+                range2.Style.Font.FontSize = 15;
+                range2.Style.Font.Bold = false;
+                range2.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                range2.Merge();
+                IXLRange range3 = worksheet.Range(worksheet.Cell(3, 1).Address, worksheet.Cell(3, 4).Address);
+                range3.Style.Font.FontSize = 14;
+                range3.Style.Font.Bold = false;
+                range3.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
+                range3.Merge();
+                IXLRange range4 = worksheet.Range(worksheet.Cell(4, 1).Address, worksheet.Cell(4, 4).Address);
+                range4.Style.Font.FontSize = 14;
+                range4.Style.Font.Bold = false;
+                range4.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
+                range4.Merge();
+
+                using (var stream = new MemoryStream())
+                {
+                    workbook.SaveAs(stream);
+                    var content = ConvertStreamToByteArray(stream);
+                    //return File(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Facilitator.xlsx");
+                    return stream.ToArray();
+                }
+            }
+        }
         #endregion
 
         #region Utils functions

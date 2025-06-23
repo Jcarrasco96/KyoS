@@ -17,5 +17,14 @@ namespace KyoS.Web.Models
 
         public int IdAgencyService { get; set; }
         public IEnumerable<SelectListItem> AgencyServices { get; set; }
+
+        public int IdInsuranceType { get; set; }
+        public IEnumerable<SelectListItem> InsuranceTypes { get; set; }
+
+        public int IdInsurancePlanType { get; set; }
+        public IEnumerable<SelectListItem> InsurancePlanTypes { get; set; }
+
+        public int IdInsuranceCoverageType { get; set; }
+        public IEnumerable<SelectListItem> InsuranceCoverageTypes { get; set; }
     }
 }

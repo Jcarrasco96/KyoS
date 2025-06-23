@@ -31,12 +31,28 @@ namespace KyoS.Web.Controllers
             _fileHelper = fileHelper;
         }
 
-        [Authorize(Roles = "CaseManager")]
+        [Authorize(Roles = "CaseManager, Manager")]
         public IActionResult Index(int id = 0, string initDate = "")
         {
             if (id == 1)
             {
                 ViewBag.DateBlocked = "B";
+            }
+            if (id == 2)
+            {
+                ViewBag.DateBlocked = "E";
+            }
+            if (id == 3)
+            {
+                ViewBag.DateBlocked = "A";
+            }
+            if (id == 4)
+            {
+                ViewBag.DateBlocked = "DX";
+            }
+            if (id == 5)
+            {
+                ViewBag.DateBlocked = "Auth";
             }
 
             UserEntity user_logged = _context.Users
@@ -44,15 +60,30 @@ namespace KyoS.Web.Controllers
                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
 
             DateTime initialDate = (initDate == string.Empty) ? DateTime.Now : Convert.ToDateTime(initDate);
-            
-            TCMBillingViewModel model = new TCMBillingViewModel
-            {
-                IdClient = 0,
-                Clients = _combosHelper.GetComboTCMClientsByCaseManager(user_logged.UserName),
-                StartDate = $"{initialDate.Year}-{initialDate.Month.ToString("00")}-{initialDate.Day.ToString("00")}"                
-            };
 
-            return View(model);
+            if (User.IsInRole("CaseManager"))
+            {
+                TCMBillingViewModel model = new TCMBillingViewModel
+                {
+                    IdClient = 0,
+                    Clients = _combosHelper.GetComboTCMClientsByCaseManager(user_logged.UserName),
+                    StartDate = $"{initialDate.Year}-{initialDate.Month.ToString("00")}-{initialDate.Day.ToString("00")}"
+                };
+
+                return View(model);
+            }
+            else
+            {
+                TCMBillingViewModel model = new TCMBillingViewModel
+                {
+                    IdClient = 0,
+                    Clients = _combosHelper.GetComboTCMClientsByClinic(user_logged.Clinic.Id),
+                    StartDate = $"{initialDate.Year}-{initialDate.Month.ToString("00")}-{initialDate.Day.ToString("00")}"
+                };
+
+                return View(model);
+            }
+            
         }
 
         [Authorize(Roles = "CaseManager")]
@@ -60,20 +91,33 @@ namespace KyoS.Web.Controllers
         {
             UserEntity user_logged = _context.Users
                                              .Include(u => u.Clinic)
+                                             .ThenInclude(u => u.Setting)
                                              .FirstOrDefault(u => u.UserName == User.Identity.Name);
-            AddProgressNoteViewModel model = new AddProgressNoteViewModel();
-            DateTime datetemp = (date != null) ? Convert.ToDateTime(date) : new DateTime();
-            if (User.IsInRole("CaseManager"))
-            {
-                model = new AddProgressNoteViewModel
-                {
-                    Date = datetemp,
-                    IdClient = 0,
-                    Clients = _combosHelper.GetComboTCMClientsByCaseManagerActives(user_logged.UserName,datetemp),
-                    Billable = true
-                };
-            }            
 
+            DateTime datetemp = (date != null) ? Convert.ToDateTime(date) : new DateTime();
+            AddProgressNoteViewModel model = new AddProgressNoteViewModel();
+
+            if (user_logged.Clinic.Setting.TCMLockCreateNote > datetemp)
+            {
+
+
+                if (User.IsInRole("CaseManager"))
+                {
+                    model = new AddProgressNoteViewModel
+                    {
+                        Date = datetemp,
+                        IdClient = 0,
+                        Clients = _combosHelper.GetComboTCMClientsByCaseManagerActives(user_logged.UserName, datetemp),
+                        Billable = true
+                    };
+                }
+                ViewData["permit"] = 0;
+            }
+            else
+            {
+                ViewData["permit"] = 1;
+                ViewData["date"] = datetemp;
+            }
             return View(model);
         }
 
@@ -295,7 +339,7 @@ namespace KyoS.Web.Controllers
             }
         }
 
-        [Authorize(Roles = "Manager, CaseManager, TCMSupervisor")]
+        [Authorize(Roles = "Manager, CaseManager, TCMSupervisor, Biller")]
         public IActionResult BillingForWeek(string dateInterval = "", int idCaseManager = 0, int idClient = 0, int billed = 0)
         {
             UserEntity user_logged = _context.Users
@@ -324,7 +368,7 @@ namespace KyoS.Web.Controllers
                 string[] date = dateInterval.Split(" - ");
                 if (billed == 0)
                 {
-                    if (User.IsInRole("Manager"))
+                    if (User.IsInRole("Manager") || User.IsInRole("Biller"))
                     {
                         IQueryable<TCMNoteEntity> query = _context.TCMNote
                                                                   .Include(t => t.TCMClient)
@@ -339,6 +383,8 @@ namespace KyoS.Web.Controllers
 
                                                                   .Include(t => t.TCMClient.Casemanager)
                                                                   .Include(t => t.TCMNoteActivity)
+
+                                                                  .AsSplitQuery()
 
                                                                   .Where(t => (t.DateOfService >= Convert.ToDateTime(date[0]) 
                                                                             && t.DateOfService <= Convert.ToDateTime(date[1])
@@ -377,6 +423,8 @@ namespace KyoS.Web.Controllers
                                                                   .Include(t => t.TCMClient.Casemanager)
                                                                   .Include(t => t.TCMNoteActivity)
 
+                                                                  .AsSplitQuery()
+
                                                                   .Where(t => (t.ApprovedDate >= Convert.ToDateTime(date[0]) 
                                                                             && t.ApprovedDate <= Convert.ToDateTime(date[1])
                                                                             && t.TCMNoteActivity.Count() > 0
@@ -409,7 +457,7 @@ namespace KyoS.Web.Controllers
                 }
                 if (billed == 1)
                 {
-                    if (User.IsInRole("Manager"))
+                    if (User.IsInRole("Manager") || User.IsInRole("Biller"))
                     {
                         IQueryable<TCMNoteEntity> query = _context.TCMNote
                                                                   .Include(t => t.TCMClient)
@@ -424,6 +472,8 @@ namespace KyoS.Web.Controllers
 
                                                                   .Include(t => t.TCMClient.Casemanager)
                                                                   .Include(t => t.TCMNoteActivity)
+
+                                                                  .AsSplitQuery()
 
                                                                   .Where(t => (t.DateOfService >= Convert.ToDateTime(date[0])
                                                                             && t.DateOfService <= Convert.ToDateTime(date[1])
@@ -464,6 +514,8 @@ namespace KyoS.Web.Controllers
                                                                   .ThenInclude(t => t.Casemanager)
                                                                   .Include(t => t.TCMNoteActivity)
 
+                                                                  .AsSplitQuery()
+
                                                                   .Where(t => (t.ApprovedDate >= Convert.ToDateTime(date[0])
                                                                             && t.ApprovedDate <= Convert.ToDateTime(date[1])
                                                                             && t.BilledDate == null
@@ -496,7 +548,7 @@ namespace KyoS.Web.Controllers
                 }
                 if (billed == 2)
                 {
-                    if (User.IsInRole("Manager"))
+                    if (User.IsInRole("Manager") || User.IsInRole("Biller"))
                     {
                         IQueryable<TCMNoteEntity> query = _context.TCMNote
                                                                   .Include(t => t.TCMClient)
@@ -511,6 +563,8 @@ namespace KyoS.Web.Controllers
 
                                                                   .Include(t => t.TCMClient.Casemanager)
                                                                   .Include(t => t.TCMNoteActivity)
+
+                                                                  .AsSplitQuery()
 
                                                                   .Where(t => (t.DateOfService >= Convert.ToDateTime(date[0])
                                                                             && t.DateOfService <= Convert.ToDateTime(date[1])
@@ -550,6 +604,8 @@ namespace KyoS.Web.Controllers
                                                                       .Include(t => t.TCMClient.Casemanager)
                                                                       .Include(t => t.TCMNoteActivity)
 
+                                                                      .AsSplitQuery()
+
                                                                       .Where(t => (t.ApprovedDate >= Convert.ToDateTime(date[0])
                                                                                 && t.ApprovedDate <= Convert.ToDateTime(date[1])
                                                                                 && t.BilledDate != null
@@ -584,7 +640,7 @@ namespace KyoS.Web.Controllers
                 }
                 if (billed == 3)
                 {
-                    if (User.IsInRole("Manager"))
+                    if (User.IsInRole("Manager") || User.IsInRole("Biller"))
                     {
                         IQueryable<TCMNoteEntity> query = _context.TCMNote
                                                                   .Include(t => t.TCMClient)
@@ -599,6 +655,8 @@ namespace KyoS.Web.Controllers
 
                                                                   .Include(t => t.TCMClient.Casemanager)
                                                                   .Include(t => t.TCMNoteActivity)
+
+                                                                  .AsSplitQuery()
 
                                                                   .Where(t => (t.DateOfService >= Convert.ToDateTime(date[0])
                                                                             && t.DateOfService <= Convert.ToDateTime(date[1])
@@ -639,6 +697,8 @@ namespace KyoS.Web.Controllers
                                                                   .Include(t => t.TCMClient.Casemanager)
                                                                   .Include(t => t.TCMNoteActivity)
 
+                                                                  .AsSplitQuery()
+
                                                                   .Where(t => (t.ApprovedDate >= Convert.ToDateTime(date[0])
                                                                             && t.ApprovedDate <= Convert.ToDateTime(date[1])
                                                                             && t.BilledDate != null
@@ -672,19 +732,106 @@ namespace KyoS.Web.Controllers
                         }
                     }
                 }
+                if (billed == 4)
+                {
+                    if (User.IsInRole("Manager") || User.IsInRole("Biller"))
+                    {
+                        IQueryable<TCMNoteEntity> query = _context.TCMNote
+                                                                  .Include(t => t.TCMClient)
+                                                                  .ThenInclude(c => c.Client)
+                                                                  .ThenInclude(cl => cl.Clients_Diagnostics)
+                                                                  .ThenInclude(cd => cd.Diagnostic)
+
+                                                                  .Include(t => t.TCMClient)
+                                                                  .ThenInclude(c => c.Client)
+                                                                  .ThenInclude(cl => cl.Clients_HealthInsurances)
+                                                                  .ThenInclude(cd => cd.HealthInsurance)
+
+                                                                  .Include(t => t.TCMClient.Casemanager)
+                                                                  .Include(t => t.TCMNoteActivity)
+
+                                                                  .AsSplitQuery()
+
+                                                                  .Where(t => (t.DateOfService >= Convert.ToDateTime(date[0])
+                                                                            && t.DateOfService <= Convert.ToDateTime(date[1])
+                                                                            && t.BilledDate != null
+                                                                            && t.PaymentDate != null
+                                                                            && t.TCMNoteActivity.Count() > 0
+                                                                            && t.Status == Common.Enums.NoteStatus.Approved
+                                                                            && t.TCMNoteActivity.Where(n => n.Billable == true).Count() > 0));
+
+                        if (idCaseManager != 0)
+                            query = query.Where(t => t.TCMClient.Casemanager.Id == idCaseManager);
+
+                        if (idClient != 0)
+                            query = query.Where(t => t.TCMClient.Id == idClient);
+
+                        try
+                        {
+                            list = query.ToList();
+                        }
+                        catch (Exception)
+                        {
+                            return RedirectToAction(nameof(BillingForWeek));
+                        }
+                    }
+                    if (User.IsInRole("CaseManager") || User.IsInRole("TCMSupervisor"))
+                    {
+                        IQueryable<TCMNoteEntity> query = _context.TCMNote
+                                                                  .Include(t => t.TCMClient)
+                                                                  .ThenInclude(c => c.Client)
+                                                                  .ThenInclude(cl => cl.Clients_Diagnostics)
+                                                                  .ThenInclude(cd => cd.Diagnostic)
+
+                                                                  .Include(t => t.TCMClient)
+                                                                  .ThenInclude(c => c.Client)
+                                                                  .ThenInclude(cl => cl.Clients_HealthInsurances)
+                                                                  .ThenInclude(cd => cd.HealthInsurance)
+
+                                                                  .Include(t => t.TCMClient.Casemanager)
+                                                                  .Include(t => t.TCMNoteActivity)
+
+                                                                  .AsSplitQuery()
+
+                                                                  .Where(t => (t.ApprovedDate >= Convert.ToDateTime(date[0])
+                                                                            && t.ApprovedDate <= Convert.ToDateTime(date[1])
+                                                                            && t.BilledDate != null
+                                                                            && t.PaymentDate != null
+                                                                            && t.TCMNoteActivity.Count() > 0
+                                                                            && t.Status == Common.Enums.NoteStatus.Approved
+                                                                            && t.TCMNoteActivity.Where(n => n.Billable == true).Count() > 0));
+
+                        if (User.IsInRole("CaseManager"))
+                        {
+                            CaseMannagerEntity casemanager = _context.CaseManagers.FirstOrDefault(n => n.LinkedUser == user_logged.UserName);
+                            query = query.Where(t => t.TCMClient.Casemanager.Id == casemanager.Id);
+                        }
+                        else
+                        {
+                            if (idCaseManager != 0)
+                                query = query.Where(t => t.TCMClient.Casemanager.Id == idCaseManager);
+
+                            if (idClient != 0)
+                                query = query.Where(t => t.TCMClient.Id == idClient);
+
+                        }
+
+                        try
+                        {
+                            list = query.ToList();
+                        }
+                        catch (Exception)
+                        {
+                            return RedirectToAction(nameof(BillingForWeek));
+                        }
+                    }
+                }
                 int minutes;
                 int totalUnits = 0;
                 int value;
                 int mod;
                 foreach (TCMNoteEntity item in list)
                 {
-                    /*foreach (var activity in item.TCMNoteActivity)
-                    {
-                        minutes = activity.Minutes;
-                        value = minutes / 15;
-                        mod = minutes % 15;
-                        totalUnits = (mod > 7) ? totalUnits + value + 1 : totalUnits + value;
-                    }*/
                     minutes = item.TCMNoteActivity.Sum(n => n.Minutes);
                     value = minutes / 15;
                     mod = minutes % 15;
@@ -733,7 +880,7 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Manager,CaseManager, TCMSupervisor")]
+        [Authorize(Roles = "Manager,CaseManager, TCMSupervisor, Biller")]
         public IActionResult BillingForWeek(TCMBillingReportViewModel model, int billed = 0)
         {
             UserEntity user_logged = _context.Users
@@ -1375,7 +1522,7 @@ namespace KyoS.Web.Controllers
             }
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public async Task<IActionResult> UpdateBill(int billed = 0)
         {
             UserEntity user_logged = _context.Users
@@ -1402,8 +1549,11 @@ namespace KyoS.Web.Controllers
                                      .ThenInclude(cl => cl.HealthInsurance)
 
                                      .Include(t => t.Casemanager)
+                                     .ThenInclude(t => t.TCMSupervisor)
                                      .Include(c => c.TCMNote)
                                      .ThenInclude(t => t.TCMNoteActivity)
+
+                                     .AsSplitQuery()
 
                                      .Where(t => t.TCMNote.Where(n => n.BilledDate == null 
                                                                    && n.Status == Common.Enums.NoteStatus.Approved
@@ -1423,8 +1573,11 @@ namespace KyoS.Web.Controllers
                                     .ThenInclude(cl => cl.HealthInsurance)
 
                                     .Include(t => t.Casemanager)
+                                    .ThenInclude(t => t.TCMSupervisor)
                                     .Include(c => c.TCMNote)
                                     .ThenInclude(t => t.TCMNoteActivity)
+
+                                    .AsSplitQuery()
 
                                     .Where(t => t.TCMNote.Where(n => n.PaymentDate == null
                                                                   && n.Status == Common.Enums.NoteStatus.Approved
@@ -1445,8 +1598,12 @@ namespace KyoS.Web.Controllers
                                      .ThenInclude(cl => cl.HealthInsurance)
 
                                      .Include(t => t.Casemanager)
+                                     .ThenInclude(t => t.TCMSupervisor)
                                      .Include(c => c.TCMNote)
                                      .ThenInclude(t => t.TCMNoteActivity)
+
+                                     .AsSplitQuery()
+
                                      .Where(n => n.TCMNote.Where(t => t.TCMNoteActivity.Where(m => m.Billable == true).Count() > 0).Count() > 0)
                                      .ToListAsync();
 
@@ -1494,7 +1651,7 @@ namespace KyoS.Web.Controllers
             return View(list);
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public async Task<IActionResult> BillTCMNoteToday(int id = 0)
         {
             if (id != 0)
@@ -1513,7 +1670,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("NotAuthorized", "Account");
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public async Task<IActionResult> NotTMCNoteBill(int id = 0)
         {
             if (id != 0)
@@ -1532,7 +1689,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("NotAuthorized", "Account");
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public async Task<IActionResult> BillTCMClientToday(int id = 0)
         {
             if (id != 0)
@@ -1559,7 +1716,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("NotAuthorized", "Account");
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public async Task<IActionResult> NotTCMClientToday(int id = 0)
         {
             if (id != 0)
@@ -1587,7 +1744,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("NotAuthorized", "Account");
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public async Task<IActionResult> PayTCMNoteToday(int id = 0)
         {
             if (id != 0)
@@ -1606,7 +1763,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("NotAuthorized", "Account");
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public async Task<IActionResult> PayTCMClientToday(int id = 0)
         {
             if (id != 0)
@@ -1634,7 +1791,7 @@ namespace KyoS.Web.Controllers
             return RedirectToAction("NotAuthorized", "Account");
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public IActionResult BillTCMNote(int id, int week = 0, int abilled = 0)
         {
             BillViewModel model = new BillViewModel { Id = id, BilledDate = DateTime.Now };
@@ -1644,8 +1801,8 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Manager")]
-        public async Task<IActionResult> BillTCMNote(BillViewModel model, int week = 0, int abilled = 0)
+        [Authorize(Roles = "Manager, Biller")]
+        public IActionResult BillTCMNote(BillViewModel model, int week = 0, int abilled = 0)
         {
 
             if (abilled == 1)
@@ -1709,7 +1866,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "BillTCMNote", model) });
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public IActionResult BillTCMClient(int id, int abilled = 0)
         {
             BillViewModel model = new BillViewModel { Id = id, BilledDate = DateTime.Now };
@@ -1719,8 +1876,8 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Manager")]
-        public async Task<IActionResult> BillTCMClient(BillViewModel model, int abilled = 0)
+        [Authorize(Roles = "Manager, Biller")]
+        public IActionResult BillTCMClient(BillViewModel model, int abilled = 0)
         {
 
             if (abilled == 1)
@@ -1802,7 +1959,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "BillTCMNote", model) });
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public IActionResult PayTCMNote(int id, int week = 0, int abilled = 0)
         {
             BillViewModel model = new BillViewModel { Id = id, BilledDate = DateTime.Now };
@@ -1812,8 +1969,8 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Manager")]
-        public async Task<IActionResult> PayTCMNote(BillViewModel model, int week = 0, int abilled = 0)
+        [Authorize(Roles = "Manager, Biller")]
+        public IActionResult PayTCMNote(BillViewModel model, int week = 0, int abilled = 0)
         {
             if (abilled == 2)
             {
@@ -1848,7 +2005,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "BillTCMNote", model) });
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public IActionResult PayTCMClient(int id, int abilled = 0)
         {
             BillViewModel model = new BillViewModel { Id = id, BilledDate = DateTime.Now };
@@ -1858,8 +2015,8 @@ namespace KyoS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Manager")]
-        public async Task<IActionResult> PayTCMClient(BillViewModel model, int abilled = 0)
+        [Authorize(Roles = "Manager, Biller")]
+        public IActionResult PayTCMClient(BillViewModel model, int abilled = 0)
         {
             if (abilled == 2)
             {
@@ -1904,7 +2061,7 @@ namespace KyoS.Web.Controllers
             return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "BillTCMNote", model) });
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Biller")]
         public IActionResult EXCEL(string dateInterval = "", int all = 0)
         {
             UserEntity user_logged = _context.Users
@@ -2029,6 +2186,69 @@ namespace KyoS.Web.Controllers
                 return File(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", ReportName);
                 //return RedirectToAction("NotAuthorized", "Account");
             }
+        }
+
+        [Authorize(Roles = "Manager, Biller")]
+        public IActionResult UpdateDatePaid(int id = 0, string dateInterval = "", int idCaseManager = 0, int idClient = 0, int billed = 0)
+        {
+            if (id > 0)
+            {
+                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                       .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                TCMNoteEntity tcmNote = _context.TCMNote.FirstOrDefault(m => m.Id == id);
+
+                TCMNoteUpdatePaidViewModel model = new TCMNoteUpdatePaidViewModel
+                {
+                    IdTCMNote = id,
+                    DatePaid = tcmNote.PaymentDate,
+                    DateInterval = dateInterval,
+                    IdCaseManager = idCaseManager,
+                    IdClient = idClient,
+                    Billed = billed
+                };
+                return View(model);
+            }
+            else
+            {
+                //Edit
+                return View(new Client_DiagnosticViewModel());
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Manager, Biller")]
+        public async Task<IActionResult> UpdateDatePaid(TCMNoteUpdatePaidViewModel model)
+        {
+            UserEntity user_logged = _context.Users
+                                             .Include(u => u.Clinic)
+                                             .FirstOrDefault(u => u.UserName == User.Identity.Name);
+            if (ModelState.IsValid)
+            {
+                TCMNoteEntity entity = await _context.TCMNote.FirstOrDefaultAsync(d => d.Id == model.IdTCMNote);
+                entity.PaymentDate = model.DatePaid;
+                _context.Update(entity);
+                try
+                {
+                    await _context.SaveChangesAsync();
+                    return Json(new { isValid = true, html = _renderHelper.RenderRazorViewToString(this, "BillingForWeek", new { dateInterval = model.DateInterval, idCaseManager = model.IdCaseManager, idClient = model.IdClient, billed = model.Billed }) });
+                }
+                catch (System.Exception ex)
+                {
+                    if (ex.InnerException.Message.Contains("duplicate"))
+                    {
+                        ModelState.AddModelError(string.Empty, $"Already exists");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+
+            }
+
+            return Json(new { isValid = false, html = _renderHelper.RenderRazorViewToString(this, "UpdateDatePaid", model) });
         }
 
     }

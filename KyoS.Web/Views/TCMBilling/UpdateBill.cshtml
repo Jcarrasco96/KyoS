@@ -15,6 +15,7 @@
         <li class="active">TCM Update Billing Report</li>
     </ul><!--.breadcrumb-->
 </div>
+<div class="row">
 @if (ViewData["billed"].ToString() == "1")
 {
     <div class="col-md-12">
@@ -141,8 +142,6 @@
     &nbsp;
 </div>
 <div class="col-md-push-12">
-    <form asp-action="UpdateBill" enctype="multipart/form-data">
-    </form>
     <div class="col-md-4">
         &nbsp;
     </div>
@@ -159,17 +158,17 @@
                     <a class="btn btn-default" asp-controller="TCMBilling" asp-action="UpdateBill" asp-route-billed="1" role="button"><i class="glyphicon glyphicon-log-in"></i>&nbsp;&nbsp;Switch to Unbilled Clients</a>
                 }
             }
-        </center>
-        @*<h4 style="font-weight:bold;"><span class="label label-default">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Week&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></h4>*@
-        @*<h5>&nbsp;<b>Init Date:</b> @Model.First().Workdays_Clients.First().Workday.Week.InitDate.ToShortDateString()&nbsp;&nbsp;<b>Final Date:</b> @Model.First().Workdays_Clients.First().Workday.Week.FinalDate.ToShortDateString()</h5>*@
-        <hr />
+            <hr />
+        </center>        
     </div>
     <div class="col-md-4">
         &nbsp;
-    </div>
-    <div id="view-tcmnotes">
-        @await Html.PartialAsync("_ViewNotes", Model)
-    </div>
+    </div>    
+</div>
+
+<div id="view-tcmnotes">
+    @await Html.PartialAsync("_ViewNotes", Model)
+</div>
 </div>
 
 <partial name="_ModalPopup" />

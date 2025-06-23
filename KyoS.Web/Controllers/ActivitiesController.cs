@@ -440,9 +440,9 @@ namespace KyoS.Web.Controllers
         }
 
         [Authorize(Roles = "Facilitator")]
-        public JsonResult Translate(string text)
+        public async Task<JsonResult> Translate(string text)
         {
-            return Json(text = _translateHelper.TranslateText("es", "en", text));
+            return Json(text = await _translateHelper.TranslateText("es", "en", text));
         }
 
         [Authorize(Roles = "Facilitator")]
@@ -477,7 +477,7 @@ namespace KyoS.Web.Controllers
                                       .Include(w => w.Days)
                                       .ThenInclude(d => d.Workdays_Activities_Facilitators)
                                       .ThenInclude(waf => waf.Facilitator)
-
+                                      .AsSplitQuery()
                                       .Where(w => (w.Clinic.Id == user_logged.Clinic.Id
                                                 && w.Days.Where(d => (d.Service == ServiceType.PSR && d.Workdays_Clients.Where(wc => wc.Facilitator.LinkedUser == User.Identity.Name).Count() > 0)).Count() > 0))
                                       .ToListAsync());
@@ -564,9 +564,7 @@ namespace KyoS.Web.Controllers
                                                                                .ThenInclude(a => a.Theme)
 
                                                                                .Where(waf => (waf.Workday.Id == workday.Id
-                                                                                           && waf.Facilitator.Id == facilitator_logged.Id
-                                                                                           && waf.AM == am
-                                                                                           && waf.PM == pm))
+                                                                                           && waf.Facilitator.Id == facilitator_logged.Id))
                                                                                .ToListAsync();
 
             //No hay creadas actividades del facilitador logueado en la fecha seleccionada
@@ -637,6 +635,8 @@ namespace KyoS.Web.Controllers
                     IdWorkday = id,
                     Date = workday.Date.ToShortDateString(),
                     Day = workday.Date.DayOfWeek.ToString(),
+                    AM = true,
+                    PM = true,
 
                     IdTopic1 = (list1.Count != 0) ? topics[0].Id : 0,
                     Topics1 = (list1.Count != 0) ? list1 : _combosHelper.GetComboThemesByClinic(workday.Week.Clinic.Id, ThemeType.PSR),
@@ -721,6 +721,9 @@ namespace KyoS.Web.Controllers
                     IdWorkday = id,
                     Date = workday.Date.ToShortDateString(),
                     Day = workday.Date.DayOfWeek.ToString(),
+                    AM = activities_list.ElementAtOrDefault(0).PM,
+                    PM = activities_list.ElementAtOrDefault(0).AM,
+                    TitleNote = activities_list.ElementAtOrDefault(0).TitleNote,
 
                     IdTopic1 = (activities_list.Count > 0) ? activities_list[0].Activity.Theme.Id : 0,
                     Topics1 = (list1.Count != 0) ? list1 : _combosHelper.GetComboThemesByClinic(workday.Week.Clinic.Id, ThemeType.PSR),
@@ -779,7 +782,10 @@ namespace KyoS.Web.Controllers
                     Facilitator = facilitator_logged,
                     Workday = workday,
                     Activity = await _context.Activities.FirstOrDefaultAsync(a => a.Id == model.IdActivity1),
-                    Schema = facilitator_logged.Clinic.Schema
+                    Schema = facilitator_logged.Clinic.Schema,
+                    AM = model.AM,
+                    PM = model.PM,
+                    TitleNote = model.TitleNote
                 };
                 _context.Add(activity);
                 activity = new Workday_Activity_Facilitator
@@ -787,7 +793,10 @@ namespace KyoS.Web.Controllers
                     Facilitator = facilitator_logged,
                     Workday = workday,
                     Activity = await _context.Activities.FirstOrDefaultAsync(a => a.Id == model.IdActivity2),
-                    Schema = facilitator_logged.Clinic.Schema
+                    Schema = facilitator_logged.Clinic.Schema,
+                    AM = model.AM,
+                    PM = model.PM,
+                    TitleNote = model.TitleNote
                 };
                 _context.Add(activity);
                 activity = new Workday_Activity_Facilitator
@@ -795,7 +804,10 @@ namespace KyoS.Web.Controllers
                     Facilitator = facilitator_logged,
                     Workday = workday,
                     Activity = await _context.Activities.FirstOrDefaultAsync(a => a.Id == model.IdActivity3),
-                    Schema = facilitator_logged.Clinic.Schema
+                    Schema = facilitator_logged.Clinic.Schema,
+                    AM = model.AM,
+                    PM = model.PM,
+                    TitleNote = model.TitleNote
                 };
                 _context.Add(activity);
                 activity = new Workday_Activity_Facilitator
@@ -803,7 +815,10 @@ namespace KyoS.Web.Controllers
                     Facilitator = facilitator_logged,
                     Workday = workday,
                     Activity = await _context.Activities.FirstOrDefaultAsync(a => a.Id == model.IdActivity4),
-                    Schema = facilitator_logged.Clinic.Schema
+                    Schema = facilitator_logged.Clinic.Schema,
+                    AM = model.AM,
+                    PM = model.PM,
+                    TitleNote = model.TitleNote
                 };
                 _context.Add(activity);
 
@@ -2095,6 +2110,57 @@ namespace KyoS.Web.Controllers
             return View(activityViewModel);
         }
 
+        [Authorize(Roles = "Facilitator")]
+        public async Task<IActionResult> EditSkill(int? id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            Workday_Activity_Facilitator activity = await _context.Workdays_Activities_Facilitators.FirstOrDefaultAsync(a => a.Id == id);
+            if (activity == null)
+            {
+                return RedirectToAction("Home/Error404");
+            }
+
+            Workday_Activity_FacilitatorSkillViewModel activityViewModel = _converterHelper.ToWorkdayActivityFacilitatorViewModel(activity);
+
+            return View(activityViewModel);
+        }
+
+        [Authorize(Roles = "Facilitator")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditSkill(Workday_Activity_FacilitatorSkillViewModel activityViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                UserEntity user_logged = _context.Users.Include(u => u.Clinic)
+                                                            .FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                Workday_Activity_Facilitator activityEntity = _converterHelper.ToWorkdayActivityFacilitatorEntity(activityViewModel);
+                _context.Update(activityEntity);
+                try
+                {
+                    await _context.SaveChangesAsync();
+
+                    return RedirectToAction("ActivitiesPerWeek", "Activities");
+                }
+                catch (System.Exception ex)
+                {
+                    if (ex.InnerException.Message.Contains("duplicate"))
+                    {
+                        ModelState.AddModelError(string.Empty, $"Already exists the facilitator's intervention: {activityEntity.Id}");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+                }
+            }
+            return View(activityViewModel);
+        }
 
     }
 }

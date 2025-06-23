@@ -156,5 +156,10 @@ namespace KyoS.Web.Models
         [DataType(DataType.Date)]
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         public DateTime AdmisionDateTCM { get; set; }
+
+        [Display(Name = "Documents Assistant")]
+        public int IdDocumentsAssistant { get; set; }
+        public IEnumerable<SelectListItem> DocumentsAssistants { get; set; }
+        public string TCMName { get; set; }
     }
 }
